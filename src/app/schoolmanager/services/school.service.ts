@@ -22,7 +22,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable()
 export class SchoolService {
 
-  private _shools: BehaviorSubject<School[]>;
+  private schoolUrl = 'http://localhost:8080/api/v1/schools';
+
+  private _schools: BehaviorSubject<School[]>;
 
   private dataStore: {
     schools: School[]
@@ -30,28 +32,33 @@ export class SchoolService {
 
   constructor(private http: HttpClient) {
     this.dataStore = { schools: [] };
-    this._shools = new BehaviorSubject<School[]>([]);
+    this._schools = new BehaviorSubject<School[]>([]);
   }
 
   get schools(): Observable<School[]> {
-    return this._shools.asObservable();
+    return this._schools.asObservable();
   }
 
   addSchool(school: School): Promise<School> {
     return new Promise((resolver, reject) => {
-      this.dataStore.schools.push(school);
-      this._shools.next(Object.assign({}, this.dataStore).schools);
-      resolver(school);
+      this.http.post(this.schoolUrl, school)
+        .subscribe(data => {
+          const s = data as School;
+          this.dataStore.schools.push(s);
+          this._schools.next(Object.assign({}, this.dataStore).schools);
+          resolver(s);
+        }, error => {
+          console.log('Failed to create school');
+        });
     });
   }
 
   loadAll() {
-    const schoolUrl = 'http://localhost:8080/api/v1/schools';
-    return this.http.get<School[]>(schoolUrl)
+    return this.http.get<School[]>(this.schoolUrl)
       .subscribe(data => {
         console.log(data);
         this.dataStore.schools = data;
-        this._shools.next(Object.assign({}, this.dataStore).schools);
+        this._schools.next(Object.assign({}, this.dataStore).schools);
       }, error => {
         console.log('Failed to fetch schools');
       });
