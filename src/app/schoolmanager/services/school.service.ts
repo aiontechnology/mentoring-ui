@@ -36,7 +36,7 @@ export class SchoolService {
   }
 
   get schools(): Observable<School[]> {
-    return this._schools.asObservable();
+    return this._schools;
   }
 
   addSchool(school: School): Promise<School> {
@@ -45,7 +45,7 @@ export class SchoolService {
         .subscribe(data => {
           const s = data as School;
           this.dataStore.schools.push(s);
-          this._schools.next(Object.assign({}, this.dataStore).schools);
+          this.publishSchools();
           resolver(s);
         }, error => {
           console.log('Failed to create school');
@@ -53,15 +53,31 @@ export class SchoolService {
     });
   }
 
-  loadAll() {
-    return this.http.get<School[]>(this.schoolUrl)
+  removeSchools(schools: School[]) {
+    schools.forEach(school => {
+      this.http.delete(school.links[0].href, {})
+        .subscribe(data => {
+          const index: number = this.dataStore.schools.indexOf(school);
+          if (index !== -1) {
+            this.dataStore.schools.splice(index, 1);
+          }
+          this.publishSchools();
+        });
+    });
+  }
+
+  loadAll(): void {
+    this.http.get<School[]>(this.schoolUrl)
       .subscribe(data => {
-        console.log(data);
         this.dataStore.schools = data;
-        this._schools.next(Object.assign({}, this.dataStore).schools);
+        this.publishSchools();
       }, error => {
         console.log('Failed to fetch schools');
       });
-
   }
+
+  private publishSchools(): void {
+    this._schools.next(Object.assign({}, this.dataStore).schools);
+  }
+
 }

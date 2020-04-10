@@ -20,4 +20,9 @@ export class School {
     name: string;
     address: Address;
     phone: string;
+    links: {
+        self: {
+            href: string;
+        }
+    }
 }
