@@ -27,6 +27,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { SchoolService } from './services/school.service';
 import { NewSchoolDialogComponent } from './components/new-school-dialog/new-school-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SchoolCacheService } from './services/school-cache.service';
+import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
 
 const routes = [
   {
@@ -43,7 +45,8 @@ const routes = [
     SidenavComponent,
     ToolbarComponent,
     MainContentComponent,
-    NewSchoolDialogComponent],
+    NewSchoolDialogComponent,
+    ConfimationDialogComponent],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -54,7 +57,8 @@ const routes = [
     RouterModule.forChild(routes)
   ],
   providers: [
-    SchoolService
+    SchoolService,
+    SchoolCacheService
   ]
 })
 export class SchoolmanagerModule { }

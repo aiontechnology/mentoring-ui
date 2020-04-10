@@ -18,6 +18,8 @@ import { Component } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
+import { SelectionModel } from '@angular/cdk/collections';
+import { School } from '../../models/school';
 
 @Component({
   selector: 'ms-sidenav',
@@ -25,6 +27,8 @@ import { map, shareReplay } from 'rxjs/operators';
   styleUrls: ['./sidenav.component.scss']
 })
 export class SidenavComponent {
+
+  selection = new SelectionModel<School>(true, []);
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(

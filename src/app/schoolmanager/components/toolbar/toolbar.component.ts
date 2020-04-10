@@ -21,22 +21,26 @@ import { MatDialog } from '@angular/material/dialog';
 import { NewSchoolDialogComponent } from '../new-school-dialog/new-school-dialog.component';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { SchoolCacheService } from '../../services/school-cache.service';
+import { ConfimationDialogComponent } from '../confimation-dialog/confimation-dialog.component';
 
 @Component({
   selector: 'ms-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent implements OnInit {
+export class ToolbarComponent {
 
   @Input() isHandset$: Observable<boolean>;
   @Input() drawer: MatDrawer;
 
   constructor(private dialog: MatDialog,
               private snackBar: MatSnackBar,
-              private router: Router) { }
+              private router: Router,
+              private schoolCacheService: SchoolCacheService) { }
 
-  ngOnInit(): void {
+  enableRemove() {
+    return this.schoolCacheService.selection.selected.length > 0;
   }
 
   openAddSchoolDialog(): void {
@@ -45,8 +49,6 @@ export class ToolbarComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
-
       if (result) {
         this.openSnackBar('School added', '')
           .onAction().subscribe(() => {
@@ -56,9 +58,23 @@ export class ToolbarComponent implements OnInit {
     });
   }
 
-  openSnackBar(message: string, action: string) : MatSnackBarRef<SimpleSnackBar> {
+  openSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
     return this.snackBar.open(message, action, {
       duration: 5000,
     });
   }
+
+  removeSelectedSchools() {
+    const dialogRef = this.dialog.open(ConfimationDialogComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.schoolCacheService.removeSelected();
+        this.openSnackBar('Schools removed', '');
+      }
+    });
+  }
+
 }

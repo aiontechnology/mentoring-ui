@@ -14,78 +14,40 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { SchoolService } from '../../services/school.service';
-import { Observable } from 'rxjs';
-import { School } from '../../models/school';
-import { MatTableDataSource } from '@angular/material/table';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { SelectionModel } from '@angular/cdk/collections';
+import { SchoolCacheService } from '../../services/school-cache.service';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'ms-main-content',
   templateUrl: './main-content.component.html',
   styleUrls: ['./main-content.component.scss']
 })
-export class MainContentComponent implements OnInit {
+export class MainContentComponent implements OnInit, AfterViewInit {
 
-  selection = new SelectionModel<School>(true, []);
-  displayedColumns = ['select', 'name', 'street1', 'street2', 'city', 'state', 'zip', 'phone'];
-  dataSource: MatTableDataSource<School>;
-  schools: Observable<School[]>;
-
-  constructor(private schoolService: SchoolService) { }
+  constructor(public schoolCacheService: SchoolCacheService,
+              private breakpointObserver: BreakpointObserver) { }
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit(): void {
-    this.schools = this.schoolService.schools;
-    this.schoolService.loadAll();
-    this.schools.subscribe(s => {
-      this.dataSource = new MatTableDataSource<School>(s);
-      this.dataSource.sort = this.sort;
-      this.dataSource.sortingDataAccessor = (item, property) => {
-        switch (property) {
-          case 'street1': return item.address.street1;
-          case 'street2': return item.address.street2;
-          case 'city': return item.address.city;
-          case 'state': return item.address.state;
-          case 'zip': return item.address.zip;
-          default: return item[property];
-        }
-      };
-      this.dataSource.paginator = this.paginator;
-    });
+    this.schoolCacheService.establishDatasource();
   }
 
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+  ngAfterViewInit(): void {
+    this.schoolCacheService.sort = this.sort;
+    this.schoolCacheService.paginator = this.paginator;
   }
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-  }
-
-  /** The label for the checkbox on the passed row */
-  checkboxLabel(row?: School): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+  displayedColumns(): string[] {
+    if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
+      return ['select', 'name'];
+    } else {
+      return ['select', 'name', 'street1', 'street2', 'city', 'state', 'zip', 'phone'];
     }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row 1`;
   }
 
 }
