@@ -16,12 +16,52 @@ limitations under the License.
 
 <h2 mat-dialog-title>Add new school</h2>
 <mat-dialog-content>
-  <div class="dialog-container">
-    <mat-form-field>
-      <input matInput placeholder="Name" [(ngModel)]="school.name" required />
-      <mat-error *ngIf="name.invalid">{{ getErrorMessage() }}</mat-error>
-    </mat-form-field>
-  </div>
+  <form [formGroup]="model">
+    <div class="dialog-container">
+      <mat-form-field>
+        <input matInput placeholder="Name" formControlName="name" required />
+        <mat-error *ngIf="model.hasError('required', 'name')">You must enter a name</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div formGroupName="address">
+      <div class="dialog-container">
+        <mat-form-field>
+          <input matInput placeholder="Street 1" formControlName="street1" />
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <input matInput placeholder="Street 2" formControlName="street2" />
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <input matInput placeholder="City" formControlName="city" />
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <input matInput placeholder="State" formControlName="state" />
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <input matInput placeholder="Zip" formControlName="zip" />
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <input matInput placeholder="Phone" formControlName="phone" />
+      </mat-form-field>
+    </div>
+  </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button color="primary" (click)="save()">

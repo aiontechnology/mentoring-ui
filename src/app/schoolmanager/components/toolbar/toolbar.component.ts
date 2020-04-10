@@ -19,6 +19,8 @@ import { Observable } from 'rxjs';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
 import { NewSchoolDialogComponent } from '../new-school-dialog/new-school-dialog.component';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ms-toolbar',
@@ -30,19 +32,33 @@ export class ToolbarComponent implements OnInit {
   @Input() isHandset$: Observable<boolean>;
   @Input() drawer: MatDrawer;
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private router: Router) { }
 
   ngOnInit(): void {
   }
 
   openAddSchoolDialog(): void {
-    let dialogRef = this.dialog.open(NewSchoolDialogComponent, {
-      width: '450px'
+    const dialogRef = this.dialog.open(NewSchoolDialogComponent, {
+      width: '700px'
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
+
+      if (result) {
+        this.openSnackBar('School added', '')
+          .onAction().subscribe(() => {
+            this.router.navigate(['/schoolmanager']);
+          });
+      }
     });
   }
 
+  openSnackBar(message: string, action: string) : MatSnackBarRef<SimpleSnackBar> {
+    return this.snackBar.open(message, action, {
+      duration: 5000,
+    });
+  }
 }
