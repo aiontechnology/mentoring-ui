@@ -15,7 +15,7 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { School } from '../../models/school';
 import { MatDialogRef } from '@angular/material/dialog';
 import { SchoolService } from '../../services/school.service';
@@ -27,22 +27,29 @@ import { SchoolService } from '../../services/school.service';
 })
 export class NewSchoolDialogComponent implements OnInit {
 
-  school: School;
+  model: FormGroup;
 
-  name = new FormControl('', [Validators.required]);
-
-  constructor(private dialogRef: MatDialogRef<NewSchoolDialogComponent>, private schoolService: SchoolService) { }
-
-  ngOnInit(): void {
-    this.school = new School();
+  constructor(private dialogRef: MatDialogRef<NewSchoolDialogComponent>,
+              private schoolService: SchoolService,
+              private formBuilder: FormBuilder) {
+    this.model = formBuilder.group({
+      name: ['', Validators.required],
+      address: formBuilder.group({
+        street1: '',
+        street2: '',
+        city: '',
+        state: '',
+        zip: ''
+      }),
+      phone: ''
+    });
   }
 
-  getErrorMessage() {
-    return this.name.hasError('required') ? 'You must enter a name' : '';
+  ngOnInit(): void {
   }
 
   save() {
-    this.schoolService.addSchool(this.school).then(school => {
+    this.schoolService.addSchool(this.model.value as School).then(school => {
       this.dialogRef.close(school);
     });
   }
