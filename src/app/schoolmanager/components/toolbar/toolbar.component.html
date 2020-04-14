@@ -32,7 +32,14 @@ limitations under the License.
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="openAddSchoolDialog()">Create New School</button>
-    <button mat-menu-item href="#" disabled>Edit School</button>
+    <button mat-menu-item (click)="openAddSchoolDialog()">
+      Create New School
+    </button>
+    <button mat-menu-item href="#" disabled>
+      Edit School
+    </button>
+    <button mat-menu-item (click)="removeSelectedSchools()" [disabled]='!enableRemove()'>
+      Remove Schools
+    </button>
   </mat-menu>
 </mat-toolbar>

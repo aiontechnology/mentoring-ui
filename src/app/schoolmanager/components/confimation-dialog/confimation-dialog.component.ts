@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-table {
-  width: 100%;
-}
+import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
-th.mat-sort-header-sorted {
-  color: black;
-}
+@Component({
+  selector: 'ms-confimation-dialog',
+  templateUrl: './confimation-dialog.component.html',
+  styleUrls: ['./confimation-dialog.component.scss']
+})
+export class ConfimationDialogComponent {
 
-.mat-table {
-  overflow: auto;
-  max-height: 500px;
-}
+  message = 'Are you sure you want to delete these schools';
 
-.header {
-  min-height: 64px;
-  padding: 8px 24px 0;
-}
+  constructor(private dialogRef: MatDialogRef<ConfimationDialogComponent>) { }
 
-.mat-column-select {
-  overflow: initial;
+  delete() {
+    this.dialogRef.close(true);
+  }
+
+  dismiss() {
+    this.dialogRef.close(false);
+  }
+
 }
