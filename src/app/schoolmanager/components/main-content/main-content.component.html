@@ -22,31 +22,25 @@ limitations under the License.
     <mat-card-content class="mat-elevation-z8">
       <div class="header">
         <mat-form-field>
-          <input
-            matInput
-            (keyup)="applyFilter($event.target.value)"
-            placeholder="Filter"
-          />
+          <input matInput (keyup)="schoolCacheService.applyFilter($event.target.value)" placeholder="Filter"/>
         </mat-form-field>
       </div>
 
-      <table mat-table [dataSource]="dataSource" matSort>
+      <table mat-table [dataSource]="schoolCacheService.dataSource" matSort>
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox
-              (change)="$event ? masterToggle() : null"
-              [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()"
-              [aria-label]="checkboxLabel()"
+              (change)="$event ? schoolCacheService.masterToggle() : null"
+              [checked]="schoolCacheService.selection.hasValue() && schoolCacheService.isAllSelected()"
+              [indeterminate]="schoolCacheService.selection.hasValue() && !schoolCacheService.isAllSelected()"
             >
             </mat-checkbox>
           </th>
           <td mat-cell *matCellDef="let row">
             <mat-checkbox
               (click)="$event.stopPropagation()"
-              (change)="$event ? selection.toggle(row) : null"
-              [checked]="selection.isSelected(row)"
-              [aria-label]="checkboxLabel(row)"
+              (change)="$event ? schoolCacheService.selection.toggle(row) : null"
+              [checked]="schoolCacheService.selection.isSelected(row)"
             >
             </mat-checkbox>
           </td>
@@ -91,19 +85,15 @@ limitations under the License.
           <td mat-cell *matCellDef="let school">{{ school.phone }}</td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
         <tr
           mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          (click)="selection.toggle(row)"
+          *matRowDef="let row; columns: displayedColumns()"
+          (click)="schoolCacheService.selection.toggle(row)"
         ></tr>
       </table>
 
-      <mat-paginator
-        #paginator
-        [pageSize]="10"
-        [pageSizeOptions]="[10, 20, 50]"
-      ></mat-paginator>
+      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
     </mat-card-content>
   </mat-card>
 </div>

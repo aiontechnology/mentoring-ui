@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-table {
-  width: 100%;
-}
+import { TestBed } from '@angular/core/testing';
 
-th.mat-sort-header-sorted {
-  color: black;
-}
+import { SchoolCacheService } from './school-cache.service';
 
-.mat-table {
-  overflow: auto;
-  max-height: 500px;
-}
+describe('SelectionService', () => {
+  let service: SchoolCacheService;
 
-.header {
-  min-height: 64px;
-  padding: 8px 24px 0;
-}
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(SchoolCacheService);
+  });
 
-.mat-column-select {
-  overflow: initial;
-}
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});
