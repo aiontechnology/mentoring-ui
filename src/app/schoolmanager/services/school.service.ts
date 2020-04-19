@@ -18,11 +18,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { School } from '../models/school';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class SchoolService {
 
-  private schoolUrl = 'http://localhost:8080/api/v1/schools';
+  private schoolsUri = environment.apiUri + '/api/v1/schools';
 
   private _schools: BehaviorSubject<School[]>;
 
@@ -41,7 +42,7 @@ export class SchoolService {
 
   addSchool(school: School): Promise<School> {
     return new Promise((resolver, reject) => {
-      this.http.post(this.schoolUrl, school)
+      this.http.post(this.schoolsUri, school)
         .subscribe(data => {
           const s = data as School;
           this.dataStore.schools.push(s);
@@ -67,7 +68,7 @@ export class SchoolService {
   }
 
   loadAll(): void {
-    this.http.get<School[]>(this.schoolUrl)
+    this.http.get<School[]>(this.schoolsUri)
       .subscribe(data => {
         this.dataStore.schools = data;
         this.publishSchools();
