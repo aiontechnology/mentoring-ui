@@ -15,5 +15,6 @@
  */
 
 export const environment = {
-  production: true
+  production: true,
+  apiUri: 'https://ve17iw2h0g.execute-api.us-west-2.amazonaws.com/dev'
 };

@@ -19,7 +19,8 @@ WORKDIR /app
 COPY package.json .
 RUN npm install
 COPY . .
-RUN npm run build --prod=true
+RUN npm install -g @angular/cli
+RUN ng build --prod --configuration production
 
 # stage 2
 FROM nginx:alpine as prod-stage
