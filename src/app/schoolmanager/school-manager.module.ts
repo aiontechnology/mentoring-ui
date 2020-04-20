@@ -16,37 +16,40 @@
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SchoolmanagerComponent } from './schoolmanager.component';
+import { SchoolManagerComponent } from './school-manager.component';
 import { RouterModule } from '@angular/router';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { LayoutModule } from '@angular/cdk/layout';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MaterialModule } from '../shared/material.module';
-import { MainContentComponent } from './components/main-content/main-content.component';
+import { SchoolListComponent } from './components/school-list/school-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SchoolService } from './services/school.service';
-import { NewSchoolDialogComponent } from './components/new-school-dialog/new-school-dialog.component';
+import { SchoolDialogComponent } from './components/new-school-dialog/school-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchoolCacheService } from './services/school-cache.service';
 import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
+import { SchoolDetailComponent } from './components/school-detail/school-detail.component';
 
 const routes = [
   {
-    path: '', component: SchoolmanagerComponent,
+    path: '', component: SchoolManagerComponent,
     children: [
-      { path: '', component: MainContentComponent }
+      { path: '', component: SchoolListComponent },
+      { path: 'schools/:id', component: SchoolDetailComponent }
     ]
   }
 ];
 
 @NgModule({
   declarations: [
-    SchoolmanagerComponent,
+    SchoolManagerComponent,
     SidenavComponent,
     ToolbarComponent,
-    MainContentComponent,
-    NewSchoolDialogComponent,
-    ConfimationDialogComponent],
+    SchoolListComponent,
+    SchoolDialogComponent,
+    ConfimationDialogComponent,
+    SchoolDetailComponent],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -61,4 +64,4 @@ const routes = [
     SchoolCacheService
   ]
 })
-export class SchoolmanagerModule { }
+export class SchoolManagerModule { }

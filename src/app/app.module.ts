@@ -22,7 +22,7 @@ import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const routes = [
-  { path: 'schoolmanager', loadChildren: () => import('./schoolmanager/schoolmanager.module').then(m => m.SchoolmanagerModule) },
+  { path: 'schoolmanager', loadChildren: () => import('./schoolmanager/school-manager.module').then(m => m.SchoolManagerModule) },
   { path: '**', redirectTo: 'schoolmanager' }
 ];
 

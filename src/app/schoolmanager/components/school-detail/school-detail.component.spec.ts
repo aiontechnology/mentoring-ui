@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
- import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SchoolmanagerComponent } from './schoolmanager.component';
+import { SchoolDetailComponent } from './school-detail.component';
 
-describe('SchoolmanagerComponent', () => {
-  let component: SchoolmanagerComponent;
-  let fixture: ComponentFixture<SchoolmanagerComponent>;
+describe('SchoolDetailComponent', () => {
+  let component: SchoolDetailComponent;
+  let fixture: ComponentFixture<SchoolDetailComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SchoolmanagerComponent ]
+      declarations: [SchoolDetailComponent]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SchoolmanagerComponent);
+    fixture = TestBed.createComponent(SchoolDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

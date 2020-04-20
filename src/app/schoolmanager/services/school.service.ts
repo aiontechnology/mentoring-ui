@@ -42,21 +42,43 @@ export class SchoolService {
 
   addSchool(school: School): Promise<School> {
     return new Promise((resolver, reject) => {
-      this.http.post(this.schoolsUri, school)
+      this.http.post(this.schoolsUri, this.stripLinks(school))
         .subscribe(data => {
           const s = data as School;
           this.dataStore.schools.push(s);
           this.publishSchools();
           resolver(s);
         }, error => {
-          console.log('Failed to create school');
+          console.error('Failed to create school');
+        });
+    });
+  }
+
+  updateSchool(school: School): Promise<School> {
+    console.log('Updating school: ', school);
+    return new Promise((resolver, reject) => {
+      this.http.put(school._links.self[0].href, this.stripLinks(school))
+        .subscribe(data => {
+          console.log('Recieved back: ', data);
+          const s = data as School;
+          for (const index in this.dataStore.schools) {
+            if (this.dataStore.schools[index].id === s.id) {
+              console.log('Replacing school: ', this.dataStore.schools[index], s);
+              this.dataStore.schools[index] = s;
+              break;
+            }
+          }
+          this.publishSchools();
+          resolver(s);
+        }, error => {
+          console.error('Failed to update school');
         });
     });
   }
 
   removeSchools(schools: School[]) {
     schools.forEach(school => {
-      this.http.delete(school.links[0].href, {})
+      this.http.delete(school._links.self[0].href, {})
         .subscribe(data => {
           const index: number = this.dataStore.schools.indexOf(school);
           if (index !== -1) {
@@ -67,18 +89,40 @@ export class SchoolService {
     });
   }
 
+  findById(id: string): School {
+    for (const school of this.dataStore.schools) {
+      if (school.id === id) {
+        return school;
+      }
+    }
+    return null;
+  }
+
   loadAll(): void {
-    this.http.get<School[]>(this.schoolsUri)
+    this.http.get<any>(this.schoolsUri)
       .subscribe(data => {
-        this.dataStore.schools = data;
+        this.dataStore.schools = data?._embedded?.schoolModelList || [];
+        this.logCache();
         this.publishSchools();
       }, error => {
-        console.log('Failed to fetch schools');
+        console.error('Failed to fetch schools');
       });
   }
 
   private publishSchools(): void {
     this._schools.next(Object.assign({}, this.dataStore).schools);
+  }
+
+  private stripLinks(school: School): School {
+    const s = Object.assign({}, school);
+    s._links = undefined;
+    return s;
+  }
+
+  private logCache(): void {
+    for (const school of this.dataStore.schools) {
+      console.log('Cache entry: ', school);
+    }
   }
 
 }
