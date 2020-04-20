@@ -16,21 +16,21 @@
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MainContentComponent } from './main-content.component';
+import { SchoolManagerComponent } from './school-manager.component';
 
-describe('MainContentComponent', () => {
-  let component: MainContentComponent;
-  let fixture: ComponentFixture<MainContentComponent>;
+describe('SchoolmanagerComponent', () => {
+  let component: SchoolManagerComponent;
+  let fixture: ComponentFixture<SchoolManagerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [MainContentComponent]
+      declarations: [SchoolManagerComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MainContentComponent);
+    fixture = TestBed.createComponent(SchoolManagerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -20,7 +20,7 @@ COPY package.json .
 RUN npm install
 COPY . .
 RUN npm install -g @angular/cli
-RUN ng build --prod --configuration production
+RUN ng build --configuration test
 
 # stage 2
 FROM nginx:alpine as prod-stage
