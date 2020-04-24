@@ -16,13 +16,23 @@
 
 import { Address } from './address';
 
+export class Link {
+    rel: string;
+    href: string;
+}
+
 export class School {
+    id: string;
     name: string;
     address: Address;
     phone: string;
-    links: {
-        self: {
-            href: string;
-        }
+    _links: {
+        self: [
+            { href: string; }
+        ]
+    };
+
+    constructor() {
+        this.address = new Address();
     }
 }

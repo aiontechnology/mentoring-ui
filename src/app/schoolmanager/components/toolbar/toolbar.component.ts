@@ -18,7 +18,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
-import { NewSchoolDialogComponent } from '../new-school-dialog/new-school-dialog.component';
+import { SchoolDialogComponent } from '../new-school-dialog/school-dialog.component';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SchoolCacheService } from '../../services/school-cache.service';
@@ -31,6 +31,8 @@ import { ConfimationDialogComponent } from '../confimation-dialog/confimation-di
 })
 export class ToolbarComponent {
 
+  private DIALOG_WIDTH = '700px';
+
   @Input() isHandset$: Observable<boolean>;
   @Input() drawer: MatDrawer;
 
@@ -39,13 +41,28 @@ export class ToolbarComponent {
               private router: Router,
               private schoolCacheService: SchoolCacheService) { }
 
+  /**
+   * Function that lets the toolbar know if it should enable the 'edit' feature.
+   * The feature should be enabled when a single school is selected.
+   */
+  enableEdit() {
+    return this.schoolCacheService.selection.selected.length === 1;
+  }
+
+  /**
+   * Function that lets the toolbar know if it should enable the 'remove' feature.
+   * The feature should be enabled when one or more schools are selected.
+   */
   enableRemove() {
     return this.schoolCacheService.selection.selected.length > 0;
   }
 
+  /**
+   * Opens a dialog for adding a new school.
+   */
   openAddSchoolDialog(): void {
-    const dialogRef = this.dialog.open(NewSchoolDialogComponent, {
-      width: '700px'
+    const dialogRef = this.dialog.open(SchoolDialogComponent, {
+      width: this.DIALOG_WIDTH
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -58,12 +75,39 @@ export class ToolbarComponent {
     });
   }
 
+  /**
+   * Opens a dialog for editing an existing school.
+   */
+  openEditSchoolDialog(): void {
+    const school = this.schoolCacheService.selection.selected[0];
+    const dialogRef = this.dialog.open(SchoolDialogComponent, {
+      width: this.DIALOG_WIDTH,
+      data: { school }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.schoolCacheService.selection.clear();
+      this.openSnackBar('School updated', '')
+        .onAction().subscribe(() => {
+          this.router.navigate(['/schoolmanager']);
+        });
+    });
+  }
+
+  /**
+   * Opens a snackbar to display the given message.
+   * @param message The message to display in the snackbar.
+   * @param action The action lable to display.
+   */
   openSnackBar(message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
     return this.snackBar.open(message, action, {
       duration: 5000,
     });
   }
 
+  /**
+   * remove a one or more schools.
+   */
   removeSelectedSchools() {
     const dialogRef = this.dialog.open(ConfimationDialogComponent, {
       width: '500px'

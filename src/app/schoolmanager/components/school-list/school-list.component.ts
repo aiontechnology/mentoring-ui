@@ -21,11 +21,11 @@ import { SchoolCacheService } from '../../services/school-cache.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
-  selector: 'ms-main-content',
-  templateUrl: './main-content.component.html',
-  styleUrls: ['./main-content.component.scss']
+  selector: 'ms-school-list',
+  templateUrl: './school-list.component.html',
+  styleUrls: ['./school-list.component.scss']
 })
-export class MainContentComponent implements OnInit, AfterViewInit {
+export class SchoolListComponent implements OnInit, AfterViewInit {
 
   constructor(public schoolCacheService: SchoolCacheService,
               private breakpointObserver: BreakpointObserver) { }
