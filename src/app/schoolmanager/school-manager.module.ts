@@ -25,7 +25,7 @@ import { MaterialModule } from '../shared/material.module';
 import { SchoolListComponent } from './components/school-list/school-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SchoolService } from './services/school.service';
-import { SchoolDialogComponent } from './components/new-school-dialog/school-dialog.component';
+import { SchoolDialogComponent } from './components/school-dialog/school-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchoolCacheService } from './services/school-cache.service';
 import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
