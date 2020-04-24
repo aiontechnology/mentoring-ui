@@ -16,21 +16,21 @@
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NewSchoolDialogComponent } from './new-school-dialog.component';
+import { SchoolListComponent } from './school-list.component';
 
-describe('NewSchoolDialogComponent', () => {
-  let component: NewSchoolDialogComponent;
-  let fixture: ComponentFixture<NewSchoolDialogComponent>;
+describe('MainContentComponent', () => {
+  let component: SchoolListComponent;
+  let fixture: ComponentFixture<SchoolListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [NewSchoolDialogComponent]
+      declarations: [SchoolListComponent]
     })
       .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NewSchoolDialogComponent);
+    fixture = TestBed.createComponent(SchoolListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

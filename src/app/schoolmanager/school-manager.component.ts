@@ -14,7 +14,18 @@
  * limitations under the License.
  */
 
-export const environment = {
-  production: true,
-  apiUri: 'https://ve17iw2h0g.execute-api.us-west-2.amazonaws.com/prod'
-};
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'ms-school-manager',
+  templateUrl: './school-manager.component.html',
+  styleUrls: ['./school-manager.component.scss']
+})
+export class SchoolManagerComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}

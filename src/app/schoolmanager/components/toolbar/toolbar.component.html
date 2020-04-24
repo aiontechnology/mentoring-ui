@@ -35,10 +35,10 @@ limitations under the License.
     <button mat-menu-item (click)="openAddSchoolDialog()">
       Create New School
     </button>
-    <button mat-menu-item href="#" disabled>
+    <button mat-menu-item (click)="openEditSchoolDialog()" [disabled]="!enableEdit()">
       Edit School
     </button>
-    <button mat-menu-item (click)="removeSelectedSchools()" [disabled]='!enableRemove()'>
+    <button mat-menu-item (click)="removeSelectedSchools()" [disabled]="!enableRemove()">
       Remove Schools
     </button>
   </mat-menu>
