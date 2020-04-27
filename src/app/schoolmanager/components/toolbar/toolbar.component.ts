@@ -18,7 +18,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
-import { SchoolDialogComponent } from '../new-school-dialog/school-dialog.component';
+import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SchoolCacheService } from '../../services/school-cache.service';
