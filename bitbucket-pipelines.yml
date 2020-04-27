@@ -15,23 +15,24 @@
 
 pipelines:
     branches:
-      develop:
-        - step:
-            name: Build, test and deploy
-            deployment: Test
-            image: python:3.7.4-alpine3.10
-            services:
-                - docker
-            caches:
-                - pip
-            script:
-                - pip3 install awscli
-                - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
-                - TAG="latest"
-                - eval $(aws ecr get-login --no-include-email --region us-west-2 | sed 's;https://;;g')
-                - docker build -t $IMAGE:$TAG .
-                - docker push $IMAGE:$TAG
+        develop:
+            - step:
+                name: Build, test and deploy
+                deployment: Test
+                image: python:3.7.4-alpine3.10
+                size: 2x
+                services:
+                    - docker
+                caches:
+                    - pip
+                script:
+                    - pip3 install awscli
+                    - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
+                    - TAG="latest"
+                    - eval $(aws ecr get-login --no-include-email --region us-west-2 | sed 's;https://;;g')
+                    - docker build -t $IMAGE:$TAG .
+                    - docker push $IMAGE:$TAG
 definitions:
     services:
         docker:
-            memory: 3072
+            memory: 4096
