@@ -65,10 +65,16 @@ export class SchoolCacheService {
     this.schools = this.schoolService.schools;
     this.schoolService.loadAll();
     this.schools.subscribe(s => {
+      console.log('Creating new datasource');
+      const savedFilter = this.dataSource?.filter;
       this.dataSource = new MatTableDataSource<School>(s);
       this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
+      if (savedFilter) {
+        console.log('Readding filter: ', savedFilter);
+        this.dataSource.filter = savedFilter;
+      }
     });
   }
 
