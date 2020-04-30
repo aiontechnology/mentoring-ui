@@ -147,7 +147,9 @@ export class SchoolDialogComponent {
         state: school?.address?.state || '',
         zip: school?.address?.zip || ''
       }),
-      phone: school?.phone || ''
+      phone: school?.phone || '',
+      district: school?.district || '',
+      isPrivate: school?.isPrivate
     });
   }
 

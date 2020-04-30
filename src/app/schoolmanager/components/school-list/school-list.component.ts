@@ -46,7 +46,7 @@ export class SchoolListComponent implements OnInit, AfterViewInit {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'name'];
     } else {
-      return ['select', 'name', 'street1', 'street2', 'city', 'state', 'zip', 'phone'];
+      return ['select', 'name', 'city', 'state', 'district', 'phone', 'private'];
     }
   }
 
