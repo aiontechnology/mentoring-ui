@@ -26,6 +26,8 @@ export class School {
     name: string;
     address: Address;
     phone: string;
+    district: string;
+    isPrivate: boolean;
     _links: {
         self: [
             { href: string; }
