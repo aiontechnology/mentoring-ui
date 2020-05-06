@@ -20,12 +20,53 @@ limitations under the License.
       <mat-card-title>{{ school?.name }}</mat-card-title>
     </mat-card-header>
     <mat-card-content class="mat-elevation-z8">
-      <table>
-        <tr>
-          <td>Address 1</td>
-          <td>{{ school?.address?.street1 }}</td>
-        </tr>
-      </table>
+      <div class="address">
+        <h1>Address</h1>
+        <table>
+          <tr>
+            <td>Street 1</td>
+            <td>{{ school?.address?.street1 }}</td>
+          </tr>
+          <tr>
+            <td>Street 2</td>
+            <td>{{ school?.address?.street2 }}</td>
+          </tr>
+          <tr>
+            <td>City</td>
+            <td>{{ school?.address?.city }}</td>
+          </tr>
+          <tr>
+            <td>State</td>
+            <td>{{ school?.address?.state }}</td>
+          </tr>
+          <tr>
+            <td>Zip</td>
+            <td>{{ school?.address?.zip }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="phone">
+        <h1>Phone</h1>
+        <table>
+          <tr>
+            <td>Phone Number</td>
+            <td>{{ school?.phone }}</td>
+          </tr>
+        </table>
+      </div>
+      <div class="other">
+        <h1>Other</h1>
+        <table>
+          <tr>
+            <td>School District</td>
+            <td>{{ school?.district }}</td>
+          </tr>
+          <tr>
+            <td>Private school?</td>
+            <td>{{ school?.isPrivate }}</td>
+          </tr>
+        </table>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>
