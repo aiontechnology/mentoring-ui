@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SchoolService } from '../../services/school.service';
 import { School } from '../../models/school';
@@ -24,18 +24,27 @@ import { School } from '../../models/school';
   templateUrl: './school-detail.component.html',
   styleUrls: ['./school-detail.component.scss']
 })
-export class SchoolDetailComponent {
+export class SchoolDetailComponent implements OnInit {
+
+  schoolService: SchoolService;
 
   schoolId;
   school: School;
 
   constructor(route: ActivatedRoute, schoolService: SchoolService) {
+    this.schoolService = schoolService;
     route.paramMap.subscribe(
       params => {
         this.schoolId = params.get('id');
-        this.school = schoolService.findById(this.schoolId);
       }
-    )
+    );
+  }
+
+  ngOnInit(): void {
+    this.schoolService.loadAll();
+    this.schoolService.schools.subscribe(s => {
+      this.school = this.schoolService.findById(this.schoolId);
+    });
   }
 
 }
