@@ -28,8 +28,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
+              "src/style/styles.scss",
+              "src/style/theme.scss",
+              "src/style/_variables.scss"
             ],
             "scripts": []
           },
