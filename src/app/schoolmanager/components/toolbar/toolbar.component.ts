@@ -21,7 +21,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { SchoolCacheService } from '../../services/school-cache.service';
+import { SchoolCacheService } from '../../services/school/school-cache.service';
 import { ConfimationDialogComponent } from '../confimation-dialog/confimation-dialog.component';
 
 @Component({
