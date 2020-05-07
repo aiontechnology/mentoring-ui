@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { School } from '../models/school';
+import { School } from '../../models/school/school';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
@@ -121,7 +121,7 @@ export class SchoolService {
 
   private logCache(): void {
     for (const school of this.dataStore.schools) {
-      console.log('Cache entry: ', school);
+      console.log('Cache entry (school): ', school);
     }
   }
 

@@ -17,7 +17,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { SchoolCacheService } from '../../services/school-cache.service';
+import { SchoolCacheService } from '../../services/school/school-cache.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
@@ -27,11 +27,11 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 })
 export class SchoolListComponent implements OnInit, AfterViewInit {
 
-  constructor(public schoolCacheService: SchoolCacheService,
-              private breakpointObserver: BreakpointObserver) { }
-
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(public schoolCacheService: SchoolCacheService,
+              private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
     this.schoolCacheService.establishDatasource();

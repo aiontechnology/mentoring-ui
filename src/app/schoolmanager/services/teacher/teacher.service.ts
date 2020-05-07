@@ -1,0 +1,64 @@
+/**
+ * Copyright 2020 Aion Technology LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { Teacher } from '../../models/teacher/teacher';
+import { HttpClient } from '@angular/common/http';
+
+@Injectable()
+export class TeacherService {
+
+  private teacherUri = environment.apiUri + '/api/v1/schools/{id}/teachers';
+
+  private _teachers: BehaviorSubject<Teacher[]>;
+
+  private dataStore: {
+    teachers: Teacher[];
+  };
+
+  constructor(private http: HttpClient) {
+    this.dataStore = { teachers: [] };
+    this._teachers = new BehaviorSubject<Teacher[]>([]);
+  }
+
+  get teachers(): Observable<Teacher[]> {
+    return this._teachers;
+  }
+
+  loadAdd(schoolId: string) {
+    const uri = this.teacherUri.replace('{id}', schoolId);
+    console.log('GET ', uri);
+    this.http.get<any>(uri)
+      .subscribe(data => {
+        this.dataStore.teachers = data?._embedded?.teacherModelList || [];
+        this.logCache();
+        this.publishTeachers();
+      });
+  }
+
+  private publishTeachers(): void {
+    this._teachers.next(Object.assign({}, this.dataStore).teachers);
+  }
+
+  private logCache(): void {
+    for (const teacher of this.dataStore.teachers) {
+      console.log('Cache entry (teacher): ', teacher);
+    }
+  }
+
+}
