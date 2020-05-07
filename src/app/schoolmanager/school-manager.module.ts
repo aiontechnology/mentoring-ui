@@ -24,12 +24,14 @@ import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MaterialModule } from '../shared/material.module';
 import { SchoolListComponent } from './components/school-list/school-list.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SchoolService } from './services/school.service';
+import { SchoolService } from './services/school/school.service';
 import { SchoolDialogComponent } from './components/school-dialog/school-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SchoolCacheService } from './services/school-cache.service';
+import { SchoolCacheService } from './services/school/school-cache.service';
 import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
 import { SchoolDetailComponent } from './components/school-detail/school-detail.component';
+import { TeacherListComponent, GradesPipe } from './components/teacher-list/teacher-list.component';
+import { TeacherService } from './services/teacher/teacher.service';
 
 const routes = [
   {
@@ -49,7 +51,10 @@ const routes = [
     SchoolListComponent,
     SchoolDialogComponent,
     ConfimationDialogComponent,
-    SchoolDetailComponent],
+    SchoolDetailComponent,
+    TeacherListComponent,
+    GradesPipe
+  ],
   imports: [
     CommonModule,
     HttpClientModule,
@@ -61,7 +66,8 @@ const routes = [
   ],
   providers: [
     SchoolService,
-    SchoolCacheService
+    SchoolCacheService,
+    TeacherService
   ]
 })
 export class SchoolManagerModule { }
