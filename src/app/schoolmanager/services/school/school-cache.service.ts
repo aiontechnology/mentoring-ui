@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { School } from '../models/school';
+import { School } from '../../models/school/school';
 import { SchoolService } from './school.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
@@ -31,7 +31,7 @@ export class SchoolCacheService {
   dataSource: MatTableDataSource<School>;
 
   /** An observable that provides changes to the set of Schools */
-  schools: Observable<School[]>;
+  private schools: Observable<School[]>;
 
   /** Manages the selection(s) of schools in the main-content table */
   selection = new SelectionModel<School>(true, []);

@@ -14,12 +14,7 @@
  * limitations under the License.
  */
 
-import { Address } from './address';
-
-export class Link {
-    rel: string;
-    href: string;
-}
+import { Address } from '../common/address';
 
 export class School {
     id: string;

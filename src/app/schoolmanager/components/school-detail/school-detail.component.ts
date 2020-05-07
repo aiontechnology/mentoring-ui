@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SchoolService } from '../../services/school.service';
-import { School } from '../../models/school';
+import { SchoolService } from '../../services/school/school.service';
+import { School } from '../../models/school/school';
+import { TeacherListComponent } from '../teacher-list/teacher-list.component';
 
 @Component({
   selector: 'ms-school-detail',
   templateUrl: './school-detail.component.html',
   styleUrls: ['./school-detail.component.scss']
 })
-export class SchoolDetailComponent implements OnInit {
+export class SchoolDetailComponent implements OnInit, AfterViewInit {
 
-  schoolService: SchoolService;
-
-  schoolId;
+  private schoolId: string;
   school: School;
 
-  constructor(route: ActivatedRoute, schoolService: SchoolService) {
-    this.schoolService = schoolService;
+  @ViewChild(TeacherListComponent) teacherList: TeacherListComponent;
+
+  constructor(route: ActivatedRoute, private schoolService: SchoolService) {
     route.paramMap.subscribe(
       params => {
         this.schoolId = params.get('id');
@@ -45,6 +45,10 @@ export class SchoolDetailComponent implements OnInit {
     this.schoolService.schools.subscribe(s => {
       this.school = this.schoolService.findById(this.schoolId);
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.teacherList.establishDatasource(this.schoolId);
   }
 
 }

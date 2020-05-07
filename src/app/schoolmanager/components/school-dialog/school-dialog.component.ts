@@ -16,9 +16,9 @@
 
 import { Component, Inject } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { School } from '../../models/school';
+import { School } from '../../models/school/school';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SchoolService } from '../../services/school.service';
+import { SchoolService } from '../../services/school/school.service';
 
 @Component({
   selector: 'ms-new-school-dialog',
