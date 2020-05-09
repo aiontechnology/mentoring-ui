@@ -29,6 +29,7 @@ import { School } from '../../models/school/school';
 export class SidenavComponent {
 
   selection = new SelectionModel<School>(true, []);
+  activeMenus: string[];
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -37,5 +38,10 @@ export class SidenavComponent {
     );
 
   constructor(private breakpointObserver: BreakpointObserver) { }
+
+  onActivate(componentReference) {
+    console.log(componentReference);
+    this.activeMenus = componentReference.activeMenus();
+  }
 
 }

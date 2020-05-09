@@ -35,9 +35,9 @@ limitations under the License.
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <ms-toolbar [isHandset$]="isHandset$" [drawer]="drawer"></ms-toolbar>
+    <ms-toolbar [isHandset$]="isHandset$" [drawer]="drawer" [activeMenus]="activeMenus"></ms-toolbar>
     <div class="wrapper">
-      <router-outlet></router-outlet>
+      <router-outlet (activate)="onActivate($event)"></router-outlet>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

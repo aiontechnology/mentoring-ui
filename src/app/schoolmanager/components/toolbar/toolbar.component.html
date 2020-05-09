@@ -32,14 +32,17 @@ limitations under the License.
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item (click)="openAddSchoolDialog()">
+    <button mat-menu-item *ngIf="isActive('add-school')" (click)="openAddSchoolDialog()" >
       Create New School
     </button>
-    <button mat-menu-item (click)="openEditSchoolDialog()" [disabled]="!enableEdit()">
+    <button mat-menu-item *ngIf="isActive('edit-school')" (click)="openEditSchoolDialog()" [disabled]="!enableEdit()">
       Edit School
     </button>
-    <button mat-menu-item (click)="removeSelectedSchools()" [disabled]="!enableRemove()">
+    <button mat-menu-item *ngIf="isActive('remove-school')" (click)="removeSelectedSchools()" [disabled]="!enableRemove()">
       Remove Schools
+    </button>
+    <button mat-menu-item *ngIf="isActive('add-teacher')" (click)="openAddTeacherDialog()">
+      Add Teacher
     </button>
   </mat-menu>
 </mat-toolbar>

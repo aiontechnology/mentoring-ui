@@ -42,6 +42,14 @@ export class SchoolListComponent implements OnInit, AfterViewInit {
     this.schoolCacheService.paginator = this.paginator;
   }
 
+  activeMenus(): Map<string, any> {
+    const menus = new Map<string, any>();
+    menus.set('add-school', {});
+    menus.set('edit-school', {});
+    menus.set('remove-school', {});
+    return menus;
+  }
+
   displayedColumns(): string[] {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'name'];

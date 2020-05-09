@@ -110,7 +110,7 @@ export class SchoolDialogComponent {
   /**
    * Save the form. Handles both new and updated schools.
    */
-  save() {
+  save(): void {
     const newSchool = this.model.value as School;
     if (this.isUpdate) {
       newSchool._links = this.model.value.school._links;
@@ -127,7 +127,7 @@ export class SchoolDialogComponent {
   /**
    * Dismiss the dialog without saving.
    */
-  dismiss() {
+  dismiss(): void {
     this.dialogRef.close(null);
   }
 
