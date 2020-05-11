@@ -21,9 +21,9 @@ limitations under the License.
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="Name" formControlName="name" required />
-        <mat-error *ngIf="model.hasError('required', 'name')"
-          >You must enter a name</mat-error
-        >
+        <mat-error *ngIf="model.hasError('required', 'name')">
+          You must enter a name
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -65,7 +65,7 @@ limitations under the License.
 
     <div class="dialog-container">
       <mat-form-field>
-        <input matInput placeholder="Phone" formControlName="phone" />
+        <input matInput msPhoneFormat placeholder="Phone Number" formControlName="phone" />
       </mat-form-field>
     </div>
 

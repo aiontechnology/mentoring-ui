@@ -25,18 +25,6 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { take, mergeAll, filter, toArray } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
-@Pipe({
-  name: 'grades'
-})
-
-export class GradesPipe implements PipeTransform {
-  transform(teacher: any, args?: any): any {
-    const part1: string = teacher.grade1;
-    const part2: string = teacher.grade2 ? ', ' + teacher.grade2 : '';
-    return part1 + part2;
-  }
-}
-
 @Component({
   selector: 'ms-teacher-list',
   templateUrl: './teacher-list.component.html',
@@ -65,7 +53,7 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
   }
 
   public establishDatasource(schoolId: string): void {
-    this.teacherService.loadAdd(schoolId);
+    this.teacherService.loadAll(schoolId);
   }
 
   ngAfterViewInit(): void {
