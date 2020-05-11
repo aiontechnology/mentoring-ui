@@ -40,6 +40,14 @@ export class SchoolDetailComponent implements OnInit, AfterViewInit {
     );
   }
 
+  activeMenus(): Map<string, any> {
+    const menus = new Map<string, any>();
+    menus.set('edit-school', { schoolId: this.schoolId });
+    menus.set('remove-school', { schoolId: this.schoolId});
+    menus.set('add-teacher', { schoolId: this.schoolId });
+    return menus;
+  }
+
   ngOnInit(): void {
     this.schoolService.loadAll();
     this.schoolService.schools.subscribe(s => {

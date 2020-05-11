@@ -30,8 +30,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchoolCacheService } from './services/school/school-cache.service';
 import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
 import { SchoolDetailComponent } from './components/school-detail/school-detail.component';
-import { TeacherListComponent, GradesPipe } from './components/teacher-list/teacher-list.component';
+import { TeacherListComponent } from './components/teacher-list/teacher-list.component';
 import { TeacherService } from './services/teacher/teacher.service';
+import { TeacherDialogComponent } from './components/teacher-dialog/teacher-dialog.component';
+import { PhoneFormatDirective } from './directives/phone-format.directive';
+import { PhoneFormatPipe } from './pipes/phone-format.pipe'
+import { GradesFormatPipe } from './pipes/grades-format.pipe';
 
 const routes = [
   {
@@ -53,7 +57,10 @@ const routes = [
     ConfimationDialogComponent,
     SchoolDetailComponent,
     TeacherListComponent,
-    GradesPipe
+    TeacherDialogComponent,
+    PhoneFormatDirective,
+    PhoneFormatPipe,
+    GradesFormatPipe
   ],
   imports: [
     CommonModule,

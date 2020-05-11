@@ -40,8 +40,25 @@ export class TeacherService {
     return this._teachers;
   }
 
-  loadAdd(schoolId: string) {
-    const uri = this.teacherUri.replace('{id}', schoolId);
+  addTeacher(schoolId: string, teacher: Teacher): Promise<Teacher> {
+    const uri = this.buildUri(schoolId);
+    console.log('POST ', uri);
+    return new Promise((resolver, reject) => {
+      console.log('Adding teacher:', schoolId, teacher);
+      this.http.post(uri, teacher)
+        .subscribe(data => {
+          const t = data as Teacher;
+          this.dataStore.teachers.push(t);
+          this.publishTeachers();
+          resolver(t);
+        }, error => {
+          console.error('Failed to create teacher');
+        });
+    });
+  }
+
+  loadAll(schoolId: string): void {
+    const uri = this.buildUri(schoolId);
     console.log('GET ', uri);
     this.http.get<any>(uri)
       .subscribe(data => {
@@ -53,6 +70,10 @@ export class TeacherService {
 
   private publishTeachers(): void {
     this._teachers.next(Object.assign({}, this.dataStore).teachers);
+  }
+
+  private buildUri(schoolId: string) {
+    return this.teacherUri.replace('{id}', schoolId);
   }
 
   private logCache(): void {

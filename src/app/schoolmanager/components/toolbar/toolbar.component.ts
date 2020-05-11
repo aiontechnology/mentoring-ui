@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatDrawer } from '@angular/material/sidenav';
 import { MatDialog } from '@angular/material/dialog';
@@ -23,24 +23,30 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/s
 import { Router } from '@angular/router';
 import { SchoolCacheService } from '../../services/school/school-cache.service';
 import { ConfimationDialogComponent } from '../confimation-dialog/confimation-dialog.component';
+import { TeacherDialogComponent } from '../teacher-dialog/teacher-dialog.component';
+import { min } from 'rxjs/operators';
 
 @Component({
   selector: 'ms-toolbar',
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.scss']
 })
-export class ToolbarComponent {
+export class ToolbarComponent implements AfterViewInit {
 
   private DIALOG_WIDTH = '700px';
 
   @Input() isHandset$: Observable<boolean>;
   @Input() drawer: MatDrawer;
+  @Input() activeMenus: Map<string, any>;
 
   constructor(private dialog: MatDialog,
               private snackBar: MatSnackBar,
               private router: Router,
               private schoolCacheService: SchoolCacheService) { }
 
+  ngAfterViewInit(): void {
+    console.log('Activating menus: ', this.activeMenus);
+  }
   /**
    * Function that lets the toolbar know if it should enable the 'edit' feature.
    * The feature should be enabled when a single school is selected.
@@ -57,6 +63,10 @@ export class ToolbarComponent {
     return this.schoolCacheService.selection.selected.length > 0;
   }
 
+  isActive(key: string): boolean {
+    return this.activeMenus.has(key);
+  }
+
   /**
    * Opens a dialog for adding a new school.
    */
@@ -67,9 +77,28 @@ export class ToolbarComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.openSnackBar('School added', '')
+        this.openSnackBar('School added', 'Navigate')
           .onAction().subscribe(() => {
-            this.router.navigate(['/schoolmanager']);
+            console.log('Navigating', result);
+            this.router.navigate(['/', 'schoolmanager', 'schools', result.id]);
+          });
+      }
+    });
+  }
+
+  openAddTeacherDialog(): void {
+    const dialogRef = this.dialog.open(TeacherDialogComponent, {
+      data: {
+        schoolId: this.activeMenus.get('add-teacher').schoolId
+      },
+      width: this.DIALOG_WIDTH
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.openSnackBar('Teacher added', '')
+          .onAction().subscribe(() => {
+            console.error('Cannot navigate to teacher');
           });
       }
     });
