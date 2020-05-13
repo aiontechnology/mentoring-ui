@@ -15,26 +15,22 @@
  */
 
 import { Injectable } from '@angular/core';
-import { SelectionModel } from '@angular/cdk/collections';
 import { School } from '../../models/school/school';
 import { SchoolService } from './school.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { filter, concatAll, map, toArray, mergeAll, tap, take } from 'rxjs/operators';
+import { SelectionManager } from '../selection-manager';
 
 @Injectable()
-export class SchoolCacheService {
+export class SchoolCacheService extends SelectionManager<School> {
 
   /** Datasource that is used by the table in the main-content component */
   dataSource: MatTableDataSource<School>;
 
   /** An observable that provides changes to the set of Schools */
   private schools: Observable<School[]>;
-
-  /** Manages the selection(s) of schools in the main-content table */
-  selection = new SelectionModel<School>(true, []);
 
   /** The sorting object */
   sort: MatSort;
@@ -46,7 +42,9 @@ export class SchoolCacheService {
    * Constructor
    * @param schoolService The SchoolService that is used for managing School instances.
    */
-  constructor(private schoolService: SchoolService) { }
+  constructor(private schoolService: SchoolService) {
+    super();
+  }
 
   /**
    * Apply a filter to the table datasource
@@ -82,39 +80,20 @@ export class SchoolCacheService {
     });
   }
 
-  getFirstSelection(): School {
-    console.log('Getting first selection', this.selection);
-    return this.selection.selected[0];
+  protected doRemoveItem(items: School[]): void {
+    this.schoolService.removeSchools(items);
   }
 
-  /**
-   * Whether the number of selected elements matches the total number of rows.
-   */
-  isAllSelected(): boolean {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
+  protected getDataObservable(): Observable<School[]> {
+    return this.schools;
   }
 
-  /**
-   * Selects all rows if they are not all selected; otherwise clear selection.
-   */
-  masterToggle(): void {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.filteredData.forEach(row => this.selection.select(row));
+  protected getDataSize(): number {
+    return this.dataSource.data.length;
   }
 
-  removeSelected(): void {
-    this.schools.pipe(
-      take(1),
-      mergeAll(),
-      filter(school => this.selection.isSelected(school)),
-      toArray()
-    ).subscribe(selected => {
-      this.schoolService.removeSchools(selected);
-      this.selection.clear();
-    });
+  protected getFilteredData(): School[] {
+    return this.dataSource.filteredData;
   }
 
   private sortingDataAccessor = (item: School, property: string) => {

@@ -36,6 +36,7 @@ import { TeacherDialogComponent } from './components/teacher-dialog/teacher-dial
 import { PhoneFormatDirective } from './directives/phone-format.directive';
 import { PhoneFormatPipe } from './pipes/phone-format.pipe'
 import { GradesFormatPipe } from './pipes/grades-format.pipe';
+import { TeacherCacheService } from './services/teacher/teacher-cache.service';
 
 const routes = [
   {
@@ -74,7 +75,8 @@ const routes = [
   providers: [
     SchoolService,
     SchoolCacheService,
-    TeacherService
+    TeacherService,
+    TeacherCacheService
   ]
 })
 export class SchoolManagerModule { }
