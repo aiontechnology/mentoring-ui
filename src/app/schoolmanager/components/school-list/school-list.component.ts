@@ -19,6 +19,12 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { SchoolCacheService } from '../../services/school/school-cache.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MenuReceiver } from '../../implementation/menu-receiver';
+import { EditSchoolDialogCommand, NewSchoolDialogCommand, RemoveSchoolCommand } from '../../implementation/menu-commands';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { MenuHandler } from '../../implementation/menu-handler';
 
 @Component({
   selector: 'ms-school-list',
@@ -27,27 +33,29 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 })
 export class SchoolListComponent implements OnInit, AfterViewInit {
 
+  private menuHandler: SchoolListMenuHandler;
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(public schoolCacheService: SchoolCacheService,
-              private breakpointObserver: BreakpointObserver) { }
+              private breakpointObserver: BreakpointObserver,
+              router: Router,
+              dialog: MatDialog,
+              snackBar: MatSnackBar) {
+    console.log('Constructing SchoolListComponent', schoolCacheService);
+    this.menuHandler = new SchoolListMenuHandler(router, dialog, snackBar, this.schoolCacheService);
+  }
 
   ngOnInit(): void {
     this.schoolCacheService.establishDatasource();
+    this.schoolCacheService.clearSelection();
   }
 
   ngAfterViewInit(): void {
     this.schoolCacheService.sort = this.sort;
     this.schoolCacheService.paginator = this.paginator;
-  }
-
-  activeMenus(): Map<string, any> {
-    const menus = new Map<string, any>();
-    menus.set('add-school', {});
-    menus.set('edit-school', {});
-    menus.set('remove-school', {});
-    return menus;
+    this.menuHandler.sendMenusToParent();
   }
 
   displayedColumns(): string[] {
@@ -56,6 +64,43 @@ export class SchoolListComponent implements OnInit, AfterViewInit {
     } else {
       return ['select', 'name', 'city', 'state', 'district', 'phone', 'private'];
     }
+  }
+
+}
+
+class SchoolListMenuHandler extends MenuHandler {
+
+  private parent: MenuReceiver;
+
+  constructor(router: Router, dialog: MatDialog, snackBar: MatSnackBar, schoolCacheSerice: SchoolCacheService) {
+    super();
+    console.log('Constructing MenuHandler', schoolCacheSerice);
+    this.currentMenus.set('add-school', new NewSchoolDialogCommand(router, dialog, snackBar));
+    this.currentMenus.set('edit-school', new EditSchoolDialogCommand(
+      router,
+      dialog,
+      snackBar,
+      () => schoolCacheSerice.getFirstSelection(),
+      () => schoolCacheSerice.clearSelection(),
+      () => schoolCacheSerice.selection.selected.length === 1));
+    this.currentMenus.set('remove-school', new RemoveSchoolCommand(
+      router,
+      dialog,
+      snackBar,
+      null,
+      () => schoolCacheSerice.removeSelected(),
+      () => {},
+      () => schoolCacheSerice.selection.selected.length > 0));
+  }
+
+  sendMenusToParent() {
+    console.log('Sending menus to parent', this.currentMenus);
+    this.parent.setMenus(this.currentMenus);
+  }
+
+  set parant(parent: MenuReceiver) {
+    console.log('Setting parent', parent);
+    this.parent = parent;
   }
 
 }

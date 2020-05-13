@@ -32,16 +32,36 @@ limitations under the License.
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item *ngIf="isActive('add-school')" (click)="openAddSchoolDialog()" >
+    <button
+      mat-menu-item
+      *ngIf="menuIsActive('add-school')"
+      (click)="getMenu('add-school').execute()"
+      [disabled]="!getMenu('add-school').isEnabled()"
+    >
       Create New School
     </button>
-    <button mat-menu-item *ngIf="isActive('edit-school')" (click)="openEditSchoolDialog()" [disabled]="!enableEdit()">
+    <button
+      mat-menu-item
+      *ngIf="menuIsActive('edit-school')"
+      (click)="getMenu('edit-school').execute()"
+      [disabled]="!getMenu('edit-school').isEnabled()"
+    >
       Edit School
     </button>
-    <button mat-menu-item *ngIf="isActive('remove-school')" (click)="removeSelectedSchools()" [disabled]="!enableRemove()">
+    <button
+      mat-menu-item
+      *ngIf="menuIsActive('remove-school')"
+      (click)="getMenu('remove-school').execute()"
+      [disabled]="!getMenu('remove-school').isEnabled()"
+    >
       Remove Schools
     </button>
-    <button mat-menu-item *ngIf="isActive('add-teacher')" (click)="openAddTeacherDialog()">
+    <button
+      mat-menu-item
+      *ngIf="menuIsActive('add-teacher')"
+      (click)="getMenu('add-teacher').execute()"
+      [disabled]="!getMenu('add-teacher').isEnabled()"
+    >
       Add Teacher
     </button>
   </mat-menu>

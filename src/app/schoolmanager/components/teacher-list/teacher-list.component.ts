@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild, AfterViewInit, Pipe, PipeTransform } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, Output, Input, EventEmitter } from '@angular/core';
 import { TeacherService } from '../../services/teacher/teacher.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -24,6 +24,10 @@ import { Observable } from 'rxjs';
 import { SelectionModel } from '@angular/cdk/collections';
 import { take, mergeAll, filter, toArray } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AddTeacherCommand } from '../../implementation/menu-commands';
+import { MenuHandler } from '../../implementation/menu-handler';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'ms-teacher-list',
@@ -36,12 +40,18 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
   selection = new SelectionModel<Teacher>(true, []);
 
   private teachers: Observable<Teacher[]>;
+  private menuHandler: TeacherListMenuHandler;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  @Input() schoolId: string;
+  @Output() publishMenuHandler = new EventEmitter<MenuHandler>();
+
   constructor(private teacherService: TeacherService,
-              private breakpointObserver: BreakpointObserver) { }
+              private breakpointObserver: BreakpointObserver,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
     this.teachers = this.teacherService.teachers;
@@ -59,6 +69,8 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     // this.schoolCacheService.sort = this.sort;
     // this.schoolCacheService.paginator = this.paginator;
+    this.menuHandler = new TeacherListMenuHandler(this.dialog, this.snackBar, this.schoolId);
+    this.publishMenuHandler.emit(this.menuHandler);
   }
 
   /**
@@ -97,6 +109,15 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
     } else {
       return ['select', 'name', 'email', 'phone', 'grades'];
     }
+  }
+
+}
+
+class TeacherListMenuHandler extends MenuHandler {
+
+  constructor(dialog: MatDialog, snackBar: MatSnackBar, schoolId: string) {
+    super();
+    this.currentMenus.set('add-teacher', new AddTeacherCommand(dialog, snackBar, schoolId));
   }
 
 }
