@@ -20,7 +20,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { SchoolCacheService } from '../../services/school/school-cache.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MenuReceiver } from '../../implementation/menu-receiver';
-import { EditSchoolDialogCommand, NewSchoolDialogCommand, RemoveSchoolCommand } from '../../implementation/menu-commands';
+import { EditSchoolDialogCommand, NewSchoolDialogCommand, RemoveSchoolCommand } from '../../implementation/school-menu-commands';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -75,8 +75,9 @@ class SchoolListMenuHandler extends MenuHandler {
   constructor(router: Router, dialog: MatDialog, snackBar: MatSnackBar, schoolCacheSerice: SchoolCacheService) {
     super();
     console.log('Constructing MenuHandler', schoolCacheSerice);
-    this.currentMenus.set('add-school', new NewSchoolDialogCommand(router, dialog, snackBar));
+    this.currentMenus.set('add-school', new NewSchoolDialogCommand('Create New School', router, dialog, snackBar));
     this.currentMenus.set('edit-school', new EditSchoolDialogCommand(
+      'Edit School',
       router,
       dialog,
       snackBar,
@@ -84,6 +85,7 @@ class SchoolListMenuHandler extends MenuHandler {
       () => schoolCacheSerice.clearSelection(),
       () => schoolCacheSerice.selection.selected.length === 1));
     this.currentMenus.set('remove-school', new RemoveSchoolCommand(
+      'Remove School(s)',
       router,
       dialog,
       snackBar,

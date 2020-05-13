@@ -32,37 +32,11 @@ limitations under the License.
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button
+    <button *ngFor="let menu of activeMenus | keyvalue"
       mat-menu-item
-      *ngIf="menuIsActive('add-school')"
-      (click)="getMenu('add-school').execute()"
-      [disabled]="!getMenu('add-school').isEnabled()"
-    >
-      Create New School
-    </button>
-    <button
-      mat-menu-item
-      *ngIf="menuIsActive('edit-school')"
-      (click)="getMenu('edit-school').execute()"
-      [disabled]="!getMenu('edit-school').isEnabled()"
-    >
-      Edit School
-    </button>
-    <button
-      mat-menu-item
-      *ngIf="menuIsActive('remove-school')"
-      (click)="getMenu('remove-school').execute()"
-      [disabled]="!getMenu('remove-school').isEnabled()"
-    >
-      Remove Schools
-    </button>
-    <button
-      mat-menu-item
-      *ngIf="menuIsActive('add-teacher')"
-      (click)="getMenu('add-teacher').execute()"
-      [disabled]="!getMenu('add-teacher').isEnabled()"
-    >
-      Add Teacher
+      (click)="menu.value.execute()"
+      [disabled]="!menu.value.isEnabled()">
+      {{ menu.value.title }}
     </button>
   </mat-menu>
 </mat-toolbar>

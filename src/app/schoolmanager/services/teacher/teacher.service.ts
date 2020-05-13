@@ -68,6 +68,19 @@ export class TeacherService {
       });
   }
 
+  removeTeachers(teachers: Teacher[]) {
+    teachers.forEach(teacher => {
+      this.http.delete(teacher._links.self[0].href, {})
+        .subscribe(data => {
+          const index: number = this.dataStore.teachers.indexOf(teacher);
+          if (index !== -1) {
+            this.dataStore.teachers.splice(index, 1);
+          }
+          this.publishTeachers();
+        });
+    });
+  }
+
   private publishTeachers(): void {
     this._teachers.next(Object.assign({}, this.dataStore).teachers);
   }
