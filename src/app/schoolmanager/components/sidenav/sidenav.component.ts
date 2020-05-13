@@ -20,16 +20,17 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
 import { School } from '../../models/school/school';
+import { MenuReceiver } from '../../implementation/menu-receiver';
 
 @Component({
   selector: 'ms-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss']
 })
-export class SidenavComponent {
+export class SidenavComponent implements MenuReceiver {
 
   selection = new SelectionModel<School>(true, []);
-  activeMenus: string[];
+  currentMenus: Map<string, any> = new Map();
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
@@ -40,8 +41,12 @@ export class SidenavComponent {
   constructor(private breakpointObserver: BreakpointObserver) { }
 
   onActivate(componentReference) {
-    console.log(componentReference);
-    this.activeMenus = componentReference.activeMenus();
+    console.log('Activating', componentReference);
+    componentReference.menuHandler.parent = this;
+  }
+
+  setMenus(menus: Map<string, any>): void {
+    this.currentMenus = menus;
   }
 
 }

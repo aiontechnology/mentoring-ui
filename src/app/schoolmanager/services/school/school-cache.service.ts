@@ -52,10 +52,14 @@ export class SchoolCacheService {
    * Apply a filter to the table datasource
    * @param filterValue The value to use as a filter
    */
-  applyFilter(filterValue: string) {
+  applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
+  }
+
+  clearSelection(): void {
+    this.selection.clear();
   }
 
   /**
@@ -78,10 +82,15 @@ export class SchoolCacheService {
     });
   }
 
+  getFirstSelection(): School {
+    console.log('Getting first selection', this.selection);
+    return this.selection.selected[0];
+  }
+
   /**
    * Whether the number of selected elements matches the total number of rows.
    */
-  isAllSelected() {
+  isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
     return numSelected === numRows;
@@ -90,13 +99,13 @@ export class SchoolCacheService {
   /**
    * Selects all rows if they are not all selected; otherwise clear selection.
    */
-  masterToggle() {
+  masterToggle(): void {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.filteredData.forEach(row => this.selection.select(row));
   }
 
-  removeSelected() {
+  removeSelected(): void {
     this.schools.pipe(
       take(1),
       mergeAll(),
@@ -108,7 +117,7 @@ export class SchoolCacheService {
     });
   }
 
-  private sortingDataAccessor = (item, property) => {
+  private sortingDataAccessor = (item: School, property: string) => {
     switch (property) {
       case 'street1': return item.address.street1;
       case 'street2': return item.address.street2;
