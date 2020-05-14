@@ -69,7 +69,7 @@ limitations under the License.
       </div>
       <div class="teachers">
         <h1>Teachers</h1>
-        <ms-teacher-list></ms-teacher-list>
+        <ms-teacher-list [schoolId]="schoolId" (publishMenuHandler)="menuHandler.receiveMenuHandlers($event)"></ms-teacher-list>
       </div>
     </mat-card-content>
   </mat-card>
