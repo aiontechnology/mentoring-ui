@@ -15,19 +15,15 @@
  */
 
 import { Component, OnInit, ViewChild, AfterViewInit, Output, Input, EventEmitter } from '@angular/core';
-import { TeacherService } from '../../services/teacher/teacher.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { Teacher } from '../../models/teacher/teacher';
-import { Observable } from 'rxjs';
-import { SelectionModel } from '@angular/cdk/collections';
-import { take, mergeAll, filter, toArray } from 'rxjs/operators';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AddTeacherCommand } from '../../implementation/menu-commands';
+import { AddTeacherCommand, RemoveTeacherCommand } from '../../implementation/teacher-menu-commands';
 import { MenuHandler } from '../../implementation/menu-handler';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TeacherCacheService } from '../../services/teacher/teacher-cache.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ms-teacher-list',
@@ -36,10 +32,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class TeacherListComponent implements OnInit, AfterViewInit {
 
-  dataSource: MatTableDataSource<Teacher>;
-  selection = new SelectionModel<Teacher>(true, []);
-
-  private teachers: Observable<Teacher[]>;
   private menuHandler: TeacherListMenuHandler;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -48,59 +40,25 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
   @Input() schoolId: string;
   @Output() publishMenuHandler = new EventEmitter<MenuHandler>();
 
-  constructor(private teacherService: TeacherService,
+  constructor(public teacherCacheService: TeacherCacheService,
               private breakpointObserver: BreakpointObserver,
+              private router: Router,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar) { }
-
-  ngOnInit(): void {
-    this.teachers = this.teacherService.teachers;
-    this.teachers.subscribe(t => {
-      this.dataSource = new MatTableDataSource<Teacher>(t);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-   });
+              private snackBar: MatSnackBar) { 
+    console.log('Constructing TeacherListComponent', teacherCacheService);
   }
 
-  public establishDatasource(schoolId: string): void {
-    this.teacherService.loadAll(schoolId);
+  ngOnInit(): void {
+    console.log('Establishing datasource with school id', this.schoolId);
+    this.teacherCacheService.establishDatasource(this.schoolId);
+    this.teacherCacheService.clearSelection();
+    this.menuHandler = new TeacherListMenuHandler(this.router, this.dialog, this.snackBar, this.teacherCacheService, this.schoolId);
   }
 
   ngAfterViewInit(): void {
-    // this.schoolCacheService.sort = this.sort;
-    // this.schoolCacheService.paginator = this.paginator;
-    this.menuHandler = new TeacherListMenuHandler(this.dialog, this.snackBar, this.schoolId);
+    this.teacherCacheService.sort = this.sort;
+    this.teacherCacheService.paginator = this.paginator;
     this.publishMenuHandler.emit(this.menuHandler);
-  }
-
-  /**
-   * Whether the number of selected elements matches the total number of rows.
-   */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
-
-  /**
-   * Selects all rows if they are not all selected; otherwise clear selection.
-   */
-  masterToggle() {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.filteredData.forEach(row => this.selection.select(row));
-  }
-
-  removeSelected() {
-    this.teachers.pipe(
-      take(1),
-      mergeAll(),
-      filter(teacher => this.selection.isSelected(teacher)),
-      toArray()
-    ).subscribe(selected => {
-      // this.teacherService.removeSchools(selected);
-      this.selection.clear();
-    });
   }
 
   displayedColumns(): string[] {
@@ -115,9 +73,18 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
 
 class TeacherListMenuHandler extends MenuHandler {
 
-  constructor(dialog: MatDialog, snackBar: MatSnackBar, schoolId: string) {
+  constructor(router: Router, dialog: MatDialog, snackBar: MatSnackBar, teacherCacheSerice: TeacherCacheService, schoolId: string) {
     super();
-    this.currentMenus.set('add-teacher', new AddTeacherCommand(dialog, snackBar, schoolId));
+    this.currentMenus.set('add-teacher', new AddTeacherCommand('Add Teacher', dialog, snackBar, schoolId));
+    this.currentMenus.set('remove-teacher', new RemoveTeacherCommand(
+      'Remove Teacher(s)',
+      router,
+      dialog,
+      snackBar,
+      null,
+      () => teacherCacheSerice.removeSelected(),
+      () => {},
+      () => teacherCacheSerice.selection.selected.length > 0));
   }
 
 }
