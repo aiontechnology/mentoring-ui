@@ -20,7 +20,7 @@ import { SchoolService } from '../../services/school/school.service';
 import { School } from '../../models/school/school';
 import { TeacherListComponent } from '../teacher-list/teacher-list.component';
 import { MenuReceiver } from '../../implementation/menu-receiver';
-import { EditSchoolDialogCommand, RemoveSchoolCommand } from '../../implementation/menu-commands';
+import { EditSchoolDialogCommand, RemoveSchoolCommand } from '../../implementation/school-menu-commands';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MenuHandler } from '../../implementation/menu-handler';
@@ -62,7 +62,6 @@ export class SchoolDetailComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     console.log('SchoolDetailComponent: ngAfterViewInit()');
-    this.teacherList.establishDatasource(this.schoolId);
     this.menuHandler.sendMenusToParent();
   }
 
@@ -77,6 +76,7 @@ class SchoolDetailMenuHandler extends MenuHandler {
   constructor(router: Router, dialog: MatDialog, snackBar: MatSnackBar, schoolService: SchoolService) {
     super();
     this.currentMenus.set('edit-school', new EditSchoolDialogCommand(
+      'Edit School',
       router,
       dialog,
       snackBar,
@@ -85,6 +85,7 @@ class SchoolDetailMenuHandler extends MenuHandler {
       () => true
     ));
     this.currentMenus.set('remove-school', new RemoveSchoolCommand(
+      'Remove School',
       router,
       dialog,
       snackBar,

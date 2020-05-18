@@ -24,6 +24,11 @@ export class Teacher {
     phone: string;
     grade1: number;
     grade2: number;
+    _links: {
+        self: [
+            { href: string; }
+        ]
+    };
 
     public grades(): string {
         return this.grade1 + this.grade2 ? ', ' + this.grade2 : '';

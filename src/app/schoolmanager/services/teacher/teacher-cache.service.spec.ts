@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
-import { MatDrawer } from '@angular/material/sidenav';
+import { TestBed } from '@angular/core/testing';
 
-@Component({
-  selector: 'ms-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss']
-})
-export class ToolbarComponent {
+import { TeacherCacheService } from './teacher-cache.service';
 
-  @Input() isHandset$: Observable<boolean>;
-  @Input() drawer: MatDrawer;
-  @Input() activeMenus: Map<string, any>;
+describe('TeacherCacheService', () => {
+  let service: TeacherCacheService;
 
-}
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(TeacherCacheService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});

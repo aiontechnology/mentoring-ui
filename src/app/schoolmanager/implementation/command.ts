@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-import { Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
-import { MatDrawer } from '@angular/material/sidenav';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 
-@Component({
-  selector: 'ms-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss']
-})
-export class ToolbarComponent {
+export abstract class Command {
 
-  @Input() isHandset$: Observable<boolean>;
-  @Input() drawer: MatDrawer;
-  @Input() activeMenus: Map<string, any>;
+    constructor(public title: string) {}
+
+    abstract execute(...args: any[]): void;
+
+    abstract isEnabled(...args: any[]): boolean;
+
+    protected openSnackBar(snackBar: MatSnackBar, message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
+        return snackBar.open(message, action, {
+            duration: 5000,
+        });
+    }
 
 }
+
