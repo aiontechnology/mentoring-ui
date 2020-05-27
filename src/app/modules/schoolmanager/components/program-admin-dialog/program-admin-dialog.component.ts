@@ -53,7 +53,7 @@ export class ProgramAdminDialogComponent {
     return formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      homePhone: '',
+      workPhone: '',
       cellPhone: '',
       email: ''
     });

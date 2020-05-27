@@ -67,7 +67,7 @@ export class TeacherDialogComponent {
     return formBuilder.group({
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      homePhone: '',
+      workPhone: '',
       cellPhone: '',
       email: '',
       grade1: undefined,

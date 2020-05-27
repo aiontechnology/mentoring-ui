@@ -22,7 +22,7 @@ export class Teacher {
     firstName: string;
     lastName: string;
     email: string;
-    homePhone: string;
+    workPhone: string;
     cellPhone: string;
     grade1: number;
     grade2: number;
