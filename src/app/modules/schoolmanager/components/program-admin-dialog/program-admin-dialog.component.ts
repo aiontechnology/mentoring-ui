@@ -51,7 +51,8 @@ export class ProgramAdminDialogComponent {
 
   private createModel(formBuilder: FormBuilder): FormGroup {
     return formBuilder.group({
-      name: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
       homePhone: '',
       cellPhone: '',
       email: ''

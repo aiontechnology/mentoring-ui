@@ -64,9 +64,9 @@ export class TeacherListComponent implements OnInit, AfterContentInit, AfterView
 
   displayedColumns(): string[] {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['select', 'name'];
+      return ['select', 'firstName', 'lastName'];
     } else {
-      return ['select', 'name', 'email', 'homePhone', 'cellPhone', 'grades'];
+      return ['select', 'firstName', 'lastName', 'email', 'homePhone', 'cellPhone', 'grades'];
     }
   }
 

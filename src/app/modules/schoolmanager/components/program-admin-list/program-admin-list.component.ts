@@ -65,9 +65,9 @@ export class ProgramAdminListComponent implements OnInit, AfterContentInit, Afte
 
   displayedColumns(): string[] {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['select', 'name'];
+      return ['select', 'firstName', 'lastName'];
     } else {
-      return ['select', 'name', 'email', 'homePhone', 'cellPhone'];
+      return ['select', 'firstName', 'lastName', 'email', 'homePhone', 'cellPhone'];
     }
   }
 
