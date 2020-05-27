@@ -15,7 +15,8 @@
  */
 
 export class ProgramAdmin {
-    name: string;
+    firstName: string;
+    lastName: string;
     email: string;
     homePhone: string;
     cellPhone: string;

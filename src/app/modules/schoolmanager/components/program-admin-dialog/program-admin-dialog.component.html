@@ -19,9 +19,18 @@ limitations under the License.
   <form [formGroup]="model">
     <div class="dialog-container">
       <mat-form-field>
-        <input matInput placeholder="Name" formControlName="name" required />
-        <mat-error *ngIf="model.hasError('required', 'name')">
-          You must enter a name
+        <input matInput placeholder="First Name" formControlName="firstName" required />
+        <mat-error *ngIf="model.hasError('required', 'firstName')">
+          You must enter a first name
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <input matInput placeholder="Last Name" formControlName="lastName" required />
+        <mat-error *ngIf="model.hasError('required', 'lastName')">
+          You must enter a last name
         </mat-error>
       </mat-form-field>
     </div>
