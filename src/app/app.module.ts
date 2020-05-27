@@ -18,24 +18,33 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { LandingPageComponent } from './components/landing-page/landing-page.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { ToolbarComponent } from './components/toolbar/toolbar.component';
+import { MaterialModule } from './shared/material.module';
 
-const routes = [
-  { path: 'schoolmanager', loadChildren: () => import('./schoolmanager/school-manager.module').then(m => m.SchoolManagerModule) },
-  { path: '**', redirectTo: 'schoolmanager' }
+const routes: Routes = [
+  { path: '', component: LandingPageComponent },
+  { path: 'schoolsmanager', loadChildren: () => import('./modules/schoolmanager/school-manager.module').then(m => m.SchoolManagerModule) }
 ];
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    LandingPageComponent,
+    SidenavComponent,
+    ToolbarComponent
   ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
+    MaterialModule,
     RouterModule.forRoot(routes)
   ],
-  providers: [],
+  providers: [
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
