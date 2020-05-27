@@ -18,7 +18,7 @@ export class ProgramAdmin {
     firstName: string;
     lastName: string;
     email: string;
-    homePhone: string;
+    workPhone: string;
     cellPhone: string;
     _links: {
         self: [

@@ -56,9 +56,9 @@ limitations under the License.
         <td mat-cell *matCellDef="let programAdmin">{{ programAdmin.email }}</td>
       </ng-container>
   
-      <ng-container matColumnDef="homePhone">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Home Phone</th>
-        <td mat-cell *matCellDef="let programAdmin">{{ programAdmin.homePhone | phone:'US' }}</td>
+      <ng-container matColumnDef="workPhone">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Work Phone</th>
+        <td mat-cell *matCellDef="let programAdmin">{{ programAdmin.workPhone | phone:'US' }}</td>
       </ng-container>
   
       <ng-container matColumnDef="cellPhone">
