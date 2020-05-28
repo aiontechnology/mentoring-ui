@@ -37,6 +37,10 @@ import { ProgramAdminListComponent } from './components/program-admin-list/progr
 import { ProgramAdminService } from './services/program-admin/program-admin.service';
 import { ProgramAdminCacheService } from './services/program-admin/program-admin-cache.service';
 import { ProgramAdminDialogComponent } from './components/program-admin-dialog/program-admin-dialog.component';
+import { PersonnelListComponent } from './components/personnel-list/personnel-list.component';
+import { PersonnelCacheService } from './services/personnel/personnel-cache.service';
+import { PersonnelService } from './services/personnel/personnel.service';
+import { PersonnelDialogComponent } from './components/personnel-dialog/personnel-dialog.component';
 
 const routes: Routes = [
   {
@@ -51,14 +55,16 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     GradesFormatPipe,
+    PersonnelListComponent,
+    ProgramAdminListComponent,
+    ProgramAdminDialogComponent,
     SchoolDetailComponent,
     SchoolDialogComponent,
     SchoolListComponent,
     SchoolManagerComponent,
     TeacherDialogComponent,
     TeacherListComponent,
-    ProgramAdminListComponent,
-    ProgramAdminDialogComponent
+    PersonnelDialogComponent
   ],
   imports: [
     CommonModule,
@@ -71,6 +77,8 @@ const routes: Routes = [
     SharedModule
   ],
   providers: [
+    PersonnelCacheService,
+    PersonnelService,
     ProgramAdminCacheService,
     ProgramAdminService,
     SchoolCacheService,
