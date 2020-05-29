@@ -70,13 +70,21 @@ export class SchoolDetailComponent implements OnInit, AfterContentInit, AfterVie
       case 0:
         this.menuState.makeGroupInvisible('teacher');
         this.menuState.makeGroupInvisible('program-admin');
+        this.menuState.makeGroupInvisible('personnel');
         break;
      case 1:
-        this.menuState.makeGroupInvisible('program-admin');
+        this.menuState.makeGroupInvisible('teacher');
+        this.menuState.makeGroupInvisible('personnel');
         break;
       case 2:
+        this.menuState.makeGroupInvisible('program-admin');
+        this.menuState.makeGroupInvisible('personnel');
+        break;
+      case 3:
+        this.menuState.makeGroupInvisible('program-admin');
         this.menuState.makeGroupInvisible('teacher');
-    }
+        break;
+      }
   }
 
 }
