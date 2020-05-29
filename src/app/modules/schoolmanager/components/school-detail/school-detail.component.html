@@ -71,6 +71,18 @@ limitations under the License.
       </mat-card-content>
     </mat-card>
   </mat-tab>
+  <mat-tab label="Program Administrators">
+    <mat-card> 
+      <mat-card-header>
+        <mat-card-title>Program Administrators</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="programAdmins">
+         <ms-program-admin-list [schoolId]="schoolId"></ms-program-admin-list>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
   <mat-tab label="Teachers">
     <mat-card> 
       <mat-card-header>
@@ -83,14 +95,14 @@ limitations under the License.
       </mat-card-content>
     </mat-card>
   </mat-tab>
-  <mat-tab label="Program Administrators">
+  <mat-tab label="Other Personnel">
     <mat-card> 
       <mat-card-header>
-        <mat-card-title>Program Administrators</mat-card-title>
+        <mat-card-title>Other Personnel</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="programAdmins">
-         <ms-program-admin-list [schoolId]="schoolId"></ms-program-admin-list>
+        <div class="personnel">
+         <ms-personnel-list [schoolId]="schoolId"></ms-personnel-list>
         </div>
       </mat-card-content>
     </mat-card>
