@@ -38,7 +38,7 @@ limitations under the License.
        <ng-container matColumnDef="type">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
         <td mat-cell *matCellDef="let programAdmin">
-          {{ programAdmin.type.replace('_', ' ') | titlecase }}
+          {{ programAdmin?.type?.replace('_', ' ') | titlecase }}
         </td>
       </ng-container>
   
