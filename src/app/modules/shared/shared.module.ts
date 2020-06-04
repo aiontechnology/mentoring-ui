@@ -20,10 +20,12 @@ import { PhoneFormatPipe } from './pipes/phone-format.pipe';
 import { PhoneFormatDirective } from './directives/phone-format.directive';
 import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
 import { MaterialModule } from 'src/app/shared/material.module';
+import { OnlyNumberDirective } from './directives/only-number.directive';
 
 @NgModule({
   declarations: [
     ConfimationDialogComponent,
+    OnlyNumberDirective,
     PhoneFormatDirective,
     PhoneFormatPipe
   ],
@@ -32,6 +34,7 @@ import { MaterialModule } from 'src/app/shared/material.module';
     MaterialModule
   ],
   exports: [
+    OnlyNumberDirective,
     PhoneFormatDirective,
     PhoneFormatPipe
   ]
