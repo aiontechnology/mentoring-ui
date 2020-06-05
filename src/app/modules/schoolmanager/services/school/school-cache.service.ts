@@ -56,10 +56,6 @@ export class SchoolCacheService extends SelectionManager<School> {
     this.dataSource.filter = filterValue;
   }
 
-  clearSelection(): void {
-    this.selection.clear();
-  }
-
   /**
    * Setup the table datasource.
    */
@@ -74,7 +70,7 @@ export class SchoolCacheService extends SelectionManager<School> {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
       if (savedFilter) {
-        console.log('Readding filter: ', savedFilter);
+        console.log('Reading filter: ', savedFilter);
         this.dataSource.filter = savedFilter;
       }
     });
