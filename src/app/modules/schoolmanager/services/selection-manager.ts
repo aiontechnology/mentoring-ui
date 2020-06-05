@@ -48,7 +48,7 @@ export abstract class SelectionManager<T> {
      */
     masterToggle(): void {
         this.isAllSelected() ?
-            this.selection.clear() :
+            this.clearSelection() :
             this.getFilteredData().forEach(row => this.selection.select(row));
     }
 
@@ -63,7 +63,7 @@ export abstract class SelectionManager<T> {
             toArray()
         ).subscribe(selected => {
             this.doRemoveItem(selected);
-            this.selection.clear();
+            this.clearSelection();
         });
     }
 
