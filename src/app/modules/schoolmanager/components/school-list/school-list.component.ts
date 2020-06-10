@@ -92,6 +92,7 @@ class SchoolListMenuManager {
       dialog,
       snackBar,
       null,
+      () => schoolCacheSerice.selectionCount,
       () => schoolCacheSerice.removeSelected(),
       () => { },
       () => schoolCacheSerice.selection.selected.length > 0));

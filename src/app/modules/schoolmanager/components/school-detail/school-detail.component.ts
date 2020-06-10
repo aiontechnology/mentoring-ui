@@ -112,6 +112,7 @@ class SchoolDetailMenuManager {
       dialog,
       snackBar,
       '/schoolmanager',
+      () => 1,
       () => schoolService.removeSchools([school]),
       () => {},
       () => true
