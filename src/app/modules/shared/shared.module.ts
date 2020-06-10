@@ -21,22 +21,26 @@ import { PhoneFormatDirective } from './directives/phone-format.directive';
 import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
 import { MaterialModule } from 'src/app/shared/material.module';
 import { OnlyNumberDirective } from './directives/only-number.directive';
+import { SelectionCountDisplayComponent } from './components/selection-count-display/selection-count-display.component';
 
 @NgModule({
   declarations: [
     ConfimationDialogComponent,
     OnlyNumberDirective,
     PhoneFormatDirective,
-    PhoneFormatPipe
+    PhoneFormatPipe,
+    SelectionCountDisplayComponent
   ],
   imports: [
     CommonModule,
     MaterialModule
   ],
   exports: [
+    ConfimationDialogComponent,
     OnlyNumberDirective,
     PhoneFormatDirective,
-    PhoneFormatPipe
+    PhoneFormatPipe,
+    SelectionCountDisplayComponent
   ]
 })
 export class SharedModule { }

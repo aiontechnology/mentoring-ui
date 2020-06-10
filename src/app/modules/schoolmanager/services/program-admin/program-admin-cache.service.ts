@@ -15,28 +15,12 @@
  */
 
 import { Injectable } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { ProgramAdmin } from '../../models/program-admin/program-admin';
-import { Observable } from 'rxjs';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
 import { ProgramAdminService } from './program-admin.service';
-import { SelectionManager } from '../selection-manager';
+import { DatasourceManager } from '../datasource-manager';
 
 @Injectable()
-export class ProgramAdminCacheService extends SelectionManager<ProgramAdmin> {
-
-  /** Datasource that is used by the table in the main-content component */
-  dataSource: MatTableDataSource<ProgramAdmin>;
-
-  /** An observable that provides changes to the set of Schools */
-  private programAdmins: Observable<ProgramAdmin[]>;
-
-  /** The sorting object */
-  sort: MatSort;
-
-  /** Tha paginator object */
-  paginator: MatPaginator;
+export class ProgramAdminCacheService extends DatasourceManager<ProgramAdmin> {
 
   /**
    * Constructor
@@ -47,29 +31,15 @@ export class ProgramAdminCacheService extends SelectionManager<ProgramAdmin> {
   }
 
   establishDatasource(schoolId: string): void {
-    this.programAdmins = this.programAdminService.programAdmins;
+    this.elements = this.programAdminService.programAdmins;
     this.programAdminService.loadAll(schoolId);
-    this.programAdmins.subscribe(t => {
-      this.dataSource = new MatTableDataSource<ProgramAdmin>(t);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+    this.elements.subscribe(t => {
+      this.dataSource.data = t;
     });
   }
 
   protected doRemoveItem(items: ProgramAdmin[]): void {
     this.programAdminService.removeProgramAdmins(items);
-  }
-
-  protected getDataObservable(): Observable<ProgramAdmin[]> {
-    return this.programAdmins;
-  }
-
-  protected getDataSize(): number {
-    return this.dataSource.data.length;
-  }
-
-  protected getFilteredData(): ProgramAdmin[] {
-    return this.dataSource.filteredData;
   }
 
 }

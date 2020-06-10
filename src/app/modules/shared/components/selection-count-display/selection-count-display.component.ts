@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-table {
-  width: 100%;
-}
+import { Component, OnInit, Input } from '@angular/core';
 
-th.mat-sort-header-sorted {
-  color: black;
-}
+@Component({
+  selector: 'ms-selection-count-display',
+  templateUrl: './selection-count-display.component.html',
+  styleUrls: ['./selection-count-display.component.scss']
+})
+export class SelectionCountDisplayComponent {
 
-.mat-table {
-  overflow: auto;
-  max-height: 500px;
-}
+  @Input() selectionCount: number;
 
-.header {
-  min-height: 64px;
-  padding: 8px 24px 0;
-}
-
-.mat-column-select {
-  overflow: initial;
 }

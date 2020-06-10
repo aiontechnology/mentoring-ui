@@ -15,28 +15,12 @@
  */
 
 import { Injectable } from '@angular/core';
-import { SelectionManager } from '../selection-manager';
 import { Teacher } from '../../models/teacher/teacher';
 import { TeacherService } from './teacher.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { Observable } from 'rxjs';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+import { DatasourceManager } from '../datasource-manager';
 
 @Injectable()
-export class TeacherCacheService extends SelectionManager<Teacher>  {
-
-  /** Datasource that is used by the table in the main-content component */
-  dataSource: MatTableDataSource<Teacher>;
-
-  /** An observable that provides changes to the set of Schools */
-  private teachers: Observable<Teacher[]>;
-
-  /** The sorting object */
-  sort: MatSort;
-
-  /** Tha paginator object */
-  paginator: MatPaginator;
+export class TeacherCacheService extends DatasourceManager<Teacher>  {
 
   /**
    * Constructor
@@ -47,29 +31,15 @@ export class TeacherCacheService extends SelectionManager<Teacher>  {
   }
 
   establishDatasource(schoolId: string): void {
-    this.teachers = this.teacherService.teachers;
+    this.elements = this.teacherService.teachers;
     this.teacherService.loadAll(schoolId);
-    this.teachers.subscribe(t => {
-      this.dataSource = new MatTableDataSource<Teacher>(t);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+    this.elements.subscribe(t => {
+      this.dataSource.data = t;
     });
   }
 
   protected doRemoveItem(items: Teacher[]): void {
     this.teacherService.removeTeachers(items);
-  }
-
-  protected getDataObservable(): Observable<Teacher[]> {
-    return this.teachers;
-  }
-
-  protected getDataSize(): number {
-    return this.dataSource.data.length;
-  }
-
-  protected getFilteredData(): Teacher[] {
-    return this.dataSource.filteredData;
   }
 
 }
