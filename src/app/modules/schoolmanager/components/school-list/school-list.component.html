@@ -22,7 +22,10 @@ limitations under the License.
     <mat-card-content class="mat-elevation-z8">
       <div class="header">
         <mat-form-field>
-          <input matInput (keyup)="schoolCacheService.applyFilter($event.target.value)" placeholder="Filter"/>
+          <input matInput [(ngModel)]="schoolCacheService.filterBinding" (keyup)="schoolCacheService.applyFilter($event.target.value)" placeholder="Filter"/>
+          <button mat-button *ngIf="schoolCacheService.filter" matSuffix mat-icon-button (click)="schoolCacheService.clearFilter()">
+            <mat-icon>close</mat-icon>
+          </button>
         </mat-form-field>
       </div>
 
