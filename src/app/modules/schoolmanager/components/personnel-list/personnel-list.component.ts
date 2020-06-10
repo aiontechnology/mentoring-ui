@@ -88,6 +88,7 @@ class PersonnelMenuManager {
       dialog,
       snackBar,
       null,
+      () => personnelCacheService.selectionCount,
       () => personnelCacheService.removeSelected(),
       () => { },
       () => personnelCacheService.selection.selected.length > 0));

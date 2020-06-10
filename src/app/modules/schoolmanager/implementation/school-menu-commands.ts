@@ -104,6 +104,7 @@ export class RemoveSchoolCommand extends Command {
                 private dialog: MatDialog,
                 private snackBar: MatSnackBar,
                 private routeTo: string,
+                private countSupplier: () => number,
                 private removeSchool: () => void,
                 private postAction: () => void,
                 private determineEnabled: () => boolean) {
@@ -112,10 +113,13 @@ export class RemoveSchoolCommand extends Command {
     }
 
     execute(): void {
+        const selectionCount = this.countSupplier();
+        const schoolLabel = selectionCount > 1 ? 'schools' : 'school';
+        const message = `Are you sure you want to delete ${ selectionCount } ${ schoolLabel }?`;
         const dialogRef = this.dialog.open(ConfimationDialogComponent, {
             width: '500px',
             data: {
-                message: 'Are you sure you want to delete these schools?'
+                message
               }
             });
 

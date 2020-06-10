@@ -35,6 +35,10 @@ export abstract class SelectionManager<T> {
         return this.selection.selected[0];
     }
 
+    get selectionCount(): number {
+        return this.selection.selected.length;
+    }
+
     /**
      * Whether the number of selected elements matches the total number of rows.
      */
