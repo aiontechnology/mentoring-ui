@@ -17,26 +17,10 @@
 import { Injectable } from '@angular/core';
 import { School } from '../../models/school/school';
 import { SchoolService } from './school.service';
-import { MatTableDataSource } from '@angular/material/table';
-import { Observable } from 'rxjs';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { SelectionManager } from '../selection-manager';
+import { DatasourceManager } from '../datasource-manager';
 
 @Injectable()
-export class SchoolCacheService extends SelectionManager<School> {
-
-  /** Datasource that is used by the table in the main-content component */
-  dataSource: MatTableDataSource<School>;
-
-  /** An observable that provides changes to the set of Schools */
-  private schools: Observable<School[]>;
-
-  /** The sorting object */
-  sort: MatSort;
-
-  /** Tha paginator object */
-  paginator: MatPaginator;
+export class SchoolCacheService extends DatasourceManager<School> {
 
   /** Binds to the filter input control. Used to clear the control when requested. */
   filterBinding: string;
@@ -50,36 +34,18 @@ export class SchoolCacheService extends SelectionManager<School> {
   }
 
   /**
-   * Apply a filter to the table datasource
-   * @param filterValue The value to use as a filter
-   */
-  applyFilter(filterValue: string): void {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
-  }
-
-  /**
-   * Clear the filter. Clear both the data source filter and the input binding
-   */
-  clearFilter(): void {
-    this.dataSource.filter = '';
-    this.filterBinding = '';
-  }
-
-  /**
    * Setup the table datasource.
    */
   establishDatasource(): void {
-    this.schools = this.schoolService.schools;
+    this.elements = this.schoolService.schools;
     this.schoolService.loadAll();
-    this.schools.subscribe(s => {
+    this.elements.subscribe(s => {
       console.log('Creating new datasource');
-      const savedFilter = this.dataSource?.filter;
-      this.dataSource = new MatTableDataSource<School>(s);
+      this.dataSource.data = s;
+
       this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+
+      const savedFilter = this.dataSource?.filter;
       if (savedFilter) {
         console.log('Reading filter: ', savedFilter);
         this.dataSource.filter = savedFilter;
@@ -96,18 +62,6 @@ export class SchoolCacheService extends SelectionManager<School> {
 
   protected doRemoveItem(items: School[]): void {
     this.schoolService.removeSchools(items);
-  }
-
-  protected getDataObservable(): Observable<School[]> {
-    return this.schools;
-  }
-
-  protected getDataSize(): number {
-    return this.dataSource.data.length;
-  }
-
-  protected getFilteredData(): School[] {
-    return this.dataSource.filteredData;
   }
 
   private sortingDataAccessor = (item: School, property: string) => {
