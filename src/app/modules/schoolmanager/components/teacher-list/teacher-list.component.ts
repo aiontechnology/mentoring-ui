@@ -87,6 +87,7 @@ class TeacherListMenuManager {
       dialog,
       snackBar,
       null,
+      () => teacherCacheSerice.selectionCount,
       () => teacherCacheSerice.removeSelected(),
       () => {},
       () => teacherCacheSerice.selection.selected.length > 0));

@@ -64,6 +64,7 @@ export class RemoveProgramAdminCommand extends Command {
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
               private routeTo: string,
+              private countSupplier: () => number,
               private removeTeacher: () => void,
               private postAction: () => void,
               private determineEnabled: () => boolean) {
@@ -72,10 +73,13 @@ export class RemoveProgramAdminCommand extends Command {
   }
 
     execute(): void {
+      const selectionCount = this.countSupplier();
+      const programAdminLabel = selectionCount > 1 ? 'program admins' : 'program admin';
+      const message = `Are you sure you want to delete ${ selectionCount } ${ programAdminLabel }?`;
       const dialogRef = this.dialog.open(ConfimationDialogComponent, {
           width: '500px',
           data: {
-            message: 'Are you sure you want to delete these program admins?'
+            message
           }
       });
 
