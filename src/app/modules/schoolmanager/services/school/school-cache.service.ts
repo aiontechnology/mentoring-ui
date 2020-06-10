@@ -38,6 +38,9 @@ export class SchoolCacheService extends SelectionManager<School> {
   /** Tha paginator object */
   paginator: MatPaginator;
 
+  /** Binds to the filter input control. Used to clear the control when requested. */
+  filterBinding: string;
+
   /**
    * Constructor
    * @param schoolService The SchoolService that is used for managing School instances.
@@ -54,6 +57,14 @@ export class SchoolCacheService extends SelectionManager<School> {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
+  }
+
+  /**
+   * Clear the filter. Clear both the data source filter and the input binding
+   */
+  clearFilter(): void {
+    this.dataSource.filter = '';
+    this.filterBinding = '';
   }
 
   /**
@@ -74,6 +85,13 @@ export class SchoolCacheService extends SelectionManager<School> {
         this.dataSource.filter = savedFilter;
       }
     });
+  }
+
+  /**
+   * Get the value of the data source filter.
+   */
+  get filter() {
+    return this.dataSource.filter;
   }
 
   protected doRemoveItem(items: School[]): void {
