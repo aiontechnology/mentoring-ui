@@ -88,6 +88,7 @@ class ProgramAdminListMenuManager {
       dialog,
       snackBar,
       null,
+      () => programAdminCacheSerice.selectionCount,
       () => programAdminCacheSerice.removeSelected(),
       () => {},
       () => programAdminCacheSerice.selection.selected.length > 0));

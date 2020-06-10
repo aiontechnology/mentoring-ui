@@ -62,6 +62,7 @@ export class RemovePersonnelCommand extends Command {
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
               private routeTo: string,
+              private countSupplier: () => number,
               private removePersonnel: () => void,
               private postAction: () => void,
               private determineEnabled: () => boolean) {
@@ -70,10 +71,12 @@ export class RemovePersonnelCommand extends Command {
   }
 
     execute(): void {
+      const selectionCount = this.countSupplier();
+      const message = `Are you sure you want to delete ${ selectionCount } personnel?`;
       const dialogRef = this.dialog.open(ConfimationDialogComponent, {
           width: '500px',
           data: {
-            message: 'Are you sure you want to delete these personnel?'
+            message
           }
       });
 
