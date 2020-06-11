@@ -43,6 +43,7 @@ export class SchoolListComponent implements OnInit, AfterContentInit, AfterViewI
               private snackBar: MatSnackBar) {
     console.log('Constructing SchoolListComponent', schoolCacheService);
   }
+
   ngOnInit(): void {
     this.schoolCacheService.establishDatasource();
     this.schoolCacheService.clearSelection();

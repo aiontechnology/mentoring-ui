@@ -15,28 +15,13 @@
  */
 
 import { Injectable } from '@angular/core';
-import { SelectionManager } from '../selection-manager';
 import { MatTableDataSource } from '@angular/material/table';
-import { Observable } from 'rxjs';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
 import { Personnel } from '../../models/personnel/personnel';
 import { PersonnelService } from './personnel.service';
+import { DatasourceManager } from '../datasource-manager';
 
 @Injectable()
-export class PersonnelCacheService extends SelectionManager<Personnel>  {
-
-  /** Datasource that is used by the table in the main-content component */
-  dataSource: MatTableDataSource<Personnel>;
-
-  /** An observable that provides changes to the set of Schools */
-  private personnel: Observable<Personnel[]>;
-
-  /** The sorting object */
-  sort: MatSort;
-
-  /** Tha paginator object */
-  paginator: MatPaginator;
+export class PersonnelCacheService extends DatasourceManager<Personnel>  {
 
   /**
    * Constructor
@@ -47,29 +32,15 @@ export class PersonnelCacheService extends SelectionManager<Personnel>  {
   }
 
   establishDatasource(schoolId: string): void {
-    this.personnel = this.personnelService.personnel;
+    this.elements = this.personnelService.personnel;
     this.personnelService.loadAll(schoolId);
-    this.personnel.subscribe(p => {
-      this.dataSource = new MatTableDataSource<Personnel>(p);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+    this.elements.subscribe(p => {
+      this.dataSource.data = p;
     });
   }
 
   protected doRemoveItem(items: Personnel[]): void {
     this.personnelService.removePersonnel(items);
-  }
-
-  protected getDataObservable(): Observable<Personnel[]> {
-    return this.personnel;
-  }
-
-  protected getDataSize(): number {
-    return this.dataSource.data.length;
-  }
-
-  protected getFilteredData(): Personnel[] {
-    return this.dataSource.filteredData;
   }
 
 }
