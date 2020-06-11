@@ -15,6 +15,14 @@ limitations under the License.
 -->
 
 <div class="teachers">
+  <div class="header">
+    <mat-form-field>
+      <input matInput [(ngModel)]="teacherCacheService.filterBinding" (keyup)="teacherCacheService.applyFilter($event.target.value)" placeholder="Filter"/>
+      <button mat-button *ngIf="teacherCacheService.filter" matSuffix mat-icon-button (click)="teacherCacheService.clearFilter()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
   <table mat-table [dataSource]="teacherCacheService.dataSource" matSort>
     <ng-container matColumnDef="select">
       <th mat-header-cell *matHeaderCellDef>
@@ -79,5 +87,10 @@ limitations under the License.
     ></tr>
   </table>
 
-  <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]" ></mat-paginator>
+  <table>
+    <tr>
+      <td><ms-selection-count-display [selectionCount]="teacherCacheService.selectionCount"></ms-selection-count-display></td>
+      <td><mat-paginator #paginator [pageSize]="teacherCacheService.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
+    </tr>
+  </table>
 </div>

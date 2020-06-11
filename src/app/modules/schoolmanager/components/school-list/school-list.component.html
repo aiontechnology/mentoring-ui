@@ -87,7 +87,12 @@ limitations under the License.
         ></tr>
       </table>
 
-      <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+      <table>
+        <tr>
+          <td><ms-selection-count-display [selectionCount]="schoolCacheService.selectionCount"></ms-selection-count-display></td>
+          <td><mat-paginator #paginator [pageSize]="schoolCacheService.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
+        </tr>
+      </table>
     </mat-card-content>
   </mat-card>
 </div>

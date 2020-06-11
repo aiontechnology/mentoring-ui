@@ -44,7 +44,7 @@ export abstract class SelectionManager<T> {
      */
     isAllSelected(): boolean {
         const numSelected = this.selection.selected.length;
-        return numSelected === this.getDataSize();
+        return numSelected === this.dataSize;
     }
 
     /**
@@ -53,14 +53,14 @@ export abstract class SelectionManager<T> {
     masterToggle(): void {
         this.isAllSelected() ?
             this.clearSelection() :
-            this.getFilteredData().forEach(row => this.selection.select(row));
+            this.filteredData.forEach(row => this.selection.select(row));
     }
 
     /**
      * Remove the currently selected items.
      */
     removeSelected(): void {
-        this.getDataObservable().pipe(
+        this.observableData.pipe(
             take(1),
             mergeAll(),
             filter(item => this.selection.isSelected(item)),
@@ -80,16 +80,16 @@ export abstract class SelectionManager<T> {
     /**
      * Get an Observable that contains the current list of items.
      */
-    protected abstract getDataObservable(): Observable<T[]>;
+    protected abstract get observableData(): Observable<T[]>;
 
     /**
      * Get the number of items in the data collection.
      */
-    protected abstract getDataSize(): number;
+    protected abstract get dataSize(): number;
 
     /**
      * Get the items from the filtered collection.
      */
-    protected abstract getFilteredData(): T[];
+    protected abstract get filteredData(): T[];
 
 }
