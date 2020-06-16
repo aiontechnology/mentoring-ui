@@ -40,7 +40,7 @@ export class SchoolCacheService extends DatasourceManager<School> {
     this.elements = this.schoolService.schools;
     this.schoolService.loadAll();
     this.elements.subscribe(s => {
-      console.log('Creating new datasource');
+      console.log('Creating new school datasource');
       this.dataSource.data = s;
 
       this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
