@@ -19,11 +19,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Teacher } from '../../models/teacher/teacher';
 import { TeacherService } from '../../services/teacher/teacher.service';
-
-interface Grade {
-  value: string;
-  valueView: string;
-}
+import { grades } from 'src/app/modules/shared/constants/grades';
+import { Grade } from 'src/app/modules/shared/types/grade';
 
 @Component({
   selector: 'ms-teacher-dialog',
@@ -35,14 +32,7 @@ export class TeacherDialogComponent {
   model: FormGroup;
   schoolId: string;
 
-  grades: Grade[] = [
-    { value: '1', valueView: 'First' },
-    { value: '2', valueView: 'Second' },
-    { value: '3', valueView: 'Third' },
-    { value: '4', valueView: 'Fourth' },
-    { value: '5', valueView: 'Fifth' },
-    { value: '6', valueView: 'Sixth' }
-  ];
+  grades: Grade[] = grades;
 
   constructor(private dialogRef: MatDialogRef<TeacherDialogComponent>,
               private teacherService: TeacherService,

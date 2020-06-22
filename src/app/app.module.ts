@@ -27,7 +27,10 @@ import { MaterialModule } from './shared/material.module';
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
-  { path: 'schoolsmanager', loadChildren: () => import('./modules/schoolmanager/school-manager.module').then(m => m.SchoolManagerModule) }
+  { path: 'schoolsmanager', loadChildren: () => import('./modules/school-manager/school-manager.module')
+    .then(m => m.SchoolManagerModule) },
+  { path: 'resourcemanager', loadChildren: () => import('./modules/resource-manager/resource-manager.module')
+    .then(m => m.ResourceManagerModule) }
 ];
 
 @NgModule({
