@@ -19,7 +19,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
-import { School } from '../../modules/schoolmanager/models/school/school';
+import { School } from '../../modules/school-manager/models/school/school';
 
 @Component({
   selector: 'ms-sidenav',
