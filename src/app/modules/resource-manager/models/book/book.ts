@@ -3,8 +3,8 @@ export class Book {
     author: string;
     gradeLevel: number;
     interests: [ string ];
-    characterTraits: [ string ];
-    successSkills: [string];
+    leadershipTraits: [ string ];
+    leadershipSkills: [string];
     _links: {
         self: [
             { href: string }
