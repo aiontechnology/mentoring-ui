@@ -28,6 +28,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from 'src/app/shared/material.module';
 import { MetaDataService } from './services/meta-data/meta-data.service';
+import { GameDialogComponent } from './components/game-dialog/game-dialog.component';
+import { GameService } from './services/resources/game.service';
+import { GameCacheService } from './services/resources/game-cache.service';
 
 const routes: Routes = [
   {
@@ -42,7 +45,8 @@ const routes: Routes = [
   declarations: [
     BookDialogComponent,
     ResourceListComponent,
-    ResourceManagerComponent
+    ResourceManagerComponent,
+    GameDialogComponent
   ],
   imports: [
     CommonModule,
@@ -57,6 +61,8 @@ const routes: Routes = [
   providers: [
     BookCacheService,
     BookService,
+    GameCacheService,
+    GameService,
     MetaDataService
   ]
 })

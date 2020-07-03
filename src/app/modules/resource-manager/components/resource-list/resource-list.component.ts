@@ -19,7 +19,7 @@ import { MenuStateService } from 'src/app/services/menu-state.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { NewBookDialogCommand } from '../../implementation/resource-menu-command';
+import { NewBookDialogCommand, NewGameDialogCommand } from '../../implementation/resource-menu-commands';
 
 @Component({
   selector: 'ms-resource-list',
@@ -51,5 +51,7 @@ class ResourceListMenuManager {
                   snackBar: MatSnackBar) {
     console.log('Constructing MenuHandler');
     menuState.add(new NewBookDialogCommand('Create New Book', router, dialog, snackBar));
+    menuState.add(new NewGameDialogCommand('Create New Game', router, dialog, snackBar));
   }
+
 }
