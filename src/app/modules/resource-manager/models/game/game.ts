@@ -14,10 +14,16 @@
  * limitations under the License.
  */
 
-import { Book } from './book';
-
-describe('Book', () => {
-  it('should create an instance', () => {
-    expect(new Book()).toBeTruthy();
-  });
-});
+export class Game {
+    name: string;
+    description: string;
+    gradeLevel: number;
+    interests: [ string ];
+    leadershipTraits: [ string ];
+    leadershipSkills: [string];
+    _links: {
+        self: [
+            { href: string }
+        ]
+    };
+}

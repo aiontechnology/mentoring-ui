@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BookService } from './book.service';
+import { GameDialogComponent } from './game-dialog.component';
 
-describe('BookService', () => {
-  let service: BookService;
+describe('GameDialogComponent', () => {
+  let component: GameDialogComponent;
+  let fixture: ComponentFixture<GameDialogComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ GameDialogComponent ]
+    })
+    .compileComponents();
+  }));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(BookService);
+    fixture = TestBed.createComponent(GameDialogComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });
