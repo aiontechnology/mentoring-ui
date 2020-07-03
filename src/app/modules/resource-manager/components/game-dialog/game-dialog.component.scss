@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import { Book } from './book';
-
-describe('Book', () => {
-  it('should create an instance', () => {
-    expect(new Book()).toBeTruthy();
-  });
-});
+ .dialog-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .dialog-container > * {
+    width: 100%;
+  }
+  
