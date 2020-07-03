@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BookDialogComponent } from '../components/book-dialog/book-dialog.component';
+import { GameDialogComponent } from '../components/game-dialog/game-dialog.component';
 
 export class NewBookDialogCommand extends Command {
 
@@ -50,3 +51,35 @@ export class NewBookDialogCommand extends Command {
     }
 
  }
+
+export class NewGameDialogCommand extends Command {
+
+    constructor(title: string,
+                private router: Router,
+                private dialog: MatDialog,
+                private snackBar: MatSnackBar) {
+        super(title);
+    }
+
+    execute(): void {
+        const dialogRef = this.dialog.open(GameDialogComponent, {
+            width: '700px'
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.openSnackBar(this.snackBar, 'Book game', 'Navigate')
+                    .onAction().subscribe(() => {
+                        console.log('Navigating', result);
+                        this.router.navigate(['/', 'resourcemanager', 'games', result.id]);
+                    });
+            }
+        });
+    }
+
+    isEnabled(): boolean {
+        return true;
+    }
+
+ }
+ 
