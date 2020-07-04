@@ -14,12 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div>
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Resources</mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="mat-elevation-z8">
-    </mat-card-content>
-  </mat-card>
-</div>
+<mat-tab-group (selectedIndexChange)="onIndexChange($event)">
+  <mat-tab label="Books">
+    <mat-card>
+      <mat-card-content class="mat-elevation-z8">
+        <ms-book-list></ms-book-list>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="Games">
+    <mat-card>
+      <mat-card-content class="mat-elevation-z8">
+        <ms-game-list></ms-game-list>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>
