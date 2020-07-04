@@ -22,13 +22,10 @@ import { MenuStateService } from 'src/app/services/menu-state.service';
   templateUrl: './school-manager.component.html',
   styleUrls: ['./school-manager.component.scss']
 })
-export class SchoolManagerComponent implements OnInit {
+export class SchoolManagerComponent {
 
   constructor(menuState: MenuStateService) {
     menuState.title = 'School Manager';
-   }
-
-  ngOnInit(): void {
   }
 
 }
