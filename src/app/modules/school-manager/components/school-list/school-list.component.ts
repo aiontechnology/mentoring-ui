@@ -76,27 +76,27 @@ class SchoolListMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
-                  schoolCacheSerice: SchoolCacheService): void {
-    console.log('Constructing MenuHandler', schoolCacheSerice);
+                  schoolCacheService: SchoolCacheService): void {
+    console.log('Constructing MenuHandler', schoolCacheService);
     menuState.add(new NewSchoolDialogCommand('Create New School', router, dialog, snackBar));
     menuState.add(new EditSchoolDialogCommand(
       'Edit School',
       router,
       dialog,
       snackBar,
-      () => schoolCacheSerice.getFirstSelection(),
-      () => schoolCacheSerice.clearSelection(),
-      () => schoolCacheSerice.selection.selected.length === 1));
+      () => schoolCacheService.getFirstSelection(),
+      () => schoolCacheService.clearSelection(),
+      () => schoolCacheService.selection.selected.length === 1));
     menuState.add(new RemoveSchoolCommand(
       'Remove School(s)',
       router,
       dialog,
       snackBar,
       null,
-      () => schoolCacheSerice.selectionCount,
-      () => schoolCacheSerice.removeSelected(),
+      () => schoolCacheService.selectionCount,
+      () => schoolCacheService.removeSelected(),
       () => { },
-      () => schoolCacheSerice.selection.selected.length > 0));
+      () => schoolCacheService.selection.selected.length > 0));
   }
 
 }

@@ -66,6 +66,28 @@ export class BookService {
       });
   }
 
+  updateBook(book: Book): Promise<Book> {
+    console.log('Updating book: ', book);
+    return new Promise((resolver, reject) => {
+      this.http.put(book._links.self[0].href, this.stripLinks(book))
+        .subscribe(data => {
+          console.log('Recieved back: ', data);
+          const b = data as Book;
+          for (const index in this.dataStore.books) {
+            if (this.dataStore.books[index].title === b.title) {
+              console.log('Replacing book: ', this.dataStore.books[index], b);
+              this.dataStore.books[index] = b;
+              break;
+            }
+          }
+          this.publishBooks();
+          resolver(b);
+        }, error => {
+          console.error('Failed to update book');
+        });
+    });
+  }
+
   private logCache(): void {
     for (const book of this.dataStore.books) {
       console.log('Cache entry (book)', book);
