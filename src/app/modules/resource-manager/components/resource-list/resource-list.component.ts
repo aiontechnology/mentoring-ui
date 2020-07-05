@@ -14,44 +14,35 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, AfterContentInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { MenuStateService } from 'src/app/services/menu-state.service';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { NewBookDialogCommand, NewGameDialogCommand } from '../../implementation/resource-menu-commands';
 
 @Component({
   selector: 'ms-resource-list',
   templateUrl: './resource-list.component.html',
   styleUrls: ['./resource-list.component.scss']
 })
-export class ResourceListComponent implements OnInit, AfterContentInit {
+export class ResourceListComponent implements AfterViewInit {
 
-  constructor(private dialog: MatDialog,
-              private menuState: MenuStateService,
-              private router: Router,
-              private snackBar: MatSnackBar) {
-    }
-
-  ngOnInit(): void {
+  constructor(private menuState: MenuStateService) {
   }
 
-  ngAfterContentInit() {
-    ResourceListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar);
+  ngAfterViewInit(): void {
+    this.onIndexChange(0);
   }
 
-}
-
-class ResourceListMenuManager {
-
-  static addMenus(menuState: MenuStateService,
-                  router: Router,
-                  dialog: MatDialog,
-                  snackBar: MatSnackBar) {
-    console.log('Constructing MenuHandler');
-    menuState.add(new NewBookDialogCommand('Create New Book', router, dialog, snackBar));
-    menuState.add(new NewGameDialogCommand('Create New Game', router, dialog, snackBar));
+  onIndexChange(index: number): void {
+    console.log('Tab change', index, this.menuState.activeMenus);
+    this.menuState.makeAllVisible();
+    switch (index) {
+      case 0:
+        this.menuState.makeGroupInvisible('game');
+        break;
+     case 1:
+        this.menuState.makeGroupInvisible('book');
+        break;
+      }
   }
 
 }
+
