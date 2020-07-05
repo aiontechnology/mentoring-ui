@@ -14,18 +14,24 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import { MenuStateService } from 'src/app/services/menu-state.service';
+export enum ResourceType {
+    BOOK,
+    GAME
+}
 
-@Component({
-  selector: 'ms-resource-manager',
-  templateUrl: './resource-manager.component.html',
-  styleUrls: ['./resource-manager.component.scss']
-})
-export class ResourceManagerComponent {
-
-  constructor(menuState: MenuStateService) {
-    menuState.title = 'Resource Manager';
-   }
-
+export class Resource {
+    type: ResourceType;
+    title: string;
+    name: string;
+    author: string;
+    description: string;
+    gradeLevel: number;
+    interests: [ string ];
+    leadershipTraits: [ string ];
+    leadershipSkills: [string];
+    _links: {
+        self: [
+            { href: string }
+        ]
+    };
 }

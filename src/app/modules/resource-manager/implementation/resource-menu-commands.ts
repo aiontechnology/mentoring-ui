@@ -28,6 +28,7 @@ export class NewBookDialogCommand extends Command {
                 private dialog: MatDialog,
                 private snackBar: MatSnackBar) {
         super(title);
+        this.group = 'book';
     }
 
     execute(): void {
@@ -59,6 +60,7 @@ export class NewGameDialogCommand extends Command {
                 private dialog: MatDialog,
                 private snackBar: MatSnackBar) {
         super(title);
+        this.group = 'game';
     }
 
     execute(): void {

@@ -31,6 +31,8 @@ import { MetaDataService } from './services/meta-data/meta-data.service';
 import { GameDialogComponent } from './components/game-dialog/game-dialog.component';
 import { GameService } from './services/resources/game.service';
 import { GameCacheService } from './services/resources/game-cache.service';
+import { BookListComponent } from './components/book-list/book-list.component';
+import { GameListComponent } from './components/game-list/game-list.component';
 
 const routes: Routes = [
   {
@@ -46,7 +48,9 @@ const routes: Routes = [
     BookDialogComponent,
     ResourceListComponent,
     ResourceManagerComponent,
-    GameDialogComponent
+    GameDialogComponent,
+    BookListComponent,
+    GameListComponent
   ],
   imports: [
     CommonModule,

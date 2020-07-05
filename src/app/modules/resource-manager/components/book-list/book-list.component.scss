@@ -14,18 +14,29 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-
-@Component({
-  selector: 'ms-resource-manager',
-  templateUrl: './resource-manager.component.html',
-  styleUrls: ['./resource-manager.component.scss']
-})
-export class ResourceManagerComponent {
-
-  constructor(menuState: MenuStateService) {
-    menuState.title = 'Resource Manager';
-   }
-
-}
+ .books {
+    border: 1px solid black;
+  }
+  
+  table {
+    width: 100%;
+  }
+  
+  th.mat-sort-header-sorted {
+    color: black;
+  }
+  
+  .mat-table {
+    overflow: auto;
+    max-height: 500px;
+  }
+  
+  .header {
+    min-height: 64px;
+    padding: 8px 24px 0;
+  }
+  
+  .mat-column-select {
+    overflow: initial;
+  }
+  
