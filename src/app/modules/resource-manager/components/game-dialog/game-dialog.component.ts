@@ -66,7 +66,11 @@ export class GameDialogComponent {
   save(): void {
     const newGame = this.model.value as Game;
     if (this.isUpdate) {
-
+      console.log('Updating', this.model.value);
+      newGame._links = this.model.value.game._links;
+      this.gameService.updateGame(newGame).then(game => {
+        this.dialogRef.close(game);
+      });
     } else {
       this.gameService.addGame(newGame).then(game => {
         this.dialogRef.close(game);
@@ -79,7 +83,7 @@ export class GameDialogComponent {
   }
 
   private createModel(formBuilder: FormBuilder, game: Game): FormGroup {
-    return formBuilder.group({
+    const formGroup: FormGroup = formBuilder.group({
       game,
       name: game?.name || '',
       description: game?.description || '',
@@ -88,6 +92,29 @@ export class GameDialogComponent {
       leadershipTraits: [],
       leadershipSkills: []
     });
+    if (this.isUpdate) {
+      formGroup.setValue({
+        game,
+        name: game?.name,
+        description: game?.description,
+        gradeLevel: game?.gradeLevel?.toString(),
+        interests: this.convertArray(game?.interests),
+        leadershipSkills: this.convertArray(game?.leadershipSkills),
+        leadershipTraits: this.convertArray(game?.leadershipTraits)
+      });
+    }
+    return formGroup;
+  }
+
+  private convertArray(array: [any]) {
+    const result = [];
+    if (array) {
+      for (const item of array) {
+        result.push(item.name as string);
+      }
+    }
+    console.log('result', result);
+    return result;
   }
 
   private determineUpdate(formData: any): boolean {
