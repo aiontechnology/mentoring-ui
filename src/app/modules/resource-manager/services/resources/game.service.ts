@@ -74,7 +74,7 @@ export class GameService {
           console.log('Recieved back: ', data);
           const g = data as Game;
           for (const index in this.dataStore.games) {
-            if (this.dataStore.games[index].name === g.name) {
+            if (this.dataStore.games[index].id === g.id) {
               console.log('Replacing game: ', this.dataStore.games[index], g);
               this.dataStore.games[index] = g;
               break;
@@ -84,6 +84,19 @@ export class GameService {
           resolver(g);
         }, error => {
           console.error('Failed to update book');
+        });
+    });
+  }
+
+  removeGames(games: Game[]) {
+    games.forEach(game => {
+      this.http.delete(game._links.self[0].href, {})
+        .subscribe(data => {
+          const index: number = this.dataStore.games.indexOf(game);
+          if (index !== -1) {
+            this.dataStore.games.splice(index, 1);
+          }
+          this.publishGames();
         });
     });
   }

@@ -23,7 +23,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BookCacheService } from '../../services/resources/book-cache.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { NewBookDialogCommand, EditBookDialogCommand } from '../../implementation/book-menu-command';
+import { NewBookDialogCommand, EditBookDialogCommand, RemoveBookCommand } from '../../implementation/book-menu-command';
 
 @Component({
   selector: 'ms-book-list',
@@ -87,6 +87,16 @@ class BookListMenuManager {
       () => bookCacheService.getFirstSelection(),
       () => bookCacheService.clearSelection(),
       () => bookCacheService.selection.selected.length === 1));
-  }
+    menuState.add(new RemoveBookCommand(
+        'Remove Book(s)',
+        router,
+        dialog,
+        snackBar,
+        null,
+        () => bookCacheService.selectionCount,
+        () => bookCacheService.removeSelected(),
+        () => { },
+        () => bookCacheService.selection.selected.length > 0));
+    }
 
 }
