@@ -74,7 +74,7 @@ export class BookService {
           console.log('Recieved back: ', data);
           const b = data as Book;
           for (const index in this.dataStore.books) {
-            if (this.dataStore.books[index].title === b.title) {
+            if (this.dataStore.books[index].id === b.id) {
               console.log('Replacing book: ', this.dataStore.books[index], b);
               this.dataStore.books[index] = b;
               break;
@@ -84,6 +84,19 @@ export class BookService {
           resolver(b);
         }, error => {
           console.error('Failed to update book');
+        });
+    });
+  }
+
+  removeBooks(books: Book[]) {
+    books.forEach(book => {
+      this.http.delete(book._links.self[0].href, {})
+        .subscribe(data => {
+          const index: number = this.dataStore.books.indexOf(book);
+          if (index !== -1) {
+            this.dataStore.books.splice(index, 1);
+          }
+          this.publishBooks();
         });
     });
   }

@@ -36,7 +36,7 @@ export class GameCacheService extends DatasourceManager<Game> {
   }
 
   protected doRemoveItem(items: Game[]): void {
-    // implement
+    this.gameService.removeGames(items);
   }
 
 }

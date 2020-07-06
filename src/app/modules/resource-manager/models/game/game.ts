@@ -15,6 +15,7 @@
  */
 
 export class Game {
+    id: string;
     name: string;
     description: string;
     gradeLevel: number;
