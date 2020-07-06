@@ -36,7 +36,7 @@ export class BookCacheService extends DatasourceManager<Book> {
   }
 
   protected doRemoveItem(items: Book[]): void {
-    // implement
+    this.bookService.removeBooks(items);
   }
 
 }

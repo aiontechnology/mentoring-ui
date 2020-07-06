@@ -20,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GameDialogComponent } from '../components/game-dialog/game-dialog.component';
 import { Game } from '../models/game/game';
+import { ConfimationDialogComponent } from '../../shared/components/confimation-dialog/confimation-dialog.component';
 
 export class NewGameDialogCommand extends Command {
 
@@ -82,6 +83,50 @@ export class EditGameDialogCommand extends Command {
                     .onAction().subscribe(() => {
                         this.router.navigate(['/resourcemanager']);
                     });
+                this.postAction();
+            }
+        });
+    }
+
+    isEnabled(): boolean {
+        return this.determineEnabled();
+    }
+
+}
+
+export class RemoveGameCommand extends Command {
+
+    constructor(title: string,
+                private router: Router,
+                private dialog: MatDialog,
+                private snackBar: MatSnackBar,
+                private routeTo: string,
+                private countSupplier: () => number,
+                private removeGame: () => void,
+                private postAction: () => void,
+                private determineEnabled: () => boolean) {
+        super(title);
+        this.group = 'game';
+    }
+
+    execute(): void {
+        const selectionCount = this.countSupplier();
+        const gameLabel = selectionCount > 1 ? 'games' : 'game';
+        const message = `Are you sure you want to delete ${ selectionCount } ${ gameLabel }?`;
+        const dialogRef = this.dialog.open(ConfimationDialogComponent, {
+            width: '500px',
+            data: {
+                message
+              }
+            });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.removeGame();
+                this.openSnackBar(this.snackBar, 'Game(s) removed', '');
+                if (this.routeTo) {
+                    this.router.navigate([this.routeTo]);
+                }
                 this.postAction();
             }
         });

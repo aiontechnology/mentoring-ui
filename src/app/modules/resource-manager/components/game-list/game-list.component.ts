@@ -23,7 +23,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GameCacheService } from '../../services/resources/game-cache.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { NewGameDialogCommand, EditGameDialogCommand } from '../../implementation/game-menu-commands';
+import { NewGameDialogCommand, EditGameDialogCommand, RemoveGameCommand } from '../../implementation/game-menu-commands';
 
 @Component({
   selector: 'ms-game-list',
@@ -87,6 +87,16 @@ class GameListMenuManager {
       () => gameCacheService.getFirstSelection(),
       () => gameCacheService.clearSelection(),
       () => gameCacheService.selection.selected.length === 1));
+    menuState.add(new RemoveGameCommand(
+        'Remove Game(s)',
+        router,
+        dialog,
+        snackBar,
+        null,
+        () => gameCacheService.selectionCount,
+        () => gameCacheService.removeSelected(),
+        () => { },
+        () => gameCacheService.selection.selected.length > 0));
   }
 
 }
