@@ -66,6 +66,28 @@ export class GameService {
       });
   }
 
+  updateGame(game: Game): Promise<Game> {
+    console.log('Updating game: ', game);
+    return new Promise((resolver, reject) => {
+      this.http.put(game._links.self[0].href, this.stripLinks(game))
+        .subscribe(data => {
+          console.log('Recieved back: ', data);
+          const g = data as Game;
+          for (const index in this.dataStore.games) {
+            if (this.dataStore.games[index].name === g.name) {
+              console.log('Replacing game: ', this.dataStore.games[index], g);
+              this.dataStore.games[index] = g;
+              break;
+            }
+          }
+          this.publishGames();
+          resolver(g);
+        }, error => {
+          console.error('Failed to update book');
+        });
+    });
+  }
+
   private logCache(): void {
     for (const game of this.dataStore.games) {
       console.log('Cache entry (game)', game);

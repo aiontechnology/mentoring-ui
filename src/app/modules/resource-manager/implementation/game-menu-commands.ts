@@ -18,40 +18,8 @@ import { Command } from 'src/app/implementation/command';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BookDialogComponent } from '../components/book-dialog/book-dialog.component';
 import { GameDialogComponent } from '../components/game-dialog/game-dialog.component';
-
-export class NewBookDialogCommand extends Command {
-
-    constructor(title: string,
-                private router: Router,
-                private dialog: MatDialog,
-                private snackBar: MatSnackBar) {
-        super(title);
-        this.group = 'book';
-    }
-
-    execute(): void {
-        const dialogRef = this.dialog.open(BookDialogComponent, {
-            width: '700px'
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.openSnackBar(this.snackBar, 'Book added', 'Navigate')
-                    .onAction().subscribe(() => {
-                        console.log('Navigating', result);
-                        this.router.navigate(['/', 'bookmanager', 'books', result.id]);
-                    });
-            }
-        });
-    }
-
-    isEnabled(): boolean {
-        return true;
-    }
-
- }
+import { Game } from '../models/game/game';
 
 export class NewGameDialogCommand extends Command {
 
@@ -83,5 +51,44 @@ export class NewGameDialogCommand extends Command {
         return true;
     }
 
- }
- 
+}
+
+export class EditGameDialogCommand extends Command {
+
+    constructor(title: string,
+                private router: Router,
+                private dialog: MatDialog,
+                private snackBar: MatSnackBar,
+                private gameSupplier: () => Game,
+                private postAction: () => void,
+                private determineEnabled: () => boolean) {
+        super(title);
+        this.group = 'game';
+        console.log('Constructing EditSchoolDialogCommand', gameSupplier, postAction);
+    }
+
+    /**
+     * Opens a dialog for editing an existing school.
+     */
+    execute(): void {
+        const dialogRef = this.dialog.open(GameDialogComponent, {
+            width: '700px',
+            data: { game: this.gameSupplier() }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.openSnackBar(this.snackBar, 'Game updated', '')
+                    .onAction().subscribe(() => {
+                        this.router.navigate(['/resourcemanager']);
+                    });
+                this.postAction();
+            }
+        });
+    }
+
+    isEnabled(): boolean {
+        return this.determineEnabled();
+    }
+
+}

@@ -23,7 +23,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GameCacheService } from '../../services/resources/game-cache.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { NewGameDialogCommand } from '../../implementation/resource-menu-commands';
+import { NewGameDialogCommand, EditGameDialogCommand } from '../../implementation/game-menu-commands';
 
 @Component({
   selector: 'ms-game-list',
@@ -52,7 +52,7 @@ export class GameListComponent implements OnInit, AfterContentInit, AfterViewIni
 
   ngAfterContentInit(): void {
     console.log('Adding game list menus')
-    GameListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar);
+    GameListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.gameCacheService);
   }
 
   ngAfterViewInit(): void {
@@ -75,9 +75,18 @@ class GameListMenuManager {
   static addMenus(menuState: MenuStateService,
                   router: Router,
                   dialog: MatDialog,
-                  snackBar: MatSnackBar) {
+                  snackBar: MatSnackBar,
+                  gameCacheService: GameCacheService) {
     console.log('Constructing MenuHandler');
     menuState.add(new NewGameDialogCommand('Create New Game', router, dialog, snackBar));
+    menuState.add(new EditGameDialogCommand(
+      'Edit Game',
+      router,
+      dialog,
+      snackBar,
+      () => gameCacheService.getFirstSelection(),
+      () => gameCacheService.clearSelection(),
+      () => gameCacheService.selection.selected.length === 1));
   }
 
 }
