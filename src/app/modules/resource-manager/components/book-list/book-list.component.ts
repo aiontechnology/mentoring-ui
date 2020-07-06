@@ -21,9 +21,9 @@ import { MenuStateService } from 'src/app/services/menu-state.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BookCacheService } from '../../services/resources/book-cache.service';
-import { NewBookDialogCommand } from '../../implementation/resource-menu-commands';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { NewBookDialogCommand, EditBookDialogCommand } from '../../implementation/book-menu-command';
 
 @Component({
   selector: 'ms-book-list',
@@ -51,8 +51,8 @@ export class BookListComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   ngAfterContentInit(): void {
-    console.log('Adding book list menus')
-    BookListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar);
+    console.log('Adding book list menus');
+    BookListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.bookCacheService);
   }
 
   ngAfterViewInit(): void {
@@ -75,9 +75,18 @@ class BookListMenuManager {
   static addMenus(menuState: MenuStateService,
                   router: Router,
                   dialog: MatDialog,
-                  snackBar: MatSnackBar) {
+                  snackBar: MatSnackBar,
+                  bookCacheService: BookCacheService) {
     console.log('Constructing MenuHandler');
     menuState.add(new NewBookDialogCommand('Create New Book', router, dialog, snackBar));
+    menuState.add(new EditBookDialogCommand(
+      'Edit Book',
+      router,
+      dialog,
+      snackBar,
+      () => bookCacheService.getFirstSelection(),
+      () => bookCacheService.clearSelection(),
+      () => bookCacheService.selection.selected.length === 1));
   }
 
 }

@@ -65,8 +65,13 @@ export class BookDialogComponent {
 
   save(): void {
     const newBook = this.model.value as Book;
+    console.log('Saving book', newBook);
     if (this.isUpdate) {
-
+      console.log('Updating', this.model.value);
+      newBook._links = this.model.value.book._links;
+      this.bookService.updateBook(newBook).then(book => {
+        this.dialogRef.close(book);
+      });
     } else {
       this.bookService.addBook(newBook).then(book => {
         this.dialogRef.close(book);
@@ -79,15 +84,39 @@ export class BookDialogComponent {
   }
 
   private createModel(formBuilder: FormBuilder, book: Book): FormGroup {
-    return formBuilder.group({
+    console.log('Book', book);
+    const formGroup: FormGroup = formBuilder.group({
       book,
-      title: book?.title || '',
-      author: book?.author || '',
-      gradeLevel: book?.gradeLevel || '',
+      title: '',
+      author: '',
+      gradeLevel: '',
       interests: [],
       leadershipTraits: [],
       leadershipSkills: []
     });
+    if (this.isUpdate) {
+      formGroup.setValue({
+        book,
+        title: book?.title,
+        author: book?.author,
+        gradeLevel: book?.gradeLevel?.toString(),
+        interests: this.convertArray(book?.interests),
+        leadershipSkills: this.convertArray(book?.leadershipSkills),
+        leadershipTraits: this.convertArray(book?.leadershipTraits)
+      });
+    }
+    return formGroup;
+  }
+
+  private convertArray(array: [any]) {
+    const result = [];
+    if (array) {
+      for (const item of array) {
+        result.push(item.name as string);
+      }
+    }
+    console.log('result', result);
+    return result;
   }
 
   private determineUpdate(formData: any): boolean {
