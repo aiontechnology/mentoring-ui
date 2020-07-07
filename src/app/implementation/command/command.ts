@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 
-import { ProgramAdminService } from './program-admin.service';
+export abstract class Command {
 
-describe('ProgramAdminService', () => {
-  let service: ProgramAdminService;
+    constructor(public title: string, public group: string) {}
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ProgramAdminService);
-  });
+    isVisible = true;
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+    abstract execute(...args: any[]): void;
+
+    abstract isEnabled(...args: any[]): boolean;
+
+    protected openSnackBar(snackBar: MatSnackBar, message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
+        return snackBar.open(message, action, {
+            duration: 5000,
+        });
+    }
+
+}
+

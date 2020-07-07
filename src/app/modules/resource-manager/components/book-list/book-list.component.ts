@@ -23,7 +23,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BookCacheService } from '../../services/resources/book-cache.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { NewBookDialogCommand, EditBookDialogCommand, RemoveBookCommand } from '../../implementation/book-menu-command';
+import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
+import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
+import { BookDialogComponent } from '../book-dialog/book-dialog.component';
+import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 
 @Component({
   selector: 'ms-book-list',
@@ -78,25 +82,43 @@ class BookListMenuManager {
                   snackBar: MatSnackBar,
                   bookCacheService: BookCacheService) {
     console.log('Constructing MenuHandler');
-    menuState.add(new NewBookDialogCommand('Create New Book', router, dialog, snackBar));
-    menuState.add(new EditBookDialogCommand(
+    menuState.add(new NewDialogCommand(
+      'Create New Book',
+      'book',
+      BookDialogComponent,
+      'Book added',
+      null,
+      null,
+      router,
+      dialog,
+      snackBar));
+    menuState.add(new EditDialogCommand(
       'Edit Book',
+      'book',
+      BookDialogComponent,
+      'Book updated',
+      null,
       router,
       dialog,
       snackBar,
       () => bookCacheService.getFirstSelection(),
       () => bookCacheService.clearSelection(),
       () => bookCacheService.selection.selected.length === 1));
-    menuState.add(new RemoveBookCommand(
-        'Remove Book(s)',
-        router,
-        dialog,
-        snackBar,
-        null,
-        () => bookCacheService.selectionCount,
-        () => bookCacheService.removeSelected(),
-        () => { },
-        () => bookCacheService.selection.selected.length > 0));
+    menuState.add(new DeleteDialogCommand(
+      'Remove Book(s)',
+      'book',
+      ConfimationDialogComponent,
+      'Book(s) removed',
+      'book',
+      'books',
+      router,
+      dialog,
+      snackBar,
+      null,
+      () => bookCacheService.selectionCount,
+      () => bookCacheService.removeSelected(),
+      () => { },
+      () => bookCacheService.selection.selected.length > 0));
     }
 
 }

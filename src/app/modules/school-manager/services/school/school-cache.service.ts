@@ -16,8 +16,8 @@
 
 import { Injectable } from '@angular/core';
 import { School } from '../../models/school/school';
-import { SchoolService } from './school.service';
 import { DatasourceManager } from '../datasource-manager';
+import { SchoolRepositoryService } from './school-repository.service';
 
 @Injectable()
 export class SchoolCacheService extends DatasourceManager<School> {
@@ -29,7 +29,7 @@ export class SchoolCacheService extends DatasourceManager<School> {
    * Constructor
    * @param schoolService The SchoolService that is used for managing School instances.
    */
-  constructor(private schoolService: SchoolService) {
+  constructor(private schoolService: SchoolRepositoryService) {
     super();
   }
 
@@ -38,7 +38,7 @@ export class SchoolCacheService extends DatasourceManager<School> {
    */
   establishDatasource(): void {
     this.elements = this.schoolService.schools;
-    this.schoolService.loadAll();
+    this.schoolService.readAllSchools();
     this.elements.subscribe(s => {
       console.log('Creating new school datasource');
       this.dataSource.data = s;
@@ -61,7 +61,7 @@ export class SchoolCacheService extends DatasourceManager<School> {
   }
 
   protected doRemoveItem(items: School[]): void {
-    this.schoolService.removeSchools(items);
+    this.schoolService.deleteSchools(items);
   }
 
   private sortingDataAccessor = (item: School, property: string) => {

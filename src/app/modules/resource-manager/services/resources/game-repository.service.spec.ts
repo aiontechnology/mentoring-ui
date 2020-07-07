@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-export class Address {
+import { TestBed } from '@angular/core/testing';
 
-    street1: string;
-    street2: string;
-    city: string;
-    state: string;
-    zip: string;
+import { GameRepositoryService } from './game-repository.service';
 
-     constructor(json?: any) {
-        this.street1 = json?.street1;
-        this.street2 = json?.street2;
-        this.city = json?.city;
-        this.state = json?.state;
-        this.zip = json?.zip;
-    }
+describe('GameService', () => {
+  let service: GameRepositoryService;
 
-}
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(GameRepositoryService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});

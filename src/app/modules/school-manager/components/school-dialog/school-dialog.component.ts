@@ -15,10 +15,10 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { School } from '../../models/school/school';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { SchoolService } from '../../services/school/school.service';
+import { School } from '../../models/school/school';
+import { SchoolRepositoryService } from '../../services/school/school-repository.service';
 
 @Component({
   selector: 'ms-new-school-dialog',
@@ -100,25 +100,26 @@ export class SchoolDialogComponent {
    * @param data The data of the dialog.
    */
   constructor(private dialogRef: MatDialogRef<SchoolDialogComponent>,
-              private schoolService: SchoolService,
+              private schoolService: SchoolRepositoryService,
               private formBuilder: FormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
-    this.model = this.createModel(formBuilder, data?.school);
+    this.model = this.createModel(formBuilder, data?.model);
   }
 
   /**
    * Save the form. Handles both new and updated schools.
    */
   save(): void {
-    const newSchool = this.model.value as School;
+    const newSchool = new School(this.model.value);
     if (this.isUpdate) {
+      console.log('Updating', this.model.value);
       newSchool._links = this.model.value.school._links;
       this.schoolService.updateSchool(newSchool).then(school => {
         this.dialogRef.close(school);
       });
     } else {
-      this.schoolService.addSchool(newSchool).then(school => {
+      this.schoolService.createSchool(newSchool).then(school => {
         this.dialogRef.close(school);
       });
     }
@@ -137,20 +138,37 @@ export class SchoolDialogComponent {
    * @param school The School being edited (if any).
    */
   private createModel(formBuilder: FormBuilder, school: School): FormGroup {
-    return formBuilder.group({
+    const formGroup: FormGroup = formBuilder.group({
       school,
-      name: [school?.name || '', Validators.required],
+      name: ['', Validators.required],
       address: formBuilder.group({
-        street1: school?.address?.street1 || '',
-        street2: school?.address?.street2 || '',
-        city: school?.address?.city || '',
-        state: school?.address?.state || '',
-        zip: school?.address?.zip || ''
+        street1: null,
+        street2: null,
+        city: null,
+        state: null,
+        zip: null
       }),
-      phone: school?.phone || '',
-      district: school?.district || '',
-      isPrivate: school?.isPrivate
+      phone: null,
+      district: null,
+      isPrivate: null
     });
+    if (this.isUpdate) {
+      formGroup.setValue({
+        school,
+        name: school?.name,
+        address: {
+          street1: school?.address?.street1,
+          street2: school?.address?.street2,
+          city: school?.address?.city,
+          state: school?.address?.state,
+          zip: school?.address?.zip
+        },
+        phone: school?.phone,
+        district: school?.district,
+        isPrivate: school?.isPrivate
+      });
+    }
+    return formGroup;
   }
 
   /**

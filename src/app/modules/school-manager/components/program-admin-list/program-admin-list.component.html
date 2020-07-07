@@ -43,14 +43,6 @@ limitations under the License.
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="type">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-      <td mat-cell *matCellDef="let personnel">
-        <!-- <a [routerLink]="['personnels', personnel.id]">{{ personnel.firstName }}</a> -->
-        {{ personnel.firstName }}
-      </td>
-    </ng-container>
-
     <ng-container matColumnDef="firstName">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
       <td mat-cell *matCellDef="let personnel">

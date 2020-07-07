@@ -22,24 +22,24 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from '../../shared/material.module';
 import { SchoolListComponent } from './components/school-list/school-list.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SchoolService } from './services/school/school.service';
+import { SchoolRepositoryService } from './services/school/school-repository.service';
 import { SchoolDialogComponent } from './components/school-dialog/school-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchoolCacheService } from './services/school/school-cache.service';
 import { SchoolDetailComponent } from './components/school-detail/school-detail.component';
 import { TeacherListComponent } from './components/teacher-list/teacher-list.component';
-import { TeacherService } from './services/teacher/teacher.service';
+import { TeacherRepositoryService } from './services/teacher/teacher-repository.service';
 import { TeacherDialogComponent } from './components/teacher-dialog/teacher-dialog.component';
 import { GradesFormatPipe } from '../shared/pipes/grades-format.pipe';
 import { TeacherCacheService } from './services/teacher/teacher-cache.service';
 import { SharedModule } from '../shared/shared.module';
 import { ProgramAdminListComponent } from './components/program-admin-list/program-admin-list.component';
-import { ProgramAdminService } from './services/program-admin/program-admin.service';
+import { ProgramAdminRepositoryService } from './services/program-admin/program-admin-repository.service';
 import { ProgramAdminCacheService } from './services/program-admin/program-admin-cache.service';
 import { ProgramAdminDialogComponent } from './components/program-admin-dialog/program-admin-dialog.component';
 import { PersonnelListComponent } from './components/personnel-list/personnel-list.component';
 import { PersonnelCacheService } from './services/personnel/personnel-cache.service';
-import { PersonnelService } from './services/personnel/personnel.service';
+import { PersonnelRepositoryService } from './services/personnel/personnel-repository.service';
 import { PersonnelDialogComponent } from './components/personnel-dialog/personnel-dialog.component';
 
 const routes: Routes = [
@@ -78,13 +78,13 @@ const routes: Routes = [
   ],
   providers: [
     PersonnelCacheService,
-    PersonnelService,
+    PersonnelRepositoryService,
     ProgramAdminCacheService,
-    ProgramAdminService,
+    ProgramAdminRepositoryService,
     SchoolCacheService,
-    SchoolService,
+    SchoolRepositoryService,
     TeacherCacheService,
-    TeacherService
+    TeacherRepositoryService
   ]
 })
 export class SchoolManagerModule { }

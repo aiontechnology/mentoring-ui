@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+export interface LinksHolder<T> {
 
-import { GameService } from './game.service';
+    clearLinks(): T;
 
-describe('GameService', () => {
-  let service: GameService;
+    getSelfLink(): string;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(GameService);
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+}
