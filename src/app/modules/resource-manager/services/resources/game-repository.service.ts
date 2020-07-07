@@ -14,29 +14,40 @@
  * limitations under the License.
  */
 
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { DatasourceManager } from 'src/app/modules/school-manager/services/datasource-manager';
+import { BaseRepository } from 'src/app/implementation/repository/base-repository';
 import { Game } from '../../models/game/game';
-import { GameRepositoryService } from './game-repository.service';
 
 @Injectable()
-export class GameCacheService extends DatasourceManager<Game> {
+export class GameRepositoryService extends BaseRepository<Game> {
 
-  constructor(private gameService: GameRepositoryService) {
-    super();
+  constructor(http: HttpClient) {
+    super('/api/v1/games', http);
   }
 
-  establishDatasource(): void {
-    this.elements = this.gameService.items;
-    this.gameService.readAllGames();
-    this.elements.subscribe(g => {
-      console.log('Creating new game datasource');
-      this.dataSource.data = g;
-    });
+  createGame(game: Game): Promise<Game> {
+    return super.create(this.uriBase, game);
   }
 
-  protected doRemoveItem(items: Game[]): void {
-    this.gameService.deleteGames(items);
+  readAllGames(): void {
+    return super.readAll(this.uriBase);
+  }
+
+  updateGame(game: Game): Promise<Game> {
+    return super.update(this.uriBase, game);
+  }
+
+  deleteGames(games: Game[]) {
+    return super.delete(games);
+  }
+
+  protected fromJSON(json: any): Game {
+    return new Game(json);
+  }
+
+  protected newItem(): Game {
+    return new Game();
   }
 
 }

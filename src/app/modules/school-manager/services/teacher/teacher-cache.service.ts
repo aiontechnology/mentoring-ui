@@ -16,8 +16,8 @@
 
 import { Injectable } from '@angular/core';
 import { Teacher } from '../../models/teacher/teacher';
-import { TeacherService } from './teacher.service';
 import { DatasourceManager } from '../datasource-manager';
+import { TeacherRepositoryService } from './teacher-repository.service';
 
 @Injectable()
 export class TeacherCacheService extends DatasourceManager<Teacher>  {
@@ -26,20 +26,20 @@ export class TeacherCacheService extends DatasourceManager<Teacher>  {
    * Constructor
    * @param schoolService The SchoolService that is used for managing School instances.
    */
-  constructor(private teacherService: TeacherService) {
+  constructor(private teacherService: TeacherRepositoryService) {
     super();
   }
 
   establishDatasource(schoolId: string): void {
-    this.elements = this.teacherService.teachers;
-    this.teacherService.loadAll(schoolId);
+    this.elements = this.teacherService.items;
+    this.teacherService.readAllTeachers(schoolId);
     this.elements.subscribe(t => {
       this.dataSource.data = t;
     });
   }
 
   protected doRemoveItem(items: Teacher[]): void {
-    this.teacherService.removeTeachers(items);
+    this.teacherService.deleteTeachers(items);
   }
 
 }

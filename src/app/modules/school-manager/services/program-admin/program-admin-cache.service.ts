@@ -16,8 +16,8 @@
 
 import { Injectable } from '@angular/core';
 import { ProgramAdmin } from '../../models/program-admin/program-admin';
-import { ProgramAdminService } from './program-admin.service';
 import { DatasourceManager } from '../datasource-manager';
+import { ProgramAdminRepositoryService } from './program-admin-repository.service';
 
 @Injectable()
 export class ProgramAdminCacheService extends DatasourceManager<ProgramAdmin> {
@@ -26,20 +26,20 @@ export class ProgramAdminCacheService extends DatasourceManager<ProgramAdmin> {
    * Constructor
    * @param schoolService The SchoolService that is used for managing School instances.
    */
-  constructor(private programAdminService: ProgramAdminService) {
+  constructor(private programAdminService: ProgramAdminRepositoryService) {
     super();
   }
 
   establishDatasource(schoolId: string): void {
-    this.elements = this.programAdminService.programAdmins;
-    this.programAdminService.loadAll(schoolId);
+    this.elements = this.programAdminService.items;
+    this.programAdminService.readAllProgramAdmins(schoolId);
     this.elements.subscribe(t => {
       this.dataSource.data = t;
     });
   }
 
   protected doRemoveItem(items: ProgramAdmin[]): void {
-    this.programAdminService.removeProgramAdmins(items);
+    this.programAdminService.deleteProgramAdmins(items);
   }
 
 }

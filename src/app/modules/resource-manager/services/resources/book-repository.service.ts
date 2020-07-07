@@ -14,29 +14,40 @@
  * limitations under the License.
  */
 
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BookRepositoryService } from './book-repository.service';
-import { DatasourceManager } from 'src/app/modules/school-manager/services/datasource-manager';
+import { BaseRepository } from 'src/app/implementation/repository/base-repository';
 import { Book } from '../../models/book/book';
 
 @Injectable()
-export class BookCacheService extends DatasourceManager<Book> {
+export class BookRepositoryService extends BaseRepository<Book> {
 
-  constructor(private bookService: BookRepositoryService) {
-    super();
+  constructor(http: HttpClient) {
+    super('/api/v1/books', http);
   }
 
-  establishDatasource(): void {
-    this.elements = this.bookService.items;
-    this.bookService.readAllBooks();
-    this.elements.subscribe(b => {
-      console.log('Creating new book datasource');
-      this.dataSource.data = b;
-    });
+  createBook(book: Book): Promise<Book> {
+    return super.create(this.uriBase, book);
   }
 
-  protected doRemoveItem(items: Book[]): void {
-    this.bookService.deleteBooks(items);
+  readAllBooks(): void {
+    return super.readAll(this.uriBase);
+  }
+
+  updateBook(book: Book): Promise<Book> {
+    return super.update(this.uriBase, book);
+  }
+
+  deleteBooks(books: Book[]) {
+    return super.delete(books);
+  }
+
+  protected fromJSON(json: any): Book {
+    return new Book(json);
+  }
+
+  protected newItem(): Book {
+    return new Book();
   }
 
 }

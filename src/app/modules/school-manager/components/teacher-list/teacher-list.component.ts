@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild, AfterViewInit, Input, AfterContentInit } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AddTeacherCommand, RemoveTeacherCommand } from '../../implementation/teacher-menu-commands';
+import { AfterContentInit, AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TeacherCacheService } from '../../services/teacher/teacher-cache.service';
+import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
+import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
+import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
+import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { MenuStateService } from 'src/app/services/menu-state.service';
+import { TeacherCacheService } from '../../services/teacher/teacher-cache.service';
+import { TeacherDialogComponent } from '../teacher-dialog/teacher-dialog.component';
 
 @Component({
   selector: 'ms-teacher-list',
@@ -80,17 +84,43 @@ class TeacherListMenuManager {
                   snackBar: MatSnackBar,
                   teacherCacheSerice: TeacherCacheService, 
                   schoolId: string) {
-  menuState.add(new AddTeacherCommand('Add Teacher', dialog, snackBar, schoolId));
-  menuState.add(new RemoveTeacherCommand(
-      'Remove Teacher(s)',
-      router,
-      dialog,
-      snackBar,
-      null,
-      () => teacherCacheSerice.selectionCount,
-      () => teacherCacheSerice.removeSelected(),
-      () => {},
-      () => teacherCacheSerice.selection.selected.length > 0));
+  menuState.add(new NewDialogCommand(
+    'Add Teacher',
+    'teacher',
+    TeacherDialogComponent,
+    'Teacher added',
+    null,
+    { schoolId },
+    router,
+    dialog,
+    snackBar));
+  menuState.add(new EditDialogCommand(
+    'Edit Teacher',
+    'teacher',
+    TeacherDialogComponent,
+    'Teacher updated',
+    null,
+    router,
+    dialog,
+    snackBar,
+    () => teacherCacheSerice.getFirstSelection(),
+    () => teacherCacheSerice.clearSelection(),
+    () => teacherCacheSerice.selection.selected.length === 1));
+  menuState.add(new DeleteDialogCommand(
+    'Remove Teacher(s)',
+    'teacher',
+    ConfimationDialogComponent,
+    'Teacher(s) removed',
+    'teacher',
+    'teachers',
+    router,
+    dialog,
+    snackBar,
+    null,
+    () => teacherCacheSerice.selectionCount,
+    () => teacherCacheSerice.removeSelected(),
+    () => {},
+    () => teacherCacheSerice.selection.selected.length > 0));
   }
 
 }

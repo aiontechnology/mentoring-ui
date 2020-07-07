@@ -19,11 +19,15 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { SchoolCacheService } from '../../services/school/school-cache.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { EditSchoolDialogCommand, NewSchoolDialogCommand, RemoveSchoolCommand } from '../../implementation/school-menu-commands';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MenuStateService } from 'src/app/services/menu-state.service';
+import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
+import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
+import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
+import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 
 @Component({
   selector: 'ms-school-list',
@@ -78,17 +82,35 @@ class SchoolListMenuManager {
                   snackBar: MatSnackBar,
                   schoolCacheService: SchoolCacheService): void {
     console.log('Constructing MenuHandler', schoolCacheService);
-    menuState.add(new NewSchoolDialogCommand('Create New School', router, dialog, snackBar));
-    menuState.add(new EditSchoolDialogCommand(
+    menuState.add(new NewDialogCommand(
+      'Create New School',
+      'school',
+      SchoolDialogComponent,
+      'School added',
+      ['/', 'schoolmanager', 'schools'],
+      undefined,
+      router,
+      dialog,
+      snackBar));
+    menuState.add(new EditDialogCommand(
       'Edit School',
+      'school',
+      SchoolDialogComponent,
+      'School updated',
+      ['/', 'schoolmanager', 'schools'],
       router,
       dialog,
       snackBar,
       () => schoolCacheService.getFirstSelection(),
       () => schoolCacheService.clearSelection(),
       () => schoolCacheService.selection.selected.length === 1));
-    menuState.add(new RemoveSchoolCommand(
+    menuState.add(new DeleteDialogCommand(
       'Remove School(s)',
+      'school',
+      ConfimationDialogComponent,
+      'School(s) removed',
+      'school',
+      'schools',
       router,
       dialog,
       snackBar,

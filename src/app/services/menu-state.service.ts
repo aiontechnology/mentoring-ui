@@ -15,7 +15,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Command } from '../implementation/command';
+import { Command } from '../implementation/command/command';
 
 @Injectable({
   providedIn: 'root'

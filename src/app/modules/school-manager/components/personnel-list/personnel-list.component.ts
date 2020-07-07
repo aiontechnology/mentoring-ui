@@ -23,7 +23,11 @@ import { MenuStateService } from 'src/app/services/menu-state.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PersonnelCacheService } from '../../services/personnel/personnel-cache.service';
-import { AddPersonnelCommand, RemovePersonnelCommand } from '../../implementation/personnel-menu-command';
+import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
+import { PersonnelDialogComponent } from '../personnel-dialog/personnel-dialog.component';
+import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
+import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
 
 @Component({
   selector: 'ms-personnel-list',
@@ -81,9 +85,35 @@ class PersonnelMenuManager {
                   snackBar: MatSnackBar,
                   personnelCacheService: PersonnelCacheService,
                   schoolId: string) {
-    menuState.add(new AddPersonnelCommand('Add Personnel', dialog, snackBar, schoolId));
-    menuState.add(new RemovePersonnelCommand(
+    menuState.add(new NewDialogCommand(
+      'Add Personnel',
+      'personnel',
+      PersonnelDialogComponent,
+      'Personnel added',
+      null,
+      { schoolId },
+      router,
+      dialog,
+      snackBar));
+    menuState.add(new EditDialogCommand(
+        'Edit Personnel',
+        'personnel',
+        PersonnelDialogComponent,
+        'Personnel updated',
+        null,
+        router,
+        dialog,
+        snackBar,
+        () => personnelCacheService.getFirstSelection(),
+        () => personnelCacheService.clearSelection(),
+        () => personnelCacheService.selection.selected.length === 1));
+    menuState.add(new DeleteDialogCommand(
       'Remove Personnel',
+      'personnel',
+      ConfimationDialogComponent,
+      'Personnel removed',
+      'personnel',
+      'personnel',
       router,
       dialog,
       snackBar,

@@ -14,17 +14,41 @@
  * limitations under the License.
  */
 
-export class Game {
+import { LinksHolder } from 'src/app/implementation/repository/links-holder';
+
+export class Game implements LinksHolder<Game> {
+
     id: string;
     name: string;
     description: string;
     gradeLevel: number;
     interests: [ string ];
-    leadershipTraits: [ string ];
     leadershipSkills: [string];
+    leadershipTraits: [ string ];
     _links: {
         self: [
             { href: string }
         ]
     };
+
+    constructor(json?: any) {
+        this.id = json?.id;
+        this.name = json?.name;
+        this.description = json?.description;
+        this.gradeLevel = json?.gradeLevel;
+        this.interests = json?.interests;
+        this.leadershipSkills = json?.leadershipSkills;
+        this.leadershipTraits = json?.leadershipTraits;
+        this._links = json?._links;
+    }
+
+    clearLinks(): Game {
+        this._links = undefined;
+        return this;
+    }
+
+    getSelfLink(): string {
+        return this._links.self[0].href;
+    }
+
 }

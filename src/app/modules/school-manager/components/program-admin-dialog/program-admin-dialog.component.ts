@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ProgramAdminService } from '../../services/program-admin/program-admin.service';
+import { Component, Inject } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProgramAdmin } from '../../models/program-admin/program-admin';
+import { ProgramAdminRepositoryService } from '../../services/program-admin/program-admin-repository.service';
 
 @Component({
   selector: 'ms-program-admin-dialog',
@@ -28,35 +28,62 @@ import { ProgramAdmin } from '../../models/program-admin/program-admin';
 export class ProgramAdminDialogComponent {
 
   model: FormGroup;
+  isUpdate = false;
+
   schoolId: string;
 
   constructor(private dialogRef: MatDialogRef<ProgramAdminDialogComponent>,
-              private programAdminService: ProgramAdminService,
+              private programAdminService: ProgramAdminRepositoryService,
               private formBuilder: FormBuilder,
               @Inject(MAT_DIALOG_DATA) data: any) {
-    this.model = this.createModel(formBuilder);
+    this.isUpdate = this.determineUpdate(data);
+    this.model = this.createModel(formBuilder, data?.model);
     this.schoolId = data.schoolId;
   }
 
   save(): void {
-    const newProgramAdmin = this.model.value as ProgramAdmin;
-    this.programAdminService.addProgramAdmin(this.schoolId, newProgramAdmin).then(programAdmin => {
-      this.dialogRef.close(programAdmin);
-    });
+    const newProgramAdmin = new ProgramAdmin(this.model.value);
+    if (this.isUpdate) {
+      console.log('Updating', this.model.value);
+      newProgramAdmin._links = this.model.value.programAdmin._links;
+      this.programAdminService.updateProgramAdmin(newProgramAdmin).then(programAdmin => {
+        this.dialogRef.close(programAdmin);
+      });
+    } else {
+      this.programAdminService.createProgramAdmin(this.schoolId, newProgramAdmin).then(programAdmin => {
+        this.dialogRef.close(programAdmin);
+      });
+    }
   }
 
   dismiss(): void {
     this.dialogRef.close(null);
   }
 
-  private createModel(formBuilder: FormBuilder): FormGroup {
-    return formBuilder.group({
+  private createModel(formBuilder: FormBuilder, programAdmin: ProgramAdmin): FormGroup {
+    const formGroup = formBuilder.group({
+      programAdmin,
       firstName: ['', Validators.required],
       lastName: ['', Validators.required],
-      workPhone: '',
-      cellPhone: '',
-      email: ''
+      workPhone: null,
+      cellPhone: null,
+      email: null
     });
+    if (this.isUpdate) {
+      formGroup.setValue({
+        programAdmin,
+        firstName: programAdmin?.firstName,
+        lastName: programAdmin?.lastName,
+        workPhone: programAdmin?.workPhone,
+        cellPhone: programAdmin?.cellPhone,
+        email: programAdmin?.email
+      });
+    }
+    return formGroup;
+  }
+
+  private determineUpdate(formData: any): boolean {
+    return formData.model !== undefined && formData.model !== null;
   }
 
 }
