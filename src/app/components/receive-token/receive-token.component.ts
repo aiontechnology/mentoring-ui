@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,23 +14,27 @@
  * limitations under the License.
  */
 
-import { Component, Input } from '@angular/core';
-import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
-import { MenuStateService } from 'src/app/services/menu-state.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
-  selector: 'ms-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss']
+  selector: 'ms-receive-token',
+  templateUrl: './receive-token.component.html',
+  styleUrls: ['./receive-token.component.scss']
 })
-export class ToolbarComponent {
+export class ReceiveTokenComponent implements OnInit {
 
-  @Input() isHandset$: Observable<boolean>;
-  @Input() drawer: MatDrawer;
+  constructor(public userSession: UserSessionService,
+              private route: ActivatedRoute) { }
 
-  constructor(public menuState: MenuStateService,
-              public userSession: UserSessionService) { }
+  ngOnInit(): void {
+    this.route.fragment.subscribe(this.parseToken);
+  }
+
+  private parseToken(fragment: string): void {
+    UserSessionService.handleLogin(new URLSearchParams(fragment));
+  }
 
 }
+

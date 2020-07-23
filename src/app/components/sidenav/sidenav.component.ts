@@ -20,6 +20,7 @@ import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
 import { School } from '../../modules/school-manager/models/school/school';
+import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
   selector: 'ms-sidenav',
@@ -36,6 +37,7 @@ export class SidenavComponent {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver) { }
+  constructor(public userSession: UserSessionService,
+              private breakpointObserver: BreakpointObserver) { }
 
 }
