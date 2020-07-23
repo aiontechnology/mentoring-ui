@@ -16,5 +16,7 @@
 
 export const environment = {
   production: false,
-  apiUri: 'https://ve17iw2h0g.execute-api.us-west-2.amazonaws.com/test'
+  apiUri: 'https://ve17iw2h0g.execute-api.us-west-2.amazonaws.com/test',
+  tokenRedirect: 'http://test.mentorsuccess.aiontechnology.io/receiveToken',
+  logoutRedirect: 'http://test.mentorsuccess.aiontechnology.io/handleLogout'
 };

@@ -15,18 +15,35 @@
  */
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, InjectionToken } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LandingPageComponent } from './components/landing-page/landing-page.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
 import { MaterialModule } from './shared/material.module';
+import { ReceiveTokenComponent } from './components/receive-token/receive-token.component';
+import { NoopComponent } from './components/noop/noop.component';
+import { HandleLogoutComponent } from './components/handle-logout/handle-logout.component';
+import { environment } from 'src/environments/environment';
+
+const loginProvider = new InjectionToken('loginRedirectResolver');
+const logoutProvider = new InjectionToken('logoutRedirectResolver');
+
+const cognitoBase = 'mentorsuccess-localhost.auth.us-west-2.amazoncognito.com';
+const clientId = '76on3r6c055h1pp2h99uc6jmbd';
+const oauthScopes = 'openid profile';
+const loginUrl =` https://${cognitoBase}/login?client_id=${clientId}&response_type=token&scope=${oauthScopes}&redirect_uri=${environment.tokenRedirect}`;
+const logoutUrl=`https://${cognitoBase}/logout?client_id=${clientId}&logout_uri=${environment.logoutRedirect}`;
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
+  { path: 'login', component: NoopComponent, canActivate: [loginProvider] },
+  { path: 'logout', component: NoopComponent, canActivate: [logoutProvider] },
+  { path: 'receiveToken', component: ReceiveTokenComponent },
+  { path: 'handleLogout', component: HandleLogoutComponent },
   { path: 'schoolsmanager', loadChildren: () => import('./modules/school-manager/school-manager.module')
     .then(m => m.SchoolManagerModule) },
   { path: 'resourcemanager', loadChildren: () => import('./modules/resource-manager/resource-manager.module')
@@ -38,7 +55,10 @@ const routes: Routes = [
     AppComponent,
     LandingPageComponent,
     SidenavComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    ReceiveTokenComponent,
+    NoopComponent,
+    HandleLogoutComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -47,6 +67,18 @@ const routes: Routes = [
     RouterModule.forRoot(routes)
   ],
   providers: [
+    {
+      provide: loginProvider,
+      useValue: (route: ActivatedRouteSnapshot) => {
+        window.open(loginUrl, '_self');
+      }
+    },
+    {
+      provide: logoutProvider,
+      useValue: (route: ActivatedRoute) => {
+        window.open(logoutUrl, '_self');
+      }
+    }
   ],
   bootstrap: [AppComponent]
 })

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-import { Component, Input } from '@angular/core';
-import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
-import { MenuStateService } from 'src/app/services/menu-state.service';
+import { AfterViewInit, Component } from '@angular/core';
 import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
-  selector: 'ms-toolbar',
-  templateUrl: './toolbar.component.html',
-  styleUrls: ['./toolbar.component.scss']
+  selector: 'ms-handle-logout',
+  templateUrl: './handle-logout.component.html',
+  styleUrls: ['./handle-logout.component.scss']
 })
-export class ToolbarComponent {
+export class HandleLogoutComponent implements AfterViewInit {
 
-  @Input() isHandset$: Observable<boolean>;
-  @Input() drawer: MatDrawer;
+  constructor(private userSession: UserSessionService) { }
 
-  constructor(public menuState: MenuStateService,
-              public userSession: UserSessionService) { }
+  ngAfterViewInit(): void {
+    this.userSession.handleLogout();
+  }
 
 }

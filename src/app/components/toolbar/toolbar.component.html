@@ -27,6 +27,8 @@ limitations under the License.
 
   <span class="spacer"></span>
 
+  <a mat-button [routerLink]="['/login']" *ngIf="!userSession.isLoggedIn()">Login</a>
+  <a mat-button [routerLink]="['/logout']" *ngIf="userSession.isLoggedIn()">Logout</a>
   <button mat-button [matMenuTriggerFor]="menu">
     <mat-icon>more_vert</mat-icon>
   </button>
