@@ -17,8 +17,8 @@
 export const environment = {
   production: false,
   apiUri: 'https://ve17iw2h0g.execute-api.us-west-2.amazonaws.com/test',
-  tokenRedirect: 'http://test.mentorsuccess.aiontechnology.io/receiveToken',
-  logoutRedirect: 'http://test.mentorsuccess.aiontechnology.io/handleLogout',
+  tokenRedirect: 'https://test.mentorsuccess.aiontechnology.io/receiveToken',
+  logoutRedirect: 'https://test.mentorsuccess.aiontechnology.io/handleLogout',
   cognitoBaseUrl: 'mentorsuccess-test.auth.us-west-2.amazoncognito.com',
   cognitoClientId: '64ijdo2f7v06m17051su8g08vi'
 
