@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,14 +16,14 @@
 
 import { TestBed } from '@angular/core/testing';
 
-import { SchoolService } from './school.service';
+import { TeacherRepositoryService } from './teacher-repository.service';
 
-describe('SchoolService', () => {
-  let service: SchoolService;
+describe('TeacherService', () => {
+  let service: TeacherRepositoryService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SchoolService);
+    service = TestBed.inject(TeacherRepositoryService);
   });
 
   it('should be created', () => {

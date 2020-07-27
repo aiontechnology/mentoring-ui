@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild, Input, AfterContentInit, AfterViewInit } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { AfterContentInit, AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { Router } from '@angular/router';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { Router } from '@angular/router';
+import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
+import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
+import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import { MenuStateService } from 'src/app/services/menu-state.service';
 import { ProgramAdminCacheService } from '../../services/program-admin/program-admin-cache.service';
-import { AddProgramAdminCommand, RemoveProgramAdminCommand } from '../../implementation/program-admin-menu-commands';
+import { ProgramAdminDialogComponent } from '../program-admin-dialog/program-admin-dialog.component';
 
 @Component({
   selector: 'ms-program-admin-list',
@@ -54,7 +58,7 @@ export class ProgramAdminListComponent implements OnInit, AfterContentInit, Afte
 
   ngAfterContentInit(): void {
     console.log('Adding program admin list menus');
-    ProgramAdminListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.programAdminCacheService, 
+    ProgramAdminListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.programAdminCacheService,
       this.schoolId);
   }
 
@@ -81,16 +85,42 @@ class ProgramAdminListMenuManager {
                   snackBar: MatSnackBar,
                   programAdminCacheSerice: ProgramAdminCacheService,
                   schoolId: string) {
-  menuState.add(new AddProgramAdminCommand('Add Program Admin', dialog, snackBar, schoolId));
-  menuState.add(new RemoveProgramAdminCommand(
+    menuState.add(new NewDialogCommand(
+      'Add Program Admin',
+      'program-admin',
+      ProgramAdminDialogComponent,
+      'Program admin added',
+      null,
+      { schoolId },
+      router,
+      dialog,
+      snackBar));
+    menuState.add(new EditDialogCommand(
+      'Edit Program Admin',
+      'program-admin',
+      ProgramAdminDialogComponent,
+      'Program admin updated',
+      null,
+      router,
+      dialog,
+      snackBar,
+      () => programAdminCacheSerice.getFirstSelection(),
+      () => programAdminCacheSerice.clearSelection(),
+      () => programAdminCacheSerice.selection.selected.length === 1));
+    menuState.add(new DeleteDialogCommand(
       'Remove Program Admin(s)',
+      'program-admin',
+      ConfimationDialogComponent,
+      'Program admin(s) removed',
+      'program admin',
+      'program admins',
       router,
       dialog,
       snackBar,
       null,
       () => programAdminCacheSerice.selectionCount,
       () => programAdminCacheSerice.removeSelected(),
-      () => {},
+      () => { },
       () => programAdminCacheSerice.selection.selected.length > 0));
   }
 

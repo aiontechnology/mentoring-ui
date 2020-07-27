@@ -16,7 +16,9 @@
 
 export const environment = {
   production: false,
-  apiUri: 'http://localhost:8080'
+  apiUri: 'http://localhost:8080',
+  tokenRedirect: 'http://localhost:4200/receiveToken',
+  logoutRedirect: 'http://localhost:4200/handleLogout'
 };
 
 import 'zone.js/dist/zone-error';

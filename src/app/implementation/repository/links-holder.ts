@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+export interface LinksHolder<T> {
 
-import { ProgramAdminService } from './program-admin.service';
+    clearLinks(): T;
 
-describe('ProgramAdminService', () => {
-  let service: ProgramAdminService;
+    getSelfLink(): string;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ProgramAdminService);
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+}

@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
+import { LinksHolder } from 'src/app/implementation/repository/links-holder';
+
 /**
  * Model class the represents a teacher.
  * @author Whitney Hunter
  */
-export class Personnel {
+export class Personnel implements LinksHolder<Personnel> {
+
     type: string;
     firstName: string;
     lastName: string;
@@ -30,5 +33,24 @@ export class Personnel {
             { href: string; }
         ]
     };
+
+    constructor(json?: any) {
+        this.type = json?.type;
+        this.firstName = json?.firstName;
+        this.lastName = json?.lastName;
+        this.email = json?.email;
+        this.workPhone = json?.workPhone;
+        this.cellPhone = json?.cellPhone;
+        this._links = json?._links;
+    }
+
+    clearLinks(): Personnel {
+        this._links = undefined;
+        return this;
+    }
+
+    getSelfLink(): string {
+        return this._links.self[0].href;
+    }
 
 }

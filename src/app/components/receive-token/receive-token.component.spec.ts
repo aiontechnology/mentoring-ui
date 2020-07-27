@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BookService } from './book.service';
+import { ReceiveTokenComponent } from './receive-token.component';
 
-describe('BookService', () => {
-  let service: BookService;
+describe('ReceiveTokenComponent', () => {
+  let component: ReceiveTokenComponent;
+  let fixture: ComponentFixture<ReceiveTokenComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ ReceiveTokenComponent ]
+    })
+    .compileComponents();
+  }));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(BookService);
+    fixture = TestBed.createComponent(ReceiveTokenComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

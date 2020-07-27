@@ -15,10 +15,9 @@
  */
 
 import { Injectable } from '@angular/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { Personnel } from '../../models/personnel/personnel';
-import { PersonnelService } from './personnel.service';
 import { DatasourceManager } from '../datasource-manager';
+import { PersonnelRepositoryService } from './personnel-repository.service';
 
 @Injectable()
 export class PersonnelCacheService extends DatasourceManager<Personnel>  {
@@ -27,20 +26,20 @@ export class PersonnelCacheService extends DatasourceManager<Personnel>  {
    * Constructor
    * @param personnelService The PersonnelService that is used for managing Personnel instances.
    */
-  constructor(private personnelService: PersonnelService) {
+  constructor(private personnelService: PersonnelRepositoryService) {
     super();
   }
 
   establishDatasource(schoolId: string): void {
-    this.elements = this.personnelService.personnel;
-    this.personnelService.loadAll(schoolId);
+    this.elements = this.personnelService.items;
+    this.personnelService.readAllPersonnel(schoolId);
     this.elements.subscribe(p => {
       this.dataSource.data = p;
     });
   }
 
   protected doRemoveItem(items: Personnel[]): void {
-    this.personnelService.removePersonnel(items);
+    this.personnelService.deletePersonnel(items);
   }
 
 }

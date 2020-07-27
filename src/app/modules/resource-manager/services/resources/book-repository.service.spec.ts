@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
+import { TestBed } from '@angular/core/testing';
 
-export abstract class Command {
+import { BookRepositoryService } from './book-repository.service';
 
-    constructor(public title: string) {}
+describe('BookService', () => {
+  let service: BookRepositoryService;
 
-    group: string;
-    isVisible = true;
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(BookRepositoryService);
+  });
 
-    abstract execute(...args: any[]): void;
-
-    abstract isEnabled(...args: any[]): boolean;
-
-    protected openSnackBar(snackBar: MatSnackBar, message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
-        return snackBar.open(message, action, {
-            duration: 5000,
-        });
-    }
-
-}
-
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});

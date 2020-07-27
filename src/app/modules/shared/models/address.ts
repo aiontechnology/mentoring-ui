@@ -15,9 +15,19 @@
  */
 
 export class Address {
+
     street1: string;
     street2: string;
     city: string;
     state: string;
     zip: string;
+
+     constructor(json?: any) {
+        this.street1 = json?.street1;
+        this.street2 = json?.street2;
+        this.city = json?.city;
+        this.state = json?.state;
+        this.zip = json?.zip;
+    }
+
 }
