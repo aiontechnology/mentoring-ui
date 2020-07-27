@@ -23,22 +23,16 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 export class UserSessionService {
 
   private static ID_TOKEN = 'id_token';
+  private static ACCESS_TOKEN = 'access_token';
 
-  constructor() { }
-
-  static handleLogin(params: URLSearchParams): void {
+  handleLogin(params: URLSearchParams): void {
     this.addToStorage(UserSessionService.ID_TOKEN, params.get(UserSessionService.ID_TOKEN));
-    this.addToStorage('access_token', params.get('access_token'));
-  }
-
-  private static addToStorage(key: string, value: any): void {
-    console.log('adding to storage', key, value);
-    localStorage.setItem(key, value);
+    this.addToStorage(UserSessionService.ACCESS_TOKEN, params.get(UserSessionService.ACCESS_TOKEN));
   }
 
   handleLogout(): void {
     console.log('logging out');
-    localStorage.removeItem('id_token');
+    localStorage.removeItem(UserSessionService.ID_TOKEN);
   }
 
   isLoggedIn(): boolean {
@@ -54,8 +48,11 @@ export class UserSessionService {
     const token: any = localStorage.getItem(UserSessionService.ID_TOKEN);
     const helper = new JwtHelperService();
     const decoded = helper.decodeToken(token);
-    console.log('name', decoded.given_name);
     return decoded.given_name;
+  }
+
+  private addToStorage(key: string, value: any): void {
+    localStorage.setItem(key, value);
   }
 
 }
