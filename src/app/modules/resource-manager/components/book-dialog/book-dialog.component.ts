@@ -16,9 +16,9 @@
 
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Book } from '../../models/book/book';
-import { BookService } from '../../services/resources/book.service';
+import { BookRepositoryService } from '../../services/resources/book-repository.service';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { MetaDataService } from '../../services/meta-data/meta-data.service';
@@ -40,12 +40,12 @@ export class BookDialogComponent {
   leadershipSkillList: Element[];
 
   constructor(private dialogRef: MatDialogRef<BookDialogComponent>,
-              private bookService: BookService,
+              private bookService: BookRepositoryService,
               private metaDataService: MetaDataService,
               private formBuilder: FormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
-    this.model = this.createModel(formBuilder, data?.book);
+    this.model = this.createModel(formBuilder, data?.model);
 
     metaDataService.loadInterests();
     metaDataService.interests.subscribe(interests => {
@@ -64,7 +64,7 @@ export class BookDialogComponent {
   }
 
   save(): void {
-    const newBook = this.model.value as Book;
+    const newBook = new Book(this.model.value);
     console.log('Saving book', newBook);
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
@@ -73,7 +73,7 @@ export class BookDialogComponent {
         this.dialogRef.close(book);
       });
     } else {
-      this.bookService.addBook(newBook).then(book => {
+      this.bookService.createBook(newBook).then(book => {
         this.dialogRef.close(book);
       });
     }
@@ -87,9 +87,9 @@ export class BookDialogComponent {
     console.log('Book', book);
     const formGroup: FormGroup = formBuilder.group({
       book,
-      title: '',
-      author: '',
-      gradeLevel: '',
+      title: ['', Validators.required],
+      author: ['', Validators.required],
+      gradeLevel: ['', Validators.required],
       interests: [],
       leadershipTraits: [],
       leadershipSkills: []

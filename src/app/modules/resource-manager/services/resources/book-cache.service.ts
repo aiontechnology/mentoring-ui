@@ -15,20 +15,20 @@
  */
 
 import { Injectable } from '@angular/core';
-import { BookService } from './book.service';
+import { BookRepositoryService } from './book-repository.service';
 import { DatasourceManager } from 'src/app/modules/school-manager/services/datasource-manager';
 import { Book } from '../../models/book/book';
 
 @Injectable()
 export class BookCacheService extends DatasourceManager<Book> {
 
-  constructor(private bookService: BookService) {
+  constructor(private bookService: BookRepositoryService) {
     super();
   }
 
   establishDatasource(): void {
-    this.elements = this.bookService.books;
-    this.bookService.loadAll();
+    this.elements = this.bookService.items;
+    this.bookService.readAllBooks();
     this.elements.subscribe(b => {
       console.log('Creating new book datasource');
       this.dataSource.data = b;
@@ -36,7 +36,7 @@ export class BookCacheService extends DatasourceManager<Book> {
   }
 
   protected doRemoveItem(items: Book[]): void {
-    this.bookService.removeBooks(items);
+    this.bookService.deleteBooks(items);
   }
 
 }

@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild, AfterViewInit, Output, EventEmitter, AfterContentInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { SchoolService } from '../../services/school/school.service';
-import { School } from '../../models/school/school';
-import { EditSchoolDialogCommand, RemoveSchoolCommand } from '../../implementation/school-menu-commands';
+import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
+import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { MenuStateService } from 'src/app/services/menu-state.service';
+import { School } from '../../models/school/school';
+import { SchoolRepositoryService } from '../../services/school/school-repository.service';
+import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
 
 @Component({
   selector: 'ms-school-detail',
@@ -36,7 +39,7 @@ export class SchoolDetailComponent implements OnInit, AfterContentInit, AfterVie
   constructor(route: ActivatedRoute,
               private dialog: MatDialog,
               private menuState: MenuStateService,
-              private schoolService: SchoolService,
+              private schoolService: SchoolRepositoryService,
               private snackBar: MatSnackBar,
               private router: Router) {
     route.paramMap.subscribe(
@@ -47,9 +50,9 @@ export class SchoolDetailComponent implements OnInit, AfterContentInit, AfterVie
   }
 
   ngOnInit(): void {
-    this.schoolService.loadAll();
+    this.schoolService.readAllSchools();
     this.schoolService.schools.subscribe(s => {
-      this.school = this.schoolService.findById(this.schoolId);
+      this.school = this.schoolService.readOneSchool(this.schoolId);
      });
   }
 
@@ -73,14 +76,17 @@ export class SchoolDetailComponent implements OnInit, AfterContentInit, AfterVie
         this.menuState.makeGroupInvisible('personnel');
         break;
      case 1:
+        this.menuState.makeGroupInvisible('school');
         this.menuState.makeGroupInvisible('teacher');
         this.menuState.makeGroupInvisible('personnel');
         break;
       case 2:
+        this.menuState.makeGroupInvisible('school');
         this.menuState.makeGroupInvisible('program-admin');
         this.menuState.makeGroupInvisible('personnel');
         break;
       case 3:
+        this.menuState.makeGroupInvisible('school');
         this.menuState.makeGroupInvisible('program-admin');
         this.menuState.makeGroupInvisible('teacher');
         break;
@@ -96,24 +102,33 @@ class SchoolDetailMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
-                  schoolService: SchoolService) {
-    menuState.add(new EditSchoolDialogCommand(
+                  schoolService: SchoolRepositoryService) {
+    menuState.add(new EditDialogCommand(
       'Edit School',
-      router,
+      'school',
+      SchoolDialogComponent,
+      'School updated',
+      null,
+       router,
       dialog,
       snackBar,
       () => school,
       () => {},
       () => true
     ));
-    menuState.add(new RemoveSchoolCommand(
+    menuState.add(new DeleteDialogCommand(
       'Remove School',
+      'school',
+      ConfimationDialogComponent,
+      'School(s) removed',
+      'school',
+      'schools',
       router,
       dialog,
       snackBar,
-      '/schoolmanager',
+      '/schoolsmanager',
       () => 1,
-      () => schoolService.removeSchools([school]),
+      () => schoolService.deleteSchools([school]),
       () => {},
       () => true
     ));

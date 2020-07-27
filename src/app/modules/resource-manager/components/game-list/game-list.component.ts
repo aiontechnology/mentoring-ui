@@ -23,7 +23,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GameCacheService } from '../../services/resources/game-cache.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { NewGameDialogCommand, EditGameDialogCommand, RemoveGameCommand } from '../../implementation/game-menu-commands';
+import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
+import { GameDialogComponent } from '../game-dialog/game-dialog.component';
+import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
+import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 
 @Component({
   selector: 'ms-game-list',
@@ -78,25 +82,43 @@ class GameListMenuManager {
                   snackBar: MatSnackBar,
                   gameCacheService: GameCacheService) {
     console.log('Constructing MenuHandler');
-    menuState.add(new NewGameDialogCommand('Create New Game', router, dialog, snackBar));
-    menuState.add(new EditGameDialogCommand(
+    menuState.add(new NewDialogCommand(
+      'Create New Game',
+      'game',
+      GameDialogComponent,
+      'Added game',
+      null,
+      null,
+      router,
+      dialog,
+      snackBar));
+    menuState.add(new EditDialogCommand(
       'Edit Game',
+      'game',
+      GameDialogComponent,
+      'Game updated',
+      null,
       router,
       dialog,
       snackBar,
       () => gameCacheService.getFirstSelection(),
       () => gameCacheService.clearSelection(),
       () => gameCacheService.selection.selected.length === 1));
-    menuState.add(new RemoveGameCommand(
-        'Remove Game(s)',
-        router,
-        dialog,
-        snackBar,
-        null,
-        () => gameCacheService.selectionCount,
-        () => gameCacheService.removeSelected(),
-        () => { },
-        () => gameCacheService.selection.selected.length > 0));
+    menuState.add(new DeleteDialogCommand(
+      'Remove Game(s)',
+      'game',
+      ConfimationDialogComponent,
+      'Game(s) removed',
+      'game',
+      'games',
+      router,
+      dialog,
+      snackBar,
+      null,
+      () => gameCacheService.selectionCount,
+      () => gameCacheService.removeSelected(),
+      () => { },
+      () => gameCacheService.selection.selected.length > 0));
   }
 
 }

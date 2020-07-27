@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GameService } from './game.service';
+import { HandleLogoutComponent } from './handle-logout.component';
 
-describe('GameService', () => {
-  let service: GameService;
+describe('HandleLogoutComponent', () => {
+  let component: HandleLogoutComponent;
+  let fixture: ComponentFixture<HandleLogoutComponent>;
+
+  beforeEach(async(() => {
+    TestBed.configureTestingModule({
+      declarations: [ HandleLogoutComponent ]
+    })
+    .compileComponents();
+  }));
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(GameService);
+    fixture = TestBed.createComponent(HandleLogoutComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

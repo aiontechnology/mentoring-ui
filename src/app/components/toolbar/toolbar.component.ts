@@ -15,9 +15,10 @@
  */
 
 import { Component, Input } from '@angular/core';
-import { Observable } from 'rxjs';
 import { MatDrawer } from '@angular/material/sidenav';
+import { Observable } from 'rxjs';
 import { MenuStateService } from 'src/app/services/menu-state.service';
+import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
   selector: 'ms-toolbar',
@@ -29,6 +30,7 @@ export class ToolbarComponent {
   @Input() isHandset$: Observable<boolean>;
   @Input() drawer: MatDrawer;
 
-  constructor(public menuState: MenuStateService) { }
+  constructor(public menuState: MenuStateService,
+              public userSession: UserSessionService) { }
 
 }

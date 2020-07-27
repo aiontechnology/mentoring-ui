@@ -15,10 +15,10 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GameService } from '../../services/resources/game.service';
+import { GameRepositoryService } from '../../services/resources/game-repository.service';
 import { MetaDataService } from '../../services/meta-data/meta-data.service';
 import { Element } from '../../models/meta-data/element';
 import { Game } from '../../models/game/game';
@@ -40,12 +40,12 @@ export class GameDialogComponent {
   leadershipSkillList: Element[];
 
   constructor(private dialogRef: MatDialogRef<GameDialogComponent>,
-              private gameService: GameService,
+              private gameService: GameRepositoryService,
               private metaDataService: MetaDataService,
               private formBuilder: FormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
-    this.model = this.createModel(formBuilder, data?.game);
+    this.model = this.createModel(formBuilder, data?.model);
 
     metaDataService.loadInterests();
     metaDataService.interests.subscribe(interests => {
@@ -64,7 +64,7 @@ export class GameDialogComponent {
   }
 
   save(): void {
-    const newGame = this.model.value as Game;
+    const newGame = new Game(this.model.value);
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newGame._links = this.model.value.game._links;
@@ -72,7 +72,7 @@ export class GameDialogComponent {
         this.dialogRef.close(game);
       });
     } else {
-      this.gameService.addGame(newGame).then(game => {
+      this.gameService.createGame(newGame).then(game => {
         this.dialogRef.close(game);
       });
     }
@@ -85,9 +85,9 @@ export class GameDialogComponent {
   private createModel(formBuilder: FormBuilder, game: Game): FormGroup {
     const formGroup: FormGroup = formBuilder.group({
       game,
-      name: game?.name || '',
-      description: game?.description || '',
-      gradeLevel: game?.gradeLevel || '',
+      name: ['', Validators.required],
+      description: null,
+      gradeLevel: ['', Validators.required],
       interests: [],
       leadershipTraits: [],
       leadershipSkills: []

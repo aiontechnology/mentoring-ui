@@ -14,17 +14,41 @@
  * limitations under the License.
  */
 
-export class Book {
+import { LinksHolder } from 'src/app/implementation/repository/links-holder';
+
+export class Book implements LinksHolder<Book>{
+
     id: string;
     title: string;
     author: string;
     gradeLevel: number;
     interests: [ string ];
-    leadershipTraits: [ string ];
     leadershipSkills: [string];
+    leadershipTraits: [ string ];
     _links: {
         self: [
             { href: string }
         ]
     };
+
+    constructor(json?: any) {
+        this.id = json?.id;
+        this.title = json?.title;
+        this.author = json?.author;
+        this.gradeLevel = json?.gradeLevel;
+        this.interests = json?.interests;
+        this.leadershipSkills = json?.leadershipSkills;
+        this.leadershipTraits = json?.leadershipTraits;
+        this._links = json?._links;
+    }
+
+    clearLinks(): Book {
+        this._links = undefined;
+        return this;
+    }
+
+    getSelfLink(): string {
+        return this._links.self[0].href;
+    }
+
 }

@@ -30,17 +30,23 @@ limitations under the License.
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="Author" formControlName="author" required />
+        <mat-error *ngIf="model.hasError('required', 'author')">
+          You must enter an author
+        </mat-error>
       </mat-form-field>
     </div>
 
     <div class="dialog-container">
       <mat-form-field>
         <mat-label>Grade level</mat-label>
-        <mat-select formControlName="gradeLevel">
+        <mat-select formControlName="gradeLevel" required>
           <mat-option *ngFor="let grade of grades" [value]="grade.value">
             {{ grade.valueView }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="model.hasError('required', 'gradeLevel')">
+          You must select a grade level
+        </mat-error>
       </mat-form-field>
     </div>
 

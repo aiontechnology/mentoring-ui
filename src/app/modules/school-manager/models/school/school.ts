@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+import { LinksHolder } from 'src/app/implementation/repository/links-holder';
 import { Address } from '../../../shared/models/address';
 
-export class School {
+export class School implements LinksHolder<School> {
+
     id: string;
     name: string;
     address: Address;
@@ -29,7 +31,23 @@ export class School {
         ]
     };
 
-    constructor() {
-        this.address = new Address();
+    constructor(json?: any) {
+        this.id = json?.id;
+        this.name = json?.name;
+        this.address = new Address(json?.address);
+        this.phone = json?.phone;
+        this.district = json?.district;
+        this.isPrivate = json?.isPrivate;
+        this._links = json?._links;
     }
+
+    clearLinks(): School {
+        this._links = undefined;
+        return this;
+    }
+
+     getSelfLink(): string {
+        return this._links.self[0].href;
+    }
+
 }

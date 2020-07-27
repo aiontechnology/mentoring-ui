@@ -17,14 +17,18 @@ limitations under the License.
 <h2 mat-dialog-title>Add new personnel</h2>
 <mat-dialog-content>
   <form [formGroup]="model">
+    <input type="hidden" formControlName="personnel">
     <div class="dialog-container">
       <mat-form-field>
         <mat-label>Job Title</mat-label>
-        <mat-select formControlName="type">
+        <mat-select formControlName="type" required>
           <mat-option *ngFor="let title of titles" [value]="title.value">
             {{ title.valueView }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="model.hasError('required', 'type')">
+          You must select a type
+        </mat-error>
       </mat-form-field>
     </div>
 

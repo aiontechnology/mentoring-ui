@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-export class ProgramAdmin {
+import { LinksHolder } from 'src/app/implementation/repository/links-holder';
+
+export class ProgramAdmin implements LinksHolder<ProgramAdmin> {
+
     firstName: string;
     lastName: string;
     email: string;
@@ -25,4 +28,23 @@ export class ProgramAdmin {
             { href: string; }
         ]
     };
+
+    constructor(json?: any) {
+        this.firstName = json?.firstName;
+        this.lastName = json?.lastName;
+        this.email = json?.email;
+        this.workPhone = json?.workPhone;
+        this.cellPhone = json?.cellPhone;
+        this._links = json?._links;
+    }
+
+    clearLinks(): ProgramAdmin {
+        this._links = undefined;
+        return this;
+    }
+
+    getSelfLink(): string {
+        return this._links.self[0].href;
+    }
+
 }

@@ -17,6 +17,7 @@ limitations under the License.
 <h2 mat-dialog-title>Add new teacher</h2>
 <mat-dialog-content>
   <form [formGroup]="model">
+    <input type="hidden" formControlName="teacher">
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="First Name" formControlName="firstName" required />
@@ -56,11 +57,14 @@ limitations under the License.
     <div class="dialog-container">
       <mat-form-field>
         <mat-label>Grade level</mat-label>
-        <mat-select formControlName="grade1">
+        <mat-select formControlName="grade1" required>
           <mat-option *ngFor="let grade of grades" [value]="grade.value">
             {{ grade.valueView }}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="model.hasError('required', 'grade1')">
+          You must select a grade
+        </mat-error>
       </mat-form-field>
     </div>
 

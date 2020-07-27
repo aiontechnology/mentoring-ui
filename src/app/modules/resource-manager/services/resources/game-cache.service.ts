@@ -17,18 +17,18 @@
 import { Injectable } from '@angular/core';
 import { DatasourceManager } from 'src/app/modules/school-manager/services/datasource-manager';
 import { Game } from '../../models/game/game';
-import { GameService } from './game.service';
+import { GameRepositoryService } from './game-repository.service';
 
 @Injectable()
 export class GameCacheService extends DatasourceManager<Game> {
 
-  constructor(private gameService: GameService) {
+  constructor(private gameService: GameRepositoryService) {
     super();
   }
 
   establishDatasource(): void {
-    this.elements = this.gameService.games;
-    this.gameService.loadAll();
+    this.elements = this.gameService.items;
+    this.gameService.readAllGames();
     this.elements.subscribe(g => {
       console.log('Creating new game datasource');
       this.dataSource.data = g;
@@ -36,7 +36,7 @@ export class GameCacheService extends DatasourceManager<Game> {
   }
 
   protected doRemoveItem(items: Game[]): void {
-    this.gameService.removeGames(items);
+    this.gameService.deleteGames(items);
   }
 
 }
