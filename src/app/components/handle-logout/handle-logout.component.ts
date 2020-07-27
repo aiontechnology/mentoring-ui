@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterViewInit, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
@@ -22,11 +22,9 @@ import { UserSessionService } from 'src/app/services/user-session.service';
   templateUrl: './handle-logout.component.html',
   styleUrls: ['./handle-logout.component.scss']
 })
-export class HandleLogoutComponent implements AfterViewInit {
+export class HandleLogoutComponent {
 
-  constructor(private userSession: UserSessionService) { }
-
-  ngAfterViewInit(): void {
+  constructor(private userSession: UserSessionService) {
     this.userSession.handleLogout();
   }
 
