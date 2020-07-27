@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserSessionService } from 'src/app/services/user-session.service';
 
@@ -23,17 +23,15 @@ import { UserSessionService } from 'src/app/services/user-session.service';
   templateUrl: './receive-token.component.html',
   styleUrls: ['./receive-token.component.scss']
 })
-export class ReceiveTokenComponent implements OnInit {
+export class ReceiveTokenComponent {
 
   constructor(public userSession: UserSessionService,
-              private route: ActivatedRoute) { }
-
-  ngOnInit(): void {
-    this.route.fragment.subscribe(this.parseToken);
+              private route: ActivatedRoute) {
+    this.parseToken(this.route.snapshot.fragment);
   }
 
   private parseToken(fragment: string): void {
-    UserSessionService.handleLogin(new URLSearchParams(fragment));
+    this.userSession.handleLogin(new URLSearchParams(fragment));
   }
 
 }
