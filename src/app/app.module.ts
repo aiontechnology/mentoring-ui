@@ -32,11 +32,9 @@ import { environment } from 'src/environments/environment';
 const loginProvider = new InjectionToken('loginRedirectResolver');
 const logoutProvider = new InjectionToken('logoutRedirectResolver');
 
-const cognitoBase = 'mentorsuccess-localhost.auth.us-west-2.amazoncognito.com';
-const clientId = '76on3r6c055h1pp2h99uc6jmbd';
 const oauthScopes = 'openid profile';
-const loginUrl =` https://${cognitoBase}/login?client_id=${clientId}&response_type=token&scope=${oauthScopes}&redirect_uri=${environment.tokenRedirect}`;
-const logoutUrl=`https://${cognitoBase}/logout?client_id=${clientId}&logout_uri=${environment.logoutRedirect}`;
+const loginUrl =` https://${environment.cognitoBaseUrl}/login?client_id=${environment.cognitoClientId}&response_type=token&scope=${oauthScopes}&redirect_uri=${environment.tokenRedirect}`;
+const logoutUrl=`https://${environment.cognitoBaseUrl}/logout?client_id=${environment.cognitoClientId}&logout_uri=${environment.logoutRedirect}`;
 
 const routes: Routes = [
   { path: '', component: LandingPageComponent },
