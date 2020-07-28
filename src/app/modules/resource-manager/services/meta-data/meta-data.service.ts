@@ -26,25 +26,30 @@ export class MetaDataService {
   private interestsUri = environment.apiUri + '/api/v1/interests';
   private leadershipTraitsUri = environment.apiUri + '/api/v1/leadership_traits';
   private leadershipSkillsUri = environment.apiUri + '/api/v1/leadership_skills';
+  private phonogramUri = environment.apiUri + '/api/v1/phonograms';
 
   private _interests: BehaviorSubject<Element[]>;
   private _leadershipTraits: BehaviorSubject<Element[]>;
   private _leadershipSkills: BehaviorSubject<Element[]>;
+  private _phonograms: BehaviorSubject<Element[]>;
 
   private dataStore: {
     interests: Element[];
     leadershipTraits: Element[];
     leadershipSkills: Element[];
+    phonograms: Element[];
   };
 
   constructor(private http: HttpClient) {
     this._interests = new BehaviorSubject<Element[]>([]);
     this._leadershipTraits = new BehaviorSubject<Element[]>([]);
     this._leadershipSkills = new BehaviorSubject<Element[]>([]);
+    this._phonograms = new BehaviorSubject<Element[]>([]);
     this.dataStore = { 
       interests: [],
       leadershipTraits: [],
-      leadershipSkills: []
+      leadershipSkills: [],
+      phonograms: []
     };
   }
 
@@ -58,6 +63,10 @@ export class MetaDataService {
 
   get leadershipSkills(): Observable<Element[]> {
     return this._leadershipSkills;
+  }
+
+  get phonograms(): Observable<Element[]> {
+    return this._phonograms;
   }
 
   loadInterests(): void {
@@ -87,6 +96,15 @@ export class MetaDataService {
       });
   }
 
+  loadPhonograms(): void {
+    this.http.get<any>(this.phonogramUri)
+      .subscribe(data => {
+        this.dataStore.phonograms = data?._embedded?.phonogramModelList || [];
+        this.logPhonogramsCache();
+        this.publishPhonograms();
+      });
+  }
+
   private logInterestCache(): void {
     for (const interest of this.dataStore.interests) {
       console.log('Cache entiry (interest)', interest);
@@ -105,6 +123,12 @@ export class MetaDataService {
     }
   }
 
+  private logPhonogramsCache(): void {
+    for (const phonogram of this.dataStore.phonograms) {
+      console.log('Cache entiry (phonogram)', phonogram);
+    }
+  }
+
   private publishInterests() {
     this._interests.next(Object.assign({}, this.dataStore).interests);
   }
@@ -115,6 +139,10 @@ export class MetaDataService {
 
   private publishLeadershipSkills() {
     this._leadershipSkills.next(Object.assign({}, this.dataStore).leadershipSkills);
+  }
+
+  private publishPhonograms() {
+    this._phonograms.next(Object.assign({}, this.dataStore).phonograms);
   }
 
 }

@@ -76,6 +76,15 @@ limitations under the License.
         </mat-select>
       </mat-form-field>
     </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Phonograms</mat-label>
+        <mat-select formControlName="phonograms" multiple>
+          <mat-option *ngFor="let phonogram of phonogramList" [value]="phonogram.name">{{phonogram.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
