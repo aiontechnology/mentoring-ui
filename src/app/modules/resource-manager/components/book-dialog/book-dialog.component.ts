@@ -39,6 +39,7 @@ export class BookDialogComponent {
   leadershipTraitList: Element[];
   leadershipSkillList: Element[];
   phonogramList: Element[];
+  behaviorList: Element[];
 
   constructor(private dialogRef: MatDialogRef<BookDialogComponent>,
               private bookService: BookRepositoryService,
@@ -66,6 +67,11 @@ export class BookDialogComponent {
     metaDataService.loadPhonograms();
     metaDataService.phonograms.subscribe(phonograms => {
       this.phonogramList = phonograms;
+    });
+
+    metaDataService.loadBehaviors();
+    metaDataService.behaviors.subscribe(behaviors => {
+      this.behaviorList = behaviors;
     });
   }
 
@@ -99,7 +105,8 @@ export class BookDialogComponent {
       interests: [],
       leadershipTraits: [],
       leadershipSkills: [],
-      phonograms: []
+      phonograms: [],
+      behaviors: []
     });
     if (this.isUpdate) {
       formGroup.setValue({
@@ -110,7 +117,8 @@ export class BookDialogComponent {
         interests: this.convertArray(book?.interests),
         leadershipSkills: this.convertArray(book?.leadershipSkills),
         leadershipTraits: this.convertArray(book?.leadershipTraits),
-        phonograms: this.convertArray(book?.phonograms)
+        phonograms: this.convertArray(book?.phonograms),
+        behaviors: this.convertArray(book?.behaviors)
       });
     }
     return formGroup;

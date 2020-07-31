@@ -27,17 +27,20 @@ export class MetaDataService {
   private leadershipTraitsUri = environment.apiUri + '/api/v1/leadership_traits';
   private leadershipSkillsUri = environment.apiUri + '/api/v1/leadership_skills';
   private phonogramUri = environment.apiUri + '/api/v1/phonograms';
+  private behaviorUri = environment.apiUri + '/api/v1/behaviors';
 
   private _interests: BehaviorSubject<Element[]>;
   private _leadershipTraits: BehaviorSubject<Element[]>;
   private _leadershipSkills: BehaviorSubject<Element[]>;
   private _phonograms: BehaviorSubject<Element[]>;
+  private _behaviors: BehaviorSubject<Element[]>;
 
   private dataStore: {
     interests: Element[];
     leadershipTraits: Element[];
     leadershipSkills: Element[];
     phonograms: Element[];
+    behaviors: Element[];
   };
 
   constructor(private http: HttpClient) {
@@ -45,11 +48,13 @@ export class MetaDataService {
     this._leadershipTraits = new BehaviorSubject<Element[]>([]);
     this._leadershipSkills = new BehaviorSubject<Element[]>([]);
     this._phonograms = new BehaviorSubject<Element[]>([]);
+    this._behaviors = new BehaviorSubject<Element[]>([]);
     this.dataStore = { 
       interests: [],
       leadershipTraits: [],
       leadershipSkills: [],
-      phonograms: []
+      phonograms: [],
+      behaviors: []
     };
   }
 
@@ -69,11 +74,15 @@ export class MetaDataService {
     return this._phonograms;
   }
 
+  get behaviors(): Observable<Element[]> {
+    return this._behaviors;
+  }
+
   loadInterests(): void {
     this.http.get<any>(this.interestsUri)
       .subscribe(data => {
         this.dataStore.interests = data?._embedded?.interestModelList || [];
-        this.logInterestCache();
+        this.logCache('interest', this.dataStore.interests);
         this.publishInterests();
       });
   }
@@ -82,7 +91,7 @@ export class MetaDataService {
     this.http.get<any>(this.leadershipTraitsUri)
       .subscribe(data => {
         this.dataStore.leadershipTraits = data?._embedded?.leadershipTraitModelList || [];
-        this.logLeadershipTraitsCache();
+        this.logCache('leadership trait', this.dataStore.leadershipTraits);
         this.publishLeadershipTraits();
       });
   }
@@ -91,7 +100,7 @@ export class MetaDataService {
     this.http.get<any>(this.leadershipSkillsUri)
       .subscribe(data => {
         this.dataStore.leadershipSkills = data?._embedded?.leadershipSkillModelList || [];
-        this.logLeadershipSkillsCache();
+        this.logCache('leadership skill', this.dataStore.leadershipSkills);
         this.publishLeadershipSkills();
       });
   }
@@ -100,32 +109,23 @@ export class MetaDataService {
     this.http.get<any>(this.phonogramUri)
       .subscribe(data => {
         this.dataStore.phonograms = data?._embedded?.phonogramModelList || [];
-        this.logPhonogramsCache();
+        this.logCache('phonogram', this.dataStore.phonograms);
         this.publishPhonograms();
       });
   }
 
-  private logInterestCache(): void {
-    for (const interest of this.dataStore.interests) {
-      console.log('Cache entiry (interest)', interest);
-    }
+  loadBehaviors(): void {
+    this.http.get<any>(this.behaviorUri)
+      .subscribe(data => {
+        this.dataStore.behaviors = data?._embedded?.behaviorModelList || [];
+        this.logCache('behavior', this.dataStore.behaviors);
+        this.publishBehaviors();
+      });
   }
 
-  private logLeadershipTraitsCache(): void {
-    for (const leadershipTrait of this.dataStore.leadershipTraits) {
-      console.log('Cache entiry (leadership trait)', leadershipTrait);
-    }
-  }
-
-  private logLeadershipSkillsCache(): void {
-    for (const leadershipSkill of this.dataStore.leadershipSkills) {
-      console.log('Cache entiry (leadership skill)', leadershipSkill);
-    }
-  }
-
-  private logPhonogramsCache(): void {
-    for (const phonogram of this.dataStore.phonograms) {
-      console.log('Cache entiry (phonogram)', phonogram);
+  private logCache(type: string, values: Element[]): void {
+    for (const value of values) {
+      console.log(`Cache entiry (${type})`, value);
     }
   }
 
@@ -143,6 +143,10 @@ export class MetaDataService {
 
   private publishPhonograms() {
     this._phonograms.next(Object.assign({}, this.dataStore).phonograms);
+  }
+
+  private publishBehaviors() {
+    this._behaviors.next(Object.assign({}, this.dataStore).behaviors);
   }
 
 }
