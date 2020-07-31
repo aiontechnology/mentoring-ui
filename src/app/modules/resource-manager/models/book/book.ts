@@ -26,6 +26,7 @@ export class Book implements LinksHolder<Book>{
     leadershipSkills: [string];
     leadershipTraits: [ string ];
     phonograms: [ string ];
+    behaviors: [ string ];
     _links: {
         self: [
             { href: string }
@@ -41,6 +42,7 @@ export class Book implements LinksHolder<Book>{
         this.leadershipSkills = json?.leadershipSkills;
         this.leadershipTraits = json?.leadershipTraits;
         this.phonograms = json?.phonograms;
+        this.behaviors = json?.behaviors;
         this._links = json?._links;
     }
 
