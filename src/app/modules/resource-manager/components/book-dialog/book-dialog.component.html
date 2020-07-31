@@ -85,6 +85,15 @@ limitations under the License.
         </mat-select>
       </mat-form-field>
     </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Behaviors</mat-label>
+        <mat-select formControlName="behaviors" multiple>
+          <mat-option *ngFor="let behavior of behaviorList" [value]="behavior.name">{{behavior.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
