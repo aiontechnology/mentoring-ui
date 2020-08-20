@@ -15,15 +15,25 @@
 
 # stage 1
 FROM node:latest as build-stage
+
+ARG TOKEN_REDIRECT
+ARG LOGOUT_TOKEN_REDIRECT
+ARG API_URL
+ARG COGNITO_CLIENT_ID
+ARG COGNITO_BASE_URL
+
 WORKDIR /app
 COPY package.json .
 RUN npm install
 COPY . .
-RUN npm install -g @angular/cli
-RUN ng build --configuration test
+COPY docker/run.sh .
+RUN npm install -g @angular/cli@9.1.12
+RUN sh run.sh
 
 # stage 2
 FROM nginx:alpine as prod-stage
+RUN apk update
+RUN apk add jq
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build-stage /app/dist/mentorsuccess-ui /usr/share/nginx/html
 EXPOSE 80

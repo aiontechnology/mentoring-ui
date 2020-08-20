@@ -76,6 +76,10 @@ const routes: Routes = [
       useValue: (route: ActivatedRoute) => {
         window.open(logoutUrl, '_self');
       }
+    },
+    {
+      provide: 'TOKEN_REDIRECT',
+      useValue: environment.tokenRedirect
     }
   ],
   bootstrap: [AppComponent]
