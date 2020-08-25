@@ -29,8 +29,8 @@ pipelines:
                     - pip3 install awscli
                     - TOKEN_REDIRECT="https://test.mentorsuccess.aiontechnology.io/receiveToken"
                     - LOGOUT_TOKEN_REDIRECT="https://test.mentorsuccess.aiontechnology.io/handleLogout"
-                    - API_URL="https://xnx4fbweth.execute-api.us-west-2.amazonaws.com/mentorsuccess-test-deployment"
-                    - COGNITO_CLIENT_ID="urcuifs3jfnk7qkuej77iovb1"
+                    - API_URL="https://m8bi8zzg1c.execute-api.us-west-2.amazonaws.com/mentorsuccess-test-deployment"
+                    - COGNITO_CLIENT_ID="5ao2lmt4ugjp8rt1dv50819kbu"
                     - COGNITO_BASE_URL="mentorsuccess-mentorsuccess-test.auth.us-west-2.amazoncognito.com"
                     - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
                     - TAG="latest"
