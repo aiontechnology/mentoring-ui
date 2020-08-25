@@ -16,19 +16,19 @@
 
 import { Component, OnInit } from '@angular/core';
 import { MenuStateService } from 'src/app/services/menu-state.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'ms-landing-page',
   templateUrl: './landing-page.component.html',
   styleUrls: ['./landing-page.component.scss']
 })
-export class LandingPageComponent implements OnInit {
+export class LandingPageComponent {
+
+  public env = environment;
 
   constructor(private menuState: MenuStateService) {
     menuState.title = 'Welcome to Mentor Suceess';
-   }
-
-  ngOnInit(): void {
   }
 
 }
