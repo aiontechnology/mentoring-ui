@@ -27,11 +27,6 @@ pipelines:
                     - pip
                 script:
                     - pip3 install awscli
-                    - TOKEN_REDIRECT="https://test.mentorsuccess.aiontechnology.io/receiveToken"
-                    - LOGOUT_TOKEN_REDIRECT="https://test.mentorsuccess.aiontechnology.io/handleLogout"
-                    - API_URL="https://m8bi8zzg1c.execute-api.us-west-2.amazonaws.com/mentorsuccess-test-deployment"
-                    - COGNITO_CLIENT_ID="5ao2lmt4ugjp8rt1dv50819kbu"
-                    - COGNITO_BASE_URL="mentorsuccess-mentorsuccess-test.auth.us-west-2.amazoncognito.com"
                     - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
                     - TAG="latest"
                     - eval $(aws ecr get-login --no-include-email --region us-west-2 | sed 's;https://;;g')
@@ -48,15 +43,10 @@ pipelines:
                 - pip
             script:
                 - pip3 install awscli
-                - TOKEN_REDIRECT="https://mentorsuccess.aiontechnology.io/receiveToken"
-                - LOGOUT_TOKEN_REDIRECT="https://mentorsuccess.aiontechnology.io/handleLogout"
-                - API_URL="https://ve17iw2h0g.execute-api.us-west-2.amazonaws.com/test"
-                - COGNITO_CLIENT_ID="64ijdo2f7v06m17051su8g08vi"
-                - COGNITO_BASE_URL="mentorsuccess-test.auth.us-west-2.amazoncognito.com"
                 - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
                 - TAG="prod"
                 - eval $(aws ecr get-login --no-include-email --region us-west-2 | sed 's;https://;;g')
-                - docker build -t $IMAGE:$TAG .
+                - docker build --build-arg TOKEN_REDIRECT=$TOKEN_REDIRECT --build-arg LOGOUT_TOKEN_REDIRECT=$LOGOUT_TOKEN_REDIRECT --build-arg API_URL=$API_URL --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID --build-arg COGNITO_BASE_URL=$COGNITO_BASE_URL -t $IMAGE:$TAG .
                 - docker push $IMAGE:$TAG
 definitions:
     services:
