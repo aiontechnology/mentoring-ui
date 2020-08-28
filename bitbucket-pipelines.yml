@@ -34,7 +34,7 @@ pipelines:
                     - docker push $IMAGE:$TAG
         master:
             name: Build, test and deploy prod environment
-            deployment: Prod
+            deployment: Production
             image: python:3.7.4-alpine3.10
             size: 2x
             services:
