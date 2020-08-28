@@ -30,6 +30,11 @@ pipelines:
                     - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
                     - TAG="latest"
                     - eval $(aws ecr get-login --no-include-email --region us-west-2 | sed 's;https://;;g')
+                    - echo TOKEN_REDIRECT=$TOKEN_REDIRECT
+                    - echo LOGOUT_TOKEN_REDIRECT=$LOGOUT_TOKEN_REDIRECT
+                    - echo API_URL=$API_URL
+                    - echo COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID
+                    - echo COGNITO_BASE_URL=$COGNITO_BASE_URL
                     - docker build --build-arg TOKEN_REDIRECT=$TOKEN_REDIRECT --build-arg LOGOUT_TOKEN_REDIRECT=$LOGOUT_TOKEN_REDIRECT --build-arg API_URL=$API_URL --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID --build-arg COGNITO_BASE_URL=$COGNITO_BASE_URL -t $IMAGE:$TAG .
                     - docker push $IMAGE:$TAG
         master:
@@ -47,6 +52,11 @@ pipelines:
                     - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
                     - TAG="prod"
                     - eval $(aws ecr get-login --no-include-email --region us-west-2 | sed 's;https://;;g')
+                    - echo TOKEN_REDIRECT=$TOKEN_REDIRECT
+                    - echo LOGOUT_TOKEN_REDIRECT=$LOGOUT_TOKEN_REDIRECT
+                    - echo API_URL=$API_URL
+                    - echo COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID
+                    - echo COGNITO_BASE_URL=$COGNITO_BASE_URL
                     - docker build --build-arg TOKEN_REDIRECT=$TOKEN_REDIRECT --build-arg LOGOUT_TOKEN_REDIRECT=$LOGOUT_TOKEN_REDIRECT --build-arg API_URL=$API_URL --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID --build-arg COGNITO_BASE_URL=$COGNITO_BASE_URL -t $IMAGE:$TAG .
                     - docker push $IMAGE:$TAG
 definitions:
