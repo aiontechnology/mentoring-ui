@@ -33,21 +33,22 @@ pipelines:
                     - docker build --build-arg TOKEN_REDIRECT=$TOKEN_REDIRECT --build-arg LOGOUT_TOKEN_REDIRECT=$LOGOUT_TOKEN_REDIRECT --build-arg API_URL=$API_URL --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID --build-arg COGNITO_BASE_URL=$COGNITO_BASE_URL -t $IMAGE:$TAG .
                     - docker push $IMAGE:$TAG
         master:
-            name: Build, test and deploy prod environment
-            deployment: Production
-            image: python:3.7.4-alpine3.10
-            size: 2x
-            services:
-                - docker
-            caches:
-                - pip
-            script:
-                - pip3 install awscli
-                - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
-                - TAG="prod"
-                - eval $(aws ecr get-login --no-include-email --region us-west-2 | sed 's;https://;;g')
-                - docker build --build-arg TOKEN_REDIRECT=$TOKEN_REDIRECT --build-arg LOGOUT_TOKEN_REDIRECT=$LOGOUT_TOKEN_REDIRECT --build-arg API_URL=$API_URL --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID --build-arg COGNITO_BASE_URL=$COGNITO_BASE_URL -t $IMAGE:$TAG .
-                - docker push $IMAGE:$TAG
+            - step:
+                name: Build, test and deploy prod environment
+                deployment: Production
+                image: python:3.7.4-alpine3.10
+                size: 2x
+                services:
+                    - docker
+                caches:
+                    - pip
+                script:
+                    - pip3 install awscli
+                    - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
+                    - TAG="prod"
+                    - eval $(aws ecr get-login --no-include-email --region us-west-2 | sed 's;https://;;g')
+                    - docker build --build-arg TOKEN_REDIRECT=$TOKEN_REDIRECT --build-arg LOGOUT_TOKEN_REDIRECT=$LOGOUT_TOKEN_REDIRECT --build-arg API_URL=$API_URL --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID --build-arg COGNITO_BASE_URL=$COGNITO_BASE_URL -t $IMAGE:$TAG .
+                    - docker push $IMAGE:$TAG
 definitions:
     services:
         docker:
