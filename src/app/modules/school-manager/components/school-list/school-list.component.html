@@ -1,0 +1,98 @@
+<!--
+Copyright 2020 Aion Technology LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Schools</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mat-elevation-z8">
+      <div class="header">
+        <mat-form-field>
+          <input matInput [(ngModel)]="schoolCacheService.filterBinding" (keyup)="schoolCacheService.applyFilter($event.target.value)" placeholder="Filter"/>
+          <button mat-button *ngIf="schoolCacheService.filter" matSuffix mat-icon-button (click)="schoolCacheService.clearFilter()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <table mat-table [dataSource]="schoolCacheService.dataSource" matSort>
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              (change)="$event ? schoolCacheService.masterToggle() : null"
+              [checked]="schoolCacheService.selection.hasValue() && schoolCacheService.isAllSelected()"
+              [indeterminate]="schoolCacheService.selection.hasValue() && !schoolCacheService.isAllSelected()"
+            >
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? schoolCacheService.selection.toggle(row) : null"
+              [checked]="schoolCacheService.selection.isSelected(row)"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let school"><a [routerLink]="['schools', school.id]">{{ school.name }}</a></td>
+        </ng-container>
+
+        <ng-container matColumnDef="city">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>City</th>
+          <td mat-cell *matCellDef="let school">{{ school.address.city }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
+          <td mat-cell *matCellDef="let school">{{ school.address.state }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+          <td mat-cell *matCellDef="let school">{{ school.phone |  phone:'US'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="district">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>District</th>
+          <td mat-cell *matCellDef="let school">{{ school.district }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="private">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Private?</th>
+          <td mat-cell *matCellDef="let school">{{ school.isPrivate ? 'yes' : 'no' }}</td>
+       </ng-container>
+
+       <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns()"
+          (click)="schoolCacheService.selection.toggle(row)"
+        ></tr>
+      </table>
+
+      <table>
+        <tr>
+          <td><ms-selection-count-display [selectionCount]="schoolCacheService.selectionCount"></ms-selection-count-display></td>
+          <td><mat-paginator #paginator [pageSize]="schoolCacheService.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>

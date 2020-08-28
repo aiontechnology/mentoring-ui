@@ -1,0 +1,110 @@
+<!--
+Copyright 2020 Aion Technology LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<mat-tab-group (selectedIndexChange)="onIndexChange($event)">
+  <mat-tab label="Details">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>{{ school?.name }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="mat-elevation-z8">
+        <div class="address">
+          <h1>Address</h1>
+          <table>
+            <tr>
+              <td>Street 1</td>
+              <td>{{ school?.address?.street1 }}</td>
+            </tr>
+            <tr>
+              <td>Street 2</td>
+              <td>{{ school?.address?.street2 }}</td>
+            </tr>
+            <tr>
+              <td>City</td>
+              <td>{{ school?.address?.city }}</td>
+            </tr>
+            <tr>
+              <td>State</td>
+              <td>{{ school?.address?.state }}</td>
+            </tr>
+            <tr>
+              <td>Zip</td>
+              <td>{{ school?.address?.zip }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="phone">
+          <h1>Phone</h1>
+          <table>
+            <tr>
+              <td>Phone Number</td>
+              <td>{{ school?.phone | phone: "US" }}</td>
+            </tr>
+          </table>
+        </div>
+        <div class="other">
+          <h1>Other</h1>
+          <table>
+            <tr>
+              <td>School District</td>
+              <td>{{ school?.district }}</td>
+            </tr>
+            <tr>
+              <td>Private school?</td>
+              <td>{{ school?.isPrivate ? "yes" : "no" }}</td>
+            </tr>
+          </table>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="Program Administrators">
+    <mat-card> 
+      <mat-card-header>
+        <mat-card-title>Program Administrators</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="programAdmins">
+         <ms-program-admin-list [schoolId]="schoolId"></ms-program-admin-list>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="Teachers">
+    <mat-card> 
+      <mat-card-header>
+        <mat-card-title>Teachers</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="teachers">
+          <ms-teacher-list [schoolId]="schoolId"></ms-teacher-list>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="Other Personnel">
+    <mat-card> 
+      <mat-card-header>
+        <mat-card-title>Other Personnel</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="personnel">
+         <ms-personnel-list [schoolId]="schoolId"></ms-personnel-list>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

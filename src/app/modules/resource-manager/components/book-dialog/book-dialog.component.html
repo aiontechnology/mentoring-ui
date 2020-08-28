@@ -1,0 +1,106 @@
+<!--
+Copyright 2020 Aion Technology LLC
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     https://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<h2 mat-dialog-title>Add new book</h2>
+<mat-dialog-content>
+  <form [formGroup]="model">
+    <input type="hidden" formControlName="book" />
+    <div class="dialog-container">
+      <mat-form-field>
+        <input matInput placeholder="Title" formControlName="title" required />
+        <mat-error *ngIf="model.hasError('required', 'title')">
+          You must enter a title
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <input matInput placeholder="Author" formControlName="author" required />
+        <mat-error *ngIf="model.hasError('required', 'author')">
+          You must enter an author
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Grade level</mat-label>
+        <mat-select formControlName="gradeLevel" required>
+          <mat-option *ngFor="let grade of grades" [value]="grade.value">
+            {{ grade.valueView }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="model.hasError('required', 'gradeLevel')">
+          You must select a grade level
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Interests</mat-label>
+        <mat-select formControlName="interests" multiple>
+          <mat-option *ngFor="let interest of interestList" [value]="interest.name">{{interest.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Leadership Traits</mat-label>
+        <mat-select formControlName="leadershipTraits" multiple>
+          <mat-option *ngFor="let leadershipTrait of leadershipTraitList" [value]="leadershipTrait.name">{{leadershipTrait.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Leadership Success Skills</mat-label>
+        <mat-select formControlName="leadershipSkills" multiple>
+          <mat-option *ngFor="let leadershipSkill of leadershipSkillList" [value]="leadershipSkill.name">{{leadershipSkill.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Phonograms</mat-label>
+        <mat-select formControlName="phonograms" multiple>
+          <mat-option *ngFor="let phonogram of phonogramList" [value]="phonogram.name">{{phonogram.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Behaviors</mat-label>
+        <mat-select formControlName="behaviors" multiple>
+          <mat-option *ngFor="let behavior of behaviorList" [value]="behavior.name">{{behavior.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button color="primary" (click)="save()" [disabled]="!model.valid">
+    <mat-icon>save</mat-icon> Save
+  </button>
+  <button mat-button color="primary" (click)="dismiss()">
+    <mat-icon>cancel</mat-icon> Cancel
+  </button>
+</mat-dialog-actions>

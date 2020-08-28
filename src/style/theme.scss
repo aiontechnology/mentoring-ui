@@ -1,0 +1,6 @@
+// @import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~src/style/_variables.scss';
+
+$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+
+@include angular-material-theme($app-theme);
