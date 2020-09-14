@@ -22,6 +22,7 @@ export class Game implements LinksHolder<Game> {
     name: string;
     description: string;
     gradeLevel: number;
+    activityFocuses: [string];
     leadershipSkills: [string];
     _links: {
         self: [
@@ -34,6 +35,7 @@ export class Game implements LinksHolder<Game> {
         this.name = json?.name;
         this.description = json?.description;
         this.gradeLevel = json?.gradeLevel;
+        this.activityFocuses = json?.activityFocuses;
         this.leadershipSkills = json?.leadershipSkills;
         this._links = json?._links;
     }
