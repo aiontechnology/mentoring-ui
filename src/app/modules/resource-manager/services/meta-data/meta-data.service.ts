@@ -18,17 +18,19 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Element } from '../../models/meta-data/element';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, VirtualTimeScheduler } from 'rxjs';
 
 @Injectable()
 export class MetaDataService {
 
+  private acctivityFocusesUri = environment.apiUri + '/api/v1/activityfocuses';
   private interestsUri = environment.apiUri + '/api/v1/interests';
   private leadershipTraitsUri = environment.apiUri + '/api/v1/leadership_traits';
   private leadershipSkillsUri = environment.apiUri + '/api/v1/leadership_skills';
   private phonogramUri = environment.apiUri + '/api/v1/phonograms';
   private behaviorUri = environment.apiUri + '/api/v1/behaviors';
 
+  private _activityFocuses: BehaviorSubject<Element[]>;
   private _interests: BehaviorSubject<Element[]>;
   private _leadershipTraits: BehaviorSubject<Element[]>;
   private _leadershipSkills: BehaviorSubject<Element[]>;
@@ -36,6 +38,7 @@ export class MetaDataService {
   private _behaviors: BehaviorSubject<Element[]>;
 
   private dataStore: {
+    activityFocuses: Element[];
     interests: Element[];
     leadershipTraits: Element[];
     leadershipSkills: Element[];
@@ -44,18 +47,24 @@ export class MetaDataService {
   };
 
   constructor(private http: HttpClient) {
+    this._activityFocuses = new BehaviorSubject<Element[]>([]);
     this._interests = new BehaviorSubject<Element[]>([]);
     this._leadershipTraits = new BehaviorSubject<Element[]>([]);
     this._leadershipSkills = new BehaviorSubject<Element[]>([]);
     this._phonograms = new BehaviorSubject<Element[]>([]);
     this._behaviors = new BehaviorSubject<Element[]>([]);
-    this.dataStore = { 
+    this.dataStore = {
+      activityFocuses: [],
       interests: [],
       leadershipTraits: [],
       leadershipSkills: [],
       phonograms: [],
       behaviors: []
     };
+  }
+
+  get activityFocuses(): Observable<Element[]> {
+    return this._activityFocuses;
   }
 
   get interests(): Observable<Element[]> {
@@ -76,6 +85,15 @@ export class MetaDataService {
 
   get behaviors(): Observable<Element[]> {
     return this._behaviors;
+  }
+
+  loadActivityFocuses(): void {
+    this.http.get<any>(this.acctivityFocusesUri)
+      .subscribe(data => {
+        this.dataStore.activityFocuses = data?._embedded.activityFocusModelList || [];
+        this.logCache('activity focus', this.dataStore.activityFocuses);
+        this.publishActivityFocuses();
+      })
   }
 
   loadInterests(): void {
@@ -127,6 +145,10 @@ export class MetaDataService {
     for (const value of values) {
       console.log(`Cache entiry (${type})`, value);
     }
+  }
+
+  private publishActivityFocuses() {
+    this._activityFocuses.next(Object.assign({}, this.dataStore).activityFocuses);
   }
 
   private publishInterests() {
