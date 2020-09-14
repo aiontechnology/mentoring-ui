@@ -35,6 +35,7 @@ export class GameDialogComponent {
   isUpdate = false;
 
   grades: Grade[] = grades;
+  activityFocusList: Element[];
   leadershipSkillList: Element[];
 
   constructor(private dialogRef: MatDialogRef<GameDialogComponent>,
@@ -44,6 +45,11 @@ export class GameDialogComponent {
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
+
+    metaDataService.loadActivityFocuses();
+    metaDataService.activityFocuses.subscribe(activityFocuses => {
+      this.activityFocusList = activityFocuses;
+    });
 
     metaDataService.loadLeadershipSkills();
     metaDataService.leadershipSkills.subscribe(leadershipSkills => {
@@ -76,6 +82,7 @@ export class GameDialogComponent {
       name: ['', Validators.required],
       description: null,
       gradeLevel: ['', Validators.required],
+      activityFocuses: [],
       leadershipSkills: []
     });
     if (this.isUpdate) {
@@ -84,6 +91,7 @@ export class GameDialogComponent {
         name: game?.name,
         description: game?.description,
         gradeLevel: game?.gradeLevel?.toString(),
+        activityFocuses: this.convertArray(game?.activityFocuses),
         leadershipSkills: this.convertArray(game?.leadershipSkills),
       });
     }
