@@ -64,6 +64,14 @@ limitations under the License.
         </mat-select>
       </mat-form-field>
     </div>
+
+    <div class="dialog-container">
+      <mat-radio-group formControlName="location">
+        <mat-radio-button *ngFor="let location of locations" [value]="location.toUpperCase()">
+          {{location}}
+        </mat-radio-button>
+      </mat-radio-group>
+    </div>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>

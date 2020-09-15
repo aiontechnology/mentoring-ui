@@ -64,6 +64,11 @@ limitations under the License.
          <td mat-cell *matCellDef="let game">{{ game.gradeLevel }}</td>
        </ng-container>
    
+       <ng-container matColumnDef="location">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Location</th>
+        <td mat-cell *matCellDef="let game">{{ game.location |  titlecase }}</td>
+      </ng-container>
+  
       <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
        <tr
          mat-row
