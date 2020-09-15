@@ -68,7 +68,7 @@ export class BookListComponent implements OnInit, AfterContentInit, AfterViewIni
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'title', 'author'];
     } else {
-      return ['select', 'title', 'author', 'gradeLevel'];
+      return ['select', 'title', 'author', 'gradeLevel', 'location'];
     }
   }
 

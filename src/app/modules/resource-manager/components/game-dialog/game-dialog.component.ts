@@ -23,6 +23,7 @@ import { MetaDataService } from '../../services/meta-data/meta-data.service';
 import { Element } from '../../models/meta-data/element';
 import { Game } from '../../models/game/game';
 import { grades } from 'src/app/modules/shared/constants/grades';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'ms-game-dialog',
@@ -35,6 +36,7 @@ export class GameDialogComponent {
   isUpdate = false;
 
   grades: Grade[] = grades;
+  locations: string[] = ['Online', 'Offline', 'Both'];
   activityFocusList: Element[];
   leadershipSkillList: Element[];
 
@@ -82,6 +84,7 @@ export class GameDialogComponent {
       name: ['', Validators.required],
       description: null,
       gradeLevel: ['', Validators.required],
+      location,
       activityFocuses: [],
       leadershipSkills: []
     });
@@ -91,6 +94,7 @@ export class GameDialogComponent {
         name: game?.name,
         description: game?.description,
         gradeLevel: game?.gradeLevel?.toString(),
+        location: game?.location?.toString(),
         activityFocuses: this.convertArray(game?.activityFocuses),
         leadershipSkills: this.convertArray(game?.leadershipSkills),
       });
