@@ -21,7 +21,8 @@ export class Game implements LinksHolder<Game> {
     id: string;
     name: string;
     description: string;
-    gradeLevel: number;
+    grade1: number;
+    grade2: number;
     location: string;
     activityFocuses: [string];
     leadershipSkills: [string];
@@ -31,15 +32,22 @@ export class Game implements LinksHolder<Game> {
         ]
     };
 
-    constructor(json?: any) {
-        this.id = json?.id;
-        this.name = json?.name;
-        this.description = json?.description;
-        this.gradeLevel = json?.gradeLevel;
-        this.location = json?.location;
-        this.activityFocuses = json?.activityFocuses;
-        this.leadershipSkills = json?.leadershipSkills;
-        this._links = json?._links;
+    constructor(value?: any) {
+        console.log('Constructing game', value);
+        this.id = value?.id;
+        this.name = value?.name;
+        this.description = value?.description;
+        if (value.gradeRange) {
+            this.grade1 = value?.gradeRange?.grade1;
+            this.grade2 = value?.gradeRange?.grade2;
+        } else {
+            this.grade1 = value?.grade1;
+            this.grade2 = value?.grade2;
+        }
+        this.location = value?.location;
+        this.activityFocuses = value?.activityFocuses;
+        this.leadershipSkills = value?.leadershipSkills;
+        this._links = value?._links;
     }
 
     clearLinks(): Game {
