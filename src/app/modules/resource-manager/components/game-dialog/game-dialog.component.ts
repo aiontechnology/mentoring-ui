@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GameRepositoryService } from '../../services/resources/game-repository.service';
@@ -23,7 +23,6 @@ import { MetaDataService } from '../../services/meta-data/meta-data.service';
 import { Element } from '../../models/meta-data/element';
 import { Game } from '../../models/game/game';
 import { grades } from 'src/app/modules/shared/constants/grades';
-import { stringify } from 'querystring';
 
 @Component({
   selector: 'ms-game-dialog',
@@ -36,9 +35,18 @@ export class GameDialogComponent {
   isUpdate = false;
 
   grades: Grade[] = grades;
-  locations: string[] = ['Online', 'Offline', 'Both'];
+  locations: string[] = ['Offline', 'Online', 'Both'];
   activityFocusList: Element[];
   leadershipSkillList: Element[];
+
+  gradeRangeValidator = (control: AbstractControl ): {[key: string]: boolean} => {
+    const grade1 = control.get('grade1');
+    const grade2 = control.get('grade2');
+    if (!grade1 || !grade2) {
+      return null;
+    }
+    return (grade1.value > grade2.value) ? { invalidRange: true } : null;
+  }
 
   constructor(private dialogRef: MatDialogRef<GameDialogComponent>,
               private gameService: GameRepositoryService,
@@ -83,8 +91,11 @@ export class GameDialogComponent {
       game,
       name: ['', Validators.required],
       description: null,
-      gradeLevel: ['', Validators.required],
-      location,
+      gradeRange: formBuilder.group({
+        grade1: ['', Validators.required],
+        grade2: ['', Validators.required]
+      }, { validator: this.gradeRangeValidator }),
+      location: ['OFFLINE', Validators.required],
       activityFocuses: [],
       leadershipSkills: []
     });
@@ -93,7 +104,10 @@ export class GameDialogComponent {
         game,
         name: game?.name,
         description: game?.description,
-        gradeLevel: game?.gradeLevel?.toString(),
+        gradeRange: {
+          grade1: game?.grade1?.toString(),
+          grade2: game?.grade2?.toString()
+        },
         location: game?.location?.toString(),
         activityFocuses: this.convertArray(game?.activityFocuses),
         leadershipSkills: this.convertArray(game?.leadershipSkills),
