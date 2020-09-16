@@ -35,7 +35,7 @@ export class BookDialogComponent {
   isUpdate = false;
 
   grades: Grade[] = grades;
-  locations: string[] = ['Online', 'Offline', 'Both'];
+  locations: string[] = ['Offline', 'Online', 'Both'];
   interestList: Element[];
   leadershipTraitList: Element[];
   leadershipSkillList: Element[];
@@ -103,7 +103,7 @@ export class BookDialogComponent {
       title: ['', Validators.required],
       author: ['', Validators.required],
       gradeLevel: ['', Validators.required],
-      location,
+      location: ['OFFLINE', Validators.required],
       interests: [],
       leadershipTraits: [],
       leadershipSkills: [],
