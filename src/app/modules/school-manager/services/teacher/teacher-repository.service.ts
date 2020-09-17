@@ -30,6 +30,10 @@ export class TeacherRepositoryService extends BaseRepository<Teacher> {
     return super.create(this.buildUri(schoolId), teacher);
   }
 
+  curriedCreateTeacher(schoolId: string): (teacher: Teacher) => Promise<Teacher> {
+    return (t: Teacher) => this.createTeacher(schoolId, t);
+  }
+
   readAllTeachers(schoolId: string): void {
     return super.readAll(this.buildUri(schoolId));
   }

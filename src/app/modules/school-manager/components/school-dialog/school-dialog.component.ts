@@ -19,6 +19,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { School } from '../../models/school/school';
 import { SchoolRepositoryService } from '../../services/school/school-repository.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 
 @Component({
   selector: 'ms-new-school-dialog',
@@ -92,6 +94,8 @@ export class SchoolDialogComponent {
     { name: 'Wyoming', abbreviation: 'WY' }
   ];
 
+  private caller = new CallerWithErrorHandling<School, SchoolDialogComponent>();
+
   /**
    * Set up the form model and determine if this is an new school or an update of an existing school.
    * @param dialogRef A reference to the dialog that is to be used.
@@ -102,6 +106,7 @@ export class SchoolDialogComponent {
   constructor(private dialogRef: MatDialogRef<SchoolDialogComponent>,
               private schoolService: SchoolRepositoryService,
               private formBuilder: FormBuilder,
+              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -112,17 +117,15 @@ export class SchoolDialogComponent {
    */
   save(): void {
     const newSchool = new School(this.model.value);
+    let func: (item: School) => Promise<School>;
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newSchool._links = this.model.value.school._links;
-      this.schoolService.updateSchool(newSchool).then(school => {
-        this.dialogRef.close(school);
-      });
+      func = this.schoolService.updateSchool;
     } else {
-      this.schoolService.createSchool(newSchool).then(school => {
-        this.dialogRef.close(school);
-      });
+      func = this.schoolService.createSchool;
     }
+    this.caller.callWithErrorHandling(this.schoolService, func, newSchool, this.dialogRef, this.snackBar);
   }
 
   /**
@@ -140,16 +143,16 @@ export class SchoolDialogComponent {
   private createModel(formBuilder: FormBuilder, school: School): FormGroup {
     const formGroup: FormGroup = formBuilder.group({
       school,
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.maxLength(50)]],
       address: formBuilder.group({
-        street1: null,
-        street2: null,
-        city: null,
+        street1: [null, Validators.maxLength(50)],
+        street2: [null, Validators.maxLength(50)],
+        city: [null, Validators.maxLength(50)],
         state: null,
         zip: null
       }),
       phone: null,
-      district: null,
+      district: [null, Validators.maxLength(50)],
       isPrivate: null
     });
     if (this.isUpdate) {

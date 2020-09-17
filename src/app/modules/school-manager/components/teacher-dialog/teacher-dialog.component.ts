@@ -17,6 +17,8 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { Teacher } from '../../models/teacher/teacher';
@@ -36,9 +38,12 @@ export class TeacherDialogComponent {
 
   grades: Grade[] = grades;
 
+  private caller = new CallerWithErrorHandling<Teacher, TeacherDialogComponent>();
+
   constructor(private dialogRef: MatDialogRef<TeacherDialogComponent>,
               private teacherService: TeacherRepositoryService,
               private formBuilder: FormBuilder,
+              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -47,17 +52,15 @@ export class TeacherDialogComponent {
 
   save(): void {
     const newTeacher = new Teacher(this.model.value);
+    let func: (item: Teacher) => Promise<Teacher>;
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newTeacher._links = this.model.value.teacher._links;
-      this.teacherService.updateTeacher(newTeacher).then(teacher => {
-        this.dialogRef.close(teacher);
-      });
+      func = this.teacherService.updateTeacher;
     } else {
-      this.teacherService.createTeacher(this.schoolId, newTeacher).then(teacher => {
-        this.dialogRef.close(teacher);
-      });
+      func = this.teacherService.curriedCreateTeacher(this.schoolId);
     }
+    this.caller.callWithErrorHandling(this.teacherService, func, newTeacher, this.dialogRef, this.snackBar);
   }
 
   dismiss(): void {
@@ -68,11 +71,11 @@ export class TeacherDialogComponent {
     console.log('Creating teacher model', teacher);
     const formGroup = formBuilder.group({
       teacher,
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.maxLength(50)]],
       workPhone: null,
       cellPhone: null,
-      email: null,
+      email: [null, [Validators.email, Validators.maxLength(50)]],
       grade1: [null, Validators.required],
       grade2: null
     });
@@ -85,7 +88,7 @@ export class TeacherDialogComponent {
         cellPhone: teacher?.cellPhone,
         email: teacher?.email,
         grade1: teacher?.grade1?.toString(),
-        grade2: teacher?.grade2?.toString()
+        grade2: teacher?.grade2?.toString() || null
       });
     }
     return formGroup;
