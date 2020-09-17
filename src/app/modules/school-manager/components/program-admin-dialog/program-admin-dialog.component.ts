@@ -17,6 +17,8 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { ProgramAdmin } from '../../models/program-admin/program-admin';
 import { ProgramAdminRepositoryService } from '../../services/program-admin/program-admin-repository.service';
 
@@ -32,9 +34,12 @@ export class ProgramAdminDialogComponent {
 
   schoolId: string;
 
+  private caller = new CallerWithErrorHandling<ProgramAdmin, ProgramAdminDialogComponent>();
+
   constructor(private dialogRef: MatDialogRef<ProgramAdminDialogComponent>,
               private programAdminService: ProgramAdminRepositoryService,
               private formBuilder: FormBuilder,
+              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -43,17 +48,15 @@ export class ProgramAdminDialogComponent {
 
   save(): void {
     const newProgramAdmin = new ProgramAdmin(this.model.value);
+    let func: (item: ProgramAdmin) => Promise<ProgramAdmin>;
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newProgramAdmin._links = this.model.value.programAdmin._links;
-      this.programAdminService.updateProgramAdmin(newProgramAdmin).then(programAdmin => {
-        this.dialogRef.close(programAdmin);
-      });
+      func = this.programAdminService.updateProgramAdmin;
     } else {
-      this.programAdminService.createProgramAdmin(this.schoolId, newProgramAdmin).then(programAdmin => {
-        this.dialogRef.close(programAdmin);
-      });
+      func = this.programAdminService.curriedCreateProgramAdmin(this.schoolId);
     }
+    this.caller.callWithErrorHandling(this.programAdminService, func, newProgramAdmin, this.dialogRef, this.snackBar);
   }
 
   dismiss(): void {
@@ -63,11 +66,11 @@ export class ProgramAdminDialogComponent {
   private createModel(formBuilder: FormBuilder, programAdmin: ProgramAdmin): FormGroup {
     const formGroup = formBuilder.group({
       programAdmin,
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.maxLength(50)]],
       workPhone: null,
       cellPhone: null,
-      email: null
+      email: [null, [Validators.email, Validators.maxLength(50)]]
     });
     if (this.isUpdate) {
       formGroup.setValue({

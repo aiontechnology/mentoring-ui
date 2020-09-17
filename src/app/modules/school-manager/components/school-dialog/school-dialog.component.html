@@ -24,6 +24,9 @@ limitations under the License.
         <mat-error *ngIf="model.hasError('required', 'name')">
           You must enter a name
         </mat-error>
+        <mat-error *ngIf="model.hasError('maxlength', 'name')">
+          A school's name can be a maximum of 50 characters in length
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -31,18 +34,27 @@ limitations under the License.
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="Street 1" formControlName="street1" />
+          <mat-error *ngIf="model.hasError('maxlength', 'address.street1')">
+            An address can be a maximum of 50 characters in length
+          </mat-error>
         </mat-form-field>
       </div>
 
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="Street 2" formControlName="street2" />
+          <mat-error *ngIf="model.hasError('maxlength', 'address.street2')">
+            An address can be a maximum of 50 characters in length
+          </mat-error>
         </mat-form-field>
       </div>
 
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="City" formControlName="city" />
+          <mat-error *ngIf="model.hasError('maxlength', 'address.city')">
+            A city can be a maximum of 50 characters in length
+          </mat-error>
         </mat-form-field>
       </div>
 
@@ -72,7 +84,10 @@ limitations under the License.
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="District" formControlName="district" />
-      </mat-form-field>
+        <mat-error *ngIf="model.hasError('maxlength', 'district')">
+          A district can be a maximum of 50 characters in length
+        </mat-error>
+    </mat-form-field>
     </div>
 
     <div class="dialog-container">

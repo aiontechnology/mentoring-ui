@@ -23,6 +23,8 @@ import { Grade } from 'src/app/modules/shared/types/grade';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { MetaDataService } from '../../services/meta-data/meta-data.service';
 import { Element } from '../../models/meta-data/element';
+import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'ms-book-dialog',
@@ -42,10 +44,13 @@ export class BookDialogComponent {
   phonogramList: Element[];
   behaviorList: Element[];
 
+  private caller = new CallerWithErrorHandling<Book, BookDialogComponent>();
+
   constructor(private dialogRef: MatDialogRef<BookDialogComponent>,
               private bookService: BookRepositoryService,
               private metaDataService: MetaDataService,
               private formBuilder: FormBuilder,
+              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -78,18 +83,16 @@ export class BookDialogComponent {
 
   save(): void {
     const newBook = new Book(this.model.value);
+    let func: (item: Book) => Promise<Book>;
     console.log('Saving book', newBook);
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newBook._links = this.model.value.book._links;
-      this.bookService.updateBook(newBook).then(book => {
-        this.dialogRef.close(book);
-      });
+      func = this.bookService.updateBook;
     } else {
-      this.bookService.createBook(newBook).then(book => {
-        this.dialogRef.close(book);
-      });
+      func = this.bookService.createBook;
     }
+    this.caller.callWithErrorHandling(this.bookService, func, newBook, this.dialogRef, this.snackBar);
   }
 
   dismiss(): void {
@@ -100,8 +103,8 @@ export class BookDialogComponent {
     console.log('Book', book);
     const formGroup: FormGroup = formBuilder.group({
       book,
-      title: ['', Validators.required],
-      author: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(100)]],
+      author: ['', [Validators.required, Validators.maxLength(30)]],
       gradeLevel: ['', Validators.required],
       location: ['OFFLINE', Validators.required],
       interests: [],
