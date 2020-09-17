@@ -24,6 +24,9 @@ limitations under the License.
         <mat-error *ngIf="model.hasError('required', 'title')">
           You must enter a title
         </mat-error>
+        <mat-error *ngIf="model.hasError('maxlength', 'title')">
+          A title can be a maximum of 100 characters in length
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -32,6 +35,9 @@ limitations under the License.
         <input matInput placeholder="Author" formControlName="author" required />
         <mat-error *ngIf="model.hasError('required', 'author')">
           You must enter an author
+        </mat-error>
+        <mat-error *ngIf="model.hasError('maxlength', 'author')">
+          An author name can be a maximum of 30 characters in length
         </mat-error>
       </mat-form-field>
     </div>

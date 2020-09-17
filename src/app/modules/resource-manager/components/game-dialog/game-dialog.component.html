@@ -24,12 +24,18 @@ limitations under the License.
         <mat-error *ngIf="model.hasError('required', 'name')">
           You must enter a name
         </mat-error>
+        <mat-error *ngIf="model.hasError('maxlength', 'name')">
+          A book name can be a maximum of 40 characters in length
+        </mat-error>
       </mat-form-field>
     </div>
 
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="Description" formControlName="description" />
+        <mat-error *ngIf="model.hasError('maxlength', 'description')">
+          A book description can be a maximum of 50 characters in length
+        </mat-error>
       </mat-form-field>
     </div>
 

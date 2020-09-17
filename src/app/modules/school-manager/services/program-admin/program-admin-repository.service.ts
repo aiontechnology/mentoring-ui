@@ -30,6 +30,10 @@ export class ProgramAdminRepositoryService extends BaseRepository<ProgramAdmin> 
     return super.create(this.buildUri(schoolId), programAdmin);
   }
 
+  curriedCreateProgramAdmin(schoolId: string): (programAdmin: ProgramAdmin) => Promise<ProgramAdmin> {
+    return (p: ProgramAdmin) => this.createProgramAdmin(schoolId, p);
+  }
+
   readAllProgramAdmins(schoolId: string): void {
     return super.readAll(this.buildUri(schoolId));
   }

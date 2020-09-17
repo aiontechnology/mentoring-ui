@@ -24,6 +24,9 @@ limitations under the License.
         <mat-error *ngIf="model.hasError('required', 'firstName')">
           You must enter a first name
         </mat-error>
+        <mat-error *ngIf="model.hasError('maxlength', 'firstName')">
+          A first name can be a maximum of 50 characters in length
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -32,6 +35,9 @@ limitations under the License.
         <input matInput placeholder="Last Name" formControlName="lastName" required />
         <mat-error *ngIf="model.hasError('required', 'lastName')">
           You must enter a last name
+        </mat-error>
+        <mat-error *ngIf="model.hasError('maxlength', 'lastName')">
+          A last name can be a maximum of 50 characters in length
         </mat-error>
       </mat-form-field>
     </div>
@@ -51,6 +57,12 @@ limitations under the License.
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="Email Address" formControlName="email" />
+        <mat-error *ngIf="model.hasError('email', 'email')">
+          Invalid email address format
+        </mat-error>
+        <mat-error *ngIf="model.hasError('maxlength', 'email')">
+          An email address name can be a maximum of 50 characters in length
+        </mat-error>
       </mat-form-field>
     </div>
 
