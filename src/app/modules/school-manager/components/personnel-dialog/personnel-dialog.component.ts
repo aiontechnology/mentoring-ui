@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PersonnelRepositoryService } from '../../services/personnel/personnel-repository.service';
 import { Personnel } from '../../models/personnel/personnel';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 
 @Component({
   selector: 'ms-personnel-dialog',
@@ -16,9 +18,12 @@ export class PersonnelDialogComponent {
 
   schoolId: string;
 
+  private caller = new CallerWithErrorHandling<Personnel, PersonnelDialogComponent>();
+
   constructor(private dialogRef: MatDialogRef<PersonnelDialogComponent>,
               private personnelService: PersonnelRepositoryService,
               private formBuilder: FormBuilder,
+              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -34,17 +39,15 @@ export class PersonnelDialogComponent {
 
   save(): void {
     const newPersonnel = new Personnel(this.model.value);
+    let func: (item: Personnel) => Promise<Personnel>;
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newPersonnel._links = this.model.value.personnel._links;
-      this.personnelService.updatePersonnel(newPersonnel).then(personnel => {
-        this.dialogRef.close(personnel);
-      });
+      func = this.personnelService.updatePersonnel;
     } else {
-      this.personnelService.createPersonnel(this.schoolId, newPersonnel).then(p => {
-        this.dialogRef.close(p);
-      });
+      func = this.personnelService.curriedCreatePersonnel(this.schoolId);
     }
+    this.caller.callWithErrorHandling(this.personnelService, func, newPersonnel, this.dialogRef, this.snackBar);
   }
 
   dismiss(): void {
@@ -55,11 +58,11 @@ export class PersonnelDialogComponent {
     const formGroup = formBuilder.group({
       personnel,
       type: ['', Validators.required],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.maxLength(50)]],
       workPhone: null,
       cellPhone: null,
-      email: null
+      email: [null, [Validators.email, Validators.maxLength(50)]]
     });
     if (this.isUpdate) {
       formGroup.setValue({

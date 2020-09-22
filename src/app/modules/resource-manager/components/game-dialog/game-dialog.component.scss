@@ -19,7 +19,28 @@
     flex-direction: column;
   }
   
-  .dialog-container > * {
-    width: 100%;
-  }
-  
+.dialog-container > * {
+  width: 100%;
+}
+
+.dialog-container2 {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.dialog-container2 > *:first-child {
+  margin-right: 16px;
+}
+
+.dialog-container2 div {
+  width: 100%;
+}
+
+.dialog-container2 div mat-form-field {
+  width: 100%;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}

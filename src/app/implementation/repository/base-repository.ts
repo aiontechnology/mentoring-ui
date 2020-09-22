@@ -47,7 +47,10 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
                     this.publishItems();
                     resolver(i);
                 }, error => {
-                    console.error('Failed to create new item');
+                    console.error('Failed to create new item', error);
+                    reject({
+                        message: error?.error?.message
+                    });
                 });
         });
     }
@@ -96,7 +99,10 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
                     this.publishItems();
                     resolver(i);
                 }, error => {
-                    console.error('Failed to update item');
+                    console.error('Failed to update item', error);
+                    reject({
+                        message: error?.error?.message
+                    });
                 });
         });
     }
