@@ -24,6 +24,9 @@ limitations under the License.
         <mat-error *ngIf="model.hasError('required', 'title')">
           You must enter a title
         </mat-error>
+        <mat-error *ngIf="model.hasError('maxlength', 'title')">
+          A title can be a maximum of 100 characters in length
+        </mat-error>
       </mat-form-field>
     </div>
 
@@ -32,6 +35,9 @@ limitations under the License.
         <input matInput placeholder="Author" formControlName="author" required />
         <mat-error *ngIf="model.hasError('required', 'author')">
           You must enter an author
+        </mat-error>
+        <mat-error *ngIf="model.hasError('maxlength', 'author')">
+          An author name can be a maximum of 30 characters in length
         </mat-error>
       </mat-form-field>
     </div>
@@ -93,6 +99,14 @@ limitations under the License.
           <mat-option *ngFor="let behavior of behaviorList" [value]="behavior.name">{{behavior.name}}</mat-option>
         </mat-select>
       </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-radio-group formControlName="location">
+        <mat-radio-button *ngFor="let location of locations" [value]="location.toUpperCase()">
+          {{location}}
+        </mat-radio-button>
+      </mat-radio-group>
     </div>
   </form>
 </mat-dialog-content>

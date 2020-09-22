@@ -22,6 +22,7 @@ export class Book implements LinksHolder<Book>{
     title: string;
     author: string;
     gradeLevel: number;
+    location: string;
     interests: [ string ];
     leadershipSkills: [string];
     leadershipTraits: [ string ];
@@ -39,6 +40,7 @@ export class Book implements LinksHolder<Book>{
         this.author = json?.author;
         this.gradeLevel = json?.gradeLevel;
         this.interests = json?.interests;
+        this.location = json?.location;
         this.leadershipSkills = json?.leadershipSkills;
         this.leadershipTraits = json?.leadershipTraits;
         this.phonograms = json?.phonograms;
