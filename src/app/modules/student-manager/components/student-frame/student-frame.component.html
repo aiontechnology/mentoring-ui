@@ -14,6 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div>
-  Here is the school {{school}}
-</div>
+<mat-form-field>
+  <mat-label>Select a school</mat-label>
+  <mat-select [(value)]="selected">
+    <mat-option *ngFor="let school of schools" [value]="school">
+      {{ school.name }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<ms-student-list [school]="selected"></ms-student-list>

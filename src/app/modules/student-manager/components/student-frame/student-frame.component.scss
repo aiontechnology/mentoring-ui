@@ -14,20 +14,6 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnChanges } from '@angular/core';
-import { School } from 'src/app/modules/shared/models/school/school';
-
-@Component({
-  selector: 'ms-student-list',
-  templateUrl: './student-list.component.html',
-  styleUrls: ['./student-list.component.scss']
-})
-export class StudentListComponent implements OnChanges {
-
-  @Input() school: School;
-
-  ngOnChanges(): void {
-    console.log('Received input', this.school);
-  }
-
-}
+ mat-form-field {
+    width: 25%;
+ }

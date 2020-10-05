@@ -21,9 +21,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
 import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import { School } from 'src/app/modules/shared/models/school/school';
+import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/school-repository.service';
 import { MenuStateService } from 'src/app/services/menu-state.service';
-import { School } from '../../models/school/school';
-import { SchoolRepositoryService } from '../../services/school/school-repository.service';
 import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
 
 @Component({

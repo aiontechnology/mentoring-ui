@@ -24,12 +24,13 @@ import { MaterialModule } from 'src/app/shared/material.module';
 import { SharedModule } from '../shared/shared.module';
 import { StudentManagerComponent } from './student-manager.component';
 import { StudentListComponent } from './components/student-list/student-list.component';
+import { StudentFrameComponent } from './components/student-frame/student-frame.component';
 
 const routes: Routes = [
   {
     path: '', component: StudentManagerComponent,
     children: [
-      { path: '', component: StudentListComponent }
+      { path: '', component: StudentFrameComponent }
     ]
   }
 ];
@@ -37,7 +38,8 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     StudentManagerComponent,
-    StudentListComponent
+    StudentListComponent,
+    StudentFrameComponent
   ],
   imports: [
     CommonModule,
@@ -47,7 +49,7 @@ const routes: Routes = [
     MaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule.forRoot()
   ]
 })
 export class StudentManagerModule { }

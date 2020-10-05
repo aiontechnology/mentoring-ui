@@ -26,6 +26,6 @@ export class StudentManagerComponent {
 
   constructor(menuState: MenuStateService) {
     menuState.title = 'Student Manager';
-   }
+  }
 
 }
