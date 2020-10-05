@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
- table {
-    width: 100%;
-  }
-  
-  th.mat-sort-header-sorted {
-    color: black;
-  }
-  
-  .mat-table {
-    overflow: auto;
-    max-height: 500px;
-  }
-  
-  .header {
-    min-height: 64px;
-    padding: 8px 24px 0;
-  }
-  
-  .mat-column-select {
-    overflow: initial;
-  }
-  
+import { TestBed } from '@angular/core/testing';
+
+import { StudentRepositoryService } from './student-repository.service';
+
+describe('StudentRepositoryService', () => {
+  let service: StudentRepositoryService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(StudentRepositoryService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});

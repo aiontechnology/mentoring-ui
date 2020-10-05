@@ -15,5 +15,85 @@ limitations under the License.
 -->
 
 <div>
-  Here is the school {{school}}
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Students</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="mat-elevation-z8">
+      <div class="header">
+        <mat-form-field>
+          <input matInput [(ngModel)]="studentCacheService.filterBinding" (keyup)="studentCacheService.applyFilter($event.target.value)" placeholder="Filter"/>
+          <button mat-button *ngIf="studentCacheService.filter" matSuffix mat-icon-button (click)="studentCacheService.clearFilter()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <table mat-table [dataSource]="studentCacheService.dataSource" matSort>
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              (change)="$event ? studentCacheService.masterToggle() : null"
+              [checked]="studentCacheService.selection.hasValue() && studentCacheService.isAllSelected()"
+              [indeterminate]="studentCacheService.selection.hasValue() && !studentCacheService.isAllSelected()"
+            >
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? studentCacheService.selection.toggle(row) : null"
+              [checked]="studentCacheService.selection.isSelected(row)"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+          <td mat-cell *matCellDef="let student"><a [routerLink]="['students', student.id]">{{ student.firstName }}</a></td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+          <td mat-cell *matCellDef="let student">{{ student.lastName }}</td>
+        </ng-container>
+
+        <!--
+        <ng-container matColumnDef="state">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>State</th>
+          <td mat-cell *matCellDef="let school">{{ school.address.state }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
+          <td mat-cell *matCellDef="let school">{{ school.phone |  phone:'US'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="district">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>District</th>
+          <td mat-cell *matCellDef="let school">{{ school.district }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="private">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Private?</th>
+          <td mat-cell *matCellDef="let school">{{ school.isPrivate ? 'yes' : 'no' }}</td>
+       </ng-container> -->
+
+       <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns()"
+          (click)="studentCacheService.selection.toggle(row)"
+        ></tr>
+      </table>
+
+      <table>
+        <tr>
+          <td><ms-selection-count-display [selectionCount]="studentCacheService.selectionCount"></ms-selection-count-display></td>
+          <td><mat-paginator #paginator [pageSize]="studentCacheService.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
 </div>

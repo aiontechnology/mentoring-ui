@@ -1,3 +1,4 @@
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 /**
  * Copyright 2020 Aion Technology LLC
  *
@@ -16,6 +17,7 @@
 
 import { Component, Input, OnChanges } from '@angular/core';
 import { School } from 'src/app/modules/shared/models/school/school';
+import { StudentCacheService } from '../../services/student/student-cache.service';
 
 @Component({
   selector: 'ms-student-list',
@@ -26,8 +28,22 @@ export class StudentListComponent implements OnChanges {
 
   @Input() school: School;
 
+  constructor(private breakpointObserver: BreakpointObserver,
+              public studentCacheService: StudentCacheService) {
+  }
+
   ngOnChanges(): void {
-    console.log('Received input', this.school);
+    if (this.school !== undefined && this.school !== null) {
+      this.studentCacheService.establishDatasource(this.school.id);
+    }
+  }
+
+  displayedColumns(): string[] {
+    if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
+      return ['select', 'firstName'];
+    } else {
+      return ['select', 'firstName', 'lastName'];
+    }
   }
 
 }
