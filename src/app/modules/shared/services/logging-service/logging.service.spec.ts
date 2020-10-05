@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnChanges } from '@angular/core';
-import { School } from 'src/app/modules/shared/models/school/school';
+import { TestBed } from '@angular/core/testing';
 
-@Component({
-  selector: 'ms-student-list',
-  templateUrl: './student-list.component.html',
-  styleUrls: ['./student-list.component.scss']
-})
-export class StudentListComponent implements OnChanges {
+import { LoggingService } from './logging.service';
 
-  @Input() school: School;
+describe('LoggingService', () => {
+  let service: LoggingService;
 
-  ngOnChanges(): void {
-    console.log('Received input', this.school);
-  }
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(LoggingService);
+  });
 
-}
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});

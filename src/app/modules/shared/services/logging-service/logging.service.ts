@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnChanges } from '@angular/core';
-import { School } from 'src/app/modules/shared/models/school/school';
+import { Injectable } from '@angular/core';
 
-@Component({
-  selector: 'ms-student-list',
-  templateUrl: './student-list.component.html',
-  styleUrls: ['./student-list.component.scss']
-})
-export class StudentListComponent implements OnChanges {
+@Injectable()
+export class LoggingService {
 
-  @Input() school: School;
-
-  ngOnChanges(): void {
-    console.log('Received input', this.school);
+  log(message: string, ...args: any[]): void {
+    console.log(message, args);
   }
 
 }

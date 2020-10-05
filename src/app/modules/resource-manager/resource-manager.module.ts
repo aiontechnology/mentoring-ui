@@ -60,7 +60,7 @@ const routes: Routes = [
     MaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule.forRoot()
   ],
   providers: [
     BookCacheService,
