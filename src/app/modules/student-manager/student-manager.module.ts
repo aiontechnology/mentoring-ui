@@ -25,6 +25,8 @@ import { SharedModule } from '../shared/shared.module';
 import { StudentManagerComponent } from './student-manager.component';
 import { StudentListComponent } from './components/student-list/student-list.component';
 import { StudentFrameComponent } from './components/student-frame/student-frame.component';
+import { StudentCacheService } from './services/student/student-cache.service';
+import { StudentRepositoryService } from './services/student/student-repository.service';
 
 const routes: Routes = [
   {
@@ -50,6 +52,10 @@ const routes: Routes = [
     ReactiveFormsModule,
     RouterModule.forChild(routes),
     SharedModule.forRoot()
+  ],
+  providers: [
+    StudentCacheService,
+    StudentRepositoryService
   ]
 })
 export class StudentManagerModule { }

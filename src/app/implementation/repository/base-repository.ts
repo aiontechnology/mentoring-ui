@@ -113,7 +113,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
     }
 
     @log
-    protected delete(items: T[]) {
+    protected delete(items: T[]): void {
         items.forEach(item => {
             console.log('Deleting', item);
             this.http.delete(item.getSelfLink(), {})

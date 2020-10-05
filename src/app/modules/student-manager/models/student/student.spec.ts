@@ -14,25 +14,10 @@
  * limitations under the License.
  */
 
- table {
-    width: 100%;
-  }
-  
-  th.mat-sort-header-sorted {
-    color: black;
-  }
-  
-  .mat-table {
-    overflow: auto;
-    max-height: 500px;
-  }
-  
-  .header {
-    min-height: 64px;
-    padding: 8px 24px 0;
-  }
-  
-  .mat-column-select {
-    overflow: initial;
-  }
-  
+import { Student } from './student';
+
+describe('Student', () => {
+  it('should create an instance', () => {
+    expect(new Student()).toBeTruthy();
+  });
+});
