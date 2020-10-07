@@ -20,7 +20,6 @@ export class Game implements LinksHolder<Game> {
 
     id: string;
     name: string;
-    description: string;
     grade1: number;
     grade2: number;
     location: string;
@@ -36,7 +35,6 @@ export class Game implements LinksHolder<Game> {
         console.log('Constructing game', value);
         this.id = value?.id;
         this.name = value?.name;
-        this.description = value?.description;
         if (value.gradeRange) {
             this.grade1 = value?.gradeRange?.grade1;
             this.grade2 = value?.gradeRange?.grade2;

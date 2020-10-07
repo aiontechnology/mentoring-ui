@@ -93,7 +93,6 @@ export class GameDialogComponent {
     const formGroup: FormGroup = formBuilder.group({
       game,
       name: ['', [Validators.required, Validators.maxLength(40)]],
-      description: [null, Validators.maxLength(50)],
       gradeRange: formBuilder.group({
         grade1: ['', Validators.required],
         grade2: ['', Validators.required]
@@ -106,7 +105,6 @@ export class GameDialogComponent {
       formGroup.setValue({
         game,
         name: game?.name,
-        description: game?.description,
         gradeRange: {
           grade1: game?.grade1?.toString(),
           grade2: game?.grade2?.toString()

@@ -66,9 +66,9 @@ export class GameListComponent implements OnInit, AfterContentInit, AfterViewIni
 
   displayedColumns(): string[] {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['select', 'name', 'description'];
+      return ['select', 'name'];
     } else {
-      return ['select', 'name', 'description', 'grade1', 'grade2', 'location'];
+      return ['select', 'name', 'grade1', 'grade2', 'location'];
     }
   }
 
