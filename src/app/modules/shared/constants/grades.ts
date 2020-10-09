@@ -17,7 +17,7 @@
 import { Grade } from '../types/grade';
 
 export const grades: Grade[] = [
-    { value: '1', valueView: 'First' },
+    { value: '1', valueView: 'Kindergarten / First' },
     { value: '2', valueView: 'Second' },
     { value: '3', valueView: 'Third' },
     { value: '4', valueView: 'Fourth' },
