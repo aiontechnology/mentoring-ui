@@ -28,9 +28,13 @@ interface StudentLeadershipTraits {
     leadershipTrait: string;
 }
 
-interface StudentPersons {
-    person: string;
+interface EmergencyContacts {
     type: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    workPhone: string;
+    cellPhone: string;
 }
 
 export class Student implements LinksHolder<Student> {
@@ -40,7 +44,7 @@ export class Student implements LinksHolder<Student> {
     preferredTime: string;
     studentLeadershipSkills: StudentLeadershipSkills[];
     studentLeadershipTraits: StudentLeadershipTraits[];
-    studentPersons: StudentPersons[];
+    emergencyContacts: EmergencyContacts[];
     teacher: string;
     _links: {
         self: [
@@ -54,6 +58,7 @@ export class Student implements LinksHolder<Student> {
         this.preferredTime = json?.preferredTime;
         this.studentLeadershipSkills = json?.studentLeadershipSkills;
         this.studentLeadershipTraits = json?.studentLeadershipTraits;
+        this.emergencyContacts = json?.emergencyContacts;
         this.teacher = json?.teacher;
     }
 
