@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import { MenuStateService } from 'src/app/services/menu-state.service';
+import { Injectable } from '@angular/core';
 
-@Component({
-  selector: 'ms-resource-manager',
-  templateUrl: './resource-manager.component.html',
-  styleUrls: ['./resource-manager.component.scss']
-})
-export class ResourceManagerComponent {
+@Injectable()
+export class LoggingService {
 
-  constructor(menuState: MenuStateService) {
-    menuState.title = 'Resource Manager';
+  log(message: string, ...args: any[]): void {
+    console.log(message, args);
   }
 
 }

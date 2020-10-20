@@ -15,6 +15,7 @@
  */
 
 import { Injectable } from '@angular/core';
+import { log } from 'src/app/shared/logging-decorator';
 import { School } from '../../models/school/school';
 import { DatasourceManager } from '../datasource-manager';
 import { SchoolRepositoryService } from './school-repository.service';
@@ -31,12 +32,15 @@ export class SchoolCacheService extends DatasourceManager<School> {
    */
   constructor(private schoolService: SchoolRepositoryService) {
     super();
+    console.log('Constructing a new SchoolCacheService instance');
+    this.establishDatasource();
   }
 
   /**
    * Setup the table datasource.
    */
-  establishDatasource(): void {
+  @log
+  private establishDatasource(): void {
     this.elements = this.schoolService.schools;
     this.schoolService.readAllSchools();
     this.elements.subscribe(s => {

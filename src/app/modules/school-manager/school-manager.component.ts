@@ -16,6 +16,7 @@
 
 import { Component, OnInit } from '@angular/core';
 import { MenuStateService } from 'src/app/services/menu-state.service';
+import { SchoolCacheService } from '../shared/services/school/school-cache.service';
 
 @Component({
   selector: 'ms-school-manager',
@@ -24,7 +25,8 @@ import { MenuStateService } from 'src/app/services/menu-state.service';
 })
 export class SchoolManagerComponent {
 
-  constructor(menuState: MenuStateService) {
+  constructor(private menuState: MenuStateService,
+              private schoolCacheService: SchoolCacheService) {
     menuState.title = 'School Manager';
   }
 

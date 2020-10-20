@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NgModule } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PhoneFormatPipe } from './pipes/phone-format.pipe';
 import { PhoneFormatDirective } from './directives/phone-format.directive';
@@ -22,6 +22,9 @@ import { ConfimationDialogComponent } from './components/confimation-dialog/conf
 import { MaterialModule } from 'src/app/shared/material.module';
 import { OnlyNumberDirective } from './directives/only-number.directive';
 import { SelectionCountDisplayComponent } from './components/selection-count-display/selection-count-display.component';
+import { SchoolCacheService } from './services/school/school-cache.service';
+import { SchoolRepositoryService } from './services/school/school-repository.service';
+import { LoggingService } from './services/logging-service/logging.service';
 
 @NgModule({
   declarations: [
@@ -30,6 +33,8 @@ import { SelectionCountDisplayComponent } from './components/selection-count-dis
     PhoneFormatDirective,
     PhoneFormatPipe,
     SelectionCountDisplayComponent
+  ],
+  providers: [
   ],
   imports: [
     CommonModule,
@@ -43,4 +48,17 @@ import { SelectionCountDisplayComponent } from './components/selection-count-dis
     SelectionCountDisplayComponent
   ]
 })
-export class SharedModule { }
+export class SharedModule {
+
+  static forRoot(): ModuleWithProviders<SharedModule> {
+    return {
+      ngModule: SharedModule,
+      providers: [
+        LoggingService,
+        SchoolCacheService,
+        SchoolRepositoryService
+      ]
+    };
+  }
+
+}

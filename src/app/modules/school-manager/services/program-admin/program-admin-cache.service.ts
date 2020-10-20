@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { ProgramAdmin } from '../../models/program-admin/program-admin';
-import { DatasourceManager } from '../datasource-manager';
+import { DatasourceManager } from '../../../shared/services/datasource-manager';
 import { ProgramAdminRepositoryService } from './program-admin-repository.service';
 
 @Injectable()

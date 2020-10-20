@@ -16,6 +16,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { log } from 'src/app/shared/logging-decorator';
 import { environment } from 'src/environments/environment';
 import { LinksHolder } from './links-holder';
 
@@ -36,6 +37,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
         return this._items;
     }
 
+    @log
     protected create(uri: string, newItem: T): Promise<T> {
         console.log('Creating', uri);
         return new Promise((resolver, reject) => {
@@ -55,6 +57,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
         });
     }
 
+    @log
     protected readAll(uri: string): void {
         console.log('Loading all', uri);
         this.http.get<any>(uri)
@@ -72,6 +75,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
             });
     }
 
+    @log
     protected readOne(id: string): T {
         for (const item of this.dataStore.items) {
             if (item.getSelfLink().endsWith(id)) {
@@ -82,6 +86,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
         return null;
     }
 
+    @log
     protected update(uri: string, item: T): Promise<T> {
         console.log('Updating', uri);
         return new Promise((resolver, reject) => {
@@ -107,7 +112,8 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
         });
     }
 
-    protected delete(items: T[]) {
+    @log
+    protected delete(items: T[]): void {
         items.forEach(item => {
             console.log('Deleting', item);
             this.http.delete(item.getSelfLink(), {})
