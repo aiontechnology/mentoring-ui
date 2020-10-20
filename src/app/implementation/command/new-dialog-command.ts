@@ -30,7 +30,8 @@ export class NewDialogCommand<T> extends Command {
                 private data: object,
                 private router: Router,
                 private dialog: MatDialog,
-                private snackBar: MatSnackBar) {
+                private snackBar: MatSnackBar,
+                private determineEnabled: () => boolean) {
         super(title, group);
     }
 
@@ -59,7 +60,7 @@ export class NewDialogCommand<T> extends Command {
     }
 
     isEnabled(): boolean {
-        return true;
+        return this.determineEnabled();
     }
 
 }

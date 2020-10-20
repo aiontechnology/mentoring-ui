@@ -94,7 +94,8 @@ class ProgramAdminListMenuManager {
       { schoolId },
       router,
       dialog,
-      snackBar));
+      snackBar,
+      () => true));
     menuState.add(new EditDialogCommand(
       'Edit Program Admin',
       'program-admin',
