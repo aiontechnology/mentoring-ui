@@ -15,60 +15,57 @@
  */
 
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
-
-interface StudentLeadershipSkills {
-    person: string;
-    type: string;
-    leadershipSkill: string;
-}
-
-interface StudentLeadershipTraits {
-    person: string;
-    type: string;
-    leadershipTrait: string;
-}
+import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 
 interface EmergencyContacts {
-    type: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    workPhone: string;
-    cellPhone: string;
+  type: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  workPhone: string;
+  cellPhone: string;
 }
 
 export class Student implements LinksHolder<Student> {
 
-    firstName: string;
-    lastName: string;
-    preferredTime: string;
-    studentLeadershipSkills: StudentLeadershipSkills[];
-    studentLeadershipTraits: StudentLeadershipTraits[];
-    emergencyContacts: EmergencyContacts[];
-    teacher: string;
-    _links: {
-        self: [
-            { href: string; }
-        ]
-    };
+  firstName: string;
+  lastName: string;
+  grade: string;
+  preferredTime: string;
+  mediaReleaseSigned: boolean;
+  teacher: Teacher;
+  behaviors: string[];
+  leadershipSkills: string[];
+  leadershipTraits: string[];
+  emergencyContacts: EmergencyContacts[];
+  location: string;
+  _links: {
+      self: [
+          { href: string; }
+      ]
+  };
 
-    constructor(json?: any) {
-        this.firstName = json?.firstName;
-        this.lastName = json?.lastName;
-        this.preferredTime = json?.preferredTime;
-        this.studentLeadershipSkills = json?.studentLeadershipSkills;
-        this.studentLeadershipTraits = json?.studentLeadershipTraits;
-        this.emergencyContacts = json?.emergencyContacts;
-        this.teacher = json?.teacher;
-    }
+  constructor(json?: any) {
+    this.firstName = json?.firstName;
+    this.lastName = json?.lastName;
+    this.grade = json?.grade;
+    this.preferredTime = json?.preferredTime;
+    this.mediaReleaseSigned = json?.mediaReleaseSigned;
+    this.teacher = json?.teacher;
+    this.behaviors = json?.behaviors;
+    this.leadershipSkills = json?.leadershipSkills;
+    this.leadershipTraits = json?.leadershipTraits;
+    this.emergencyContacts = json?.emergencyContacts;
+    this.location = json?.location;
+  }
 
-    clearLinks(): Student {
-        this._links = undefined;
-        return this;
-    }
+  clearLinks(): Student {
+    this._links = undefined;
+    return this;
+  }
 
-    getSelfLink(): string {
-        return this._links?.self[0]?.href;
-    }
+  getSelfLink(): string {
+    return this._links?.self[0]?.href;
+  }
 
 }

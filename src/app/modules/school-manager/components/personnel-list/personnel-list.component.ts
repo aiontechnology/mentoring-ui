@@ -94,7 +94,8 @@ class PersonnelMenuManager {
       { schoolId },
       router,
       dialog,
-      snackBar));
+      snackBar,
+      () => true));
     menuState.add(new EditDialogCommand(
         'Edit Personnel',
         'personnel',
