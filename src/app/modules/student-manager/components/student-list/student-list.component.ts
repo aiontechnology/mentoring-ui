@@ -26,6 +26,8 @@ import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import { StudentDialogComponent } from '../student-dialog/student-dialog.component';
+import { Student } from '../../models/student/student';
 
 @Component({
   selector: 'ms-student-list',
@@ -48,12 +50,10 @@ export class StudentListComponent implements OnChanges {
     if (this.school !== undefined && this.school !== null) {
       this.studentCacheService.establishDatasource(this.school.id);
     }
-  }
 
-  ngAfterContentInit(): void {
     this.menuState.clear();
     console.log('Adding student list menus');
-    StudentListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.studentCacheService);
+    StudentListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.studentCacheService, this.school?.id);
   }
 
   displayedColumns(): string[] {
@@ -72,22 +72,24 @@ class StudentListMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
-                  studentCacheService: StudentCacheService) {
-    console.log("Constructing MenuHandler");
+                  studentCacheService: StudentCacheService,
+                  selectedSchoolId: string) { 
+    console.log('Constructing MenuHandler');
     menuState.add(new NewDialogCommand(
       'Create New Student',
       'student',
-      null, // TODO: Implement student dialog component.
+      StudentDialogComponent,
       'Student added',
       null,
-      null,
+      { 'id': selectedSchoolId },
       router,
       dialog,
-      snackBar));
+      snackBar,
+      () => selectedSchoolId != null));
     menuState.add(new EditDialogCommand(
       'Edit Student',
       'student',
-      null, // TODO: Implement student dialog component.
+      StudentDialogComponent,
       'Student updated',
       null,
       router,

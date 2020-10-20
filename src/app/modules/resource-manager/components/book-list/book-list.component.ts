@@ -91,7 +91,8 @@ class BookListMenuManager {
       null,
       router,
       dialog,
-      snackBar));
+      snackBar,
+      () => true));
     menuState.add(new EditDialogCommand(
       'Edit Book',
       'book',

@@ -90,7 +90,8 @@ class SchoolListMenuManager {
       undefined,
       router,
       dialog,
-      snackBar));
+      snackBar,
+      () => true));
     menuState.add(new EditDialogCommand(
       'Edit School',
       'school',
