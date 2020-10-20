@@ -18,14 +18,14 @@ import { Component, OnInit } from '@angular/core';
 import { MenuStateService } from 'src/app/services/menu-state.service';
 
 @Component({
-  selector: 'ms-resource-manager',
-  templateUrl: './resource-manager.component.html',
-  styleUrls: ['./resource-manager.component.scss']
+  selector: 'ms-student-manager',
+  templateUrl: './student-manager.component.html',
+  styleUrls: ['./student-manager.component.scss']
 })
-export class ResourceManagerComponent {
+export class StudentManagerComponent {
 
   constructor(menuState: MenuStateService) {
-    menuState.title = 'Resource Manager';
+    menuState.title = 'Student Manager';
   }
 
 }

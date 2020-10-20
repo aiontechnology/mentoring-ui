@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import { MenuStateService } from 'src/app/services/menu-state.service';
+import { Student } from './student';
 
-@Component({
-  selector: 'ms-resource-manager',
-  templateUrl: './resource-manager.component.html',
-  styleUrls: ['./resource-manager.component.scss']
-})
-export class ResourceManagerComponent {
-
-  constructor(menuState: MenuStateService) {
-    menuState.title = 'Resource Manager';
-  }
-
-}
+describe('Student', () => {
+  it('should create an instance', () => {
+    expect(new Student()).toBeTruthy();
+  });
+});

@@ -22,10 +22,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from '../../shared/material.module';
 import { SchoolListComponent } from './components/school-list/school-list.component';
 import { HttpClientModule } from '@angular/common/http';
-import { SchoolRepositoryService } from './services/school/school-repository.service';
 import { SchoolDialogComponent } from './components/school-dialog/school-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SchoolCacheService } from './services/school/school-cache.service';
 import { SchoolDetailComponent } from './components/school-detail/school-detail.component';
 import { TeacherListComponent } from './components/teacher-list/teacher-list.component';
 import { TeacherRepositoryService } from './services/teacher/teacher-repository.service';
@@ -74,15 +72,13 @@ const routes: Routes = [
     MaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule.forRoot()
   ],
   providers: [
     PersonnelCacheService,
     PersonnelRepositoryService,
     ProgramAdminCacheService,
     ProgramAdminRepositoryService,
-    SchoolCacheService,
-    SchoolRepositoryService,
     TeacherCacheService,
     TeacherRepositoryService
   ]

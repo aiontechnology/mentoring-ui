@@ -15,7 +15,7 @@
  */
 
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
-import { Address } from '../../../shared/models/address';
+import { Address } from '../address/address';
 
 export class School implements LinksHolder<School> {
 

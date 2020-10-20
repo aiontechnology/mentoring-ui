@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
-import { MenuStateService } from 'src/app/services/menu-state.service';
+import { TestBed } from '@angular/core/testing';
 
-@Component({
-  selector: 'ms-resource-manager',
-  templateUrl: './resource-manager.component.html',
-  styleUrls: ['./resource-manager.component.scss']
-})
-export class ResourceManagerComponent {
+import { StudentCacheService } from './student-cache.service';
 
-  constructor(menuState: MenuStateService) {
-    menuState.title = 'Resource Manager';
-  }
+describe('StudentCacheService', () => {
+  let service: StudentCacheService;
 
-}
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(StudentCacheService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});

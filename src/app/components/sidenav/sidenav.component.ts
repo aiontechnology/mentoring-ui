@@ -19,8 +19,8 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
-import { School } from '../../modules/school-manager/models/school/school';
 import { UserSessionService } from 'src/app/services/user-session.service';
+import { School } from 'src/app/modules/shared/models/school/school';
 
 @Component({
   selector: 'ms-sidenav',

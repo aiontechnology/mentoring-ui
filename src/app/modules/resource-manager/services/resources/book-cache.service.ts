@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { BookRepositoryService } from './book-repository.service';
-import { DatasourceManager } from 'src/app/modules/school-manager/services/datasource-manager';
+import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
 import { Book } from '../../models/book/book';
 
 @Injectable()
