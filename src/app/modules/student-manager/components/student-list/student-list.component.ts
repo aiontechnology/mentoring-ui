@@ -1,4 +1,3 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 /**
  * Copyright 2020 Aion Technology LLC
  *
@@ -27,7 +26,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { StudentDialogComponent } from '../student-dialog/student-dialog.component';
-import { Student } from '../../models/student/student';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 @Component({
   selector: 'ms-student-list',
@@ -60,7 +59,7 @@ export class StudentListComponent implements OnChanges {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'firstName', 'teacher', 'preferredTime'];
     } else {
-      return ['select', 'firstName', 'lastName', 'teacher', 'preferredTime', 'emergencyContacts'];
+      return ['select', 'firstName', 'lastName', 'teacher', 'preferredTime', 'contacts'];
     }
   }
 
@@ -73,7 +72,7 @@ class StudentListMenuManager {
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   studentCacheService: StudentCacheService,
-                  selectedSchoolId: string) { 
+                  schoolId: string) { 
     console.log('Constructing MenuHandler');
     menuState.add(new NewDialogCommand(
       'Create New Student',
@@ -81,12 +80,12 @@ class StudentListMenuManager {
       StudentDialogComponent,
       'Student added',
       null,
-      { 'id': selectedSchoolId },
+      { schoolId },
       router,
       dialog,
       snackBar,
-      () => selectedSchoolId != null));
-    menuState.add(new EditDialogCommand(
+      () => schoolId != null));
+    /*menuState.add(new EditDialogCommand(
       'Edit Student',
       'student',
       StudentDialogComponent,
@@ -112,6 +111,6 @@ class StudentListMenuManager {
       () => studentCacheService.selectionCount,
       () => studentCacheService.removeSelected(),
       () => { },
-      () => studentCacheService.selection.select.length > 0));
+      () => studentCacheService.selection.select.length > 0));*/
   }
 }

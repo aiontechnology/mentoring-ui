@@ -17,46 +17,53 @@
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
 import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 
-interface EmergencyContacts {
+interface Contacts {
   type: string;
   firstName: string;
   lastName: string;
   email: string;
   workPhone: string;
   cellPhone: string;
+  preferredContactMethod: string;
+  isEmergencyContact: boolean;
+  comment: string;
 }
 
-export class Student implements LinksHolder<Student> {
+export abstract class Student implements LinksHolder<Student> {
 
   firstName: string;
   lastName: string;
   grade: string;
   preferredTime: string;
+  location: string;
   mediaReleaseSigned: boolean;
-  teacher: Teacher;
+  allergyInfo: string;
   behaviors: string[];
+  interests: string[];
   leadershipSkills: string[];
   leadershipTraits: string[];
-  emergencyContacts: EmergencyContacts[];
-  location: string;
+  contacts: Contacts[];
   _links: {
       self: [
           { href: string; }
       ]
   };
 
+  abstract teacher: any;
+
   constructor(json?: any) {
     this.firstName = json?.firstName;
     this.lastName = json?.lastName;
     this.grade = json?.grade;
     this.preferredTime = json?.preferredTime;
+    this.location = json?.location;
     this.mediaReleaseSigned = json?.mediaReleaseSigned;
-    this.teacher = json?.teacher;
+    this.allergyInfo = json?.allergyInfo;
     this.behaviors = json?.behaviors;
+    this.interests = json?.interests;
     this.leadershipSkills = json?.leadershipSkills;
     this.leadershipTraits = json?.leadershipTraits;
-    this.emergencyContacts = json?.emergencyContacts;
-    this.location = json?.location;
+    this.contacts = json?.contacts;
   }
 
   clearLinks(): Student {

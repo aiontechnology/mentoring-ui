@@ -14,40 +14,24 @@
  * limitations under the License.
  */
 
-h3 {
-  font-weight: bold;
+import { Student } from '../student/student';
+import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
+
+interface StudentTeacherOutbound {
+  uri: string;
+  comment: string;
 }
 
-.dialog-container {
-  display: flex;
-  flex-direction: column;
-}
+export class StudentOutbound extends Student {
 
-.dialog-container > * {
-  width: 100%;
-}
+  teacher: StudentTeacherOutbound;
 
-.mat-radio-button ~ .mat-radio-button {
-  margin-left: 16px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
+  constructor(json?: any) {
+    super(json);
+    this.teacher = {
+      uri: json?.teacher?.uri,
+      comment: json?.teacher?.comment
+    }
+  }
 
-.contact-dialog {
-  margin-top: 35px;
-}
-
-button.form {
-  margin-left: 10px;
-  display: flex;
-  width: 110px;
-  justify-content: center;
-}
-
-button.remove {
-  margin-top: 20px;
-}
-
-button.add {
-  margin-top: 10px;
 }

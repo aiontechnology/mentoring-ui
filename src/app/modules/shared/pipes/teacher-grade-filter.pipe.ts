@@ -14,40 +14,22 @@
  * limitations under the License.
  */
 
-h3 {
-  font-weight: bold;
-}
+import { Pipe, PipeTransform } from '@angular/core';
+import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 
-.dialog-container {
-  display: flex;
-  flex-direction: column;
-}
+@Pipe({
+  name: 'teacherGradeFilter'
+})
+export class TeacherGradeFilterPipe implements PipeTransform {
 
-.dialog-container > * {
-  width: 100%;
-}
+  transform(teachers: Teacher[], selectedGrade: string): Teacher[] {
+    if (selectedGrade == null) {
+      return [];
+    }
+    return teachers.filter(
+      teacher => teacher.grade1?.toString() === selectedGrade || 
+      teacher.grade2?.toString() === selectedGrade
+    );
+  }
 
-.mat-radio-button ~ .mat-radio-button {
-  margin-left: 16px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.contact-dialog {
-  margin-top: 35px;
-}
-
-button.form {
-  margin-left: 10px;
-  display: flex;
-  width: 110px;
-  justify-content: center;
-}
-
-button.remove {
-  margin-top: 20px;
-}
-
-button.add {
-  margin-top: 10px;
 }
