@@ -62,7 +62,8 @@ limitations under the License.
         <ng-container matColumnDef="teacher">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Teacher</th>
           <td mat-cell *matCellDef="let student">
-            {{ student.teacher.firstName + ' ' + student.teacher.lastName }}
+            {{ student.teacher.teacher.firstName + ' ' +
+            student.teacher.teacher.lastName }}
           </td>
         </ng-container>
 
@@ -71,13 +72,16 @@ limitations under the License.
           <td mat-cell *matCellDef="let student">{{ student.preferredTime }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="emergencyContacts">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Emergency Contacts</th>
+        <ng-container matColumnDef="contacts">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Contacts</th>
           <td mat-cell *matCellDef="let student">
-            <div *ngFor="let contact of student.emergencyContacts">
-              {{ contact.firstName + ' ' + contact.lastName + ': ' + contact.cellPhone + ', ' + contact.email }}
-              <br>
-            </div>
+            <ul>
+              <div *ngFor="let contact of student.contacts">
+                <li> 
+                  {{ contact.firstName + ' ' + contact.lastName + ': ' + contact.cellPhone + ', ' + contact.email }}
+                </li>
+              </div>
+            </ul>
           </td>
         </ng-container>
 

@@ -15,6 +15,6 @@
  */
 
 export interface Grade {
-    value: string;
-    valueView: string;
+  value: string;
+  valueView: string;
 }
