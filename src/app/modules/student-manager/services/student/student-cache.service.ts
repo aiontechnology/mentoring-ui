@@ -21,7 +21,7 @@ import { Student } from '../../models/student/student';
 import { StudentRepositoryService } from './student-repository.service';
 
 @Injectable()
-export class StudentCacheService  extends DatasourceManager<Student>  {
+export class StudentCacheService extends DatasourceManager<Student>  {
 
   /** Binds to the filter input control. Used to clear the control when requested. */
   filterBinding: string;

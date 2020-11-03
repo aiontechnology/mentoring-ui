@@ -14,40 +14,12 @@
  * limitations under the License.
  */
 
-h3 {
-  font-weight: bold;
-}
+import { Grade } from '../types/grade';
 
-.dialog-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.dialog-container > * {
-  width: 100%;
-}
-
-.mat-radio-button ~ .mat-radio-button {
-  margin-left: 16px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.contact-dialog {
-  margin-top: 35px;
-}
-
-button.form {
-  margin-left: 10px;
-  display: flex;
-  width: 110px;
-  justify-content: center;
-}
-
-button.remove {
-  margin-top: 20px;
-}
-
-button.add {
-  margin-top: 10px;
-}
+export const resourceGrades: Grade[] = [
+  { value: '1', valueView: 'Kindergarten / First' },
+  { value: '2', valueView: 'Second' },
+  { value: '3', valueView: 'Third' },
+  { value: '4', valueView: 'Fourth' },
+  { value: '5', valueView: 'Fifth' },
+];

@@ -19,12 +19,12 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GameRepositoryService } from '../../services/resources/game-repository.service';
-import { MetaDataService } from '../../services/meta-data/meta-data.service';
-import { Element } from '../../models/meta-data/element';
+import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { Game } from '../../models/game/game';
-import { grades } from 'src/app/modules/shared/constants/grades';
+import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
+import { Element } from 'src/app/modules/shared/models/meta-data/element';
 
 @Component({
   selector: 'ms-game-dialog',
@@ -36,7 +36,7 @@ export class GameDialogComponent {
   model: FormGroup;
   isUpdate = false;
 
-  grades: Grade[] = grades;
+  grades: Grade[] = resourceGrades;
   locations: string[] = ['Offline', 'Online', 'Both'];
   activityFocusList: Element[];
   leadershipSkillList: Element[];

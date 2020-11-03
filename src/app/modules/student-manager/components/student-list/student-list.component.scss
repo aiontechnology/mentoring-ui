@@ -35,7 +35,12 @@
   .mat-column-select {
     overflow: initial;
   }
-  
-  .mat-column-emergencyContacts {
-    padding: 15px;
+
+  td.mat-cell {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .mat-column-contacts ul li {
+    line-height: 1.4;
   }

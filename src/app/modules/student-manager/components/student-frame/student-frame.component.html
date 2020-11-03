@@ -23,4 +23,6 @@ limitations under the License.
   </mat-select>
 </mat-form-field>
 
-<ms-student-list [school]="selected"></ms-student-list>
+<div *ngIf="selected">
+  <ms-student-list [school]="selected"></ms-student-list>
+</div>
