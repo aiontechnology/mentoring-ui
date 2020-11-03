@@ -102,7 +102,7 @@ class GameListMenuManager {
       router,
       dialog,
       snackBar,
-      () => gameCacheService.getFirstSelection(),
+      () => ({ model: gameCacheService.getFirstSelection() }),
       () => gameCacheService.clearSelection(),
       () => gameCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(

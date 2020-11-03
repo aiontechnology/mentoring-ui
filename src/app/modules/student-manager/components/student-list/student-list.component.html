@@ -78,7 +78,7 @@ limitations under the License.
             <ul>
               <div *ngFor="let contact of student.contacts">
                 <li> 
-                  {{ contact.firstName + ' ' + contact.lastName + ': ' + contact.cellPhone + ', ' + contact.email }}
+                  {{ displayContact(contact) }}
                 </li>
               </div>
             </ul>

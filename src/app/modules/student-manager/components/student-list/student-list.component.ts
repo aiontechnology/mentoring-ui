@@ -27,6 +27,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { StudentDialogComponent } from '../student-dialog/student-dialog.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { Contacts } from '../../models/student/student';
 
 @Component({
   selector: 'ms-student-list',
@@ -63,6 +64,25 @@ export class StudentListComponent implements OnChanges {
     }
   }
 
+  displayContact(contact: Contacts): string {
+    
+    let name = contact.firstName + ' ' + contact.lastName;
+    let contactInfo: string;
+
+    if (contact.cellPhone) {
+      contactInfo = contact.cellPhone;
+    } else if (contact.workPhone) {
+      contactInfo = contact.workPhone;
+    }
+
+    if (contact.email) {
+      contactInfo = contactInfo + ', ' + contact.email;
+    }
+
+    return name + ': ' + contactInfo;
+
+  }
+
 }
 
 class StudentListMenuManager {
@@ -85,7 +105,7 @@ class StudentListMenuManager {
       dialog,
       snackBar,
       () => schoolId != null));
-    /*menuState.add(new EditDialogCommand(
+    menuState.add(new EditDialogCommand(
       'Edit Student',
       'student',
       StudentDialogComponent,
@@ -94,10 +114,10 @@ class StudentListMenuManager {
       router,
       dialog,
       snackBar,
-      () => studentCacheService.getFirstSelection(),
+      () => ({ schoolId: schoolId, model: studentCacheService.getFirstSelection() }),
       () => studentCacheService.clearSelection(),
       () => studentCacheService.selection.selected.length === 1));
-    menuState.add(new DeleteDialogCommand(
+    /* menuState.add(new DeleteDialogCommand(
       'Delete Student',
       'student',
       ConfimationDialogComponent,
@@ -111,6 +131,7 @@ class StudentListMenuManager {
       () => studentCacheService.selectionCount,
       () => studentCacheService.removeSelected(),
       () => { },
-      () => studentCacheService.selection.select.length > 0));*/
+      () => studentCacheService.selection.selected.length > 0)); */
   }
+
 }
