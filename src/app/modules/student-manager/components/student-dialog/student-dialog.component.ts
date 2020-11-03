@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-import { Component, Inject, OnInit, OnChanges, Output} from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { Student } from '../../models/student/student';
+import { StudentInbound } from '../../models/student-inbound/student-inbound';
+import { StudentOutbound } from '../../models/student-outbound/student-outbound';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { StudentRepositoryService } from '../../services/student/student-repository.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TeacherRepositoryService } from 'src/app/modules/school-manager/services/teacher/teacher-repository.service'
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
 import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
+import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import { Element } from 'src/app/modules/shared/models/meta-data/element';
 
 @Component({
   selector: 'ms-student-dialog',
@@ -34,20 +38,26 @@ import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 })
 export class StudentDialogComponent {
 
-  @Output() valueChange
-
   model: FormGroup;
   isUpdate = false;
 
+  schoolId: string;
+  selectedGrade: string;
+
   teachers: Teacher[];
   grades: Grade[] = grades;
-  selectedGrade: string;
+  contactMethods: string[] = ['Cellphone', 'Workphone', 'Email'];
   locations: string[] = ['Offline', 'Online', 'Both'];
 
-  //interestList: Element[];
-  //leadershipTraitList: Element[];
-  //leadershipSkillList: Element[];
-  //behavior: Element;
+  contactTypes = [
+    { value: 'PARENT_GUARDIAN', valueView: 'Parent' },
+    { value: 'GRANDPARENT', valueView: 'Grandparent' }
+  ];
+
+  interestList: Element[];
+  leadershipTraitList: Element[];
+  leadershipSkillList: Element[];
+  behaviorList: Element[];
 
   private caller = new CallerWithErrorHandling<Student, StudentDialogComponent>();
 
@@ -55,19 +65,42 @@ export class StudentDialogComponent {
               private studentService: StudentRepositoryService,
               private teacherService: TeacherRepositoryService,
               private logger: LoggingService,
-              // private metaDataService: MetaDataService,
               private formBuilder: FormBuilder,
               private snackBar: MatSnackBar,
+              private metaDataService: MetaDataService,
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
-    this.isUpdate = this.determineUpdate(null);//data);
-    this.model = this.createModel(formBuilder, null);//data?.model);
+    this.isUpdate = this.determineUpdate(data);
+    this.model = this.createModel(formBuilder, data?.model);
+    this.schoolId = data?.schoolId;
+
+    metaDataService.loadInterests();
+    metaDataService.interests.subscribe(interests => {
+      this.interestList = interests;
+    });
+
+    metaDataService.loadLeadershipTraits();
+    metaDataService.leadershipTraits.subscribe(leadershipTraits => {
+      this.leadershipTraitList = leadershipTraits;
+    });
+
+    metaDataService.loadLeadershipSkills();
+    metaDataService.leadershipSkills.subscribe(leadershipSkills => {
+      this.leadershipSkillList = leadershipSkills;
+    });
+
+    metaDataService.loadBehaviors();
+    metaDataService.behaviors.subscribe(behaviors => {
+      this.behaviorList = behaviors;
+    });
+
+    this.addContact();
   }
 
   /* Get teacher data; to be displayed in a selection menu */
   ngOnInit() {
-    console.log('School data', this.data?.id);
-    this.teacherService.readAllTeachers(this.data?.id);
+    console.log('School data', this.schoolId);
+    this.teacherService.readAllTeachers(this.schoolId);
     this.teacherService.teachers.subscribe(teachers => {
       this.logger.log('Read teachers from school', teachers);
       this.teachers = teachers;
@@ -75,52 +108,94 @@ export class StudentDialogComponent {
   }
 
   save(): void {
-    // Save student's info.
+    const newStudent = new StudentOutbound(this.model.value);
+    let func: (item: StudentOutbound) => Promise<StudentInbound>;
+    console.log('Saving student', newStudent);
+    if (this.isUpdate) {
+      //console.log('Updating', this.model.value);
+      //newBook._links = this.model.value.book._links;
+      //func = this.bookService.updateBook;
+    } else {
+      func = this.studentService.curriedCreateStudent(this.schoolId);
+    }
+    this.caller.callWithErrorHandling(this.studentService, func, newStudent, this.dialogRef, this.snackBar); 
   }
-  
+
   dismiss(): void {
     this.dialogRef.close(null);
   }
 
-  /* teachersInSelectedGrade(): Teacher[] {
-    if (this.selectedGrade == null) {
-      return [];
-    }
-    return this.teachers.filter(
-      teacher => teacher.grade1?.toString() === this.selectedGrade || 
-      teacher.grade2?.toString() === this.selectedGrade
-    );
-  } */
+  private determineUpdate(formData: any): boolean {
+    return formData.model !== undefined && formData.model !== null;
+  }
 
-  private createModel(formBuilder: FormBuilder, student: Student): FormGroup {
+  private createModel(formBuilder: FormBuilder, student: StudentInbound): FormGroup {
+
     console.log('Student', student);
     const formGroup: FormGroup = formBuilder.group({
-      student,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      mediaReleaseSigned: [''],    
-      gradeLevel: ['', [Validators.required]],
-      // TODO: preferred time
-      teacher: ['', [Validators.required]],
+      grade: ['', Validators.required],
+      mediaReleaseSigned: false,
+      preferredTime: [''],
+      teacher: formBuilder.group({
+        uri: ['', Validators.required],
+        comment: ['']
+      }),
+      allergyInfo: [''],
+      interests: [],
+      leadershipTraits: [],
+      leadershipSkills: [],
+      behaviors: [],
+      contacts: formBuilder.array([]),
       location: ['OFFLINE', Validators.required]
     });
-    if (this.isUpdate) {
+
+    /*if (this.isUpdate) {
       formGroup.setValue({
-        student,
         firstName: student?.firstName,
         lastName: student?.lastName,
-        mediaReleaseSigned: [''],
-        gradeLevel: [''],
-        //TODO: preferred time
-        teacher: student?.teacher?.firstName + ' ' + student?.teacher?.lastName,
+        grade: student?.grade,
+        mediaReleaseSigned: student?.mediaReleaseSigned,    
+        preferredTime: student?.preferredTime,
+        teacher: student?.teacher,
+        allergyInfo: student?.allergyInfo,
+        interests: student?.interests,
+        leadershipTraits: student?.leadershipTraits,
+        leadershipSkills: student?.leadershipSkills,
+        behaviors: student?.behaviors,
         location: student?.location?.toString()
       });
-    }
+    }*/
+
     return formGroup;
   }
 
-  private determineUpdate(formData: any): boolean {
-    return formData !== undefined && formData !== null;
+  get contacts() {
+    return this.model.get('contacts') as FormArray;
+  }
+
+  addContact() {
+    this.contacts.push(this.createContactsFormGroup());
+  }
+  
+  removeContact(i: number) {
+    this.contacts.removeAt(i);
+  }
+
+  private createContactsFormGroup(): FormGroup {
+    return this.formBuilder.group({
+      type: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.maxLength(50)]],
+      lastName: ['', [Validators.required, Validators.maxLength(50)]],
+      workPhone: null,
+      cellPhone: null,
+      email: [null, [Validators.email, Validators.maxLength(50)]],
+      preferredContactMethod: null,
+      isEmergencyContact: false,
+      comment: ['']
+    });
   }
 
 }
+

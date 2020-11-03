@@ -20,11 +20,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Book } from '../../models/book/book';
 import { BookRepositoryService } from '../../services/resources/book-repository.service';
 import { Grade } from 'src/app/modules/shared/types/grade';
-import { grades } from 'src/app/modules/shared/constants/grades';
-import { MetaDataService } from '../../services/meta-data/meta-data.service';
-import { Element } from '../../models/meta-data/element';
+import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
+import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Element } from 'src/app/modules/shared/models/meta-data/element';
 
 @Component({
   selector: 'ms-book-dialog',
@@ -36,7 +36,7 @@ export class BookDialogComponent {
   model: FormGroup;
   isUpdate = false;
 
-  grades: Grade[] = grades;
+  grades: Grade[] = resourceGrades;
   locations: string[] = ['Offline', 'Online', 'Both'];
   interestList: Element[];
   leadershipTraitList: Element[];
