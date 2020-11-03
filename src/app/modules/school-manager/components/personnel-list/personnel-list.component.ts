@@ -105,7 +105,7 @@ class PersonnelMenuManager {
         router,
         dialog,
         snackBar,
-        () => personnelCacheService.getFirstSelection(),
+        () => ({ model: personnelCacheService.getFirstSelection() }),
         () => personnelCacheService.clearSelection(),
         () => personnelCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(

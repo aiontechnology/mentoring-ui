@@ -105,7 +105,7 @@ class ProgramAdminListMenuManager {
       router,
       dialog,
       snackBar,
-      () => programAdminCacheSerice.getFirstSelection(),
+      () => ({ model: programAdminCacheSerice.getFirstSelection() }),
       () => programAdminCacheSerice.clearSelection(),
       () => programAdminCacheSerice.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(

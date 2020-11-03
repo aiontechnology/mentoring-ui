@@ -17,7 +17,7 @@
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
 import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 
-interface Contacts {
+export interface Contacts {
   type: string;
   firstName: string;
   lastName: string;
@@ -64,6 +64,7 @@ export abstract class Student implements LinksHolder<Student> {
     this.leadershipSkills = json?.leadershipSkills;
     this.leadershipTraits = json?.leadershipTraits;
     this.contacts = json?.contacts;
+    this._links = json?._links;
   }
 
   clearLinks(): Student {
