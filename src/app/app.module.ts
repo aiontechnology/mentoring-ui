@@ -47,7 +47,9 @@ const routes: Routes = [
   { path: 'schoolsmanager', loadChildren: () => import('./modules/school-manager/school-manager.module')
     .then(m => m.SchoolManagerModule) },
   { path: 'studentmanager', loadChildren: () => import('./modules/student-manager/student-manager.module')
-    .then(m => m.StudentManagerModule) }
+    .then(m => m.StudentManagerModule) },
+  { path: 'mentormanager', loadChildren: () => import('./modules/mentor-manager/mentor-manager.module')
+    .then(m => m.MentorManagerModule) }
 ];
 
 @NgModule({
