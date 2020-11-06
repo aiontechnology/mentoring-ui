@@ -42,6 +42,10 @@ export class StudentRepositoryService extends BaseRepository<Student> {
     super.readAll(this.buildUri(schoolId));
   }
 
+  updateStudent(student: StudentOutbound): Promise<StudentInbound> {
+    return super.update(this.uriBase, student);
+  }
+
   deleteStudents(students: StudentInbound[]): void {
     super.delete(students);
   }
