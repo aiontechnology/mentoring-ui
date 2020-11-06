@@ -30,11 +30,11 @@ export class EditDialogCommand<T> extends Command {
               private router: Router,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
-              private modelSupplier: () => any,
+              private dataSupplier: () => object,
               private postAction: () => void,
               private determineEnabled: () => boolean) {
     super(title, group);
-    console.log('Constructing EditDialogCommand', modelSupplier, postAction);
+    console.log('Constructing EditDialogCommand', dataSupplier, postAction);
   }
 
   /**
@@ -43,7 +43,7 @@ export class EditDialogCommand<T> extends Command {
   execute(): void {
     const dialogRef = this.dialog.open(this.componentType, {
       width: '700px',
-      data: { model: this.modelSupplier() }
+      data: this.dataSupplier()
     });
 
     dialogRef.afterClosed().subscribe(result => {

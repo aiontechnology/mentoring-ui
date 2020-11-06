@@ -109,10 +109,10 @@ class SchoolDetailMenuManager {
       SchoolDialogComponent,
       'School updated',
       null,
-       router,
+      router,
       dialog,
       snackBar,
-      () => school,
+      () => ({ model: school }),
       () => {},
       () => true
     ));

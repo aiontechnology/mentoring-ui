@@ -95,6 +95,7 @@ export class StudentDialogComponent {
     });
 
     this.addContact();
+
   }
 
   /* Get teacher data; to be displayed in a selection menu */
@@ -112,9 +113,9 @@ export class StudentDialogComponent {
     let func: (item: StudentOutbound) => Promise<StudentInbound>;
     console.log('Saving student', newStudent);
     if (this.isUpdate) {
-      //console.log('Updating', this.model.value);
-      //newBook._links = this.model.value.book._links;
-      //func = this.bookService.updateBook;
+      console.log('Updating', this.model.value);
+      newStudent._links = this.model.value.student._links;
+      func = this.studentService.updateStudent;
     } else {
       func = this.studentService.curriedCreateStudent(this.schoolId);
     }
@@ -133,6 +134,7 @@ export class StudentDialogComponent {
 
     console.log('Student', student);
     const formGroup: FormGroup = formBuilder.group({
+      student,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       grade: ['', Validators.required],
@@ -151,22 +153,51 @@ export class StudentDialogComponent {
       location: ['OFFLINE', Validators.required]
     });
 
-    /*if (this.isUpdate) {
+    if (this.isUpdate) {
+
+      this.selectedGrade = student?.grade?.toString();
+
       formGroup.setValue({
+        student,
         firstName: student?.firstName,
         lastName: student?.lastName,
-        grade: student?.grade,
+        grade: student?.grade?.toString(),
         mediaReleaseSigned: student?.mediaReleaseSigned,    
         preferredTime: student?.preferredTime,
-        teacher: student?.teacher,
+        teacher: {
+          uri: student?.teacher?.teacher?._links?.self[0]?.href,
+          comment: student?.teacher?.comment
+        },
         allergyInfo: student?.allergyInfo,
         interests: student?.interests,
         leadershipTraits: student?.leadershipTraits,
         leadershipSkills: student?.leadershipSkills,
         behaviors: student?.behaviors,
+        contacts: [],
         location: student?.location?.toString()
       });
-    }*/
+
+      let contacts = formGroup.get('contacts') as FormArray;
+
+      for (let contact of student?.contacts) {
+        contacts.push(this.createContactForm());
+      }
+
+      student?.contacts?.forEach((contact, index) => {
+        (contacts.at(index) as FormGroup).setValue({
+          type: contact?.type,
+          firstName: contact?.firstName,
+          lastName: contact?.lastName,
+          workPhone: contact?.workPhone,
+          cellPhone: contact?.cellPhone,
+          email: contact?.email,
+          preferredContactMethod: contact?.preferredContactMethod,
+          isEmergencyContact: contact?.isEmergencyContact,
+          comment: contact?.comment
+        });
+      });
+
+    }
 
     return formGroup;
   }
@@ -176,14 +207,14 @@ export class StudentDialogComponent {
   }
 
   addContact() {
-    this.contacts.push(this.createContactsFormGroup());
+    this.contacts.push(this.createContactForm());
   }
   
   removeContact(i: number) {
     this.contacts.removeAt(i);
   }
 
-  private createContactsFormGroup(): FormGroup {
+  private createContactForm(): FormGroup {
     return this.formBuilder.group({
       type: ['', Validators.required],
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -195,6 +226,14 @@ export class StudentDialogComponent {
       isEmergencyContact: false,
       comment: ['']
     });
+  }
+
+  /*
+   * Reset #teacher form value when grade is changed.
+   */
+  onGradeSelected() {
+    let teacher = this.model.get('teacher') as FormGroup;
+    teacher.patchValue({ uri: '' });
   }
 
 }

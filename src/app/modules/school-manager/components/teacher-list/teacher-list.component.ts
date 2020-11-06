@@ -104,7 +104,7 @@ class TeacherListMenuManager {
     router,
     dialog,
     snackBar,
-    () => teacherCacheSerice.getFirstSelection(),
+    () => ({ model: teacherCacheSerice.getFirstSelection() }),
     () => teacherCacheSerice.clearSelection(),
     () => teacherCacheSerice.selection.selected.length === 1));
   menuState.add(new DeleteDialogCommand(
