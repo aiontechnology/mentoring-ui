@@ -117,7 +117,7 @@ class StudentListMenuManager {
       () => ({ schoolId: schoolId, model: studentCacheService.getFirstSelection() }),
       () => studentCacheService.clearSelection(),
       () => studentCacheService.selection.selected.length === 1));
-    /* menuState.add(new DeleteDialogCommand(
+    menuState.add(new DeleteDialogCommand(
       'Delete Student',
       'student',
       ConfimationDialogComponent,
@@ -131,7 +131,7 @@ class StudentListMenuManager {
       () => studentCacheService.selectionCount,
       () => studentCacheService.removeSelected(),
       () => { },
-      () => studentCacheService.selection.selected.length > 0)); */
+      () => studentCacheService.selection.selected.length > 0));
   }
 
 }
