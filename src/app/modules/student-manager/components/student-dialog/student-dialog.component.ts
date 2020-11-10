@@ -94,8 +94,6 @@ export class StudentDialogComponent {
       this.behaviorList = behaviors;
     });
 
-    this.addContact();
-
   }
 
   /* Get teacher data; to be displayed in a selection menu */
@@ -109,9 +107,13 @@ export class StudentDialogComponent {
   }
 
   save(): void {
+
+    this.addContactsProperty(this.model.value);
+
     const newStudent = new StudentOutbound(this.model.value);
     let func: (item: StudentOutbound) => Promise<StudentInbound>;
     console.log('Saving student', newStudent);
+
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newStudent._links = this.model.value.student._links;
@@ -119,11 +121,20 @@ export class StudentDialogComponent {
     } else {
       func = this.studentService.curriedCreateStudent(this.schoolId);
     }
+
     this.caller.callWithErrorHandling(this.studentService, func, newStudent, this.dialogRef, this.snackBar); 
+
   }
 
   dismiss(): void {
     this.dialogRef.close(null);
+  }
+
+  /*
+   * Combine form's contact properties for backend model.
+   */
+  private addContactsProperty(modelValue: any): void {
+    modelValue['contacts'] = modelValue.parents.concat(modelValue.emergencyContact);
   }
 
   private determineUpdate(formData: any): boolean {
@@ -149,15 +160,15 @@ export class StudentDialogComponent {
       leadershipTraits: [],
       leadershipSkills: [],
       behaviors: [],
-      contacts: formBuilder.array([]),
+      parents: formBuilder.array([this.createContactForm(false)]),
+      emergencyContact: this.createContactForm(true),
       location: ['OFFLINE', Validators.required]
     });
 
     if (this.isUpdate) {
 
       this.selectedGrade = student?.grade?.toString();
-
-      formGroup.setValue({
+      formGroup.patchValue({
         student,
         firstName: student?.firstName,
         lastName: student?.lastName,
@@ -173,57 +184,63 @@ export class StudentDialogComponent {
         leadershipTraits: student?.leadershipTraits,
         leadershipSkills: student?.leadershipSkills,
         behaviors: student?.behaviors,
-        contacts: [],
         location: student?.location?.toString()
       });
 
-      let contacts = formGroup.get('contacts') as FormArray;
+      let parents = student?.contacts?.filter(contact => {
+        return !contact?.isEmergencyContact;
+      });
+      let emergencyContact = student?.contacts?.filter(contact => {
+        return contact?.isEmergencyContact;
+      })
 
-      for (let contact of student?.contacts) {
-        contacts.push(this.createContactForm());
+      let parentsFormArray = formGroup.get('parents') as FormArray;
+
+      // Add the extra parent/guardian to form group, if student has 2nd parent.
+      if (parents.length == 2) {
+        parentsFormArray.push(this.createContactForm(false));
       }
 
-      student?.contacts?.forEach((contact, index) => {
-        (contacts.at(index) as FormGroup).setValue({
-          type: contact?.type,
-          firstName: contact?.firstName,
-          lastName: contact?.lastName,
-          workPhone: contact?.workPhone,
-          cellPhone: contact?.cellPhone,
-          email: contact?.email,
-          preferredContactMethod: contact?.preferredContactMethod,
-          isEmergencyContact: contact?.isEmergencyContact,
-          comment: contact?.comment
-        });
+      // Instantiate parent/guardian and emergencyContact in form.
+      parents.forEach((contact, index) => {
+        (parentsFormArray.at(index) as FormGroup).setValue(contact);
       });
+
+      (formGroup.get('emergencyContact') as FormGroup).setValue(emergencyContact[0]);
 
     }
 
     return formGroup;
+
   }
 
-  get contacts() {
-    return this.model.get('contacts') as FormArray;
+  get parents() {
+    return this.model.get('parents') as FormArray;
   }
 
-  addContact() {
-    this.contacts.push(this.createContactForm());
+  addParent() {
+    this.parents.push(this.createContactForm(false));
   }
   
-  removeContact(i: number) {
-    this.contacts.removeAt(i);
+  removeParent(i: number) {
+    this.parents.removeAt(i);
   }
 
-  private createContactForm(): FormGroup {
+  private createContactForm(isEmergencyContact?: boolean): FormGroup {
+    let relation = '';
+    if (!isEmergencyContact) {
+      relation = 'PARENT_GUARDIAN';
+    }
+
     return this.formBuilder.group({
-      type: ['', Validators.required],
+      type: [relation, Validators.required],
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       workPhone: null,
       cellPhone: null,
       email: [null, [Validators.email, Validators.maxLength(50)]],
       preferredContactMethod: null,
-      isEmergencyContact: false,
+      isEmergencyContact: isEmergencyContact,
       comment: ['']
     });
   }
@@ -237,4 +254,3 @@ export class StudentDialogComponent {
   }
 
 }
-
