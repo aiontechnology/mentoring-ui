@@ -167,19 +167,21 @@ limitations under the License.
     </mat-tab>
     
     <mat-tab label="Contacts">
-    <div formArrayName="contacts">
+    <div formArrayName="parents">
     <div
       class="contact-dialog"
-      *ngFor="let contact of contacts.controls; let i=index">
-    <div [formGroupName]="i">
-      <h3>Contact {{ i + 1 }}</h3>
+      *ngFor="let parent of parents.controls; let i=index">
+    <div class="parent-form-group" [formGroupName]="i">
+
+      <h3>Parent / Guardian {{ i + 1 }}</h3>
+
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="First name" formControlName="firstName" required/>
-          <mat-error *ngIf="model.hasError('required', ['contacts', i, 'firstName'])">
+          <mat-error *ngIf="model.hasError('required', ['parents', i, 'firstName'])">
             You must enter a first name
           </mat-error>
-          <mat-error *ngIf="model.hasError('maxlength', ['contacts', i, 'firstName'])">
+          <mat-error *ngIf="model.hasError('maxlength', ['parents', i, 'firstName'])">
             A first name can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
@@ -188,25 +190,11 @@ limitations under the License.
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="Last name" formControlName="lastName" required/>
-          <mat-error *ngIf="model.hasError('required', ['contacts', i, 'lastName'])">
+          <mat-error *ngIf="model.hasError('required', ['parents', i, 'lastName'])">
             You must enter a last name
           </mat-error>
-          <mat-error *ngIf="model.hasError('maxlength', ['contacts', i, 'lastName'])">
+          <mat-error *ngIf="model.hasError('maxlength', ['parents', i, 'lastName'])">
             A last name can be a maximum of 50 characters in length
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div class="dialog-container">
-        <mat-form-field>
-          <mat-label>Relation</mat-label>
-          <mat-select formControlName="type" required>
-            <mat-option *ngFor="let type of contactTypes" [value]="type.value">
-              {{ type.valueView }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="model.hasError('required', ['contacts', i, 'type'])">
-            You must select a relation.
           </mat-error>
         </mat-form-field>
       </div>
@@ -226,10 +214,10 @@ limitations under the License.
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="Email Address" formControlName="email" />
-          <mat-error *ngIf="model.hasError('email', ['contacts', i, 'email'])">
+          <mat-error *ngIf="model.hasError('email', ['parents', i, 'email'])">
             Invalid email address format
           </mat-error>
-          <mat-error *ngIf="model.hasError('maxlength', ['contacts', i, 'email'])">
+          <mat-error *ngIf="model.hasError('maxlength', ['parents', i, 'email'])">
             An email address name can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
@@ -252,32 +240,110 @@ limitations under the License.
           <textarea matInput formControlName="comment"></textarea>
         </mat-form-field>
       </div>
-
-      <div class="dialog-container">
-        <mat-checkbox formControlName="isEmergencyContact" labelPosition="before">
-          Emergency contact?
-        </mat-checkbox>
-      </div>
     </div>
-
-      <div *ngIf="contacts.controls.length > 1">
-        <button mat-stroked-button
-                color="warn"
-                class="form remove"
-                (click)="removeContact(i)">
-          Remove
-        </button>
-      </div>
-
-    </div>
-      <button mat-flat-button color="primary"
-              class="form add"
-              (click)="addContact()"
-              [disabled]="contacts.controls.length >= 3">
-        Add contact
+      <button mat-stroked-button
+              *ngIf="parents.controls.length > 1"
+              color="warn"
+              class="form remove"
+              (click)="removeParent(i)">
+        Remove
       </button>
     </div>
+      <button mat-flat-button
+              color="primary"
+              class="form add"
+              (click)="addParent()"
+              [disabled]="parents.controls.length >= 2">
+        Add Parent / Guardian
+      </button>
+    </div>
+
+    <div formGroupName="emergencyContact">
+
+      <h3>Emergency Contact</h3>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <input matInput placeholder="First name" formControlName="firstName" required/>
+          <mat-error *ngIf="model.hasError('required', ['emergencyContact', 'firstName'])">
+            You must enter a first name
+          </mat-error>
+          <mat-error *ngIf="model.hasError('maxlength', ['emergencyContact', 'firstName'])">
+            A first name can be a maximum of 50 characters in length
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <input matInput placeholder="Last name" formControlName="lastName" required/>
+          <mat-error *ngIf="model.hasError('required', ['emergencyContact', 'lastName'])">
+            You must enter a last name
+          </mat-error>
+          <mat-error *ngIf="model.hasError('maxlength', ['emergencyContact', 'lastName'])">
+            A last name can be a maximum of 50 characters in length
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <mat-label>Relation</mat-label>
+          <mat-select formControlName="type" required>
+            <mat-option *ngFor="let type of contactTypes" [value]="type.value">
+              {{ type.valueView }}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="model.hasError('required', ['emergencyContact', 'type'])">
+            You must select a relation.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <input matInput msPhoneFormat placeholder="Work Phone Number" formControlName="workPhone" />
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <input matInput msPhoneFormat placeholder="Cell Phone Number" formControlName="cellPhone" />
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <input matInput placeholder="Email Address" formControlName="email" />
+          <mat-error *ngIf="model.hasError('email', ['emergencyContact', 'email'])">
+            Invalid email address format
+          </mat-error>
+          <mat-error *ngIf="model.hasError('maxlength', ['emergencyContact', 'email'])">
+            An email address name can be a maximum of 50 characters in length
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="dialog-container">
+        <label id="preferred-contact-method-label">Preferred contact method:</label>
+        <mat-radio-group
+          formControlName="preferredContactMethod"
+          aria-labelledby="preferred-contact-method-label">
+          <mat-radio-button *ngFor="let contactMethod of contactMethods" [value]="contactMethod | uppercase">
+            {{ contactMethod }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </div>
+
+      <div class="dialog-container">
+        <mat-form-field>
+          <mat-label>Comments</mat-label>
+          <textarea matInput formControlName="comment"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
     </mat-tab>
+
   </mat-tab-group>
   </form>
 </mat-dialog-content>
