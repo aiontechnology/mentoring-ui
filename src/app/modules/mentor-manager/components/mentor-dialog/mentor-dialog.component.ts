@@ -57,7 +57,9 @@ export class MentorDialogComponent {
     let func: (item: Mentor) => Promise<Mentor>;
     console.log('Saving mentor', newMentor);
     if (this.isUpdate) {
-      // TODO: add update value.
+      console.log('Updating', this.model.value);
+      newMentor._links = this.model.value.mentor._links;
+      func = this.mentorService.updateMentor;
     } else {
       func = this.mentorService.curriedCreateMentor(this.schoolId);
     }
@@ -87,7 +89,6 @@ export class MentorDialogComponent {
       location: ['OFFLINE', Validators.required]
     });
 
-    /*
     if (this.isUpdate) {
       formGroup.setValue({
         mentor,
@@ -97,11 +98,10 @@ export class MentorDialogComponent {
         workPhone: mentor?.workPhone,
         cellPhone: mentor?.cellPhone,
         availability: mentor?.availability,
-        mediaReleaseSigned: mentor?.mediaReleaseSigned,
-        location: mentor?.location?.toString()
+        mediaReleaseSigned: false, //mentor?.mediaReleaseSigned,
+        location: 'OFFLINE' //mentor?.location?.toString()
       });
     }
-    */
 
     return formGroup;
 
