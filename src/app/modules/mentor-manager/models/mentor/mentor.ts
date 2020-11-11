@@ -22,6 +22,8 @@ export class Mentor {
   workPhone: string;
   cellPhone: string;
   availability: string;
+  mediaReleaseSigned: boolean;
+  location: string;
   _links: {
     self: [
       { href: string; }
@@ -35,6 +37,8 @@ export class Mentor {
     this.workPhone = json?.workPhone;
     this.cellPhone = json?.cellPhone;
     this.availability = json?.availability;
+    this.mediaReleaseSigned = json?.mediaReleaseSigned;
+    this.location = json?.location;
     this._links = json?._links;
   }
 
