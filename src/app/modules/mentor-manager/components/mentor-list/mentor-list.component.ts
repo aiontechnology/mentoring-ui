@@ -18,7 +18,8 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { School } from 'src/app/modules/shared/models/school/school';
 import { MentorCacheService } from '../../services/mentor/mentor-cache.service';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { MentorDialogComponent } from '../mentor-dialog/mentor-dialog.component'
+import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { MentorDialogComponent } from '../mentor-dialog/mentor-dialog.component';
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
@@ -83,5 +84,18 @@ class MentorListMenuManager {
       dialog,
       snackBar,
       () => schoolId != null));
+    menuState.add(new EditDialogCommand(
+      'Edit Mentor',
+      'mentor',
+      MentorDialogComponent,
+      'Mentor updated',
+      null,
+      router,
+      dialog,
+      snackBar,
+      () => ({ schoolId: schoolId, model: mentorCacheService.getFirstSelection() }),
+      () => mentorCacheService.clearSelection(),
+      () => mentorCacheService.selection.selected.length === 1));
   }
+
 }
