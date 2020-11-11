@@ -40,6 +40,10 @@ export class MentorRepositoryService extends BaseRepository<Mentor> {
     super.readAll(this.buildUri(schoolId));
   }
 
+  updateMentor(mentor: Mentor): Promise<Mentor> {
+    return super.update(this.uriBase, mentor);
+  }
+
   deleteMentors(mentors: Mentor[]): void {
     super.delete(mentors);
   }
