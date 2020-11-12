@@ -67,7 +67,7 @@ export class StudentListComponent implements OnChanges {
   displayContact(contact: Contacts): string {
     
     let name = contact.firstName + ' ' + contact.lastName;
-    let contactInfo: string;
+    let contactInfo = '';
 
     if (contact.cellPhone) {
       contactInfo = contact.cellPhone;
@@ -76,7 +76,7 @@ export class StudentListComponent implements OnChanges {
     }
 
     if (contact.email) {
-      contactInfo = contactInfo + ', ' + contact.email;
+      contactInfo += contactInfo ? ', ' + contact.email : contact.email;
     }
 
     return name + ': ' + contactInfo;
