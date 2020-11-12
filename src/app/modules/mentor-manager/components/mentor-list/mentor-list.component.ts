@@ -19,6 +19,7 @@ import { School } from 'src/app/modules/shared/models/school/school';
 import { MentorCacheService } from '../../services/mentor/mentor-cache.service';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
 import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
 import { MentorDialogComponent } from '../mentor-dialog/mentor-dialog.component';
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { Router } from '@angular/router';
@@ -96,6 +97,21 @@ class MentorListMenuManager {
       () => ({ schoolId: schoolId, model: mentorCacheService.getFirstSelection() }),
       () => mentorCacheService.clearSelection(),
       () => mentorCacheService.selection.selected.length === 1));
+    menuState.add(new DeleteDialogCommand(
+      'Delete Mentor',
+      'mentor',
+      ConfimationDialogComponent,
+      'Mentor(s) removed',
+      'mentor',
+      'mentors',
+      router,
+      dialog,
+      snackBar,
+      null,
+      () => mentorCacheService.selectionCount,
+      () => mentorCacheService.removeSelected(),
+      () => { },
+      () => mentorCacheService.selection.selected.length > 0));
   }
 
 }
