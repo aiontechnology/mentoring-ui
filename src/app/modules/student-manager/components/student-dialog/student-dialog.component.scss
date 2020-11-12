@@ -37,17 +37,18 @@ h3 {
   margin-top: 35px;
 }
 
+.parent-form-group {
+  margin-bottom: 10px;
+}
+
 button.form {
   margin-left: 10px;
+  margin-bottom: 10px;
   display: flex;
-  width: 110px;
+  width: 200px;
   justify-content: center;
 }
 
-button.remove {
-  margin-top: 20px;
-}
-
 button.add {
-  margin-top: 10px;
+  margin-bottom: 30px;
 }
