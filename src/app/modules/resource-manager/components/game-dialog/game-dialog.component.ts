@@ -24,7 +24,6 @@ import { Game } from '../../models/game/game';
 import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
-import { Element } from 'src/app/modules/shared/models/meta-data/element';
 
 @Component({
   selector: 'ms-game-dialog',
@@ -38,8 +37,8 @@ export class GameDialogComponent {
 
   grades: Grade[] = resourceGrades;
   locations: string[] = ['Offline', 'Online', 'Both'];
-  activityFocusList: Element[];
-  leadershipSkillList: Element[];
+  activityFocusList: string[];
+  leadershipSkillList: string[];
 
   private caller = new CallerWithErrorHandling<Game, GameDialogComponent>();
 
@@ -110,22 +109,11 @@ export class GameDialogComponent {
           grade2: game?.grade2?.toString()
         },
         location: game?.location?.toString(),
-        activityFocuses: this.convertArray(game?.activityFocuses),
-        leadershipSkills: this.convertArray(game?.leadershipSkills),
+        activityFocuses: game?.activityFocuses,
+        leadershipSkills: game?.leadershipSkills
       });
     }
     return formGroup;
-  }
-
-  private convertArray(array: [any]) {
-    const result = [];
-    if (array) {
-      for (const item of array) {
-        result.push(item.name as string);
-      }
-    }
-    console.log('result', result);
-    return result;
   }
 
   private determineUpdate(formData: any): boolean {

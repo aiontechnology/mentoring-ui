@@ -24,7 +24,6 @@ import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades'
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Element } from 'src/app/modules/shared/models/meta-data/element';
 
 @Component({
   selector: 'ms-book-dialog',
@@ -38,11 +37,11 @@ export class BookDialogComponent {
 
   grades: Grade[] = resourceGrades;
   locations: string[] = ['Offline', 'Online', 'Both'];
-  interestList: Element[];
-  leadershipTraitList: Element[];
-  leadershipSkillList: Element[];
-  phonogramList: Element[];
-  behaviorList: Element[];
+  interestList: string[];
+  leadershipTraitList: string[];
+  leadershipSkillList: string[];
+  phonogramList: string[];
+  behaviorList: string[];
 
   private caller = new CallerWithErrorHandling<Book, BookDialogComponent>();
 
@@ -120,25 +119,14 @@ export class BookDialogComponent {
         author: book?.author,
         gradeLevel: book?.gradeLevel?.toString(),
         location: book?.location?.toString(),
-        interests: this.convertArray(book?.interests),
-        leadershipSkills: this.convertArray(book?.leadershipSkills),
-        leadershipTraits: this.convertArray(book?.leadershipTraits),
-        phonograms: this.convertArray(book?.phonograms),
-        behaviors: this.convertArray(book?.behaviors)
+        interests: book?.interests,
+        leadershipSkills: book?.leadershipSkills,
+        leadershipTraits: book?.leadershipTraits,
+        phonograms: book?.phonograms,
+        behaviors: book?.behaviors
       });
     }
     return formGroup;
-  }
-
-  private convertArray(array: [any]) {
-    const result = [];
-    if (array) {
-      for (const item of array) {
-        result.push(item.name as string);
-      }
-    }
-    console.log('result', result);
-    return result;
   }
 
   private determineUpdate(formData: any): boolean {
