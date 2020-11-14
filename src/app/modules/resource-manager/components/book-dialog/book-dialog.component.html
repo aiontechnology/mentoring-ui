@@ -60,7 +60,7 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Interests</mat-label>
         <mat-select formControlName="interests" multiple>
-          <mat-option *ngFor="let interest of interestList" [value]="interest.name">{{interest.name}}</mat-option>
+          <mat-option *ngFor="let interest of interestList" [value]="interest">{{interest}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -69,7 +69,7 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Leadership Traits</mat-label>
         <mat-select formControlName="leadershipTraits" multiple>
-          <mat-option *ngFor="let leadershipTrait of leadershipTraitList" [value]="leadershipTrait.name">{{leadershipTrait.name}}</mat-option>
+          <mat-option *ngFor="let leadershipTrait of leadershipTraitList" [value]="leadershipTrait">{{leadershipTrait}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -78,7 +78,7 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Leadership Success Skills</mat-label>
         <mat-select formControlName="leadershipSkills" multiple>
-          <mat-option *ngFor="let leadershipSkill of leadershipSkillList" [value]="leadershipSkill.name">{{leadershipSkill.name}}</mat-option>
+          <mat-option *ngFor="let leadershipSkill of leadershipSkillList" [value]="leadershipSkill">{{leadershipSkill}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -87,7 +87,7 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Phonograms</mat-label>
         <mat-select formControlName="phonograms" multiple>
-          <mat-option *ngFor="let phonogram of phonogramList" [value]="phonogram.name">{{phonogram.name}}</mat-option>
+          <mat-option *ngFor="let phonogram of phonogramList" [value]="phonogram">{{phonogram}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -96,7 +96,7 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Behaviors</mat-label>
         <mat-select formControlName="behaviors" multiple>
-          <mat-option *ngFor="let behavior of behaviorList" [value]="behavior.name">{{behavior.name}}</mat-option>
+          <mat-option *ngFor="let behavior of behaviorList" [value]="behavior">{{behavior}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
