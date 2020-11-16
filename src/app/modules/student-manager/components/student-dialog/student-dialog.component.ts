@@ -29,7 +29,6 @@ import { TeacherRepositoryService } from 'src/app/modules/school-manager/service
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
 import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import { Element } from 'src/app/modules/shared/models/meta-data/element';
 
 @Component({
   selector: 'ms-student-dialog',
@@ -54,10 +53,10 @@ export class StudentDialogComponent {
     { value: 'GRANDPARENT', valueView: 'Grandparent' }
   ];
 
-  interestList: Element[];
-  leadershipTraitList: Element[];
-  leadershipSkillList: Element[];
-  behaviorList: Element[];
+  interestList: string[];
+  leadershipTraitList: string[];
+  leadershipSkillList: string[];
+  behaviorList: string[];
 
   private caller = new CallerWithErrorHandling<Student, StudentDialogComponent>();
 
