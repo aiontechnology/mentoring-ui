@@ -14,11 +14,92 @@
  * limitations under the License.
  */
 
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { PhoneFormatDirective } from './phone-format.directive';
+import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 
-describe('PhoneFormatDirective', () => {
-  it('should create an instance', () => {
-    const directive = new PhoneFormatDirective();
-    expect(directive).toBeTruthy();
+@Component({
+  template: `<input msPhoneFormat [formControl]="testControl">`
+})
+class TestComponent {
+  testControl = new FormControl('');
+}
+
+fdescribe('PhoneFormatDirective', () => {
+
+  let input: HTMLInputElement;
+
+  beforeEach(() => {
+
+    const fixture = TestBed.configureTestingModule({
+      imports: [FormsModule, ReactiveFormsModule],
+      declarations: [PhoneFormatDirective, TestComponent]
+    })
+    .createComponent(TestComponent);
+
+    fixture.detectChanges();
+
+    const element = fixture.debugElement.query(By.directive(PhoneFormatDirective));
+    input = element.nativeElement as HTMLInputElement;
+
   });
+
+  it('#formatInput should store empty string when no input is given', () => {
+
+    input.value = '';
+    input.dispatchEvent(new Event('input'));
+
+    expect(input.value).toBe('');
+
+  });
+
+  it('#formatInput should mask integer input properly', () => {
+
+    input.value = '1';
+    input.dispatchEvent(new Event('input'));
+
+    expect(input.value).toBe('(1)');
+
+    input.value += '23';
+    input.dispatchEvent(new Event('input'));
+
+    expect(input.value).toBe('(123)');
+
+    input.value += '4';
+    input.dispatchEvent(new Event('input'));
+
+    expect(input.value).toBe('(123) 4');
+
+    input.value += '56';
+    input.dispatchEvent(new Event('input'));
+
+    expect(input.value).toBe('(123) 456');
+
+    input.value += '7890';
+    input.dispatchEvent(new Event('input'));
+
+    expect(input.value).toBe('(123) 456-7890');
+
+  });
+
+  it('#formatInput should not store input greater than 10 digits', () => {
+
+    input.value = '12345678901';
+    input.dispatchEvent(new Event('input'));
+
+    expect(input.value).toBe('(123) 456-7890');
+
+  });
+
+  it('#formatInput should not store non-numeric input', () => {
+
+    input.value = '1abcdef+-=@#';
+    input.dispatchEvent(new Event('input'));
+
+    expect(input.value).toBe('(1)');
+
+  });
+
 });
