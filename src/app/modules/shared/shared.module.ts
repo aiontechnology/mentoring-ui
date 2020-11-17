@@ -16,7 +16,6 @@
 
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PhoneFormatPipe } from './pipes/phone-format.pipe';
 import { PhoneFormatDirective } from './directives/phone-format.directive';
 import { ConfimationDialogComponent } from './components/confimation-dialog/confimation-dialog.component';
 import { MaterialModule } from 'src/app/shared/material.module';
@@ -31,7 +30,6 @@ import { LoggingService } from './services/logging-service/logging.service';
     ConfimationDialogComponent,
     OnlyNumberDirective,
     PhoneFormatDirective,
-    PhoneFormatPipe,
     SelectionCountDisplayComponent
   ],
   providers: [
@@ -44,7 +42,6 @@ import { LoggingService } from './services/logging-service/logging.service';
     ConfimationDialogComponent,
     OnlyNumberDirective,
     PhoneFormatDirective,
-    PhoneFormatPipe,
     SelectionCountDisplayComponent
   ]
 })
