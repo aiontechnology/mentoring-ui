@@ -1,0 +1,124 @@
+/**
+ * Copyright 2020 Aion Technology LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { Component, OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
+import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import { StudentInbound } from '../../models/student-inbound/student-inbound';
+import { StudentRepositoryService } from '../../services/student/student-repository.service';
+import { MenuStateService } from 'src/app/services/menu-state.service';
+import { StudentDialogComponent } from '../student-dialog/student-dialog.component';
+import { Contact } from '../../models/contact/contact';
+import { Grade } from 'src/app/modules/shared/types/grade';
+import { grades } from 'src/app/modules/shared/constants/grades';
+
+@Component({
+  selector: 'ms-student-detail',
+  templateUrl: './student-detail.component.html',
+  styleUrls: ['./student-detail.component.scss']
+})
+export class StudentDetailComponent implements OnDestroy {
+
+  student: StudentInbound;
+  studentId: string;
+  schoolId: string;
+
+  grades: Grade[] = grades;
+  studentGrade: string;
+
+  parents: Contact[];
+  emergencyContact: Contact;
+
+  constructor(route: ActivatedRoute,
+              private dialog: MatDialog,
+              private menuState: MenuStateService,
+              private studentService: StudentRepositoryService,
+              private snackBar: MatSnackBar,
+              private router: Router) {
+
+    route.paramMap.subscribe(params => {
+      this.studentId = params.get('studentId');
+      this.schoolId = params.get('schoolId');
+    });
+
+    this.studentService.readAllStudents(this.schoolId);
+    this.studentService.students.subscribe(s => {
+
+      this.menuState.removeGroup('student');
+
+      this.student = this.studentService.readOneStudent(this.studentId);
+      this.parents = this.student?.contacts.filter(contact => !contact.isEmergencyContact);
+      this.emergencyContact = this.student?.contacts.find(contact => contact.isEmergencyContact);
+      this.studentGrade = grades.find(grade => grade.value == this.student.grade).valueView;
+
+      console.log('Adding student detail menus');
+      StudentDetailMenuManager.addMenus(this.student, this.menuState, this.router, this.dialog, this.snackBar, this.studentService, this.schoolId);
+
+    });
+
+  }
+
+  ngOnDestroy(): void {
+    this.menuState.clear();
+  }
+
+}
+
+class StudentDetailMenuManager {
+
+  static addMenus(student: StudentInbound,
+                  menuState: MenuStateService,
+                  router: Router,
+                  dialog: MatDialog,
+                  snackBar: MatSnackBar,
+                  studentService: StudentRepositoryService,
+                  school: string) {
+    menuState.add(new EditDialogCommand(
+      'Edit Student',
+      'student',
+      StudentDialogComponent,
+      'Student updated',
+      null,
+      router,
+      dialog,
+      snackBar,
+      () => ({ schoolId: school, model: student }),
+      () => {},
+      () => true
+    ));
+    menuState.add(new DeleteDialogCommand(
+      'Remove Student',
+      'student',
+      ConfimationDialogComponent,
+      'Student(s) removed',
+      'student',
+      'student',
+      router,
+      dialog,
+      snackBar,
+      '/studentsmanager',
+      () => 1,
+      () => studentService.deleteStudents([student]),
+      () => {},
+      () => true
+    ));
+  }
+
+}
