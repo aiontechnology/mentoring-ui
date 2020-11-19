@@ -32,7 +32,7 @@ export class ProgramAdmin implements LinksHolder<ProgramAdmin> {
     constructor(json?: any) {
         this.firstName = json?.firstName;
         this.lastName = json?.lastName;
-        this.email = json?.email;
+        this.email = (json?.email === '') ? null : json?.email;
         this.workPhone = json?.workPhone;
         this.cellPhone = json?.cellPhone;
         this._links = json?._links;
