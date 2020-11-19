@@ -32,6 +32,7 @@ import { TeacherRepositoryService } from 'src/app/modules/school-manager/service
 import { TeacherGradeFilterPipe } from '../shared/pipes/teacher-grade-filter.pipe';
 import { MetaDataService } from '../shared/services/meta-data/meta-data.service';
 import { StudentDetailComponent } from './components/student-detail/student-detail.component';
+import { MentorRepositoryService } from 'src/app/modules/mentor-manager/services/mentor/mentor-repository.service';
 
 const routes: Routes = [
   {
@@ -66,7 +67,8 @@ const routes: Routes = [
     StudentCacheService,
     StudentRepositoryService,
     TeacherRepositoryService,
-    MetaDataService
+    MetaDataService,
+    MentorRepositoryService
   ]
 })
 export class StudentManagerModule { }

@@ -40,6 +40,7 @@ export abstract class Student implements LinksHolder<Student> {
   };
 
   abstract teacher: any;
+  abstract mentor: any;
 
   constructor(json?: any) {
     this.id = json?.id;

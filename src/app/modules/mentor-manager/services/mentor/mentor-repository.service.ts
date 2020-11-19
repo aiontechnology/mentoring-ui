@@ -19,12 +19,17 @@ import { Injectable } from '@angular/core';
 import { BaseRepository } from 'src/app/implementation/repository/base-repository';
 import { log } from 'src/app/shared/logging-decorator';
 import { Mentor } from '../../models/mentor/mentor';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class MentorRepositoryService extends BaseRepository<Mentor> {
 
   constructor(http: HttpClient) {
     super('/api/v1/schools/{id}/mentors', http);
+  }
+
+  get mentors(): Observable<Mentor[]>{
+    return this.items;
   }
 
   createMentor(schoolId: string, mentor: Mentor): Promise<Mentor> {
