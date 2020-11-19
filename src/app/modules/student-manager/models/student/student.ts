@@ -20,6 +20,7 @@ import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 
 export abstract class Student implements LinksHolder<Student> {
 
+  id: string;
   firstName: string;
   lastName: string;
   grade: string;
@@ -41,6 +42,7 @@ export abstract class Student implements LinksHolder<Student> {
   abstract teacher: any;
 
   constructor(json?: any) {
+    this.id = json?.id;
     this.firstName = json?.firstName;
     this.lastName = json?.lastName;
     this.grade = json?.grade;

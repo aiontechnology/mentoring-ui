@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, AfterViewInit, AfterContentInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { MenuStateService } from 'src/app/services/menu-state.service';
 
 @Component({
@@ -22,17 +22,17 @@ import { MenuStateService } from 'src/app/services/menu-state.service';
   templateUrl: './resource-list.component.html',
   styleUrls: ['./resource-list.component.scss']
 })
-export class ResourceListComponent implements AfterContentInit, AfterViewInit {
+export class ResourceListComponent implements AfterViewInit, OnDestroy {
 
   constructor(private menuState: MenuStateService) {
   }
 
-  ngAfterContentInit(): void {
-    this.menuState.clear();
-  }
-
   ngAfterViewInit(): void {
     this.onIndexChange(0);
+  }
+
+  ngOnDestroy(): void {
+    this.menuState.clear();
   }
 
   onIndexChange(index: number): void {
