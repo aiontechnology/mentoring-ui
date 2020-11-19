@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ValidatorFn, FormArray } from '@angular/forms';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
@@ -241,7 +241,29 @@ export class StudentDialogComponent {
       preferredContactMethod: null,
       isEmergencyContact: isEmergencyContact,
       comment: ['']
+    }, {
+      validators: this.noContactMethodValidator()
     });
+  }
+
+  noContactMethodValidator(): ValidatorFn {
+
+    return (contact: FormGroup): {[key: string]: any} | null => {
+
+      const errorMsg = 'You must provide at least one contact method.';
+
+      const workPhone = contact.get('workPhone');
+      const cellPhone = contact.get('cellPhone');
+      const email = contact.get('email');
+
+      if (!workPhone.value && !cellPhone.value && !email.value) {
+        return { noContacts: { msg: errorMsg } };
+      }
+
+      return null;
+
+    };
+
   }
 
   /*

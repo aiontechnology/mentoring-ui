@@ -223,6 +223,13 @@ limitations under the License.
         </mat-form-field>
       </div>
 
+      <div class="dialog-error">
+        <mat-error
+          *ngIf="model.hasError('noContacts', ['parents', i])">
+          {{ model.getError('noContacts', ['parents', i]).msg }}
+        </mat-error>
+      </div>
+
       <div class="dialog-container">
         <label id="preferred-contact-method-label">Preferred contact method:</label>
         <mat-radio-group
@@ -322,6 +329,13 @@ limitations under the License.
             An email address name can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
+      </div>
+
+      <div class="dialog-error">
+        <mat-error
+          *ngIf="model.hasError('noContacts', ['emergencyContact'])">
+          {{ model.getError('noContacts', ['emergencyContact']).msg }}
+        </mat-error>
       </div>
 
       <div class="dialog-container">
