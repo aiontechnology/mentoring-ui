@@ -22,16 +22,21 @@ interface StudentTeacherOutbound {
   comment: string;
 }
 
+interface StudentMentorOutbound {
+  uri: string;
+  startDate: string;
+  time: string;
+}
+
 export class StudentOutbound extends Student {
 
   teacher: StudentTeacherOutbound;
+  mentor: StudentMentorOutbound;
 
   constructor(json?: any) {
     super(json);
-    this.teacher = {
-      uri: json?.teacher?.uri,
-      comment: json?.teacher?.comment
-    }
+    this.teacher = json?.teacher;
+    this.mentor = json?.mentor;
   }
 
 }
