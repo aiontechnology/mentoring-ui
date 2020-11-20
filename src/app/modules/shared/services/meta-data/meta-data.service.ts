@@ -17,8 +17,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Element } from '../../models/meta-data/element';
-import { BehaviorSubject, Observable, VirtualTimeScheduler } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable()
 export class MetaDataService {
@@ -30,29 +29,29 @@ export class MetaDataService {
   private phonogramUri = environment.apiUri + '/api/v1/phonograms';
   private behaviorUri = environment.apiUri + '/api/v1/behaviors';
 
-  private _activityFocuses: BehaviorSubject<Element[]>;
-  private _interests: BehaviorSubject<Element[]>;
-  private _leadershipTraits: BehaviorSubject<Element[]>;
-  private _leadershipSkills: BehaviorSubject<Element[]>;
-  private _phonograms: BehaviorSubject<Element[]>;
-  private _behaviors: BehaviorSubject<Element[]>;
+  private _activityFocuses: BehaviorSubject<string[]>;
+  private _interests: BehaviorSubject<string[]>;
+  private _leadershipTraits: BehaviorSubject<string[]>;
+  private _leadershipSkills: BehaviorSubject<string[]>;
+  private _phonograms: BehaviorSubject<string[]>;
+  private _behaviors: BehaviorSubject<string[]>;
 
   private dataStore: {
-    activityFocuses: Element[];
-    interests: Element[];
-    leadershipTraits: Element[];
-    leadershipSkills: Element[];
-    phonograms: Element[];
-    behaviors: Element[];
+    activityFocuses: string[];
+    interests: string[];
+    leadershipTraits: string[];
+    leadershipSkills: string[];
+    phonograms: string[];
+    behaviors: string[];
   };
 
   constructor(private http: HttpClient) {
-    this._activityFocuses = new BehaviorSubject<Element[]>([]);
-    this._interests = new BehaviorSubject<Element[]>([]);
-    this._leadershipTraits = new BehaviorSubject<Element[]>([]);
-    this._leadershipSkills = new BehaviorSubject<Element[]>([]);
-    this._phonograms = new BehaviorSubject<Element[]>([]);
-    this._behaviors = new BehaviorSubject<Element[]>([]);
+    this._activityFocuses = new BehaviorSubject<string[]>([]);
+    this._interests = new BehaviorSubject<string[]>([]);
+    this._leadershipTraits = new BehaviorSubject<string[]>([]);
+    this._leadershipSkills = new BehaviorSubject<string[]>([]);
+    this._phonograms = new BehaviorSubject<string[]>([]);
+    this._behaviors = new BehaviorSubject<string[]>([]);
     this.dataStore = {
       activityFocuses: [],
       interests: [],
@@ -63,34 +62,34 @@ export class MetaDataService {
     };
   }
 
-  get activityFocuses(): Observable<Element[]> {
+  get activityFocuses(): Observable<string[]> {
     return this._activityFocuses;
   }
 
-  get interests(): Observable<Element[]> {
+  get interests(): Observable<string[]> {
     return this._interests;
   }
 
-  get leadershipTraits(): Observable<Element[]> {
+  get leadershipTraits(): Observable<string[]> {
     return this._leadershipTraits;
   }
 
-  get leadershipSkills(): Observable<Element[]> {
+  get leadershipSkills(): Observable<string[]> {
     return this._leadershipSkills;
   }
 
-  get phonograms(): Observable<Element[]> {
+  get phonograms(): Observable<string[]> {
     return this._phonograms;
   }
 
-  get behaviors(): Observable<Element[]> {
+  get behaviors(): Observable<string[]> {
     return this._behaviors;
   }
 
   loadActivityFocuses(): void {
     this.http.get<any>(this.acctivityFocusesUri)
       .subscribe(data => {
-        this.dataStore.activityFocuses = data?._embedded.activityFocusModelList || [];
+        this.dataStore.activityFocuses = data?._embedded.stringList || [];
         this.logCache('activity focus', this.dataStore.activityFocuses);
         this.publishActivityFocuses();
       })
@@ -99,7 +98,7 @@ export class MetaDataService {
   loadInterests(): void {
     this.http.get<any>(this.interestsUri)
       .subscribe(data => {
-        this.dataStore.interests = data?._embedded?.interestModelList || [];
+        this.dataStore.interests = data?._embedded?.stringList || [];
         this.logCache('interest', this.dataStore.interests);
         this.publishInterests();
       });
@@ -108,7 +107,7 @@ export class MetaDataService {
   loadLeadershipTraits(): void {
     this.http.get<any>(this.leadershipTraitsUri)
       .subscribe(data => {
-        this.dataStore.leadershipTraits = data?._embedded?.leadershipTraitModelList || [];
+        this.dataStore.leadershipTraits = data?._embedded?.stringList || [];
         this.logCache('leadership trait', this.dataStore.leadershipTraits);
         this.publishLeadershipTraits();
       });
@@ -117,7 +116,7 @@ export class MetaDataService {
   loadLeadershipSkills(): void {
     this.http.get<any>(this.leadershipSkillsUri)
       .subscribe(data => {
-        this.dataStore.leadershipSkills = data?._embedded?.leadershipSkillModelList || [];
+        this.dataStore.leadershipSkills = data?._embedded?.stringList || [];
         this.logCache('leadership skill', this.dataStore.leadershipSkills);
         this.publishLeadershipSkills();
       });
@@ -126,7 +125,7 @@ export class MetaDataService {
   loadPhonograms(): void {
     this.http.get<any>(this.phonogramUri)
       .subscribe(data => {
-        this.dataStore.phonograms = data?._embedded?.phonogramModelList || [];
+        this.dataStore.phonograms = data?._embedded?.stringList || [];
         this.logCache('phonogram', this.dataStore.phonograms);
         this.publishPhonograms();
       });
@@ -135,13 +134,13 @@ export class MetaDataService {
   loadBehaviors(): void {
     this.http.get<any>(this.behaviorUri)
       .subscribe(data => {
-        this.dataStore.behaviors = data?._embedded?.behaviorModelList || [];
+        this.dataStore.behaviors = data?._embedded?.stringList || [];
         this.logCache('behavior', this.dataStore.behaviors);
         this.publishBehaviors();
       });
   }
 
-  private logCache(type: string, values: Element[]): void {
+  private logCache(type: string, values: string[]): void {
     for (const value of values) {
       console.log(`Cache entiry (${type})`, value);
     }

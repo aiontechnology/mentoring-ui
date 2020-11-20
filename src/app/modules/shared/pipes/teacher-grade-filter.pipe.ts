@@ -14,6 +14,22 @@
  * limitations under the License.
  */
 
-export class Element {
-    name: string;
+import { Pipe, PipeTransform } from '@angular/core';
+import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
+
+@Pipe({
+  name: 'teacherGradeFilter'
+})
+export class TeacherGradeFilterPipe implements PipeTransform {
+
+  transform(teachers: Teacher[], selectedGrade: string): Teacher[] {
+    if (selectedGrade == null) {
+      return [];
+    }
+    return teachers.filter(
+      teacher => teacher.grade1?.toString() === selectedGrade || 
+      teacher.grade2?.toString() === selectedGrade
+    );
+  }
+
 }

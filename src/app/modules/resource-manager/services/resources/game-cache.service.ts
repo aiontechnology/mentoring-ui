@@ -15,7 +15,7 @@
  */
 
 import { Injectable } from '@angular/core';
-import { DatasourceManager } from 'src/app/modules/school-manager/services/datasource-manager';
+import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
 import { Game } from '../../models/game/game';
 import { GameRepositoryService } from './game-repository.service';
 

@@ -19,10 +19,9 @@ import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/fo
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GameRepositoryService } from '../../services/resources/game-repository.service';
-import { MetaDataService } from '../../services/meta-data/meta-data.service';
-import { Element } from '../../models/meta-data/element';
+import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { Game } from '../../models/game/game';
-import { grades } from 'src/app/modules/shared/constants/grades';
+import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 
@@ -36,10 +35,10 @@ export class GameDialogComponent {
   model: FormGroup;
   isUpdate = false;
 
-  grades: Grade[] = grades;
+  grades: Grade[] = resourceGrades;
   locations: string[] = ['Offline', 'Online', 'Both'];
-  activityFocusList: Element[];
-  leadershipSkillList: Element[];
+  activityFocusList: string[];
+  leadershipSkillList: string[];
 
   private caller = new CallerWithErrorHandling<Game, GameDialogComponent>();
 
@@ -93,7 +92,6 @@ export class GameDialogComponent {
     const formGroup: FormGroup = formBuilder.group({
       game,
       name: ['', [Validators.required, Validators.maxLength(40)]],
-      description: [null, Validators.maxLength(50)],
       gradeRange: formBuilder.group({
         grade1: ['', Validators.required],
         grade2: ['', Validators.required]
@@ -106,28 +104,16 @@ export class GameDialogComponent {
       formGroup.setValue({
         game,
         name: game?.name,
-        description: game?.description,
         gradeRange: {
           grade1: game?.grade1?.toString(),
           grade2: game?.grade2?.toString()
         },
         location: game?.location?.toString(),
-        activityFocuses: this.convertArray(game?.activityFocuses),
-        leadershipSkills: this.convertArray(game?.leadershipSkills),
+        activityFocuses: game?.activityFocuses,
+        leadershipSkills: game?.leadershipSkills
       });
     }
     return formGroup;
-  }
-
-  private convertArray(array: [any]) {
-    const result = [];
-    if (array) {
-      for (const item of array) {
-        result.push(item.name as string);
-      }
-    }
-    console.log('result', result);
-    return result;
   }
 
   private determineUpdate(formData: any): boolean {

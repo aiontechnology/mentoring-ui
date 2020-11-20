@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SelectionManager } from './selection-manager';
+import { SelectionManager } from '../../school-manager/services/selection-manager';
 import { MatTableDataSource } from '@angular/material/table';
 import { Observable } from 'rxjs';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';

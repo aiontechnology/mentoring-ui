@@ -14,21 +14,12 @@
  * limitations under the License.
  */
 
-import { Pipe, PipeTransform } from '@angular/core';
-import { parsePhoneNumber, CountryCode } from 'libphonenumber-js/min';
+import { Grade } from '../types/grade';
 
-@Pipe({
-  name: 'phone'
-})
-export class PhoneFormatPipe implements PipeTransform {
-
-  transform(phoneValue: number | string, country: string): any {
-    try {
-      const phoneNumber = parsePhoneNumber(phoneValue + '', country as CountryCode);
-      return phoneNumber.formatNational();
-    } catch (error) {
-      return phoneValue;
-    }
-  }
-
-}
+export const resourceGrades: Grade[] = [
+  { value: '1', valueView: 'Kindergarten / First' },
+  { value: '2', valueView: 'Second' },
+  { value: '3', valueView: 'Third' },
+  { value: '4', valueView: 'Fourth' },
+  { value: '5', valueView: 'Fifth' },
+];

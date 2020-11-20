@@ -66,9 +66,9 @@ export class GameListComponent implements OnInit, AfterContentInit, AfterViewIni
 
   displayedColumns(): string[] {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['select', 'name', 'description'];
+      return ['select', 'name'];
     } else {
-      return ['select', 'name', 'description', 'grade1', 'grade2', 'location'];
+      return ['select', 'name', 'grade1', 'grade2', 'location'];
     }
   }
 
@@ -91,7 +91,8 @@ class GameListMenuManager {
       null,
       router,
       dialog,
-      snackBar));
+      snackBar,
+      () => true));
     menuState.add(new EditDialogCommand(
       'Edit Game',
       'game',
@@ -101,7 +102,7 @@ class GameListMenuManager {
       router,
       dialog,
       snackBar,
-      () => gameCacheService.getFirstSelection(),
+      () => ({ model: gameCacheService.getFirstSelection() }),
       () => gameCacheService.clearSelection(),
       () => gameCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(

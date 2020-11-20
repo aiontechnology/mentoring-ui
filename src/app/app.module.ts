@@ -42,10 +42,14 @@ const routes: Routes = [
   { path: 'logout', component: NoopComponent, canActivate: [logoutProvider] },
   { path: 'receiveToken', component: ReceiveTokenComponent },
   { path: 'handleLogout', component: HandleLogoutComponent },
+  { path: 'resourcemanager', loadChildren: () => import('./modules/resource-manager/resource-manager.module')
+    .then(m => m.ResourceManagerModule) },
   { path: 'schoolsmanager', loadChildren: () => import('./modules/school-manager/school-manager.module')
     .then(m => m.SchoolManagerModule) },
-  { path: 'resourcemanager', loadChildren: () => import('./modules/resource-manager/resource-manager.module')
-    .then(m => m.ResourceManagerModule) }
+  { path: 'studentmanager', loadChildren: () => import('./modules/student-manager/student-manager.module')
+    .then(m => m.StudentManagerModule) },
+  { path: 'mentormanager', loadChildren: () => import('./modules/mentor-manager/mentor-manager.module')
+    .then(m => m.MentorManagerModule) }
 ];
 
 @NgModule({

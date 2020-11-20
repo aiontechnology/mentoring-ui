@@ -93,7 +93,8 @@ class TeacherListMenuManager {
     { schoolId },
     router,
     dialog,
-    snackBar));
+    snackBar,
+    () => true));
   menuState.add(new EditDialogCommand(
     'Edit Teacher',
     'teacher',
@@ -103,7 +104,7 @@ class TeacherListMenuManager {
     router,
     dialog,
     snackBar,
-    () => teacherCacheSerice.getFirstSelection(),
+    () => ({ model: teacherCacheSerice.getFirstSelection() }),
     () => teacherCacheSerice.clearSelection(),
     () => teacherCacheSerice.selection.selected.length === 1));
   menuState.add(new DeleteDialogCommand(
