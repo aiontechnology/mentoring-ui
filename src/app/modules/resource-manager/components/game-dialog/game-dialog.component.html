@@ -30,15 +30,6 @@ limitations under the License.
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput placeholder="Description" formControlName="description" />
-        <mat-error *ngIf="model.hasError('maxlength', 'description')">
-          A book description can be a maximum of 50 characters in length
-        </mat-error>
-      </mat-form-field>
-    </div>
-
     <div class="dialog-container2" formGroupName="gradeRange">
       <div>
         <mat-form-field>
@@ -76,7 +67,7 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Activity Focuses</mat-label>
         <mat-select formControlName="activityFocuses" multiple>
-          <mat-option *ngFor="let activityFocus of activityFocusList" [value]="activityFocus.name">{{activityFocus.name}}</mat-option>
+          <mat-option *ngFor="let activityFocus of activityFocusList" [value]="activityFocus">{{activityFocus}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -85,7 +76,7 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Leadership Success Skills</mat-label>
         <mat-select formControlName="leadershipSkills" multiple>
-          <mat-option *ngFor="let leadershipSkill of leadershipSkillList" [value]="leadershipSkill.name">{{leadershipSkill.name}}</mat-option>
+          <mat-option *ngFor="let leadershipSkill of leadershipSkillList" [value]="leadershipSkill">{{leadershipSkill}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>

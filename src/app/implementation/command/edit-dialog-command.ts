@@ -22,47 +22,47 @@ import { ComponentType } from '@angular/cdk/portal';
 
 export class EditDialogCommand<T> extends Command {
 
-    constructor(title: string,
-                group: string,
-                private componentType: ComponentType<T>,
-                private snackBarMessage: string,
-                private navigationBase: string[],
-                private router: Router,
-                private dialog: MatDialog,
-                private snackBar: MatSnackBar,
-                private modelSupplier: () => any,
-                private postAction: () => void,
-                private determineEnabled: () => boolean) {
-        super(title, group);
-        console.log('Constructing EditDialogCommand', modelSupplier, postAction);
-    }
+  constructor(title: string,
+              group: string,
+              private componentType: ComponentType<T>,
+              private snackBarMessage: string,
+              private navigationBase: string[],
+              private router: Router,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private dataSupplier: () => object,
+              private postAction: () => void,
+              private determineEnabled: () => boolean) {
+    super(title, group);
+    console.log('Constructing EditDialogCommand', dataSupplier, postAction);
+  }
 
-    /**
-     * Opens a dialog for editing an existing school.
-     */
-    execute(): void {
-        const dialogRef = this.dialog.open(this.componentType, {
-            width: '700px',
-            data: { model: this.modelSupplier() }
-        });
+  /**
+   * Opens a dialog for editing an existing school.
+   */
+  execute(): void {
+    const dialogRef = this.dialog.open(this.componentType, {
+      width: '700px',
+      data: this.dataSupplier()
+    });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                if (this.navigationBase) {
-                    this.openSnackBar(this.snackBar, this.snackBarMessage, 'Navigate')
-                        .onAction().subscribe(() => {
-                            this.router.navigate([...this.navigationBase, result.id]);
-                        });
-                } else {
-                    this.openSnackBar(this.snackBar, this.snackBarMessage, '');
-                }
-                this.postAction();
-            }
-        });
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (this.navigationBase) {
+          this.openSnackBar(this.snackBar, this.snackBarMessage, 'Navigate')
+            .onAction().subscribe(() => {
+              this.router.navigate([...this.navigationBase, result.id]);
+            });
+        } else {
+          this.openSnackBar(this.snackBar, this.snackBarMessage, '');
+        }
+        this.postAction();
+      }
+    });
+  }
 
-    isEnabled(): boolean {
-        return this.determineEnabled();
-    }
+  isEnabled(): boolean {
+    return this.determineEnabled();
+  }
 
 }

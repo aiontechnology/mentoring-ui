@@ -31,8 +31,8 @@ limitations under the License.
     <mat-nav-list>
       <a mat-list-item [routerLink]="['schoolsmanager']" [disabled]="!userSession.isLoggedIn()">Schools</a>
       <a mat-list-item [routerLink]="['resourcemanager']" [disabled]="!userSession.isLoggedIn()">Resources</a>
-      <a mat-list-item href="#" [disabled]="!userSession.isLoggedIn()">Mentors</a>
-      <a mat-list-item href="#" [disabled]="!userSession.isLoggedIn()">Students</a>
+      <a mat-list-item [routerLink]="['studentmanager']" [disabled]="!userSession.isLoggedIn()">Students</a>
+      <a mat-list-item [routerLink]="['mentormanager']" [disabled]="!userSession.isLoggedIn()">Mentors</a>
       <a mat-list-item href="#" [disabled]="!userSession.isLoggedIn()">Sessions</a>
     </mat-nav-list>
   </mat-sidenav>

@@ -27,7 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from 'src/app/shared/material.module';
-import { MetaDataService } from './services/meta-data/meta-data.service';
+import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { GameDialogComponent } from './components/game-dialog/game-dialog.component';
 import { GameRepositoryService } from './services/resources/game-repository.service';
 import { GameCacheService } from './services/resources/game-cache.service';
@@ -60,7 +60,7 @@ const routes: Routes = [
     MaterialModule,
     ReactiveFormsModule,
     RouterModule.forChild(routes),
-    SharedModule
+    SharedModule.forRoot()
   ],
   providers: [
     BookCacheService,

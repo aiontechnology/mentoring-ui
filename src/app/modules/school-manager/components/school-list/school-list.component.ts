@@ -17,7 +17,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, AfterContentInit } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { SchoolCacheService } from '../../services/school/school-cache.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,6 +27,7 @@ import { SchoolDialogComponent } from '../school-dialog/school-dialog.component'
 import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
 import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import { SchoolCacheService } from 'src/app/modules/shared/services/school/school-cache.service';
 
 @Component({
   selector: 'ms-school-list',
@@ -49,7 +49,6 @@ export class SchoolListComponent implements OnInit, AfterContentInit, AfterViewI
   }
 
   ngOnInit(): void {
-    this.schoolCacheService.establishDatasource();
     this.schoolCacheService.clearSelection();
   }
 
@@ -91,7 +90,8 @@ class SchoolListMenuManager {
       undefined,
       router,
       dialog,
-      snackBar));
+      snackBar,
+      () => true));
     menuState.add(new EditDialogCommand(
       'Edit School',
       'school',
@@ -101,7 +101,7 @@ class SchoolListMenuManager {
       router,
       dialog,
       snackBar,
-      () => schoolCacheService.getFirstSelection(),
+      () => ({ model: schoolCacheService.getFirstSelection() }),
       () => schoolCacheService.clearSelection(),
       () => schoolCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(

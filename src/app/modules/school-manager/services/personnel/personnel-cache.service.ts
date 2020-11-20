@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { Personnel } from '../../models/personnel/personnel';
-import { DatasourceManager } from '../datasource-manager';
+import { DatasourceManager } from '../../../shared/services/datasource-manager';
 import { PersonnelRepositoryService } from './personnel-repository.service';
 
 @Injectable()

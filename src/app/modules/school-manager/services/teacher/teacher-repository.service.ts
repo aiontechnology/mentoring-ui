@@ -18,12 +18,17 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseRepository } from 'src/app/implementation/repository/base-repository';
 import { Teacher } from '../../models/teacher/teacher';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class TeacherRepositoryService extends BaseRepository<Teacher> {
 
   constructor(http: HttpClient) {
     super('/api/v1/schools/{id}/teachers', http);
+  }
+
+  get teachers(): Observable<Teacher[]>{
+    return this.items;
   }
 
   createTeacher(schoolId: string, teacher: Teacher): Promise<Teacher> {

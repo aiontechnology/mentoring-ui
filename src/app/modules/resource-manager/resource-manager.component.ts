@@ -26,6 +26,6 @@ export class ResourceManagerComponent {
 
   constructor(menuState: MenuStateService) {
     menuState.title = 'Resource Manager';
-   }
+  }
 
 }

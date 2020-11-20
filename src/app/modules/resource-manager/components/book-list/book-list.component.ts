@@ -91,7 +91,8 @@ class BookListMenuManager {
       null,
       router,
       dialog,
-      snackBar));
+      snackBar,
+      () => true));
     menuState.add(new EditDialogCommand(
       'Edit Book',
       'book',
@@ -101,7 +102,7 @@ class BookListMenuManager {
       router,
       dialog,
       snackBar,
-      () => bookCacheService.getFirstSelection(),
+      () => ({ model: bookCacheService.getFirstSelection() }),
       () => bookCacheService.clearSelection(),
       () => bookCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(

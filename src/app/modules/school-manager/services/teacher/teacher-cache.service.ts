@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { Teacher } from '../../models/teacher/teacher';
-import { DatasourceManager } from '../datasource-manager';
+import { DatasourceManager } from '../../../shared/services/datasource-manager';
 import { TeacherRepositoryService } from './teacher-repository.service';
 
 @Injectable()

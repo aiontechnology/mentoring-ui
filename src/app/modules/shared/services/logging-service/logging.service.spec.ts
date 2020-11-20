@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-import { Element } from './element';
+import { TestBed } from '@angular/core/testing';
 
-describe('Interest', () => {
-  it('should create an instance', () => {
-    expect(new Element()).toBeTruthy();
+import { LoggingService } from './logging.service';
+
+describe('LoggingService', () => {
+  let service: LoggingService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(LoggingService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
   });
 });

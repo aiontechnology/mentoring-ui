@@ -94,7 +94,8 @@ class ProgramAdminListMenuManager {
       { schoolId },
       router,
       dialog,
-      snackBar));
+      snackBar,
+      () => true));
     menuState.add(new EditDialogCommand(
       'Edit Program Admin',
       'program-admin',
@@ -104,7 +105,7 @@ class ProgramAdminListMenuManager {
       router,
       dialog,
       snackBar,
-      () => programAdminCacheSerice.getFirstSelection(),
+      () => ({ model: programAdminCacheSerice.getFirstSelection() }),
       () => programAdminCacheSerice.clearSelection(),
       () => programAdminCacheSerice.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
