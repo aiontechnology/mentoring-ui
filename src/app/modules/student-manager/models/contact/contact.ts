@@ -14,41 +14,28 @@
  * limitations under the License.
  */
 
-export class Mentor {
+export class Contact {
 
+  type: string;
   firstName: string;
   lastName: string;
   email: string;
   workPhone: string;
   cellPhone: string;
-  availability: string;
-  mediaReleaseSigned: boolean;
-  location: string;
-  _links: {
-    self: [
-      { href: string; }
-    ]
-  };
+  preferredContactMethod: string;
+  isEmergencyContact: boolean;
+  comment: string;
 
   constructor(json?: any) {
+    this.type = json?.type;
     this.firstName = json?.firstName;
     this.lastName = json?.lastName;
     this.email = (json?.email === '') ? null : json?.email;
     this.workPhone = json?.workPhone;
     this.cellPhone = json?.cellPhone;
-    this.availability = json?.availability;
-    this.mediaReleaseSigned = json?.mediaReleaseSigned;
-    this.location = json?.location;
-    this._links = json?._links;
-  }
-
-  clearLinks(): Mentor {
-    this._links = undefined;
-    return this;
-  }
-
-  getSelfLink(): string {
-    return this._links?.self[0]?.href;
+    this.preferredContactMethod = json?.preferredContactMethod;
+    this.isEmergencyContact = json?.isEmergencyContact;
+    this.comment = json?.comment;
   }
 
 }

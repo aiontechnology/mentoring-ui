@@ -27,7 +27,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { StudentDialogComponent } from '../student-dialog/student-dialog.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Contacts } from '../../models/student/student';
+import { Contact } from '../../models/contact/contact';
 
 @Component({
   selector: 'ms-student-list',
@@ -64,7 +64,7 @@ export class StudentListComponent implements OnChanges {
     }
   }
 
-  displayContact(contact: Contacts): string {
+  displayContact(contact: Contact): string {
     
     let name = contact.firstName + ' ' + contact.lastName;
     let contactInfo = '';

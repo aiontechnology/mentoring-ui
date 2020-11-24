@@ -40,7 +40,7 @@ export class PhoneFormatDirective {
       newVal = newVal.substring(0, newVal.length - 1);
     }
     if (newVal.length === 0) {
-      newVal = '';
+      newVal = null;
     } else if (newVal.length <= 3) {
       newVal = newVal.replace(/^(\d{0,3})/, '($1)');
     } else if (newVal.length <= 6) {
