@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { School } from 'src/app/modules/shared/models/school/school';
 import { MentorCacheService } from '../../services/mentor/mentor-cache.service';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
@@ -33,9 +33,28 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
   templateUrl: './mentor-list.component.html',
   styleUrls: ['./mentor-list.component.scss']
 })
-export class MentorListComponent implements OnChanges {
+export class MentorListComponent implements OnDestroy {
 
-  @Input() school: School;
+  school: School;
+
+  @Input()
+  set selectedSchool(school: School) {
+
+    this.school = school;
+
+    if (school != null) {
+
+      this.mentorCacheService.clearSelection();
+      this.menuState.clear();
+
+      this.mentorCacheService.establishDatasource(school.id);
+
+      console.log('Adding mentor list menus');
+      MentorListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.mentorCacheService, school?.id);
+
+    }
+
+  }
 
   constructor(private breakpointObserver: BreakpointObserver,
               private dialog: MatDialog,
@@ -45,14 +64,8 @@ export class MentorListComponent implements OnChanges {
               public mentorCacheService: MentorCacheService) {
   }
 
-  ngOnChanges(): void {
-    if (this.school !== undefined && this.school !== null) {
-      this.mentorCacheService.establishDatasource(this.school.id);
-    }
-
+  ngOnDestroy(): void {
     this.menuState.clear();
-    console.log('Adding mentor list menus');
-    MentorListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.mentorCacheService, this.school?.id);
   }
 
   displayedColumns(): string[] {

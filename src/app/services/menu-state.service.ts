@@ -49,4 +49,10 @@ export class MenuStateService {
     }
   }
 
+  removeGroup(group: string): void {
+    this.activeMenus = this.activeMenus.filter(menu => {
+      return menu.group !== group;
+    });
+  }
+
 }
