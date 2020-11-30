@@ -21,12 +21,17 @@ import { log } from 'src/app/shared/logging-decorator';
 import { Student } from '../../models/student/student';
 import { StudentInbound } from '../../models/student-inbound/student-inbound';
 import { StudentOutbound } from '../../models/student-outbound/student-outbound';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class StudentRepositoryService extends BaseRepository<Student> {
 
   constructor(http: HttpClient) {
     super('/api/v1/schools/{id}/students', http);
+  }
+
+  get students(): Observable<StudentInbound[]> {
+    return this.items;
   }
 
   createStudent(schoolId: string, student: StudentOutbound): Promise<StudentInbound> {
@@ -40,6 +45,10 @@ export class StudentRepositoryService extends BaseRepository<Student> {
   @log
   readAllStudents(schoolId: string): void {
     super.readAll(this.buildUri(schoolId));
+  }
+
+  readOneStudent(id: string): StudentInbound {
+    return super.readOne(id);
   }
 
   updateStudent(student: StudentOutbound): Promise<StudentInbound> {

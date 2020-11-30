@@ -31,12 +31,14 @@ import { StudentRepositoryService } from './services/student/student-repository.
 import { TeacherRepositoryService } from 'src/app/modules/school-manager/services/teacher/teacher-repository.service';
 import { TeacherGradeFilterPipe } from '../shared/pipes/teacher-grade-filter.pipe';
 import { MetaDataService } from '../shared/services/meta-data/meta-data.service';
+import { StudentDetailComponent } from './components/student-detail/student-detail.component';
 
 const routes: Routes = [
   {
     path: '', component: StudentManagerComponent,
     children: [
-      { path: '', component: StudentFrameComponent }
+      { path: '', component: StudentFrameComponent },
+      { path: 'schools/:schoolId/students/:studentId', component: StudentDetailComponent }
     ]
   }
 ];
@@ -47,7 +49,8 @@ const routes: Routes = [
     StudentListComponent,
     StudentFrameComponent,
     StudentDialogComponent,
-    TeacherGradeFilterPipe
+    TeacherGradeFilterPipe,
+    StudentDetailComponent
   ],
   imports: [
     CommonModule,

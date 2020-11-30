@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnDestroy } from '@angular/core';
 import { School } from 'src/app/modules/shared/models/school/school';
 import { StudentCacheService } from '../../services/student/student-cache.service';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
@@ -34,9 +34,28 @@ import { Contact } from '../../models/contact/contact';
   templateUrl: './student-list.component.html',
   styleUrls: ['./student-list.component.scss']
 })
-export class StudentListComponent implements OnChanges {
+export class StudentListComponent implements OnDestroy {
 
-  @Input() school: School;
+  school: School;
+
+  @Input()
+  set selectedSchool(school: School) {
+
+    this.school = school;
+
+    if (school != null) {
+
+      this.studentCacheService.clearSelection();
+      this.menuState.clear();
+
+      this.studentCacheService.establishDatasource(school.id);
+
+      console.log('Adding student list menus');
+      StudentListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.studentCacheService, school?.id);
+
+    }
+
+  }
 
   constructor(private breakpointObserver: BreakpointObserver,
               private dialog: MatDialog,
@@ -46,14 +65,8 @@ export class StudentListComponent implements OnChanges {
               public studentCacheService: StudentCacheService) {
   }
 
-  ngOnChanges(): void {
-    if (this.school !== undefined && this.school !== null) {
-      this.studentCacheService.establishDatasource(this.school.id);
-    }
-
+  ngOnDestroy(): void {
     this.menuState.clear();
-    console.log('Adding student list menus');
-    StudentListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.studentCacheService, this.school?.id);
   }
 
   displayedColumns(): string[] {
@@ -92,7 +105,7 @@ class StudentListMenuManager {
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   studentCacheService: StudentCacheService,
-                  schoolId: string) { 
+                  schoolId: string) {
     console.log('Constructing MenuHandler');
     menuState.add(new NewDialogCommand(
       'Create New Student',
