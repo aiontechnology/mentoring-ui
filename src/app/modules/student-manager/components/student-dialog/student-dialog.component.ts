@@ -172,7 +172,6 @@ export class StudentDialogComponent {
         startDate: [''],
         time: ['']
       }),
-      allergyInfo: [''],
       interests: [],
       leadershipTraits: [],
       leadershipSkills: [],
@@ -201,7 +200,6 @@ export class StudentDialogComponent {
           startDate: student?.mentor?.startDate,
           time: student?.mentor?.time
         },
-        allergyInfo: student?.allergyInfo,
         interests: student?.interests,
         leadershipTraits: student?.leadershipTraits,
         leadershipSkills: student?.leadershipSkills,

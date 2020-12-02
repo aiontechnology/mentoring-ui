@@ -27,7 +27,6 @@ export abstract class Student implements LinksHolder<Student> {
   preferredTime: string;
   location: string;
   mediaReleaseSigned: boolean;
-  allergyInfo: string;
   behaviors: string[];
   interests: string[];
   leadershipSkills: string[];
@@ -50,7 +49,6 @@ export abstract class Student implements LinksHolder<Student> {
     this.preferredTime = json?.preferredTime;
     this.location = json?.location;
     this.mediaReleaseSigned = json?.mediaReleaseSigned;
-    this.allergyInfo = json?.allergyInfo;
     this.behaviors = json?.behaviors;
     this.interests = json?.interests;
     this.leadershipSkills = json?.leadershipSkills;

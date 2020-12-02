@@ -78,17 +78,6 @@ limitations under the License.
     </div>
 
     <div class="dialog-container">
-      <mat-form-field>
-        <mat-label>Allergy info.</mat-label>
-        <textarea
-          matInput
-          placeholder="Ex. Tree nuts, wheat, . . ."
-          formControlName="allergyInfo">
-        </textarea>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-container">
       <mat-radio-group formControlName="location">
         <mat-radio-button *ngFor="let location of locations" [value]="location | uppercase">
           {{ location }}
