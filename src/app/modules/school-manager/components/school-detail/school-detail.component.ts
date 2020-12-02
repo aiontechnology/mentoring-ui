@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AfterContentInit, AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,7 +31,7 @@ import { SchoolDialogComponent } from '../school-dialog/school-dialog.component'
   templateUrl: './school-detail.component.html',
   styleUrls: ['./school-detail.component.scss']
 })
-export class SchoolDetailComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
 
   school: School;
   schoolId: string;
@@ -42,28 +42,33 @@ export class SchoolDetailComponent implements OnInit, AfterContentInit, AfterVie
               private schoolService: SchoolRepositoryService,
               private snackBar: MatSnackBar,
               private router: Router) {
+
     route.paramMap.subscribe(
       params => {
         this.schoolId = params.get('id');
       }
     );
-  }
 
-  ngOnInit(): void {
     this.schoolService.readAllSchools();
     this.schoolService.schools.subscribe(s => {
-      this.school = this.schoolService.readOneSchool(this.schoolId);
-     });
-  }
 
-  ngAfterContentInit(): void {
-    console.log('Adding school detail menus');
-    this.menuState.clear();
-    SchoolDetailMenuManager.addMenus(this.school, this.menuState, this.router, this.dialog, this.snackBar, this.schoolService);
+      this.menuState.removeGroup('school');
+
+      this.school = this.schoolService.readOneSchool(this.schoolId);
+
+      console.log('Adding school detail menus');
+      SchoolDetailMenuManager.addMenus(this.school, this.menuState, this.router, this.dialog, this.snackBar, this.schoolService);
+
+    });
+
   }
 
   ngAfterViewInit(): void {
     this.onIndexChange(0);
+  }
+
+  ngOnDestroy(): void {
+    this.menuState.clear();
   }
 
   onIndexChange(index: number): void {
@@ -75,7 +80,7 @@ export class SchoolDetailComponent implements OnInit, AfterContentInit, AfterVie
         this.menuState.makeGroupInvisible('program-admin');
         this.menuState.makeGroupInvisible('personnel');
         break;
-     case 1:
+      case 1:
         this.menuState.makeGroupInvisible('school');
         this.menuState.makeGroupInvisible('teacher');
         this.menuState.makeGroupInvisible('personnel');
@@ -90,7 +95,7 @@ export class SchoolDetailComponent implements OnInit, AfterContentInit, AfterVie
         this.menuState.makeGroupInvisible('program-admin');
         this.menuState.makeGroupInvisible('teacher');
         break;
-      }
+    }
   }
 
 }

@@ -38,7 +38,7 @@ export class Personnel implements LinksHolder<Personnel> {
         this.type = json?.type;
         this.firstName = json?.firstName;
         this.lastName = json?.lastName;
-        this.email = json?.email;
+        this.email = (json?.email === '') ? null : json?.email;
         this.workPhone = json?.workPhone;
         this.cellPhone = json?.cellPhone;
         this._links = json?._links;

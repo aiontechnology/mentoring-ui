@@ -15,22 +15,12 @@
  */
 
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
+import { Contact } from '../contact/contact';
 import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
-
-export interface Contacts {
-  type: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  workPhone: string;
-  cellPhone: string;
-  preferredContactMethod: string;
-  isEmergencyContact: boolean;
-  comment: string;
-}
 
 export abstract class Student implements LinksHolder<Student> {
 
+  id: string;
   firstName: string;
   lastName: string;
   grade: string;
@@ -42,7 +32,7 @@ export abstract class Student implements LinksHolder<Student> {
   interests: string[];
   leadershipSkills: string[];
   leadershipTraits: string[];
-  contacts: Contacts[];
+  contacts: Contact[];
   _links: {
       self: [
           { href: string; }
@@ -52,6 +42,7 @@ export abstract class Student implements LinksHolder<Student> {
   abstract teacher: any;
 
   constructor(json?: any) {
+    this.id = json?.id;
     this.firstName = json?.firstName;
     this.lastName = json?.lastName;
     this.grade = json?.grade;
@@ -63,7 +54,12 @@ export abstract class Student implements LinksHolder<Student> {
     this.interests = json?.interests;
     this.leadershipSkills = json?.leadershipSkills;
     this.leadershipTraits = json?.leadershipTraits;
-    this.contacts = json?.contacts;
+
+    this.contacts = [];
+    json?.contacts.forEach(contact => {
+      this.contacts.push(new Contact(contact));
+    });
+
     this._links = json?._links;
   }
 
