@@ -96,7 +96,7 @@ export class StudentDialogComponent {
   }
 
   /* Get teacher data; to be displayed in a selection menu */
-  ngOnInit() {
+  ngOnInit(): void {
     console.log('School data', this.schoolId);
     this.teacherService.readAllTeachers(this.schoolId);
     this.teacherService.teachers.subscribe(teachers => {
@@ -217,11 +217,11 @@ export class StudentDialogComponent {
     return this.model.get('parents') as FormArray;
   }
 
-  addParent() {
+  addParent(): void {
     this.parents.push(this.createContactForm(false));
   }
   
-  removeParent(i: number) {
+  removeParent(i: number): void {
     this.parents.removeAt(i);
   }
 
@@ -269,7 +269,7 @@ export class StudentDialogComponent {
   /*
    * Reset #teacher form value when grade is changed.
    */
-  onGradeSelected() {
+  onGradeSelected(): void {
     let teacher = this.model.get('teacher') as FormGroup;
     teacher.patchValue({ uri: '' });
   }

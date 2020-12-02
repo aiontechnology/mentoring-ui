@@ -38,7 +38,7 @@ export class Teacher implements LinksHolder<Teacher> {
     constructor(json?: any) {
         this.firstName = json?.firstName;
         this.lastName = json?.lastName;
-        this.email = json?.email;
+        this.email = (json?.email === '') ? null : json?.email;
         this.workPhone = json?.workPhone;
         this.cellPhone = json?.cellPhone;
         this.grade1 = json?.grade1;

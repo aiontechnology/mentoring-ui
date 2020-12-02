@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild, AfterViewInit, AfterContentInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, AfterContentInit, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -34,7 +34,7 @@ import { SchoolCacheService } from 'src/app/modules/shared/services/school/schoo
   templateUrl: './school-list.component.html',
   styleUrls: ['./school-list.component.scss']
 })
-export class SchoolListComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class SchoolListComponent implements OnInit, AfterContentInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,13 +54,16 @@ export class SchoolListComponent implements OnInit, AfterContentInit, AfterViewI
 
   ngAfterContentInit(): void {
     console.log('Adding school list menus');
-    this.menuState.clear();
     SchoolListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.schoolCacheService);
   }
 
   ngAfterViewInit(): void {
     this.schoolCacheService.sort = this.sort;
     this.schoolCacheService.paginator = this.paginator;
+  }
+
+  ngOnDestroy(): void {
+    this.menuState.clear();
   }
 
   displayedColumns(): string[] {
