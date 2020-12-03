@@ -16,22 +16,29 @@
 
 import { Student } from '../student/student';
 import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
+import { Mentor } from 'src/app/modules/mentor-manager/models/mentor/mentor';
 
 interface StudentTeacherInbound {
   teacher: Teacher;
-  comment: string; 
+  comment: string;
+}
+
+export interface StudentMentorInbound {
+  mentor: Mentor;
+  uri: string;
+  startDate: string;
+  time: string;
 }
 
 export class StudentInbound extends Student {
 
   teacher: StudentTeacherInbound;
+  mentor: StudentMentorInbound;
 
   constructor(json?: any) {
     super(json);
-    this.teacher = {
-      teacher: new Teacher(json?.teacher?.teacher),
-      comment: json?.teacher?.comment
-    }
+    this.teacher = json?.teacher;
+    this.mentor = json?.mentor;
   }
 
 }

@@ -29,6 +29,8 @@ import { TeacherRepositoryService } from 'src/app/modules/school-manager/service
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
 import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import { MentorRepositoryService } from 'src/app/modules/mentor-manager/services/mentor/mentor-repository.service';
+import { Mentor } from 'src/app/modules/mentor-manager/models/mentor/mentor';
 
 @Component({
   selector: 'ms-student-dialog',
@@ -44,6 +46,7 @@ export class StudentDialogComponent {
   selectedGrade: string;
 
   teachers: Teacher[];
+  mentors: Mentor[];
   grades: Grade[] = grades;
   contactMethods: string[] = ['Cellphone', 'Workphone', 'Email'];
   locations: string[] = ['Offline', 'Online', 'Both'];
@@ -63,6 +66,7 @@ export class StudentDialogComponent {
   constructor(private dialogRef: MatDialogRef<StudentDialogComponent>,
               private studentService: StudentRepositoryService,
               private teacherService: TeacherRepositoryService,
+              private mentorService: MentorRepositoryService,
               private logger: LoggingService,
               private formBuilder: FormBuilder,
               private snackBar: MatSnackBar,
@@ -97,12 +101,21 @@ export class StudentDialogComponent {
 
   /* Get teacher data; to be displayed in a selection menu */
   ngOnInit(): void {
+
     console.log('School data', this.schoolId);
     this.teacherService.readAllTeachers(this.schoolId);
     this.teacherService.teachers.subscribe(teachers => {
       this.logger.log('Read teachers from school', teachers);
       this.teachers = teachers;
     });
+
+    console.log('Mentor data', this.schoolId);
+    this.mentorService.readAllMentors(this.schoolId);
+    this.mentorService.mentors.subscribe(mentors => {
+      this.logger.log('Read mentors from school', mentors);
+      this.mentors = mentors;
+    });
+
   }
 
   save(): void {
@@ -154,6 +167,11 @@ export class StudentDialogComponent {
         uri: ['', Validators.required],
         comment: ['']
       }),
+      mentor: formBuilder.group({
+        uri: [''],
+        startDate: [''],
+        time: ['']
+      }),
       allergyInfo: [''],
       interests: [],
       leadershipTraits: [],
@@ -177,6 +195,11 @@ export class StudentDialogComponent {
         teacher: {
           uri: student?.teacher?.teacher?._links?.self[0]?.href,
           comment: student?.teacher?.comment
+        },
+        mentor: {
+          uri: student?.mentor?.mentor?._links?.self[0]?.href,
+          startDate: student?.mentor?.startDate,
+          time: student?.mentor?.time
         },
         allergyInfo: student?.allergyInfo,
         interests: student?.interests,
