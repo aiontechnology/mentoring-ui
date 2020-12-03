@@ -33,8 +33,20 @@ limitations under the License.
               <td>{{ student?.mediaReleaseSigned ? 'yes' : 'no' }}</td>
             </tr>
             <tr>
+              <td>Start date</td>
+              <td>{{ student?.startDate }}</td>
+            </tr>
+            <tr>
               <td>Preferred time</td>
               <td>{{ student?.preferredTime }}</td>
+            </tr>
+            <tr>
+              <td>Mentor</td>
+              <td>{{ studentMentor?.mentor?.firstName + studentMentor?.mentor?.lastName }}</td>
+            </tr>
+            <tr>
+              <td>Meeting time</td>
+              <td>{{ studentMentor?.time }}</td>
             </tr>
             <tr>
               <td>Location</td>
@@ -152,28 +164,6 @@ limitations under the License.
             <tr>
               <td>Comments</td>
               <td>{{ emergencyContact?.comment ? emergencyContact.comment : '' }}</td>
-            </tr>
-          </table>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </mat-tab>
-  <mat-tab label="Mentor">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Mentor: {{ studentMentor?.mentor?.firstName + studentMentor?.mentor?.lastName }}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="mat-elevation-z8">
-        <div class="student-details">
-          <h1>Mentor Details</h1>
-          <table>
-            <tr>
-              <td>Meeting time</td>
-              <td>{{ studentMentor?.time }}</td>
-            </tr>
-            <tr>
-              <td>Start date</td>
-              <td>{{ studentMentor?.startDate }}</td>
             </tr>
           </table>
         </div>
