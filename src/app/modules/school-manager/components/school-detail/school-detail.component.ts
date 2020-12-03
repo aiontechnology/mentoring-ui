@@ -25,6 +25,7 @@ import { School } from 'src/app/modules/shared/models/school/school';
 import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/school-repository.service';
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ms-school-detail',
@@ -36,6 +37,8 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
   school: School;
   schoolId: string;
 
+  schoolSubscriptions$ = new Subscription();
+
   constructor(route: ActivatedRoute,
               private dialog: MatDialog,
               private menuState: MenuStateService,
@@ -43,14 +46,14 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
               private snackBar: MatSnackBar,
               private router: Router) {
 
-    route.paramMap.subscribe(
+    let subscription1$ = route.paramMap.subscribe(
       params => {
         this.schoolId = params.get('id');
       }
     );
 
     this.schoolService.readAllSchools();
-    this.schoolService.schools.subscribe(s => {
+    let subscription2$ = this.schoolService.schools.subscribe(s => {
 
       this.menuState.removeGroup('school');
 
@@ -61,6 +64,9 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
 
     });
 
+    this.schoolSubscriptions$.add(subscription1$);
+    this.schoolSubscriptions$.add(subscription2$);
+
   }
 
   ngAfterViewInit(): void {
@@ -68,6 +74,7 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.schoolSubscriptions$.unsubscribe();
     this.menuState.clear();
   }
 
