@@ -14,42 +14,20 @@
  * limitations under the License.
  */
 
-h3 {
-  font-weight: bold;
-}
+import { Directive, ElementRef, AfterViewInit } from '@angular/core';
 
-.dialog-container {
-  display: flex;
-  flex-direction: column;
-}
+/*
+ * TODO: Change this scrolling implementation. Current behavior works, but is not well defined.
+ */
+@Directive({
+  selector: '[scrollTo]'
+})
+export class ScrollToDirective implements AfterViewInit {
 
-.dialog-container > * {
-  width: 100%;
-}
+  constructor(private el: ElementRef) { }
 
-.dialog-error {
-  padding-bottom: 15px;
-}
+  ngAfterViewInit() {
+    setTimeout(() => this.el.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
 
-.mat-radio-button ~ .mat-radio-button {
-  margin-left: 16px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.contacts {
-  background-color: #fafafa;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 25px;
-}
-
-button.form {
-  margin-right: 5px;
-}
-
-button.mat-raised-button {
-  line-height: 2.5;
-  margin-top: 10px;
-  margin-right: 10px;
 }
