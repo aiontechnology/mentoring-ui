@@ -14,42 +14,11 @@
  * limitations under the License.
  */
 
-h3 {
-  font-weight: bold;
-}
+import { ScrollToDirective } from './scroll-to.directive';
 
-.dialog-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.dialog-container > * {
-  width: 100%;
-}
-
-.dialog-error {
-  padding-bottom: 15px;
-}
-
-.mat-radio-button ~ .mat-radio-button {
-  margin-left: 16px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-.contacts {
-  background-color: #fafafa;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 25px;
-}
-
-button.form {
-  margin-right: 5px;
-}
-
-button.mat-raised-button {
-  line-height: 2.5;
-  margin-top: 10px;
-  margin-right: 10px;
-}
+describe('ScrollToDirective', () => {
+  it('should create an instance', () => {
+    const directive = new ScrollToDirective();
+    expect(directive).toBeTruthy();
+  });
+});
