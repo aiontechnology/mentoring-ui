@@ -24,7 +24,6 @@ interface StudentTeacherOutbound {
 
 interface StudentMentorOutbound {
   uri: string;
-  startDate: string;
   time: string;
 }
 
