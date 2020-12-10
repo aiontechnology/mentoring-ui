@@ -26,7 +26,6 @@ interface StudentTeacherInbound {
 export interface StudentMentorInbound {
   mentor: Mentor;
   uri: string;
-  startDate: string;
   time: string;
 }
 

@@ -31,15 +31,23 @@ import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { MentorRepositoryService } from 'src/app/modules/mentor-manager/services/mentor/mentor-repository.service';
 import { Mentor } from 'src/app/modules/mentor-manager/models/mentor/mentor';
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper'
 
 @Component({
   selector: 'ms-student-dialog',
   templateUrl: './student-dialog.component.html',
-  styleUrls: ['./student-dialog.component.scss']
+  styleUrls: ['./student-dialog.component.scss'],
+  providers: [{
+    provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true }
+  }]
 })
 export class StudentDialogComponent {
 
   model: FormGroup;
+  studentDetails: FormGroup;
+  teacherInput: FormGroup;
+  contacts: FormGroup;
+
   isUpdate = false;
 
   schoolId: string;
@@ -74,7 +82,12 @@ export class StudentDialogComponent {
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
     this.isUpdate = this.determineUpdate(data);
+
     this.model = this.createModel(formBuilder, data?.model);
+    this.studentDetails = this.model.get('studentDetails') as FormGroup;
+    this.teacherInput = this.model.get('teacherInput') as FormGroup;
+    this.contacts = this.model.get('contacts') as FormGroup;
+
     this.schoolId = data?.schoolId;
 
     metaDataService.loadInterests();
@@ -120,15 +133,17 @@ export class StudentDialogComponent {
 
   save(): void {
 
-    this.addContactsProperty(this.model.value);
+    // Create outbound student.
+    let studentProperties = Object.assign(this.studentDetails.value, { teacher: this.teacherInput.value.teacher }, this.contacts.value);
+    this.addContactsProperty(studentProperties);
+    this.clearMentorIfNotProvided(studentProperties);
 
-    const newStudent = new StudentOutbound(this.model.value);
+    const newStudent = new StudentOutbound(studentProperties);
     let func: (item: StudentOutbound) => Promise<StudentInbound>;
     console.log('Saving student', newStudent);
 
     if (this.isUpdate) {
-      console.log('Updating', this.model.value);
-      newStudent._links = this.model.value.student._links;
+      console.log('Updating', studentProperties);
       func = this.studentService.updateStudent;
     } else {
       func = this.studentService.curriedCreateStudent(this.schoolId);
@@ -149,6 +164,11 @@ export class StudentDialogComponent {
     modelValue['contacts'] = modelValue.parents.concat(modelValue.emergencyContact);
   }
 
+  private clearMentorIfNotProvided(modelValue: any): void {
+    const mentor = modelValue.mentor;
+    modelValue.mentor = (mentor.uri == null || mentor.uri === '') ? null : mentor;
+  }
+
   private determineUpdate(formData: any): boolean {
     return formData.model !== undefined && formData.model !== null;
   }
@@ -158,27 +178,34 @@ export class StudentDialogComponent {
     console.log('Student', student);
     const formGroup: FormGroup = formBuilder.group({
       student,
-      firstName: ['', [Validators.required, Validators.maxLength(50)]],
-      lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      grade: ['', Validators.required],
-      mediaReleaseSigned: false,
-      preferredTime: [''],
-      teacher: formBuilder.group({
-        uri: ['', Validators.required],
-        comment: ['']
-      }),
-      mentor: formBuilder.group({
-        uri: [''],
+      studentDetails: formBuilder.group({
+        firstName: ['', [Validators.required, Validators.maxLength(50)]],
+        lastName: ['', [Validators.required, Validators.maxLength(50)]],
+        grade: ['', Validators.required],
+        mediaReleaseSigned: false,
         startDate: [''],
-        time: ['']
+        preferredTime: [''],
+        mentor: formBuilder.group({
+          uri: [''],
+          time: ['']
+        }),
+        interests: [],
+        leadershipTraits: [],
+        leadershipSkills: [],
+        behaviors: [],
+        location: ['OFFLINE', Validators.required],
+        _links: null
       }),
-      interests: [],
-      leadershipTraits: [],
-      leadershipSkills: [],
-      behaviors: [],
-      parents: formBuilder.array([this.createContactForm(false)]),
-      emergencyContact: this.createContactForm(true),
-      location: ['OFFLINE', Validators.required]
+      teacherInput: formBuilder.group({
+        teacher: formBuilder.group({
+          uri: ['', Validators.required],
+          comment: ['']
+        }),
+      }),
+      contacts: formBuilder.group({
+        parents: formBuilder.array([this.createContactForm(false)]),
+        emergencyContact: this.createContactForm(true)
+      }),
     });
 
     if (this.isUpdate) {
@@ -186,25 +213,30 @@ export class StudentDialogComponent {
       this.selectedGrade = student?.grade?.toString();
       formGroup.patchValue({
         student,
-        firstName: student?.firstName,
-        lastName: student?.lastName,
-        grade: student?.grade?.toString(),
-        mediaReleaseSigned: student?.mediaReleaseSigned,    
-        preferredTime: student?.preferredTime,
-        teacher: {
-          uri: student?.teacher?.teacher?._links?.self[0]?.href,
-          comment: student?.teacher?.comment
+        studentDetails: {
+          firstName: student?.firstName,
+          lastName: student?.lastName,
+          grade: student?.grade?.toString(),
+          mediaReleaseSigned: student?.mediaReleaseSigned,
+          startDate: student?.startDate,
+          preferredTime: student?.preferredTime,
+          mentor: {
+            uri: student?.mentor?.mentor?._links?.self[0]?.href,
+            time: student?.mentor?.time
+          },
+          interests: student?.interests,
+          leadershipTraits: student?.leadershipTraits,
+          leadershipSkills: student?.leadershipSkills,
+          behaviors: student?.behaviors,
+          location: student?.location?.toString(),
+          _links: student._links
         },
-        mentor: {
-          uri: student?.mentor?.mentor?._links?.self[0]?.href,
-          startDate: student?.mentor?.startDate,
-          time: student?.mentor?.time
+        teacherInput: {
+          teacher: {
+            uri: student?.teacher?.teacher?._links?.self[0]?.href,
+            comment: student?.teacher?.comment
+          },
         },
-        interests: student?.interests,
-        leadershipTraits: student?.leadershipTraits,
-        leadershipSkills: student?.leadershipSkills,
-        behaviors: student?.behaviors,
-        location: student?.location?.toString()
       });
 
       let parents = student?.contacts?.filter(contact => {
@@ -214,7 +246,7 @@ export class StudentDialogComponent {
         return contact?.isEmergencyContact;
       })
 
-      let parentsFormArray = formGroup.get('parents') as FormArray;
+      let parentsFormArray = formGroup.get('contacts.parents') as FormArray;
 
       // Add the extra parent/guardian to form group, if student has 2nd parent.
       if (parents.length == 2) {
@@ -226,7 +258,7 @@ export class StudentDialogComponent {
         (parentsFormArray.at(index) as FormGroup).setValue(contact);
       });
 
-      (formGroup.get('emergencyContact') as FormGroup).setValue(emergencyContact[0]);
+      (formGroup.get('contacts.emergencyContact') as FormGroup).setValue(emergencyContact[0]);
 
     }
 
@@ -235,7 +267,7 @@ export class StudentDialogComponent {
   }
 
   get parents() {
-    return this.model.get('parents') as FormArray;
+    return this.contacts.get('parents') as FormArray;
   }
 
   addParent(): void {
@@ -291,7 +323,7 @@ export class StudentDialogComponent {
    * Reset #teacher form value when grade is changed.
    */
   onGradeSelected(): void {
-    let teacher = this.model.get('teacher') as FormGroup;
+    let teacher = this.teacherInput.get('teacher') as FormGroup;
     teacher.patchValue({ uri: '' });
   }
 

@@ -17,9 +17,9 @@ limitations under the License.
 <h2 mat-dialog-title>Add new student</h2>
 
 <mat-dialog-content>
-  <form [formGroup]="model">
-  <mat-tab-group mat-stretch-tabs class="example-stretched-tabs" dynamicHeight>
-    <mat-tab label="Student Details">
+  <mat-horizontal-stepper #stepper>
+    <mat-step label="Student Details" [stepControl]="studentDetails" errorMessage="Incomplete">
+    <form [formGroup]="studentDetails">
     <div class="dialog-container">
       <mat-form-field>
         <input
@@ -27,10 +27,10 @@ limitations under the License.
           placeholder="First name"
           formControlName="firstName"
           required/>
-        <mat-error *ngIf="model.hasError('required', 'firstName')">
+        <mat-error *ngIf="studentDetails.hasError('required', 'firstName')">
           You must enter a first name
         </mat-error>
-        <mat-error *ngIf="model.hasError('maxlength', 'firstName')">
+        <mat-error *ngIf="studentDetails.hasError('maxlength', 'firstName')">
           A first name can be a maximum of 50 characters in length
         </mat-error>
       </mat-form-field>
@@ -39,10 +39,10 @@ limitations under the License.
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="Last name" formControlName="lastName" required/>
-        <mat-error *ngIf="model.hasError('required', 'lastName')">
+        <mat-error *ngIf="studentDetails.hasError('required', 'lastName')">
           You must enter a last name
         </mat-error>
-        <mat-error *ngIf="model.hasError('maxlength', 'lastName')">
+        <mat-error *ngIf="studentDetails.hasError('maxlength', 'lastName')">
           A last name can be a maximum of 30 characters in length
         </mat-error>
       </mat-form-field>
@@ -59,7 +59,7 @@ limitations under the License.
             {{ grade.valueView }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="model.hasError('required', 'grade')">
+        <mat-error *ngIf="studentDetails.hasError('required', 'grade')">
           You must select a grade level
         </mat-error>
       </mat-form-field>
@@ -73,8 +73,38 @@ limitations under the License.
 
     <div class="dialog-container">
       <mat-form-field>
+        <mat-label>Start date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="startDate">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
         <input matInput placeholder="Preferred time" formControlName="preferredTime"/>
       </mat-form-field>
+    </div>
+
+    <div formGroupName="mentor">
+    <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Mentor</mat-label>
+        <mat-select formControlName="uri">
+          <mat-option
+            *ngFor="let mentor of mentors"
+            [value]="mentor.getSelfLink()">
+            {{ mentor.firstName + ' ' + mentor.lastName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <input matInput placeholder="Meeting Time" formControlName="time"/>
+      </mat-form-field>
+    </div>
     </div>
 
     <div class="dialog-container">
@@ -84,9 +114,12 @@ limitations under the License.
         </mat-radio-button>
       </mat-radio-group>
     </div>
-    </mat-tab>
+    </form>
+    <button mat-raised-button matStepperNext color="primary">Next</button>
+    </mat-step>
     
-    <mat-tab label="Teacher Input">
+    <mat-step label="Teacher Input" [stepControl]="teacherInput" errorMessage="Incomplete">
+    <form [formGroup]="teacherInput">
     <div formGroupName="teacher">
     <div class="dialog-container">
       <mat-form-field>
@@ -105,7 +138,7 @@ limitations under the License.
           No teachers in selected grade
         </mat-error>
 
-        <mat-error *ngIf="model.hasError('required', ['teacher', 'uri'])">
+        <mat-error *ngIf="teacherInput.hasError('required', ['teacher', 'uri'])">
           You must select a teacher
         </mat-error>
       </mat-form-field>
@@ -117,7 +150,9 @@ limitations under the License.
       </mat-form-field>
       </div>
     </div>
+    </form>
 
+    <form [formGroup]="studentDetails">
     <div class="dialog-container">
       <mat-form-field>
         <mat-label>Interests</mat-label>
@@ -153,41 +188,13 @@ limitations under the License.
         </mat-select>
       </mat-form-field>
     </div>
-    </mat-tab>
-    
-    <mat-tab label="Mentor">
-    <div formGroupName="mentor">
-    <div class="dialog-container">
-      <mat-form-field>
-        <mat-label>Mentor</mat-label>
-        <mat-select formControlName="uri">
-          <mat-option
-            *ngFor="let mentor of mentors"
-            [value]="mentor.getSelfLink()">
-            {{ mentor.firstName + ' ' + mentor.lastName }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+    </form>
+    <button mat-raised-button matStepperPrevious color="primary">Back</button>
+    <button mat-raised-button matStepperNext color="primary">Next</button>
+    </mat-step>
 
-    <div class="dialog-container">
-      <mat-form-field>
-        <mat-label>Start date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="startDate">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput placeholder="Time" formControlName="time"/>
-      </mat-form-field>
-    </div>
-    </div>
-    </mat-tab>
-
-    <mat-tab label="Contacts">
+    <mat-step label="Contacts" [stepControl]="contacts" errorMessage="Incomplete">
+    <form [formGroup]="contacts">
     <div formArrayName="parents">
     <div
       class="contact-dialog"
@@ -199,11 +206,11 @@ limitations under the License.
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="First name" formControlName="firstName" required/>
-          <mat-error *ngIf="model.hasError('required', ['parents', i, 'firstName'])">
+          <mat-error *ngIf="contacts.hasError('required', ['parents', i, 'firstName'])">
             You must enter a first name
           </mat-error>
-          <mat-error *ngIf="model.hasError('maxlength', ['parents', i, 'firstName'])">
-            A first name can be a maximum of 50 characters in length
+          <mat-error *ngIf="contacts.hasError('maxlength', ['parents', i, 'firstName'])">
+             A first name can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
       </div>
@@ -211,10 +218,10 @@ limitations under the License.
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="Last name" formControlName="lastName" required/>
-          <mat-error *ngIf="model.hasError('required', ['parents', i, 'lastName'])">
+          <mat-error *ngIf="contacts.hasError('required', ['parents', i, 'lastName'])">
             You must enter a last name
           </mat-error>
-          <mat-error *ngIf="model.hasError('maxlength', ['parents', i, 'lastName'])">
+          <mat-error *ngIf="contacts.hasError('maxlength', ['parents', i, 'lastName'])">
             A last name can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
@@ -235,10 +242,10 @@ limitations under the License.
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="Email Address" formControlName="email" />
-          <mat-error *ngIf="model.hasError('email', ['parents', i, 'email'])">
+          <mat-error *ngIf="contacts.hasError('email', ['parents', i, 'email'])">
             Invalid email address format
           </mat-error>
-          <mat-error *ngIf="model.hasError('maxlength', ['parents', i, 'email'])">
+          <mat-error *ngIf="contacts.hasError('maxlength', ['parents', i, 'email'])">
             An email address name can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
@@ -246,8 +253,8 @@ limitations under the License.
 
       <div class="dialog-error">
         <mat-error
-          *ngIf="model.hasError('noContacts', ['parents', i])">
-          {{ model.getError('noContacts', ['parents', i]).msg }}
+          *ngIf="contacts.hasError('noContacts', ['parents', i])">
+          {{ contacts.getError('noContacts', ['parents', i]).msg }}
         </mat-error>
       </div>
 
@@ -293,10 +300,10 @@ limitations under the License.
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="First name" formControlName="firstName" required/>
-          <mat-error *ngIf="model.hasError('required', ['emergencyContact', 'firstName'])">
+          <mat-error *ngIf="contacts.hasError('required', ['emergencyContact', 'firstName'])">
             You must enter a first name
           </mat-error>
-          <mat-error *ngIf="model.hasError('maxlength', ['emergencyContact', 'firstName'])">
+          <mat-error *ngIf="contacts.hasError('maxlength', ['emergencyContact', 'firstName'])">
             A first name can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
@@ -305,10 +312,10 @@ limitations under the License.
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="Last name" formControlName="lastName" required/>
-          <mat-error *ngIf="model.hasError('required', ['emergencyContact', 'lastName'])">
+          <mat-error *ngIf="contacts.hasError('required', ['emergencyContact', 'lastName'])">
             You must enter a last name
           </mat-error>
-          <mat-error *ngIf="model.hasError('maxlength', ['emergencyContact', 'lastName'])">
+          <mat-error *ngIf="contacts.hasError('maxlength', ['emergencyContact', 'lastName'])">
             A last name can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
@@ -322,7 +329,7 @@ limitations under the License.
               {{ type.valueView }}
             </mat-option>
           </mat-select>
-          <mat-error *ngIf="model.hasError('required', ['emergencyContact', 'type'])">
+          <mat-error *ngIf="contacts.hasError('required', ['emergencyContact', 'type'])">
             You must select a relation.
           </mat-error>
         </mat-form-field>
@@ -343,10 +350,10 @@ limitations under the License.
       <div class="dialog-container">
         <mat-form-field>
           <input matInput placeholder="Email Address" formControlName="email" />
-          <mat-error *ngIf="model.hasError('email', ['emergencyContact', 'email'])">
+          <mat-error *ngIf="contacts.hasError('email', ['emergencyContact', 'email'])">
             Invalid email address format
           </mat-error>
-          <mat-error *ngIf="model.hasError('maxlength', ['emergencyContact', 'email'])">
+          <mat-error *ngIf="contacts.hasError('maxlength', ['emergencyContact', 'email'])">
             An email address name can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
@@ -354,8 +361,8 @@ limitations under the License.
 
       <div class="dialog-error">
         <mat-error
-          *ngIf="model.hasError('noContacts', ['emergencyContact'])">
-          {{ model.getError('noContacts', ['emergencyContact']).msg }}
+          *ngIf="contacts.hasError('noContacts', ['emergencyContact'])">
+          {{ contacts.getError('noContacts', ['emergencyContact']).msg }}
         </mat-error>
       </div>
 
@@ -377,10 +384,11 @@ limitations under the License.
         </mat-form-field>
       </div>
     </div>
-    </mat-tab>
+    </form>
+    <button mat-raised-button matStepperPrevious color="primary">Back</button>
+    </mat-step>
 
-  </mat-tab-group>
-  </form>
+  </mat-horizontal-stepper>
 </mat-dialog-content>
 
 <mat-dialog-actions>
