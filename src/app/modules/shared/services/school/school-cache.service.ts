@@ -19,12 +19,10 @@ import { log } from 'src/app/shared/logging-decorator';
 import { School } from '../../models/school/school';
 import { DatasourceManager } from '../datasource-manager';
 import { SchoolRepositoryService } from './school-repository.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class SchoolCacheService extends DatasourceManager<School> {
-
-  /** Binds to the filter input control. Used to clear the control when requested. */
-  filterBinding: string;
 
   /**
    * Constructor
@@ -41,27 +39,21 @@ export class SchoolCacheService extends DatasourceManager<School> {
    */
   @log
   private establishDatasource(): void {
-    this.elements = this.schoolService.schools;
     this.schoolService.readAllSchools();
-    this.elements.subscribe(s => {
-      console.log('Creating new school datasource');
-      this.dataSource.data = s;
+    this.dataSource.data$ = this.schoolService.items.pipe(
+      tap(s => {
+        console.log('Creating new school datasource');
+        this.dataSource.data = s;
 
-      this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
+        this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
 
-      const savedFilter = this.dataSource?.filter;
-      if (savedFilter) {
-        console.log('Reading filter: ', savedFilter);
-        this.dataSource.filter = savedFilter;
-      }
-    });
-  }
-
-  /**
-   * Get the value of the data source filter.
-   */
-  get filter() {
-    return this.dataSource.filter;
+        const savedFilter = this.dataSource?.filter;
+        if (savedFilter) {
+          console.log('Reading filter: ', savedFilter);
+          this.dataSource.filter = savedFilter;
+        }
+      })
+    );
   }
 
   protected doRemoveItem(items: School[]): void {

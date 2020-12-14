@@ -32,14 +32,16 @@ import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-
 import { MentorRepositoryService } from 'src/app/modules/mentor-manager/services/mentor/mentor-repository.service';
 import { Mentor } from 'src/app/modules/mentor-manager/models/mentor/mentor';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper'
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'ms-student-dialog',
   templateUrl: './student-dialog.component.html',
   styleUrls: ['./student-dialog.component.scss'],
-  providers: [{
-    provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true }
-  }]
+  providers: [
+    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
+  ]
 })
 export class StudentDialogComponent {
 
@@ -53,8 +55,8 @@ export class StudentDialogComponent {
   schoolId: string;
   selectedGrade: string;
 
-  teachers: Teacher[];
-  mentors: Mentor[];
+  teachers$: Observable<Teacher[]>;
+  mentors$: Observable<Mentor[]>;
   grades: Grade[] = grades;
   contactMethods: string[] = ['Cellphone', 'Workphone', 'Email'];
   locations: string[] = ['Offline', 'Online', 'Both'];
@@ -64,10 +66,10 @@ export class StudentDialogComponent {
     { value: 'GRANDPARENT', valueView: 'Grandparent' }
   ];
 
-  interestList: string[];
-  leadershipTraitList: string[];
-  leadershipSkillList: string[];
-  behaviorList: string[];
+  interestList$: Observable<string[]>;
+  leadershipTraitList$: Observable<string[]>;
+  leadershipSkillList$: Observable<string[]>;
+  behaviorList$: Observable<string[]>;
 
   private caller = new CallerWithErrorHandling<Student, StudentDialogComponent>();
 
@@ -90,44 +92,34 @@ export class StudentDialogComponent {
 
     this.schoolId = data?.schoolId;
 
-    metaDataService.loadInterests();
-    metaDataService.interests.subscribe(interests => {
-      this.interestList = interests;
-    });
-
-    metaDataService.loadLeadershipTraits();
-    metaDataService.leadershipTraits.subscribe(leadershipTraits => {
-      this.leadershipTraitList = leadershipTraits;
-    });
-
-    metaDataService.loadLeadershipSkills();
-    metaDataService.leadershipSkills.subscribe(leadershipSkills => {
-      this.leadershipSkillList = leadershipSkills;
-    });
-
-    metaDataService.loadBehaviors();
-    metaDataService.behaviors.subscribe(behaviors => {
-      this.behaviorList = behaviors;
-    });
-
   }
 
   /* Get teacher data; to be displayed in a selection menu */
   ngOnInit(): void {
 
+    this.metaDataService.loadInterests();
+    this.interestList$ = this.metaDataService.interests;
+
+    this.metaDataService.loadLeadershipTraits();
+    this.leadershipTraitList$ = this.metaDataService.leadershipTraits;
+
+    this.metaDataService.loadLeadershipSkills();
+    this.leadershipSkillList$ = this.metaDataService.leadershipSkills;
+
+    this.metaDataService.loadBehaviors();
+    this.behaviorList$ = this.metaDataService.behaviors;
+
     console.log('School data', this.schoolId);
     this.teacherService.readAllTeachers(this.schoolId);
-    this.teacherService.teachers.subscribe(teachers => {
-      this.logger.log('Read teachers from school', teachers);
-      this.teachers = teachers;
-    });
+    this.teachers$ = this.teacherService.teachers.pipe(
+      tap(teachers => this.logger.log('Read teachers from school', teachers))
+    );
 
     console.log('Mentor data', this.schoolId);
     this.mentorService.readAllMentors(this.schoolId);
-    this.mentorService.mentors.subscribe(mentors => {
-      this.logger.log('Read mentors from school', mentors);
-      this.mentors = mentors;
-    });
+    this.mentors$ = this.mentorService.mentors.pipe(
+      tap(mentors => this.logger.log('Read mentors from school', mentors))
+    );
 
   }
 
