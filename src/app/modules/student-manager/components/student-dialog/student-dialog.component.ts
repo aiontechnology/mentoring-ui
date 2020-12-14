@@ -161,7 +161,8 @@ export class StudentDialogComponent {
    * Combine form's contact properties for backend model.
    */
   private addContactsProperty(modelValue: any): void {
-    modelValue['contacts'] = modelValue.parents.concat(modelValue.emergencyContact);
+    const e = modelValue.emergencyContact ? modelValue.emergencyContact : [];
+    modelValue['contacts'] = modelValue.parents.concat(e);
   }
 
   private clearMentorIfNotProvided(modelValue: any): void {
@@ -177,8 +178,8 @@ export class StudentDialogComponent {
 
     console.log('Student', student);
     const formGroup: FormGroup = formBuilder.group({
-      student,
       studentDetails: formBuilder.group({
+        student,
         firstName: ['', [Validators.required, Validators.maxLength(50)]],
         lastName: ['', [Validators.required, Validators.maxLength(50)]],
         grade: ['', Validators.required],
@@ -198,13 +199,12 @@ export class StudentDialogComponent {
       }),
       teacherInput: formBuilder.group({
         teacher: formBuilder.group({
-          uri: ['', Validators.required],
+          uri: [{ value: '', disabled: true }, Validators.required],
           comment: ['']
         }),
       }),
       contacts: formBuilder.group({
-        parents: formBuilder.array([this.createContactForm(false)]),
-        emergencyContact: this.createContactForm(true)
+        parents: formBuilder.array([])
       }),
     });
 
@@ -212,8 +212,8 @@ export class StudentDialogComponent {
 
       this.selectedGrade = student?.grade?.toString();
       formGroup.patchValue({
-        student,
         studentDetails: {
+          student,
           firstName: student?.firstName,
           lastName: student?.lastName,
           grade: student?.grade?.toString(),
@@ -239,6 +239,9 @@ export class StudentDialogComponent {
         },
       });
 
+      // Enable teacher, since its value has been set.
+      formGroup.get('teacherInput.teacher.uri').enable();
+
       let parents = student?.contacts?.filter(contact => {
         return !contact?.isEmergencyContact;
       });
@@ -246,19 +249,18 @@ export class StudentDialogComponent {
         return contact?.isEmergencyContact;
       })
 
-      let parentsFormArray = formGroup.get('contacts.parents') as FormArray;
-
-      // Add the extra parent/guardian to form group, if student has 2nd parent.
-      if (parents.length == 2) {
-        parentsFormArray.push(this.createContactForm(false));
+      if (emergencyContact.length) {
+        let contacts = formGroup.get('contacts') as FormGroup;
+        contacts.addControl('emergencyContact', this.createContactForm(true));
+        (formGroup.get('contacts.emergencyContact') as FormGroup).setValue(emergencyContact[0]);
       }
 
       // Instantiate parent/guardian and emergencyContact in form.
+      let parentsFormArray = formGroup.get('contacts.parents') as FormArray;
       parents.forEach((contact, index) => {
+        parentsFormArray.push(this.createContactForm(false));
         (parentsFormArray.at(index) as FormGroup).setValue(contact);
       });
-
-      (formGroup.get('contacts.emergencyContact') as FormGroup).setValue(emergencyContact[0]);
 
     }
 
@@ -266,16 +268,46 @@ export class StudentDialogComponent {
 
   }
 
+  enableTeacher(): void {
+    if (this.selectedGrade) {
+      this.teacherInput.get('teacher.uri').enable();
+    }
+  }
+
   get parents() {
     return this.contacts.get('parents') as FormArray;
+  }
+
+  get emergencyContact() {
+    return this.contacts.get('emergencyContact') as FormGroup;
+  }
+
+  contactsIsEmpty(): boolean {
+    return !this.parents.length && !this.emergencyContact;
+  }
+
+  contactsIsFull(): boolean {
+    return this.parents.controls.length >= 2 && this.emergencyContact != null;
+  }
+
+  parentsIsFull(): boolean {
+    return this.parents.length >= 2;
   }
 
   addParent(): void {
     this.parents.push(this.createContactForm(false));
   }
   
+  addEmergencyContact(): void {
+    this.contacts.addControl('emergencyContact', this.createContactForm(true));
+  }
+
   removeParent(i: number): void {
     this.parents.removeAt(i);
+  }
+
+  removeEmergencyContact(): void {
+    this.contacts.removeControl('emergencyContact');
   }
 
   private createContactForm(isEmergencyContact?: boolean): FormGroup {
@@ -297,6 +329,7 @@ export class StudentDialogComponent {
     }, {
       validators: this.noContactMethodValidator()
     });
+
   }
 
   noContactMethodValidator(): ValidatorFn {
