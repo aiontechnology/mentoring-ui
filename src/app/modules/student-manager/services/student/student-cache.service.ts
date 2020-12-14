@@ -19,12 +19,10 @@ import { DatasourceManager } from 'src/app/modules/shared/services/datasource-ma
 import { log } from 'src/app/shared/logging-decorator';
 import { Student } from '../../models/student/student';
 import { StudentRepositoryService } from './student-repository.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class StudentCacheService extends DatasourceManager<Student>  {
-
-  /** Binds to the filter input control. Used to clear the control when requested. */
-  filterBinding: string;
 
   constructor(private studentService: StudentRepositoryService) {
     super();
@@ -32,18 +30,10 @@ export class StudentCacheService extends DatasourceManager<Student>  {
 
   @log
   establishDatasource(schoolId: string): void {
-    this.elements = this.studentService.items;
     this.studentService.readAllStudents(schoolId);
-    this.elements.subscribe(t => {
-      this.dataSource.data = t;
-    });
-  }
-
-  /**
-   * Get the value of the data source filter.
-   */
-  get filter() {
-    return this.dataSource.filter;
+    this.dataSource.data$ = this.studentService.items.pipe(
+      tap(() => console.log('Creating new student datasource'))
+    );
   }
 
   protected doRemoveItem(items: Student[]): void {

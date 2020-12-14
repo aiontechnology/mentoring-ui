@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -24,25 +24,26 @@ import { Game } from '../../models/game/game';
 import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'ms-game-dialog',
   templateUrl: './game-dialog.component.html',
   styleUrls: ['./game-dialog.component.scss']
 })
-export class GameDialogComponent {
+export class GameDialogComponent implements OnInit {
 
   model: FormGroup;
   isUpdate = false;
 
   grades: Grade[] = resourceGrades;
   locations: string[] = ['Offline', 'Online', 'Both'];
-  activityFocusList: string[];
-  leadershipSkillList: string[];
+  activityFocusList$: Observable<string[]>;
+  leadershipSkillList$: Observable<string[]>;
 
   private caller = new CallerWithErrorHandling<Game, GameDialogComponent>();
 
-  gradeRangeValidator = (control: AbstractControl ): {[key: string]: boolean} => {
+  gradeRangeValidator = (control: AbstractControl): {[key: string]: boolean} => {
     const grade1 = control.get('grade1');
     const grade2 = control.get('grade2');
     if (!grade1 || !grade2) {
@@ -59,16 +60,16 @@ export class GameDialogComponent {
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
+  }
 
-    metaDataService.loadActivityFocuses();
-    metaDataService.activityFocuses.subscribe(activityFocuses => {
-      this.activityFocusList = activityFocuses;
-    });
+  ngOnInit(): void {
 
-    metaDataService.loadLeadershipSkills();
-    metaDataService.leadershipSkills.subscribe(leadershipSkills => {
-      this.leadershipSkillList = leadershipSkills;
-    });
+    this.metaDataService.loadActivityFocuses();
+    this.activityFocusList$ = this.metaDataService.activityFocuses;
+
+    this.metaDataService.loadLeadershipSkills();
+    this.leadershipSkillList$ = this.metaDataService.leadershipSkills;
+
   }
 
   save(): void {
