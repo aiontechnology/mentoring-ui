@@ -199,7 +199,7 @@ export class StudentDialogComponent {
       }),
       teacherInput: formBuilder.group({
         teacher: formBuilder.group({
-          uri: [{ value: '', disabled: true }, Validators.required],
+          uri: ['', Validators.required],
           comment: ['']
         }),
       }),
