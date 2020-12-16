@@ -28,6 +28,8 @@ import { StudentDialogComponent } from '../student-dialog/student-dialog.compone
 import { Contact } from '../../models/contact/contact';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { grades } from 'src/app/modules/shared/constants/grades';
+import { StudentMentorInbound } from '../../models/student-inbound/student-inbound';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ms-student-detail',
@@ -37,6 +39,8 @@ import { grades } from 'src/app/modules/shared/constants/grades';
 export class StudentDetailComponent implements OnDestroy {
 
   student: StudentInbound;
+  studentMentor: StudentMentorInbound;
+
   studentId: string;
   schoolId: string;
 
@@ -46,6 +50,8 @@ export class StudentDetailComponent implements OnDestroy {
   parents: Contact[];
   emergencyContact: Contact;
 
+  studentSubscriptions$ = new Subscription();
+
   constructor(route: ActivatedRoute,
               private dialog: MatDialog,
               private menuState: MenuStateService,
@@ -53,13 +59,13 @@ export class StudentDetailComponent implements OnDestroy {
               private snackBar: MatSnackBar,
               private router: Router) {
 
-    route.paramMap.subscribe(params => {
+    let subscription1$ = route.paramMap.subscribe(params => {
       this.studentId = params.get('studentId');
       this.schoolId = params.get('schoolId');
     });
 
     this.studentService.readAllStudents(this.schoolId);
-    this.studentService.students.subscribe(s => {
+    let subscription2$ = this.studentService.students.subscribe(s => {
 
       this.menuState.removeGroup('student');
 
@@ -67,15 +73,20 @@ export class StudentDetailComponent implements OnDestroy {
       this.parents = this.student?.contacts.filter(contact => !contact.isEmergencyContact);
       this.emergencyContact = this.student?.contacts.find(contact => contact.isEmergencyContact);
       this.studentGrade = grades.find(grade => grade.value == this.student.grade).valueView;
+      this.studentMentor = this.student?.mentor;
 
       console.log('Adding student detail menus');
       StudentDetailMenuManager.addMenus(this.student, this.menuState, this.router, this.dialog, this.snackBar, this.studentService, this.schoolId);
 
     });
 
+    this.studentSubscriptions$.add(subscription1$);
+    this.studentSubscriptions$.add(subscription2$);
+
   }
 
   ngOnDestroy(): void {
+    this.studentSubscriptions$.unsubscribe();
     this.menuState.clear();
   }
 
