@@ -25,9 +25,9 @@ export abstract class Student implements LinksHolder<Student> {
   lastName: string;
   grade: string;
   preferredTime: string;
+  startDate: string;
   location: string;
   mediaReleaseSigned: boolean;
-  allergyInfo: string;
   behaviors: string[];
   interests: string[];
   leadershipSkills: string[];
@@ -40,6 +40,7 @@ export abstract class Student implements LinksHolder<Student> {
   };
 
   abstract teacher: any;
+  abstract mentor: any;
 
   constructor(json?: any) {
     this.id = json?.id;
@@ -47,15 +48,16 @@ export abstract class Student implements LinksHolder<Student> {
     this.lastName = json?.lastName;
     this.grade = json?.grade;
     this.preferredTime = json?.preferredTime;
+    this.startDate = json?.startDate;
     this.location = json?.location;
     this.mediaReleaseSigned = json?.mediaReleaseSigned;
-    this.allergyInfo = json?.allergyInfo;
     this.behaviors = json?.behaviors;
     this.interests = json?.interests;
     this.leadershipSkills = json?.leadershipSkills;
     this.leadershipTraits = json?.leadershipTraits;
 
     this.contacts = [];
+
     json?.contacts.forEach(contact => {
       this.contacts.push(new Contact(contact));
     });
