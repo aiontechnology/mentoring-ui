@@ -27,6 +27,7 @@ import { StudentListComponent } from './components/student-list/student-list.com
 import { StudentFrameComponent } from './components/student-frame/student-frame.component';
 import { StudentDialogComponent } from './components/student-dialog/student-dialog.component';
 import { StudentCacheService } from './services/student/student-cache.service';
+import { LpgRepositoryService } from './services/lpg/lpg-repository.service';
 import { StudentRepositoryService } from './services/student/student-repository.service';
 import { TeacherRepositoryService } from 'src/app/modules/school-manager/services/teacher/teacher-repository.service';
 import { TeacherGradeFilterPipe } from '../shared/pipes/teacher-grade-filter.pipe';
@@ -68,6 +69,7 @@ const routes: Routes = [
   providers: [
     StudentCacheService,
     StudentRepositoryService,
+    LpgRepositoryService,
     TeacherRepositoryService,
     MetaDataService,
     MentorRepositoryService
