@@ -30,6 +30,7 @@ import { Grade } from 'src/app/modules/shared/types/grade';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { StudentMentorInbound } from '../../models/student-inbound/student-inbound';
 import { Subscription } from 'rxjs';
+import { LpgRepositoryService } from '../../services/lpg/lpg-repository.service';
 
 @Component({
   selector: 'ms-student-detail',
@@ -47,6 +48,7 @@ export class StudentDetailComponent implements OnDestroy {
   grades: Grade[] = grades;
   studentGrade: string;
 
+  contacts: Contact[];
   parents: Contact[];
   emergencyContact: Contact;
 
@@ -57,7 +59,8 @@ export class StudentDetailComponent implements OnDestroy {
               private menuState: MenuStateService,
               private studentService: StudentRepositoryService,
               private snackBar: MatSnackBar,
-              private router: Router) {
+              private router: Router,
+              private lpgService: LpgRepositoryService) {
 
     let subscription1$ = route.paramMap.subscribe(params => {
       this.studentId = params.get('studentId');
@@ -70,9 +73,10 @@ export class StudentDetailComponent implements OnDestroy {
       this.menuState.removeGroup('student');
 
       this.student = this.studentService.readOneStudent(this.studentId);
-      this.parents = this.student?.contacts.filter(contact => !contact.isEmergencyContact);
-      this.emergencyContact = this.student?.contacts.find(contact => contact.isEmergencyContact);
-      this.studentGrade = grades.find(grade => grade.value == this.student.grade).valueView;
+      this.contacts = this.student?.contacts ? this.student?.contacts : [];
+      this.parents = this.contacts.filter(contact => !contact.isEmergencyContact);
+      this.emergencyContact = this.contacts.find(contact => contact.isEmergencyContact);
+      this.studentGrade = grades.find(grade => grade.value == this.student?.grade)?.valueView;
       this.studentMentor = this.student?.mentor;
 
       console.log('Adding student detail menus');
@@ -88,6 +92,35 @@ export class StudentDetailComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.studentSubscriptions$.unsubscribe();
     this.menuState.clear();
+  }
+
+  getCurrentMonth(): void {
+    const date = new Date();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    this.createLp(month.toString(), year.toString());
+  }
+
+  getNextMonth(): void {
+    const date = new Date();
+    let month = date.getMonth() + 1;
+    let year = date.getFullYear();
+
+    if (month === 12) {
+      year++;
+      month = 1;
+    } else {
+      month++;
+    }
+
+    this.createLp(month.toString(), year.toString());
+  }
+
+  createLp(month: string, year: string): void {
+    this.lpgService.getLpg(this.schoolId, this.studentId, month, year).subscribe(pdf => {
+      const url = window.URL.createObjectURL(pdf);
+      window.open(url);
+    });
   }
 
 }

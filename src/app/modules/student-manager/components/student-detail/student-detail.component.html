@@ -97,77 +97,97 @@ limitations under the License.
         <mat-card-title>Contacts</mat-card-title>
       </mat-card-header>
       <mat-card-content class="mat-elevation-z8">
-        <div class="parent" *ngFor="let parent of parents; let i = index">
-          <h1>Parent / Guardian {{ i + 1 }}</h1>
-          <table>
-            <tr>
-              <td>First name</td>
-              <td>{{ parent?.firstName }}</td>
-            </tr>
-            <tr>
-              <td>Last name</td>
-              <td>{{ parent?.lastName }}</td>
-            </tr>
-            <tr>
-              <td>Work phone number</td>
-              <td>{{ parent?.workPhone ? parent.workPhone : '' }}</td>
-            </tr>
-            <tr>
-              <td>Cell phone number</td>
-              <td>{{ parent?.cellPhone ? parent.cellPhone : '' }}</td>
-            </tr>
-            <tr>
-              <td>Email address</td>
-              <td>{{ parent?.email ? parent.email : '' }}</td>
-            </tr>
-            <tr>
-              <td>Preferred contact method</td>
-              <td>{{ (parent?.preferredContactMethod ? parent.preferredContactMethod : '') | lowercase }}</td>
-            </tr>
-            <tr>
-              <td>Comments</td>
-              <td>{{ parent?.comment ? parent.comment : '' }}</td>
-            </tr>
-          </table>
+        <div class="contacts" *ngIf="contacts.length">
+          <div class="parent" *ngFor="let parent of parents; let i = index">
+            <h1>Parent / Guardian {{ i + 1 }}</h1>
+            <table>
+              <tr>
+                <td>First name</td>
+                <td>{{ parent?.firstName }}</td>
+              </tr>
+              <tr>
+                <td>Last name</td>
+                <td>{{ parent?.lastName }}</td>
+              </tr>
+              <tr>
+                <td>Work phone number</td>
+                <td>{{ parent?.workPhone ? parent.workPhone : '' }}</td>
+              </tr>
+              <tr>
+                <td>Cell phone number</td>
+                <td>{{ parent?.cellPhone ? parent.cellPhone : '' }}</td>
+              </tr>
+              <tr>
+                <td>Email address</td>
+                <td>{{ parent?.email ? parent.email : '' }}</td>
+              </tr>
+              <tr>
+                <td>Preferred contact method</td>
+                <td>{{ (parent?.preferredContactMethod ? parent.preferredContactMethod : '') | lowercase }}</td>
+              </tr>
+              <tr>
+                <td>Comments</td>
+                <td>{{ parent?.comment ? parent.comment : '' }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="emergency-contact">
+            <h1>Emergency Contact</h1>
+            <table>
+              <tr>
+                <td>First name</td>
+                <td>{{ emergencyContact?.firstName }}</td>
+              </tr>
+              <tr>
+                <td>Last name</td>
+                <td>{{ emergencyContact?.lastName }}</td>
+              </tr>
+              <tr>
+                <td>Relation</td>
+                <td>{{ emergencyContact?.type | lowercase }}</td>
+              </tr>
+              <tr>
+                <td>Work phone number</td>
+                <td>{{ emergencyContact?.workPhone ? emergencyContact.workPhone : '' }}</td>
+              </tr>
+              <tr>
+                <td>Cell phone number</td>
+                <td>{{ emergencyContact?.cellPhone ? emergencyContact.cellPhone : '' }}</td>
+              </tr>
+              <tr>
+                <td>Email address</td>
+                <td>{{ emergencyContact?.email ? emergencyContact.email : '' }}</td>
+              </tr>
+              <tr>
+                <td>Preferred contact method</td>
+                <td>{{ (emergencyContact?.preferredContactMethod ? emergencyContact.preferredContactMethod : '') | lowercase }}</td>
+              </tr>
+              <tr>
+                <td>Comments</td>
+                <td>{{ emergencyContact?.comment ? emergencyContact.comment : '' }}</td>
+              </tr>
+            </table>
+          </div>
         </div>
-        <div class="emergency-contact">
-          <h1>Emergency Contact</h1>
-          <table>
-            <tr>
-              <td>First name</td>
-              <td>{{ emergencyContact?.firstName }}</td>
-            </tr>
-            <tr>
-              <td>Last name</td>
-              <td>{{ emergencyContact?.lastName }}</td>
-            </tr>
-            <tr>
-              <td>Relation</td>
-              <td>{{ emergencyContact?.type | lowercase }}</td>
-            </tr>
-            <tr>
-              <td>Work phone number</td>
-              <td>{{ emergencyContact?.workPhone ? emergencyContact.workPhone : '' }}</td>
-            </tr>
-            <tr>
-              <td>Cell phone number</td>
-              <td>{{ emergencyContact?.cellPhone ? emergencyContact.cellPhone : '' }}</td>
-            </tr>
-            <tr>
-              <td>Email address</td>
-              <td>{{ emergencyContact?.email ? emergencyContact.email : '' }}</td>
-            </tr>
-            <tr>
-              <td>Preferred contact method</td>
-              <td>{{ (emergencyContact?.preferredContactMethod ? emergencyContact.preferredContactMethod : '') | lowercase }}</td>
-            </tr>
-            <tr>
-              <td>Comments</td>
-              <td>{{ emergencyContact?.comment ? emergencyContact.comment : '' }}</td>
-            </tr>
-          </table>
+        <div class="no-contacts" *ngIf="!contacts.length">
+          <h1>No contacts provided</h1>
         </div>
       </mat-card-content>
     </mat-card>
+  </mat-tab>
+  <mat-tab label="LPG">
+    <div class="lpg-container">
+      <div class="lpg-title">
+        <h1>Learning Pathway Generator</h1>
+      </div>
+      <div class="lpg-buttons">
+        <button mat-raised-button color="primary" (click)="getCurrentMonth()">
+          Generate current month
+        </button>
+        <button mat-raised-button color="primary" (click)="getNextMonth()">
+          Generate next month
+        </button>
+      </div>
+    </div>
   </mat-tab>
 </mat-tab-group>
