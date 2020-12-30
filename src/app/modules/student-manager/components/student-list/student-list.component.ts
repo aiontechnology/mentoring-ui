@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { School } from 'src/app/modules/shared/models/school/school';
 import { StudentCacheService } from '../../services/student/student-cache.service';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
@@ -28,13 +28,18 @@ import { ConfimationDialogComponent } from 'src/app/modules/shared/components/co
 import { StudentDialogComponent } from '../student-dialog/student-dialog.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Contact } from '../../models/contact/contact';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'ms-student-list',
   templateUrl: './student-list.component.html',
   styleUrls: ['./student-list.component.scss']
 })
-export class StudentListComponent implements OnDestroy {
+export class StudentListComponent implements AfterViewInit, OnDestroy {
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   school: School;
 
@@ -44,15 +49,12 @@ export class StudentListComponent implements OnDestroy {
     this.school = school;
 
     if (school != null) {
-
-      this.studentCacheService.clearSelection();
       this.menuState.clear();
-
+      this.studentCacheService.clearSelection();
       this.studentCacheService.establishDatasource(school.id);
 
       console.log('Adding student list menus');
       StudentListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.studentCacheService, school?.id);
-
     }
 
   }
@@ -63,6 +65,11 @@ export class StudentListComponent implements OnDestroy {
               private router: Router,
               private snackBar: MatSnackBar,
               public studentCacheService: StudentCacheService) {
+  }
+
+  ngAfterViewInit(): void {
+    this.studentCacheService.sort = this.sort;
+    this.studentCacheService.paginator = this.paginator;
   }
 
   ngOnDestroy(): void {

@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Mentor } from '../../models/mentor/mentor';
 import { School } from 'src/app/modules/shared/models/school/school';
 import { MentorCacheService } from '../../services/mentor/mentor-cache.service';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
@@ -27,13 +28,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'ms-mentor-list',
   templateUrl: './mentor-list.component.html',
   styleUrls: ['./mentor-list.component.scss']
 })
-export class MentorListComponent implements OnDestroy {
+export class MentorListComponent implements AfterViewInit, OnDestroy {
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   school: School;
 
@@ -43,15 +49,12 @@ export class MentorListComponent implements OnDestroy {
     this.school = school;
 
     if (school != null) {
-
-      this.mentorCacheService.clearSelection();
       this.menuState.clear();
-
+      this.mentorCacheService.clearSelection();
       this.mentorCacheService.establishDatasource(school.id);
 
       console.log('Adding mentor list menus');
       MentorListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.mentorCacheService, school?.id);
-
     }
 
   }
@@ -62,6 +65,11 @@ export class MentorListComponent implements OnDestroy {
               private router: Router,
               private snackBar: MatSnackBar,
               public mentorCacheService: MentorCacheService) {
+  }
+
+  ngAfterViewInit(): void {
+    this.mentorCacheService.sort = this.sort;
+    this.mentorCacheService.paginator = this.paginator;
   }
 
   ngOnDestroy(): void {
@@ -85,7 +93,7 @@ class MentorListMenuManager {
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   mentorCacheService: MentorCacheService,
-                  schoolId: string) { 
+                  schoolId: string) {
     console.log('Constructing MenuHandler');
     menuState.add(new NewDialogCommand(
       'Create New Mentor',

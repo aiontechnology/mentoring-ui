@@ -15,7 +15,7 @@
  */
 
 import { SelectionManager } from '../../school-manager/services/selection-manager';
-import { MatTableDataSource } from '@angular/material/table';
+import { TableDataSource } from './table-data-source';
 import { Observable } from 'rxjs';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -23,10 +23,7 @@ import { MatSort } from '@angular/material/sort';
 export abstract class DatasourceManager<T> extends SelectionManager<T> {
 
     /** Datasource that is used by the table in the main-content component */
-    dataSource: MatTableDataSource<T>;
-
-    /** An observable that provides changes to the set of Schools */
-    protected elements: Observable<T[]>;
+    dataSource: TableDataSource<T>;
 
     /** Binds to the filter input control. Used to clear the control when requested. */
     filterBinding: string;
@@ -39,7 +36,7 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
 
     constructor() {
         super();
-        this.dataSource = new MatTableDataSource<T>([]);
+        this.dataSource = new TableDataSource<T>();
         this.pageSize = 10;
         this.currentPage = 0;
     }
@@ -100,7 +97,7 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
     }
 
     protected get observableData(): Observable<T[]> {
-        return this.elements;
+        return this.dataSource.data$;
     }
 
 }

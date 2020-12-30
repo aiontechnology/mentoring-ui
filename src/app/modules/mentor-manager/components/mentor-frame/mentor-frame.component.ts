@@ -19,6 +19,8 @@ import { School } from 'src/app/modules/shared/models/school/school';
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
 import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/school-repository.service';
 import { log } from 'src/app/shared/logging-decorator';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'ms-mentor-frame',
@@ -27,7 +29,7 @@ import { log } from 'src/app/shared/logging-decorator';
 })
 export class MentorFrameComponent implements OnInit {
 
-  schools: School[];
+  schools$: Observable<School[]>;
   selected: School;
 
   constructor(private logger: LoggingService,
@@ -38,10 +40,9 @@ export class MentorFrameComponent implements OnInit {
   @log
   ngOnInit(): void {
     this.schoolRepository.readAllSchools();
-    this.schoolRepository.schools.subscribe(schools => {
-      this.logger.log('Read schools', schools);
-      this.schools = schools;
-    });
+    this.schools$ = this.schoolRepository.schools.pipe(
+      tap(s => this.logger.log('Read schools', s))
+    );
   }
 
   @log

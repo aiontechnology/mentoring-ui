@@ -18,6 +18,7 @@ import { Injectable } from '@angular/core';
 import { ProgramAdmin } from '../../models/program-admin/program-admin';
 import { DatasourceManager } from '../../../shared/services/datasource-manager';
 import { ProgramAdminRepositoryService } from './program-admin-repository.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class ProgramAdminCacheService extends DatasourceManager<ProgramAdmin> {
@@ -31,11 +32,10 @@ export class ProgramAdminCacheService extends DatasourceManager<ProgramAdmin> {
   }
 
   establishDatasource(schoolId: string): void {
-    this.elements = this.programAdminService.items;
     this.programAdminService.readAllProgramAdmins(schoolId);
-    this.elements.subscribe(t => {
-      this.dataSource.data = t;
-    });
+    this.dataSource.data$ = this.programAdminService.items.pipe(
+      tap(() => console.log('Creating new programAdmin datasource'))
+    );
   }
 
   protected doRemoveItem(items: ProgramAdmin[]): void {

@@ -67,7 +67,7 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Activity Focuses</mat-label>
         <mat-select formControlName="activityFocuses" multiple>
-          <mat-option *ngFor="let activityFocus of activityFocusList" [value]="activityFocus">{{activityFocus}}</mat-option>
+          <mat-option *ngFor="let activityFocus of (activityFocusList$ | async)" [value]="activityFocus">{{activityFocus}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -76,7 +76,7 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Leadership Success Skills</mat-label>
         <mat-select formControlName="leadershipSkills" multiple>
-          <mat-option *ngFor="let leadershipSkill of leadershipSkillList" [value]="leadershipSkill">{{leadershipSkill}}</mat-option>
+          <mat-option *ngFor="let leadershipSkill of (leadershipSkillList$ | async)" [value]="leadershipSkill">{{leadershipSkill}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
