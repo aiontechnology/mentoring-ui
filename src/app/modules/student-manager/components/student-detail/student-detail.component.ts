@@ -54,7 +54,7 @@ export class StudentDetailComponent implements OnDestroy {
 
   studentSubscriptions$ = new Subscription();
 
-  constructor(route: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private studentService: StudentRepositoryService,
@@ -62,7 +62,7 @@ export class StudentDetailComponent implements OnDestroy {
               private router: Router,
               private lpgService: LpgRepositoryService) {
 
-    let subscription1$ = route.paramMap.subscribe(params => {
+    let subscription1$ = this.route.paramMap.subscribe(params => {
       this.studentId = params.get('studentId');
       this.schoolId = params.get('schoolId');
     });

@@ -19,12 +19,10 @@ import { DatasourceManager } from 'src/app/modules/shared/services/datasource-ma
 import { log } from 'src/app/shared/logging-decorator';
 import { Mentor } from '../../models/mentor/mentor';
 import { MentorRepositoryService } from './mentor-repository.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class MentorCacheService extends DatasourceManager<Mentor>  {
-
-  /** Binds to the filter input control. Used to clear the control when requested. */
-  filterBinding: string;
+export class MentorCacheService extends DatasourceManager<Mentor> {
 
   constructor(private mentorService: MentorRepositoryService) {
     super();
@@ -32,18 +30,10 @@ export class MentorCacheService extends DatasourceManager<Mentor>  {
 
   @log
   establishDatasource(schoolId: string): void {
-    this.elements = this.mentorService.items;
     this.mentorService.readAllMentors(schoolId);
-    this.elements.subscribe(t => {
-      this.dataSource.data = t;
-    });
-  }
-
-  /**
-   * Get the value of the data source filter.
-   */
-  get filter() {
-    return this.dataSource.filter;
+    this.dataSource.data$ = this.mentorService.items.pipe(
+      tap(() => console.log('Creating new mentor datasource'))
+    );
   }
 
   protected doRemoveItem(items: Mentor[]): void {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Book } from '../../models/book/book';
@@ -24,24 +24,25 @@ import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades'
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'ms-book-dialog',
   templateUrl: './book-dialog.component.html',
   styleUrls: ['./book-dialog.component.scss']
 })
-export class BookDialogComponent {
+export class BookDialogComponent implements OnInit {
 
   model: FormGroup;
   isUpdate = false;
 
   grades: Grade[] = resourceGrades;
   locations: string[] = ['Offline', 'Online', 'Both'];
-  interestList: string[];
-  leadershipTraitList: string[];
-  leadershipSkillList: string[];
-  phonogramList: string[];
-  behaviorList: string[];
+  interestList$: Observable<string[]>;
+  leadershipTraitList$: Observable<string[]>;
+  leadershipSkillList$: Observable<string[]>;
+  phonogramList$: Observable<string[]>;
+  behaviorList$: Observable<string[]>;
 
   private caller = new CallerWithErrorHandling<Book, BookDialogComponent>();
 
@@ -52,32 +53,26 @@ export class BookDialogComponent {
               private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
-    this.model = this.createModel(formBuilder, data?.model);
+    this.model = this.createModel(this.formBuilder, this.data?.model);
+  }
 
-    metaDataService.loadInterests();
-    metaDataService.interests.subscribe(interests => {
-      this.interestList = interests;
-    });
+  ngOnInit(): void {
 
-    metaDataService.loadLeadershipTraits();
-    metaDataService.leadershipTraits.subscribe(leadershipTraits => {
-      this.leadershipTraitList = leadershipTraits;
-    });
+    this.metaDataService.loadInterests();
+    this.interestList$ = this.metaDataService.interests;
 
-    metaDataService.loadLeadershipSkills();
-    metaDataService.leadershipSkills.subscribe(leadershipSkills => {
-      this.leadershipSkillList = leadershipSkills;
-    });
+    this.metaDataService.loadLeadershipTraits();
+    this.leadershipTraitList$ = this.metaDataService.leadershipTraits;
 
-    metaDataService.loadPhonograms();
-    metaDataService.phonograms.subscribe(phonograms => {
-      this.phonogramList = phonograms;
-    });
+    this.metaDataService.loadLeadershipSkills();
+    this.leadershipSkillList$ = this.metaDataService.leadershipSkills;
 
-    metaDataService.loadBehaviors();
-    metaDataService.behaviors.subscribe(behaviors => {
-      this.behaviorList = behaviors;
-    });
+    this.metaDataService.loadPhonograms();
+    this.phonogramList$ = this.metaDataService.phonograms;
+
+    this.metaDataService.loadBehaviors();
+    this.behaviorList$ = this.metaDataService.behaviors;
+
   }
 
   save(): void {
