@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from '../../shared/material.module';
 import { SchoolListComponent } from './components/school-list/school-list.component';
-import { HttpClientModule } from '@angular/common/http';
 import { SchoolDialogComponent } from './components/school-dialog/school-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchoolDetailComponent } from './components/school-detail/school-detail.component';
@@ -67,7 +66,6 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule,
     LayoutModule,
     MaterialModule,
     ReactiveFormsModule,
