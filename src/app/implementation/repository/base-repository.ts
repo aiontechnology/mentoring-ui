@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,8 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
     items: T[];
   };
 
-  constructor(protected path: string, private http: HttpClient) {
+  constructor(protected path: string,
+              private http: HttpClient) {
     this.dataStore = { items: [] };
     this._items = new BehaviorSubject<T[]>([]);
   }
@@ -48,11 +49,6 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
           this.dataStore.items.push(i);
           this.publishItems();
           resolver(i);
-        }, error => {
-          console.error('Failed to create new item', error);
-          reject({
-            message: error?.error?.message
-          });
         });
     });
   }
@@ -103,11 +99,6 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
           }
           this.publishItems();
           resolver(i);
-        }, error => {
-          console.error('Failed to update item', error);
-          reject({
-            message: error?.error?.message
-          });
         });
     });
   }
@@ -116,7 +107,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   protected delete(items: T[]): void {
     items.forEach(item => {
       console.log('Deleting', item);
-      this.http.delete(item.getSelfLink(), {})
+      this.http.delete(item.getSelfLink())
         .subscribe(data => {
           const index: number = this.dataStore.items.indexOf(item);
           if (index !== -1) {

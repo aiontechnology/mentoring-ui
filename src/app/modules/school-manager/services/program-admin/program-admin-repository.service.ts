@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,6 @@ export class ProgramAdminRepositoryService extends BaseRepository<ProgramAdmin> 
 
   createProgramAdmin(schoolId: string, programAdmin: ProgramAdmin  ): Promise<ProgramAdmin> {
     return super.create(this.buildUri(schoolId), programAdmin);
-  }
-
-  curriedCreateProgramAdmin(schoolId: string): (programAdmin: ProgramAdmin) => Promise<ProgramAdmin> {
-    return (p: ProgramAdmin) => this.createProgramAdmin(schoolId, p);
   }
 
   readAllProgramAdmins(schoolId: string): void {
