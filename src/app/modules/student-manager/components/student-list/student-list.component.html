@@ -76,6 +76,11 @@ limitations under the License.
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Contacts</th>
           <td mat-cell *matCellDef="let student">
             <ul>
+              <div *ngIf="!student.contacts.length">
+                <li>
+                  N/A
+                </li>
+              </div>
               <div *ngFor="let contact of student.contacts">
                 <li> 
                   {{ displayContact(contact) }}

@@ -57,7 +57,6 @@ export abstract class Student implements LinksHolder<Student> {
     this.leadershipTraits = json?.leadershipTraits;
 
     this.contacts = [];
-
     json?.contacts.forEach(contact => {
       this.contacts.push(new Contact(contact));
     });

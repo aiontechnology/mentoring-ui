@@ -18,6 +18,7 @@ import { Injectable } from '@angular/core';
 import { BookRepositoryService } from './book-repository.service';
 import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
 import { Book } from '../../models/book/book';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class BookCacheService extends DatasourceManager<Book> {
@@ -27,12 +28,10 @@ export class BookCacheService extends DatasourceManager<Book> {
   }
 
   establishDatasource(): void {
-    this.elements = this.bookService.items;
     this.bookService.readAllBooks();
-    this.elements.subscribe(b => {
-      console.log('Creating new book datasource');
-      this.dataSource.data = b;
-    });
+    this.dataSource.data$ = this.bookService.items.pipe(
+      tap(() => console.log('Creating new book datasource'))
+    );
   }
 
   protected doRemoveItem(items: Book[]): void {
