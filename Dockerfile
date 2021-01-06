@@ -14,11 +14,12 @@
 # limitations under the License.
 
 # stage 1
-FROM node:latest as build-stage
+FROM node:15.5.0-alpine3.12 as build-stage
 
 ARG TOKEN_REDIRECT
 ARG LOGOUT_TOKEN_REDIRECT
 ARG API_URL
+ARG LPG_URL
 ARG COGNITO_CLIENT_ID
 ARG COGNITO_BASE_URL
 
@@ -27,7 +28,7 @@ COPY package.json .
 RUN npm install
 COPY . .
 COPY docker/run.sh .
-RUN npm install -g @angular/cli@9.1.12
+RUN npm install -g @angular/cli@10.2.1
 RUN sh run.sh
 
 # stage 2

@@ -18,6 +18,7 @@ import { Injectable } from '@angular/core';
 import { Personnel } from '../../models/personnel/personnel';
 import { DatasourceManager } from '../../../shared/services/datasource-manager';
 import { PersonnelRepositoryService } from './personnel-repository.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class PersonnelCacheService extends DatasourceManager<Personnel>  {
@@ -31,11 +32,10 @@ export class PersonnelCacheService extends DatasourceManager<Personnel>  {
   }
 
   establishDatasource(schoolId: string): void {
-    this.elements = this.personnelService.items;
     this.personnelService.readAllPersonnel(schoolId);
-    this.elements.subscribe(p => {
-      this.dataSource.data = p;
-    });
+    this.dataSource.data$ = this.personnelService.items.pipe(
+      tap(() => console.log('Creating new mentor datasource'))
+    );
   }
 
   protected doRemoveItem(items: Personnel[]): void {

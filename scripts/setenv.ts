@@ -16,6 +16,7 @@ export const environment = {
    tokenRedirect: "${process.env.TOKEN_REDIRECT}",
    logoutRedirect: "${process.env.LOGOUT_TOKEN_REDIRECT}",
    apiUri: "${process.env.API_URL}",
+   lpgUri: "${process.env.LPG_URL}",
    cognitoClientId: "${process.env.COGNITO_CLIENT_ID}",
    cognitoBaseUrl: "${process.env.COGNITO_BASE_URL}"
 };

@@ -18,6 +18,7 @@ import { Injectable } from '@angular/core';
 import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
 import { Game } from '../../models/game/game';
 import { GameRepositoryService } from './game-repository.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class GameCacheService extends DatasourceManager<Game> {
@@ -27,12 +28,10 @@ export class GameCacheService extends DatasourceManager<Game> {
   }
 
   establishDatasource(): void {
-    this.elements = this.gameService.items;
     this.gameService.readAllGames();
-    this.elements.subscribe(g => {
-      console.log('Creating new game datasource');
-      this.dataSource.data = g;
-    });
+    this.dataSource.data$ = this.gameService.items.pipe(
+      tap(() => console.log('Creating new game datasource'))
+    );
   }
 
   protected doRemoveItem(items: Game[]): void {

@@ -18,6 +18,7 @@ import { Injectable } from '@angular/core';
 import { Teacher } from '../../models/teacher/teacher';
 import { DatasourceManager } from '../../../shared/services/datasource-manager';
 import { TeacherRepositoryService } from './teacher-repository.service';
+import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class TeacherCacheService extends DatasourceManager<Teacher>  {
@@ -31,11 +32,10 @@ export class TeacherCacheService extends DatasourceManager<Teacher>  {
   }
 
   establishDatasource(schoolId: string): void {
-    this.elements = this.teacherService.items;
     this.teacherService.readAllTeachers(schoolId);
-    this.elements.subscribe(t => {
-      this.dataSource.data = t;
-    });
+    this.dataSource.data$ = this.teacherService.items.pipe(
+      tap(() => console.log('Creating new teacher datasource'))
+    );
   }
 
   protected doRemoveItem(items: Teacher[]): void {
