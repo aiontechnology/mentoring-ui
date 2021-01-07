@@ -99,9 +99,9 @@ export class MentorDialogComponent {
         workPhone: mentor?.workPhone,
         cellPhone: mentor?.cellPhone,
         availability: mentor?.availability,
-        mediaReleaseSigned: false, //mentor?.mediaReleaseSigned,
+        mediaReleaseSigned: mentor?.mediaReleaseSigned,
         backgroundCheckCompleted: mentor?.backgroundCheckCompleted,
-        location: 'OFFLINE' //mentor?.location?.toString()
+        location: mentor?.location?.toString()
       });
     }
 
