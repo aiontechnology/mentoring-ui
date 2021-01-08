@@ -20,7 +20,6 @@ pipelines:
         '{MS-*,feature/*,bugfix/*}':
             - step:
                 name: Build, test and deploy test environment
-                deployment: Test
                 size: 2x
                 services:
                     - docker
@@ -60,8 +59,10 @@ pipelines:
                     - echo COGNITO_BASE_URL=$COGNITO_BASE_URL
                     - docker build --build-arg TOKEN_REDIRECT=$TOKEN_REDIRECT --build-arg LOGOUT_TOKEN_REDIRECT=$LOGOUT_TOKEN_REDIRECT --build-arg API_URL=$API_URL --build-arg LPG_URL=$LPG_URL --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID --build-arg COGNITO_BASE_URL=$COGNITO_BASE_URL -t ui:$TAG .
                     - docker tag ui:$TAG $IMAGE:latest
+                    - docker tag ui:$TAG $IMAGE:test
                     - docker tag ui:$TAG $IMAGE:$TAG
                     - docker push $IMAGE:latest
+                    - docker push $IMAGE:test
                     - docker push $IMAGE:$TAG
         master:
             - step:
@@ -82,8 +83,10 @@ pipelines:
                     - echo COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID
                     - echo COGNITO_BASE_URL=$COGNITO_BASE_URL
                     - docker build --build-arg TOKEN_REDIRECT=$TOKEN_REDIRECT --build-arg LOGOUT_TOKEN_REDIRECT=$LOGOUT_TOKEN_REDIRECT --build-arg API_URL=$API_URL --build-arg LPG_URL=$LPG_URL --build-arg COGNITO_CLIENT_ID=$COGNITO_CLIENT_ID --build-arg COGNITO_BASE_URL=$COGNITO_BASE_URL -t ui:$TAG .
+                    - docker tag ui:$TAG $IMAGE:latest
                     - docker tag ui:$TAG $IMAGE:prod
                     - docker tag ui:$TAG $IMAGE:$TAG
+                    - docker push $IMAGE:latest
                     - docker push $IMAGE:prod
                     - docker push $IMAGE:$TAG
 definitions:
