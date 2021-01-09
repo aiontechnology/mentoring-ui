@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,6 @@ export class PersonnelRepositoryService extends BaseRepository<Personnel> {
 
   createPersonnel(schoolId: string, personnel: Personnel): Promise<Personnel> {
     return super.create(this.buildUri(schoolId), personnel);
-  }
-
-  curriedCreatePersonnel(schoolId: string): (personnel: Personnel) => Promise<Personnel> {
-    return (p: Personnel) => this.createPersonnel(schoolId, p);
   }
 
   readAllPersonnel(schoolId: string): void {
