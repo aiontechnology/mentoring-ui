@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,10 +36,6 @@ export class StudentRepositoryService extends BaseRepository<Student> {
 
   createStudent(schoolId: string, student: StudentOutbound): Promise<StudentInbound> {
     return super.create(this.buildUri(schoolId), student);
-  }
-  
-  curriedCreateStudent(schoolId: string): (student: StudentOutbound) => Promise<StudentInbound> {
-    return (s: StudentOutbound) => this.createStudent(schoolId, s);
   }
 
   @log

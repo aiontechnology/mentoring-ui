@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MaterialModule } from 'src/app/shared/material.module';
 import { SharedModule } from '../shared/shared.module';
@@ -59,7 +58,6 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule,
     LayoutModule,
     MaterialModule,
     ReactiveFormsModule,

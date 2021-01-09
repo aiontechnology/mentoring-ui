@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,10 +33,6 @@ export class TeacherRepositoryService extends BaseRepository<Teacher> {
 
   createTeacher(schoolId: string, teacher: Teacher): Promise<Teacher> {
     return super.create(this.buildUri(schoolId), teacher);
-  }
-
-  curriedCreateTeacher(schoolId: string): (teacher: Teacher) => Promise<Teacher> {
-    return (t: Teacher) => this.createTeacher(schoolId, t);
   }
 
   readAllTeachers(schoolId: string): void {

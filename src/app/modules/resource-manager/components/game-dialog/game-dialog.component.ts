@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import { GameRepositoryService } from '../../services/resources/game-repository.
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { Game } from '../../models/game/game';
 import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -41,8 +39,6 @@ export class GameDialogComponent implements OnInit {
   activityFocusList$: Observable<string[]>;
   leadershipSkillList$: Observable<string[]>;
 
-  private caller = new CallerWithErrorHandling<Game, GameDialogComponent>();
-
   gradeRangeValidator = (control: AbstractControl): {[key: string]: boolean} => {
     const grade1 = control.get('grade1');
     const grade2 = control.get('grade2');
@@ -56,7 +52,6 @@ export class GameDialogComponent implements OnInit {
               private gameService: GameRepositoryService,
               private metaDataService: MetaDataService,
               private formBuilder: FormBuilder,
-              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -73,16 +68,22 @@ export class GameDialogComponent implements OnInit {
   }
 
   save(): void {
+
     const newGame = new Game(this.model.value);
-    let func: (item: Game) => Promise<Game>;
+    let value: Promise<Game>;
+
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newGame._links = this.model.value.game._links;
-      func = this.gameService.updateGame;
+      value = this.gameService.updateGame(newGame);
     } else {
-      func = this.gameService.createGame;
+      value = this.gameService.createGame(newGame);
     }
-    this.caller.callWithErrorHandling(this.gameService, func, newGame, this.dialogRef, this.snackBar);
+
+    value.then((g: Game) => {
+      this.dialogRef.close(g);
+    });
+
   }
 
   dismiss(): void {
