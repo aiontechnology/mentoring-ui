@@ -37,10 +37,11 @@ export class HttpErrorInterceptorService {
       catchError((error: HttpErrorResponse) => {
 
         let errorMsg: string;
+        const serverMsg = error?.error?.error?.name;
 
-        if (error.error instanceof ErrorEvent) {
-          errorMsg = error.error.message;
-          console.error('client-side error:', errorMsg);
+        if (serverMsg) {
+          errorMsg = serverMsg;
+          console.error('server-side error:', errorMsg);
         } else {
           switch (error.status) {
             case 401:
