@@ -84,7 +84,7 @@ export class MentorDialogComponent {
       email: [null, [Validators.email, Validators.maxLength(50)]],
       workPhone: null,
       cellPhone: null,
-      availability: [''],
+      availability: ['',  Validators.maxLength(100)],
       mediaReleaseSigned: false,
       location: ['OFFLINE', Validators.required]
     });

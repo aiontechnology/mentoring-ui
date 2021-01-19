@@ -174,7 +174,7 @@ export class StudentDialogComponent {
         grade: ['', Validators.required],
         mediaReleaseSigned: false,
         startDate: [''],
-        preferredTime: [''],
+        preferredTime: ['', Validators.maxLength(30)],
         mentor: formBuilder.group({
           uri: [''],
           time: ['', Validators.maxLength(30)]
