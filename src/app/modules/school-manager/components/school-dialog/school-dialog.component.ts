@@ -144,7 +144,7 @@ export class SchoolDialogComponent {
   private createModel(formBuilder: FormBuilder, school: School): FormGroup {
     const formGroup: FormGroup = formBuilder.group({
       school,
-      name: ['', [Validators.required, Validators.maxLength(50)]],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
       address: formBuilder.group({
         street1: [null, Validators.maxLength(50)],
         street2: [null, Validators.maxLength(50)],

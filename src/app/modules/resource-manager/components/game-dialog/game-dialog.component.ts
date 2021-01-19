@@ -93,7 +93,7 @@ export class GameDialogComponent implements OnInit {
   private createModel(formBuilder: FormBuilder, game: Game): FormGroup {
     const formGroup: FormGroup = formBuilder.group({
       game,
-      name: ['', [Validators.required, Validators.maxLength(40)]],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
       gradeRange: formBuilder.group({
         grade1: ['', Validators.required],
         grade2: ['', Validators.required]
