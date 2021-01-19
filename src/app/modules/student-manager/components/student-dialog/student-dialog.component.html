@@ -80,6 +80,9 @@ limitations under the License.
         <div class="dialog-container">
           <mat-form-field>
             <input matInput placeholder="Preferred time" formControlName="preferredTime"/>
+            <mat-error *ngIf="studentDetails.hasError('maxlength', 'preferredTime')">
+              Preferred time can be a maximum of 30 characters in length
+            </mat-error>
           </mat-form-field>
         </div>
 
