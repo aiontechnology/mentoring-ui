@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 Aion Technology LLC
+Copyright 2020 - 2021 Aion Technology LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -69,6 +69,9 @@ limitations under the License.
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="Availability" formControlName="availability"/>
+        <mat-error *ngIf="model.hasError('maxlength', 'availability')">
+          Availability can be a maximum of 100 characters in length
+        </mat-error>
       </mat-form-field>
     </div>
 
