@@ -177,7 +177,7 @@ export class StudentDialogComponent {
         preferredTime: [''],
         mentor: formBuilder.group({
           uri: [''],
-          time: ['']
+          time: ['', Validators.maxLength(30)]
         }),
         interests: [],
         leadershipTraits: [],
