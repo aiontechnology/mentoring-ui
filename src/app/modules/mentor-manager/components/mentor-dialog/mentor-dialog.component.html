@@ -82,6 +82,12 @@ limitations under the License.
     </div>
 
     <div class="dialog-container">
+      <mat-checkbox formControlName="backgroundCheckCompleted" labelPosition="before">
+        Background check completed?
+      </mat-checkbox>
+    </div>
+
+    <div class="dialog-container">
       <mat-radio-group formControlName="location">
         <mat-radio-button *ngFor="let location of locations" [value]="location | uppercase">
           {{ location }}

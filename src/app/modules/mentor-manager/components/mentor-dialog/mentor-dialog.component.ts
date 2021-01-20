@@ -86,6 +86,7 @@ export class MentorDialogComponent {
       cellPhone: null,
       availability: ['',  Validators.maxLength(100)],
       mediaReleaseSigned: false,
+      backgroundCheckCompleted: false,
       location: ['OFFLINE', Validators.required]
     });
 
@@ -99,6 +100,7 @@ export class MentorDialogComponent {
         cellPhone: mentor?.cellPhone,
         availability: mentor?.availability,
         mediaReleaseSigned: false, //mentor?.mediaReleaseSigned,
+        backgroundCheckCompleted: mentor?.backgroundCheckCompleted,
         location: 'OFFLINE' //mentor?.location?.toString()
       });
     }

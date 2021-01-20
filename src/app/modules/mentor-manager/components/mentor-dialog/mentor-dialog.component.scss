@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,11 @@
 
 .mat-radio-button ~ .mat-radio-button {
   margin-left: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.mat-checkbox {
   margin-top: 10px;
   margin-bottom: 10px;
 }
