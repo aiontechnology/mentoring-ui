@@ -1,5 +1,5 @@
-/**
- * Copyright 2020 Aion Technology LLC
+ /**
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { InterestOutbound } from '../../models/meta-data/interests/interest-outbound';
 
 @Injectable()
 export class MetaDataService {
@@ -138,6 +139,19 @@ export class MetaDataService {
         this.logCache('behavior', this.dataStore.behaviors);
         this.publishBehaviors();
       });
+  }
+
+  updateInterests(newInterest: InterestOutbound): Promise<string[]> {
+    console.log('Updating interest', newInterest);
+    return new Promise((resolver, reject) => {
+      this.http.put<any>(this.interestsUri, newInterest)
+        .subscribe(data => {
+          console.log('Recieved interest list:', data);
+          this.dataStore.interests = data?._embedded?.stringList || [];
+          this.publishInterests();
+          resolver(data);
+        });
+    });
   }
 
   private logCache(type: string, values: string[]): void {
