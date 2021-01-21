@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +34,6 @@ export class MentorRepositoryService extends BaseRepository<Mentor> {
 
   createMentor(schoolId: string, mentor: Mentor): Promise<Mentor> {
     return super.create(this.buildUri(schoolId), mentor);
-  }
-  
-  curriedCreateMentor(schoolId: string): (mentor: Mentor) => Promise<Mentor> {
-    return (m: Mentor) => this.createMentor(schoolId, m);
   }
 
   @log

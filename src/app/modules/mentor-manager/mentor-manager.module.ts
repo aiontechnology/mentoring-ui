@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 import { MentorManagerComponent } from './mentor-manager.component';
 import { MentorListComponent } from './components/mentor-list/mentor-list.component';
 import { MentorFrameComponent } from './components/mentor-frame/mentor-frame.component';
@@ -48,7 +47,6 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
-    HttpClientModule,
     LayoutModule,
     MaterialModule,
     ReactiveFormsModule,

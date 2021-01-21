@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,11 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ValidatorFn, FormArray } from '@angular/forms';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { grades } from 'src/app/modules/shared/constants/grades';
-import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { Student } from '../../models/student/student';
 import { StudentInbound } from '../../models/student-inbound/student-inbound';
 import { StudentOutbound } from '../../models/student-outbound/student-outbound';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { StudentRepositoryService } from '../../services/student/student-repository.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { TeacherRepositoryService } from 'src/app/modules/school-manager/services/teacher/teacher-repository.service'
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
 import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
@@ -71,15 +69,12 @@ export class StudentDialogComponent {
   leadershipSkillList$: Observable<string[]>;
   behaviorList$: Observable<string[]>;
 
-  private caller = new CallerWithErrorHandling<Student, StudentDialogComponent>();
-
   constructor(private dialogRef: MatDialogRef<StudentDialogComponent>,
               private studentService: StudentRepositoryService,
               private teacherService: TeacherRepositoryService,
               private mentorService: MentorRepositoryService,
               private logger: LoggingService,
               private formBuilder: FormBuilder,
-              private snackBar: MatSnackBar,
               private metaDataService: MetaDataService,
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
@@ -131,17 +126,19 @@ export class StudentDialogComponent {
     this.clearMentorIfNotProvided(studentProperties);
 
     const newStudent = new StudentOutbound(studentProperties);
-    let func: (item: StudentOutbound) => Promise<StudentInbound>;
-    console.log('Saving student', newStudent);
+    let value: Promise<StudentInbound>;
 
+    console.log('Saving student', newStudent);
     if (this.isUpdate) {
       console.log('Updating', studentProperties);
-      func = this.studentService.updateStudent;
+      value = this.studentService.updateStudent(newStudent);
     } else {
-      func = this.studentService.curriedCreateStudent(this.schoolId);
+      value = this.studentService.createStudent(this.schoolId, newStudent);
     }
 
-    this.caller.callWithErrorHandling(this.studentService, func, newStudent, this.dialogRef, this.snackBar); 
+    value.then((s: Student) => {
+      this.dialogRef.close(s);
+    });
 
   }
 
@@ -177,10 +174,10 @@ export class StudentDialogComponent {
         grade: ['', Validators.required],
         mediaReleaseSigned: false,
         startDate: [''],
-        preferredTime: [''],
+        preferredTime: ['', Validators.maxLength(30)],
         mentor: formBuilder.group({
           uri: [''],
-          time: ['']
+          time: ['', Validators.maxLength(30)]
         }),
         interests: [],
         leadershipTraits: [],

@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { ProgramAdmin } from '../../models/program-admin/program-admin';
 import { ProgramAdminRepositoryService } from '../../services/program-admin/program-admin-repository.service';
 
@@ -34,12 +32,9 @@ export class ProgramAdminDialogComponent {
 
   schoolId: string;
 
-  private caller = new CallerWithErrorHandling<ProgramAdmin, ProgramAdminDialogComponent>();
-
   constructor(private dialogRef: MatDialogRef<ProgramAdminDialogComponent>,
               private programAdminService: ProgramAdminRepositoryService,
               private formBuilder: FormBuilder,
-              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -47,16 +42,22 @@ export class ProgramAdminDialogComponent {
   }
 
   save(): void {
+
     const newProgramAdmin = new ProgramAdmin(this.model.value);
-    let func: (item: ProgramAdmin) => Promise<ProgramAdmin>;
+    let value: Promise<ProgramAdmin>;
+
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newProgramAdmin._links = this.model.value.programAdmin._links;
-      func = this.programAdminService.updateProgramAdmin;
+      value = this.programAdminService.updateProgramAdmin(newProgramAdmin);
     } else {
-      func = this.programAdminService.curriedCreateProgramAdmin(this.schoolId);
+      value = this.programAdminService.createProgramAdmin(this.schoolId, newProgramAdmin);
     }
-    this.caller.callWithErrorHandling(this.programAdminService, func, newProgramAdmin, this.dialogRef, this.snackBar);
+
+    value.then((p: ProgramAdmin) => {
+      this.dialogRef.close(p);
+    });
+
   }
 
   dismiss(): void {

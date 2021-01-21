@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,9 @@ import { ReceiveTokenComponent } from './components/receive-token/receive-token.
 import { NoopComponent } from './components/noop/noop.component';
 import { HandleLogoutComponent } from './components/handle-logout/handle-logout.component';
 import { environment } from 'src/environments/environment';
+import { HttpErrorInterceptorService } from './services/http-error-interceptor.service';
+import { TokenInterceptorService } from './services/token-interceptor.service';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 const loginProvider = new InjectionToken('loginRedirectResolver');
 const logoutProvider = new InjectionToken('logoutRedirectResolver');
@@ -65,6 +68,7 @@ const routes: Routes = [
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
+    HttpClientModule,
     MaterialModule,
     RouterModule.forRoot(routes)
   ],
@@ -84,6 +88,16 @@ const routes: Routes = [
     {
       provide: 'TOKEN_REDIRECT',
       useValue: environment.tokenRedirect
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: TokenInterceptorService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptorService,
+      multi: true
     }
   ],
   bootstrap: [AppComponent]
