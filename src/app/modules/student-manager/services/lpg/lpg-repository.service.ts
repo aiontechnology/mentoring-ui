@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,13 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { log } from 'src/app/shared/logging-decorator';
 import { environment } from 'src/environments/environment';
-import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class LpgRepositoryService {
 
   private path: string;
 
-  constructor(private http: HttpClient,
-              private snackBar: MatSnackBar) {
+  constructor(private http: HttpClient) {
     this.path = '/api/v1/schools/{schoolId}/students/{studentId}/learningPathway?month={month}&year={year}';
   }
 
@@ -58,15 +56,8 @@ export class LpgRepositoryService {
     return this.http.get(url, options)
       .pipe(
         tap(
-        data => console.log('Learning pathway generated successfully'),
-        error => {
-          console.log('failed to get learning pathway', error);
-          this.snackBar.open(error?.message, '', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top'
-          });
-        })
+          data => console.log('Learning pathway generated successfully')
+        )
       );
 
   }

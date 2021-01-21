@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 Aion Technology LLC
+Copyright 2020 - 2021 Aion Technology LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -80,6 +80,9 @@ limitations under the License.
         <div class="dialog-container">
           <mat-form-field>
             <input matInput placeholder="Preferred time" formControlName="preferredTime"/>
+            <mat-error *ngIf="studentDetails.hasError('maxlength', 'preferredTime')">
+              Preferred time can be a maximum of 30 characters in length
+            </mat-error>
           </mat-form-field>
         </div>
 
@@ -100,6 +103,9 @@ limitations under the License.
           <div class="dialog-container">
             <mat-form-field>
               <input matInput placeholder="Meeting Time" formControlName="time"/>
+              <mat-error *ngIf="studentDetails.hasError('maxlength', ['mentor', 'time'])">
+                Meeting Time can be a maximum of 30 characters in length
+              </mat-error>
             </mat-form-field>
           </div>
         </div>

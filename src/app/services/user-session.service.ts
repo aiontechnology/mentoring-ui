@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,13 @@ export class UserSessionService {
     const helper = new JwtHelperService();
     const decoded = helper.decodeToken(token);
     return decoded.given_name;
+  }
+
+  get accessToken(): string {
+    if (!this.isLoggedIn()) {
+      return null;
+    }
+    return localStorage.getItem(UserSessionService.ACCESS_TOKEN).toString();
   }
 
   private addToStorage(key: string, value: any): void {

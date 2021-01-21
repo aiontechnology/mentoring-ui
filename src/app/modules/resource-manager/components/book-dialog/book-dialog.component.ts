@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,6 @@ import { BookRepositoryService } from '../../services/resources/book-repository.
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -44,13 +42,10 @@ export class BookDialogComponent implements OnInit {
   phonogramList$: Observable<string[]>;
   behaviorList$: Observable<string[]>;
 
-  private caller = new CallerWithErrorHandling<Book, BookDialogComponent>();
-
   constructor(private dialogRef: MatDialogRef<BookDialogComponent>,
               private bookService: BookRepositoryService,
               private metaDataService: MetaDataService,
               private formBuilder: FormBuilder,
-              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(this.formBuilder, this.data?.model);
@@ -76,17 +71,23 @@ export class BookDialogComponent implements OnInit {
   }
 
   save(): void {
+
     const newBook = new Book(this.model.value);
-    let func: (item: Book) => Promise<Book>;
+    let value: Promise<Book>;
+
     console.log('Saving book', newBook);
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newBook._links = this.model.value.book._links;
-      func = this.bookService.updateBook;
+      value = this.bookService.updateBook(newBook);
     } else {
-      func = this.bookService.createBook;
+      value = this.bookService.createBook(newBook);
     }
-    this.caller.callWithErrorHandling(this.bookService, func, newBook, this.dialogRef, this.snackBar);
+
+    value.then((b: Book) => {
+      this.dialogRef.close(b);
+    });
+
   }
 
   dismiss(): void {

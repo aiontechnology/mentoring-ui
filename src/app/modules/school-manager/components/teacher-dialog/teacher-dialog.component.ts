@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { Teacher } from '../../models/teacher/teacher';
@@ -38,12 +36,9 @@ export class TeacherDialogComponent {
 
   grades: Grade[] = grades;
 
-  private caller = new CallerWithErrorHandling<Teacher, TeacherDialogComponent>();
-
   constructor(private dialogRef: MatDialogRef<TeacherDialogComponent>,
               private teacherService: TeacherRepositoryService,
               private formBuilder: FormBuilder,
-              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -51,16 +46,22 @@ export class TeacherDialogComponent {
   }
 
   save(): void {
+
     const newTeacher = new Teacher(this.model.value);
-    let func: (item: Teacher) => Promise<Teacher>;
+    let value: Promise<Teacher>;
+
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newTeacher._links = this.model.value.teacher._links;
-      func = this.teacherService.updateTeacher;
+      value = this.teacherService.updateTeacher(newTeacher);
     } else {
-      func = this.teacherService.curriedCreateTeacher(this.schoolId);
+      value = this.teacherService.createTeacher(this.schoolId, newTeacher);
     }
-    this.caller.callWithErrorHandling(this.teacherService, func, newTeacher, this.dialogRef, this.snackBar);
+
+    value.then((t: Teacher) => {
+      this.dialogRef.close(t);
+    });
+
   }
 
   dismiss(): void {

@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,7 +119,7 @@ class StudentListMenuManager {
       'student',
       StudentDialogComponent,
       'Student added',
-      null,
+      ['/', 'studentmanager', 'schools', schoolId, 'students'],
       { schoolId },
       router,
       dialog,
@@ -130,7 +130,7 @@ class StudentListMenuManager {
       'student',
       StudentDialogComponent,
       'Student updated',
-      null,
+      ['/', 'studentmanager', 'schools', schoolId, 'students'],
       router,
       dialog,
       snackBar,

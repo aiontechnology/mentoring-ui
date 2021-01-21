@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,10 @@
 
 import { Component, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { Mentor } from '../../models/mentor/mentor';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MentorRepositoryService } from '../../services/mentor/mentor-repository.service';
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-
 
 @Component({
   selector: 'ms-mentor-dialog',
@@ -37,13 +34,10 @@ export class MentorDialogComponent {
   schoolId: string;
   locations: string[] = ['Offline', 'Online', 'Both'];
 
-  private caller = new CallerWithErrorHandling<Mentor, MentorDialogComponent>();
-
   constructor(private dialogRef: MatDialogRef<MentorDialogComponent>,
               private mentorService: MentorRepositoryService,
               private logger: LoggingService,
               private formBuilder: FormBuilder,
-              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
     this.isUpdate = this.determineUpdate(data);
@@ -53,17 +47,23 @@ export class MentorDialogComponent {
   }
 
   save(): void {
+
     const newMentor = new Mentor(this.model.value);
-    let func: (item: Mentor) => Promise<Mentor>;
+    let value: Promise<Mentor>;
+
     console.log('Saving mentor', newMentor);
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newMentor._links = this.model.value.mentor._links;
-      func = this.mentorService.updateMentor;
+      value = this.mentorService.updateMentor(newMentor);
     } else {
-      func = this.mentorService.curriedCreateMentor(this.schoolId);
+      value = this.mentorService.createMentor(this.schoolId, newMentor);
     }
-    this.caller.callWithErrorHandling(this.mentorService, func, newMentor, this.dialogRef, this.snackBar); 
+
+    value.then((m: Mentor) => {
+      this.dialogRef.close(m);
+    });
+
   }
 
   dismiss(): void {
@@ -84,8 +84,9 @@ export class MentorDialogComponent {
       email: [null, [Validators.email, Validators.maxLength(50)]],
       workPhone: null,
       cellPhone: null,
-      availability: [''],
+      availability: ['',  Validators.maxLength(100)],
       mediaReleaseSigned: false,
+      backgroundCheckCompleted: false,
       location: ['OFFLINE', Validators.required]
     });
 
@@ -99,6 +100,7 @@ export class MentorDialogComponent {
         cellPhone: mentor?.cellPhone,
         availability: mentor?.availability,
         mediaReleaseSigned: false, //mentor?.mediaReleaseSigned,
+        backgroundCheckCompleted: mentor?.backgroundCheckCompleted,
         location: 'OFFLINE' //mentor?.location?.toString()
       });
     }

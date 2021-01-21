@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { CallerWithErrorHandling } from 'src/app/implementation/util/caller-with-error-handling';
 import { School } from 'src/app/modules/shared/models/school/school';
 import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/school-repository.service';
 
@@ -94,8 +92,6 @@ export class SchoolDialogComponent {
     { name: 'Wyoming', abbreviation: 'WY' }
   ];
 
-  private caller = new CallerWithErrorHandling<School, SchoolDialogComponent>();
-
   /**
    * Set up the form model and determine if this is an new school or an update of an existing school.
    * @param dialogRef A reference to the dialog that is to be used.
@@ -106,7 +102,6 @@ export class SchoolDialogComponent {
   constructor(private dialogRef: MatDialogRef<SchoolDialogComponent>,
               private schoolService: SchoolRepositoryService,
               private formBuilder: FormBuilder,
-              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -116,16 +111,22 @@ export class SchoolDialogComponent {
    * Save the form. Handles both new and updated schools.
    */
   save(): void {
+
     const newSchool = new School(this.model.value);
-    let func: (item: School) => Promise<School>;
+    let value: Promise<School>;
+
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
       newSchool._links = this.model.value.school._links;
-      func = this.schoolService.updateSchool;
+      value = this.schoolService.updateSchool(newSchool);
     } else {
-      func = this.schoolService.createSchool;
+      value = this.schoolService.createSchool(newSchool);
     }
-    this.caller.callWithErrorHandling(this.schoolService, func, newSchool, this.dialogRef, this.snackBar);
+
+    value.then((s: School) => {
+      this.dialogRef.close(s);
+    });
+
   }
 
   /**
@@ -143,7 +144,7 @@ export class SchoolDialogComponent {
   private createModel(formBuilder: FormBuilder, school: School): FormGroup {
     const formGroup: FormGroup = formBuilder.group({
       school,
-      name: ['', [Validators.required, Validators.maxLength(50)]],
+      name: ['', [Validators.required, Validators.maxLength(100)]],
       address: formBuilder.group({
         street1: [null, Validators.maxLength(50)],
         street2: [null, Validators.maxLength(50)],
