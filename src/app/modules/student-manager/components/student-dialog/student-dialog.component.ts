@@ -59,11 +59,6 @@ export class StudentDialogComponent {
   contactMethods: string[] = ['Cellphone', 'Workphone', 'Email'];
   locations: string[] = ['Offline', 'Online', 'Both'];
 
-  contactTypes = [
-    { value: 'PARENT_GUARDIAN', valueView: 'Parent' },
-    { value: 'GRANDPARENT', valueView: 'Grandparent' }
-  ];
-
   interestList$: Observable<string[]>;
   leadershipTraitList$: Observable<string[]>;
   leadershipSkillList$: Observable<string[]>;
@@ -304,13 +299,8 @@ export class StudentDialogComponent {
   }
 
   private createContactForm(isEmergencyContact?: boolean): FormGroup {
-    let relation = '';
-    if (!isEmergencyContact) {
-      relation = 'PARENT_GUARDIAN';
-    }
 
-    return this.formBuilder.group({
-      type: [relation, Validators.required],
+    let contact = {
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       workPhone: null,
@@ -319,7 +309,13 @@ export class StudentDialogComponent {
       preferredContactMethod: null,
       isEmergencyContact: isEmergencyContact,
       comment: ['']
-    }, {
+    };
+
+    if (isEmergencyContact) {
+      contact['label'] = ['', [Validators.required, Validators.maxLength(50)]]
+    }
+
+    return this.formBuilder.group(contact, {
       validators: this.noContactMethodValidator()
     });
 
