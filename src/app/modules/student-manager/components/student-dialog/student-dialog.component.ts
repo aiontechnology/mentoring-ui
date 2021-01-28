@@ -59,11 +59,6 @@ export class StudentDialogComponent {
   contactMethods: string[] = ['Cellphone', 'Workphone', 'Email'];
   locations: string[] = ['Offline', 'Online', 'Both'];
 
-  contactTypes = [
-    { value: 'PARENT_GUARDIAN', valueView: 'Parent' },
-    { value: 'GRANDPARENT', valueView: 'Grandparent' }
-  ];
-
   interestList$: Observable<string[]>;
   leadershipTraitList$: Observable<string[]>;
   leadershipSkillList$: Observable<string[]>;
@@ -172,6 +167,8 @@ export class StudentDialogComponent {
         firstName: ['', [Validators.required, Validators.maxLength(50)]],
         lastName: ['', [Validators.required, Validators.maxLength(50)]],
         grade: ['', Validators.required],
+        preBehavioralAssessment: ['', [Validators.min(0), Validators.max(45)]],
+        postBehavioralAssessment: ['', [Validators.min(0), Validators.max(45)]],
         mediaReleaseSigned: false,
         startDate: [''],
         preferredTime: ['', Validators.maxLength(30)],
@@ -206,6 +203,8 @@ export class StudentDialogComponent {
           firstName: student?.firstName,
           lastName: student?.lastName,
           grade: student?.grade?.toString(),
+          preBehavioralAssessment: student?.preBehavioralAssessment,
+          postBehavioralAssessment: student?.postBehavioralAssessment,
           mediaReleaseSigned: student?.mediaReleaseSigned,
           startDate: student?.startDate,
           preferredTime: student?.preferredTime,
@@ -300,13 +299,8 @@ export class StudentDialogComponent {
   }
 
   private createContactForm(isEmergencyContact?: boolean): FormGroup {
-    let relation = '';
-    if (!isEmergencyContact) {
-      relation = 'PARENT_GUARDIAN';
-    }
 
-    return this.formBuilder.group({
-      type: [relation, Validators.required],
+    let contact = {
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       workPhone: null,
@@ -315,7 +309,13 @@ export class StudentDialogComponent {
       preferredContactMethod: null,
       isEmergencyContact: isEmergencyContact,
       comment: ['']
-    }, {
+    };
+
+    if (isEmergencyContact) {
+      contact['label'] = ['', [Validators.required, Validators.maxLength(50)]]
+    }
+
+    return this.formBuilder.group(contact, {
       validators: this.noContactMethodValidator()
     });
 

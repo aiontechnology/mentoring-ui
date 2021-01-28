@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ export abstract class Student implements LinksHolder<Student> {
   startDate: string;
   location: string;
   mediaReleaseSigned: boolean;
+  preBehavioralAssessment: number;
+  postBehavioralAssessment: number;
   behaviors: string[];
   interests: string[];
   leadershipSkills: string[];
@@ -51,6 +53,8 @@ export abstract class Student implements LinksHolder<Student> {
     this.startDate = json?.startDate;
     this.location = json?.location;
     this.mediaReleaseSigned = json?.mediaReleaseSigned;
+    this.preBehavioralAssessment = json?.preBehavioralAssessment;
+    this.postBehavioralAssessment = json?.postBehavioralAssessment;
     this.behaviors = json?.behaviors;
     this.interests = json?.interests;
     this.leadershipSkills = json?.leadershipSkills;
