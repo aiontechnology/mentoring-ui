@@ -15,7 +15,6 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { MentorManagerComponent } from './mentor-manager.component';
 import { MentorListComponent } from './components/mentor-list/mentor-list.component';
@@ -24,9 +23,6 @@ import { MentorCacheService } from './services/mentor/mentor-cache.service';
 import { MentorRepositoryService } from './services/mentor/mentor-repository.service';
 import { SharedModule } from '../shared/shared.module';
 import { MentorDialogComponent } from './components/mentor-dialog/mentor-dialog.component';
-import { MaterialModule } from 'src/app/shared/material.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LayoutModule } from '@angular/cdk/layout';
 
 const routes: Routes = [
   {
@@ -45,11 +41,6 @@ const routes: Routes = [
     MentorDialogComponent
   ],
   imports: [
-    CommonModule,
-    FormsModule,
-    LayoutModule,
-    MaterialModule,
-    ReactiveFormsModule,
     RouterModule.forChild(routes),
     SharedModule.forRoot()
   ],
