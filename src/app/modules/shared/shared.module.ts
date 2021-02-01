@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,9 @@ import { SelectionCountDisplayComponent } from './components/selection-count-dis
 import { SchoolCacheService } from './services/school/school-cache.service';
 import { SchoolRepositoryService } from './services/school/school-repository.service';
 import { LoggingService } from './services/logging-service/logging.service';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LayoutModule } from '@angular/cdk/layout';
+import { MetaDataService } from './services/meta-data/meta-data.service';
 
 @NgModule({
   declarations: [
@@ -31,8 +34,6 @@ import { LoggingService } from './services/logging-service/logging.service';
     OnlyNumberDirective,
     PhoneFormatDirective,
     SelectionCountDisplayComponent
-  ],
-  providers: [
   ],
   imports: [
     CommonModule,
@@ -42,7 +43,12 @@ import { LoggingService } from './services/logging-service/logging.service';
     ConfimationDialogComponent,
     OnlyNumberDirective,
     PhoneFormatDirective,
-    SelectionCountDisplayComponent
+    SelectionCountDisplayComponent,
+    CommonModule,
+    FormsModule,
+    MaterialModule,
+    ReactiveFormsModule,
+    LayoutModule
   ]
 })
 export class SharedModule {
@@ -53,7 +59,8 @@ export class SharedModule {
       providers: [
         LoggingService,
         SchoolCacheService,
-        SchoolRepositoryService
+        SchoolRepositoryService,
+        MetaDataService
       ]
     };
   }

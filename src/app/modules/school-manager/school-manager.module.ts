@@ -15,14 +15,10 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { SchoolManagerComponent } from './school-manager.component';
 import { RouterModule, Routes } from '@angular/router';
-import { LayoutModule } from '@angular/cdk/layout';
-import { MaterialModule } from '../../shared/material.module';
 import { SchoolListComponent } from './components/school-list/school-list.component';
 import { SchoolDialogComponent } from './components/school-dialog/school-dialog.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SchoolDetailComponent } from './components/school-detail/school-detail.component';
 import { TeacherListComponent } from './components/teacher-list/teacher-list.component';
 import { TeacherRepositoryService } from './services/teacher/teacher-repository.service';
@@ -64,11 +60,6 @@ const routes: Routes = [
     PersonnelDialogComponent
   ],
   imports: [
-    CommonModule,
-    FormsModule,
-    LayoutModule,
-    MaterialModule,
-    ReactiveFormsModule,
     RouterModule.forChild(routes),
     SharedModule.forRoot()
   ],
