@@ -28,6 +28,7 @@ import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
 import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
   selector: 'ms-game-list',
@@ -39,12 +40,13 @@ export class GameListComponent implements OnInit, AfterContentInit, AfterViewIni
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private breakpointObserver: BreakpointObserver,
+  constructor(public gameCacheService: GameCacheService,
+              public userSession: UserSessionService,
+              private breakpointObserver: BreakpointObserver,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private router: Router,
-              private snackBar: MatSnackBar,
-              public gameCacheService: GameCacheService) {
+              private snackBar: MatSnackBar) {
     console.log('Constructing GameListComponent', gameCacheService);
   }
 
@@ -55,8 +57,10 @@ export class GameListComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   ngAfterContentInit(): void {
-    console.log('Adding game list menus')
-    GameListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.gameCacheService);
+    console.log('Adding game list menus');
+    if (this.userSession.isSysAdmin) {
+      GameListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.gameCacheService);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -65,11 +69,15 @@ export class GameListComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   displayedColumns(): string[] {
-    if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['select', 'name'];
-    } else {
-      return ['select', 'name', 'grade1', 'grade2', 'location'];
+    let displayedColumns = [];
+    if (this.userSession.isSysAdmin) {
+      displayedColumns.push('select');
     }
+    displayedColumns.push('name');
+    if (!this.breakpointObserver.isMatched(Breakpoints.Handset)) {
+      displayedColumns.push('grade1', 'grade2', 'location');
+    }
+    return displayedColumns;
   }
 
 }

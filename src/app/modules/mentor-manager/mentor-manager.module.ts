@@ -18,7 +18,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { MentorManagerComponent } from './mentor-manager.component';
 import { MentorListComponent } from './components/mentor-list/mentor-list.component';
-import { MentorFrameComponent } from './components/mentor-frame/mentor-frame.component';
 import { MentorCacheService } from './services/mentor/mentor-cache.service';
 import { MentorRepositoryService } from './services/mentor/mentor-repository.service';
 import { SharedModule } from '../shared/shared.module';
@@ -28,7 +27,7 @@ const routes: Routes = [
   {
     path: '', component: MentorManagerComponent,
     children: [
-      { path: '', component: MentorFrameComponent }
+      { path: '', component: MentorListComponent }
     ]
   }
 ];
@@ -37,7 +36,6 @@ const routes: Routes = [
   declarations: [
     MentorManagerComponent,
     MentorListComponent,
-    MentorFrameComponent,
     MentorDialogComponent
   ],
   imports: [
