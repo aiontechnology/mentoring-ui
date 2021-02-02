@@ -43,8 +43,12 @@ export class StudentRepositoryService extends BaseRepository<Student> {
     super.readAll(this.buildUri(schoolId));
   }
 
-  readOneStudent(id: string): StudentInbound {
+  readOneStudent(id: string): void {
     return super.readOne(id);
+  }
+
+  getStudentById(id: string): StudentInbound {
+    return super.getById(id);
   }
 
   updateStudent(student: StudentOutbound): Promise<StudentInbound> {

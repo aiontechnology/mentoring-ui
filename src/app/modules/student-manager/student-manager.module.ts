@@ -19,7 +19,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { StudentManagerComponent } from './student-manager.component';
 import { StudentListComponent } from './components/student-list/student-list.component';
-import { StudentFrameComponent } from './components/student-frame/student-frame.component';
 import { StudentDialogComponent } from './components/student-dialog/student-dialog.component';
 import { StudentCacheService } from './services/student/student-cache.service';
 import { LpgRepositoryService } from './services/lpg/lpg-repository.service';
@@ -35,7 +34,7 @@ const routes: Routes = [
   {
     path: '', component: StudentManagerComponent,
     children: [
-      { path: '', component: StudentFrameComponent },
+      { path: '', component: StudentListComponent },
       { path: 'schools/:schoolId/students/:studentId', component: StudentDetailComponent }
     ]
   }
@@ -45,7 +44,6 @@ const routes: Routes = [
   declarations: [
     StudentManagerComponent,
     StudentListComponent,
-    StudentFrameComponent,
     StudentDialogComponent,
     TeacherGradeFilterPipe,
     StudentDetailComponent,
@@ -60,7 +58,6 @@ const routes: Routes = [
     StudentRepositoryService,
     LpgRepositoryService,
     TeacherRepositoryService,
-    MetaDataService,
     MentorRepositoryService
   ]
 })

@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { Component, Input, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
-import { Mentor } from '../../models/mentor/mentor';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { UserSessionService } from 'src/app/services/user-session.service';
+import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/school-repository.service';
 import { School } from 'src/app/modules/shared/models/school/school';
 import { MentorCacheService } from '../../services/mentor/mentor-cache.service';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
@@ -30,50 +31,68 @@ import { ConfimationDialogComponent } from 'src/app/modules/shared/components/co
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'ms-mentor-list',
   templateUrl: './mentor-list.component.html',
   styleUrls: ['./mentor-list.component.scss']
 })
-export class MentorListComponent implements AfterViewInit, OnDestroy {
+export class MentorListComponent implements OnInit, OnDestroy {
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  school: School;
-
-  @Input()
-  set selectedSchool(school: School) {
-
-    this.school = school;
-
-    if (school != null) {
-      this.menuState.clear();
-      this.mentorCacheService.clearSelection();
-      this.mentorCacheService.establishDatasource(school.id);
-
-      console.log('Adding mentor list menus');
-      MentorListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.mentorCacheService, school?.id);
+  @ViewChild(MatSort) set sort(sort: MatSort) {
+    if (sort !== undefined) {
+      this.mentorCacheService.sort = sort;
     }
-
   }
 
-  constructor(private breakpointObserver: BreakpointObserver,
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator !== undefined) {
+      this.mentorCacheService.paginator = paginator;
+    }
+  }
+
+  schools$: Observable<School[]>;
+  schoolId: string;
+
+  constructor(public userSession: UserSessionService,
+              public mentorCacheService: MentorCacheService,
+              private schoolRepository: SchoolRepositoryService,
+              private logger: LoggingService,
+              private breakpointObserver: BreakpointObserver,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private router: Router,
-              private snackBar: MatSnackBar,
-              public mentorCacheService: MentorCacheService) {
+              private snackBar: MatSnackBar) {
+    console.log('mentor list constructed');
   }
 
-  ngAfterViewInit(): void {
-    this.mentorCacheService.sort = this.sort;
-    this.mentorCacheService.paginator = this.paginator;
+  ngOnInit(): void {
+    if (this.userSession.isSysAdmin) {
+      this.schoolRepository.readAllSchools();
+      this.schools$ = this.schoolRepository.schools.pipe(
+        tap(s => this.logger.log('Read schools', s))
+      );
+    } else if (this.userSession.isProgAdmin) {
+      this.schoolId = this.userSession.schoolUUID;
+      this.mentorCacheService.establishDatasource(this.schoolId);
+      this.loadMentorData();
+    }
   }
 
   ngOnDestroy(): void {
     this.menuState.clear();
+  }
+
+  get isSchoolSelected(): boolean {
+    return (this.schoolId !== undefined) || this.userSession.isProgAdmin;
+  }
+
+  setSchool(id$: string) {
+    this.schoolId = id$;
+    this.loadMentorData();
   }
 
   displayedColumns(): string[] {
@@ -82,6 +101,13 @@ export class MentorListComponent implements AfterViewInit, OnDestroy {
     } else {
       return ['select', 'firstName', 'lastName', 'availability', 'cellPhone', 'email'];
     }
+  }
+
+  private loadMentorData(): void {
+    this.mentorCacheService.clearSelection();
+    this.mentorCacheService.establishDatasource(this.schoolId);
+    console.log('Adding mentor list menus');
+    MentorListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.mentorCacheService, this.schoolId);
   }
 
 }
@@ -94,6 +120,7 @@ class MentorListMenuManager {
                   snackBar: MatSnackBar,
                   mentorCacheService: MentorCacheService,
                   schoolId: string) {
+    menuState.clear();
     console.log('Constructing MenuHandler');
     menuState.add(new NewDialogCommand(
       'Create New Mentor',

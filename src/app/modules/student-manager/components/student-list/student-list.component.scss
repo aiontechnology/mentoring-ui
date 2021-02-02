@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,33 +14,40 @@
  * limitations under the License.
  */
 
-  table {
-    width: 100%;
-  }
-  
-  th.mat-sort-header-sorted {
-    color: black;
-  }
-  
-  .mat-table {
-    overflow: auto;
-    max-height: 500px;
-  }
-  
-  .header {
-    min-height: 64px;
-    padding: 8px 24px 0;
-  }
-  
-  .mat-column-select {
-    overflow: initial;
-  }
+table {
+  width: 100%;
+}
 
-  td.mat-cell {
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
+th.mat-sort-header-sorted {
+  color: black;
+}
 
-  .mat-column-contacts ul li {
-    line-height: 1.4;
-  }
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.table-header {
+  display: flex;
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.spacer {
+  width: 20px;
+  height: auto;
+  display: inline-block;
+}
+
+.mat-column-select {
+  overflow: initial;
+}
+
+td.mat-cell {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.mat-column-contacts ul li {
+  line-height: 1.4;
+}

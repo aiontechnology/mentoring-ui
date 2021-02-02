@@ -72,7 +72,20 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   }
 
   @log
-  protected readOne(id: string): T {
+  protected readOne(uri: string): void {
+    console.log('Loading item', uri);
+    this.http.get<any>(uri)
+      .subscribe(data => {
+        this.dataStore.items = [];
+        const i = data as T;
+        this.dataStore.items.push(i);
+        this.logCache();
+        this.publishItems();
+      })
+  }
+
+  @log
+  protected getById(id: string): T {
     for (const item of this.dataStore.items) {
       if (item.getSelfLink().endsWith(id)) {
         console.log('Found an item', item);
