@@ -7,5 +7,5 @@
     window["env"]["tokenRedirect"] = "http://localhost:4200/receiveToken";
     window["env"]["logoutRedirect"] = "http://localhost:4200/handleLogout";
     window["env"]["cognitoBaseUrl"] = "mentorsuccess-localhost.auth.us-west-2.amazoncognito.com";
-    window["env"]["cognitoClientId"] = "76on3r6c055h1pp2h99uc6jmbd";
+    window["env"]["cognitoClientId"] = "2j1eb0o8qfsbrpaqsftd879c79";
 })(this);
