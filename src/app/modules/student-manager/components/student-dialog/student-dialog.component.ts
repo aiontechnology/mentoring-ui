@@ -300,22 +300,17 @@ export class StudentDialogComponent {
 
   private createContactForm(isEmergencyContact?: boolean): FormGroup {
 
-    let contact = {
+    return this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
+      label: [null, [Validators.maxLength(50)]],
       workPhone: null,
       cellPhone: null,
       email: [null, [Validators.email, Validators.maxLength(50)]],
       preferredContactMethod: null,
       isEmergencyContact: isEmergencyContact,
       comment: ['']
-    };
-
-    if (isEmergencyContact) {
-      contact['label'] = ['', [Validators.required, Validators.maxLength(50)]]
-    }
-
-    return this.formBuilder.group(contact, {
+    }, {
       validators: this.noContactMethodValidator()
     });
 

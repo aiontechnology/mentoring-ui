@@ -15,11 +15,7 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LayoutModule } from '@angular/cdk/layout';
-import { MaterialModule } from 'src/app/shared/material.module';
 import { SharedModule } from '../shared/shared.module';
 import { StudentManagerComponent } from './student-manager.component';
 import { StudentListComponent } from './components/student-list/student-list.component';
@@ -56,11 +52,6 @@ const routes: Routes = [
     ScrollToDirective
   ],
   imports: [
-    CommonModule,
-    FormsModule,
-    LayoutModule,
-    MaterialModule,
-    ReactiveFormsModule,
     RouterModule.forChild(routes),
     SharedModule.forRoot()
   ],
