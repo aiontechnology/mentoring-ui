@@ -15,7 +15,6 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ResourceManagerComponent } from './resource-manager.component';
 import { SharedModule } from '../shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
@@ -23,10 +22,6 @@ import { ResourceListComponent } from './components/resource-list/resource-list.
 import { BookDialogComponent } from './components/book-dialog/book-dialog.component';
 import { BookRepositoryService } from './services/resources/book-repository.service';
 import { BookCacheService } from './services/resources/book-cache.service';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LayoutModule } from '@angular/cdk/layout';
-import { MaterialModule } from 'src/app/shared/material.module';
-import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { GameDialogComponent } from './components/game-dialog/game-dialog.component';
 import { GameRepositoryService } from './services/resources/game-repository.service';
 import { GameCacheService } from './services/resources/game-cache.service';
@@ -52,11 +47,6 @@ const routes: Routes = [
     GameListComponent
   ],
   imports: [
-    CommonModule,
-    FormsModule,
-    LayoutModule,
-    MaterialModule,
-    ReactiveFormsModule,
     RouterModule.forChild(routes),
     SharedModule.forRoot()
   ],
@@ -64,8 +54,7 @@ const routes: Routes = [
     BookCacheService,
     BookRepositoryService,
     GameCacheService,
-    GameRepositoryService,
-    MetaDataService
+    GameRepositoryService
   ]
 })
 export class ResourceManagerModule { }
