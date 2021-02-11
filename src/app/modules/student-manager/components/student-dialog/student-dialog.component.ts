@@ -172,9 +172,9 @@ export class StudentDialogComponent {
         mediaReleaseSigned: false,
         startDate: [''],
         preferredTime: ['', Validators.maxLength(30)],
+        actualTime: ['', Validators.maxLength(30)],
         mentor: formBuilder.group({
-          uri: [''],
-          time: ['', Validators.maxLength(30)]
+          uri: ['']
         }),
         interests: [],
         leadershipTraits: [],
@@ -208,9 +208,9 @@ export class StudentDialogComponent {
           mediaReleaseSigned: student?.mediaReleaseSigned,
           startDate: student?.startDate,
           preferredTime: student?.preferredTime,
+          actualTime: student?.actualTime,
           mentor: {
-            uri: student?.mentor?.mentor?._links?.self[0]?.href,
-            time: student?.mentor?.time
+            uri: student?.mentor?.mentor?._links?.self[0]?.href
           },
           interests: student?.interests,
           leadershipTraits: student?.leadershipTraits,
