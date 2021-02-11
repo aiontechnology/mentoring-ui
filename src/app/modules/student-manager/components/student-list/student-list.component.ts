@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-import { Component, Input, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
+import { UserSessionService } from 'src/app/services/user-session.service';
+import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/school-repository.service';
 import { School } from 'src/app/modules/shared/models/school/school';
 import { StudentCacheService } from '../../services/student/student-cache.service';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
@@ -30,50 +32,68 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Contact } from '../../models/contact/contact';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'ms-student-list',
   templateUrl: './student-list.component.html',
   styleUrls: ['./student-list.component.scss']
 })
-export class StudentListComponent implements AfterViewInit, OnDestroy {
+export class StudentListComponent implements OnInit, OnDestroy {
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  school: School;
-
-  @Input()
-  set selectedSchool(school: School) {
-
-    this.school = school;
-
-    if (school != null) {
-      this.menuState.clear();
-      this.studentCacheService.clearSelection();
-      this.studentCacheService.establishDatasource(school.id);
-
-      console.log('Adding student list menus');
-      StudentListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.studentCacheService, school?.id);
+  @ViewChild(MatSort) set sort(sort: MatSort) {
+    if (sort !== undefined) {
+      this.studentCacheService.sort = sort;
     }
-
   }
 
-  constructor(private breakpointObserver: BreakpointObserver,
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator !== undefined) {
+      this.studentCacheService.paginator = paginator;
+    }
+  }
+
+  schools$: Observable<School[]>;
+  schoolId: string;
+
+  constructor(public userSession: UserSessionService,
+              public studentCacheService: StudentCacheService,
+              private schoolRepository: SchoolRepositoryService,
+              private logger: LoggingService,
+              private breakpointObserver: BreakpointObserver,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private router: Router,
-              private snackBar: MatSnackBar,
-              public studentCacheService: StudentCacheService) {
+              private snackBar: MatSnackBar) {
+    console.log('student list constructed');
   }
 
-  ngAfterViewInit(): void {
-    this.studentCacheService.sort = this.sort;
-    this.studentCacheService.paginator = this.paginator;
+  ngOnInit(): void {
+    if (this.userSession.isSysAdmin) {
+      this.schoolRepository.readAllSchools();
+      this.schools$ = this.schoolRepository.schools.pipe(
+        tap(s => this.logger.log('Read schools', s))
+      );
+    } else if (this.userSession.isProgAdmin) {
+      this.schoolId = this.userSession.schoolUUID;
+      this.studentCacheService.establishDatasource(this.schoolId);
+      this.loadStudentData();
+    }
   }
 
   ngOnDestroy(): void {
     this.menuState.clear();
+  }
+
+  get isSchoolSelected(): boolean {
+    return (this.schoolId !== undefined) || this.userSession.isProgAdmin;
+  }
+
+  setSchool(id$: string) {
+    this.schoolId = id$;
+    this.loadStudentData();
   }
 
   displayedColumns(): string[] {
@@ -103,6 +123,13 @@ export class StudentListComponent implements AfterViewInit, OnDestroy {
 
   }
 
+  private loadStudentData(): void {
+    this.studentCacheService.clearSelection();
+    this.studentCacheService.establishDatasource(this.schoolId);
+    console.log('Adding student list menus');
+    StudentListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.studentCacheService, this.schoolId);
+  }
+
 }
 
 class StudentListMenuManager {
@@ -113,6 +140,7 @@ class StudentListMenuManager {
                   snackBar: MatSnackBar,
                   studentCacheService: StudentCacheService,
                   schoolId: string) {
+    menuState.clear();
     console.log('Constructing MenuHandler');
     menuState.add(new NewDialogCommand(
       'Create New Student',

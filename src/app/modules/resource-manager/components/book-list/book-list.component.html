@@ -24,24 +24,26 @@ limitations under the License.
       </mat-form-field>
     </div>
     <table mat-table [dataSource]="bookCacheService.dataSource" matSort>
-      <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef>
-          <mat-checkbox
-            (change)="$event ? bookCacheService.masterToggle() : null"
-            [checked]="bookCacheService.selection.hasValue() && bookCacheService.isAllSelected()"
-            [indeterminate]="bookCacheService.selection.hasValue() && !bookCacheService.isAllSelected()"
-          >
-          </mat-checkbox>
-        </th>
-        <td mat-cell *matCellDef="let row">
-          <mat-checkbox
-            (click)="$event.stopPropagation()"
-            (change)="$event ? bookCacheService.selection.toggle(row) : null"
-            [checked]="bookCacheService.selection.isSelected(row)"
-          >
-          </mat-checkbox>
-        </td>
-      </ng-container>
+      <div *ngIf="userSession.isSysAdmin">
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              (change)="$event ? bookCacheService.masterToggle() : null"
+              [checked]="bookCacheService.selection.hasValue() && bookCacheService.isAllSelected()"
+              [indeterminate]="bookCacheService.selection.hasValue() && !bookCacheService.isAllSelected()"
+            >
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? bookCacheService.selection.toggle(row) : null"
+              [checked]="bookCacheService.selection.isSelected(row)"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
+      </div>
   
       <ng-container matColumnDef="title">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>

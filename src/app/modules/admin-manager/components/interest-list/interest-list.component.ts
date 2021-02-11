@@ -35,17 +35,18 @@ export class InterestListComponent implements OnInit, AfterContentInit, AfterVie
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  displayedColumns: string[];
+
   editedInterest: string;
   isEdit: boolean;
-  displayedColumns: string[];
 
   constructor(public interestCacheService: InterestCacheService,
               private menuState: MenuStateService,
               private matDialog: MatDialog,
               private snackBar: MatSnackBar) {
 
-    this.isEdit = false;
     this.displayedColumns = ['select', 'name'];
+    this.isEdit = false;
 
   }
 

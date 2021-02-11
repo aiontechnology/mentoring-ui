@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,18 @@ table {
 
 th.mat-sort-header-sorted {
   color: black;
+}
+
+.table-header {
+  display: flex;
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.spacer {
+  width: 20px;
+  height: auto;
+  display: inline-block;
 }
 
 .mat-table {
