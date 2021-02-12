@@ -31,9 +31,6 @@ limitations under the License.
               A first name can be a maximum of 50 characters in length
             </mat-error>
           </mat-form-field>
-        </div>
-
-        <div class="dialog-container">
           <mat-form-field>
             <input matInput placeholder="Last name" formControlName="lastName" required/>
             <mat-error *ngIf="studentDetails.hasError('required', 'lastName')">
@@ -62,31 +59,27 @@ limitations under the License.
           </mat-form-field>
         </div>
 
-        <div class="dialog-container2">
-          <div>
-            <mat-form-field>
-              <mat-label>Pre-behavioral assessment</mat-label>
-              <input matInput formControlName="preBehavioralAssessment" type="number" min="0" max="45">
-              <mat-error *ngIf="studentDetails.hasError('min', 'preBehavioralAssessment')">
-                Value must be greater than zero
-              </mat-error>
-              <mat-error *ngIf="studentDetails.hasError('max', 'preBehavioralAssessment')">
-                Value must be less than 45
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field>
-              <mat-label>Post-behavioral assessment</mat-label>
-              <input matInput formControlName="postBehavioralAssessment" type="number" min="0" max="45">
-              <mat-error *ngIf="studentDetails.hasError('min', 'postBehavioralAssessment')">
-                Value must be greater than zero
-              </mat-error>
-              <mat-error *ngIf="studentDetails.hasError('max', 'postBehavioralAssessment')">
-                Value must be less than 45
-              </mat-error>
-            </mat-form-field>
-          </div>
+        <div class="dialog-container">
+          <mat-form-field>
+            <mat-label>Pre-behavioral assessment</mat-label>
+            <input matInput formControlName="preBehavioralAssessment" type="number" min="0" max="45">
+            <mat-error *ngIf="studentDetails.hasError('min', 'preBehavioralAssessment')">
+              Value must be greater than zero
+            </mat-error>
+            <mat-error *ngIf="studentDetails.hasError('max', 'preBehavioralAssessment')">
+              Value must be less than 45
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Post-behavioral assessment</mat-label>
+            <input matInput formControlName="postBehavioralAssessment" type="number" min="0" max="45">
+            <mat-error *ngIf="studentDetails.hasError('min', 'postBehavioralAssessment')">
+              Value must be greater than zero
+            </mat-error>
+            <mat-error *ngIf="studentDetails.hasError('max', 'postBehavioralAssessment')">
+              Value must be less than 45
+            </mat-error>
+          </mat-form-field>
         </div>
 
         <div class="dialog-container">
@@ -250,9 +243,6 @@ limitations under the License.
                     A first name can be a maximum of 50 characters in length
                   </mat-error>
                 </mat-form-field>
-              </div>
-
-              <div class="dialog-container">
                 <mat-form-field>
                   <input matInput placeholder="Last name" formControlName="lastName" required/>
                   <mat-error *ngIf="contacts.hasError('required', ['parents', i, 'lastName'])">
@@ -347,9 +337,6 @@ limitations under the License.
                 A first name can be a maximum of 50 characters in length
               </mat-error>
             </mat-form-field>
-          </div>
-
-          <div class="dialog-container">
             <mat-form-field>
               <input matInput placeholder="Last name" formControlName="lastName" required/>
               <mat-error *ngIf="contacts.hasError('required', ['emergencyContact', 'lastName'])">
