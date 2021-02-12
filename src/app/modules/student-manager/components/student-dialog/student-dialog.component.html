@@ -363,10 +363,7 @@ limitations under the License.
 
           <div class="dialog-container">
             <mat-form-field>
-              <input matInput placeholder="Relation" formControlName="label" required/>
-              <mat-error *ngIf="contacts.hasError('required', ['emergencyContact', 'label'])">
-                You must enter a relation
-              </mat-error>
+              <input matInput placeholder="Relation" formControlName="label"/>
               <mat-error *ngIf="contacts.hasError('maxlength', ['emergencyContact', 'label'])">
                 A relation can be a maximum of 50 characters in length
               </mat-error>
