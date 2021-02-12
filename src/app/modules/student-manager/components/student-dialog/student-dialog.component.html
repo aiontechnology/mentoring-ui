@@ -197,18 +197,18 @@ limitations under the License.
 
         <div class="dialog-container">
           <mat-form-field>
-            <mat-label>Leadership traits</mat-label>
-            <mat-select formControlName="leadershipTraits" multiple>
-              <mat-option *ngFor="let leadershipTrait of (leadershipTraitList$ | async)" [value]="leadershipTrait">{{ leadershipTrait }}</mat-option>
+            <mat-label>Leadership success skills</mat-label>
+            <mat-select formControlName="leadershipSkills" multiple>
+              <mat-option *ngFor="let leadershipSkill of (leadershipSkillList$ | async)" [value]="leadershipSkill">{{ leadershipSkill }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
 
         <div class="dialog-container">
           <mat-form-field>
-            <mat-label>Leadership success skills</mat-label>
-            <mat-select formControlName="leadershipSkills" multiple>
-              <mat-option *ngFor="let leadershipSkill of (leadershipSkillList$ | async)" [value]="leadershipSkill">{{ leadershipSkill }}</mat-option>
+            <mat-label>Leadership traits</mat-label>
+            <mat-select formControlName="leadershipTraits" multiple>
+              <mat-option *ngFor="let leadershipTrait of (leadershipTraitList$ | async)" [value]="leadershipTrait">{{ leadershipTrait }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
