@@ -30,34 +30,29 @@ limitations under the License.
       </mat-form-field>
     </div>
 
-    <div class="dialog-container2" formGroupName="gradeRange">
-      <div>
-        <mat-form-field>
-          <mat-label>Grade Range Start</mat-label>
-          <mat-select formControlName="grade1" required>
-            <mat-option *ngFor="let grade of grades" [value]="grade.value">
-              {{ grade.valueView }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="model.hasError('required', 'grade1')">
-            You must select a beginning grade level
-          </mat-error>
-        </mat-form-field>
-      </div>
-
-      <div>
-        <mat-form-field>
-          <mat-label>Grade Range End</mat-label>
-          <mat-select formControlName="grade2" required>
-            <mat-option *ngFor="let grade of grades" [value]="grade.value">
-              {{ grade.valueView }}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="model.hasError('required', 'grade2')">
-            <div>You must select an ending grade level</div>
-          </mat-error>
-        </mat-form-field>
-      </div>
+    <div class="dialog-container" formGroupName="gradeRange">
+      <mat-form-field>
+        <mat-label>Grade Range Start</mat-label>
+        <mat-select formControlName="grade1" required>
+          <mat-option *ngFor="let grade of grades" [value]="grade.value">
+            {{ grade.valueView }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="model.hasError('required', 'grade1')">
+          You must select a beginning grade level
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Grade Range End</mat-label>
+        <mat-select formControlName="grade2" required>
+          <mat-option *ngFor="let grade of grades" [value]="grade.value">
+            {{ grade.valueView }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="model.hasError('required', 'grade2')">
+          <div>You must select an ending grade level</div>
+        </mat-error>
+      </mat-form-field>
     </div>
     <mat-error *ngIf="model.hasError('invalidRange', 'gradeRange')">
       Starting grade must be less than or equal to ending grade

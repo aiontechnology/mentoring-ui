@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,16 @@
  * limitations under the License.
  */
 
- .dialog-container {
-    display: flex;
-    flex-direction: column;
-  }
-  
+.dialog-container {
+  display: flex;
+}
+
 .dialog-container > * {
   width: 100%;
 }
 
-.dialog-container2 {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-
-.dialog-container2 > *:first-child {
-  margin-right: 16px;
-}
-
-.dialog-container2 div {
-  width: 100%;
-}
-
-.dialog-container2 div mat-form-field {
-  width: 100%;
+.dialog-container > .mat-form-field + .mat-form-field {
+  margin-left: 16px;
 }
 
 .mat-radio-button ~ .mat-radio-button {
