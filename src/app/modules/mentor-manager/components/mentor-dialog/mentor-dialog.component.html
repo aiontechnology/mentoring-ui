@@ -18,6 +18,7 @@ limitations under the License.
 <mat-dialog-content>
   <form [formGroup]="model">
     <input type="hidden" formControlName="mentor">
+
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="First Name" formControlName="firstName" required />
@@ -28,9 +29,6 @@ limitations under the License.
           A first name can be a maximum of 50 characters in length
         </mat-error>
       </mat-form-field>
-    </div>
-
-    <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="Last Name" formControlName="lastName" required />
         <mat-error *ngIf="model.hasError('required', 'lastName')">
