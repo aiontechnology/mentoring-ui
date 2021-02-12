@@ -106,9 +106,18 @@ limitations under the License.
 
         <div class="dialog-container">
           <mat-form-field>
-            <input matInput placeholder="Preferred time" formControlName="preferredTime"/>
+            <input matInput placeholder="Preferred meeting time" formControlName="preferredTime"/>
             <mat-error *ngIf="studentDetails.hasError('maxlength', 'preferredTime')">
               Preferred time can be a maximum of 30 characters in length
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="dialog-container">
+          <mat-form-field>
+            <input matInput placeholder="Actual meeting time" formControlName="actualTime"/>
+            <mat-error *ngIf="studentDetails.hasError('maxlength', 'actualTime')">
+              Actual meeting time can be a maximum of 30 characters in length
             </mat-error>
           </mat-form-field>
         </div>
@@ -124,15 +133,6 @@ limitations under the License.
                   {{ mentor.firstName + ' ' + mentor.lastName }}
                 </mat-option>
               </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div class="dialog-container">
-            <mat-form-field>
-              <input matInput placeholder="Meeting Time" formControlName="time"/>
-              <mat-error *ngIf="studentDetails.hasError('maxlength', ['mentor', 'time'])">
-                Meeting Time can be a maximum of 30 characters in length
-              </mat-error>
             </mat-form-field>
           </div>
         </div>
