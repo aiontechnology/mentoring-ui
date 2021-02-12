@@ -177,8 +177,8 @@ export class StudentDialogComponent {
           uri: ['']
         }),
         interests: [],
-        leadershipTraits: [],
         leadershipSkills: [],
+        leadershipTraits: [],
         behaviors: [],
         location: ['OFFLINE', Validators.required],
         _links: null
@@ -213,8 +213,8 @@ export class StudentDialogComponent {
             uri: student?.mentor?.mentor?._links?.self[0]?.href
           },
           interests: student?.interests,
-          leadershipTraits: student?.leadershipTraits,
           leadershipSkills: student?.leadershipSkills,
+          leadershipTraits: student?.leadershipTraits,
           behaviors: student?.behaviors,
           location: student?.location?.toString(),
           _links: student._links
