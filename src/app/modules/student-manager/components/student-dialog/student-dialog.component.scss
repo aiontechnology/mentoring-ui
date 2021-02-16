@@ -18,6 +18,11 @@ h3 {
   font-weight: bold;
 }
 
+.dialog-container-column {
+  display: flex;
+  flex-direction: column;
+}
+
 .dialog-container {
   display: flex;
 }
