@@ -120,6 +120,7 @@ limitations under the License.
             <mat-form-field>
               <mat-label>Mentor</mat-label>
               <mat-select formControlName="uri">
+                <mat-option [value]="null">- None -</mat-option>
                 <mat-option
                   *ngFor="let mentor of (mentors$ | async)"
                   [value]="mentor.getSelfLink()">
@@ -285,7 +286,7 @@ limitations under the License.
                 </mat-error>
               </div>
 
-              <div class="dialog-container">
+              <div class="dialog-container-column">
                 <label id="preferred-contact-method-label">Preferred contact method:</label>
                 <mat-radio-group
                   formControlName="preferredContactMethod"
@@ -388,7 +389,7 @@ limitations under the License.
             </mat-error>
           </div>
 
-          <div class="dialog-container">
+          <div class="dialog-container-column">
             <label id="preferred-contact-method-label">Preferred contact method:</label>
             <mat-radio-group formControlName="preferredContactMethod" aria-labelledby="preferred-contact-method-label">
               <mat-radio-button *ngFor="let contactMethod of contactMethods" [value]="contactMethod | uppercase">

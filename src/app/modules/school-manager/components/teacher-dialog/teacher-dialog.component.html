@@ -82,6 +82,7 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Grade level 2 (Optional)</mat-label>
         <mat-select formControlName="grade2">
+          <mat-option [value]="null">- None -</mat-option>
           <mat-option *ngFor="let grade of grades" [value]="grade.value">
             {{ grade.valueView }}
           </mat-option>
