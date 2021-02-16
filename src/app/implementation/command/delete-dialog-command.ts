@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +33,7 @@ export class DeleteDialogCommand<T> extends Command {
                 private snackBar: MatSnackBar,
                 private routeTo: string,
                 private countSupplier: () => number,
-                private removeBook: () => void,
-                private postAction: () => void,
+                private removeItem: () => void,
                 private determineEnabled: () => boolean) {
         super(title, group);
     }
@@ -44,17 +43,16 @@ export class DeleteDialogCommand<T> extends Command {
             width: '500px',
             data: {
                 message: this.message
-              }
-            });
+            }
+        });
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.removeBook();
+                this.removeItem();
                 this.openSnackBar(this.snackBar, this.snackBarMessage, '');
                 if (this.routeTo) {
                     this.router.navigate([this.routeTo]);
                 }
-                this.postAction();
             }
         });
     }
