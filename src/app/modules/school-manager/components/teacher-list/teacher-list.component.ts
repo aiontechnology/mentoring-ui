@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterContentInit, AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,13 +28,15 @@ import { ConfimationDialogComponent } from 'src/app/modules/shared/components/co
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { TeacherCacheService } from '../../services/teacher/teacher-cache.service';
 import { TeacherDialogComponent } from '../teacher-dialog/teacher-dialog.component';
+import { Teacher } from '../../models/teacher/teacher';
 
 @Component({
   selector: 'ms-teacher-list',
   templateUrl: './teacher-list.component.html',
-  styleUrls: ['./teacher-list.component.scss']
+  styleUrls: ['./teacher-list.component.scss'],
+  providers: [TeacherCacheService]
 })
-export class TeacherListComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class TeacherListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,11 +56,15 @@ export class TeacherListComponent implements OnInit, AfterContentInit, AfterView
     console.log('Establishing datasource with school id', this.schoolId);
     this.teacherCacheService.establishDatasource(this.schoolId);
     this.teacherCacheService.clearSelection();
-  }
 
-  ngAfterContentInit(): void {
     console.log('Adding teacher list menus');
-    TeacherListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.teacherCacheService, this.schoolId);
+    TeacherListMenuManager.addMenus(this.menuState,
+                                    this.router,
+                                    this.dialog,
+                                    this.snackBar,
+                                    (t: Teacher) => this.jumpToNewItem(t),
+                                    this.teacherCacheService,
+                                    this.schoolId);
   }
 
   ngAfterViewInit(): void {
@@ -74,6 +80,17 @@ export class TeacherListComponent implements OnInit, AfterContentInit, AfterView
     }
   }
 
+  /**
+   * Action taken after a dialog is closed: Move
+   * to page that displayes the new item.
+   * @param newItem Added/edited item that helps the
+   * cache service determine which page to jump to.
+   */
+  private jumpToNewItem(newItem: Teacher): void {
+    this.teacherCacheService.clearSelection();
+    this.teacherCacheService.jumpToItem(newItem);
+  }
+
 }
 
 class TeacherListMenuManager {
@@ -82,46 +99,49 @@ class TeacherListMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
-                  teacherCacheSerice: TeacherCacheService, 
-                  schoolId: string) {
-  menuState.add(new NewDialogCommand(
-    'Add Teacher',
-    'teacher',
-    TeacherDialogComponent,
-    'Teacher added',
-    null,
-    { schoolId },
-    router,
-    dialog,
-    snackBar,
-    () => true));
-  menuState.add(new EditDialogCommand(
-    'Edit Teacher',
-    'teacher',
-    TeacherDialogComponent,
-    'Teacher updated',
-    null,
-    router,
-    dialog,
-    snackBar,
-    () => ({ model: teacherCacheSerice.getFirstSelection() }),
-    () => teacherCacheSerice.clearSelection(),
-    () => teacherCacheSerice.selection.selected.length === 1));
-  menuState.add(new DeleteDialogCommand(
-    'Remove Teacher(s)',
-    'teacher',
-    ConfimationDialogComponent,
-    'Teacher(s) removed',
-    'teacher',
-    'teachers',
-    router,
-    dialog,
-    snackBar,
-    null,
-    () => teacherCacheSerice.selectionCount,
-    () => teacherCacheSerice.removeSelected(),
-    () => {},
-    () => teacherCacheSerice.selection.selected.length > 0));
+                  postAction: (t: Teacher) => void,
+                  teacherCacheService: TeacherCacheService,
+                  schoolId: string): void {
+
+    menuState.add(new NewDialogCommand(
+      'Add Teacher',
+      'teacher',
+      TeacherDialogComponent,
+      'Teacher added',
+      null,
+      { schoolId },
+      router,
+      dialog,
+      snackBar,
+      (t: Teacher) => postAction(t),
+      () => true));
+    menuState.add(new EditDialogCommand(
+      'Edit Teacher',
+      'teacher',
+      TeacherDialogComponent,
+      'Teacher updated',
+      null,
+      router,
+      dialog,
+      snackBar,
+      () => ({ model: teacherCacheService.getFirstSelection() }),
+      (t: Teacher) => postAction(t),
+      () => teacherCacheService.selection.selected.length === 1));
+    menuState.add(new DeleteDialogCommand(
+      'Remove Teacher(s)',
+      'teacher',
+      ConfimationDialogComponent,
+      'Teacher(s) removed',
+      'teacher',
+      'teachers',
+      router,
+      dialog,
+      snackBar,
+      null,
+      () => teacherCacheService.selectionCount,
+      () => teacherCacheService.removeSelected(),
+      () => teacherCacheService.selection.selected.length > 0));
+
   }
 
 }

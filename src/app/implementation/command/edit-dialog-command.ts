@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ComponentType } from '@angular/cdk/portal';
 
-export class EditDialogCommand<T> extends Command {
+export class EditDialogCommand<T, S> extends Command {
 
   constructor(title: string,
               group: string,
@@ -31,7 +31,7 @@ export class EditDialogCommand<T> extends Command {
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
               private dataSupplier: () => object,
-              private postAction: () => void,
+              private postAction: (newItem: S) => void,
               private determineEnabled: () => boolean) {
     super(title, group);
     console.log('Constructing EditDialogCommand', dataSupplier, postAction);
@@ -53,10 +53,9 @@ export class EditDialogCommand<T> extends Command {
             .onAction().subscribe(() => {
               this.router.navigate([...this.navigationBase, result.id]);
             });
-        } else {
-          this.openSnackBar(this.snackBar, this.snackBarMessage, '');
         }
-        this.postAction();
+        this.openSnackBar(this.snackBar, this.snackBarMessage, '');
+        this.postAction(result);
       }
     });
   }
