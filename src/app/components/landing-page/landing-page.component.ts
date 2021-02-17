@@ -28,7 +28,7 @@ export class LandingPageComponent {
   public env = environment;
 
   constructor(private menuState: MenuStateService) {
-    menuState.title = 'Welcome to Mentor Suceess';
+    menuState.title = 'Welcome to MentorSuccess\u2122';
   }
 
 }

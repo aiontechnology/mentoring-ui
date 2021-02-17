@@ -31,9 +31,6 @@ limitations under the License.
               A first name can be a maximum of 50 characters in length
             </mat-error>
           </mat-form-field>
-        </div>
-
-        <div class="dialog-container">
           <mat-form-field>
             <input matInput placeholder="Last name" formControlName="lastName" required/>
             <mat-error *ngIf="studentDetails.hasError('required', 'lastName')">
@@ -62,31 +59,27 @@ limitations under the License.
           </mat-form-field>
         </div>
 
-        <div class="dialog-container2">
-          <div>
-            <mat-form-field>
-              <mat-label>Pre-behavioral assessment</mat-label>
-              <input matInput formControlName="preBehavioralAssessment" type="number" min="0" max="45">
-              <mat-error *ngIf="studentDetails.hasError('min', 'preBehavioralAssessment')">
-                Value must be greater than zero
-              </mat-error>
-              <mat-error *ngIf="studentDetails.hasError('max', 'preBehavioralAssessment')">
-                Value must be less than 45
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field>
-              <mat-label>Post-behavioral assessment</mat-label>
-              <input matInput formControlName="postBehavioralAssessment" type="number" min="0" max="45">
-              <mat-error *ngIf="studentDetails.hasError('min', 'postBehavioralAssessment')">
-                Value must be greater than zero
-              </mat-error>
-              <mat-error *ngIf="studentDetails.hasError('max', 'postBehavioralAssessment')">
-                Value must be less than 45
-              </mat-error>
-            </mat-form-field>
-          </div>
+        <div class="dialog-container">
+          <mat-form-field>
+            <mat-label>Pre-behavioral assessment</mat-label>
+            <input matInput formControlName="preBehavioralAssessment" type="number" min="0" max="45">
+            <mat-error *ngIf="studentDetails.hasError('min', 'preBehavioralAssessment')">
+              Value must be greater than zero
+            </mat-error>
+            <mat-error *ngIf="studentDetails.hasError('max', 'preBehavioralAssessment')">
+              Value must be less than 45
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Post-behavioral assessment</mat-label>
+            <input matInput formControlName="postBehavioralAssessment" type="number" min="0" max="45">
+            <mat-error *ngIf="studentDetails.hasError('min', 'postBehavioralAssessment')">
+              Value must be greater than zero
+            </mat-error>
+            <mat-error *ngIf="studentDetails.hasError('max', 'postBehavioralAssessment')">
+              Value must be less than 45
+            </mat-error>
+          </mat-form-field>
         </div>
 
         <div class="dialog-container">
@@ -106,9 +99,18 @@ limitations under the License.
 
         <div class="dialog-container">
           <mat-form-field>
-            <input matInput placeholder="Preferred time" formControlName="preferredTime"/>
+            <input matInput placeholder="Preferred meeting time" formControlName="preferredTime"/>
             <mat-error *ngIf="studentDetails.hasError('maxlength', 'preferredTime')">
               Preferred time can be a maximum of 30 characters in length
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="dialog-container">
+          <mat-form-field>
+            <input matInput placeholder="Actual meeting time" formControlName="actualTime"/>
+            <mat-error *ngIf="studentDetails.hasError('maxlength', 'actualTime')">
+              Actual meeting time can be a maximum of 30 characters in length
             </mat-error>
           </mat-form-field>
         </div>
@@ -118,21 +120,13 @@ limitations under the License.
             <mat-form-field>
               <mat-label>Mentor</mat-label>
               <mat-select formControlName="uri">
+                <mat-option [value]="null">- None -</mat-option>
                 <mat-option
                   *ngFor="let mentor of (mentors$ | async)"
                   [value]="mentor.getSelfLink()">
                   {{ mentor.firstName + ' ' + mentor.lastName }}
                 </mat-option>
               </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div class="dialog-container">
-            <mat-form-field>
-              <input matInput placeholder="Meeting Time" formControlName="time"/>
-              <mat-error *ngIf="studentDetails.hasError('maxlength', ['mentor', 'time'])">
-                Meeting Time can be a maximum of 30 characters in length
-              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -197,18 +191,18 @@ limitations under the License.
 
         <div class="dialog-container">
           <mat-form-field>
-            <mat-label>Leadership traits</mat-label>
-            <mat-select formControlName="leadershipTraits" multiple>
-              <mat-option *ngFor="let leadershipTrait of (leadershipTraitList$ | async)" [value]="leadershipTrait">{{ leadershipTrait }}</mat-option>
+            <mat-label>Leadership success skills</mat-label>
+            <mat-select formControlName="leadershipSkills" multiple>
+              <mat-option *ngFor="let leadershipSkill of (leadershipSkillList$ | async)" [value]="leadershipSkill">{{ leadershipSkill }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
 
         <div class="dialog-container">
           <mat-form-field>
-            <mat-label>Leadership success skills</mat-label>
-            <mat-select formControlName="leadershipSkills" multiple>
-              <mat-option *ngFor="let leadershipSkill of (leadershipSkillList$ | async)" [value]="leadershipSkill">{{ leadershipSkill }}</mat-option>
+            <mat-label>Leadership traits</mat-label>
+            <mat-select formControlName="leadershipTraits" multiple>
+              <mat-option *ngFor="let leadershipTrait of (leadershipTraitList$ | async)" [value]="leadershipTrait">{{ leadershipTrait }}</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -250,9 +244,6 @@ limitations under the License.
                     A first name can be a maximum of 50 characters in length
                   </mat-error>
                 </mat-form-field>
-              </div>
-
-              <div class="dialog-container">
                 <mat-form-field>
                   <input matInput placeholder="Last name" formControlName="lastName" required/>
                   <mat-error *ngIf="contacts.hasError('required', ['parents', i, 'lastName'])">
@@ -295,7 +286,7 @@ limitations under the License.
                 </mat-error>
               </div>
 
-              <div class="dialog-container">
+              <div class="dialog-container-column">
                 <label id="preferred-contact-method-label">Preferred contact method:</label>
                 <mat-radio-group
                   formControlName="preferredContactMethod"
@@ -347,9 +338,6 @@ limitations under the License.
                 A first name can be a maximum of 50 characters in length
               </mat-error>
             </mat-form-field>
-          </div>
-
-          <div class="dialog-container">
             <mat-form-field>
               <input matInput placeholder="Last name" formControlName="lastName" required/>
               <mat-error *ngIf="contacts.hasError('required', ['emergencyContact', 'lastName'])">
@@ -363,10 +351,7 @@ limitations under the License.
 
           <div class="dialog-container">
             <mat-form-field>
-              <input matInput placeholder="Relation" formControlName="label" required/>
-              <mat-error *ngIf="contacts.hasError('required', ['emergencyContact', 'label'])">
-                You must enter a relation
-              </mat-error>
+              <input matInput placeholder="Relation" formControlName="label"/>
               <mat-error *ngIf="contacts.hasError('maxlength', ['emergencyContact', 'label'])">
                 A relation can be a maximum of 50 characters in length
               </mat-error>
@@ -404,7 +389,7 @@ limitations under the License.
             </mat-error>
           </div>
 
-          <div class="dialog-container">
+          <div class="dialog-container-column">
             <label id="preferred-contact-method-label">Preferred contact method:</label>
             <mat-radio-group formControlName="preferredContactMethod" aria-labelledby="preferred-contact-method-label">
               <mat-radio-button *ngFor="let contactMethod of contactMethods" [value]="contactMethod | uppercase">

@@ -72,7 +72,7 @@ export class StudentDetailComponent implements OnDestroy {
 
       this.menuState.removeGroup('student');
 
-      this.student = this.studentService.readOneStudent(this.studentId);
+      this.student = this.studentService.getStudentById(this.studentId);
       this.contacts = this.student?.contacts ? this.student?.contacts : [];
       this.parents = this.contacts.filter(contact => !contact.isEmergencyContact);
       this.emergencyContact = this.contacts.find(contact => contact.isEmergencyContact);
