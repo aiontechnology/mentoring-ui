@@ -25,6 +25,12 @@ export class UserSessionService {
   private static ID_TOKEN = 'id_token';
   private static ACCESS_TOKEN = 'access_token';
 
+  private helper: JwtHelperService;
+
+  constructor() {
+    this.helper = new JwtHelperService();
+  }
+
   handleLogin(params: URLSearchParams): void {
     this.addToStorage(UserSessionService.ID_TOKEN, params.get(UserSessionService.ID_TOKEN));
     this.addToStorage(UserSessionService.ACCESS_TOKEN, params.get(UserSessionService.ACCESS_TOKEN));
@@ -33,6 +39,7 @@ export class UserSessionService {
   handleLogout(): void {
     console.log('logging out');
     localStorage.removeItem(UserSessionService.ID_TOKEN);
+    localStorage.removeItem(UserSessionService.ACCESS_TOKEN);
   }
 
   isLoggedIn(): boolean {
@@ -41,21 +48,45 @@ export class UserSessionService {
     return loggedIn;
   }
 
-  get givenName(): string {
-    if (!this.isLoggedIn()) {
-      return null;
+  get idToken(): any {
+    if (this.isLoggedIn()) {
+      return localStorage.getItem(UserSessionService.ID_TOKEN);
     }
-    const token: any = localStorage.getItem(UserSessionService.ID_TOKEN);
-    const helper = new JwtHelperService();
-    const decoded = helper.decodeToken(token);
-    return decoded.given_name;
+    return null;
   }
 
-  get accessToken(): string {
-    if (!this.isLoggedIn()) {
-      return null;
+  get accessToken(): any {
+    if (this.isLoggedIn()) {
+      return localStorage.getItem(UserSessionService.ACCESS_TOKEN);
     }
-    return localStorage.getItem(UserSessionService.ACCESS_TOKEN).toString();
+    return null;
+  }
+
+  get givenName(): string {
+    const decoded = this.decodeToken(this.idToken);
+    return decoded?.given_name;
+  }
+
+  get schoolUUID(): string {
+    const decoded = this.decodeToken(this.idToken);
+    return decoded?.['custom:school_uuid'];
+  }
+
+  get isSysAdmin(): boolean {
+    return this.group === 'SYSTEM_ADMIN';
+  }
+
+  get isProgAdmin(): boolean {
+    return this.group === 'PROGRAM_ADMIN';
+  }
+
+  private get group(): string {
+    const decoded = this.decodeToken(this.accessToken);
+    return decoded?.['cognito:groups'][0];
+  }
+
+  private decodeToken(token: any): any {
+    return this.helper.decodeToken(token);
   }
 
   private addToStorage(key: string, value: any): void {

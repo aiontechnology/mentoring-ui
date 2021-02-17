@@ -18,31 +18,21 @@ h3 {
   font-weight: bold;
 }
 
-.dialog-container {
+.dialog-container-column {
   display: flex;
   flex-direction: column;
 }
 
-.dialog-container2 {
+.dialog-container {
   display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-
-.dialog-container2 > *:first-child {
-  margin-right: 16px;
-}
-
-.dialog-container2 div {
-  width: 100%;
-}
-
-.dialog-container2 div mat-form-field {
-  width: 100%;
 }
 
 .dialog-container > * {
   width: 100%;
+}
+
+.dialog-container > .mat-form-field + .mat-form-field {
+  margin-left: 16px;
 }
 
 .dialog-error {

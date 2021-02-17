@@ -28,7 +28,7 @@ import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-co
 import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
 import { BookDialogComponent } from '../book-dialog/book-dialog.component';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-
+import { UserSessionService } from 'src/app/services/user-session.service';
 @Component({
   selector: 'ms-book-list',
   templateUrl: './book-list.component.html',
@@ -39,12 +39,13 @@ export class BookListComponent implements OnInit, AfterContentInit, AfterViewIni
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private breakpointObserver: BreakpointObserver,
+  constructor(public bookCacheService: BookCacheService,
+              public userSession: UserSessionService,
+              private breakpointObserver: BreakpointObserver,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private router: Router,
-              private snackBar: MatSnackBar,
-              public bookCacheService: BookCacheService) {
+              private snackBar: MatSnackBar) {
     console.log('Constructing BookListComponent', bookCacheService);
   }
 
@@ -56,7 +57,9 @@ export class BookListComponent implements OnInit, AfterContentInit, AfterViewIni
 
   ngAfterContentInit(): void {
     console.log('Adding book list menus');
-    BookListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.bookCacheService);
+    if (this.userSession.isSysAdmin) {
+      BookListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.bookCacheService);
+    }
   }
 
   ngAfterViewInit(): void {
@@ -65,11 +68,15 @@ export class BookListComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   displayedColumns(): string[] {
-    if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['select', 'title', 'author'];
-    } else {
-      return ['select', 'title', 'author', 'gradeLevel', 'location'];
+    let displayedColumns = [];
+    if (this.userSession.isSysAdmin) {
+      displayedColumns.push('select');
     }
+    displayedColumns.push('title', 'author');
+    if (!this.breakpointObserver.isMatched(Breakpoints.Handset)) {
+      displayedColumns.push('gradeLevel', 'location');
+    }
+    return displayedColumns;
   }
 
 }
