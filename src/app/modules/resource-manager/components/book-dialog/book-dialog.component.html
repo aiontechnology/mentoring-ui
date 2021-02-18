@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 Aion Technology LLC
+Copyright 2020 - 2021 Aion Technology LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,6 +18,9 @@ limitations under the License.
 <mat-dialog-content>
   <form [formGroup]="model">
     <input type="hidden" formControlName="book" />
+
+    <p class="legend">* Denotes a required field</p>
+
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="Title" formControlName="title" required />
