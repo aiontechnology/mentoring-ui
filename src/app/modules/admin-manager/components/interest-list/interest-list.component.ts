@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, ViewChild, OnInit, AfterContentInit, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { InterestCacheService } from '../../services/interests/interest-cache.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -24,13 +24,15 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { InterestDialogComponent } from '../interest-dialog/interest-dialog.component';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
 import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { InterestInbound } from '../../models/interest/interest-inbound';
 
 @Component({
   selector: 'ms-interest-list',
   templateUrl: './interest-list.component.html',
-  styleUrls: ['./interest-list.component.scss']
+  styleUrls: ['./interest-list.component.scss'],
+  providers: [InterestCacheService]
 })
-export class InterestListComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class InterestListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -53,11 +55,13 @@ export class InterestListComponent implements OnInit, AfterContentInit, AfterVie
   ngOnInit(): void {
     this.interestCacheService.establishDatasource();
     this.interestCacheService.clearSelection();
-  }
 
-  ngAfterContentInit(): void {
-    console.log('Adding book list menus');
-    InterestListMenuManager.addMenus(this.menuState, this.matDialog, this.snackBar, this.interestCacheService);
+    console.log('Adding interest list menus');
+    InterestListMenuManager.addMenus(this.menuState,
+                                     this.matDialog,
+                                     this.snackBar,
+                                     (i: InterestInbound) => this.jumpToNewItem(i),
+                                     this.interestCacheService);
   }
 
   ngAfterViewInit(): void {
@@ -69,6 +73,17 @@ export class InterestListComponent implements OnInit, AfterContentInit, AfterVie
     this.menuState.clear();
   }
 
+  /**
+   * Action taken after a dialog is closed: Move
+   * to page that displayes the new item.
+   * @param newItem Added/edited item that helps the
+   * cache service determine which page to jump to.
+   */
+  private jumpToNewItem(newItem: InterestInbound): void {
+    this.interestCacheService.clearSelection();
+    this.interestCacheService.jumpToItem(newItem);
+  }
+
 }
 
 class InterestListMenuManager {
@@ -76,8 +91,11 @@ class InterestListMenuManager {
   static addMenus(menuState: MenuStateService,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
-                  interestCacheService: InterestCacheService) {
+                  postAction: (i: InterestInbound) => void,
+                  interestCacheService: InterestCacheService): void {
+
     console.log('Constructing MenuHandler');
+
     menuState.add(new NewDialogCommand(
       'Create New Interest',
       'interest',
@@ -88,6 +106,7 @@ class InterestListMenuManager {
       null,
       dialog,
       snackBar,
+      (i: InterestInbound) => postAction(i),
       () => true));
     menuState.add(new EditDialogCommand(
       'Edit Interest',
@@ -99,8 +118,9 @@ class InterestListMenuManager {
       dialog,
       snackBar,
       () => ({ model: interestCacheService.getFirstSelection() }),
-      () => interestCacheService.clearSelection(),
+      (i: InterestInbound) => postAction(i),
       () => interestCacheService.selection.selected.length === 1));
+
   }
 
 }

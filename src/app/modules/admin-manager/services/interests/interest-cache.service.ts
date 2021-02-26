@@ -37,6 +37,6 @@ export class InterestCacheService extends DatasourceManager<InterestInbound> {
     );
   }
 
-  protected doRemoveItem(items): void { }
+  protected doRemoveItem(items: InterestInbound[]): void { }
 
 }

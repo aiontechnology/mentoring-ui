@@ -34,11 +34,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Mentor } from '../../models/mentor/mentor';
 
 @Component({
   selector: 'ms-mentor-list',
   templateUrl: './mentor-list.component.html',
-  styleUrls: ['./mentor-list.component.scss']
+  styleUrls: ['./mentor-list.component.scss'],
+  providers: [MentorCacheService]
 })
 export class MentorListComponent implements OnInit, OnDestroy {
 
@@ -107,7 +109,24 @@ export class MentorListComponent implements OnInit, OnDestroy {
     this.mentorCacheService.clearSelection();
     this.mentorCacheService.establishDatasource(this.schoolId);
     console.log('Adding mentor list menus');
-    MentorListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.mentorCacheService, this.schoolId);
+    MentorListMenuManager.addMenus(this.menuState,
+                                   this.router,
+                                   this.dialog,
+                                   this.snackBar,
+                                   (m: Mentor) => this.jumpToNewItem(m),
+                                   this.mentorCacheService,
+                                   this.schoolId);
+  }
+
+  /**
+   * Action taken after a dialog is closed: Move
+   * to page that displayes the new item.
+   * @param newItem Added/edited item that helps the
+   * cache service determine which page to jump to.
+   */
+  private jumpToNewItem(newItem: Mentor): void {
+    this.mentorCacheService.clearSelection();
+    this.mentorCacheService.jumpToItem(newItem);
   }
 
 }
@@ -118,10 +137,13 @@ class MentorListMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
+                  postAction: (m: Mentor) => void,
                   mentorCacheService: MentorCacheService,
-                  schoolId: string) {
-    menuState.clear();
+                  schoolId: string): void {
+
     console.log('Constructing MenuHandler');
+    menuState.clear();
+
     menuState.add(new NewDialogCommand(
       'Create New Mentor',
       'mentor',
@@ -132,6 +154,7 @@ class MentorListMenuManager {
       router,
       dialog,
       snackBar,
+      (m: Mentor) => postAction(m),
       () => schoolId != null));
     menuState.add(new EditDialogCommand(
       'Edit Mentor',
@@ -142,8 +165,8 @@ class MentorListMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ schoolId: schoolId, model: mentorCacheService.getFirstSelection() }),
-      () => mentorCacheService.clearSelection(),
+      () => ({ schoolId, model: mentorCacheService.getFirstSelection() }),
+      (m: Mentor) => postAction(m),
       () => mentorCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
       'Delete Mentor',
@@ -158,8 +181,8 @@ class MentorListMenuManager {
       null,
       () => mentorCacheService.selectionCount,
       () => mentorCacheService.removeSelected(),
-      () => { },
       () => mentorCacheService.selection.selected.length > 0));
+
   }
 
 }

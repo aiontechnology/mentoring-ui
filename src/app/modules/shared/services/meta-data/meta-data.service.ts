@@ -1,4 +1,4 @@
- /**
+/**
  * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -93,7 +93,7 @@ export class MetaDataService {
         this.dataStore.activityFocuses = data?._embedded.stringList || [];
         this.logCache('activity focus', this.dataStore.activityFocuses);
         this.publishActivityFocuses();
-      })
+      });
   }
 
   loadInterests(): void {
@@ -143,13 +143,14 @@ export class MetaDataService {
 
   updateInterests(newInterest: InterestOutbound): Promise<string[]> {
     console.log('Updating interest', newInterest);
-    return new Promise((resolver, reject) => {
+    return new Promise((resolver) => {
       this.http.put<any>(this.interestsUri, newInterest)
         .subscribe(data => {
           console.log('Recieved interest list:', data);
-          this.dataStore.interests = data?._embedded?.stringList || [];
+          const i = data?._embedded?.stringList || [];
+          this.dataStore.interests = i;
           this.publishInterests();
-          resolver(data);
+          resolver(i);
         });
     });
   }

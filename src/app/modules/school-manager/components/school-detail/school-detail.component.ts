@@ -46,14 +46,14 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
               private snackBar: MatSnackBar,
               private router: Router) {
 
-    let subscription1$ = route.paramMap.subscribe(
+    const subscription1$ = route.paramMap.subscribe(
       params => {
         this.schoolId = params.get('id');
       }
     );
 
     this.schoolService.readAllSchools();
-    let subscription2$ = this.schoolService.schools.subscribe(s => {
+    const subscription2$ = this.schoolService.schools.subscribe(() => {
 
       this.menuState.removeGroup('school');
 
@@ -125,9 +125,8 @@ class SchoolDetailMenuManager {
       dialog,
       snackBar,
       () => ({ model: school }),
-      () => {},
-      () => true
-    ));
+      () => { },
+      () => true));
     menuState.add(new DeleteDialogCommand(
       'Remove School',
       'school',
@@ -141,9 +140,7 @@ class SchoolDetailMenuManager {
       '/schoolsmanager',
       () => 1,
       () => schoolService.deleteSchools([school]),
-      () => {},
-      () => true
-    ));
+      () => true));
   }
 
 }
