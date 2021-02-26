@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,6 +69,38 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
      */
     get filter() {
         return this.dataSource.filter;
+    }
+
+    /**
+     * Move to the page that has the specified table data.
+     * @param value An item in the table.
+     */
+    jumpToItem(value: T): void {
+        const index = this.sortedData.findIndex(item => {
+            return JSON.stringify(item) === JSON.stringify(value);
+        });
+        if (index === -1) {
+            return;
+        }
+        const page = Math.floor(index / this.pageSize);
+        this.jumpToPage(page);
+    }
+
+    /**
+     * Move to the specified page.
+     * @param index Page number to jump to.
+     */
+    private jumpToPage(index: number): void {
+        this.dataSource.paginator.pageIndex = index;
+        this.dataSource.paginator.page.next({
+            pageIndex: index,
+            pageSize: this.pageSize,
+            length: this.dataSource.paginator.length
+        });
+    }
+
+    private get sortedData(): T[] {
+        return this.dataSource.sortData(this.dataSource.filteredData, this.dataSource.sort);
     }
 
     protected get filteredData(): T[] {

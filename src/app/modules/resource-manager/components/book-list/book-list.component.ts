@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, AfterContentInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MenuStateService } from 'src/app/services/menu-state.service';
@@ -29,12 +29,15 @@ import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialo
 import { BookDialogComponent } from '../book-dialog/book-dialog.component';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { UserSessionService } from 'src/app/services/user-session.service';
+import { Book } from '../../models/book/book';
+
 @Component({
   selector: 'ms-book-list',
   templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss']
+  styleUrls: ['./book-list.component.scss'],
+  providers: [BookCacheService]
 })
-export class BookListComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class BookListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -53,12 +56,15 @@ export class BookListComponent implements OnInit, AfterContentInit, AfterViewIni
     console.log('Establishing datasource');
     this.bookCacheService.establishDatasource();
     this.bookCacheService.clearSelection();
-  }
 
-  ngAfterContentInit(): void {
     console.log('Adding book list menus');
     if (this.userSession.isSysAdmin) {
-      BookListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.bookCacheService);
+      BookListMenuManager.addMenus(this.menuState,
+                                   this.router,
+                                   this.dialog,
+                                   this.snackBar,
+                                   (b: Book) => this.jumpToNewItem(b),
+                                   this.bookCacheService);
     }
   }
 
@@ -68,7 +74,7 @@ export class BookListComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   displayedColumns(): string[] {
-    let displayedColumns = [];
+    const displayedColumns = [];
     if (this.userSession.isSysAdmin) {
       displayedColumns.push('select');
     }
@@ -79,6 +85,17 @@ export class BookListComponent implements OnInit, AfterContentInit, AfterViewIni
     return displayedColumns;
   }
 
+  /**
+   * Action taken after a dialog is closed: Move
+   * to page that displayes the new item.
+   * @param newItem Added/edited item that helps the
+   * cache service determine which page to jump to.
+   */
+  private jumpToNewItem(newItem: Book): void {
+    this.bookCacheService.clearSelection();
+    this.bookCacheService.jumpToItem(newItem);
+  }
+
 }
 
 class BookListMenuManager {
@@ -87,8 +104,11 @@ class BookListMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
-                  bookCacheService: BookCacheService) {
+                  postAction: (b: Book) => void,
+                  bookCacheService: BookCacheService): void {
+
     console.log('Constructing MenuHandler');
+
     menuState.add(new NewDialogCommand(
       'Create New Book',
       'book',
@@ -99,6 +119,7 @@ class BookListMenuManager {
       router,
       dialog,
       snackBar,
+      (b: Book) => postAction(b),
       () => true));
     menuState.add(new EditDialogCommand(
       'Edit Book',
@@ -110,7 +131,7 @@ class BookListMenuManager {
       dialog,
       snackBar,
       () => ({ model: bookCacheService.getFirstSelection() }),
-      () => bookCacheService.clearSelection(),
+      (b: Book) => postAction(b),
       () => bookCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
       'Remove Book(s)',
@@ -125,8 +146,8 @@ class BookListMenuManager {
       null,
       () => bookCacheService.selectionCount,
       () => bookCacheService.removeSelected(),
-      () => { },
       () => bookCacheService.selection.selected.length > 0));
-    }
+
+  }
 
 }

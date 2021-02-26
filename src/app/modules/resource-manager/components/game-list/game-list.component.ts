@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, AfterContentInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MenuStateService } from 'src/app/services/menu-state.service';
@@ -29,13 +29,15 @@ import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-co
 import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { UserSessionService } from 'src/app/services/user-session.service';
+import { Game } from '../../models/game/game';
 
 @Component({
   selector: 'ms-game-list',
   templateUrl: './game-list.component.html',
-  styleUrls: ['./game-list.component.scss']
+  styleUrls: ['./game-list.component.scss'],
+  providers: [GameCacheService]
 })
-export class GameListComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class GameListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,12 +56,15 @@ export class GameListComponent implements OnInit, AfterContentInit, AfterViewIni
     console.log('Establishing datasource');
     this.gameCacheService.establishDatasource();
     this.gameCacheService.clearSelection();
-  }
 
-  ngAfterContentInit(): void {
     console.log('Adding game list menus');
     if (this.userSession.isSysAdmin) {
-      GameListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.gameCacheService);
+      GameListMenuManager.addMenus(this.menuState,
+                                   this.router,
+                                   this.dialog,
+                                   this.snackBar,
+                                   (g: Game) => this.jumpToNewItem(g),
+                                   this.gameCacheService);
     }
   }
 
@@ -69,7 +74,7 @@ export class GameListComponent implements OnInit, AfterContentInit, AfterViewIni
   }
 
   displayedColumns(): string[] {
-    let displayedColumns = [];
+    const displayedColumns = [];
     if (this.userSession.isSysAdmin) {
       displayedColumns.push('select');
     }
@@ -80,6 +85,17 @@ export class GameListComponent implements OnInit, AfterContentInit, AfterViewIni
     return displayedColumns;
   }
 
+  /**
+   * Action taken after a dialog is closed: Move
+   * to page that displayes the new item.
+   * @param newItem Added/edited item that helps the
+   * cache service determine which page to jump to.
+   */
+  private jumpToNewItem(newItem: Game): void {
+    this.gameCacheService.clearSelection();
+    this.gameCacheService.jumpToItem(newItem);
+  }
+
 }
 
 class GameListMenuManager {
@@ -88,8 +104,11 @@ class GameListMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
-                  gameCacheService: GameCacheService) {
+                  postAction: (g: Game) => void,
+                  gameCacheService: GameCacheService): void {
+
     console.log('Constructing MenuHandler');
+
     menuState.add(new NewDialogCommand(
       'Create New Game',
       'game',
@@ -100,6 +119,7 @@ class GameListMenuManager {
       router,
       dialog,
       snackBar,
+      (g: Game) => postAction(g),
       () => true));
     menuState.add(new EditDialogCommand(
       'Edit Game',
@@ -111,7 +131,7 @@ class GameListMenuManager {
       dialog,
       snackBar,
       () => ({ model: gameCacheService.getFirstSelection() }),
-      () => gameCacheService.clearSelection(),
+      (g: Game) => postAction(g),
       () => gameCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
       'Remove Game(s)',
@@ -126,8 +146,8 @@ class GameListMenuManager {
       null,
       () => gameCacheService.selectionCount,
       () => gameCacheService.removeSelected(),
-      () => { },
       () => gameCacheService.selection.selected.length > 0));
+
   }
 
 }
