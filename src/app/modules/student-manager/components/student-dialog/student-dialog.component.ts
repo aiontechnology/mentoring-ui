@@ -56,7 +56,7 @@ export class StudentDialogComponent implements OnInit {
   teachers$: Observable<Teacher[]>;
   mentors$: Observable<Mentor[]>;
   grades: Grade[] = grades;
-  contactMethods: string[] = ['Cellphone', 'Workphone', 'Email'];
+  contactMethods: string[] = ['Phone', 'Email', 'Either'];
   locations: string[] = ['Offline', 'Online', 'Both'];
 
   interestList$: Observable<string[]>;
@@ -304,8 +304,7 @@ export class StudentDialogComponent implements OnInit {
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       label: [null, [Validators.maxLength(50)]],
-      workPhone: null,
-      cellPhone: null,
+      phone: null,
       email: [null, [Validators.email, Validators.maxLength(50)]],
       preferredContactMethod: null,
       isEmergencyContact,
@@ -322,11 +321,10 @@ export class StudentDialogComponent implements OnInit {
 
       const errorMsg = 'You must provide at least one contact method.';
 
-      const workPhone = contact.get('workPhone');
-      const cellPhone = contact.get('cellPhone');
+      const phone = contact.get('phone');
       const email = contact.get('email');
 
-      if (!workPhone.value && !cellPhone.value && !email.value) {
+      if (!phone.value && !email.value) {
         return { noContacts: { msg: errorMsg } };
       }
 

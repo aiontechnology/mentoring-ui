@@ -109,15 +109,10 @@ export class StudentListComponent implements OnInit, OnDestroy {
   displayContact(contact: Contact): string {
 
     const name = contact.firstName + ' ' + contact.lastName;
-    let contactInfo = '';
 
-    if (contact.cellPhone) {
-      contactInfo = contact.cellPhone;
-    } else if (contact.workPhone) {
-      contactInfo = contact.workPhone;
-    }
+    let contactInfo = contact.phone ?? '';
 
-    if (contact.email) {
+    if (contact.email !== null) {
       contactInfo += contactInfo ? ', ' + contact.email : contact.email;
     }
 
