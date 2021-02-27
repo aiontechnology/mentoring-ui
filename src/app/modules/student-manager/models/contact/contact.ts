@@ -20,9 +20,8 @@ export class Contact {
   firstName: string;
   lastName: string;
   email: string;
-  workPhone: string;
-  cellPhone: string;
-  preferredContactMethod: string;
+  phone: string;
+  preferredContactMethod: 'EITHER' | 'EMAIL' | 'PHONE';
   isEmergencyContact: boolean;
   comment: string;
 
@@ -31,8 +30,7 @@ export class Contact {
     this.firstName = json?.firstName;
     this.lastName = json?.lastName;
     this.email = (json?.email === '') ? null : json?.email;
-    this.workPhone = json?.workPhone;
-    this.cellPhone = json?.cellPhone;
+    this.phone = json?.phone;
     this.preferredContactMethod = json?.preferredContactMethod;
     this.isEmergencyContact = json?.isEmergencyContact;
     this.comment = json?.comment;
