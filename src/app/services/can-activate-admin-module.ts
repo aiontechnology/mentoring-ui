@@ -22,7 +22,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CanActivateAdminModule implements CanActivate {
+export class CanActivateRoute implements CanActivate {
 
   constructor(private userSession: UserSessionService) { }
 

@@ -27,6 +27,7 @@ import { LoggingService } from './services/logging-service/logging.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MetaDataService } from './services/meta-data/meta-data.service';
+import { BookRepositoryService } from './services/resources/book-repository.service';
 
 @NgModule({
   declarations: [
@@ -60,6 +61,7 @@ export class SharedModule {
         LoggingService,
         SchoolCacheService,
         SchoolRepositoryService,
+        BookRepositoryService,
         MetaDataService
       ]
     };

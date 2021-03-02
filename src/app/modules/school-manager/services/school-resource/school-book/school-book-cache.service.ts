@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 - 2021 Aion Technology LLC
+ * Copyright 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,24 @@
  */
 
 import { Injectable } from '@angular/core';
-import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
+import { SchoolBookRepositoryService } from './school-book-repository.service';
 import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
 import { Book } from 'src/app/modules/shared/models/book/book';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class BookCacheService extends DatasourceManager<Book> {
+export class SchoolBookCacheService extends DatasourceManager<Book> {
 
-  constructor(private bookService: BookRepositoryService) {
+  constructor(private schoolBookService: SchoolBookRepositoryService) {
     super();
   }
 
-  establishDatasource(): void {
-    this.bookService.readAllBooks();
-    this.dataSource.data$ = this.bookService.items.pipe(
-      tap(() => console.log('Creating new book datasource'))
-    );
+  establishDatasource(schoolId: string): void {
+    this.schoolBookService.readAllSchoolBooks(schoolId);
+    this.dataSource.data$ = this.schoolBookService.schoolBooks
+      .pipe(tap(() => console.log('Creating new school book datasource')));
   }
 
-  protected doRemoveItem(items: Book[]): void {
-    this.bookService.deleteBooks(items);
-  }
+  protected doRemoveItem(items): void { }
 
 }
