@@ -77,7 +77,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
     this.http.get<any>(uri)
       .subscribe(data => {
         this.dataStore.items = [];
-        const i = data as T;
+        const i = this.fromJSON(data);
         this.dataStore.items.push(i);
         this.logCache();
         this.publishItems();
