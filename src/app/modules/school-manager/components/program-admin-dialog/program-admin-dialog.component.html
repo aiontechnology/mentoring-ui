@@ -56,7 +56,10 @@ limitations under the License.
 
     <div class="dialog-container">
       <mat-form-field>
-        <input matInput placeholder="Email Address" formControlName="email" />
+        <input matInput placeholder="Email Address" formControlName="email" required />
+        <mat-error *ngIf="model.hasError('required', 'email')">
+          You must enter an email address
+        </mat-error>
         <mat-error *ngIf="model.hasError('email', 'email')">
           Invalid email address format
         </mat-error>
