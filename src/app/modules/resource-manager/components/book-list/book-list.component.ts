@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MenuStateService } from 'src/app/services/menu-state.service';
@@ -37,10 +37,19 @@ import { Book } from 'src/app/modules/shared/models/book/book';
   styleUrls: ['./book-list.component.scss'],
   providers: [BookCacheService]
 })
-export class BookListComponent implements OnInit, AfterViewInit {
+export class BookListComponent implements OnInit {
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) set sort(sort: MatSort) {
+    if (sort !== undefined) {
+      this.bookCacheService.sort = sort;
+    }
+  }
+
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator !== undefined) {
+      this.bookCacheService.paginator = paginator;
+    }
+  }
 
   constructor(public bookCacheService: BookCacheService,
               public userSession: UserSessionService,
@@ -55,7 +64,6 @@ export class BookListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     console.log('Establishing datasource');
     this.bookCacheService.establishDatasource();
-    this.bookCacheService.clearSelection();
 
     console.log('Adding book list menus');
     if (this.userSession.isSysAdmin) {
@@ -66,11 +74,6 @@ export class BookListComponent implements OnInit, AfterViewInit {
                                    (b: Book) => this.jumpToNewItem(b),
                                    this.bookCacheService);
     }
-  }
-
-  ngAfterViewInit(): void {
-    this.bookCacheService.sort = this.sort;
-    this.bookCacheService.paginator = this.paginator;
   }
 
   displayedColumns(): string[] {

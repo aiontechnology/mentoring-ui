@@ -23,12 +23,16 @@ import { BookDialogComponent } from './components/book-dialog/book-dialog.compon
 import { GameDialogComponent } from './components/game-dialog/game-dialog.component';
 import { BookListComponent } from './components/book-list/book-list.component';
 import { GameListComponent } from './components/game-list/game-list.component';
+import { BookDetailComponent } from './components/book-detail/book-detail.component';
+import { GameDetailComponent } from './components/game-detail/game-detail.component';
 
 const routes: Routes = [
   {
     path: '', component: ResourceManagerComponent,
     children: [
-      { path: '', component: ResourceListComponent }
+      { path: '', component: ResourceListComponent },
+      { path: 'books/:id', component: BookDetailComponent },
+      { path: 'games/:id', component: GameDetailComponent }
     ]
   }
 ];
@@ -40,7 +44,9 @@ const routes: Routes = [
     ResourceManagerComponent,
     GameDialogComponent,
     BookListComponent,
-    GameListComponent
+    GameListComponent,
+    BookDetailComponent,
+    GameDetailComponent
   ],
   imports: [
     RouterModule.forChild(routes),
