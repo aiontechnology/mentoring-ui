@@ -21,6 +21,8 @@ limitations under the License.
     <mat-step label="Student Details" [stepControl]="studentDetails" errorMessage="Incomplete">
       <form [formGroup]="studentDetails">
 
+        <p class="legend">* Denotes a required field</p>
+
         <div class="dialog-container">
           <mat-form-field>
             <input matInput placeholder="First name" formControlName="firstName" required/>
@@ -142,7 +144,7 @@ limitations under the License.
       </form>
       <button mat-raised-button matStepperNext color="primary">Next</button>
     </mat-step>
-    
+
     <mat-step label="Teacher Input" [stepControl]="teacherInput" errorMessage="Incomplete">
       <form [formGroup]="teacherInput">
         <div formGroupName="teacher">
@@ -257,13 +259,7 @@ limitations under the License.
 
               <div class="dialog-container">
                 <mat-form-field>
-                  <input matInput msPhoneFormat placeholder="Work Phone Number" formControlName="workPhone" />
-                </mat-form-field>
-              </div>
-
-              <div class="dialog-container">
-                <mat-form-field>
-                  <input matInput msPhoneFormat placeholder="Cell Phone Number" formControlName="cellPhone" />
+                  <input matInput msPhoneFormat placeholder="Phone Number" formControlName="phone" />
                 </mat-form-field>
               </div>
 
@@ -360,13 +356,7 @@ limitations under the License.
 
           <div class="dialog-container">
             <mat-form-field>
-              <input matInput msPhoneFormat placeholder="Work Phone Number" formControlName="workPhone" />
-            </mat-form-field>
-          </div>
-
-          <div class="dialog-container">
-            <mat-form-field>
-              <input matInput msPhoneFormat placeholder="Cell Phone Number" formControlName="cellPhone" />
+              <input matInput msPhoneFormat placeholder="Phone Number" formControlName="phone" />
             </mat-form-field>
           </div>
 

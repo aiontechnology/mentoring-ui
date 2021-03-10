@@ -23,13 +23,13 @@ import { StudentInbound } from '../../models/student-inbound/student-inbound';
 import { StudentOutbound } from '../../models/student-outbound/student-outbound';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { StudentRepositoryService } from '../../services/student/student-repository.service';
-import { TeacherRepositoryService } from 'src/app/modules/school-manager/services/teacher/teacher-repository.service'
+import { TeacherRepositoryService } from 'src/app/modules/school-manager/services/teacher/teacher-repository.service';
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
 import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { MentorRepositoryService } from 'src/app/modules/mentor-manager/services/mentor/mentor-repository.service';
 import { Mentor } from 'src/app/modules/mentor-manager/models/mentor/mentor';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper'
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
@@ -41,7 +41,7 @@ import { tap } from 'rxjs/operators';
     { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
   ]
 })
-export class StudentDialogComponent {
+export class StudentDialogComponent implements OnInit {
 
   model: FormGroup;
   studentDetails: FormGroup;
@@ -56,7 +56,7 @@ export class StudentDialogComponent {
   teachers$: Observable<Teacher[]>;
   mentors$: Observable<Mentor[]>;
   grades: Grade[] = grades;
-  contactMethods: string[] = ['Cellphone', 'Workphone', 'Email'];
+  contactMethods: string[] = ['Phone', 'Email', 'Either'];
   locations: string[] = ['Offline', 'Online', 'Both'];
 
   interestList$: Observable<string[]>;
@@ -116,7 +116,7 @@ export class StudentDialogComponent {
   save(): void {
 
     // Create outbound student.
-    let studentProperties = Object.assign(this.studentDetails.value, { teacher: this.teacherInput.value.teacher }, this.contacts.value);
+    const studentProperties = Object.assign(this.studentDetails.value, { teacher: this.teacherInput.value.teacher }, this.contacts.value);
     this.addContactsProperty(studentProperties);
     this.clearMentorIfNotProvided(studentProperties);
 
@@ -230,21 +230,21 @@ export class StudentDialogComponent {
       // Enable teacher, since its value has been set.
       formGroup.get('teacherInput.teacher.uri').enable();
 
-      let parents = student?.contacts?.filter(contact => {
+      const parents = student?.contacts?.filter(contact => {
         return !contact?.isEmergencyContact;
       });
-      let emergencyContact = student?.contacts?.filter(contact => {
+      const emergencyContact = student?.contacts?.filter(contact => {
         return contact?.isEmergencyContact;
-      })
+      });
 
       if (emergencyContact.length) {
-        let contacts = formGroup.get('contacts') as FormGroup;
+        const contacts = formGroup.get('contacts') as FormGroup;
         contacts.addControl('emergencyContact', this.createContactForm(true));
         (formGroup.get('contacts.emergencyContact') as FormGroup).setValue(emergencyContact[0]);
       }
 
       // Instantiate parent/guardian and emergencyContact in form.
-      let parentsFormArray = formGroup.get('contacts.parents') as FormArray;
+      const parentsFormArray = formGroup.get('contacts.parents') as FormArray;
       parents.forEach((contact, index) => {
         parentsFormArray.push(this.createContactForm(false));
         (parentsFormArray.at(index) as FormGroup).setValue(contact);
@@ -285,7 +285,7 @@ export class StudentDialogComponent {
   addParent(): void {
     this.parents.push(this.createContactForm(false));
   }
-  
+
   addEmergencyContact(): void {
     this.contacts.addControl('emergencyContact', this.createContactForm(true));
   }
@@ -304,11 +304,10 @@ export class StudentDialogComponent {
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       label: [null, [Validators.maxLength(50)]],
-      workPhone: null,
-      cellPhone: null,
+      phone: null,
       email: [null, [Validators.email, Validators.maxLength(50)]],
       preferredContactMethod: null,
-      isEmergencyContact: isEmergencyContact,
+      isEmergencyContact,
       comment: ['']
     }, {
       validators: this.noContactMethodValidator()
@@ -322,11 +321,10 @@ export class StudentDialogComponent {
 
       const errorMsg = 'You must provide at least one contact method.';
 
-      const workPhone = contact.get('workPhone');
-      const cellPhone = contact.get('cellPhone');
+      const phone = contact.get('phone');
       const email = contact.get('email');
 
-      if (!workPhone.value && !cellPhone.value && !email.value) {
+      if (!phone.value && !email.value) {
         return { noContacts: { msg: errorMsg } };
       }
 
@@ -340,7 +338,7 @@ export class StudentDialogComponent {
    * Reset #teacher form value when grade is changed.
    */
   onGradeSelected(): void {
-    let teacher = this.teacherInput.get('teacher') as FormGroup;
+    const teacher = this.teacherInput.get('teacher') as FormGroup;
     teacher.patchValue({ uri: '' });
   }
 

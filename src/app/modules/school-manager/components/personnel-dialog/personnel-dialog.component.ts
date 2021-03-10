@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PersonnelRepositoryService } from '../../services/personnel/personnel-repository.service';
@@ -90,7 +90,7 @@ export class PersonnelDialogComponent {
         workPhone: personnel?.workPhone,
         cellPhone: personnel?.cellPhone,
         email: personnel?.email
-      })
+      });
     }
     return formGroup;
   }

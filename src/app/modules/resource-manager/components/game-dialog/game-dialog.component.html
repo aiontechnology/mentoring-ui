@@ -18,6 +18,9 @@ limitations under the License.
 <mat-dialog-content>
   <form [formGroup]="model">
     <input type="hidden" formControlName="game" />
+
+    <p class="legend">* Denotes a required field</p>
+
     <div class="dialog-container">
       <mat-form-field>
         <input matInput placeholder="Name" formControlName="name" required />

@@ -1,11 +1,30 @@
-export const environment = {
-    production: window["env"]["production"],
-    apiUri: window["env"]["apiUri"],
-    lpgUri: window["env"]["lpgUri"],
-    tokenRedirect: window["env"]["tokenRedirect"],
-    logoutRedirect: window["env"]["logoutRedirect"],
-    cognitoBaseUrl: window["env"]["cognitoBaseUrl"],
-    cognitoClientId: window["env"]["cognitoClientId"]
-};
+/**
+ * Copyright 2020 - 2021 Aion Technology LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
 import 'zone.js/dist/zone-error';
+import { EnvironmentOptions } from './environment-options';
+
+const windowEnv = window as EnvironmentOptions;
+
+export const environment = {
+  production: windowEnv?.env?.production,
+  apiUri: windowEnv?.env?.apiUri,
+  lpgUri: windowEnv?.env?.lpgUri,
+  tokenRedirect: windowEnv?.env?.tokenRedirect,
+  logoutRedirect: windowEnv?.env?.logoutRedirect,
+  cognitoBaseUrl: windowEnv?.env?.cognitoBaseUrl,
+  cognitoClientId: windowEnv?.env?.cognitoClientId
+};

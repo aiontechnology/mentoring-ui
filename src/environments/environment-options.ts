@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 - 2021 Aion Technology LLC
+ * Copyright 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-p.legend {
-  font-size: 0.9em;
-  color: red;
-  margin-bottom: 10px;
-}
-
-.dialog-container {
-  display: flex;
-}
-
-.dialog-container > * {
-  width: 100%;
-}
-
-.dialog-container > .mat-form-field + .mat-form-field {
-  margin-left: 16px;
-}
-
-.mat-radio-button ~ .mat-radio-button {
-  margin-left: 16px;
+export interface EnvironmentOptions {
+  env?: {
+    production: string;
+    apiUri: string;
+    lpgUri: string;
+    tokenRedirect: string;
+    logoutRedirect: string;
+    cognitoBaseUrl: string;
+    cognitoClientId: string;
+  };
 }

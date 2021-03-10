@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { PhoneFormatDirective } from './phone-format.directive';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';

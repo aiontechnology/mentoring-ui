@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild, AfterViewInit, AfterContentInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -26,15 +26,17 @@ import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-comm
 import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
 import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
 import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { SchoolCacheService } from 'src/app/modules/shared/services/school/school-cache.service';
+import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import { School } from 'src/app/modules/shared/models/school/school';
 
 @Component({
   selector: 'ms-school-list',
   templateUrl: './school-list.component.html',
-  styleUrls: ['./school-list.component.scss']
+  styleUrls: ['./school-list.component.scss'],
+  providers: [SchoolCacheService]
 })
-export class SchoolListComponent implements OnInit, AfterContentInit, AfterViewInit, OnDestroy {
+export class SchoolListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -50,11 +52,14 @@ export class SchoolListComponent implements OnInit, AfterContentInit, AfterViewI
 
   ngOnInit(): void {
     this.schoolCacheService.clearSelection();
-  }
 
-  ngAfterContentInit(): void {
     console.log('Adding school list menus');
-    SchoolListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.schoolCacheService);
+    SchoolListMenuManager.addMenus(this.menuState,
+                                   this.router,
+                                   this.dialog,
+                                   this.snackBar,
+                                   (s: School) => this.jumpToNewItem(s),
+                                   this.schoolCacheService);
   }
 
   ngAfterViewInit(): void {
@@ -74,6 +79,17 @@ export class SchoolListComponent implements OnInit, AfterContentInit, AfterViewI
     }
   }
 
+  /**
+   * Action taken after a dialog is closed: Move
+   * to page that displayes the new item.
+   * @param newItem Added/edited item that helps the
+   * cache service determine which page to jump to.
+   */
+  private jumpToNewItem(newItem: School): void {
+    this.schoolCacheService.clearSelection();
+    this.schoolCacheService.jumpToItem(newItem);
+  }
+
 }
 
 class SchoolListMenuManager {
@@ -82,8 +98,11 @@ class SchoolListMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
+                  postAction: (s: School) => void,
                   schoolCacheService: SchoolCacheService): void {
+
     console.log('Constructing MenuHandler', schoolCacheService);
+
     menuState.add(new NewDialogCommand(
       'Create New School',
       'school',
@@ -94,6 +113,7 @@ class SchoolListMenuManager {
       router,
       dialog,
       snackBar,
+      (s: School) => postAction(s),
       () => true));
     menuState.add(new EditDialogCommand(
       'Edit School',
@@ -105,7 +125,7 @@ class SchoolListMenuManager {
       dialog,
       snackBar,
       () => ({ model: schoolCacheService.getFirstSelection() }),
-      () => schoolCacheService.clearSelection(),
+      (s: School) => postAction(s),
       () => schoolCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
       'Remove School(s)',
@@ -120,8 +140,8 @@ class SchoolListMenuManager {
       null,
       () => schoolCacheService.selectionCount,
       () => schoolCacheService.removeSelected(),
-      () => { },
       () => schoolCacheService.selection.selected.length > 0));
+
   }
 
 }

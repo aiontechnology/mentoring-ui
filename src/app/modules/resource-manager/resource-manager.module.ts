@@ -21,10 +21,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ResourceListComponent } from './components/resource-list/resource-list.component';
 import { BookDialogComponent } from './components/book-dialog/book-dialog.component';
 import { BookRepositoryService } from './services/resources/book-repository.service';
-import { BookCacheService } from './services/resources/book-cache.service';
 import { GameDialogComponent } from './components/game-dialog/game-dialog.component';
 import { GameRepositoryService } from './services/resources/game-repository.service';
-import { GameCacheService } from './services/resources/game-cache.service';
 import { BookListComponent } from './components/book-list/book-list.component';
 import { GameListComponent } from './components/game-list/game-list.component';
 
@@ -51,9 +49,7 @@ const routes: Routes = [
     SharedModule.forRoot()
   ],
   providers: [
-    BookCacheService,
     BookRepositoryService,
-    GameCacheService,
     GameRepositoryService
   ]
 })

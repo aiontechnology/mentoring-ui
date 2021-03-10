@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, AfterContentInit, AfterViewInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -28,13 +28,15 @@ import { PersonnelDialogComponent } from '../personnel-dialog/personnel-dialog.c
 import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
+import { Personnel } from '../../models/personnel/personnel';
 
 @Component({
   selector: 'ms-personnel-list',
   templateUrl: './personnel-list.component.html',
-  styleUrls: ['./personnel-list.component.scss']
+  styleUrls: ['./personnel-list.component.scss'],
+  providers: [PersonnelCacheService]
 })
-export class PersonnelListComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class PersonnelListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,12 +56,15 @@ export class PersonnelListComponent implements OnInit, AfterContentInit, AfterVi
     console.log('Establishing datasource with school id', this.schoolId);
     this.personnelCacheService.establishDatasource(this.schoolId);
     this.personnelCacheService.clearSelection();
-  }
 
-  ngAfterContentInit(): void {
     console.log('Adding personnel list menus');
-    PersonnelMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.personnelCacheService,
-      this.schoolId);
+    PersonnelMenuManager.addMenus(this.menuState,
+                                  this.router,
+                                  this.dialog,
+                                  this.snackBar,
+                                  (p: Personnel) => this.jumpToNewItem(p),
+                                  this.personnelCacheService,
+                                  this.schoolId);
   }
 
   ngAfterViewInit(): void {
@@ -75,6 +80,17 @@ export class PersonnelListComponent implements OnInit, AfterContentInit, AfterVi
     }
   }
 
+  /**
+   * Action taken after a dialog is closed: Move
+   * to page that displayes the new item.
+   * @param newItem Added/edited item that helps the
+   * cache service determine which page to jump to.
+   */
+  private jumpToNewItem(newItem: Personnel): void {
+    this.personnelCacheService.clearSelection();
+    this.personnelCacheService.jumpToItem(newItem);
+  }
+
 }
 
 class PersonnelMenuManager {
@@ -83,8 +99,10 @@ class PersonnelMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
+                  postAction: (p: Personnel) => void,
                   personnelCacheService: PersonnelCacheService,
-                  schoolId: string) {
+                  schoolId: string): void {
+
     menuState.add(new NewDialogCommand(
       'Add Personnel',
       'personnel',
@@ -95,19 +113,20 @@ class PersonnelMenuManager {
       router,
       dialog,
       snackBar,
+      (p: Personnel) => postAction(p),
       () => true));
     menuState.add(new EditDialogCommand(
-        'Edit Personnel',
-        'personnel',
-        PersonnelDialogComponent,
-        'Personnel updated',
-        null,
-        router,
-        dialog,
-        snackBar,
-        () => ({ model: personnelCacheService.getFirstSelection() }),
-        () => personnelCacheService.clearSelection(),
-        () => personnelCacheService.selection.selected.length === 1));
+      'Edit Personnel',
+      'personnel',
+      PersonnelDialogComponent,
+      'Personnel updated',
+      null,
+      router,
+      dialog,
+      snackBar,
+      () => ({ model: personnelCacheService.getFirstSelection() }),
+      (p: Personnel) => postAction(p),
+      () => personnelCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
       'Remove Personnel',
       'personnel',
@@ -121,8 +140,8 @@ class PersonnelMenuManager {
       null,
       () => personnelCacheService.selectionCount,
       () => personnelCacheService.removeSelected(),
-      () => { },
       () => personnelCacheService.selection.selected.length > 0));
+
   }
 
 }

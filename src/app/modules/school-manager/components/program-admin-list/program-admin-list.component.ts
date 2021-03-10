@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterContentInit, AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,13 +28,15 @@ import { ConfimationDialogComponent } from 'src/app/modules/shared/components/co
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { ProgramAdminCacheService } from '../../services/program-admin/program-admin-cache.service';
 import { ProgramAdminDialogComponent } from '../program-admin-dialog/program-admin-dialog.component';
+import { ProgramAdmin } from '../../models/program-admin/program-admin';
 
 @Component({
   selector: 'ms-program-admin-list',
   templateUrl: './program-admin-list.component.html',
-  styleUrls: ['./program-admin-list.component.scss']
+  styleUrls: ['./program-admin-list.component.scss'],
+  providers: [ProgramAdminCacheService]
 })
-export class ProgramAdminListComponent implements OnInit, AfterContentInit, AfterViewInit {
+export class ProgramAdminListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -54,12 +56,15 @@ export class ProgramAdminListComponent implements OnInit, AfterContentInit, Afte
     console.log('Establishing datasource with school id', this.schoolId);
     this.programAdminCacheService.establishDatasource(this.schoolId);
     this.programAdminCacheService.clearSelection();
-  }
 
-  ngAfterContentInit(): void {
     console.log('Adding program admin list menus');
-    ProgramAdminListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.programAdminCacheService,
-      this.schoolId);
+    ProgramAdminListMenuManager.addMenus(this.menuState,
+                                         this.router,
+                                         this.dialog,
+                                         this.snackBar,
+                                         (p: ProgramAdmin) => this.jumpToNewItem(p),
+                                         this.programAdminCacheService,
+                                         this.schoolId);
   }
 
   ngAfterViewInit(): void {
@@ -75,6 +80,17 @@ export class ProgramAdminListComponent implements OnInit, AfterContentInit, Afte
     }
   }
 
+  /**
+   * Action taken after a dialog is closed: Move
+   * to page that displayes the new item.
+   * @param newItem Added/edited item that helps the
+   * cache service determine which page to jump to.
+   */
+  private jumpToNewItem(newItem: ProgramAdmin): void {
+    this.programAdminCacheService.clearSelection();
+    this.programAdminCacheService.jumpToItem(newItem);
+  }
+
 }
 
 class ProgramAdminListMenuManager {
@@ -83,8 +99,10 @@ class ProgramAdminListMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
+                  postAction: (p: ProgramAdmin) => void,
                   programAdminCacheSerice: ProgramAdminCacheService,
-                  schoolId: string) {
+                  schoolId: string): void {
+
     menuState.add(new NewDialogCommand(
       'Add Program Admin',
       'program-admin',
@@ -95,6 +113,7 @@ class ProgramAdminListMenuManager {
       router,
       dialog,
       snackBar,
+      (p: ProgramAdmin) => postAction(p),
       () => true));
     menuState.add(new EditDialogCommand(
       'Edit Program Admin',
@@ -106,7 +125,7 @@ class ProgramAdminListMenuManager {
       dialog,
       snackBar,
       () => ({ model: programAdminCacheSerice.getFirstSelection() }),
-      () => programAdminCacheSerice.clearSelection(),
+      (p: ProgramAdmin) => postAction(p),
       () => programAdminCacheSerice.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
       'Remove Program Admin(s)',
@@ -121,8 +140,8 @@ class ProgramAdminListMenuManager {
       null,
       () => programAdminCacheSerice.selectionCount,
       () => programAdminCacheSerice.removeSelected(),
-      () => { },
       () => programAdminCacheSerice.selection.selected.length > 0));
+
   }
 
 }

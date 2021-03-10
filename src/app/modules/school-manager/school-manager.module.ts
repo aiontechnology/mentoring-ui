@@ -24,14 +24,11 @@ import { TeacherListComponent } from './components/teacher-list/teacher-list.com
 import { TeacherRepositoryService } from './services/teacher/teacher-repository.service';
 import { TeacherDialogComponent } from './components/teacher-dialog/teacher-dialog.component';
 import { GradesFormatPipe } from '../shared/pipes/grades-format.pipe';
-import { TeacherCacheService } from './services/teacher/teacher-cache.service';
 import { SharedModule } from '../shared/shared.module';
 import { ProgramAdminListComponent } from './components/program-admin-list/program-admin-list.component';
 import { ProgramAdminRepositoryService } from './services/program-admin/program-admin-repository.service';
-import { ProgramAdminCacheService } from './services/program-admin/program-admin-cache.service';
 import { ProgramAdminDialogComponent } from './components/program-admin-dialog/program-admin-dialog.component';
 import { PersonnelListComponent } from './components/personnel-list/personnel-list.component';
-import { PersonnelCacheService } from './services/personnel/personnel-cache.service';
 import { PersonnelRepositoryService } from './services/personnel/personnel-repository.service';
 import { PersonnelDialogComponent } from './components/personnel-dialog/personnel-dialog.component';
 
@@ -64,11 +61,8 @@ const routes: Routes = [
     SharedModule.forRoot()
   ],
   providers: [
-    PersonnelCacheService,
     PersonnelRepositoryService,
-    ProgramAdminCacheService,
     ProgramAdminRepositoryService,
-    TeacherCacheService,
     TeacherRepositoryService
   ]
 })

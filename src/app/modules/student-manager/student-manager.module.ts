@@ -20,12 +20,10 @@ import { SharedModule } from '../shared/shared.module';
 import { StudentManagerComponent } from './student-manager.component';
 import { StudentListComponent } from './components/student-list/student-list.component';
 import { StudentDialogComponent } from './components/student-dialog/student-dialog.component';
-import { StudentCacheService } from './services/student/student-cache.service';
 import { LpgRepositoryService } from './services/lpg/lpg-repository.service';
 import { StudentRepositoryService } from './services/student/student-repository.service';
 import { TeacherRepositoryService } from 'src/app/modules/school-manager/services/teacher/teacher-repository.service';
 import { TeacherGradeFilterPipe } from '../shared/pipes/teacher-grade-filter.pipe';
-import { MetaDataService } from '../shared/services/meta-data/meta-data.service';
 import { StudentDetailComponent } from './components/student-detail/student-detail.component';
 import { MentorRepositoryService } from 'src/app/modules/mentor-manager/services/mentor/mentor-repository.service';
 import { ScrollToDirective } from './directives/scroll-to.directive';
@@ -54,7 +52,6 @@ const routes: Routes = [
     SharedModule.forRoot()
   ],
   providers: [
-    StudentCacheService,
     StudentRepositoryService,
     LpgRepositoryService,
     TeacherRepositoryService,
