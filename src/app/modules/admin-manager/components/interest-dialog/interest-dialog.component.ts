@@ -19,6 +19,7 @@ import { AbstractControl, FormGroup, FormBuilder, ValidatorFn } from '@angular/f
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { InterestOutbound } from 'src/app/modules/shared/models/meta-data/interests/interest-outbound';
+import { InterestInbound } from '../../models/interest/interest-inbound';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -87,8 +88,9 @@ export class InterestDialogComponent implements OnInit, OnDestroy {
     };
     const ret = this.metaDataService.updateInterests(value);
 
-    ret.then((i: string[]) => {
-      this.dialogRef.close(i);
+    ret.then(() => {
+      const n: InterestInbound = { name: newInterest };
+      this.dialogRef.close(n);
     });
 
   }

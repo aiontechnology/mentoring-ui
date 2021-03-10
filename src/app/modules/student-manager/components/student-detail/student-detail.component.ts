@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,13 +62,13 @@ export class StudentDetailComponent implements OnDestroy {
               private router: Router,
               private lpgService: LpgRepositoryService) {
 
-    let subscription1$ = this.route.paramMap.subscribe(params => {
+    const subscription1$ = this.route.paramMap.subscribe(params => {
       this.studentId = params.get('studentId');
       this.schoolId = params.get('schoolId');
     });
 
     this.studentService.readAllStudents(this.schoolId);
-    let subscription2$ = this.studentService.students.subscribe(s => {
+    const subscription2$ = this.studentService.students.subscribe(() => {
 
       this.menuState.removeGroup('student');
 
@@ -76,7 +76,7 @@ export class StudentDetailComponent implements OnDestroy {
       this.contacts = this.student?.contacts ? this.student?.contacts : [];
       this.parents = this.contacts.filter(contact => !contact.isEmergencyContact);
       this.emergencyContact = this.contacts.find(contact => contact.isEmergencyContact);
-      this.studentGrade = grades.find(grade => grade.value == this.student?.grade)?.valueView;
+      this.studentGrade = grades.find(grade => grade.value === this.student?.grade)?.valueView;
       this.studentMentor = this.student?.mentor;
 
       console.log('Adding student detail menus');
@@ -157,10 +157,9 @@ class StudentDetailMenuManager {
       router,
       dialog,
       snackBar,
-      '/studentsmanager',
+      '/studentmanager',
       () => 1,
       () => studentService.deleteStudents([student]),
-      () => {},
       () => true
     ));
   }

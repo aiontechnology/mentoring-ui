@@ -35,11 +35,13 @@ import { MatPaginator } from '@angular/material/paginator';
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Student } from '../../models/student/student';
 
 @Component({
   selector: 'ms-student-list',
   templateUrl: './student-list.component.html',
-  styleUrls: ['./student-list.component.scss']
+  styleUrls: ['./student-list.component.scss'],
+  providers: [StudentCacheService]
 })
 export class StudentListComponent implements OnInit, OnDestroy {
 
@@ -105,17 +107,12 @@ export class StudentListComponent implements OnInit, OnDestroy {
   }
 
   displayContact(contact: Contact): string {
-    
-    let name = contact.firstName + ' ' + contact.lastName;
-    let contactInfo = '';
 
-    if (contact.cellPhone) {
-      contactInfo = contact.cellPhone;
-    } else if (contact.workPhone) {
-      contactInfo = contact.workPhone;
-    }
+    const name = contact.firstName + ' ' + contact.lastName;
 
-    if (contact.email) {
+    let contactInfo = contact.phone ?? '';
+
+    if (contact.email !== null) {
       contactInfo += contactInfo ? ', ' + contact.email : contact.email;
     }
 
@@ -126,8 +123,26 @@ export class StudentListComponent implements OnInit, OnDestroy {
   private loadStudentData(): void {
     this.studentCacheService.clearSelection();
     this.studentCacheService.establishDatasource(this.schoolId);
+
     console.log('Adding student list menus');
-    StudentListMenuManager.addMenus(this.menuState, this.router, this.dialog, this.snackBar, this.studentCacheService, this.schoolId);
+    StudentListMenuManager.addMenus(this.menuState,
+                                    this.router,
+                                    this.dialog,
+                                    this.snackBar,
+                                    (s: Student) => this.jumpToNewItem(s),
+                                    this.studentCacheService,
+                                    this.schoolId);
+  }
+
+  /**
+   * Action taken after a dialog is closed: Move
+   * to page that displayes the new item.
+   * @param newItem Added/edited item that helps the
+   * cache service determine which page to jump to.
+   */
+  private jumpToNewItem(newItem: Student): void {
+    this.studentCacheService.clearSelection();
+    this.studentCacheService.jumpToItem(newItem);
   }
 
 }
@@ -138,10 +153,13 @@ class StudentListMenuManager {
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
+                  postAction: (s: Student) => void,
                   studentCacheService: StudentCacheService,
-                  schoolId: string) {
-    menuState.clear();
+                  schoolId: string): void {
+
     console.log('Constructing MenuHandler');
+    menuState.clear();
+
     menuState.add(new NewDialogCommand(
       'Create New Student',
       'student',
@@ -152,6 +170,7 @@ class StudentListMenuManager {
       router,
       dialog,
       snackBar,
+      (s: Student) => postAction(s),
       () => schoolId != null));
     menuState.add(new EditDialogCommand(
       'Edit Student',
@@ -162,8 +181,8 @@ class StudentListMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ schoolId: schoolId, model: studentCacheService.getFirstSelection() }),
-      () => studentCacheService.clearSelection(),
+      () => ({ schoolId, model: studentCacheService.getFirstSelection() }),
+      (s: Student) => postAction(s),
       () => studentCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
       'Delete Student',
@@ -178,8 +197,8 @@ class StudentListMenuManager {
       null,
       () => studentCacheService.selectionCount,
       () => studentCacheService.removeSelected(),
-      () => { },
       () => studentCacheService.selection.selected.length > 0));
+
   }
 
 }

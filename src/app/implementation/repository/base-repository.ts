@@ -41,7 +41,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   @log
   protected create(uri: string, newItem: T): Promise<T> {
     console.log('Creating', uri);
-    return new Promise((resolver, reject) => {
+    return new Promise((resolver) => {
       console.log('Adding item:', uri, newItem);
       this.http.post(uri, newItem)
         .subscribe(data => {
@@ -81,7 +81,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
         this.dataStore.items.push(i);
         this.logCache();
         this.publishItems();
-      })
+      });
   }
 
   @log
@@ -98,7 +98,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   @log
   protected update(uri: string, item: T): Promise<T> {
     console.log('Updating', uri);
-    return new Promise((resolver, reject) => {
+    return new Promise((resolver) => {
       this.http.put(item.getSelfLink(), item)
         .subscribe(data => {
           console.log('Recieved item: ', data);
@@ -121,7 +121,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
     items.forEach(item => {
       console.log('Deleting', item);
       this.http.delete(item.getSelfLink())
-        .subscribe(data => {
+        .subscribe(() => {
           const index: number = this.dataStore.items.indexOf(item);
           if (index !== -1) {
             this.dataStore.items.splice(index, 1);
