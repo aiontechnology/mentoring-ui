@@ -38,6 +38,7 @@ export class GameDialogComponent implements OnInit {
   locations: string[] = ['Offline', 'Online', 'Both'];
   activityFocusList$: Observable<string[]>;
   leadershipSkillList$: Observable<string[]>;
+  leadershipTraitList$: Observable<string[]>;
 
   gradeRangeValidator = (control: AbstractControl): {[key: string]: boolean} => {
     const grade1 = control.get('grade1');
@@ -64,6 +65,9 @@ export class GameDialogComponent implements OnInit {
 
     this.metaDataService.loadLeadershipSkills();
     this.leadershipSkillList$ = this.metaDataService.leadershipSkills;
+
+    this.metaDataService.loadLeadershipTraits();
+    this.leadershipTraitList$ = this.metaDataService.leadershipTraits;
 
   }
 
@@ -100,7 +104,8 @@ export class GameDialogComponent implements OnInit {
       }, { validator: this.gradeRangeValidator }),
       location: ['OFFLINE', Validators.required],
       activityFocuses: [],
-      leadershipSkills: []
+      leadershipSkills: [],
+      leadershipTraits: []
     });
     if (this.isUpdate) {
       formGroup.setValue({
@@ -112,7 +117,8 @@ export class GameDialogComponent implements OnInit {
         },
         location: game?.location?.toString(),
         activityFocuses: game?.activityFocuses,
-        leadershipSkills: game?.leadershipSkills
+        leadershipSkills: game?.leadershipSkills,
+        leadershipTraits: game?.leadershipTraits
       });
     }
     return formGroup;
