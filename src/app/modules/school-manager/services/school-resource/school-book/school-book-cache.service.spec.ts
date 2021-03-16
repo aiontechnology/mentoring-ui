@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,14 @@
 
 import { TestBed } from '@angular/core/testing';
 
-import { BookRepositoryService } from './book-repository.service';
+import { SchoolBookCacheService } from './school-book-cache.service';
 
-describe('BookService', () => {
-  let service: BookRepositoryService;
+describe('SchoolBookCacheService', () => {
+  let service: SchoolBookCacheService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BookRepositoryService);
+    service = TestBed.inject(SchoolBookCacheService);
   });
 
   it('should be created', () => {

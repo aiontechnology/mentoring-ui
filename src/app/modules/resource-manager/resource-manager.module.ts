@@ -20,7 +20,6 @@ import { SharedModule } from '../shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { ResourceListComponent } from './components/resource-list/resource-list.component';
 import { BookDialogComponent } from './components/book-dialog/book-dialog.component';
-import { BookRepositoryService } from './services/resources/book-repository.service';
 import { GameDialogComponent } from './components/game-dialog/game-dialog.component';
 import { GameRepositoryService } from './services/resources/game-repository.service';
 import { BookListComponent } from './components/book-list/book-list.component';
@@ -49,7 +48,6 @@ const routes: Routes = [
     SharedModule.forRoot()
   ],
   providers: [
-    BookRepositoryService,
     GameRepositoryService
   ]
 })

@@ -17,8 +17,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Book } from '../../models/book/book';
-import { BookRepositoryService } from '../../services/resources/book-repository.service';
+import { Book } from 'src/app/modules/shared/models/book/book';
+import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
