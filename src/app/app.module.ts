@@ -31,7 +31,7 @@ import { environment } from 'src/environments/environment';
 import { HttpErrorInterceptorService } from './services/http-error-interceptor.service';
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CanActivateAdminModule } from './services/can-activate-admin-module';
+import { CanActivateRoute } from './services/can-activate-admin-module';
 
 const loginProvider = new InjectionToken('loginRedirectResolver');
 const logoutProvider = new InjectionToken('logoutRedirectResolver');
@@ -47,7 +47,7 @@ const routes: Routes = [
   { path: 'receiveToken', component: ReceiveTokenComponent },
   { path: 'handleLogout', component: HandleLogoutComponent },
   { path: 'adminmanager', loadChildren: () => import('./modules/admin-manager/admin-manager.module')
-    .then(m => m.AdminManagerModule), canActivate: [CanActivateAdminModule]},
+    .then(m => m.AdminManagerModule), canActivate: [CanActivateRoute]},
   { path: 'resourcemanager', loadChildren: () => import('./modules/resource-manager/resource-manager.module')
     .then(m => m.ResourceManagerModule) },
   { path: 'schoolsmanager', loadChildren: () => import('./modules/school-manager/school-manager.module')

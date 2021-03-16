@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 Aion Technology LLC
+Copyright 2020 - 2021 Aion Technology LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -71,8 +71,8 @@ limitations under the License.
       </mat-card-content>
     </mat-card>
   </mat-tab>
-  <mat-tab label="Program Administrators">
-    <mat-card> 
+  <mat-tab label="Program Administrators" *ngIf="userSession.isSysAdmin">
+    <mat-card>
       <mat-card-header>
         <mat-card-title>Program Administrators</mat-card-title>
       </mat-card-header>
@@ -84,7 +84,7 @@ limitations under the License.
     </mat-card>
   </mat-tab>
   <mat-tab label="Teachers">
-    <mat-card> 
+    <mat-card>
       <mat-card-header>
         <mat-card-title>Teachers</mat-card-title>
       </mat-card-header>
@@ -96,13 +96,25 @@ limitations under the License.
     </mat-card>
   </mat-tab>
   <mat-tab label="Other Personnel">
-    <mat-card> 
+    <mat-card>
       <mat-card-header>
         <mat-card-title>Other Personnel</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="personnel">
          <ms-personnel-list [schoolId]="schoolId"></ms-personnel-list>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="Books">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Books</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="books">
+         <ms-school-book-list [schoolId]="schoolId"></ms-school-book-list>
         </div>
       </mat-card-content>
     </mat-card>

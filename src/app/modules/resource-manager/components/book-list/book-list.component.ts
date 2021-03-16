@@ -29,7 +29,7 @@ import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialo
 import { BookDialogComponent } from '../book-dialog/book-dialog.component';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { UserSessionService } from 'src/app/services/user-session.service';
-import { Book } from '../../models/book/book';
+import { Book } from 'src/app/modules/shared/models/book/book';
 
 @Component({
   selector: 'ms-book-list',

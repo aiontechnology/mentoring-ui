@@ -31,14 +31,22 @@ import { ProgramAdminDialogComponent } from './components/program-admin-dialog/p
 import { PersonnelListComponent } from './components/personnel-list/personnel-list.component';
 import { PersonnelRepositoryService } from './services/personnel/personnel-repository.service';
 import { PersonnelDialogComponent } from './components/personnel-dialog/personnel-dialog.component';
+import { SchoolBookListComponent } from './components/school-book-list/school-book-list.component';
+import { SchoolBookDialogComponent } from './components/school-book-dialog/school-book-dialog.component';
+import { SchoolBookRepositoryService } from './services/school-resource/school-book/school-book-repository.service';
+import { CanActivateRoute } from 'src/app/services/can-activate-admin-module';
 
 const routes: Routes = [
   {
-    path: '', component: SchoolManagerComponent,
+    path: '',
+    component: SchoolManagerComponent,
     children: [
-      { path: '', component: SchoolListComponent },
-      { path: 'schools/:id', component: SchoolDetailComponent }
-    ]
+      { path: '', component: SchoolListComponent }
+    ],
+    canActivate: [CanActivateRoute]
+  },
+  {
+    path: 'schools/:id', component: SchoolDetailComponent
   }
 ];
 
@@ -54,7 +62,9 @@ const routes: Routes = [
     SchoolManagerComponent,
     TeacherDialogComponent,
     TeacherListComponent,
-    PersonnelDialogComponent
+    PersonnelDialogComponent,
+    SchoolBookListComponent,
+    SchoolBookDialogComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -63,7 +73,8 @@ const routes: Routes = [
   providers: [
     PersonnelRepositoryService,
     ProgramAdminRepositoryService,
-    TeacherRepositoryService
+    TeacherRepositoryService,
+    SchoolBookRepositoryService
   ]
 })
 export class SchoolManagerModule { }
