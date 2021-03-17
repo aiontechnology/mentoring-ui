@@ -29,7 +29,7 @@ import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-co
 import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import { UserSessionService } from 'src/app/services/user-session.service';
-import { Game } from '../../models/game/game';
+import { Game } from 'src/app/modules/shared/models/game/game';
 
 @Component({
   selector: 'ms-game-list',
