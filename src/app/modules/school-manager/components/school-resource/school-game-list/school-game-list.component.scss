@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,24 +14,28 @@
  * limitations under the License.
  */
 
-export enum ResourceType {
-    BOOK,
-    GAME
+.school-games {
+  border: 1px solid black;
 }
 
-export class Resource {
-    type: ResourceType;
-    title: string;
-    name: string;
-    author: string;
-    description: string;
-    gradeLevel: number;
-    interests: [ string ];
-    leadershipTraits: [ string ];
-    leadershipSkills: [string];
-    _links: {
-        self: [
-            { href: string }
-        ]
-    };
+table {
+  width: 100%;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.mat-table {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.header {
+  min-height: 64px;
+  padding: 8px 24px 0;
+}
+
+.mat-column-select {
+  overflow: initial;
 }
