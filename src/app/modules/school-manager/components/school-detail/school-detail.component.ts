@@ -93,30 +93,42 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
           this.menuState.makeGroupInvisible('program-admin');
           this.menuState.makeGroupInvisible('personnel');
           this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
           break;
         case 1:
           this.menuState.makeGroupInvisible('school');
           this.menuState.makeGroupInvisible('teacher');
           this.menuState.makeGroupInvisible('personnel');
           this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
           break;
         case 2:
           this.menuState.makeGroupInvisible('school');
           this.menuState.makeGroupInvisible('program-admin');
           this.menuState.makeGroupInvisible('personnel');
           this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
           break;
         case 3:
           this.menuState.makeGroupInvisible('school');
           this.menuState.makeGroupInvisible('program-admin');
           this.menuState.makeGroupInvisible('teacher');
           this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
           break;
         case 4:
           this.menuState.makeGroupInvisible('school');
           this.menuState.makeGroupInvisible('program-admin');
           this.menuState.makeGroupInvisible('personnel');
           this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('school-game');
+          break;
+        case 5:
+          this.menuState.makeGroupInvisible('school');
+          this.menuState.makeGroupInvisible('program-admin');
+          this.menuState.makeGroupInvisible('personnel');
+          this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('school-book');
           break;
       }
     } else {

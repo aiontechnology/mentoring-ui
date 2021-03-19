@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 - 2021 Aion Technology LLC
+ * Copyright 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,24 @@
  */
 
 import { Injectable } from '@angular/core';
+import { SchoolGameRepositoryService } from './school-game-repository.service';
 import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
 import { Game } from 'src/app/modules/shared/models/game/game';
-import { GameRepositoryService } from 'src/app/modules/shared/services/resources/game-repository.service';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class GameCacheService extends DatasourceManager<Game> {
+export class SchoolGameCacheService extends DatasourceManager<Game> {
 
-  constructor(private gameService: GameRepositoryService) {
+  constructor(private schoolGameService: SchoolGameRepositoryService) {
     super();
   }
 
-  establishDatasource(): void {
-    this.gameService.readAllGames();
-    this.dataSource.data$ = this.gameService.items.pipe(
-      tap(() => console.log('Creating new game datasource'))
-    );
+  establishDatasource(schoolId: string): void {
+    this.schoolGameService.readAllSchoolGames(schoolId);
+    this.dataSource.data$ = this.schoolGameService.schoolGames
+      .pipe(tap(() => console.log('Creating new school game datasource')));
   }
 
-  protected doRemoveItem(items: Game[]): void {
-    this.gameService.deleteGames(items);
-  }
+  protected doRemoveItem(items): void { }
 
 }
