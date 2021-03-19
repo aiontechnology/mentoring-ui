@@ -79,7 +79,6 @@ export class MentorListComponent implements OnInit, OnDestroy {
       );
     } else if (this.userSession.isProgAdmin) {
       this.schoolId = this.userSession.schoolUUID;
-      this.mentorCacheService.establishDatasource(this.schoolId);
       this.loadMentorData();
     }
   }
@@ -106,8 +105,9 @@ export class MentorListComponent implements OnInit, OnDestroy {
   }
 
   private loadMentorData(): void {
-    this.mentorCacheService.clearSelection();
+
     this.mentorCacheService.establishDatasource(this.schoolId);
+
     console.log('Adding mentor list menus');
     MentorListMenuManager.addMenus(this.menuState,
                                    this.router,
@@ -116,6 +116,7 @@ export class MentorListComponent implements OnInit, OnDestroy {
                                    (m: Mentor) => this.jumpToNewItem(m),
                                    this.mentorCacheService,
                                    this.schoolId);
+
   }
 
   /**
