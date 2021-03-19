@@ -18,9 +18,9 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GameRepositoryService } from '../../services/resources/game-repository.service';
+import { GameRepositoryService } from 'src/app/modules/shared/services/resources/game-repository.service';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import { Game } from '../../models/game/game';
+import { Game } from 'src/app/modules/shared/models/game/game';
 import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { Observable } from 'rxjs';
 

@@ -17,10 +17,11 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
-import { SchoolBookRepositoryService } from '../../services/school-resource/school-book/school-book-repository.service';
+import { SchoolBookRepositoryService } from '../../../services/school-resource/school-book/school-book-repository.service';
 import { Subscription } from 'rxjs';
 import { Book } from 'src/app/modules/shared/models/book/book';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { DropListData } from '../drop-list-data';
 
 @Component({
   selector: 'ms-school-book-dialog',
@@ -76,18 +77,16 @@ export class SchoolBookDialogComponent implements OnInit, OnDestroy {
 
   drop(event$: CdkDragDrop<Book[]>): void {
 
-    const prevItem = event$.previousContainer.data[event$.previousIndex];
-
-    // Index of the filtered list to insert into.
-    event$.currentIndex = DropListData.sortedInsertIndex(prevItem, event$.container.data);
-    if (event$.currentIndex < 0) {
-      event$.currentIndex = event$.container.data.length;
-    }
-
     // If the droplist item is dropped back into the same container.
     if (event$.previousContainer === event$.container) {
-      moveItemInArray(event$.container.data, event$.previousIndex, event$.currentIndex);
+
+      // If the item is dropped back in the same container, insert it back into (previous) sorted order.
+      moveItemInArray(event$.container.data, event$.previousIndex, event$.previousIndex);
+
     } else {
+
+      const prevItem = event$.previousContainer.data[event$.previousIndex];
+
       // Check if book is being transferred from global resources to local.
       if (event$.previousContainer.data !== this.localBooks.filteredData) {
         this.books.removeFromData(prevItem);
@@ -98,12 +97,25 @@ export class SchoolBookDialogComponent implements OnInit, OnDestroy {
         // Insert the book back into global resources.
         this.books.insertSorted(prevItem);
       }
+
+      /**
+       * Find the index of the filteredData to insert at. This overrides
+       * the index the droplist item was dropped at, allowing us to
+       * maintain alphabetical order.
+       */
+      event$.currentIndex = DropListData.sortedInsertIndex(prevItem, event$.container.data);
+      if (event$.currentIndex < 0) {
+        event$.currentIndex = event$.container.data.length;
+      }
+
       // Now the filtered (visible) data can be updated.
       transferArrayItem(event$.previousContainer.data,
                         event$.container.data,
                         event$.previousIndex,
                         event$.currentIndex);
+
     }
+
   }
 
   private schoolHasBook(book: Book): boolean {
@@ -113,89 +125,6 @@ export class SchoolBookDialogComponent implements OnInit, OnDestroy {
       }
     }
     return false;
-  }
-
-}
-
-/**
- * DropListData manages the stored (actual) data, and the visible, filtered data
- * presented in the Drop List.
- */
-class DropListData {
-
-  data: Book[];
-  filteredData: Book[];
-
-  constructor(data: Book[]) {
-    this.data = data.sort(this.compareTitle);
-    this.filteredData = this.data.slice();
-  }
-
-  /**
-   * Return the index to insert the book at to keep alphabetical order.
-   * @param book The book to be inserted.
-   * @param list The list the book will be sorted into.
-   * @returns The index to insert at, or -1 if the list is
-   * empty or if the book should be appended to the end of the list.
-   */
-  static sortedInsertIndex(book: Book, list: Book[]): number {
-    if (!list.length) {
-      return -1;
-    }
-    for (const [i, v] of list.entries()) {
-      if (v.title > book.title) {
-        return i;
-      } else if (list.length === (i + 1)) {
-        return -1;
-      }
-    }
-  }
-
-  applyFilter(filterValue: string): void {
-    if (filterValue == null) {
-      this.filteredData = this.data.slice();
-    } else {
-      filterValue = this.cleanInput(filterValue);
-      this.filteredData = this.data.filter(book => this.cleanInput(book.title).includes(filterValue));
-    }
-  }
-
-  clearInput(filter: HTMLInputElement): void {
-    filter.value = '';
-    this.applyFilter(null);
-  }
-
-  removeFromData(book: Book): void {
-    const index = this.data.indexOf(book);
-    this.data.splice(index, 1);
-  }
-
-  /**
-   * Insert a book into drop list data, ordered by title.
-   * @param book Book to insert.
-   * @param list DropListData to insert book into.
-   */
-  insertSorted(book: Book): void {
-    const i = DropListData.sortedInsertIndex(book, this.data);
-    if (i < 0) {
-      this.data.push(book);
-    } else {
-      this.data.splice(i, 0, book);
-    }
-  }
-
-  private compareTitle(a: Book, b: Book): number {
-    if (a.title.localeCompare(b.title) < 0) {
-      return -1;
-    }
-    if (a.title.localeCompare(b.title) > 0) {
-      return 1;
-    }
-    return 0;
-  }
-
-  private cleanInput(str: string): string {
-    return str.trim().toLowerCase();
   }
 
 }

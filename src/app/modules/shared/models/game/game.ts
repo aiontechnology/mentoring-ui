@@ -16,26 +16,25 @@
 
 import { Resource } from '../resource/resource';
 
-export class Book extends Resource {
+export class Game extends Resource {
 
-  title: string;
-  author: string;
-  gradeLevel: number;
-  interests: string[];
-  leadershipTraits: string[];
-  phonograms: string[];
-  behaviors: string[];
+  name: string;
+  grade1: number;
+  grade2: number;
+  activityFocuses: string[];
 
   constructor(json?: any) {
     super(json);
-    this.displayName = json?.title;
-    this.title = json?.title;
-    this.author = json?.author;
-    this.gradeLevel = json?.gradeLevel;
-    this.interests = json?.interests;
-    this.leadershipTraits = json?.leadershipTraits;
-    this.phonograms = json?.phonograms;
-    this.behaviors = json?.behaviors;
+    this.displayName = json?.name;
+    this.name = json?.name;
+    if (json.gradeRange) {
+      this.grade1 = json?.gradeRange?.grade1;
+      this.grade2 = json?.gradeRange?.grade2;
+    } else {
+      this.grade1 = json?.grade1;
+      this.grade2 = json?.grade2;
+    }
+    this.activityFocuses = json?.activityFocuses;
   }
 
 }
