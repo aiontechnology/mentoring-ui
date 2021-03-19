@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseRepository } from 'src/app/implementation/repository/base-repository';
 import { log } from 'src/app/shared/logging-decorator';
@@ -43,8 +43,8 @@ export class StudentRepositoryService extends BaseRepository<Student> {
     super.readAll(this.buildUri(schoolId));
   }
 
-  readOneStudent(id: string): void {
-    return super.readOne(id);
+  readOneStudent(schoolId: string, studentId: string): void {
+    return super.readOne(`${this.buildUri(schoolId)}/${studentId}`);
   }
 
   getStudentById(id: string): StudentInbound {
