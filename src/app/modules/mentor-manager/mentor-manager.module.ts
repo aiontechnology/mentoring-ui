@@ -21,12 +21,14 @@ import { MentorListComponent } from './components/mentor-list/mentor-list.compon
 import { MentorRepositoryService } from './services/mentor/mentor-repository.service';
 import { SharedModule } from '../shared/shared.module';
 import { MentorDialogComponent } from './components/mentor-dialog/mentor-dialog.component';
+import { MentorDetailComponent } from './components/mentor-detail/mentor-detail.component';
 
 const routes: Routes = [
   {
     path: '', component: MentorManagerComponent,
     children: [
-      { path: '', component: MentorListComponent }
+      { path: '', component: MentorListComponent },
+      { path: 'schools/:schoolId/mentors/:mentorId', component: MentorDetailComponent }
     ]
   }
 ];
@@ -35,7 +37,8 @@ const routes: Routes = [
   declarations: [
     MentorManagerComponent,
     MentorListComponent,
-    MentorDialogComponent
+    MentorDialogComponent,
+    MentorDetailComponent
   ],
   imports: [
     RouterModule.forChild(routes),
