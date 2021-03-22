@@ -16,6 +16,7 @@
 
 export class Mentor {
 
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -32,6 +33,7 @@ export class Mentor {
   };
 
   constructor(json?: any) {
+    this.id = json?.id;
     this.firstName = json?.firstName;
     this.lastName = json?.lastName;
     this.email = (json?.email === '') ? null : json?.email;
