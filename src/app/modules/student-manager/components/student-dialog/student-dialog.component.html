@@ -176,6 +176,9 @@ limitations under the License.
             <mat-form-field>
               <mat-label>Comments</mat-label>
               <textarea matInput formControlName="comment"></textarea>
+              <mat-error *ngIf="teacherInput.hasError('maxlength', ['teacher', 'comment'])">
+                A comment can be a maximum of 500 characters in length
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
