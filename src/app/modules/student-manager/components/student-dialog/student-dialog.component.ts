@@ -186,7 +186,7 @@ export class StudentDialogComponent implements OnInit {
       teacherInput: formBuilder.group({
         teacher: formBuilder.group({
           uri: ['', Validators.required],
-          comment: ['']
+          comment: ['', Validators.maxLength(500)]
         }),
       }),
       contacts: formBuilder.group({
