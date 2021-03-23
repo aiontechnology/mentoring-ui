@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatDialog } from '@angular/material/dialog';
 import { MenuStateService } from 'src/app/services/menu-state.service';
@@ -37,10 +37,19 @@ import { Game } from 'src/app/modules/shared/models/game/game';
   styleUrls: ['./game-list.component.scss'],
   providers: [GameCacheService]
 })
-export class GameListComponent implements OnInit, AfterViewInit {
+export class GameListComponent implements OnInit {
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) set sort(sort: MatSort) {
+    if (sort !== undefined) {
+      this.gameCacheService.sort = sort;
+    }
+  }
+
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator !== undefined) {
+      this.gameCacheService.paginator = paginator;
+    }
+  }
 
   constructor(public gameCacheService: GameCacheService,
               public userSession: UserSessionService,
@@ -55,7 +64,6 @@ export class GameListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     console.log('Establishing datasource');
     this.gameCacheService.establishDatasource();
-    this.gameCacheService.clearSelection();
 
     console.log('Adding game list menus');
     if (this.userSession.isSysAdmin) {
@@ -66,11 +74,6 @@ export class GameListComponent implements OnInit, AfterViewInit {
                                    (g: Game) => this.jumpToNewItem(g),
                                    this.gameCacheService);
     }
-  }
-
-  ngAfterViewInit(): void {
-    this.gameCacheService.sort = this.sort;
-    this.gameCacheService.paginator = this.paginator;
   }
 
   displayedColumns(): string[] {
