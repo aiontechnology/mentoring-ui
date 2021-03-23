@@ -18,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseRepository } from 'src/app/implementation/repository/base-repository';
 import { Book } from '../../models/book/book';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class BookRepositoryService extends BaseRepository<Book> {
@@ -26,12 +27,24 @@ export class BookRepositoryService extends BaseRepository<Book> {
     super('/api/v1/books', http);
   }
 
+  get books(): Observable<Book[]>{
+    return this.items;
+  }
+
+  getBookById(id: string): Book {
+    return this.getById(id);
+  }
+
   createBook(book: Book): Promise<Book> {
     return super.create(this.uriBase, book);
   }
 
   readAllBooks(): void {
     return super.readAll(this.uriBase);
+  }
+
+  readOneBook(id: string): void {
+    super.readOne(`${this.uriBase}/${id}`);
   }
 
   updateBook(book: Book): Promise<Book> {
