@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseRepository } from 'src/app/implementation/repository/base-repository';
 import { Game } from '../../models/game/game';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class GameRepositoryService extends BaseRepository<Game> {
@@ -26,12 +27,24 @@ export class GameRepositoryService extends BaseRepository<Game> {
     super('/api/v1/games', http);
   }
 
+  get games(): Observable<Game[]>{
+    return this.items;
+  }
+
+  getGameById(id: string): Game {
+    return this.getById(id);
+  }
+
   createGame(game: Game): Promise<Game> {
     return super.create(this.uriBase, game);
   }
 
   readAllGames(): void {
     return super.readAll(this.uriBase);
+  }
+
+  readOneGame(id: string): void {
+    super.readOne(`${this.uriBase}/${id}`);
   }
 
   updateGame(game: Game): Promise<Game> {

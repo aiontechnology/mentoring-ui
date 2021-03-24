@@ -71,7 +71,7 @@ export class ProgramAdminDialogComponent {
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       workPhone: null,
       cellPhone: null,
-      email: [null, [Validators.email, Validators.maxLength(50)]]
+      email: [null, [Validators.required, Validators.email, Validators.maxLength(50)]]
     });
     if (this.isUpdate) {
       formGroup.setValue({

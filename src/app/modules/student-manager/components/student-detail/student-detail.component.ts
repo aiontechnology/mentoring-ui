@@ -63,11 +63,11 @@ export class StudentDetailComponent implements OnDestroy {
               private lpgService: LpgRepositoryService) {
 
     const subscription1$ = this.route.paramMap.subscribe(params => {
-      this.studentId = params.get('studentId');
       this.schoolId = params.get('schoolId');
+      this.studentId = params.get('studentId');
     });
 
-    this.studentService.readAllStudents(this.schoolId);
+    this.studentService.readOneStudent(this.schoolId, this.studentId);
     const subscription2$ = this.studentService.students.subscribe(() => {
 
       this.menuState.removeGroup('student');
@@ -80,7 +80,13 @@ export class StudentDetailComponent implements OnDestroy {
       this.studentMentor = this.student?.mentor;
 
       console.log('Adding student detail menus');
-      StudentDetailMenuManager.addMenus(this.student, this.menuState, this.router, this.dialog, this.snackBar, this.studentService, this.schoolId);
+      StudentDetailMenuManager.addMenus(this.student,
+                                        this.menuState,
+                                        this.router,
+                                        this.dialog,
+                                        this.snackBar,
+                                        this.studentService,
+                                        this.schoolId);
 
     });
 

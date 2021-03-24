@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
@@ -36,10 +36,19 @@ import { School } from 'src/app/modules/shared/models/school/school';
   styleUrls: ['./school-list.component.scss'],
   providers: [SchoolCacheService]
 })
-export class SchoolListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SchoolListComponent implements OnInit, OnDestroy {
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) set sort(sort: MatSort) {
+    if (sort !== undefined) {
+      this.schoolCacheService.sort = sort;
+    }
+  }
+
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator !== undefined) {
+      this.schoolCacheService.paginator = paginator;
+    }
+  }
 
   constructor(private dialog: MatDialog,
               private breakpointObserver: BreakpointObserver,
@@ -60,11 +69,6 @@ export class SchoolListComponent implements OnInit, AfterViewInit, OnDestroy {
                                    this.snackBar,
                                    (s: School) => this.jumpToNewItem(s),
                                    this.schoolCacheService);
-  }
-
-  ngAfterViewInit(): void {
-    this.schoolCacheService.sort = this.sort;
-    this.schoolCacheService.paginator = this.paginator;
   }
 
   ngOnDestroy(): void {

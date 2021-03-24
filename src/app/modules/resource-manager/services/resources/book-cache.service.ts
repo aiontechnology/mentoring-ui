@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 import { Injectable } from '@angular/core';
-import { BookRepositoryService } from './book-repository.service';
+import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
 import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
-import { Book } from '../../models/book/book';
+import { Book } from 'src/app/modules/shared/models/book/book';
 import { tap } from 'rxjs/operators';
 
 @Injectable()

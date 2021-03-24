@@ -80,6 +80,15 @@ limitations under the License.
     </div>
 
     <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Leadership Traits</mat-label>
+        <mat-select formControlName="leadershipTraits" multiple>
+          <mat-option *ngFor="let leadershipTrait of (leadershipTraitList$ | async)" [value]="leadershipTrait">{{leadershipTrait}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
       <mat-radio-group formControlName="location">
         <mat-radio-button *ngFor="let location of locations" [value]="location.toUpperCase()">
           {{location}}

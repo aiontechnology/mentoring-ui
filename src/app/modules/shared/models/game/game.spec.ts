@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Resource } from './resource';
+import { Game } from './game';
 
-describe('Resource', () => {
+describe('Game', () => {
   it('should create an instance', () => {
-    expect(new Resource()).toBeTruthy();
+    expect(new Game()).toBeTruthy();
   });
 });
