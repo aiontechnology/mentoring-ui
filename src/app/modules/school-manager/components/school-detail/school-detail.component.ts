@@ -35,10 +35,10 @@ import { UserSessionService } from 'src/app/services/user-session.service';
 })
 export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
 
+  private subscriptions$: Subscription;
+
   school: School;
   schoolId: string;
-
-  schoolSubscriptions$ = new Subscription();
 
   constructor(route: ActivatedRoute,
               public userSession: UserSessionService,
@@ -47,6 +47,8 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
               private schoolService: SchoolRepositoryService,
               private snackBar: MatSnackBar,
               private router: Router) {
+
+    this.subscriptions$ = new Subscription();
 
     const subscription1$ = route.paramMap.subscribe(
       params => {
@@ -69,8 +71,8 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    this.schoolSubscriptions$.add(subscription1$);
-    this.schoolSubscriptions$.add(subscription2$);
+    this.subscriptions$.add(subscription1$);
+    this.subscriptions$.add(subscription2$);
 
   }
 
@@ -79,7 +81,7 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.schoolSubscriptions$.unsubscribe();
+    this.subscriptions$.unsubscribe();
     this.menuState.clear();
   }
 
@@ -137,18 +139,27 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
           this.menuState.makeGroupInvisible('teacher');
           this.menuState.makeGroupInvisible('personnel');
           this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
           break;
         case 1:
           this.menuState.makeGroupInvisible('personnel');
           this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
           break;
         case 2:
           this.menuState.makeGroupInvisible('teacher');
           this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
           break;
         case 3:
           this.menuState.makeGroupInvisible('teacher');
           this.menuState.makeGroupInvisible('personnel');
+          this.menuState.makeGroupInvisible('school-game');
+          break;
+        case 4:
+          this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('personnel');
+          this.menuState.makeGroupInvisible('school-book');
           break;
       }
     }
