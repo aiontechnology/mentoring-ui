@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,8 @@
 
 import { Injectable } from '@angular/core';
 import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
-import { Game } from '../../models/game/game';
-import { GameRepositoryService } from './game-repository.service';
+import { Game } from 'src/app/modules/shared/models/game/game';
+import { GameRepositoryService } from 'src/app/modules/shared/services/resources/game-repository.service';
 import { tap } from 'rxjs/operators';
 
 @Injectable()

@@ -26,6 +26,7 @@ import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
 import { Subscription } from 'rxjs';
+import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
   selector: 'ms-school-detail',
@@ -40,6 +41,7 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
   schoolSubscriptions$ = new Subscription();
 
   constructor(route: ActivatedRoute,
+              public userSession: UserSessionService,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private schoolService: SchoolRepositoryService,
@@ -52,16 +54,19 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
       }
     );
 
-    this.schoolService.readAllSchools();
+    if (userSession.isSysAdmin) {
+      this.schoolService.readAllSchools();
+    } else {
+      this.schoolService.readOneSchool(this.schoolId);
+    }
+
     const subscription2$ = this.schoolService.schools.subscribe(() => {
-
       this.menuState.removeGroup('school');
-
       this.school = this.schoolService.getSchoolById(this.schoolId);
-
-      console.log('Adding school detail menus');
-      SchoolDetailMenuManager.addMenus(this.school, this.menuState, this.router, this.dialog, this.snackBar, this.schoolService);
-
+      if (userSession.isSysAdmin) {
+        console.log('Adding school detail menus');
+        SchoolDetailMenuManager.addMenus(this.school, this.menuState, this.router, this.dialog, this.snackBar, this.schoolService);
+      }
     });
 
     this.schoolSubscriptions$.add(subscription1$);
@@ -81,30 +86,73 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
   onIndexChange(index: number): void {
     console.log('Tab change', index, this.menuState.activeMenus);
     this.menuState.makeAllVisible();
-    switch (index) {
-      case 0:
-        this.menuState.makeGroupInvisible('teacher');
-        this.menuState.makeGroupInvisible('program-admin');
-        this.menuState.makeGroupInvisible('personnel');
-        break;
-      case 1:
-        this.menuState.makeGroupInvisible('school');
-        this.menuState.makeGroupInvisible('teacher');
-        this.menuState.makeGroupInvisible('personnel');
-        break;
-      case 2:
-        this.menuState.makeGroupInvisible('school');
-        this.menuState.makeGroupInvisible('program-admin');
-        this.menuState.makeGroupInvisible('personnel');
-        break;
-      case 3:
-        this.menuState.makeGroupInvisible('school');
-        this.menuState.makeGroupInvisible('program-admin');
-        this.menuState.makeGroupInvisible('teacher');
-        break;
+    if (this.userSession.isSysAdmin) {
+      switch (index) {
+        case 0:
+          this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('program-admin');
+          this.menuState.makeGroupInvisible('personnel');
+          this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
+          break;
+        case 1:
+          this.menuState.makeGroupInvisible('school');
+          this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('personnel');
+          this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
+          break;
+        case 2:
+          this.menuState.makeGroupInvisible('school');
+          this.menuState.makeGroupInvisible('program-admin');
+          this.menuState.makeGroupInvisible('personnel');
+          this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
+          break;
+        case 3:
+          this.menuState.makeGroupInvisible('school');
+          this.menuState.makeGroupInvisible('program-admin');
+          this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('school-book');
+          this.menuState.makeGroupInvisible('school-game');
+          break;
+        case 4:
+          this.menuState.makeGroupInvisible('school');
+          this.menuState.makeGroupInvisible('program-admin');
+          this.menuState.makeGroupInvisible('personnel');
+          this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('school-game');
+          break;
+        case 5:
+          this.menuState.makeGroupInvisible('school');
+          this.menuState.makeGroupInvisible('program-admin');
+          this.menuState.makeGroupInvisible('personnel');
+          this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('school-book');
+          break;
+      }
+    } else {
+      switch (index) {
+        case 0:
+          this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('personnel');
+          this.menuState.makeGroupInvisible('school-book');
+          break;
+        case 1:
+          this.menuState.makeGroupInvisible('personnel');
+          this.menuState.makeGroupInvisible('school-book');
+          break;
+        case 2:
+          this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('school-book');
+          break;
+        case 3:
+          this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('personnel');
+          break;
+      }
     }
   }
-
 }
 
 class SchoolDetailMenuManager {

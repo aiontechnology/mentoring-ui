@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BaseRepository } from 'src/app/implementation/repository/base-repository';
 import { log } from 'src/app/shared/logging-decorator';
@@ -41,12 +41,20 @@ export class MentorRepositoryService extends BaseRepository<Mentor> {
     super.readAll(this.buildUri(schoolId));
   }
 
+  readOneMentor(schoolId: string, mentorId: string): void {
+    super.readOne(`${this.buildUri(schoolId)}/${mentorId}`);
+  }
+
   updateMentor(mentor: Mentor): Promise<Mentor> {
     return super.update(this.uriBase, mentor);
   }
 
   deleteMentors(mentors: Mentor[]): void {
     super.delete(mentors);
+  }
+
+  getMentorById(id: string): Mentor {
+    return this.getById(id);
   }
 
   protected fromJSON(json: any): Mentor {

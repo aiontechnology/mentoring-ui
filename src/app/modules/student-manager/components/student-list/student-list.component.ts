@@ -80,7 +80,6 @@ export class StudentListComponent implements OnInit, OnDestroy {
       );
     } else if (this.userSession.isProgAdmin) {
       this.schoolId = this.userSession.schoolUUID;
-      this.studentCacheService.establishDatasource(this.schoolId);
       this.loadStudentData();
     }
   }
@@ -121,7 +120,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
   }
 
   private loadStudentData(): void {
-    this.studentCacheService.clearSelection();
+
     this.studentCacheService.establishDatasource(this.schoolId);
 
     console.log('Adding student list menus');
@@ -132,6 +131,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
                                     (s: Student) => this.jumpToNewItem(s),
                                     this.studentCacheService,
                                     this.schoolId);
+
   }
 
   /**
