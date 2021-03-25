@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 import { Injectable } from '@angular/core';
 import { Personnel } from '../../models/personnel/personnel';
-import { DatasourceManager } from '../../../shared/services/datasource-manager';
+import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
 import { PersonnelRepositoryService } from './personnel-repository.service';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class PersonnelCacheService extends DatasourceManager<Personnel>  {
+export class PersonnelCacheService extends DatasourceManagerRemovable<Personnel>  {
 
   /**
    * Constructor
@@ -38,8 +38,8 @@ export class PersonnelCacheService extends DatasourceManager<Personnel>  {
     );
   }
 
-  protected doRemoveItem(items: Personnel[]): void {
-    this.personnelService.deletePersonnel(items);
+  protected doRemoveItem(items: Personnel[]): Promise<void> {
+    return this.personnelService.deletePersonnel(items);
   }
 
 }

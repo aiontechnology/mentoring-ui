@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  */
 
 import { Injectable } from '@angular/core';
-import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
+import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
 import { log } from 'src/app/shared/logging-decorator';
 import { Mentor } from '../../models/mentor/mentor';
 import { MentorRepositoryService } from './mentor-repository.service';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class MentorCacheService extends DatasourceManager<Mentor> {
+export class MentorCacheService extends DatasourceManagerRemovable<Mentor> {
 
   constructor(private mentorService: MentorRepositoryService) {
     super();
@@ -36,8 +36,8 @@ export class MentorCacheService extends DatasourceManager<Mentor> {
     );
   }
 
-  protected doRemoveItem(items: Mentor[]): void {
-    this.mentorService.deleteMentors(items);
+  protected doRemoveItem(items: Mentor[]): Promise<void> {
+    return this.mentorService.deleteMentors(items);
   }
 
 }

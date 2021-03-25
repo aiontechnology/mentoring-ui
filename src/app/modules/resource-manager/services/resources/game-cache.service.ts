@@ -15,13 +15,13 @@
  */
 
 import { Injectable } from '@angular/core';
-import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
+import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
 import { Game } from 'src/app/modules/shared/models/game/game';
 import { GameRepositoryService } from 'src/app/modules/shared/services/resources/game-repository.service';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class GameCacheService extends DatasourceManager<Game> {
+export class GameCacheService extends DatasourceManagerRemovable<Game> {
 
   constructor(private gameService: GameRepositoryService) {
     super();
@@ -34,8 +34,8 @@ export class GameCacheService extends DatasourceManager<Game> {
     );
   }
 
-  protected doRemoveItem(items: Game[]): void {
-    this.gameService.deleteGames(items);
+  protected doRemoveItem(items: Game[]): Promise<void> {
+    return this.gameService.deleteGames(items);
   }
 
 }

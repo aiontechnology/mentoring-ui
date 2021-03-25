@@ -55,8 +55,8 @@ export class StudentRepositoryService extends BaseRepository<Student> {
     return super.update(this.uriBase, student);
   }
 
-  deleteStudents(students: StudentInbound[]): void {
-    super.delete(students);
+  deleteStudents(students: StudentInbound[]): Promise<void> {
+    return super.delete(students);
   }
 
   protected fromJSON(json: any): StudentInbound {

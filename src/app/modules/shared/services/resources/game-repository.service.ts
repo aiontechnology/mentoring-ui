@@ -51,7 +51,7 @@ export class GameRepositoryService extends BaseRepository<Game> {
     return super.update(this.uriBase, game);
   }
 
-  deleteGames(games: Game[]) {
+  deleteGames(games: Game[]): Promise<void> {
     return super.delete(games);
   }
 
