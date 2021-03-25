@@ -39,20 +39,19 @@ import { LpgRepositoryService } from '../../services/lpg/lpg-repository.service'
 })
 export class StudentDetailComponent implements OnDestroy {
 
+  private subscriptions$: Subscription;
+  private studentId: string;
+  private schoolId: string;
+
   student: StudentInbound;
   studentMentor: StudentMentorInbound;
 
-  studentId: string;
-  schoolId: string;
-
-  grades: Grade[] = grades;
+  grades: Grade[];
   studentGrade: string;
 
   contacts: Contact[];
   parents: Contact[];
   emergencyContact: Contact;
-
-  studentSubscriptions$ = new Subscription();
 
   constructor(private route: ActivatedRoute,
               private dialog: MatDialog,
@@ -61,6 +60,9 @@ export class StudentDetailComponent implements OnDestroy {
               private snackBar: MatSnackBar,
               private router: Router,
               private lpgService: LpgRepositoryService) {
+
+    this.subscriptions$ = new Subscription();
+    this.grades = grades;
 
     const subscription1$ = this.route.paramMap.subscribe(params => {
       this.schoolId = params.get('schoolId');
@@ -90,13 +92,13 @@ export class StudentDetailComponent implements OnDestroy {
 
     });
 
-    this.studentSubscriptions$.add(subscription1$);
-    this.studentSubscriptions$.add(subscription2$);
+    this.subscriptions$.add(subscription1$);
+    this.subscriptions$.add(subscription2$);
 
   }
 
   ngOnDestroy(): void {
-    this.studentSubscriptions$.unsubscribe();
+    this.subscriptions$.unsubscribe();
     this.menuState.clear();
   }
 
