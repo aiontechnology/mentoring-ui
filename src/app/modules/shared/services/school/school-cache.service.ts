@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 import { Injectable } from '@angular/core';
 import { log } from 'src/app/shared/logging-decorator';
 import { School } from '../../models/school/school';
-import { DatasourceManager } from '../datasource-manager';
+import { DatasourceManagerRemovable } from '../datasource-manager/datasource-manager-removable';
 import { SchoolRepositoryService } from './school-repository.service';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class SchoolCacheService extends DatasourceManager<School> {
+export class SchoolCacheService extends DatasourceManagerRemovable<School> {
 
   /**
    * Constructor
@@ -56,8 +56,8 @@ export class SchoolCacheService extends DatasourceManager<School> {
     );
   }
 
-  protected doRemoveItem(items: School[]): void {
-    this.schoolService.deleteSchools(items);
+  protected doRemoveItem(items: School[]): Promise<void> {
+    return this.schoolService.deleteSchools(items);
   }
 
   private sortingDataAccessor = (item: School, property: string) => {
