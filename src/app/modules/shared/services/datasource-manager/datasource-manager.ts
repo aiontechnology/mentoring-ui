@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import { SelectionManager } from '../../school-manager/services/selection-manager';
+import { SelectionManager } from '../../../school-manager/services/selection-manager';
 import { TableDataSource } from './table-data-source';
-import { Observable } from 'rxjs';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 
@@ -126,10 +125,6 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
      */
     set sort(sort: MatSort) {
         this.dataSource.sort = sort;
-    }
-
-    protected get observableData(): Observable<T[]> {
-        return this.dataSource.data$;
     }
 
 }

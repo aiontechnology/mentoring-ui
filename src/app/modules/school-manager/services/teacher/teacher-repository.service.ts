@@ -43,7 +43,7 @@ export class TeacherRepositoryService extends BaseRepository<Teacher> {
     return super.update(this.uriBase, teacher);
   }
 
-  deleteTeachers(teachers: Teacher[]) {
+  deleteTeachers(teachers: Teacher[]): Promise<void> {
     return super.delete(teachers);
   }
 
