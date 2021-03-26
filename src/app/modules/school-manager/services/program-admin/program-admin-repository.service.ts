@@ -38,7 +38,7 @@ export class ProgramAdminRepositoryService extends BaseRepository<ProgramAdmin> 
     return super.update(this.uriBase, programAdmin);
   }
 
-  deleteProgramAdmins(programAdmins: ProgramAdmin[]) {
+  deleteProgramAdmins(programAdmins: ProgramAdmin[]): Promise<void> {
     return super.delete(programAdmins);
   }
 

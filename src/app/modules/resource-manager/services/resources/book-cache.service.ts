@@ -16,12 +16,12 @@
 
 import { Injectable } from '@angular/core';
 import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
-import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
+import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
 import { Book } from 'src/app/modules/shared/models/book/book';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
-export class BookCacheService extends DatasourceManager<Book> {
+export class BookCacheService extends DatasourceManagerRemovable<Book> {
 
   constructor(private bookService: BookRepositoryService) {
     super();
@@ -34,8 +34,8 @@ export class BookCacheService extends DatasourceManager<Book> {
     );
   }
 
-  protected doRemoveItem(items: Book[]): void {
-    this.bookService.deleteBooks(items);
+  protected doRemoveItem(items: Book[]): Promise<void> {
+    return this.bookService.deleteBooks(items);
   }
 
 }

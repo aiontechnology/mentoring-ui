@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { SchoolBookRepositoryService } from './school-book-repository.service';
-import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
+import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager/datasource-manager';
 import { Book } from 'src/app/modules/shared/models/book/book';
 import { tap } from 'rxjs/operators';
 
@@ -32,7 +32,5 @@ export class SchoolBookCacheService extends DatasourceManager<Book> {
     this.dataSource.data$ = this.schoolBookService.schoolBooks
       .pipe(tap(() => console.log('Creating new school book datasource')));
   }
-
-  protected doRemoveItem(items): void { }
 
 }

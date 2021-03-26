@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
+import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager/datasource-manager';
 import { InterestInbound } from '../../models/interest/interest-inbound';
 import { map } from 'rxjs/operators';
 
@@ -36,7 +36,5 @@ export class InterestCacheService extends DatasourceManager<InterestInbound> {
       })
     );
   }
-
-  protected doRemoveItem(items: InterestInbound[]): void { }
 
 }
