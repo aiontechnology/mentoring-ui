@@ -26,7 +26,6 @@ import { StudentRepositoryService } from '../../services/student/student-reposit
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { StudentDialogComponent } from '../student-dialog/student-dialog.component';
 import { Contact } from '../../models/contact/contact';
-import { Grade } from 'src/app/modules/shared/types/grade';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { StudentMentorInbound } from '../../models/student-inbound/student-inbound';
 import { Subscription } from 'rxjs';
@@ -46,7 +45,6 @@ export class StudentDetailComponent implements OnDestroy {
   student: StudentInbound;
   studentMentor: StudentMentorInbound;
 
-  grades: Grade[];
   studentGrade: string;
 
   contacts: Contact[];
@@ -62,7 +60,6 @@ export class StudentDetailComponent implements OnDestroy {
               private lpgService: LpgRepositoryService) {
 
     this.subscriptions$ = new Subscription();
-    this.grades = grades;
 
     const subscription1$ = this.route.paramMap.subscribe(params => {
       this.schoolId = params.get('schoolId');
@@ -78,7 +75,7 @@ export class StudentDetailComponent implements OnDestroy {
       this.contacts = this.student?.contacts ? this.student?.contacts : [];
       this.parents = this.contacts.filter(contact => !contact.isEmergencyContact);
       this.emergencyContact = this.contacts.find(contact => contact.isEmergencyContact);
-      this.studentGrade = grades.find(grade => grade.value === this.student?.grade)?.valueView;
+      this.studentGrade = grades.find(grade => grade.value === this.student?.grade.toString())?.valueView;
       this.studentMentor = this.student?.mentor;
 
       console.log('Adding student detail menus');
