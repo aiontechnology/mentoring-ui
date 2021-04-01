@@ -100,7 +100,7 @@ export class MentorListComponent implements OnInit, OnDestroy {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'lastName', 'availability', 'cellPhone'];
     } else {
-      return ['select', 'firstName', 'lastName', 'availability', 'cellPhone', 'email'];
+      return ['select', 'firstName', 'lastName', 'availability', 'cellPhone', 'email', 'mediaReleaseSigned', 'backgroundCheckCompleted'];
     }
   }
 
