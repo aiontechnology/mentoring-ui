@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,6 @@
  */
 
 import { SelectionModel } from '@angular/cdk/collections';
-import { take, mergeAll, filter, toArray } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 
 /**
  * Class to manage the selection of a collection of model objects.
@@ -55,32 +53,6 @@ export abstract class SelectionManager<T> {
             this.clearSelection() :
             this.filteredData.forEach(row => this.selection.select(row));
     }
-
-    /**
-     * Remove the currently selected items.
-     */
-    removeSelected(): void {
-        this.observableData.pipe(
-            take(1),
-            mergeAll(),
-            filter(item => this.selection.isSelected(item)),
-            toArray()
-        ).subscribe(selected => {
-            this.doRemoveItem(selected);
-            this.clearSelection();
-        });
-    }
-
-    /**
-     * Allow the concrete class to do whatever is necessary to remove the array of items.
-     * @param items The items to remove.
-     */
-    protected abstract doRemoveItem(items: T[]): void;
-
-    /**
-     * Get an Observable that contains the current list of items.
-     */
-    protected abstract get observableData(): Observable<T[]>;
 
     /**
      * Get the number of items in the data collection.

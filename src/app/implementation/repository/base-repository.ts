@@ -15,10 +15,11 @@
  */
 
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
 import { log } from 'src/app/shared/logging-decorator';
 import { environment } from 'src/environments/environment';
 import { LinksHolder } from './links-holder';
+import { tap } from 'rxjs/operators';
 
 export abstract class BaseRepository<T extends LinksHolder<any>> {
 
@@ -117,18 +118,29 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   }
 
   @log
-  protected delete(items: T[]): void {
-    items.forEach(item => {
-      console.log('Deleting', item);
-      this.http.delete(item.getSelfLink())
-        .subscribe(() => {
-          const index: number = this.dataStore.items.indexOf(item);
-          if (index !== -1) {
-            this.dataStore.items.splice(index, 1);
-          }
-          this.publishItems();
-        });
+  protected delete(items: T[]): Promise<void> {
+
+    const observables$ = items.map((item) => {
+      return this.http.delete(item.getSelfLink())
+        .pipe(
+          tap(() => {
+            const index = this.dataStore.items.indexOf(item);
+            if (index !== -1) {
+              this.dataStore.items.splice(index, 1);
+            }
+          })
+        );
     });
+
+    const deleteRequests$ = forkJoin({...observables$});
+
+    return new Promise((resolver) => {
+      deleteRequests$.subscribe(() => {
+        this.publishItems();
+        resolver();
+      });
+    });
+
   }
 
   protected abstract fromJSON(json: any): T;

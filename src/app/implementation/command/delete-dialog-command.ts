@@ -33,7 +33,7 @@ export class DeleteDialogCommand<T> extends Command {
                 private snackBar: MatSnackBar,
                 private routeTo: string,
                 private countSupplier: () => number,
-                private removeItem: () => void,
+                private removeItem: () => Promise<void>,
                 private determineEnabled: () => boolean) {
         super(title, group);
     }
@@ -48,11 +48,12 @@ export class DeleteDialogCommand<T> extends Command {
 
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.removeItem();
-                this.openSnackBar(this.snackBar, this.snackBarMessage, '');
-                if (this.routeTo) {
-                    this.router.navigate([this.routeTo]);
-                }
+                this.removeItem().then(() => {
+                    this.openSnackBar(this.snackBar, this.snackBarMessage, '');
+                    if (this.routeTo) {
+                        this.router.navigate([this.routeTo]);
+                    }
+                });
             }
         });
     }

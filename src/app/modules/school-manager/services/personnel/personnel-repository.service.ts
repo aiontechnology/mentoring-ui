@@ -38,7 +38,7 @@ export class PersonnelRepositoryService extends BaseRepository<Personnel> {
     return super.update(this.uriBase, personnel);
   }
 
-  deletePersonnel(personnel: Personnel[]) {
+  deletePersonnel(personnel: Personnel[]): Promise<void> {
     return super.delete(personnel);
   }
 
