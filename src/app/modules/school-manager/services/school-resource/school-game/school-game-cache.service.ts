@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { SchoolGameRepositoryService } from './school-game-repository.service';
-import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager';
+import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager/datasource-manager';
 import { Game } from 'src/app/modules/shared/models/game/game';
 import { tap } from 'rxjs/operators';
 
@@ -32,7 +32,5 @@ export class SchoolGameCacheService extends DatasourceManager<Game> {
     this.dataSource.data$ = this.schoolGameService.schoolGames
       .pipe(tap(() => console.log('Creating new school game datasource')));
   }
-
-  protected doRemoveItem(items): void { }
 
 }

@@ -51,7 +51,7 @@ export class BookRepositoryService extends BaseRepository<Book> {
     return super.update(this.uriBase, book);
   }
 
-  deleteBooks(books: Book[]) {
+  deleteBooks(books: Book[]): Promise<void> {
     return super.delete(books);
   }
 

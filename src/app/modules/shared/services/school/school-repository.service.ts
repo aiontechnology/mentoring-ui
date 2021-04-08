@@ -51,7 +51,7 @@ export class SchoolRepositoryService extends BaseRepository<School> {
     return super.update(this.uriBase, school);
   }
 
-  deleteSchools(schools: School[]) {
+  deleteSchools(schools: School[]): Promise<void> {
     return super.delete(schools);
   }
 
