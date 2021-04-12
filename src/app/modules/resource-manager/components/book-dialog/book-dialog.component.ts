@@ -41,14 +41,17 @@ export class BookDialogComponent implements OnInit {
   leadershipSkillList$: Observable<string[]>;
   phonogramList$: Observable<string[]>;
   behaviorList$: Observable<string[]>;
+  tagsList$: Observable<string[]>;
 
   constructor(private dialogRef: MatDialogRef<BookDialogComponent>,
               private bookService: BookRepositoryService,
               private metaDataService: MetaDataService,
               private formBuilder: FormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
+
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(this.formBuilder, this.data?.model);
+
   }
 
   ngOnInit(): void {
@@ -67,6 +70,9 @@ export class BookDialogComponent implements OnInit {
 
     this.metaDataService.loadBehaviors();
     this.behaviorList$ = this.metaDataService.behaviors;
+
+    this.metaDataService.loadTags();
+    this.tagsList$ = this.metaDataService.tags;
 
   }
 
@@ -106,7 +112,8 @@ export class BookDialogComponent implements OnInit {
       leadershipTraits: [],
       leadershipSkills: [],
       phonograms: [],
-      behaviors: []
+      behaviors: [],
+      tag: ['']
     });
     if (this.isUpdate) {
       formGroup.setValue({
@@ -119,7 +126,8 @@ export class BookDialogComponent implements OnInit {
         leadershipSkills: book?.leadershipSkills,
         leadershipTraits: book?.leadershipTraits,
         phonograms: book?.phonograms,
-        behaviors: book?.behaviors
+        behaviors: book?.behaviors,
+        tag: book?.tag
       });
     }
     return formGroup;
