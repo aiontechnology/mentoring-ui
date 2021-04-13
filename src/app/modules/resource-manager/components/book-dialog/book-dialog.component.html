@@ -105,6 +105,15 @@ limitations under the License.
     </div>
 
     <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Tag</mat-label>
+        <mat-select formControlName="tag">
+          <mat-option *ngFor="let tag of (tagsList$ | async)" [value]="tag">{{tag}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
       <mat-radio-group formControlName="location">
         <mat-radio-button *ngFor="let location of locations" [value]="location.toUpperCase()">
           {{location}}
