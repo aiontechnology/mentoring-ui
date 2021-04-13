@@ -29,6 +29,7 @@ export class MetaDataService {
   private leadershipSkillsUri = environment.apiUri + '/api/v1/leadership_skills';
   private phonogramUri = environment.apiUri + '/api/v1/phonograms';
   private behaviorUri = environment.apiUri + '/api/v1/behaviors';
+  private tagsUri = environment.apiUri + '/api/v1/tags';
 
   private _activityFocuses: BehaviorSubject<string[]>;
   private _interests: BehaviorSubject<string[]>;
@@ -36,6 +37,7 @@ export class MetaDataService {
   private _leadershipSkills: BehaviorSubject<string[]>;
   private _phonograms: BehaviorSubject<string[]>;
   private _behaviors: BehaviorSubject<string[]>;
+  private _tags: BehaviorSubject<string[]>;
 
   private dataStore: {
     activityFocuses: string[];
@@ -44,6 +46,7 @@ export class MetaDataService {
     leadershipSkills: string[];
     phonograms: string[];
     behaviors: string[];
+    tags: string[];
   };
 
   constructor(private http: HttpClient) {
@@ -53,13 +56,15 @@ export class MetaDataService {
     this._leadershipSkills = new BehaviorSubject<string[]>([]);
     this._phonograms = new BehaviorSubject<string[]>([]);
     this._behaviors = new BehaviorSubject<string[]>([]);
+    this._tags = new BehaviorSubject<string[]>([]);
     this.dataStore = {
       activityFocuses: [],
       interests: [],
       leadershipTraits: [],
       leadershipSkills: [],
       phonograms: [],
-      behaviors: []
+      behaviors: [],
+      tags: []
     };
   }
 
@@ -85,6 +90,10 @@ export class MetaDataService {
 
   get behaviors(): Observable<string[]> {
     return this._behaviors;
+  }
+
+  get tags(): Observable<string[]> {
+    return this._tags;
   }
 
   loadActivityFocuses(): void {
@@ -141,6 +150,15 @@ export class MetaDataService {
       });
   }
 
+  loadTags(): void {
+    this.http.get<any>(this.tagsUri)
+      .subscribe(data => {
+        this.dataStore.tags = data?._embedded?.stringList || [];
+        this.logCache('tag', this.dataStore.tags);
+        this.publishTags();
+      });
+  }
+
   updateInterests(newInterest: InterestOutbound): Promise<string[]> {
     console.log('Updating interest', newInterest);
     return new Promise((resolver) => {
@@ -183,6 +201,10 @@ export class MetaDataService {
 
   private publishBehaviors() {
     this._behaviors.next(Object.assign({}, this.dataStore).behaviors);
+  }
+
+  private publishTags() {
+    this._tags.next(Object.assign({}, this.dataStore).tags);
   }
 
 }
