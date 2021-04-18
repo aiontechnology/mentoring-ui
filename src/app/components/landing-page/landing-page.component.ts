@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 import { Component } from '@angular/core';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { environment } from '../../../environments/environment';
+import { Router } from '@angular/router';
+import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
   selector: 'ms-landing-page',
@@ -25,10 +25,11 @@ import { environment } from '../../../environments/environment';
 })
 export class LandingPageComponent {
 
-  public env = environment;
-
-  constructor(private menuState: MenuStateService) {
-    menuState.title = 'Welcome to MentorSuccess\u2122';
+  constructor(private userSession: UserSessionService,
+              private router: Router) {
+    if (this.userSession.isLoggedIn()) {
+      this.router.navigate(['home']);
+    }
   }
 
 }

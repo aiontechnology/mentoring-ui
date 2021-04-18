@@ -44,7 +44,7 @@ export class UserSessionService {
 
   isLoggedIn(): boolean {
     const idToken = localStorage.getItem(UserSessionService.ID_TOKEN);
-    const loggedIn = idToken !== undefined && idToken !== null;
+    const loggedIn = idToken !== undefined && idToken !== 'null' && idToken !== null;
     return loggedIn;
   }
 
