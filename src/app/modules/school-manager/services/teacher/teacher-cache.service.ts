@@ -18,10 +18,13 @@ import { Injectable } from '@angular/core';
 import { Teacher } from '../../models/teacher/teacher';
 import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
 import { TeacherRepositoryService } from './teacher-repository.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class TeacherCacheService extends DatasourceManagerRemovable<Teacher>  {
+
+  private isLoading$: BehaviorSubject<boolean>;
 
   /**
    * Constructor
@@ -29,13 +32,25 @@ export class TeacherCacheService extends DatasourceManagerRemovable<Teacher>  {
    */
   constructor(private teacherService: TeacherRepositoryService) {
     super();
+    this.isLoading$ = new BehaviorSubject(true);
   }
 
+  /**
+   * Load backend data to table.
+   * @param schoolId UUID of the school to load data from.
+   */
   establishDatasource(schoolId: string): void {
     this.teacherService.readAllTeachers(schoolId);
     this.dataSource.data$ = this.teacherService.items.pipe(
-      tap(() => console.log('Creating new teacher datasource'))
+      tap(() => {
+        this.isLoading$.next(false);
+        console.log('Creating new teacher datasource');
+      })
     );
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
   protected doRemoveItem(items: Teacher[]): Promise<void> {

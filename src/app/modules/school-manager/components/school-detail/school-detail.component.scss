@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,21 @@
 
 @import "~src/style/_variables.scss";
 
+::ng-deep .mat-tab-body-wrapper {
+  height: 100%;
+}
+
+.wrapper {
+  height: 100%;
+}
+
+.tab-content {
+  height: 100%;
+}
+
 h1 {
-   font-size: 1.25em;
-   margin-bottom: .5em;
+  font-size: 1.25em;
+  margin-bottom: .5em;
 }
 
 mat-card-content div {
@@ -26,7 +38,7 @@ mat-card-content div {
 }
 
 mat-card-content div:last-of-type {
-   padding-bottom: 40px;
+  padding-bottom: 40px;
 }
 
 table {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MenuStateService } from 'src/app/services/menu-state.service';
 
 @Component({

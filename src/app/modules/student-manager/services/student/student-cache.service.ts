@@ -19,21 +19,32 @@ import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/data
 import { log } from 'src/app/shared/logging-decorator';
 import { Student } from '../../models/student/student';
 import { StudentRepositoryService } from './student-repository.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class StudentCacheService extends DatasourceManagerRemovable<Student>  {
 
+  private isLoading$: BehaviorSubject<boolean>;
+
   constructor(private studentService: StudentRepositoryService) {
     super();
+    this.isLoading$ = new BehaviorSubject(true);
   }
 
   @log
   establishDatasource(schoolId: string): void {
     this.studentService.readAllStudents(schoolId);
     this.dataSource.data$ = this.studentService.items.pipe(
-      tap(() => console.log('Creating new student datasource'))
+      tap(() => {
+        this.isLoading$.next(false);
+        console.log('Creating new student datasource');
+      })
     );
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
   protected doRemoveItem(items: Student[]): Promise<void> {

@@ -58,7 +58,9 @@ export class BookListComponent implements OnInit {
               private menuState: MenuStateService,
               private router: Router,
               private snackBar: MatSnackBar) {
+
     console.log('Constructing BookListComponent', bookCacheService);
+
   }
 
   ngOnInit(): void {

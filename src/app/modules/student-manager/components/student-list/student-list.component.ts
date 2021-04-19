@@ -69,7 +69,9 @@ export class StudentListComponent implements OnInit, OnDestroy {
               private menuState: MenuStateService,
               private router: Router,
               private snackBar: MatSnackBar) {
+
     console.log('student list constructed');
+
   }
 
   ngOnInit(): void {
@@ -117,6 +119,10 @@ export class StudentListComponent implements OnInit, OnDestroy {
 
     return name + ': ' + contactInfo;
 
+  }
+
+  isLoading(gettingData: boolean): boolean {
+    return gettingData && this.isSchoolSelected;
   }
 
   private loadStudentData(): void {
