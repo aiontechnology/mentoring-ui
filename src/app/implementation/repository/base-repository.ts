@@ -15,7 +15,7 @@
  */
 
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
+import { Subject, Observable, forkJoin } from 'rxjs';
 import { log } from 'src/app/shared/logging-decorator';
 import { environment } from 'src/environments/environment';
 import { LinksHolder } from './links-holder';
@@ -23,7 +23,7 @@ import { tap } from 'rxjs/operators';
 
 export abstract class BaseRepository<T extends LinksHolder<any>> {
 
-  protected _items: BehaviorSubject<T[]>;
+  protected _items: Subject<T[]>;
 
   private dataStore: {
     items: T[];
@@ -32,7 +32,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   constructor(protected path: string,
               private http: HttpClient) {
     this.dataStore = { items: [] };
-    this._items = new BehaviorSubject<T[]>([]);
+    this._items = new Subject<T[]>();
   }
 
   get items(): Observable<T[]> {
@@ -158,7 +158,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   }
 
   private publishItems(): void {
-    this._items.next(Object.assign({}, this.dataStore).items);
+    this._items.next(this.dataStore.items);
   }
 
   private stripLinks(item: T): T {

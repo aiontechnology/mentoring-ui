@@ -18,20 +18,31 @@ import { Injectable } from '@angular/core';
 import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
 import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
 import { Book } from 'src/app/modules/shared/models/book/book';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class BookCacheService extends DatasourceManagerRemovable<Book> {
 
+  private isLoading$: BehaviorSubject<boolean>;
+
   constructor(private bookService: BookRepositoryService) {
     super();
+    this.isLoading$ = new BehaviorSubject(true);
   }
 
   establishDatasource(): void {
     this.bookService.readAllBooks();
     this.dataSource.data$ = this.bookService.items.pipe(
-      tap(() => console.log('Creating new book datasource'))
+      tap(() => {
+        this.isLoading$.next(false);
+        console.log('Creating new book datasource');
+      })
     );
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
   protected doRemoveItem(items: Book[]): Promise<void> {

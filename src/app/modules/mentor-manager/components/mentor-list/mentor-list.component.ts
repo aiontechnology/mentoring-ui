@@ -68,7 +68,9 @@ export class MentorListComponent implements OnInit, OnDestroy {
               private menuState: MenuStateService,
               private router: Router,
               private snackBar: MatSnackBar) {
+
     console.log('mentor list constructed');
+
   }
 
   ngOnInit(): void {
@@ -102,6 +104,10 @@ export class MentorListComponent implements OnInit, OnDestroy {
     } else {
       return ['select', 'firstName', 'lastName', 'availability', 'cellPhone', 'email', 'mediaReleaseSigned', 'backgroundCheckCompleted'];
     }
+  }
+
+  isLoading(gettingData: boolean): boolean {
+    return gettingData && this.isSchoolSelected;
   }
 
   private loadMentorData(): void {

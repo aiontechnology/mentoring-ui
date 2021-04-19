@@ -49,7 +49,9 @@ export class PersonnelListComponent implements OnInit, AfterViewInit {
               private router: Router,
               private snackBar: MatSnackBar,
               public personnelCacheService: PersonnelCacheService) {
+
     console.log('Constructing PersonnelListComponent', PersonnelCacheService);
+
   }
 
   ngOnInit(): void {

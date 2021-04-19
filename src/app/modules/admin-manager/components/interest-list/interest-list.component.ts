@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Component, ViewChild, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { InterestCacheService } from '../../services/interests/interest-cache.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -32,10 +32,19 @@ import { InterestInbound } from '../../models/interest/interest-inbound';
   styleUrls: ['./interest-list.component.scss'],
   providers: [InterestCacheService]
 })
-export class InterestListComponent implements OnInit, AfterViewInit, OnDestroy {
+export class InterestListComponent implements OnInit, OnDestroy {
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) set sort(sort: MatSort) {
+    if (sort !== undefined) {
+      this.interestCacheService.sort = sort;
+    }
+  }
+
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator !== undefined) {
+      this.interestCacheService.paginator = paginator;
+    }
+  }
 
   displayedColumns: string[];
 
@@ -64,18 +73,13 @@ export class InterestListComponent implements OnInit, AfterViewInit, OnDestroy {
                                      this.interestCacheService);
   }
 
-  ngAfterViewInit(): void {
-    this.interestCacheService.sort = this.sort;
-    this.interestCacheService.paginator = this.paginator;
-  }
-
   ngOnDestroy(): void {
     this.menuState.clear();
   }
 
   /**
    * Action taken after a dialog is closed: Move
-   * to page that displayes the new item.
+   * to page that displays the new item.
    * @param newItem Added/edited item that helps the
    * cache service determine which page to jump to.
    */

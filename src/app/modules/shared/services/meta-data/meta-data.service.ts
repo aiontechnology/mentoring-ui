@@ -17,7 +17,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Subject, ReplaySubject, Observable } from 'rxjs';
 import { InterestOutbound } from '../../models/meta-data/interests/interest-outbound';
 
 @Injectable()
@@ -31,49 +31,26 @@ export class MetaDataService {
   private behaviorUri = environment.apiUri + '/api/v1/behaviors';
   private tagsUri = environment.apiUri + '/api/v1/tags';
 
-  private _activityFocuses: BehaviorSubject<string[]>;
-  private _interests: BehaviorSubject<string[]>;
-  private _leadershipTraits: BehaviorSubject<string[]>;
-  private _leadershipSkills: BehaviorSubject<string[]>;
-  private _phonograms: BehaviorSubject<string[]>;
-  private _behaviors: BehaviorSubject<string[]>;
-  private _tags: BehaviorSubject<string[]>;
-
-  private dataStore: {
-    activityFocuses: string[];
-    interests: string[];
-    leadershipTraits: string[];
-    leadershipSkills: string[];
-    phonograms: string[];
-    behaviors: string[];
-    tags: string[];
-  };
+  private _activityFocuses: Subject<string[]>;
+  private _leadershipTraits: Subject<string[]>;
+  private _leadershipSkills: Subject<string[]>;
+  private _phonograms: Subject<string[]>;
+  private _behaviors: Subject<string[]>;
+  private _tags: Subject<string[]>;
+  private _interests: ReplaySubject<string[]>;
 
   constructor(private http: HttpClient) {
-    this._activityFocuses = new BehaviorSubject<string[]>([]);
-    this._interests = new BehaviorSubject<string[]>([]);
-    this._leadershipTraits = new BehaviorSubject<string[]>([]);
-    this._leadershipSkills = new BehaviorSubject<string[]>([]);
-    this._phonograms = new BehaviorSubject<string[]>([]);
-    this._behaviors = new BehaviorSubject<string[]>([]);
-    this._tags = new BehaviorSubject<string[]>([]);
-    this.dataStore = {
-      activityFocuses: [],
-      interests: [],
-      leadershipTraits: [],
-      leadershipSkills: [],
-      phonograms: [],
-      behaviors: [],
-      tags: []
-    };
+    this._activityFocuses = new Subject<string[]>();
+    this._leadershipTraits = new Subject<string[]>();
+    this._leadershipSkills = new Subject<string[]>();
+    this._phonograms = new Subject<string[]>();
+    this._behaviors = new Subject<string[]>();
+    this._tags = new Subject<string[]>();
+    this._interests = new ReplaySubject<string[]>(1);
   }
 
   get activityFocuses(): Observable<string[]> {
     return this._activityFocuses;
-  }
-
-  get interests(): Observable<string[]> {
-    return this._interests;
   }
 
   get leadershipTraits(): Observable<string[]> {
@@ -96,66 +73,70 @@ export class MetaDataService {
     return this._tags;
   }
 
+  get interests(): Observable<string[]> {
+    return this._interests;
+  }
+
   loadActivityFocuses(): void {
     this.http.get<any>(this.acctivityFocusesUri)
       .subscribe(data => {
-        this.dataStore.activityFocuses = data?._embedded.stringList || [];
-        this.logCache('activity focus', this.dataStore.activityFocuses);
-        this.publishActivityFocuses();
-      });
-  }
-
-  loadInterests(): void {
-    this.http.get<any>(this.interestsUri)
-      .subscribe(data => {
-        this.dataStore.interests = data?._embedded?.stringList || [];
-        this.logCache('interest', this.dataStore.interests);
-        this.publishInterests();
+        const activityFocuses = data?._embedded?.stringList ?? [];
+        this._activityFocuses.next(activityFocuses);
+        this.logCache('activity focus', activityFocuses);
       });
   }
 
   loadLeadershipTraits(): void {
     this.http.get<any>(this.leadershipTraitsUri)
       .subscribe(data => {
-        this.dataStore.leadershipTraits = data?._embedded?.stringList || [];
-        this.logCache('leadership trait', this.dataStore.leadershipTraits);
-        this.publishLeadershipTraits();
+        const leadershipTraits = data?._embedded?.stringList ?? [];
+        this._leadershipTraits.next(leadershipTraits);
+        this.logCache('leadership trait', leadershipTraits);
       });
   }
 
   loadLeadershipSkills(): void {
     this.http.get<any>(this.leadershipSkillsUri)
       .subscribe(data => {
-        this.dataStore.leadershipSkills = data?._embedded?.stringList || [];
-        this.logCache('leadership skill', this.dataStore.leadershipSkills);
-        this.publishLeadershipSkills();
+        const leadershipSkills = data?._embedded?.stringList ?? [];
+        this._leadershipSkills.next(leadershipSkills);
+        this.logCache('leadership skill', leadershipSkills);
       });
   }
 
   loadPhonograms(): void {
     this.http.get<any>(this.phonogramUri)
       .subscribe(data => {
-        this.dataStore.phonograms = data?._embedded?.stringList || [];
-        this.logCache('phonogram', this.dataStore.phonograms);
-        this.publishPhonograms();
+        const phonograms = data?._embedded?.stringList ?? [];
+        this._phonograms.next(phonograms);
+        this.logCache('phonogram', phonograms);
       });
   }
 
   loadBehaviors(): void {
     this.http.get<any>(this.behaviorUri)
       .subscribe(data => {
-        this.dataStore.behaviors = data?._embedded?.stringList || [];
-        this.logCache('behavior', this.dataStore.behaviors);
-        this.publishBehaviors();
+        const behaviors = data?._embedded?.stringList ?? [];
+        this._behaviors.next(behaviors);
+        this.logCache('behavior', behaviors);
       });
   }
 
   loadTags(): void {
     this.http.get<any>(this.tagsUri)
       .subscribe(data => {
-        this.dataStore.tags = data?._embedded?.stringList || [];
-        this.logCache('tag', this.dataStore.tags);
-        this.publishTags();
+        const tags = data?._embedded?.stringList ?? [];
+        this._tags.next(tags);
+        this.logCache('tag', tags);
+      });
+  }
+
+  loadInterests(): void {
+    this.http.get<any>(this.interestsUri)
+      .subscribe(data => {
+        const interests = data?._embedded?.stringList ?? [];
+        this._interests.next(interests);
+        this.logCache('interest', interests);
       });
   }
 
@@ -165,10 +146,9 @@ export class MetaDataService {
       this.http.put<any>(this.interestsUri, newInterest)
         .subscribe(data => {
           console.log('Recieved interest list:', data);
-          const i = data?._embedded?.stringList || [];
-          this.dataStore.interests = i;
-          this.publishInterests();
-          resolver(i);
+          const interests = data?._embedded?.stringList ?? [];
+          this._interests.next(interests);
+          resolver(interests);
         });
     });
   }
@@ -177,34 +157,6 @@ export class MetaDataService {
     for (const value of values) {
       console.log(`Cache entiry (${type})`, value);
     }
-  }
-
-  private publishActivityFocuses() {
-    this._activityFocuses.next(Object.assign({}, this.dataStore).activityFocuses);
-  }
-
-  private publishInterests() {
-    this._interests.next(Object.assign({}, this.dataStore).interests);
-  }
-
-  private publishLeadershipTraits() {
-    this._leadershipTraits.next(Object.assign({}, this.dataStore).leadershipTraits);
-  }
-
-  private publishLeadershipSkills() {
-    this._leadershipSkills.next(Object.assign({}, this.dataStore).leadershipSkills);
-  }
-
-  private publishPhonograms() {
-    this._phonograms.next(Object.assign({}, this.dataStore).phonograms);
-  }
-
-  private publishBehaviors() {
-    this._behaviors.next(Object.assign({}, this.dataStore).behaviors);
-  }
-
-  private publishTags() {
-    this._tags.next(Object.assign({}, this.dataStore).tags);
   }
 
 }

@@ -49,7 +49,9 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
               private router: Router,
               private snackBar: MatSnackBar,
               public teacherCacheService: TeacherCacheService) {
+
     console.log('Constructing TeacherListComponent', teacherCacheService);
+
   }
 
   ngOnInit(): void {

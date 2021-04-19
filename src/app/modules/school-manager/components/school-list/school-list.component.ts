@@ -56,10 +56,13 @@ export class SchoolListComponent implements OnInit, OnDestroy {
               private router: Router,
               public schoolCacheService: SchoolCacheService,
               private snackBar: MatSnackBar) {
+
     console.log('Constructing SchoolListComponent', schoolCacheService);
+
   }
 
   ngOnInit(): void {
+    this.schoolCacheService.establishDatasource();
     this.schoolCacheService.clearSelection();
 
     console.log('Adding school list menus');

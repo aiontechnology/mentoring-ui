@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-sidenav-container class="sidenav-container" fullsize>
+<mat-sidenav-container fullscreen>
   <mat-sidenav
     #drawer
     class="sidenav"
@@ -51,7 +51,7 @@ limitations under the License.
   </mat-sidenav>
   <mat-sidenav-content>
     <ms-toolbar [isHandset$]="isHandset$" [drawer]="drawer"></ms-toolbar>
-    <div class="wrapper">
+    <div class="router-wrapper">
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>

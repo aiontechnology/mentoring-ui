@@ -15,18 +15,18 @@
  */
 
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
 
 export abstract class SchoolResourceRepository<T extends LinksHolder<any>> {
 
-  private resources$: BehaviorSubject<T[]>;
+  private resources$: Subject<T[]>;
   private dataStore: T[];
 
   constructor(protected path: string,
               private http: HttpClient) {
-    this.resources$ = new BehaviorSubject<T[]>([]);
+    this.resources$ = new Subject<T[]>();
     this.dataStore = [];
   }
 

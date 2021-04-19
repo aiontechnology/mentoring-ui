@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MenuStateService } from 'src/app/services/menu-state.service';
-import { SchoolCacheService } from '../shared/services/school/school-cache.service';
 
 @Component({
   selector: 'ms-school-manager',
@@ -25,9 +24,8 @@ import { SchoolCacheService } from '../shared/services/school/school-cache.servi
 })
 export class SchoolManagerComponent {
 
-  constructor(private menuState: MenuStateService,
-              private schoolCacheService: SchoolCacheService) {
-    menuState.title = 'School Manager';
+  constructor(private menuState: MenuStateService) {
+    this.menuState.title = 'School Manager';
   }
 
 }

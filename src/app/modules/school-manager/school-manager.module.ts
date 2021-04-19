@@ -38,7 +38,6 @@ import { CanActivateAdmin } from 'src/app/services/can-activate-admin';
 import { SchoolGameDialogComponent } from './components/school-resource/school-game-dialog/school-game-dialog.component';
 import { SchoolGameListComponent } from './components/school-resource/school-game-list/school-game-list.component';
 import { SchoolGameRepositoryService } from './services/school-resource/school-game/school-game-repository.service';
-
 const routes: Routes = [
   {
     path: '',
