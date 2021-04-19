@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,11 +33,15 @@ export class SidenavComponent {
 
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
-      map(result => result.matches),
+      map(result => (result.matches && this.userSession.isLoggedIn())),
       shareReplay()
     );
 
   constructor(public userSession: UserSessionService,
               private breakpointObserver: BreakpointObserver) { }
+
+  canShowSidenav(isHandset: boolean): boolean {
+    return !isHandset && this.userSession.isLoggedIn();
+  }
 
 }
