@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,28 +15,42 @@
  */
 
 .sidenav {
-  width: 200px;
 
   .mat-toolbar {
     background: inherit;
   }
-}
 
-.sidenav-container {
-  height: 100%;
-
-  img {
-    margin: 10px 0 0 0;
-    width: 150px;
+  .mat-nav-list {
+    margin-top: 35px;
   }
 }
 
+span {
+  text-align: center;
+}
+
+img {
+  padding: 35px 5px 0 5px;
+  width: 250px;
+}
+
+.mat-sidenav-content {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
 .mat-toolbar.mat-primary {
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 1;
+  z-index: 500;
 }
 
 .wrapper {
-  margin: 50px;
+  flex-grow: 1;
+  height: 100%;
+}
+
+span.mat-h2 {
+  margin: auto;
 }
