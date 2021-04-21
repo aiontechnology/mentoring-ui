@@ -16,7 +16,7 @@
 
 (function(window) {
     window["env"] = window["env"] || {};
-    
+
     window["env"]["production"] = false;
     window["env"]["apiUri"] = "http://localhost:8080";
     window["env"]["lpgUri"] = "http://localhost:8090";

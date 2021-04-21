@@ -25,6 +25,7 @@ export class Book extends Resource {
   leadershipTraits: string[];
   phonograms: string[];
   behaviors: string[];
+  tag: string;
 
   constructor(json?: any) {
     super(json);
@@ -36,6 +37,7 @@ export class Book extends Resource {
     this.leadershipTraits = json?.leadershipTraits;
     this.phonograms = json?.phonograms;
     this.behaviors = json?.behaviors;
+    this.tag = json?.tag;
   }
 
 }

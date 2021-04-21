@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 Aion Technology LLC
+Copyright 2020 - 2021 Aion Technology LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,13 +23,16 @@ limitations under the License.
     *ngIf="isHandset$ | async">
     <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
   </button>
-  <span>{{ menuState.title }}</span>
-
-  <span class="spacer"></span>
-
-  <a mat-button [routerLink]="['/login']" *ngIf="!userSession.isLoggedIn()">Login</a>
-  <a mat-button [routerLink]="['/logout']" *ngIf="userSession.isLoggedIn()">Logout</a>
-  <button mat-button [matMenuTriggerFor]="menu">
+  <span class="mat-display-1 title">{{ menuState.title }}</span>
+  <a mat-button [routerLink]="['/login']" *ngIf="!userSession.isLoggedIn()">
+    <span class="mat-h2">Login</span>
+    <mat-icon>account_circle</mat-icon>
+  </a>
+  <a mat-button [routerLink]="['/logout']" *ngIf="userSession.isLoggedIn()">
+    <span class="mat-h2">Logout</span>
+    <mat-icon>account_circle</mat-icon>
+  </a>
+  <button mat-button [matMenuTriggerFor]="menu" *ngIf="userSession.isLoggedIn()">
     <mat-icon>more_vert</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
