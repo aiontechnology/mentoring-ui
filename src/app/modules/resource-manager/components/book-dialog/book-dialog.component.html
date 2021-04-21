@@ -19,7 +19,7 @@ limitations under the License.
   <form [formGroup]="model">
     <input type="hidden" formControlName="book" />
 
-    <p class="legend">* Denotes a required field</p>
+    <p class="legend mat-small">* Denotes a required field</p>
 
     <div class="dialog-container">
       <mat-form-field>
@@ -100,6 +100,15 @@ limitations under the License.
         <mat-label>Behaviors</mat-label>
         <mat-select formControlName="behaviors" multiple>
           <mat-option *ngFor="let behavior of (behaviorList$ | async)" [value]="behavior">{{behavior}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <mat-label>Tag</mat-label>
+        <mat-select formControlName="tag">
+          <mat-option *ngFor="let tag of (tagsList$ | async)" [value]="tag">{{tag}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>

@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
@@ -26,8 +26,12 @@ import { UserSessionService } from 'src/app/services/user-session.service';
 export class ReceiveTokenComponent {
 
   constructor(public userSession: UserSessionService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
+
     this.parseToken(this.route.snapshot.fragment);
+    this.router.navigate(['home']);
+
   }
 
   private parseToken(fragment: string): void {
@@ -35,4 +39,3 @@ export class ReceiveTokenComponent {
   }
 
 }
-
