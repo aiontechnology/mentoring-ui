@@ -15,27 +15,31 @@ limitations under the License.
 -->
 
 <h2 mat-dialog-title>Update Games</h2>
-<p class="mat-small">To add: Click and drag titles from global resources to local resources.</p>
 <mat-dialog-content>
-  <div class="input-group">
-    <mat-form-field>
-      <input matInput #filterAll (keyup)="games.applyFilter($event.target.value)" placeholder="Filter resources"/>
-      <button mat-button *ngIf="filterAll.value" matSuffix mat-icon-button (click)="games.clearInput(filterAll)">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput #filterLocal (keyup)="localGames.applyFilter($event.target.value)" placeholder="Filter local games"/>
-      <button mat-button *ngIf="filterLocal.value" matSuffix mat-icon-button (click)="localGames.clearInput(filterLocal)">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
+  <div class="filter-group-wrapper">
+    <h3 class="mat-h3">Resource filters</h3>
+    <div class="filter-group">
+      <mat-form-field>
+        <input matInput #filterAll (keyup)="games.applyTitleFilter($event.target.value)" placeholder="Global titles"/>
+        <button mat-button *ngIf="filterAll.value" matSuffix mat-icon-button (click)="games.clearInput(filterAll)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="spacer"></div>
+      <mat-form-field>
+        <input matInput #filterLocal (keyup)="localGames.applyTitleFilter($event.target.value)" placeholder="Local games"/>
+        <button mat-button *ngIf="filterLocal.value" matSuffix mat-icon-button (click)="localGames.clearInput(filterLocal)">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
   </div>
 
+  <p class="mat-small">To add: Click and drag titles from global resources to local resources.</p>
   <div class="droplist-group" cdkDropListGroup>
 
     <div class="droplist-container">
-      <h3 class="mat-h3">Available resources</h3>
+      <h3 class="mat-h3">Global resources</h3>
       <div
         class="droplist-column"
         cdkDropList
