@@ -25,7 +25,7 @@ export class DropListData {
   data: Resource[];
   filteredData: Resource[];
 
-  constructor(data: Resource[]) {
+  constructor(data: Resource[] = []) {
     this.data = data.sort(this.compareTitle).slice();
     this.filteredData = this.data.slice();
   }
@@ -53,8 +53,8 @@ export class DropListData {
 
   }
 
-  applyFilter(filterValue: string): void {
-    if (filterValue == null) {
+  applyTitleFilter(filterValue: string): void {
+    if (filterValue === '') {
       this.filteredData = this.data.slice();
     } else {
       filterValue = this.cleanInput(filterValue);
@@ -64,7 +64,7 @@ export class DropListData {
 
   clearInput(filter: HTMLInputElement): void {
     filter.value = '';
-    this.applyFilter(null);
+    this.applyTitleFilter('');
   }
 
   removeFromData(value: Resource): void {
@@ -85,6 +85,10 @@ export class DropListData {
     }
   }
 
+  protected cleanInput(str: string): string {
+    return str.trim().toLowerCase();
+  }
+
   private compareTitle(a: Resource, b: Resource): number {
     if (a.displayName.localeCompare(b.displayName) < 0) {
       return -1;
@@ -93,10 +97,6 @@ export class DropListData {
       return 1;
     }
     return 0;
-  }
-
-  private cleanInput(str: string): string {
-    return str.trim().toLowerCase();
   }
 
 }
