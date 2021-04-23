@@ -18,20 +18,31 @@ import { Injectable } from '@angular/core';
 import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
 import { Game } from 'src/app/modules/shared/models/game/game';
 import { GameRepositoryService } from 'src/app/modules/shared/services/resources/game-repository.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class GameCacheService extends DatasourceManagerRemovable<Game> {
 
+  private isLoading$: BehaviorSubject<boolean>;
+
   constructor(private gameService: GameRepositoryService) {
     super();
+    this.isLoading$ = new BehaviorSubject(true);
   }
 
   establishDatasource(): void {
     this.gameService.readAllGames();
     this.dataSource.data$ = this.gameService.items.pipe(
-      tap(() => console.log('Creating new game datasource'))
+      tap(() => {
+        this.isLoading$.next(false);
+        console.log('Creating new game datasource');
+      })
     );
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
   protected doRemoveItem(items: Game[]): Promise<void> {
