@@ -19,10 +19,13 @@ import { log } from 'src/app/shared/logging-decorator';
 import { School } from '../../models/school/school';
 import { DatasourceManagerRemovable } from '../datasource-manager/datasource-manager-removable';
 import { SchoolRepositoryService } from './school-repository.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class SchoolCacheService extends DatasourceManagerRemovable<School> {
+
+  private isLoading$: BehaviorSubject<boolean>;
 
   /**
    * Constructor
@@ -30,19 +33,21 @@ export class SchoolCacheService extends DatasourceManagerRemovable<School> {
    */
   constructor(private schoolService: SchoolRepositoryService) {
     super();
+    this.isLoading$ = new BehaviorSubject(true);
     console.log('Constructing a new SchoolCacheService instance');
-    this.establishDatasource();
   }
 
   /**
-   * Setup the table datasource.
+   * Load backend data to table.
    */
   @log
-  private establishDatasource(): void {
+  establishDatasource(): void {
     this.schoolService.readAllSchools();
     this.dataSource.data$ = this.schoolService.items.pipe(
       tap(s => {
         console.log('Creating new school datasource');
+
+        this.isLoading$.next(false);
         this.dataSource.data = s;
 
         this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
@@ -54,6 +59,10 @@ export class SchoolCacheService extends DatasourceManagerRemovable<School> {
         }
       })
     );
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
   protected doRemoveItem(items: School[]): Promise<void> {

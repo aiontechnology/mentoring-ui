@@ -23,7 +23,11 @@ import { InterestDialogComponent } from './components/interest-dialog/interest-d
 
 const routes: Routes = [
   {
-    path: '', component: InterestListComponent
+    path: '',
+    component: AdminManagerComponent,
+    children: [
+      { path: '', component: InterestListComponent }
+    ]
   }
 ];
 

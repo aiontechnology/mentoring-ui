@@ -14,113 +14,110 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div>
-  <mat-card>
+<div class="spinner-container" *ngIf="isLoading(mentorCacheService.isLoading | async)">
+  <mat-progress-spinner color="primary" mode="indeterminate" [diameter]="100" [strokeWidth]="10"></mat-progress-spinner>
+</div>
 
-    <mat-card-header>
-      <mat-card-title>Mentors</mat-card-title>
-    </mat-card-header>
+<div class="bg">
+  <div class="list-container mat-elevation-z2">
 
-    <mat-card-content class="mat-elevation-z8">
-
-      <div class="table-header">
-        <div *ngIf="userSession.isSysAdmin">
-          <mat-form-field>
-            <mat-label>Select a school</mat-label>
-            <mat-select (selectionChange)="setSchool($event.value.id)">
-              <mat-option *ngFor="let school of (schools$ | async)" [value]="school">
-                {{ school.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <div class="spacer"></div>
-        </div>
-        <mat-form-field *ngIf="isSchoolSelected">
-          <input matInput [(ngModel)]="mentorCacheService.filterBinding" (keyup)="mentorCacheService.applyFilter($event.target.value)" placeholder="Filter"/>
-          <button mat-button *ngIf="mentorCacheService.filter" matSuffix mat-icon-button (click)="mentorCacheService.clearFilter()">
-            <mat-icon>close</mat-icon>
-          </button>
+    <div class="header">
+      <div *ngIf="userSession.isSysAdmin">
+        <mat-form-field>
+          <mat-label>Select a school</mat-label>
+          <mat-select (selectionChange)="setSchool($event.value.id)">
+            <mat-option *ngFor="let school of (schools$ | async)" [value]="school">
+              {{ school.name }}
+            </mat-option>
+          </mat-select>
         </mat-form-field>
+        <div class="spacer"></div>
       </div>
+      <mat-form-field *ngIf="isSchoolSelected">
+        <input matInput [(ngModel)]="mentorCacheService.filterBinding" (keyup)="mentorCacheService.applyFilter($event.target.value)" placeholder="Filter"/>
+        <button mat-button *ngIf="mentorCacheService.filter" matSuffix mat-icon-button (click)="mentorCacheService.clearFilter()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
 
-      <div *ngIf="isSchoolSelected">
-        <table mat-table [dataSource]="mentorCacheService.dataSource" matSort>
-          <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef>
-              <mat-checkbox
-                (change)="$event ? mentorCacheService.masterToggle() : null"
-                [checked]="mentorCacheService.selection.hasValue() && mentorCacheService.isAllSelected()"
-                [indeterminate]="mentorCacheService.selection.hasValue() && !mentorCacheService.isAllSelected()"
-              >
-              </mat-checkbox>
-            </th>
-            <td mat-cell *matCellDef="let row">
-              <mat-checkbox
-                (click)="$event.stopPropagation()"
-                (change)="$event ? mentorCacheService.selection.toggle(row) : null"
-                [checked]="mentorCacheService.selection.isSelected(row)"
-              >
-              </mat-checkbox>
-            </td>
-          </ng-container>
+    <div *ngIf="isSchoolSelected">
+      <table mat-table [dataSource]="mentorCacheService.dataSource" matSort>
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              (change)="$event ? mentorCacheService.masterToggle() : null"
+              [checked]="mentorCacheService.selection.hasValue() && mentorCacheService.isAllSelected()"
+              [indeterminate]="mentorCacheService.selection.hasValue() && !mentorCacheService.isAllSelected()"
+            >
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox
+              (click)="$event.stopPropagation()"
+              (change)="$event ? mentorCacheService.selection.toggle(row) : null"
+              [checked]="mentorCacheService.selection.isSelected(row)"
+            >
+            </mat-checkbox>
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="firstName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
-            <td mat-cell *matCellDef="let mentor"><a [routerLink]="['schools', schoolId, 'mentors', mentor.id]">{{ mentor.firstName }}</a></td>
-          </ng-container>
+        <ng-container matColumnDef="firstName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+          <td mat-cell *matCellDef="let mentor"><a [routerLink]="['schools', schoolId, 'mentors', mentor.id]">{{ mentor.firstName }}</a></td>
+        </ng-container>
 
-          <ng-container matColumnDef="lastName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
-            <td mat-cell *matCellDef="let mentor">{{ mentor.lastName }}</td>
-          </ng-container>
+        <ng-container matColumnDef="lastName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+          <td mat-cell *matCellDef="let mentor">{{ mentor.lastName }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="availability">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
-            <td mat-cell *matCellDef="let mentor">
-              {{ mentor.availability }}
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="availability">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
+          <td mat-cell *matCellDef="let mentor">
+            {{ mentor.availability }}
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="cellPhone">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Cellphone</th>
-            <td mat-cell *matCellDef="let mentor">{{ mentor.cellPhone }}</td>
-          </ng-container>
+        <ng-container matColumnDef="cellPhone">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Cellphone</th>
+          <td mat-cell *matCellDef="let mentor">{{ mentor.cellPhone }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="email">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-            <td mat-cell *matCellDef="let mentor">{{ mentor.email }}</td>
-          </ng-container>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <td mat-cell *matCellDef="let mentor">{{ mentor.email }}</td>
+        </ng-container>
 
-          <ng-container matColumnDef="mediaReleaseSigned">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Media Release</th>
-            <td mat-cell *matCellDef="let mentor">
-              <mat-icon *ngIf="mentor.mediaReleaseSigned">done</mat-icon>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="mediaReleaseSigned">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Media Release</th>
+          <td mat-cell *matCellDef="let mentor">
+            <mat-icon *ngIf="mentor.mediaReleaseSigned">done</mat-icon>
+          </td>
+        </ng-container>
 
-          <ng-container matColumnDef="backgroundCheckCompleted">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>Background Check</th>
-            <td mat-cell *matCellDef="let mentor">
-              <mat-icon *ngIf="mentor.backgroundCheckCompleted">done</mat-icon>
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="backgroundCheckCompleted">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Background Check</th>
+          <td mat-cell *matCellDef="let mentor">
+            <mat-icon *ngIf="mentor.backgroundCheckCompleted">done</mat-icon>
+          </td>
+        </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumns()"
-            (click)="mentorCacheService.selection.toggle(row)"
-          ></tr>
-        </table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns()"
+          (click)="mentorCacheService.selection.toggle(row)"
+        ></tr>
+      </table>
 
-        <table>
-          <tr>
-            <td><ms-selection-count-display [selectionCount]="mentorCacheService.selectionCount"></ms-selection-count-display></td>
-            <td><mat-paginator #paginator [pageSize]="mentorCacheService.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
-          </tr>
-        </table>
-      </div>
+      <table class="footer mat-elevation-z1">
+        <tr>
+          <td><ms-selection-count-display [selectionCount]="mentorCacheService.selectionCount"></ms-selection-count-display></td>
+          <td><mat-paginator #paginator [pageSize]="mentorCacheService.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
+        </tr>
+      </table>
+    </div>
 
-    </mat-card-content>
-  </mat-card>
+  </div>
 </div>
