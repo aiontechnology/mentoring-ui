@@ -102,11 +102,11 @@ export class SchoolBookDialogComponent implements OnInit, OnDestroy {
       if (event$.previousContainer.data !== this.localBooks.filteredData) {
         this.books.removeFromData(prevItem);
         // Insert the book into local resources.
-        this.localBooks.insertSorted(prevItem);
+        this.localBooks.insertToDataSorted(prevItem);
       } else {
         this.localBooks.removeFromData(prevItem);
         // Insert the book back into global resources.
-        this.books.insertSorted(prevItem);
+        this.books.insertToDataSorted(prevItem);
       }
 
       /**
@@ -129,6 +129,14 @@ export class SchoolBookDialogComponent implements OnInit, OnDestroy {
 
   }
 
+  moveGlobalToLocal(): void {
+    this.moveTo(this.books, this.localBooks);
+  }
+
+  moveLocalToGlobal(): void {
+    this.moveTo(this.localBooks, this.books);
+  }
+
   private schoolHasBook(book: Book): boolean {
     for (const b of this.localBooks.data) {
       if (book.id === b.id) {
@@ -136,6 +144,19 @@ export class SchoolBookDialogComponent implements OnInit, OnDestroy {
       }
     }
     return false;
+  }
+
+  private moveTo(origin: DropListBooks, destination: DropListBooks): void {
+
+    origin.filteredData.forEach((value) => {
+      destination.insertToDataSorted(value);
+      destination.insertToFilteredSorted(value);
+      const i = origin.data.indexOf(value);
+      origin.data.splice(i, 1);
+    });
+
+    origin.filteredData = [];
+
   }
 
 }

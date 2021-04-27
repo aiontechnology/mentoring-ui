@@ -72,16 +72,24 @@ export class DropListData {
     this.data.splice(index, 1);
   }
 
+  insertToDataSorted(value: Resource): void {
+    this.insertItemSorted(value, this.data);
+  }
+
+  insertToFilteredSorted(value: Resource): void {
+    this.insertItemSorted(value, this.filteredData);
+  }
+
   /**
    * Insert a value into drop list data, ordered by title.
    * @param value Item to insert.
    */
-  insertSorted(value: Resource): void {
-    const i = DropListData.sortedInsertIndex(value, this.data);
+  private insertItemSorted(value: Resource, arr: Resource[]) {
+    const i = DropListData.sortedInsertIndex(value, arr);
     if (i < 0) {
-      this.data.push(value);
+      arr.push(value);
     } else {
-      this.data.splice(i, 0, value);
+      arr.splice(i, 0, value);
     }
   }
 
