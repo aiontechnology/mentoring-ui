@@ -35,7 +35,7 @@ export class InterestCacheService extends DatasourceManager<InterestInbound> {
     this.metaDataService.loadInterests();
     this.dataSource.data$ = this.metaDataService.interests.pipe(
       map((interest): InterestInbound[] => {
-        this.isLoading$.next(false);
+        setTimeout(() => this.isLoading$.next(false));
         console.log('Creating new interests datasource');
         return interest.map((i): InterestInbound => ({ name: i }));
       })
