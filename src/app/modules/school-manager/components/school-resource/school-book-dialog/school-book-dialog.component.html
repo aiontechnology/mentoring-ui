@@ -62,7 +62,7 @@ limitations under the License.
   <div class="droplist-group" cdkDropListGroup>
 
     <div class="droplist-container">
-      <h3 class="mat-h3">Global resources</h3>
+      <h3 class="mat-h3">Global books</h3>
       <div
         class="droplist-column"
         cdkDropList
@@ -71,10 +71,14 @@ limitations under the License.
         (cdkDropListDropped)="drop($event)">
         <div class="droplist-box mat-body" *ngFor="let book of books.filteredData" cdkDrag>{{ book.title }}<span class="tag" *ngIf="book.tag">{{ book.tag }}</span></div>
       </div>
+      <button class="transfer" mat-raised-button (click)="moveGlobalToLocal()">
+        Add to school
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
     </div>
 
     <div class="droplist-container">
-      <h3 class="mat-h3">Local books</h3>
+      <h3 class="mat-h3">School books</h3>
       <div
         class="droplist-column"
         cdkDropList
@@ -83,6 +87,10 @@ limitations under the License.
         (cdkDropListDropped)="drop($event)">
         <div class="droplist-box mat-body" *ngFor="let book of localBooks.filteredData" cdkDrag>{{ book.title }}<span class="tag" *ngIf="book.tag">{{ book.tag }}</span></div>
       </div>
+      <button class="transfer" mat-raised-button (click)="moveLocalToGlobal()">
+        <mat-icon>arrow_back</mat-icon>
+        Remove from school
+      </button>
     </div>
 
   </div>
