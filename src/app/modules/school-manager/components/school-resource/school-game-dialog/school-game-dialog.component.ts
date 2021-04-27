@@ -42,6 +42,7 @@ export class SchoolGameDialogComponent implements OnInit, OnDestroy {
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
     this.schoolId = this.data?.schoolId;
+    this.games = new DropListData();
     this.localGames = new DropListData(this.data?.schoolGames());
 
   }

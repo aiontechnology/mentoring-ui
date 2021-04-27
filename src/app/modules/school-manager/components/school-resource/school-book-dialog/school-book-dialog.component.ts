@@ -21,7 +21,9 @@ import { SchoolBookRepositoryService } from '../../../services/school-resource/s
 import { Subscription } from 'rxjs';
 import { Book } from 'src/app/modules/shared/models/book/book';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { DropListData } from '../drop-list-data';
+import { DropListBooks } from '../drop-list-books';
+import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'ms-school-book-dialog',
@@ -30,23 +32,28 @@ import { DropListData } from '../drop-list-data';
 })
 export class SchoolBookDialogComponent implements OnInit, OnDestroy {
 
-  booksSubscription$: Subscription;
-  books: DropListData;
-  localBooks: DropListData;
-
   private schoolId: string;
+
+  tags$: Observable<string[]>;
+
+  booksSubscription$: Subscription;
+  books: DropListBooks;
+  localBooks: DropListBooks;
 
   constructor(private bookService: BookRepositoryService,
               private schoolBookService: SchoolBookRepositoryService,
               private dialogRef: MatDialogRef<SchoolBookDialogComponent>,
+              private metaDataService: MetaDataService,
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
     this.schoolId = this.data?.schoolId;
-    this.localBooks = new DropListData(this.data?.schoolBooks());
+    this.books = new DropListBooks();
+    this.localBooks = new DropListBooks(this.data?.schoolBooks());
 
   }
 
   ngOnInit(): void {
+
     this.bookService.readAllBooks();
     this.booksSubscription$ = this.bookService.items.subscribe(
       books => {
@@ -56,9 +63,13 @@ export class SchoolBookDialogComponent implements OnInit, OnDestroy {
          * which are already local to the school.
          */
         const books$ = books.filter(book => !this.schoolHasBook(book));
-        this.books = new DropListData(books$);
+        this.books = new DropListBooks(books$);
       }
     );
+
+    this.metaDataService.loadTags();
+    this.tags$ = this.metaDataService.tags;
+
   }
 
   ngOnDestroy(): void {
@@ -103,7 +114,7 @@ export class SchoolBookDialogComponent implements OnInit, OnDestroy {
        * the index the droplist item was dropped at, allowing us to
        * maintain alphabetical order.
        */
-      event$.currentIndex = DropListData.sortedInsertIndex(prevItem, event$.container.data);
+      event$.currentIndex = DropListBooks.sortedInsertIndex(prevItem, event$.container.data);
       if (event$.currentIndex < 0) {
         event$.currentIndex = event$.container.data.length;
       }
