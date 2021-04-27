@@ -60,6 +60,11 @@
   border-radius: 10px;
 }
 
+button.transfer {
+  width: 100%;
+  margin-top: 15px;
+}
+
 .droplist-container {
   width: 100%;
   display: inline-block;
@@ -71,8 +76,7 @@
 }
 
 .droplist-column {
-  min-height: 50px;
-  max-height: 275px;
+  height: 400px;
   background: white;
   border-radius: 10px;
   overflow: auto;
