@@ -115,8 +115,8 @@ limitations under the License.
 
     <div class="dialog-container">
       <mat-radio-group formControlName="location">
-        <mat-radio-button *ngFor="let location of locations" [value]="location.toUpperCase()">
-          {{location}}
+        <mat-radio-button *ngFor="let location of (locations | keyvalue: unsorted)" [value]="location.key">
+          {{location.value}}
         </mat-radio-button>
       </mat-radio-group>
     </div>
