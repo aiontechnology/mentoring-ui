@@ -15,6 +15,7 @@
  */
 
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
+import { resourceLocations } from '../../constants/locations';
 
 export abstract class Resource implements LinksHolder<Resource> {
 
@@ -47,6 +48,10 @@ export abstract class Resource implements LinksHolder<Resource> {
 
   getSelfLink(): string {
     return this._links.self[0].href;
+  }
+
+  get displayLocation(): string {
+    return resourceLocations[this.location] ?? '';
   }
 
 }

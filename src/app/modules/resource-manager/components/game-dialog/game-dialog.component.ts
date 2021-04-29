@@ -23,6 +23,7 @@ import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-
 import { Game } from 'src/app/modules/shared/models/game/game';
 import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { Observable } from 'rxjs';
+import { resourceLocations } from 'src/app/modules/shared/constants/locations';
 
 @Component({
   selector: 'ms-game-dialog',
@@ -35,7 +36,7 @@ export class GameDialogComponent implements OnInit {
   isUpdate = false;
 
   grades: Grade[] = resourceGrades;
-  locations: string[] = ['Offline', 'Online', 'Both'];
+  locations: { [key: string]: string };
   activityFocusList$: Observable<string[]>;
   leadershipSkillList$: Observable<string[]>;
   leadershipTraitList$: Observable<string[]>;
@@ -54,8 +55,11 @@ export class GameDialogComponent implements OnInit {
               private metaDataService: MetaDataService,
               private formBuilder: FormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
+
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
+    this.locations = resourceLocations;
+
   }
 
   ngOnInit(): void {
@@ -92,6 +96,11 @@ export class GameDialogComponent implements OnInit {
 
   dismiss(): void {
     this.dialogRef.close(null);
+  }
+
+  // Used for the keyvalue pipe, to keep location properties in their default order.
+  unsorted(): number {
+    return 0;
   }
 
   private createModel(formBuilder: FormBuilder, game: Game): FormGroup {
