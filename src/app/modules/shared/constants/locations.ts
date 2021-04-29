@@ -19,3 +19,9 @@ export const resourceLocations = {
   ONLINE: 'Online',
   BOTH: 'Both',
 };
+
+export const studentLocations = {
+  OFFLINE: 'In-Person',
+  ONLINE: 'Online',
+  BOTH: 'Both'
+};
