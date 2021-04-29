@@ -128,6 +128,10 @@ export class StudentDetailComponent implements OnDestroy {
     });
   }
 
+  get mentorFullName(): string {
+    return this.studentMentor ? this.studentMentor?.mentor?.firstName + ' ' + this.studentMentor?.mentor?.lastName : '';
+  }
+
 }
 
 class StudentDetailMenuManager {
