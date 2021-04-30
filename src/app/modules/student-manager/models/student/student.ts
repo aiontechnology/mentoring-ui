@@ -23,6 +23,7 @@ export abstract class Student implements LinksHolder<Student> {
   id: string;
   firstName: string;
   lastName: string;
+  studentId: string;
   grade: string;
   preferredTime: string;
   actualTime: string;
@@ -49,6 +50,7 @@ export abstract class Student implements LinksHolder<Student> {
     this.id = json?.id;
     this.firstName = json?.firstName;
     this.lastName = json?.lastName;
+    this.studentId = json?.studentId;
     this.grade = json?.grade;
     this.preferredTime = json?.preferredTime;
     this.actualTime = json?.actualTime;
