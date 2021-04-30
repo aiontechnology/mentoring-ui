@@ -103,7 +103,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'firstName', 'teacher', 'preferredTime'];
     } else {
-      return ['select', 'firstName', 'lastName', 'teacher', 'preferredTime', 'contacts'];
+      return ['select', 'firstName', 'lastName', 'studentId', 'teacher', 'preferredTime', 'contacts'];
     }
   }
 
