@@ -46,6 +46,12 @@ limitations under the License.
 
         <div class="dialog-container">
           <mat-form-field>
+            <input matInput placeholder="Student ID" formControlName="studentId" />
+            <mat-error *ngIf="studentDetails.hasError('maxlength', 'studentId')">
+              The student ID can be a maximum of 20 characters in length
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
             <mat-label>Grade</mat-label>
             <mat-select formControlName="grade"
                         [(value)]="selectedGrade"
