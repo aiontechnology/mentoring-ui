@@ -32,6 +32,7 @@ import { Mentor } from 'src/app/modules/mentor-manager/models/mentor/mentor';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { studentLocations } from 'src/app/modules/shared/constants/locations';
 
 @Component({
   selector: 'ms-student-dialog',
@@ -57,7 +58,7 @@ export class StudentDialogComponent implements OnInit {
   mentors$: Observable<Mentor[]>;
   grades: Grade[] = grades;
   contactMethods: string[] = ['Phone', 'Email', 'Either'];
-  locations: string[] = ['Offline', 'Online', 'Both'];
+  locations: { [key: string]: string };
 
   interestList$: Observable<string[]>;
   leadershipTraitList$: Observable<string[]>;
@@ -81,6 +82,7 @@ export class StudentDialogComponent implements OnInit {
     this.contacts = this.model.get('contacts') as FormGroup;
 
     this.schoolId = data?.schoolId;
+    this.locations = studentLocations;
 
   }
 
@@ -139,6 +141,11 @@ export class StudentDialogComponent implements OnInit {
 
   dismiss(): void {
     this.dialogRef.close(null);
+  }
+
+  // Used for the keyvalue pipe, to keep location properties in their default order.
+  unsorted(): number {
+    return 0;
   }
 
   /*
