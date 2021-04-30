@@ -16,7 +16,7 @@
 
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
 import { Contact } from '../contact/contact';
-import { studentLocations } from 'src/app/modules/shared/constants/locations';
+import { personLocations } from 'src/app/modules/shared/constants/locations';
 
 export abstract class Student implements LinksHolder<Student> {
 
@@ -80,7 +80,7 @@ export abstract class Student implements LinksHolder<Student> {
   }
 
   get displayLocation(): string {
-    return studentLocations[this.location] ?? '';
+    return personLocations[this.location] ?? '';
   }
 
 }
