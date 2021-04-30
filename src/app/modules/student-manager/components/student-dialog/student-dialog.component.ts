@@ -32,7 +32,7 @@ import { Mentor } from 'src/app/modules/mentor-manager/models/mentor/mentor';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { studentLocations } from 'src/app/modules/shared/constants/locations';
+import { personLocations } from 'src/app/modules/shared/constants/locations';
 
 @Component({
   selector: 'ms-student-dialog',
@@ -82,7 +82,7 @@ export class StudentDialogComponent implements OnInit {
     this.contacts = this.model.get('contacts') as FormGroup;
 
     this.schoolId = data?.schoolId;
-    this.locations = studentLocations;
+    this.locations = personLocations;
 
   }
 
