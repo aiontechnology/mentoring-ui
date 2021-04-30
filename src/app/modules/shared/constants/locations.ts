@@ -20,7 +20,7 @@ export const resourceLocations = {
   BOTH: 'Both',
 };
 
-export const studentLocations = {
+export const personLocations = {
   OFFLINE: 'In-Person',
   ONLINE: 'Online',
   BOTH: 'Both'
