@@ -16,7 +16,7 @@
 
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { log } from 'src/app/shared/logging-decorator';
 import { environment } from 'src/environments/environment';
@@ -25,9 +25,11 @@ import { environment } from 'src/environments/environment';
 export class LpgRepositoryService {
 
   private path: string;
+  private isLoading$: BehaviorSubject<boolean>;
 
   constructor(private http: HttpClient) {
     this.path = '/api/v1/schools/{schoolId}/students/{studentId}/learningPathway?month={month}&year={year}';
+    this.isLoading$ = new BehaviorSubject(false);
   }
 
   private get uriBase() {
@@ -44,7 +46,8 @@ export class LpgRepositoryService {
   @log
   getLpg(schoolId: string, studentId: string, month: string, year: string): Observable<Blob> {
 
-    let url = this.buildUri(schoolId, studentId, month, year);
+    this.isLoading$.next(true);
+    const url = this.buildUri(schoolId, studentId, month, year);
 
     const options = {
       headers: new HttpHeaders().set('Accept', 'application/pdf'),
@@ -56,10 +59,16 @@ export class LpgRepositoryService {
     return this.http.get(url, options)
       .pipe(
         tap(
-          data => console.log('Learning pathway generated successfully')
-        )
+          () => {
+            this.isLoading$.next(false);
+            console.log('Learning pathway generated successfully');
+          })
       );
 
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
 }
