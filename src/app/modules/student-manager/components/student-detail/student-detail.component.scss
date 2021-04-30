@@ -16,6 +16,29 @@
 
 @import "~src/style/_variables.scss";
 
+::ng-deep .mat-tab-body-wrapper {
+  height: 100%;
+}
+
+.wrapper {
+  height: 100%;
+}
+
+.spinner-container {
+
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 90%;
+  width: 100%;
+
+  backdrop-filter: blur(5px);
+  z-index: 500;
+
+}
+
 h1 {
   font-size: 1.25em;
   margin-bottom: .5em;
