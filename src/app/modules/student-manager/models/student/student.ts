@@ -16,7 +16,7 @@
 
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
 import { Contact } from '../contact/contact';
-import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
+import { studentLocations } from 'src/app/modules/shared/constants/locations';
 
 export abstract class Student implements LinksHolder<Student> {
 
@@ -77,6 +77,10 @@ export abstract class Student implements LinksHolder<Student> {
 
   getSelfLink(): string {
     return this._links?.self[0]?.href;
+  }
+
+  get displayLocation(): string {
+    return studentLocations[this.location] ?? '';
   }
 
 }

@@ -46,11 +46,11 @@ limitations under the License.
             </tr>
             <tr>
               <td>Mentor</td>
-              <td>{{ studentMentor?.mentor?.firstName + ' ' + studentMentor?.mentor?.lastName }}</td>
+              <td>{{ mentorFullName }}</td>
             </tr>
             <tr>
               <td>Location</td>
-              <td>{{ student?.location | lowercase }}</td>
+              <td>{{ student?.displayLocation }}</td>
             </tr>
           </table>
         </div>
@@ -163,7 +163,7 @@ limitations under the License.
             </table>
           </div>
         </div>
-        <div class="no-contacts" *ngIf="!contacts.length">
+        <div class="no-contacts" *ngIf="!contacts?.length">
           <h1>No contacts provided</h1>
         </div>
       </mat-card-content>

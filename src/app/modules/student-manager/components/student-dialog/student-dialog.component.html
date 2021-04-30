@@ -135,8 +135,8 @@ limitations under the License.
 
         <div class="dialog-container">
           <mat-radio-group formControlName="location">
-            <mat-radio-button *ngFor="let location of locations" [value]="location | uppercase">
-              {{ location }}
+            <mat-radio-button *ngFor="let location of (locations | keyvalue: unsorted)" [value]="location.key">
+              {{ location.value }}
             </mat-radio-button>
           </mat-radio-group>
         </div>
@@ -162,7 +162,7 @@ limitations under the License.
                 </mat-option>
               </mat-select>
 
-              <mat-error *ngIf="!((teachers$ | async) | teacherGradeFilter: selectedGrade).length">
+              <mat-error *ngIf="!((teachers$ | async) | teacherGradeFilter: selectedGrade)?.length">
                 No teachers in selected grade
               </mat-error>
 
