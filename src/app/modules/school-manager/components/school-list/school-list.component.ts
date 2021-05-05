@@ -111,7 +111,7 @@ class SchoolListMenuManager {
     console.log('Constructing MenuHandler', schoolCacheService);
 
     menuState.add(new NewDialogCommand(
-      'Create New School',
+      'Add School',
       'school',
       SchoolDialogComponent,
       'School added',

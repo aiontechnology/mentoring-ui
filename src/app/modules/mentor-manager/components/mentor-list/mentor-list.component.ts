@@ -152,7 +152,7 @@ class MentorListMenuManager {
     menuState.clear();
 
     menuState.add(new NewDialogCommand(
-      'Create New Mentor',
+      'Add Mentor',
       'mentor',
       MentorDialogComponent,
       'Mentor added',
