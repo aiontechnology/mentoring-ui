@@ -115,7 +115,7 @@ class GameListMenuManager {
     console.log('Constructing MenuHandler');
 
     menuState.add(new NewDialogCommand(
-      'Create New Game',
+      'Add Game',
       'game',
       GameDialogComponent,
       'Added game',

@@ -115,7 +115,7 @@ class BookListMenuManager {
     console.log('Constructing MenuHandler');
 
     menuState.add(new NewDialogCommand(
-      'Create New Book',
+      'Add Book',
       'book',
       BookDialogComponent,
       'Book added',

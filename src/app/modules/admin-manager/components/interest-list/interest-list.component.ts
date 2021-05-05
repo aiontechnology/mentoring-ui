@@ -101,7 +101,7 @@ class InterestListMenuManager {
     console.log('Constructing MenuHandler');
 
     menuState.add(new NewDialogCommand(
-      'Create New Interest',
+      'Add Interest',
       'interest',
       InterestDialogComponent,
       'Interest added',
