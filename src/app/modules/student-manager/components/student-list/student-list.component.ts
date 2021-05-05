@@ -167,7 +167,7 @@ class StudentListMenuManager {
     menuState.clear();
 
     menuState.add(new NewDialogCommand(
-      'Create New Student',
+      'Add Student',
       'student',
       StudentDialogComponent,
       'Student added',
