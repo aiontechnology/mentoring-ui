@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-.sidenav {
-
-  .mat-toolbar {
-    background: inherit;
-  }
-
-  .mat-nav-list {
-    margin-top: 35px;
-  }
+.mat-nav-list {
+  margin-top: 35px;
 }
 
-span {
-  text-align: center;
+.mat-toolbar {
+  background: inherit;
 }
 
 img {
@@ -40,15 +33,14 @@ img {
   height: 100vh;
 }
 
-.mat-toolbar.mat-primary {
-  position: fixed;
-  top: 0;
-  z-index: 500;
+.router-wrapper {
+  flex-grow: 1;
+  overflow: auto;
+  background-color: white;
 }
 
-.wrapper {
-  flex-grow: 1;
-  height: 100%;
+span {
+  text-align: center;
 }
 
 span.mat-h2 {

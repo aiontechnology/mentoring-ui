@@ -18,23 +18,32 @@ import { Injectable } from '@angular/core';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager/datasource-manager';
 import { InterestInbound } from '../../models/interest/interest-inbound';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 @Injectable()
 export class InterestCacheService extends DatasourceManager<InterestInbound> {
 
+  private isLoading$: BehaviorSubject<boolean>;
+
   constructor(private metaDataService: MetaDataService) {
     super();
+    this.isLoading$ = new BehaviorSubject(true);
   }
 
   establishDatasource(): void {
     this.metaDataService.loadInterests();
     this.dataSource.data$ = this.metaDataService.interests.pipe(
       map((interest): InterestInbound[] => {
+        setTimeout(() => this.isLoading$.next(false));
         console.log('Creating new interests datasource');
         return interest.map((i): InterestInbound => ({ name: i }));
       })
     );
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
 }

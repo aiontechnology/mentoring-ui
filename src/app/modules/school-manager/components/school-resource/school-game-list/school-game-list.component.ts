@@ -46,7 +46,9 @@ export class SchoolGameListComponent implements OnInit, AfterViewInit {
               private menuState: MenuStateService,
               private router: Router,
               private snackBar: MatSnackBar) {
+
     console.log('Constructing SchoolGameListComponent', SchoolGameCacheService);
+
   }
 
   ngOnInit(): void {

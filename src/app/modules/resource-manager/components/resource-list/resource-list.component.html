@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 Aion Technology LLC
+Copyright 2020 - 2021 Aion Technology LLC
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,19 +14,11 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-tab-group (selectedIndexChange)="onIndexChange($event)">
+<mat-tab-group class="wrapper" (selectedIndexChange)="onIndexChange($event)">
   <mat-tab label="Books">
-    <mat-card>
-      <mat-card-content class="mat-elevation-z8">
-        <ms-book-list></ms-book-list>
-      </mat-card-content>
-    </mat-card>
+    <ms-book-list class="tab-content"></ms-book-list>
   </mat-tab>
   <mat-tab label="Games">
-    <mat-card>
-      <mat-card-content class="mat-elevation-z8">
-        <ms-game-list></ms-game-list>
-      </mat-card-content>
-    </mat-card>
+    <ms-game-list class="tab-content"></ms-game-list>
   </mat-tab>
 </mat-tab-group>

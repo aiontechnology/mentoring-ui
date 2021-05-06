@@ -18,19 +18,31 @@ import { Injectable } from '@angular/core';
 import { SchoolBookRepositoryService } from './school-book-repository.service';
 import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager/datasource-manager';
 import { Book } from 'src/app/modules/shared/models/book/book';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class SchoolBookCacheService extends DatasourceManager<Book> {
 
+  private isLoading$: BehaviorSubject<boolean>;
+
   constructor(private schoolBookService: SchoolBookRepositoryService) {
     super();
+    this.isLoading$ = new BehaviorSubject(true);
   }
 
   establishDatasource(schoolId: string): void {
     this.schoolBookService.readAllSchoolBooks(schoolId);
     this.dataSource.data$ = this.schoolBookService.schoolBooks
-      .pipe(tap(() => console.log('Creating new school book datasource')));
+      .pipe(tap(() => {
+        this.isLoading$.next(false);
+        console.log('Creating new school book datasource');
+      })
+    );
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
 }

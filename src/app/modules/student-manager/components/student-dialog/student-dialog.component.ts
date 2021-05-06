@@ -32,6 +32,7 @@ import { Mentor } from 'src/app/modules/mentor-manager/models/mentor/mentor';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { personLocations } from 'src/app/modules/shared/constants/locations';
 
 @Component({
   selector: 'ms-student-dialog',
@@ -57,7 +58,7 @@ export class StudentDialogComponent implements OnInit {
   mentors$: Observable<Mentor[]>;
   grades: Grade[] = grades;
   contactMethods: string[] = ['Phone', 'Email', 'Either'];
-  locations: string[] = ['Offline', 'Online', 'Both'];
+  locations: { [key: string]: string };
 
   interestList$: Observable<string[]>;
   leadershipTraitList$: Observable<string[]>;
@@ -81,6 +82,7 @@ export class StudentDialogComponent implements OnInit {
     this.contacts = this.model.get('contacts') as FormGroup;
 
     this.schoolId = data?.schoolId;
+    this.locations = personLocations;
 
   }
 
@@ -141,6 +143,11 @@ export class StudentDialogComponent implements OnInit {
     this.dialogRef.close(null);
   }
 
+  // Used for the keyvalue pipe, to keep location properties in their default order.
+  unsorted(): number {
+    return 0;
+  }
+
   /*
    * Combine form's contact properties for backend model.
    */
@@ -166,6 +173,7 @@ export class StudentDialogComponent implements OnInit {
         student,
         firstName: ['', [Validators.required, Validators.maxLength(50)]],
         lastName: ['', [Validators.required, Validators.maxLength(50)]],
+        studentId: ['', Validators.maxLength(20)],
         grade: ['', Validators.required],
         preBehavioralAssessment: ['', [Validators.min(0), Validators.max(45)]],
         postBehavioralAssessment: ['', [Validators.min(0), Validators.max(45)]],
@@ -202,6 +210,7 @@ export class StudentDialogComponent implements OnInit {
           student,
           firstName: student?.firstName,
           lastName: student?.lastName,
+          studentId: student?.studentId,
           grade: student?.grade?.toString(),
           preBehavioralAssessment: student?.preBehavioralAssessment,
           postBehavioralAssessment: student?.postBehavioralAssessment,

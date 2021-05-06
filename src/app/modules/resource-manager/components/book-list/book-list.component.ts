@@ -58,7 +58,9 @@ export class BookListComponent implements OnInit {
               private menuState: MenuStateService,
               private router: Router,
               private snackBar: MatSnackBar) {
+
     console.log('Constructing BookListComponent', bookCacheService);
+
   }
 
   ngOnInit(): void {
@@ -113,7 +115,7 @@ class BookListMenuManager {
     console.log('Constructing MenuHandler');
 
     menuState.add(new NewDialogCommand(
-      'Create New Book',
+      'Add Book',
       'book',
       BookDialogComponent,
       'Book added',

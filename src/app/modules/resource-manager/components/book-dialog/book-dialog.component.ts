@@ -23,6 +23,7 @@ import { Grade } from 'src/app/modules/shared/types/grade';
 import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { Observable } from 'rxjs';
+import { resourceLocations } from 'src/app/modules/shared/constants/locations';
 
 @Component({
   selector: 'ms-book-dialog',
@@ -35,7 +36,7 @@ export class BookDialogComponent implements OnInit {
   isUpdate = false;
 
   grades: Grade[] = resourceGrades;
-  locations: string[] = ['Offline', 'Online', 'Both'];
+  locations: { [key: string]: string };
   interestList$: Observable<string[]>;
   leadershipTraitList$: Observable<string[]>;
   leadershipSkillList$: Observable<string[]>;
@@ -51,6 +52,7 @@ export class BookDialogComponent implements OnInit {
 
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(this.formBuilder, this.data?.model);
+    this.locations = resourceLocations;
 
   }
 
@@ -98,6 +100,11 @@ export class BookDialogComponent implements OnInit {
 
   dismiss(): void {
     this.dialogRef.close(null);
+  }
+
+  // Used for the keyvalue pipe, to keep location properties in their default order.
+  unsorted(): number {
+    return 0;
   }
 
   private createModel(formBuilder: FormBuilder, book: Book): FormGroup {

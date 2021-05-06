@@ -56,10 +56,13 @@ export class SchoolListComponent implements OnInit, OnDestroy {
               private router: Router,
               public schoolCacheService: SchoolCacheService,
               private snackBar: MatSnackBar) {
+
     console.log('Constructing SchoolListComponent', schoolCacheService);
+
   }
 
   ngOnInit(): void {
+    this.schoolCacheService.establishDatasource();
     this.schoolCacheService.clearSelection();
 
     console.log('Adding school list menus');
@@ -79,7 +82,7 @@ export class SchoolListComponent implements OnInit, OnDestroy {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'name'];
     } else {
-      return ['select', 'name', 'city', 'state', 'district', 'phone', 'private'];
+      return ['select', 'name', 'city', 'state', 'district', 'phone', 'isPrivate'];
     }
   }
 
@@ -108,7 +111,7 @@ class SchoolListMenuManager {
     console.log('Constructing MenuHandler', schoolCacheService);
 
     menuState.add(new NewDialogCommand(
-      'Create New School',
+      'Add School',
       'school',
       SchoolDialogComponent,
       'School added',

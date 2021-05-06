@@ -58,7 +58,9 @@ export class GameListComponent implements OnInit {
               private menuState: MenuStateService,
               private router: Router,
               private snackBar: MatSnackBar) {
+
     console.log('Constructing GameListComponent', gameCacheService);
+
   }
 
   ngOnInit(): void {
@@ -113,7 +115,7 @@ class GameListMenuManager {
     console.log('Constructing MenuHandler');
 
     menuState.add(new NewDialogCommand(
-      'Create New Game',
+      'Add Game',
       'game',
       GameDialogComponent,
       'Added game',

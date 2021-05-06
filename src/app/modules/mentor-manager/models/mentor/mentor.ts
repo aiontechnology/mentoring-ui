@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { personLocations } from 'src/app/modules/shared/constants/locations';
+
 export class Mentor {
 
   id: string;
@@ -53,6 +55,10 @@ export class Mentor {
 
   getSelfLink(): string {
     return this._links?.self[0]?.href;
+  }
+
+  get displayLocation(): string {
+    return personLocations[this.location] ?? '';
   }
 
 }

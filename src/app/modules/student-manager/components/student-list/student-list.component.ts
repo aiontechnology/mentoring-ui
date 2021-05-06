@@ -69,7 +69,9 @@ export class StudentListComponent implements OnInit, OnDestroy {
               private menuState: MenuStateService,
               private router: Router,
               private snackBar: MatSnackBar) {
+
     console.log('student list constructed');
+
   }
 
   ngOnInit(): void {
@@ -101,7 +103,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'firstName', 'teacher', 'preferredTime'];
     } else {
-      return ['select', 'firstName', 'lastName', 'teacher', 'preferredTime', 'contacts'];
+      return ['select', 'firstName', 'lastName', 'studentId', 'teacher', 'preferredTime', 'contacts'];
     }
   }
 
@@ -117,6 +119,10 @@ export class StudentListComponent implements OnInit, OnDestroy {
 
     return name + ': ' + contactInfo;
 
+  }
+
+  isLoading(gettingData: boolean): boolean {
+    return gettingData && this.isSchoolSelected;
   }
 
   private loadStudentData(): void {
@@ -161,7 +167,7 @@ class StudentListMenuManager {
     menuState.clear();
 
     menuState.add(new NewDialogCommand(
-      'Create New Student',
+      'Add Student',
       'student',
       StudentDialogComponent,
       'Student added',
