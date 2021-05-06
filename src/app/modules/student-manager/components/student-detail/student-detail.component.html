@@ -33,6 +33,10 @@ limitations under the License.
               <td>{{ studentGrade }}</td>
             </tr>
             <tr>
+              <td>Interests</td>
+              <td>{{ student?.interests.join(', ') }}</td>
+            </tr>
+            <tr>
               <td>Media release signed</td>
               <td>{{ student?.mediaReleaseSigned ? 'yes' : 'no' }}</td>
             </tr>
@@ -81,10 +85,6 @@ limitations under the License.
             <tr>
               <td>Post-behavioral assessment</td>
               <td>{{ student?.postBehavioralAssessment }}</td>
-            </tr>
-            <tr>
-              <td>Interests</td>
-              <td>{{ student?.interests.join(', ') }}</td>
             </tr>
             <tr>
               <td>Leadership traits</td>
