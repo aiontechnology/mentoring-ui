@@ -82,7 +82,7 @@ export class SchoolListComponent implements OnInit, OnDestroy {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'name'];
     } else {
-      return ['select', 'name', 'city', 'state', 'district', 'phone', 'private'];
+      return ['select', 'name', 'city', 'state', 'district', 'phone', 'isPrivate'];
     }
   }
 

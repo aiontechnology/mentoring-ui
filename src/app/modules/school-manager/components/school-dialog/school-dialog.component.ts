@@ -154,7 +154,7 @@ export class SchoolDialogComponent {
       }),
       phone: null,
       district: [null, Validators.maxLength(50)],
-      isPrivate: null
+      isPrivate: false
     });
     if (this.isUpdate) {
       formGroup.setValue({
