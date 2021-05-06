@@ -44,19 +44,10 @@ export class SchoolCacheService extends DatasourceManagerRemovable<School> {
   establishDatasource(): void {
     this.schoolService.readAllSchools();
     this.dataSource.data$ = this.schoolService.items.pipe(
-      tap(s => {
-        console.log('Creating new school datasource');
-
+      tap(() => {
         this.isLoading$.next(false);
-        this.dataSource.data = s;
-
         this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
-
-        const savedFilter = this.dataSource?.filter;
-        if (savedFilter) {
-          console.log('Reading filter: ', savedFilter);
-          this.dataSource.filter = savedFilter;
-        }
+        console.log('Creating new school datasource');
       })
     );
   }
