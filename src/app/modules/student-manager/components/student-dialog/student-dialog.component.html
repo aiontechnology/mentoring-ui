@@ -68,6 +68,15 @@ limitations under the License.
         </div>
 
         <div class="dialog-container">
+          <mat-form-field>
+            <mat-label>Interests</mat-label>
+            <mat-select formControlName="interests" multiple>
+              <mat-option *ngFor="let interest of (interestList$ | async)" [value]="interest">{{ interest }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="dialog-container">
           <mat-checkbox formControlName="mediaReleaseSigned" labelPosition="before">
             Media release signed?
           </mat-checkbox>
@@ -188,15 +197,6 @@ limitations under the License.
             <mat-error *ngIf="studentDetails.hasError('max', 'postBehavioralAssessment')">
               Value must be less than 45
             </mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="dialog-container">
-          <mat-form-field>
-            <mat-label>Interests</mat-label>
-            <mat-select formControlName="interests" multiple>
-              <mat-option *ngFor="let interest of (interestList$ | async)" [value]="interest">{{ interest }}</mat-option>
-            </mat-select>
           </mat-form-field>
         </div>
 
