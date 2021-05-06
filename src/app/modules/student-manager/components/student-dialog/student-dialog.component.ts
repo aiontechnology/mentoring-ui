@@ -65,6 +65,8 @@ export class StudentDialogComponent implements OnInit {
   leadershipSkillList$: Observable<string[]>;
   behaviorList$: Observable<string[]>;
 
+  months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
   constructor(private dialogRef: MatDialogRef<StudentDialogComponent>,
               private studentService: StudentRepositoryService,
               private teacherService: TeacherRepositoryService,
@@ -121,6 +123,7 @@ export class StudentDialogComponent implements OnInit {
     const studentProperties = Object.assign(this.studentDetails.value, { teacher: this.teacherInput.value.teacher }, this.contacts.value);
     this.addContactsProperty(studentProperties);
     this.clearMentorIfNotProvided(studentProperties);
+    this.reformatDate(studentProperties);
 
     const newStudent = new StudentOutbound(studentProperties);
     let value: Promise<StudentInbound>;
@@ -178,7 +181,8 @@ export class StudentDialogComponent implements OnInit {
         preBehavioralAssessment: ['', [Validators.min(0), Validators.max(45)]],
         postBehavioralAssessment: ['', [Validators.min(0), Validators.max(45)]],
         mediaReleaseSigned: false,
-        startDate: [''],
+        month: [''],
+        year: ['', Validators.min(1900)],
         preferredTime: ['', Validators.maxLength(30)],
         actualTime: ['', Validators.maxLength(30)],
         mentor: formBuilder.group({
@@ -215,7 +219,8 @@ export class StudentDialogComponent implements OnInit {
           preBehavioralAssessment: student?.preBehavioralAssessment,
           postBehavioralAssessment: student?.postBehavioralAssessment,
           mediaReleaseSigned: student?.mediaReleaseSigned,
-          startDate: student?.startDate,
+          month: this.getMonth(student?.startDate),
+          year: this.getYear(student?.startDate),
           preferredTime: student?.preferredTime,
           actualTime: student?.actualTime,
           mentor: {
@@ -307,6 +312,14 @@ export class StudentDialogComponent implements OnInit {
     this.contacts.removeControl('emergencyContact');
   }
 
+  /**
+   * Reset #teacher form value when grade is changed.
+   */
+  onGradeSelected(): void {
+    const teacher = this.teacherInput.get('teacher') as FormGroup;
+    teacher.patchValue({ uri: '' });
+  }
+
   private createContactForm(isEmergencyContact?: boolean): FormGroup {
 
     return this.formBuilder.group({
@@ -324,7 +337,7 @@ export class StudentDialogComponent implements OnInit {
 
   }
 
-  noContactMethodValidator(): ValidatorFn {
+  private noContactMethodValidator(): ValidatorFn {
 
     return (contact: FormGroup): {[key: string]: any} | null => {
 
@@ -343,12 +356,32 @@ export class StudentDialogComponent implements OnInit {
 
   }
 
-  /*
-   * Reset #teacher form value when grade is changed.
+  /**
+   * Parses a date string and returns the month's name.
    */
-  onGradeSelected(): void {
-    const teacher = this.teacherInput.get('teacher') as FormGroup;
-    teacher.patchValue({ uri: '' });
+  private getMonth(str: string): string {
+    const date = new Date(str);
+    return str ? this.months[date.getUTCMonth()] : null;
+  }
+
+  /**
+   * Parses a date string and returns the year.
+   */
+  private getYear(str: string): string {
+    const date = new Date(str);
+    return str ? date.getUTCFullYear().toString() : null;
+  }
+
+  /**
+   * Converts the start date into a valid API date object.
+   */
+  private reformatDate(student: any): void {
+    if (student.month === null || !student.year) {
+      student['startDate'] = null;
+      return;
+    }
+    const m = this.months.indexOf(student?.month);
+    student['startDate'] = new Date(student?.year, m);
   }
 
 }
