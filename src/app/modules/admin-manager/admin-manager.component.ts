@@ -15,6 +15,7 @@
  */
 
 import { Component } from '@angular/core';
+import { MenuStateService } from 'src/app/services/menu-state.service';
 
 @Component({
   selector: 'ms-admin-manager',
@@ -23,6 +24,8 @@ import { Component } from '@angular/core';
 })
 export class AdminManagerComponent {
 
-  constructor() { }
+  constructor(private menuState: MenuStateService) {
+    this.menuState.title = 'Admin Manager';
+  }
 
 }

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-tab-group (selectedIndexChange)="onIndexChange($event)">
+<mat-tab-group class="wrapper" (selectedIndexChange)="onIndexChange($event)">
   <mat-tab label="Details">
     <mat-card>
       <mat-card-header>
@@ -72,63 +72,18 @@ limitations under the License.
     </mat-card>
   </mat-tab>
   <mat-tab label="Program Administrators" *ngIf="userSession.isSysAdmin">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Program Administrators</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="programAdmins">
-         <ms-program-admin-list [schoolId]="schoolId"></ms-program-admin-list>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <ms-program-admin-list class="tab-content" [schoolId]="schoolId"></ms-program-admin-list>
   </mat-tab>
   <mat-tab label="Teachers">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Teachers</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="teachers">
-          <ms-teacher-list [schoolId]="schoolId"></ms-teacher-list>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <ms-teacher-list class="tab-content" [schoolId]="schoolId"></ms-teacher-list>
   </mat-tab>
   <mat-tab label="Other Personnel">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Other Personnel</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="personnel">
-         <ms-personnel-list [schoolId]="schoolId"></ms-personnel-list>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <ms-personnel-list class="tab-content" [schoolId]="schoolId"></ms-personnel-list>
   </mat-tab>
   <mat-tab label="Books">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Books</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="books">
-         <ms-school-book-list [schoolId]="schoolId"></ms-school-book-list>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <ms-school-book-list class="tab-content" [schoolId]="schoolId"></ms-school-book-list>
   </mat-tab>
   <mat-tab label="Games">
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Games</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="games">
-         <ms-school-game-list [schoolId]="schoolId"></ms-school-game-list>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <ms-school-game-list class="tab-content" [schoolId]="schoolId"></ms-school-game-list>
   </mat-tab>
 </mat-tab-group>

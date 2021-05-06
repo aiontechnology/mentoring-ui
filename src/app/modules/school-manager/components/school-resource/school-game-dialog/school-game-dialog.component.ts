@@ -42,6 +42,7 @@ export class SchoolGameDialogComponent implements OnInit, OnDestroy {
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
     this.schoolId = this.data?.schoolId;
+    this.games = new DropListData();
     this.localGames = new DropListData(this.data?.schoolGames());
 
   }
@@ -90,11 +91,11 @@ export class SchoolGameDialogComponent implements OnInit, OnDestroy {
       if (event$.previousContainer.data !== this.localGames.filteredData) {
         this.games.removeFromData(prevItem);
         // Insert the game into local resources.
-        this.localGames.insertSorted(prevItem);
+        this.localGames.insertToDataSorted(prevItem);
       } else {
         this.localGames.removeFromData(prevItem);
         // Insert the game back into global resources.
-        this.games.insertSorted(prevItem);
+        this.games.insertToDataSorted(prevItem);
       }
 
       /**
@@ -117,6 +118,14 @@ export class SchoolGameDialogComponent implements OnInit, OnDestroy {
 
   }
 
+  moveGlobalToLocal(): void {
+    this.moveTo(this.games, this.localGames);
+  }
+
+  moveLocalToGlobal(): void {
+    this.moveTo(this.localGames, this.games);
+  }
+
   private schoolHasGame(game: Game): boolean {
     for (const g of this.localGames.data) {
       if (game.id === g.id) {
@@ -124,6 +133,19 @@ export class SchoolGameDialogComponent implements OnInit, OnDestroy {
       }
     }
     return false;
+  }
+
+  private moveTo(origin: DropListData, destination: DropListData): void {
+
+    origin.filteredData.forEach((value) => {
+      destination.insertToDataSorted(value);
+      destination.insertToFilteredSorted(value);
+      const i = origin.data.indexOf(value);
+      origin.data.splice(i, 1);
+    });
+
+    origin.filteredData = [];
+
   }
 
 }

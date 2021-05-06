@@ -18,23 +18,51 @@
   margin-top: 10px;
 }
 
-.input-group {
+.filter-group-wrapper {
+
   display: flex;
-  padding: 15px 0 15px 0;
+  flex-direction: column;
+
+  border-radius: 10px;
+  background-color: whitesmoke;
+
+  margin-bottom: 20px;
+  padding: 15px;
+
+}
+
+.filter-group {
+  display: flex;
+}
+
+.spacer {
+  width: 50px;
+}
+
+.mat-small {
   margin-bottom: 10px;
 }
 
 .mat-form-field {
+
   width: 100%;
-  padding: 0 15px 0 15px;
+  padding: 15px;
+  border-radius: 10px;
+  background-color: white;
+
 }
 
 .droplist-group {
   display: flex;
   justify-content: center;
   padding: 15px;
-  background-color: #fafafa;
-  border-radius: 5px;
+  background-color: whitesmoke;
+  border-radius: 10px;
+}
+
+button.transfer {
+  width: 100%;
+  margin-top: 15px;
 }
 
 .droplist-container {
@@ -48,17 +76,15 @@
 }
 
 .droplist-column {
-  border: solid 1px #ccc;
-  min-height: 50px;
-  max-height: 40vh;
+  height: 400px;
   background: white;
-  border-radius: 4px;
+  border-radius: 10px;
   overflow: auto;
   display: block;
 }
 
 .droplist-box {
-  padding: 20px 10px;
+  padding: 10px 10px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
@@ -68,7 +94,6 @@
   box-sizing: border-box;
   cursor: move;
   background: white;
-  font-size: 14px;
 }
 
 .cdk-drag-preview {

@@ -18,10 +18,13 @@ import { Injectable } from '@angular/core';
 import { Personnel } from '../../models/personnel/personnel';
 import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
 import { PersonnelRepositoryService } from './personnel-repository.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class PersonnelCacheService extends DatasourceManagerRemovable<Personnel>  {
+
+  private isLoading$: BehaviorSubject<boolean>;
 
   /**
    * Constructor
@@ -29,13 +32,25 @@ export class PersonnelCacheService extends DatasourceManagerRemovable<Personnel>
    */
   constructor(private personnelService: PersonnelRepositoryService) {
     super();
+    this.isLoading$ = new BehaviorSubject(true);
   }
 
+  /**
+   * Load backend data to table.
+   * @param schoolId UUID of the school to load data from.
+   */
   establishDatasource(schoolId: string): void {
     this.personnelService.readAllPersonnel(schoolId);
     this.dataSource.data$ = this.personnelService.items.pipe(
-      tap(() => console.log('Creating new mentor datasource'))
+      tap(() => {
+        this.isLoading$.next(false);
+        console.log('Creating new mentor datasource');
+      })
     );
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
   protected doRemoveItem(items: Personnel[]): Promise<void> {

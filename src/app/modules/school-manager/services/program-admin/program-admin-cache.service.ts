@@ -18,10 +18,13 @@ import { Injectable } from '@angular/core';
 import { ProgramAdmin } from '../../models/program-admin/program-admin';
 import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
 import { ProgramAdminRepositoryService } from './program-admin-repository.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class ProgramAdminCacheService extends DatasourceManagerRemovable<ProgramAdmin> {
+
+  private isLoading$: BehaviorSubject<boolean>;
 
   /**
    * Constructor
@@ -29,13 +32,25 @@ export class ProgramAdminCacheService extends DatasourceManagerRemovable<Program
    */
   constructor(private programAdminService: ProgramAdminRepositoryService) {
     super();
+    this.isLoading$ = new BehaviorSubject(true);
   }
 
+  /**
+   * Load backend data to table.
+   * @param schoolId UUID of the school to load data from.
+   */
   establishDatasource(schoolId: string): void {
     this.programAdminService.readAllProgramAdmins(schoolId);
     this.dataSource.data$ = this.programAdminService.items.pipe(
-      tap(() => console.log('Creating new programAdmin datasource'))
+      tap(() => {
+        this.isLoading$.next(false);
+        console.log('Creating new programAdmin datasource');
+      })
     );
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
   protected doRemoveItem(items: ProgramAdmin[]): Promise<void> {

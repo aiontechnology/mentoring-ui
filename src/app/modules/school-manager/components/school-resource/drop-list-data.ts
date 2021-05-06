@@ -25,7 +25,7 @@ export class DropListData {
   data: Resource[];
   filteredData: Resource[];
 
-  constructor(data: Resource[]) {
+  constructor(data: Resource[] = []) {
     this.data = data.sort(this.compareTitle).slice();
     this.filteredData = this.data.slice();
   }
@@ -53,8 +53,8 @@ export class DropListData {
 
   }
 
-  applyFilter(filterValue: string): void {
-    if (filterValue == null) {
+  applyTitleFilter(filterValue: string): void {
+    if (filterValue === '') {
       this.filteredData = this.data.slice();
     } else {
       filterValue = this.cleanInput(filterValue);
@@ -64,7 +64,7 @@ export class DropListData {
 
   clearInput(filter: HTMLInputElement): void {
     filter.value = '';
-    this.applyFilter(null);
+    this.applyTitleFilter('');
   }
 
   removeFromData(value: Resource): void {
@@ -72,17 +72,29 @@ export class DropListData {
     this.data.splice(index, 1);
   }
 
+  insertToDataSorted(value: Resource): void {
+    this.insertItemSorted(value, this.data);
+  }
+
+  insertToFilteredSorted(value: Resource): void {
+    this.insertItemSorted(value, this.filteredData);
+  }
+
   /**
    * Insert a value into drop list data, ordered by title.
    * @param value Item to insert.
    */
-  insertSorted(value: Resource): void {
-    const i = DropListData.sortedInsertIndex(value, this.data);
+  private insertItemSorted(value: Resource, arr: Resource[]) {
+    const i = DropListData.sortedInsertIndex(value, arr);
     if (i < 0) {
-      this.data.push(value);
+      arr.push(value);
     } else {
-      this.data.splice(i, 0, value);
+      arr.splice(i, 0, value);
     }
+  }
+
+  protected cleanInput(str: string): string {
+    return str.trim().toLowerCase();
   }
 
   private compareTitle(a: Resource, b: Resource): number {
@@ -93,10 +105,6 @@ export class DropListData {
       return 1;
     }
     return 0;
-  }
-
-  private cleanInput(str: string): string {
-    return str.trim().toLowerCase();
   }
 
 }

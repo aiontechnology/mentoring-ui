@@ -20,6 +20,7 @@ import { Mentor } from '../../models/mentor/mentor';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MentorRepositoryService } from '../../services/mentor/mentor-repository.service';
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
+import { personLocations } from 'src/app/modules/shared/constants/locations';
 
 @Component({
   selector: 'ms-mentor-dialog',
@@ -32,7 +33,7 @@ export class MentorDialogComponent {
   isUpdate = false;
 
   schoolId: string;
-  locations: string[] = ['Offline', 'Online', 'Both'];
+  locations: { [key: string]: string };
 
   constructor(private dialogRef: MatDialogRef<MentorDialogComponent>,
               private mentorService: MentorRepositoryService,
@@ -43,6 +44,7 @@ export class MentorDialogComponent {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
     this.schoolId = data?.schoolId;
+    this.locations = personLocations;
 
   }
 
@@ -68,6 +70,11 @@ export class MentorDialogComponent {
 
   dismiss(): void {
     this.dialogRef.close(null);
+  }
+
+  // Used for the keyvalue pipe, to keep location properties in their default order.
+  unsorted(): number {
+    return 0;
   }
 
   private determineUpdate(formData: any): boolean {

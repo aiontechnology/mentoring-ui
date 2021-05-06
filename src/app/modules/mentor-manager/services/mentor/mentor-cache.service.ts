@@ -19,21 +19,32 @@ import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/data
 import { log } from 'src/app/shared/logging-decorator';
 import { Mentor } from '../../models/mentor/mentor';
 import { MentorRepositoryService } from './mentor-repository.service';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable()
 export class MentorCacheService extends DatasourceManagerRemovable<Mentor> {
 
+  private isLoading$: BehaviorSubject<boolean>;
+
   constructor(private mentorService: MentorRepositoryService) {
     super();
+    this.isLoading$ = new BehaviorSubject(true);
   }
 
   @log
   establishDatasource(schoolId: string): void {
     this.mentorService.readAllMentors(schoolId);
     this.dataSource.data$ = this.mentorService.items.pipe(
-      tap(() => console.log('Creating new mentor datasource'))
+      tap(() => {
+        this.isLoading$.next(false);
+        console.log('Creating new mentor datasource');
+      })
     );
+  }
+
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
   protected doRemoveItem(items: Mentor[]): Promise<void> {

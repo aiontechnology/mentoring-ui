@@ -49,7 +49,9 @@ export class ProgramAdminListComponent implements OnInit, AfterViewInit {
               private router: Router,
               private snackBar: MatSnackBar,
               public programAdminCacheService: ProgramAdminCacheService) {
+
     console.log('Constructing ProgramAdminListComponent', programAdminCacheService);
+
   }
 
   ngOnInit(): void {

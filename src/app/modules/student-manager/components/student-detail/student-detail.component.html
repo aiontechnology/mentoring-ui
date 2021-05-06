@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-tab-group>
+<mat-tab-group class="wrapper">
   <mat-tab label="Student Details">
     <mat-card>
       <mat-card-header>
@@ -24,6 +24,10 @@ limitations under the License.
         <div class="student-details">
           <h1>Details</h1>
           <table>
+            <tr>
+              <td>Student ID</td>
+              <td>{{ student?.studentId }}</td>
+            </tr>
             <tr>
               <td>Grade</td>
               <td>{{ studentGrade }}</td>
@@ -46,11 +50,11 @@ limitations under the License.
             </tr>
             <tr>
               <td>Mentor</td>
-              <td>{{ studentMentor?.mentor?.firstName + ' ' + studentMentor?.mentor?.lastName }}</td>
+              <td>{{ mentorFullName }}</td>
             </tr>
             <tr>
               <td>Location</td>
-              <td>{{ student?.location | lowercase }}</td>
+              <td>{{ student?.displayLocation }}</td>
             </tr>
           </table>
         </div>
@@ -163,13 +167,16 @@ limitations under the License.
             </table>
           </div>
         </div>
-        <div class="no-contacts" *ngIf="!contacts.length">
+        <div class="no-contacts" *ngIf="!contacts?.length">
           <h1>No contacts provided</h1>
         </div>
       </mat-card-content>
     </mat-card>
   </mat-tab>
   <mat-tab label="LPG">
+    <div class="spinner-container" *ngIf="lpgService.isLoading | async">
+      <mat-progress-spinner color="primary" mode="indeterminate" [diameter]="100" [strokeWidth]="10"></mat-progress-spinner>
+    </div>
     <div class="lpg-container">
       <div class="lpg-title">
         <h1>Learning Pathway Generator</h1>

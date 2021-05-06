@@ -51,13 +51,13 @@ export class StudentDetailComponent implements OnDestroy {
   parents: Contact[];
   emergencyContact: Contact;
 
-  constructor(private route: ActivatedRoute,
+  constructor(public lpgService: LpgRepositoryService,
+              private route: ActivatedRoute,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private studentService: StudentRepositoryService,
               private snackBar: MatSnackBar,
-              private router: Router,
-              private lpgService: LpgRepositoryService) {
+              private router: Router) {
 
     this.subscriptions$ = new Subscription();
 
@@ -126,6 +126,10 @@ export class StudentDetailComponent implements OnDestroy {
       const url = window.URL.createObjectURL(pdf);
       window.open(url);
     });
+  }
+
+  get mentorFullName(): string {
+    return this.studentMentor ? this.studentMentor?.mentor?.firstName + ' ' + this.studentMentor?.mentor?.lastName : '';
   }
 
 }
