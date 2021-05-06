@@ -75,7 +75,7 @@ limitations under the License.
         <td mat-cell *matCellDef="let school">{{ school.district }}</td>
       </ng-container>
 
-      <ng-container matColumnDef="private">
+      <ng-container matColumnDef="isPrivate">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Private?</th>
         <td mat-cell *matCellDef="let school">{{ school.isPrivate ? 'yes' : 'no' }}</td>
      </ng-container>
