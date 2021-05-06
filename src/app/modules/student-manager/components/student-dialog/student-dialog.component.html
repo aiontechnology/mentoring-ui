@@ -68,29 +68,6 @@ limitations under the License.
         </div>
 
         <div class="dialog-container">
-          <mat-form-field>
-            <mat-label>Pre-behavioral assessment</mat-label>
-            <input matInput formControlName="preBehavioralAssessment" type="number" min="0" max="45">
-            <mat-error *ngIf="studentDetails.hasError('min', 'preBehavioralAssessment')">
-              Value must be greater than zero
-            </mat-error>
-            <mat-error *ngIf="studentDetails.hasError('max', 'preBehavioralAssessment')">
-              Value must be less than 45
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Post-behavioral assessment</mat-label>
-            <input matInput formControlName="postBehavioralAssessment" type="number" min="0" max="45">
-            <mat-error *ngIf="studentDetails.hasError('min', 'postBehavioralAssessment')">
-              Value must be greater than zero
-            </mat-error>
-            <mat-error *ngIf="studentDetails.hasError('max', 'postBehavioralAssessment')">
-              Value must be less than 45
-            </mat-error>
-          </mat-form-field>
-        </div>
-
-        <div class="dialog-container">
           <mat-checkbox formControlName="mediaReleaseSigned" labelPosition="before">
             Media release signed?
           </mat-checkbox>
@@ -191,6 +168,29 @@ limitations under the License.
       </form>
 
       <form [formGroup]="studentDetails">
+        <div class="dialog-container">
+          <mat-form-field>
+            <mat-label>Pre-behavioral assessment</mat-label>
+            <input matInput formControlName="preBehavioralAssessment" type="number" min="0" max="45">
+            <mat-error *ngIf="studentDetails.hasError('min', 'preBehavioralAssessment')">
+              Value must be greater than zero
+            </mat-error>
+            <mat-error *ngIf="studentDetails.hasError('max', 'preBehavioralAssessment')">
+              Value must be less than 45
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Post-behavioral assessment</mat-label>
+            <input matInput formControlName="postBehavioralAssessment" type="number" min="0" max="45">
+            <mat-error *ngIf="studentDetails.hasError('min', 'postBehavioralAssessment')">
+              Value must be greater than zero
+            </mat-error>
+            <mat-error *ngIf="studentDetails.hasError('max', 'postBehavioralAssessment')">
+              Value must be less than 45
+            </mat-error>
+          </mat-form-field>
+        </div>
+
         <div class="dialog-container">
           <mat-form-field>
             <mat-label>Interests</mat-label>
