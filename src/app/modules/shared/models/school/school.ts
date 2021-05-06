@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,35 +19,35 @@ import { Address } from '../address/address';
 
 export class School implements LinksHolder<School> {
 
-    id: string;
-    name: string;
-    address: Address;
-    phone: string;
-    district: string;
-    isPrivate: boolean;
-    _links: {
-        self: [
-            { href: string; }
-        ]
-    };
+  id: string;
+  name: string;
+  address: Address;
+  phone: string;
+  district: string;
+  isPrivate: boolean;
+  _links: {
+    self: [
+      { href: string; }
+    ]
+  };
 
-    constructor(json?: any) {
-        this.id = json?.id;
-        this.name = json?.name;
-        this.address = new Address(json?.address);
-        this.phone = json?.phone;
-        this.district = json?.district;
-        this.isPrivate = json?.isPrivate;
-        this._links = json?._links;
-    }
+  constructor(json?: any) {
+    this.id = json?.id;
+    this.name = json?.name;
+    this.address = new Address(json?.address);
+    this.phone = json?.phone;
+    this.district = json?.district;
+    this.isPrivate = json?.isPrivate;
+    this._links = json?._links;
+  }
 
-    clearLinks(): School {
-        this._links = undefined;
-        return this;
-    }
+  clearLinks(): School {
+    this._links = undefined;
+    return this;
+  }
 
-     getSelfLink(): string {
-        return this._links.self[0].href;
-    }
+  getSelfLink(): string {
+    return this._links.self[0].href;
+  }
 
 }
