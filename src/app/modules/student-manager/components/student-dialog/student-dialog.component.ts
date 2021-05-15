@@ -33,6 +33,10 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { personLocations } from 'src/app/modules/shared/constants/locations';
+import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
+import { TeacherDialogComponent } from 'src/app/modules/school-manager/components/teacher-dialog/teacher-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'ms-student-dialog',
@@ -67,6 +71,8 @@ export class StudentDialogComponent implements OnInit {
 
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
+  newTeacherCommand: NewDialogCommand<TeacherDialogComponent, Teacher>;
+
   constructor(private dialogRef: MatDialogRef<StudentDialogComponent>,
               private studentService: StudentRepositoryService,
               private teacherService: TeacherRepositoryService,
@@ -74,6 +80,8 @@ export class StudentDialogComponent implements OnInit {
               private logger: LoggingService,
               private formBuilder: FormBuilder,
               private metaDataService: MetaDataService,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
     this.isUpdate = this.determineUpdate(data);
@@ -85,6 +93,22 @@ export class StudentDialogComponent implements OnInit {
 
     this.schoolId = data?.schoolId;
     this.locations = personLocations;
+
+    /**
+     * Opens teacher creation dialog with a fixed grade.
+     */
+    this.newTeacherCommand = new NewDialogCommand(
+      'Add Teacher',
+      'teacher',
+      TeacherDialogComponent,
+      'Teacher added',
+      null,
+      { schoolId: this.schoolId, selectedGrade: () => this.selectedGrade },
+      null,
+      this.dialog,
+      this.snackBar,
+      (t: Teacher) => this.addNewTeacher(t),
+      () => true);
 
   }
 
@@ -103,11 +127,7 @@ export class StudentDialogComponent implements OnInit {
     this.metaDataService.loadBehaviors();
     this.behaviorList$ = this.metaDataService.behaviors;
 
-    console.log('School data', this.schoolId);
-    this.teacherService.readAllTeachers(this.schoolId);
-    this.teachers$ = this.teacherService.teachers.pipe(
-      tap(teachers => this.logger.log('Read teachers from school', teachers))
-    );
+    this.loadAllTeachers();
 
     console.log('Mentor data', this.schoolId);
     this.mentorService.readAllMentors(this.schoolId);
@@ -320,6 +340,14 @@ export class StudentDialogComponent implements OnInit {
     teacher.patchValue({ uri: '' });
   }
 
+  stepperAtStart(index: number): boolean {
+    return index === 0;
+  }
+
+  stepperAtFinish(index: number): boolean {
+    return index === 2;
+  }
+
   private createContactForm(isEmergencyContact?: boolean): FormGroup {
 
     return this.formBuilder.group({
@@ -382,6 +410,24 @@ export class StudentDialogComponent implements OnInit {
     }
     const m = this.months.indexOf(student?.month);
     student['startDate'] = new Date(student?.year, m);
+  }
+
+  private loadAllTeachers(): void {
+    console.log('School data', this.schoolId);
+    this.teacherService.readAllTeachers(this.schoolId);
+    this.teachers$ = this.teacherService.teachers.pipe(
+      tap(teachers => this.logger.log('Read teachers from school', teachers))
+    );
+  }
+
+  private addNewTeacher(t: Teacher): void {
+
+    this.loadAllTeachers();
+
+    const teacher = new Teacher(t);
+    const teacherInput = this.teacherInput.get('teacher') as FormGroup;
+    teacherInput.patchValue({ uri: teacher.getSelfLink() });
+
   }
 
 }

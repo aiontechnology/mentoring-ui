@@ -43,6 +43,7 @@ export class EditDialogCommand<T, S> extends Command {
   execute(): void {
     const dialogRef = this.dialog.open(this.componentType, {
       width: '700px',
+      disableClose: true,
       data: this.dataSupplier()
     });
 
