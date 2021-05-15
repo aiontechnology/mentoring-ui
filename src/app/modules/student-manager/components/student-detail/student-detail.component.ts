@@ -142,7 +142,8 @@ class StudentDetailMenuManager {
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   studentService: StudentRepositoryService,
-                  school: string) {
+                  schoolId: string) {
+
     menuState.add(new EditDialogCommand(
       'Edit Student',
       'student',
@@ -152,7 +153,7 @@ class StudentDetailMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ schoolId: school, model: student }),
+      () => ({ schoolId, model: student }),
       () => {},
       () => true
     ));
