@@ -68,11 +68,23 @@ limitations under the License.
         </div>
 
         <div class="dialog-container">
-          <mat-form-field>
-            <mat-label>Interests</mat-label>
-            <mat-select formControlName="interests" multiple>
-              <mat-option *ngFor="let interest of (interestList$ | async)" [value]="interest">{{ interest }}</mat-option>
-            </mat-select>
+          <div class="month-wrapper">
+            <h2 class="mat-header-2 start">Start date:</h2>
+            <mat-form-field class="month">
+              <mat-label>Month</mat-label>
+              <mat-select formControlName="month">
+                <mat-option [value]="null">- None -</mat-option>
+                <mat-option *ngFor="let month of months" [value]="month">
+                  {{ month }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <mat-form-field class="year">
+            <input matInput msOnlyNumber placeholder="Year" formControlName="year" maxlength="4"/>
+            <mat-error *ngIf="studentDetails.hasError('min', 'year')">
+              Invalid year
+            </mat-error>
           </mat-form-field>
         </div>
 
@@ -84,10 +96,10 @@ limitations under the License.
 
         <div class="dialog-container">
           <mat-form-field>
-            <mat-label>Start date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="startDate">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <mat-label>Interests</mat-label>
+            <mat-select formControlName="interests" multiple>
+              <mat-option *ngFor="let interest of (interestList$ | async)" [value]="interest">{{ interest }}</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
 

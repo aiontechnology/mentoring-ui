@@ -28,6 +28,20 @@ h3 {
   flex-direction: column;
 }
 
+.month-wrapper {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+}
+
+.start {
+  margin-right: 16px;
+}
+
+.month {
+  flex-grow: 1;
+}
+
 .dialog-container {
   display: flex;
 }
