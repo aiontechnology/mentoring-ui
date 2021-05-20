@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@import '~src/style/_variables.scss';
+
 p.legend {
   color: red;
   margin-bottom: 10px;
@@ -63,7 +65,13 @@ h3 {
   top: 0;
   z-index: 1;
   font-style: italic;
+  color: $primary;
   background-color: white;
+  border-bottom: 2px solid whitesmoke;
+}
+
+.mat-icon {
+  margin-left: 7px;
 }
 
 .mat-radio-button ~ .mat-radio-button {

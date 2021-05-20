@@ -125,6 +125,9 @@ limitations under the License.
             <mat-form-field>
               <mat-label>Mentor</mat-label>
               <mat-select formControlName="uri">
+                <mat-option class="action" (click)="newMentorCommand.execute()">
+                  Create new mentor<mat-icon>open_in_new</mat-icon>
+                </mat-option>
                 <mat-option [value]="null">- None -</mat-option>
                 <mat-option
                   *ngFor="let mentor of (mentors$ | async)"
@@ -157,8 +160,8 @@ limitations under the License.
               <mat-label *ngIf="!selectedGrade">Teacher * (select grade first)</mat-label>
 
               <mat-select formControlName="uri" required>
-                <mat-option *ngIf="selectedGrade" class="mat-elevation-z1 action" (click)="newTeacherCommand.execute()">
-                  Create teacher <mat-icon>mode_edit</mat-icon>
+                <mat-option *ngIf="selectedGrade" class="action" (click)="newTeacherCommand.execute()">
+                  Create new teacher<mat-icon>open_in_new</mat-icon>
                 </mat-option>
                 <mat-option
                   *ngFor="let teacher of (teachers$ | async) | teacherGradeFilter: selectedGrade"
