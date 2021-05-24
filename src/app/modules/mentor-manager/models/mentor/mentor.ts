@@ -22,7 +22,6 @@ export class Mentor {
   firstName: string;
   lastName: string;
   email: string;
-  workPhone: string;
   cellPhone: string;
   availability: string;
   mediaReleaseSigned: boolean;
@@ -39,7 +38,6 @@ export class Mentor {
     this.firstName = json?.firstName;
     this.lastName = json?.lastName;
     this.email = (json?.email === '') ? null : json?.email;
-    this.workPhone = json?.workPhone;
     this.cellPhone = json?.cellPhone;
     this.availability = json?.availability;
     this.mediaReleaseSigned = json?.mediaReleaseSigned;
