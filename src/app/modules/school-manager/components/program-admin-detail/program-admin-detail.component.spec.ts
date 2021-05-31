@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProgramAdminListComponent } from './program-admin-list.component';
+import { ProgramAdminDetailComponent } from './program-admin-detail.component';
 
-describe('ProgramAdminListComponent', () => {
-  let component: ProgramAdminListComponent;
-  let fixture: ComponentFixture<ProgramAdminListComponent>;
+describe('ProgramAdminDetailComponent', () => {
+  let component: ProgramAdminDetailComponent;
+  let fixture: ComponentFixture<ProgramAdminDetailComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ ProgramAdminListComponent ]
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ ProgramAdminDetailComponent ]
     })
     .compileComponents();
-  }));
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProgramAdminListComponent);
+    fixture = TestBed.createComponent(ProgramAdminDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
