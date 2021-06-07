@@ -36,6 +36,7 @@ import { LoggingService } from 'src/app/modules/shared/services/logging-service/
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Student } from '../../models/student/student';
+import { grades } from 'src/app/modules/shared/constants/grades';
 
 @Component({
   selector: 'ms-student-list',
@@ -103,7 +104,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'firstName', 'teacher', 'preferredTime'];
     } else {
-      return ['select', 'firstName', 'lastName', 'studentId', 'teacher', 'preferredTime', 'contacts'];
+      return ['select', 'firstName', 'lastName', 'studentId', 'grade', 'teacher', 'preferredTime', 'contacts'];
     }
   }
 
@@ -123,6 +124,10 @@ export class StudentListComponent implements OnInit, OnDestroy {
 
   isLoading(gettingData: boolean): boolean {
     return gettingData && this.isSchoolSelected;
+  }
+
+  studentGrade(student: Student): string {
+    return grades[student.grade].valueView;
   }
 
   private loadStudentData(): void {
