@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { Grade } from 'src/app/modules/shared/types/grade';
@@ -36,13 +36,26 @@ export class TeacherDialogComponent {
 
   grades: Grade[] = grades;
 
+  /**
+   * Used to set a fixed grade. Its value is provided when the
+   * dialog is activated through a student dialog.
+   */
+  studentGrade: string;
+
   constructor(private dialogRef: MatDialogRef<TeacherDialogComponent>,
               private teacherService: TeacherRepositoryService,
               private formBuilder: FormBuilder,
               @Inject(MAT_DIALOG_DATA) data: any) {
+
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
     this.schoolId = data.schoolId;
+
+    if (typeof data?.selectedGrade === 'function') {
+      this.studentGrade = data?.selectedGrade();
+      this.model.patchValue({ grade1: this.studentGrade });
+    }
+
   }
 
   save(): void {
@@ -66,6 +79,10 @@ export class TeacherDialogComponent {
 
   dismiss(): void {
     this.dialogRef.close(null);
+  }
+
+  get hasStudentGrade(): boolean {
+    return this.studentGrade !== undefined;
   }
 
   private createModel(formBuilder: FormBuilder, teacher: Teacher): FormGroup {

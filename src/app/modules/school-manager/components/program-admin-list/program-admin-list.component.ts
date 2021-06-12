@@ -102,7 +102,7 @@ class ProgramAdminListMenuManager {
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   postAction: (p: ProgramAdmin) => void,
-                  programAdminCacheSerice: ProgramAdminCacheService,
+                  programAdminCacheService: ProgramAdminCacheService,
                   schoolId: string): void {
 
     menuState.add(new NewDialogCommand(
@@ -126,9 +126,9 @@ class ProgramAdminListMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ model: programAdminCacheSerice.getFirstSelection() }),
+      () => ({ model: programAdminCacheService.getFirstSelection() }),
       (p: ProgramAdmin) => postAction(p),
-      () => programAdminCacheSerice.selection.selected.length === 1));
+      () => programAdminCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
       'Remove Program Admin(s)',
       'program-admin',
@@ -140,9 +140,9 @@ class ProgramAdminListMenuManager {
       dialog,
       snackBar,
       null,
-      () => programAdminCacheSerice.selectionCount,
-      () => programAdminCacheSerice.removeSelected(),
-      () => programAdminCacheSerice.selection.selected.length > 0));
+      () => programAdminCacheService.selectionCount,
+      () => programAdminCacheService.removeSelected(),
+      () => programAdminCacheService.selection.selected.length > 0));
 
   }
 
