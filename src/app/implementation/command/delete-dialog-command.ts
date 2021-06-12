@@ -22,50 +22,51 @@ import { ComponentType } from '@angular/cdk/portal';
 
 export class DeleteDialogCommand<T> extends Command {
 
-    constructor(title: string,
-                group: string,
-                private componentType: ComponentType<T>,
-                private snackBarMessage: string,
-                private singularName: string,
-                private pluralName: string,
-                private router: Router,
-                private dialog: MatDialog,
-                private snackBar: MatSnackBar,
-                private routeTo: string,
-                private countSupplier: () => number,
-                private removeItem: () => Promise<void>,
-                private determineEnabled: () => boolean) {
-        super(title, group);
-    }
+  constructor(title: string,
+              group: string,
+              private componentType: ComponentType<T>,
+              private snackBarMessage: string,
+              private singularName: string,
+              private pluralName: string,
+              private router: Router,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private routeTo: string,
+              private countSupplier: () => number,
+              private removeItem: () => Promise<void>,
+              private determineEnabled: () => boolean) {
+  super(title, group);
+}
 
-    execute(): void {
-        const dialogRef = this.dialog.open(this.componentType, {
-            width: '500px',
-            data: {
-                message: this.message
-            }
+  execute(): void {
+    const dialogRef = this.dialog.open(this.componentType, {
+      width: '500px',
+      disableClose: true,
+      data: {
+        message: this.message
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.removeItem().then(() => {
+          this.openSnackBar(this.snackBar, this.snackBarMessage, '');
+          if (this.routeTo) {
+            this.router.navigate([this.routeTo]);
+          }
         });
+      }
+    });
+  }
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                this.removeItem().then(() => {
-                    this.openSnackBar(this.snackBar, this.snackBarMessage, '');
-                    if (this.routeTo) {
-                        this.router.navigate([this.routeTo]);
-                    }
-                });
-            }
-        });
-    }
+  isEnabled(): boolean {
+    return this.determineEnabled();
+  }
 
-    isEnabled(): boolean {
-        return this.determineEnabled();
-    }
-
-    private get message(): string {
-        const selectionCount = this.countSupplier();
-        const bookLabel = selectionCount > 1 ? this.pluralName : this.singularName;
-        return `Are you sure you want to delete ${ selectionCount } ${ bookLabel }?`;
-    }
+  private get message(): string {
+    const selectionCount = this.countSupplier();
+    const bookLabel = selectionCount > 1 ? this.pluralName : this.singularName;
+    return `Are you sure you want to delete ${ selectionCount } ${ bookLabel }?`;
+  }
 
 }
