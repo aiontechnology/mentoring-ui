@@ -35,6 +35,7 @@ import { tap } from 'rxjs/operators';
 import { personLocations } from 'src/app/modules/shared/constants/locations';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
 import { TeacherDialogComponent } from 'src/app/modules/school-manager/components/teacher-dialog/teacher-dialog.component';
+import { MentorDialogComponent } from 'src/app/modules/mentor-manager/components/mentor-dialog/mentor-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -72,6 +73,7 @@ export class StudentDialogComponent implements OnInit {
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
   newTeacherCommand: NewDialogCommand<TeacherDialogComponent, Teacher>;
+  newMentorCommand: NewDialogCommand<MentorDialogComponent, Mentor>;
 
   constructor(private dialogRef: MatDialogRef<StudentDialogComponent>,
               private studentService: StudentRepositoryService,
@@ -110,6 +112,19 @@ export class StudentDialogComponent implements OnInit {
       (t: Teacher) => this.addNewTeacher(t),
       () => true);
 
+    this.newMentorCommand = new NewDialogCommand(
+      'Add Mentor',
+      'mentor',
+      MentorDialogComponent,
+      'Mentor added',
+      null,
+      { schoolId: this.schoolId },
+      null,
+      this.dialog,
+      this.snackBar,
+      (m: Mentor) => this.addNewMentor(m),
+      () => true);
+
   }
 
   /* Get teacher data; to be displayed in a selection menu */
@@ -129,11 +144,7 @@ export class StudentDialogComponent implements OnInit {
 
     this.loadAllTeachers();
 
-    console.log('Mentor data', this.schoolId);
-    this.mentorService.readAllMentors(this.schoolId);
-    this.mentors$ = this.mentorService.mentors.pipe(
-      tap(mentors => this.logger.log('Read mentors from school', mentors))
-    );
+    this.loadAllMentors();
 
   }
 
@@ -427,6 +438,24 @@ export class StudentDialogComponent implements OnInit {
     const teacher = new Teacher(t);
     const teacherInput = this.teacherInput.get('teacher') as FormGroup;
     teacherInput.patchValue({ uri: teacher.getSelfLink() });
+
+  }
+
+  private loadAllMentors(): void {
+    console.log('Mentor data', this.schoolId);
+    this.mentorService.readAllMentors(this.schoolId);
+    this.mentors$ = this.mentorService.mentors.pipe(
+      tap(mentors => this.logger.log('Read mentors from school', mentors))
+    );
+  }
+
+  private addNewMentor(m: Mentor): void {
+
+    this.loadAllMentors();
+
+    const mentor = new Mentor(m);
+    const mentorInput = this.studentDetails.get('mentor') as FormGroup;
+    mentorInput.patchValue({ uri: mentor.getSelfLink() });
 
   }
 
