@@ -27,13 +27,16 @@ import { TeacherGradeFilterPipe } from '../shared/pipes/teacher-grade-filter.pip
 import { StudentDetailComponent } from './components/student-detail/student-detail.component';
 import { MentorRepositoryService } from 'src/app/modules/mentor-manager/services/mentor/mentor-repository.service';
 import { ScrollToDirective } from './directives/scroll-to.directive';
+import { CanActivateSysAdmin } from 'src/app/services/can-activate-sys-admin';
+import { CanActivateProgAdmin } from 'src/app/services/can-activate-prog-admin';
 
 const routes: Routes = [
   {
-    path: '', component: StudentManagerComponent,
-    children: [
+    path: '', component: StudentManagerComponent, children: [
       { path: '', component: StudentListComponent },
-      { path: 'schools/:schoolId/students/:studentId', component: StudentDetailComponent }
+      { path: 'schools/:schoolId', component: StudentListComponent, canActivate: [CanActivateSysAdmin] },
+      { path: 'schools/:schoolId/students/:studentId', component: StudentDetailComponent, canActivate: [CanActivateSysAdmin] },
+      { path: 'students/:studentId', component: StudentDetailComponent, canActivate: [CanActivateProgAdmin] }
     ]
   }
 ];
