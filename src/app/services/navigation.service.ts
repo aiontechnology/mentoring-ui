@@ -1,11 +1,11 @@
 /**
- * Copyright 2020 - 2021 Aion Technology LLC
+ * Copyright 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-.mat-toolbar {
-  height: 80px;
-  z-index: 1000;
-}
+import { Injectable } from '@angular/core';
 
-a .mat-icon {
-  margin-left: 10px;
-}
+@Injectable({
+  providedIn: 'root'
+})
+export class NavigationService {
 
-span {
-  margin: auto;
-}
+  routeParams: string[];
+  fragment: string;
 
-.title {
-  margin-left: 15px;
+  constructor() {
+    this.routeParams = [];
+    this.fragment = null;
+  }
+
+  hasPrev(): boolean {
+    return this.routeParams.length !== 0;
+  }
+
+  clearRoute(): void {
+    this.routeParams = [];
+    this.fragment = null;
+  }
+
 }

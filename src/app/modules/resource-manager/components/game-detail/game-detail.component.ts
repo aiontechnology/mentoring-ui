@@ -28,6 +28,7 @@ import { GameDialogComponent } from '../game-dialog/game-dialog.component';
 import { Subscription } from 'rxjs';
 import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { UserSessionService } from 'src/app/services/user-session.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'ms-game-detail',
@@ -47,7 +48,8 @@ export class GameDetailComponent implements OnDestroy {
               private menuState: MenuStateService,
               private gameService: GameRepositoryService,
               private snackBar: MatSnackBar,
-              private router: Router) {
+              private router: Router,
+              private navigation: NavigationService) {
 
     this.subscriptions$ = new Subscription();
 
@@ -79,10 +81,14 @@ export class GameDetailComponent implements OnDestroy {
     this.subscriptions$.add(subscription1$);
     this.subscriptions$.add(subscription2$);
 
+    this.navigation.routeParams = ['resourcemanager'];
+    this.navigation.fragment = 'games';
+
   }
 
   ngOnDestroy(): void {
     this.subscriptions$.unsubscribe();
+    this.navigation.clearRoute();
     this.menuState.clear();
   }
 

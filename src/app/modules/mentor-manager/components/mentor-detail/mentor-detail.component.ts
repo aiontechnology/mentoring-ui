@@ -27,6 +27,7 @@ import { MenuStateService } from 'src/app/services/menu-state.service';
 import { MentorDialogComponent } from '../mentor-dialog/mentor-dialog.component';
 import { Subscription } from 'rxjs';
 import { UserSessionService } from 'src/app/services/user-session.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'ms-mentor-detail',
@@ -41,22 +42,31 @@ export class MentorDetailComponent implements OnDestroy {
 
   mentor: Mentor;
 
-  constructor(route: ActivatedRoute,
-              public userSession: UserSessionService,
+  constructor(public userSession: UserSessionService,
+              private route: ActivatedRoute,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private mentorService: MentorRepositoryService,
               private snackBar: MatSnackBar,
-              private router: Router) {
+              private router: Router,
+              private navigation: NavigationService) {
 
     this.subscriptions$ = new Subscription();
 
-    const subscription1$ = route.paramMap.subscribe(
-      params => {
-        this.mentorId = params.get('mentorId');
+    let subscription1$: Subscription;
+    if (this.userSession.isSysAdmin) {
+      subscription1$ = this.route.paramMap.subscribe(params => {
         this.schoolId = params.get('schoolId');
-      }
-    );
+        this.mentorId = params.get('mentorId');
+        this.navigation.routeParams = ['/mentormanager', 'schools', this.schoolId];
+      });
+    } else {
+      this.schoolId = this.userSession.schoolUUID;
+      this.navigation.routeParams = ['/mentormanager'];
+      subscription1$ = this.route.paramMap.subscribe(params => {
+        this.mentorId = params.get('mentorId');
+      });
+    }
 
     this.mentorService.readOneMentor(this.schoolId, this.mentorId);
     const subscription2$ = this.mentorService.mentors.subscribe(() => {
@@ -71,7 +81,8 @@ export class MentorDetailComponent implements OnDestroy {
                                        this.dialog,
                                        this.snackBar,
                                        this.mentorService,
-                                       this.schoolId);
+                                       this.schoolId,
+                                       this.navigation.routeParams.join('/'));
 
     });
 
@@ -82,6 +93,7 @@ export class MentorDetailComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions$.unsubscribe();
+    this.navigation.clearRoute();
     this.menuState.clear();
   }
 
@@ -95,7 +107,8 @@ class MentorDetailMenuManager {
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   mentorService: MentorRepositoryService,
-                  schoolId: string) {
+                  schoolId: string,
+                  routeTo: string) {
     menuState.add(new EditDialogCommand(
       'Edit Mentor',
       'mentor',
@@ -118,7 +131,7 @@ class MentorDetailMenuManager {
       router,
       dialog,
       snackBar,
-      '/mentormanager',
+      routeTo,
       () => 1,
       () => mentorService.deleteMentors([mentor]),
       () => true));

@@ -22,13 +22,16 @@ import { MentorRepositoryService } from './services/mentor/mentor-repository.ser
 import { SharedModule } from '../shared/shared.module';
 import { MentorDialogComponent } from './components/mentor-dialog/mentor-dialog.component';
 import { MentorDetailComponent } from './components/mentor-detail/mentor-detail.component';
+import { CanActivateSysAdmin } from 'src/app/services/can-activate-sys-admin';
+import { CanActivateProgAdmin } from 'src/app/services/can-activate-prog-admin';
 
 const routes: Routes = [
   {
-    path: '', component: MentorManagerComponent,
-    children: [
+    path: '', component: MentorManagerComponent, children: [
       { path: '', component: MentorListComponent },
-      { path: 'schools/:schoolId/mentors/:mentorId', component: MentorDetailComponent }
+      { path: 'schools/:schoolId', component: MentorListComponent, canActivate: [CanActivateSysAdmin] },
+      { path: 'schools/:schoolId/mentors/:mentorId', component: MentorDetailComponent, canActivate: [CanActivateSysAdmin] },
+      { path: 'mentors/:mentorId', component: MentorDetailComponent, canActivate: [CanActivateProgAdmin] }
     ]
   }
 ];
