@@ -77,7 +77,6 @@ export class PersonnelDialogComponent {
       type: ['', Validators.required],
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      workPhone: null,
       cellPhone: null,
       email: [null, [Validators.email, Validators.maxLength(50)]]
     });
@@ -87,7 +86,6 @@ export class PersonnelDialogComponent {
         type: personnel?.type,
         firstName: personnel?.firstName,
         lastName: personnel?.lastName,
-        workPhone: personnel?.workPhone,
         cellPhone: personnel?.cellPhone,
         email: personnel?.email
       });
