@@ -78,7 +78,7 @@ export class PersonnelListComponent implements OnInit, AfterViewInit {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'type', 'firstName', 'lastName'];
     } else {
-      return ['select', 'type', 'firstName', 'lastName', 'email', 'workPhone', 'cellPhone'];
+      return ['select', 'type', 'firstName', 'lastName', 'email', 'cellPhone'];
     }
   }
 

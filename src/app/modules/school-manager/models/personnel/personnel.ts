@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ export class Personnel implements LinksHolder<Personnel> {
     firstName: string;
     lastName: string;
     email: string;
-    workPhone: string;
     cellPhone: string;
     _links: {
         self: [
@@ -39,7 +38,6 @@ export class Personnel implements LinksHolder<Personnel> {
         this.firstName = json?.firstName;
         this.lastName = json?.lastName;
         this.email = (json?.email === '') ? null : json?.email;
-        this.workPhone = json?.workPhone;
         this.cellPhone = json?.cellPhone;
         this._links = json?._links;
     }
