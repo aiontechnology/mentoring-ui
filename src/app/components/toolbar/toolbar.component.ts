@@ -19,6 +19,7 @@ import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { UserSessionService } from 'src/app/services/user-session.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'ms-toolbar',
@@ -31,6 +32,7 @@ export class ToolbarComponent {
   @Input() drawer: MatDrawer;
 
   constructor(public menuState: MenuStateService,
-              public userSession: UserSessionService) { }
+              public userSession: UserSessionService,
+              public navigationService: NavigationService) { }
 
 }

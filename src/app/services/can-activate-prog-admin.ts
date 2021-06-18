@@ -21,12 +21,12 @@ import { UserSessionService } from './user-session.service';
 import { Observable } from 'rxjs';
 
 /**
- * Route guard for System Admin access.
+ * Controls access to routes only the program admin should see.
  */
 @Injectable({
   providedIn: 'root'
 })
-export class CanActivateAdmin implements CanActivate {
+export class CanActivateProgAdmin implements CanActivate {
 
   constructor(private userSession: UserSessionService,
               private router: Router) { }
@@ -35,7 +35,7 @@ export class CanActivateAdmin implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean|UrlTree>|Promise<boolean|UrlTree>|boolean|UrlTree {
-    if (this.userSession.isSysAdmin) {
+    if (this.userSession.isProgAdmin) {
       return true;
     }
     return this.router.navigate(['']);

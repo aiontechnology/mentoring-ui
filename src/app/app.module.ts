@@ -30,7 +30,7 @@ import { environment } from 'src/environments/environment';
 import { HttpErrorInterceptorService } from './services/http-error-interceptor.service';
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CanActivateAdmin } from './services/can-activate-admin';
+import { CanActivateSysAdmin } from './services/can-activate-sys-admin';
 import { CanActivateApp } from './services/can-activate-app';
 import { ReceiveTokenComponent } from './components/receive-token/receive-token.component';
 
@@ -47,7 +47,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [CanActivateApp] },
   { path: 'handleLogout', component: HandleLogoutComponent, canActivate: [CanActivateApp] },
   { path: 'adminmanager', loadChildren: () => import('./modules/admin-manager/admin-manager.module')
-    .then(m => m.AdminManagerModule), canActivate: [CanActivateAdmin] },
+    .then(m => m.AdminManagerModule), canActivate: [CanActivateSysAdmin] },
   { path: 'resourcemanager', loadChildren: () => import('./modules/resource-manager/resource-manager.module')
     .then(m => m.ResourceManagerModule), canActivate: [CanActivateApp] },
   { path: 'schoolsmanager', loadChildren: () => import('./modules/school-manager/school-manager.module')

@@ -27,6 +27,7 @@ import { MenuStateService } from 'src/app/services/menu-state.service';
 import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
 import { Subscription } from 'rxjs';
 import { UserSessionService } from 'src/app/services/user-session.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'ms-school-detail',
@@ -46,7 +47,8 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
               private menuState: MenuStateService,
               private schoolService: SchoolRepositoryService,
               private snackBar: MatSnackBar,
-              private router: Router) {
+              private router: Router,
+              private navigation: NavigationService) {
 
     this.subscriptions$ = new Subscription();
 
@@ -58,6 +60,7 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
 
     if (userSession.isSysAdmin) {
       this.schoolService.readAllSchools();
+      this.navigation.routeParams = ['schoolsmanager'];
     } else {
       this.schoolService.readOneSchool(this.schoolId);
     }
@@ -82,6 +85,7 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions$.unsubscribe();
+    this.navigation.clearRoute();
     this.menuState.clear();
   }
 
