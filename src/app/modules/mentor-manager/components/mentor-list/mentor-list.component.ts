@@ -24,7 +24,7 @@ import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-co
 import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
 import { MentorDialogComponent } from '../mentor-dialog/mentor-dialog.component';
 import { MenuStateService } from 'src/app/services/menu-state.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
@@ -32,7 +32,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Mentor } from '../../models/mentor/mentor';
 
@@ -58,6 +58,9 @@ export class MentorListComponent implements OnInit, OnDestroy {
 
   schools$: Observable<School[]>;
   schoolId: string;
+  selectedSchool: School;
+
+  private paramSubscription$: Subscription;
 
   constructor(public userSession: UserSessionService,
               public mentorCacheService: MentorCacheService,
@@ -67,30 +70,41 @@ export class MentorListComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private router: Router,
-              private snackBar: MatSnackBar) {
-
+              private snackBar: MatSnackBar,
+              private route: ActivatedRoute) {
     console.log('mentor list constructed');
-
   }
 
   ngOnInit(): void {
+
     if (this.userSession.isSysAdmin) {
       this.schoolRepository.readAllSchools();
       this.schools$ = this.schoolRepository.schools.pipe(
-        tap(s => this.logger.log('Read schools', s))
+        tap(s => {
+          this.logger.log('Read schools', s);
+          this.paramSubscription$ = this.route.paramMap.subscribe(params => {
+            this.schoolId = params.get('schoolId');
+            if (this.schoolId !== null) {
+              this.selectedSchool = this.schoolRepository.getSchoolById(this.schoolId);
+              this.loadMentorData();
+            }
+          });
+        })
       );
     } else if (this.userSession.isProgAdmin) {
       this.schoolId = this.userSession.schoolUUID;
       this.loadMentorData();
     }
+
   }
 
   ngOnDestroy(): void {
     this.menuState.clear();
+    this.paramSubscription$?.unsubscribe();
   }
 
   get isSchoolSelected(): boolean {
-    return (this.schoolId !== undefined) || this.userSession.isProgAdmin;
+    return (this.schoolId != null) || this.userSession.isProgAdmin;
   }
 
   setSchool(id$: string) {

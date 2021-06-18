@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 Aion Technology LLC
+ * Copyright 2020 - 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,33 @@
  * limitations under the License.
  */
 
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { MenuStateService } from 'src/app/services/menu-state.service';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ms-resource-list',
   templateUrl: './resource-list.component.html',
   styleUrls: ['./resource-list.component.scss']
 })
-export class ResourceListComponent implements AfterViewInit, OnDestroy {
+export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  constructor(private menuState: MenuStateService) {
+  private fragmentSubscription$: Subscription;
+
+  tabGroupIndex: number;
+
+  constructor(private menuState: MenuStateService,
+              private route: ActivatedRoute) { }
+
+  ngOnInit(): void {
+    this.fragmentSubscription$ = this.route.fragment.subscribe(fragment => {
+      if (fragment === 'books') {
+        this.tabGroupIndex = 0;
+      } else if (fragment === 'games') {
+        this.tabGroupIndex = 1;
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -33,6 +49,7 @@ export class ResourceListComponent implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.menuState.clear();
+    this.fragmentSubscription$.unsubscribe();
   }
 
   onIndexChange(index: number): void {
