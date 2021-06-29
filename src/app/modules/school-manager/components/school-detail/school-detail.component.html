@@ -71,8 +71,8 @@ limitations under the License.
       </mat-card-content>
     </mat-card>
   </mat-tab>
-  <mat-tab label="Program Administrators" *ngIf="userSession.isSysAdmin">
-    <ms-program-admin-list class="tab-content" [schoolId]="schoolId"></ms-program-admin-list>
+  <mat-tab label="Program Administrator" *ngIf="userSession.isSysAdmin">
+    <ms-program-admin-detail class="tab-content" [schoolId]="schoolId"></ms-program-admin-detail>
   </mat-tab>
   <mat-tab label="Teachers">
     <ms-teacher-list class="tab-content" [schoolId]="schoolId"></ms-teacher-list>
