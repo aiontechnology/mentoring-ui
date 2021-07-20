@@ -30,6 +30,8 @@ import { grades } from 'src/app/modules/shared/constants/grades';
 import { StudentMentorInbound } from '../../models/student-inbound/student-inbound';
 import { Subscription } from 'rxjs';
 import { LpgRepositoryService } from '../../services/lpg/lpg-repository.service';
+import { UserSessionService } from 'src/app/services/user-session.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'ms-student-detail',
@@ -57,14 +59,26 @@ export class StudentDetailComponent implements OnDestroy {
               private menuState: MenuStateService,
               private studentService: StudentRepositoryService,
               private snackBar: MatSnackBar,
-              private router: Router) {
+              private router: Router,
+              private userSession: UserSessionService,
+              private navigation: NavigationService) {
 
     this.subscriptions$ = new Subscription();
 
-    const subscription1$ = this.route.paramMap.subscribe(params => {
-      this.schoolId = params.get('schoolId');
-      this.studentId = params.get('studentId');
-    });
+    let subscription1$: Subscription;
+    if (this.userSession.isSysAdmin) {
+      subscription1$ = this.route.paramMap.subscribe(params => {
+        this.schoolId = params.get('schoolId');
+        this.studentId = params.get('studentId');
+        this.navigation.routeParams = ['/studentmanager', 'schools', this.schoolId];
+      });
+    } else {
+      this.schoolId = this.userSession.schoolUUID;
+      this.navigation.routeParams = ['/studentmanager'];
+      subscription1$ = this.route.paramMap.subscribe(params => {
+        this.studentId = params.get('studentId');
+      });
+    }
 
     this.studentService.readOneStudent(this.schoolId, this.studentId);
     const subscription2$ = this.studentService.students.subscribe(() => {
@@ -85,7 +99,8 @@ export class StudentDetailComponent implements OnDestroy {
                                         this.dialog,
                                         this.snackBar,
                                         this.studentService,
-                                        this.schoolId);
+                                        this.schoolId,
+                                        this.navigation.routeParams.join('/'));
 
     });
 
@@ -96,6 +111,7 @@ export class StudentDetailComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions$.unsubscribe();
+    this.navigation.clearRoute();
     this.menuState.clear();
   }
 
@@ -142,7 +158,8 @@ class StudentDetailMenuManager {
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   studentService: StudentRepositoryService,
-                  school: string) {
+                  schoolId: string,
+                  routeTo: string) {
     menuState.add(new EditDialogCommand(
       'Edit Student',
       'student',
@@ -152,7 +169,7 @@ class StudentDetailMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ schoolId: school, model: student }),
+      () => ({ schoolId, model: student }),
       () => {},
       () => true
     ));
@@ -166,7 +183,7 @@ class StudentDetailMenuManager {
       router,
       dialog,
       snackBar,
-      '/studentmanager',
+      routeTo,
       () => 1,
       () => studentService.deleteStudents([student]),
       () => true

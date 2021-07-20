@@ -22,46 +22,47 @@ import { ComponentType } from '@angular/cdk/portal';
 
 export class NewDialogCommand<T, S> extends Command {
 
-    constructor(title: string,
-                group: string,
-                private componentType: ComponentType<T>,
-                private snackBarMessage: string,
-                private navigationBase: string[],
-                private data: object,
-                private router: Router,
-                private dialog: MatDialog,
-                private snackBar: MatSnackBar,
-                private postAction: (newItem: S) => void,
-                private determineEnabled: () => boolean) {
-        super(title, group);
-    }
+  constructor(title: string,
+              group: string,
+              private componentType: ComponentType<T>,
+              private snackBarMessage: string,
+              private navigationBase: string[],
+              private data: object,
+              private router: Router,
+              private dialog: MatDialog,
+              private snackBar: MatSnackBar,
+              private postAction: (newItem: S) => void,
+              private determineEnabled: () => boolean) {
+    super(title, group);
+  }
 
-    /**
-     * Opens a dialog for adding a new school.
-     */
-    execute(): void {
-        const dialogRef = this.dialog.open(this.componentType, {
-            width: '700px',
-            data: this?.data
-        });
+  /**
+   * Opens a dialog for adding a new school.
+   */
+  execute(): void {
+    const dialogRef = this.dialog.open(this.componentType, {
+      width: '700px',
+      disableClose: true,
+      data: this?.data
+    });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                if (this.navigationBase) {
-                    this.openSnackBar(this.snackBar, this.snackBarMessage, 'Navigate')
-                        .onAction().subscribe(() => {
-                            console.log('Navigating', result);
-                            this.router.navigate([...this.navigationBase, result.id]);
-                        });
-                }
-                this.openSnackBar(this.snackBar, this.snackBarMessage, '');
-                this.postAction(result);
-            }
-        });
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        if (this.navigationBase) {
+          this.openSnackBar(this.snackBar, this.snackBarMessage, 'Navigate')
+            .onAction().subscribe(() => {
+              console.log('Navigating', result);
+              this.router.navigate([...this.navigationBase, result.id]);
+            });
+        }
+        this.openSnackBar(this.snackBar, this.snackBarMessage, '');
+        this.postAction(result);
+      }
+    });
+  }
 
-    isEnabled(): boolean {
-        return this.determineEnabled();
-    }
+  isEnabled(): boolean {
+    return this.determineEnabled();
+  }
 
 }
