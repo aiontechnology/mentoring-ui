@@ -15,7 +15,6 @@ limitations under the License.
 -->
 
 <h2 mat-dialog-title>Add new student</h2>
-
 <mat-dialog-content>
   <mat-horizontal-stepper #stepper>
     <mat-step label="Student Details" [stepControl]="studentDetails" errorMessage="Incomplete">
@@ -68,24 +67,22 @@ limitations under the License.
         </div>
 
         <div class="dialog-container">
-          <mat-form-field>
-            <mat-label>Pre-behavioral assessment</mat-label>
-            <input matInput formControlName="preBehavioralAssessment" type="number" min="0" max="45">
-            <mat-error *ngIf="studentDetails.hasError('min', 'preBehavioralAssessment')">
-              Value must be greater than zero
-            </mat-error>
-            <mat-error *ngIf="studentDetails.hasError('max', 'preBehavioralAssessment')">
-              Value must be less than 45
-            </mat-error>
-          </mat-form-field>
-          <mat-form-field>
-            <mat-label>Post-behavioral assessment</mat-label>
-            <input matInput formControlName="postBehavioralAssessment" type="number" min="0" max="45">
-            <mat-error *ngIf="studentDetails.hasError('min', 'postBehavioralAssessment')">
-              Value must be greater than zero
-            </mat-error>
-            <mat-error *ngIf="studentDetails.hasError('max', 'postBehavioralAssessment')">
-              Value must be less than 45
+          <div class="month-wrapper">
+            <h2 class="mat-header-2 start">Start date:</h2>
+            <mat-form-field class="month">
+              <mat-label>Month</mat-label>
+              <mat-select formControlName="month">
+                <mat-option [value]="null">- None -</mat-option>
+                <mat-option *ngFor="let month of months" [value]="month">
+                  {{ month }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <mat-form-field class="year">
+            <input matInput msOnlyNumber placeholder="Year" formControlName="year" maxlength="4"/>
+            <mat-error *ngIf="studentDetails.hasError('min', 'year')">
+              Invalid year
             </mat-error>
           </mat-form-field>
         </div>
@@ -98,10 +95,10 @@ limitations under the License.
 
         <div class="dialog-container">
           <mat-form-field>
-            <mat-label>Start date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="startDate">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+            <mat-label>Interests</mat-label>
+            <mat-select formControlName="interests" multiple>
+              <mat-option *ngFor="let interest of (interestList$ | async)" [value]="interest">{{ interest }}</mat-option>
+            </mat-select>
           </mat-form-field>
         </div>
 
@@ -128,6 +125,9 @@ limitations under the License.
             <mat-form-field>
               <mat-label>Mentor</mat-label>
               <mat-select formControlName="uri">
+                <mat-option class="action" (click)="newMentorCommand.execute()">
+                  Create new mentor<mat-icon>open_in_new</mat-icon>
+                </mat-option>
                 <mat-option [value]="null">- None -</mat-option>
                 <mat-option
                   *ngFor="let mentor of (mentors$ | async)"
@@ -148,7 +148,6 @@ limitations under the License.
         </div>
 
       </form>
-      <button mat-raised-button matStepperNext color="primary">Next</button>
     </mat-step>
 
     <mat-step label="Teacher Input" [stepControl]="teacherInput" errorMessage="Incomplete">
@@ -161,6 +160,9 @@ limitations under the License.
               <mat-label *ngIf="!selectedGrade">Teacher * (select grade first)</mat-label>
 
               <mat-select formControlName="uri" required>
+                <mat-option *ngIf="selectedGrade" class="action" (click)="newTeacherCommand.execute()">
+                  Create new teacher<mat-icon>open_in_new</mat-icon>
+                </mat-option>
                 <mat-option
                   *ngFor="let teacher of (teachers$ | async) | teacherGradeFilter: selectedGrade"
                   [value]="teacher.getSelfLink()">
@@ -177,6 +179,7 @@ limitations under the License.
               </mat-error>
 
             </mat-form-field>
+
           </div>
           <div class="dialog-container">
             <mat-form-field>
@@ -193,10 +196,24 @@ limitations under the License.
       <form [formGroup]="studentDetails">
         <div class="dialog-container">
           <mat-form-field>
-            <mat-label>Interests</mat-label>
-            <mat-select formControlName="interests" multiple>
-              <mat-option *ngFor="let interest of (interestList$ | async)" [value]="interest">{{ interest }}</mat-option>
-            </mat-select>
+            <mat-label>Pre-behavioral assessment</mat-label>
+            <input matInput formControlName="preBehavioralAssessment" type="number" min="0" max="45">
+            <mat-error *ngIf="studentDetails.hasError('min', 'preBehavioralAssessment')">
+              Value must be greater than zero
+            </mat-error>
+            <mat-error *ngIf="studentDetails.hasError('max', 'preBehavioralAssessment')">
+              Value must be less than 45
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Post-behavioral assessment</mat-label>
+            <input matInput formControlName="postBehavioralAssessment" type="number" min="0" max="45">
+            <mat-error *ngIf="studentDetails.hasError('min', 'postBehavioralAssessment')">
+              Value must be greater than zero
+            </mat-error>
+            <mat-error *ngIf="studentDetails.hasError('max', 'postBehavioralAssessment')">
+              Value must be less than 45
+            </mat-error>
           </mat-form-field>
         </div>
 
@@ -228,8 +245,6 @@ limitations under the License.
         </div>
 
       </form>
-      <button mat-raised-button matStepperPrevious color="primary">Back</button>
-      <button mat-raised-button matStepperNext color="primary">Next</button>
     </mat-step>
 
     <mat-step label="Contacts" [stepControl]="contacts" errorMessage="Incomplete">
@@ -432,17 +447,33 @@ limitations under the License.
         </button>
       </mat-menu>
 
-      <button mat-raised-button matStepperPrevious color="primary">Back</button>
-
     </mat-step>
   </mat-horizontal-stepper>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-  <button mat-button color="primary" (click)="save()" [disabled]="!model.valid">
-    <mat-icon>save</mat-icon> Save
-  </button>
-  <button mat-button color="primary" (click)="dismiss()">
-    <mat-icon>cancel</mat-icon> Cancel
-  </button>
+  <div>
+    <button mat-button color="primary" (click)="save()" [disabled]="!model.valid">
+      <mat-icon>save</mat-icon> Save
+    </button>
+    <button mat-button color="primary" (click)="dismiss()">
+      <mat-icon>cancel</mat-icon> Cancel
+    </button>
+  </div>
+  <div>
+    <button mat-button
+            mat-button
+            (click)="stepper.previous()"
+            [disabled]="stepperAtStart(stepper.selectedIndex)"
+            color="primary">
+      <mat-icon>arrow_back_ios</mat-icon>Back
+    </button>
+    <button mat-button
+            mat-button
+            (click)="stepper.next()"
+            [disabled]="stepperAtFinish(stepper.selectedIndex)"
+            color="primary">
+      Next <mat-icon>arrow_forward_ios</mat-icon>
+    </button>
+  </div>
 </mat-dialog-actions>

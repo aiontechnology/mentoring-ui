@@ -69,7 +69,6 @@ export class ProgramAdminDialogComponent {
       programAdmin,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      workPhone: null,
       cellPhone: null,
       email: [null, [Validators.required, Validators.email, Validators.maxLength(50)]]
     });
@@ -78,7 +77,6 @@ export class ProgramAdminDialogComponent {
         programAdmin,
         firstName: programAdmin?.firstName,
         lastName: programAdmin?.lastName,
-        workPhone: programAdmin?.workPhone,
         cellPhone: programAdmin?.cellPhone,
         email: programAdmin?.email
       });

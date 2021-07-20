@@ -33,12 +33,16 @@ limitations under the License.
               <td>{{ studentGrade }}</td>
             </tr>
             <tr>
+              <td>Interests</td>
+              <td>{{ student?.interests.join(', ') }}</td>
+            </tr>
+            <tr>
               <td>Media release signed</td>
               <td>{{ student?.mediaReleaseSigned ? 'yes' : 'no' }}</td>
             </tr>
             <tr>
               <td>Start date</td>
-              <td>{{ student?.startDate }}</td>
+              <td>{{ student?.startDate | date: 'MMMM, yyyy' : 'utc' }}</td>
             </tr>
             <tr>
               <td>Preferred time</td>
@@ -75,8 +79,12 @@ limitations under the License.
               <td>{{ student?.teacher?.comment ? student.teacher.comment : '' }}</td>
             </tr>
             <tr>
-              <td>Interests</td>
-              <td>{{ student?.interests.join(', ') }}</td>
+              <td>Pre-behavioral assessment</td>
+              <td>{{ student?.preBehavioralAssessment }}</td>
+            </tr>
+            <tr>
+              <td>Post-behavioral assessment</td>
+              <td>{{ student?.postBehavioralAssessment }}</td>
             </tr>
             <tr>
               <td>Leadership traits</td>

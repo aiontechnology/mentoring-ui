@@ -29,6 +29,7 @@ import { Subscription } from 'rxjs';
 import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { UserSessionService } from 'src/app/services/user-session.service';
+import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
   selector: 'ms-book-detail',
@@ -49,7 +50,8 @@ export class BookDetailComponent implements OnDestroy {
               private menuState: MenuStateService,
               private bookService: BookRepositoryService,
               private snackBar: MatSnackBar,
-              private router: Router) {
+              private router: Router,
+              private navigation: NavigationService) {
 
     this.subscriptions$ = new Subscription();
     this.resourceGrades = resourceGrades;
@@ -82,10 +84,14 @@ export class BookDetailComponent implements OnDestroy {
     this.subscriptions$.add(subscription1$);
     this.subscriptions$.add(subscription2$);
 
+    this.navigation.routeParams = ['resourcemanager'];
+    this.navigation.fragment = 'books';
+
   }
 
   ngOnDestroy(): void {
     this.subscriptions$.unsubscribe();
+    this.navigation.clearRoute();
     this.menuState.clear();
   }
 

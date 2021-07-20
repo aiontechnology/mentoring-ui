@@ -44,13 +44,7 @@ limitations under the License.
 
     <div class="dialog-container">
       <mat-form-field>
-        <input matInput msPhoneFormat placeholder="Work Phone Number" formControlName="workPhone" />
-      </mat-form-field>
-    </div>
-
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput msPhoneFormat placeholder="Cell Phone Number" formControlName="cellPhone" />
+        <input matInput msPhoneFormat placeholder="Phone Number" formControlName="cellPhone" />
       </mat-form-field>
     </div>
 
@@ -69,7 +63,7 @@ limitations under the License.
     <div class="dialog-container">
       <mat-form-field>
         <mat-label>Grade level</mat-label>
-        <mat-select formControlName="grade1" required>
+        <mat-select formControlName="grade1" [disabled]="hasStudentGrade" required>
           <mat-option *ngFor="let grade of grades" [value]="grade.value">
             {{ grade.valueView }}
           </mat-option>

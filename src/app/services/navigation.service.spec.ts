@@ -1,5 +1,5 @@
 /**
- * Copyright 2020 - 2021 Aion Technology LLC
+ * Copyright 2021 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
-import { Pipe, PipeTransform } from '@angular/core';
-import { grades } from '../constants/grades';
-import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
+import { TestBed } from '@angular/core/testing';
 
-@Pipe({
-  name: 'grades'
-})
+import { NavigationService } from './navigation.service';
 
-export class GradesFormatPipe implements PipeTransform {
-  transform(teacher: Teacher): string {
-    const part1 = grades[teacher.grade1]?.valueView;
-    const part2 = grades[teacher.grade2]?.valueView ? ', ' + grades[teacher.grade2].valueView : '';
-    return part1 + part2;
-  }
-}
+describe('NavigationService', () => {
+  let service: NavigationService;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({});
+    service = TestBed.inject(NavigationService);
+  });
+
+  it('should be created', () => {
+    expect(service).toBeTruthy();
+  });
+});

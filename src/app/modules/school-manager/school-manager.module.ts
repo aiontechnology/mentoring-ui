@@ -25,7 +25,6 @@ import { TeacherRepositoryService } from './services/teacher/teacher-repository.
 import { TeacherDialogComponent } from './components/teacher-dialog/teacher-dialog.component';
 import { GradesFormatPipe } from '../shared/pipes/grades-format.pipe';
 import { SharedModule } from '../shared/shared.module';
-import { ProgramAdminListComponent } from './components/program-admin-list/program-admin-list.component';
 import { ProgramAdminRepositoryService } from './services/program-admin/program-admin-repository.service';
 import { ProgramAdminDialogComponent } from './components/program-admin-dialog/program-admin-dialog.component';
 import { PersonnelListComponent } from './components/personnel-list/personnel-list.component';
@@ -34,10 +33,11 @@ import { PersonnelDialogComponent } from './components/personnel-dialog/personne
 import { SchoolBookListComponent } from './components/school-resource/school-book-list/school-book-list.component';
 import { SchoolBookDialogComponent } from './components/school-resource/school-book-dialog/school-book-dialog.component';
 import { SchoolBookRepositoryService } from './services/school-resource/school-book/school-book-repository.service';
-import { CanActivateAdmin } from 'src/app/services/can-activate-admin';
+import { CanActivateSysAdmin } from 'src/app/services/can-activate-sys-admin';
 import { SchoolGameDialogComponent } from './components/school-resource/school-game-dialog/school-game-dialog.component';
 import { SchoolGameListComponent } from './components/school-resource/school-game-list/school-game-list.component';
 import { SchoolGameRepositoryService } from './services/school-resource/school-game/school-game-repository.service';
+import { ProgramAdminDetailComponent } from './components/program-admin-detail/program-admin-detail.component';
 
 const routes: Routes = [
   {
@@ -46,7 +46,7 @@ const routes: Routes = [
     children: [
       { path: '', component: SchoolListComponent }
     ],
-    canActivate: [CanActivateAdmin]
+    canActivate: [CanActivateSysAdmin]
   },
   {
     path: 'schools/:id', component: SchoolDetailComponent
@@ -57,7 +57,6 @@ const routes: Routes = [
   declarations: [
     GradesFormatPipe,
     PersonnelListComponent,
-    ProgramAdminListComponent,
     ProgramAdminDialogComponent,
     SchoolDetailComponent,
     SchoolDialogComponent,
@@ -69,7 +68,8 @@ const routes: Routes = [
     SchoolBookListComponent,
     SchoolBookDialogComponent,
     SchoolGameDialogComponent,
-    SchoolGameListComponent
+    SchoolGameListComponent,
+    ProgramAdminDetailComponent
   ],
   imports: [
     RouterModule.forChild(routes),

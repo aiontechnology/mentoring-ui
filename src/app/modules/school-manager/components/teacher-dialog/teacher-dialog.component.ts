@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { Grade } from 'src/app/modules/shared/types/grade';
@@ -36,13 +36,26 @@ export class TeacherDialogComponent {
 
   grades: Grade[] = grades;
 
+  /**
+   * Used to set a fixed grade. Its value is provided when the
+   * dialog is activated through a student dialog.
+   */
+  studentGrade: string;
+
   constructor(private dialogRef: MatDialogRef<TeacherDialogComponent>,
               private teacherService: TeacherRepositoryService,
               private formBuilder: FormBuilder,
               @Inject(MAT_DIALOG_DATA) data: any) {
+
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
     this.schoolId = data.schoolId;
+
+    if (typeof data?.selectedGrade === 'function') {
+      this.studentGrade = data?.selectedGrade();
+      this.model.patchValue({ grade1: this.studentGrade });
+    }
+
   }
 
   save(): void {
@@ -68,13 +81,16 @@ export class TeacherDialogComponent {
     this.dialogRef.close(null);
   }
 
+  get hasStudentGrade(): boolean {
+    return this.studentGrade !== undefined;
+  }
+
   private createModel(formBuilder: FormBuilder, teacher: Teacher): FormGroup {
     console.log('Creating teacher model', teacher);
     const formGroup = formBuilder.group({
       teacher,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      workPhone: null,
       cellPhone: null,
       email: [null, [Validators.email, Validators.maxLength(50)]],
       grade1: [null, Validators.required],
@@ -85,7 +101,6 @@ export class TeacherDialogComponent {
         teacher,
         firstName: teacher?.firstName,
         lastName: teacher?.lastName,
-        workPhone: teacher?.workPhone,
         cellPhone: teacher?.cellPhone,
         email: teacher?.email,
         grade1: teacher?.grade1?.toString(),

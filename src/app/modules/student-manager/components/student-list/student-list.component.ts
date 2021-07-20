@@ -23,7 +23,7 @@ import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-comm
 import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
 import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
 import { MenuStateService } from 'src/app/services/menu-state.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
@@ -33,9 +33,10 @@ import { Contact } from '../../models/contact/contact';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Student } from '../../models/student/student';
+import { grades } from 'src/app/modules/shared/constants/grades';
 
 @Component({
   selector: 'ms-student-list',
@@ -59,6 +60,9 @@ export class StudentListComponent implements OnInit, OnDestroy {
 
   schools$: Observable<School[]>;
   schoolId: string;
+  selectedSchool: School;
+
+  private paramSubscription$: Subscription;
 
   constructor(public userSession: UserSessionService,
               public studentCacheService: StudentCacheService,
@@ -68,30 +72,41 @@ export class StudentListComponent implements OnInit, OnDestroy {
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private router: Router,
-              private snackBar: MatSnackBar) {
-
+              private snackBar: MatSnackBar,
+              private route: ActivatedRoute) {
     console.log('student list constructed');
-
   }
 
   ngOnInit(): void {
+
     if (this.userSession.isSysAdmin) {
       this.schoolRepository.readAllSchools();
       this.schools$ = this.schoolRepository.schools.pipe(
-        tap(s => this.logger.log('Read schools', s))
+        tap(s => {
+          this.logger.log('Read schools', s);
+          this.paramSubscription$ = this.route.paramMap.subscribe(params => {
+            this.schoolId = params.get('schoolId');
+            if (this.schoolId !== null) {
+              this.selectedSchool = this.schoolRepository.getSchoolById(this.schoolId);
+              this.loadStudentData();
+            }
+          });
+        })
       );
     } else if (this.userSession.isProgAdmin) {
       this.schoolId = this.userSession.schoolUUID;
       this.loadStudentData();
     }
+
   }
 
   ngOnDestroy(): void {
     this.menuState.clear();
+    this.paramSubscription$?.unsubscribe();
   }
 
   get isSchoolSelected(): boolean {
-    return (this.schoolId !== undefined) || this.userSession.isProgAdmin;
+    return (this.schoolId != null) || this.userSession.isProgAdmin;
   }
 
   setSchool(id$: string) {
@@ -103,7 +118,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       return ['select', 'firstName', 'teacher', 'preferredTime'];
     } else {
-      return ['select', 'firstName', 'lastName', 'studentId', 'teacher', 'preferredTime', 'contacts'];
+      return ['select', 'firstName', 'lastName', 'studentId', 'grade', 'teacher', 'preferredTime', 'contacts'];
     }
   }
 
@@ -123,6 +138,10 @@ export class StudentListComponent implements OnInit, OnDestroy {
 
   isLoading(gettingData: boolean): boolean {
     return gettingData && this.isSchoolSelected;
+  }
+
+  studentGrade(student: Student): string {
+    return grades[student.grade].valueView;
   }
 
   private loadStudentData(): void {
