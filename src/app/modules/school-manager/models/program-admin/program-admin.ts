@@ -15,6 +15,7 @@
  */
 
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
+import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
 
 export class ProgramAdmin implements LinksHolder<ProgramAdmin> {
 
@@ -22,7 +23,7 @@ export class ProgramAdmin implements LinksHolder<ProgramAdmin> {
     lastName: string;
     email: string;
     cellPhone: string;
-    _links: {
+    links: {
         self: [
             { href: string; }
         ]
@@ -33,16 +34,16 @@ export class ProgramAdmin implements LinksHolder<ProgramAdmin> {
         this.lastName = json?.lastName;
         this.email = (json?.email === '') ? null : json?.email;
         this.cellPhone = json?.cellPhone;
-        this._links = json?._links;
+        this.links = json?.links;
     }
 
     clearLinks(): ProgramAdmin {
-        this._links = undefined;
+        this.links = undefined;
         return this;
     }
 
     getSelfLink(): string {
-        return this._links.self[0].href;
+        return LinkServiceService.selfLink(JSON.stringify(this));
     }
 
 }

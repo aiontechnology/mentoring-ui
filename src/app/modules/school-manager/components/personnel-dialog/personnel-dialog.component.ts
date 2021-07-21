@@ -55,7 +55,7 @@ export class PersonnelDialogComponent {
 
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
-      newPersonnel._links = this.model.value.personnel._links;
+      newPersonnel.links = this.model.value.personnel.links;
       value = this.personnelService.updatePersonnel(newPersonnel);
     } else {
       value = this.personnelService.createPersonnel(this.schoolId, newPersonnel);

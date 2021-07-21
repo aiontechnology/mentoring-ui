@@ -17,6 +17,7 @@
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
 import { Contact } from '../contact/contact';
 import { personLocations } from 'src/app/modules/shared/constants/locations';
+import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
 
 export abstract class Student implements LinksHolder<Student> {
 
@@ -37,7 +38,7 @@ export abstract class Student implements LinksHolder<Student> {
   leadershipSkills: string[];
   leadershipTraits: string[];
   contacts: Contact[];
-  _links: {
+  links: {
       self: [
           { href: string; }
       ]
@@ -69,16 +70,16 @@ export abstract class Student implements LinksHolder<Student> {
       this.contacts.push(new Contact(contact));
     });
 
-    this._links = json?._links;
+    this.links = json?.links;
   }
 
   clearLinks(): Student {
-    this._links = undefined;
+    this.links = undefined;
     return this;
   }
 
   getSelfLink(): string {
-    return this._links?.self[0]?.href;
+    return LinkServiceService.selfLink(JSON.stringify(this));
   }
 
   get displayLocation(): string {
