@@ -117,7 +117,7 @@ export class SchoolDialogComponent {
 
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
-      newSchool._links = this.model.value.school._links;
+      newSchool.links = this.model.value.school.links;
       value = this.schoolService.updateSchool(newSchool);
     } else {
       value = this.schoolService.createSchool(newSchool);
