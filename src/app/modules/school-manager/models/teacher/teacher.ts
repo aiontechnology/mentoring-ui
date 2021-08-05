@@ -15,6 +15,7 @@
  */
 
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
+import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
 
 /**
  * Model class the represents a teacher.
@@ -28,7 +29,7 @@ export class Teacher implements LinksHolder<Teacher> {
     cellPhone: string;
     grade1: number;
     grade2: number;
-    _links: {
+    links: {
         self: [
             { href: string; }
         ]
@@ -41,11 +42,11 @@ export class Teacher implements LinksHolder<Teacher> {
         this.cellPhone = json?.cellPhone;
         this.grade1 = json?.grade1;
         this.grade2 = json?.grade2;
-        this._links = json?._links;
+        this.links = json?.links;
     }
 
     clearLinks(): Teacher {
-        this._links = undefined;
+        this.links = undefined;
         return this;
     }
 
@@ -54,7 +55,7 @@ export class Teacher implements LinksHolder<Teacher> {
     }
 
     getSelfLink(): string {
-        return this._links?.self[0]?.href;
+        return LinkServiceService.selfLink(JSON.stringify(this));
     }
 
 }

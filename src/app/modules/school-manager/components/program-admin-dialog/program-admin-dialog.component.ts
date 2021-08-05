@@ -48,7 +48,7 @@ export class ProgramAdminDialogComponent {
 
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
-      newProgramAdmin._links = this.model.value.programAdmin._links;
+      newProgramAdmin.links = this.model.value.programAdmin.links;
       value = this.programAdminService.updateProgramAdmin(newProgramAdmin);
     } else {
       value = this.programAdminService.createProgramAdmin(this.schoolId, newProgramAdmin);

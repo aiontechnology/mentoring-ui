@@ -38,6 +38,7 @@ import { TeacherDialogComponent } from 'src/app/modules/school-manager/component
 import { MentorDialogComponent } from 'src/app/modules/mentor-manager/components/mentor-dialog/mentor-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
 
 @Component({
   selector: 'ms-student-dialog',
@@ -224,7 +225,7 @@ export class StudentDialogComponent implements OnInit {
         leadershipTraits: [],
         behaviors: [],
         location: ['OFFLINE', Validators.required],
-        _links: null
+        links: null
       }),
       teacherInput: formBuilder.group({
         teacher: formBuilder.group({
@@ -255,18 +256,18 @@ export class StudentDialogComponent implements OnInit {
           preferredTime: student?.preferredTime,
           actualTime: student?.actualTime,
           mentor: {
-            uri: student?.mentor?.mentor?._links?.self[0]?.href
+            uri: LinkServiceService.selfLink(JSON.stringify(student?.mentor?.mentor))
           },
           interests: student?.interests,
           leadershipSkills: student?.leadershipSkills,
           leadershipTraits: student?.leadershipTraits,
           behaviors: student?.behaviors,
           location: student?.location?.toString(),
-          _links: student._links
+          links: student.links
         },
         teacherInput: {
           teacher: {
-            uri: student?.teacher?.teacher?._links?.self[0]?.href,
+            uri: LinkServiceService.selfLink(JSON.stringify(student?.teacher?.teacher)),
             comment: student?.teacher?.comment
           },
         },

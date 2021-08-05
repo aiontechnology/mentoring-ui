@@ -80,7 +80,8 @@ export class MetaDataService {
   loadActivityFocuses(): void {
     this.http.get<any>(this.acctivityFocusesUri)
       .subscribe(data => {
-        const activityFocuses = data?._embedded?.stringList ?? [];
+        console.log("Activity Focuses: ", data);
+        const activityFocuses = data?.content ?? [];
         this._activityFocuses.next(activityFocuses);
         this.logCache('activity focus', activityFocuses);
       });
@@ -89,7 +90,8 @@ export class MetaDataService {
   loadLeadershipTraits(): void {
     this.http.get<any>(this.leadershipTraitsUri)
       .subscribe(data => {
-        const leadershipTraits = data?._embedded?.stringList ?? [];
+        console.log("LeadershipTraits: ", data);
+        const leadershipTraits = data?.content ?? [];
         this._leadershipTraits.next(leadershipTraits);
         this.logCache('leadership trait', leadershipTraits);
       });
@@ -98,7 +100,8 @@ export class MetaDataService {
   loadLeadershipSkills(): void {
     this.http.get<any>(this.leadershipSkillsUri)
       .subscribe(data => {
-        const leadershipSkills = data?._embedded?.stringList ?? [];
+        console.log("LeadershipSkills: ", data);
+        const leadershipSkills = data?.content ?? [];
         this._leadershipSkills.next(leadershipSkills);
         this.logCache('leadership skill', leadershipSkills);
       });
@@ -107,7 +110,8 @@ export class MetaDataService {
   loadPhonograms(): void {
     this.http.get<any>(this.phonogramUri)
       .subscribe(data => {
-        const phonograms = data?._embedded?.stringList ?? [];
+        console.log("Phonograms: ", data);
+        const phonograms = data?.content ?? [];
         this._phonograms.next(phonograms);
         this.logCache('phonogram', phonograms);
       });
@@ -116,7 +120,8 @@ export class MetaDataService {
   loadBehaviors(): void {
     this.http.get<any>(this.behaviorUri)
       .subscribe(data => {
-        const behaviors = data?._embedded?.stringList ?? [];
+        console.log("Behaviors: ", data);
+        const behaviors = data?.content ?? [];
         this._behaviors.next(behaviors);
         this.logCache('behavior', behaviors);
       });
@@ -125,7 +130,8 @@ export class MetaDataService {
   loadTags(): void {
     this.http.get<any>(this.tagsUri)
       .subscribe(data => {
-        const tags = data?._embedded?.stringList ?? [];
+        console.log("Tags: ", data);
+        const tags = data?.content ?? [];
         this._tags.next(tags);
         this.logCache('tag', tags);
       });
@@ -134,7 +140,8 @@ export class MetaDataService {
   loadInterests(): void {
     this.http.get<any>(this.interestsUri)
       .subscribe(data => {
-        const interests = data?._embedded?.stringList ?? [];
+        console.log("Interests: ", data);
+        const interests = data?.content ?? [];
         this._interests.next(interests);
         this.logCache('interest', interests);
       });
@@ -146,7 +153,7 @@ export class MetaDataService {
       this.http.put<any>(this.interestsUri, newInterest)
         .subscribe(data => {
           console.log('Recieved interest list:', data);
-          const interests = data?._embedded?.stringList ?? [];
+          const interests = data?.content ?? [];
           this._interests.next(interests);
           resolver(interests);
         });

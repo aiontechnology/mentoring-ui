@@ -15,6 +15,7 @@
  */
 
 import { personLocations } from 'src/app/modules/shared/constants/locations';
+import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
 
 export class Mentor {
 
@@ -27,7 +28,7 @@ export class Mentor {
   mediaReleaseSigned: boolean;
   backgroundCheckCompleted: boolean;
   location: string;
-  _links: {
+  links: {
     self: [
       { href: string; }
     ]
@@ -43,16 +44,16 @@ export class Mentor {
     this.mediaReleaseSigned = json?.mediaReleaseSigned;
     this.backgroundCheckCompleted = json?.backgroundCheckCompleted;
     this.location = json?.location;
-    this._links = json?._links;
+    this.links = json?.links;
   }
 
   clearLinks(): Mentor {
-    this._links = undefined;
+    this.links = undefined;
     return this;
   }
 
   getSelfLink(): string {
-    return this._links?.self[0]?.href;
+    return LinkServiceService.selfLink(JSON.stringify(this));
   }
 
   get displayLocation(): string {

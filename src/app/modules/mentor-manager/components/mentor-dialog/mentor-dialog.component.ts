@@ -56,7 +56,7 @@ export class MentorDialogComponent {
     console.log('Saving mentor', newMentor);
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
-      newMentor._links = this.model.value.mentor._links;
+      newMentor.links = this.model.value.mentor.links;
       value = this.mentorService.updateMentor(newMentor);
     } else {
       value = this.mentorService.createMentor(this.schoolId, newMentor);
