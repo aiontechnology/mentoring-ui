@@ -82,7 +82,7 @@ export class GameDialogComponent implements OnInit {
 
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
-      newGame._links = this.model.value.game._links;
+      newGame.links = this.model.value.game.links;
       value = this.gameService.updateGame(newGame);
     } else {
       value = this.gameService.createGame(newGame);

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { JSONPath } from 'jsonpath-plus';
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
 import { Address } from '../address/address';
 
@@ -25,7 +26,7 @@ export class School implements LinksHolder<School> {
   phone: string;
   district: string;
   isPrivate: boolean;
-  _links: {
+  links: {
     self: [
       { href: string; }
     ]
@@ -38,16 +39,22 @@ export class School implements LinksHolder<School> {
     this.phone = json?.phone;
     this.district = json?.district;
     this.isPrivate = json?.isPrivate;
-    this._links = json?._links;
+    this.links = json?.links;
   }
 
   clearLinks(): School {
-    this._links = undefined;
+    this.links = undefined;
     return this;
   }
 
   getSelfLink(): string {
-    return this._links.self[0].href;
+    const href = JSONPath({ path: '$.links[?(@.rel == "self")].href', json: this });
+    if (Array.isArray(href) && href.length == 1 ) {
+      const self = href[0];
+      console.log("Self link:", self);
+      return self;
+    }
+    throw new Error("No self link found");
   }
 
 }

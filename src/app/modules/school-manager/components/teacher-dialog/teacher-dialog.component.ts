@@ -65,7 +65,7 @@ export class TeacherDialogComponent {
 
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
-      newTeacher._links = this.model.value.teacher._links;
+      newTeacher.links = this.model.value.teacher.links;
       value = this.teacherService.updateTeacher(newTeacher);
     } else {
       value = this.teacherService.createTeacher(this.schoolId, newTeacher);

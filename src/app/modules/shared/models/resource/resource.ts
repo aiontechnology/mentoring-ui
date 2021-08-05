@@ -16,6 +16,7 @@
 
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
 import { resourceLocations } from '../../constants/locations';
+import { LinkServiceService } from '../../services/link-service/link-service.service';
 
 export abstract class Resource implements LinksHolder<Resource> {
 
@@ -23,7 +24,7 @@ export abstract class Resource implements LinksHolder<Resource> {
   location: string;
   leadershipSkills: string[];
   leadershipTraits: string[];
-  _links: {
+  links: {
     self: [
       { href: string }
     ]
@@ -38,16 +39,16 @@ export abstract class Resource implements LinksHolder<Resource> {
     this.location = json?.location;
     this.leadershipSkills = json?.leadershipSkills;
     this.leadershipTraits = json?.leadershipTraits;
-    this._links = json?._links;
+    this.links = json?.links;
   }
 
   clearLinks(): Resource {
-    this._links = undefined;
+    this.links = undefined;
     return this;
   }
 
   getSelfLink(): string {
-    return this._links.self[0].href;
+    return LinkServiceService.selfLink(JSON.stringify(this));
   }
 
   get displayLocation(): string {
