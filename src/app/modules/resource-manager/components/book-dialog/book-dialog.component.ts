@@ -86,7 +86,7 @@ export class BookDialogComponent implements OnInit {
     console.log('Saving book', newBook);
     if (this.isUpdate) {
       console.log('Updating', this.model.value);
-      newBook._links = this.model.value.book._links;
+      newBook.links = this.model.value.book.links;
       value = this.bookService.updateBook(newBook);
     } else {
       value = this.bookService.createBook(newBook);
