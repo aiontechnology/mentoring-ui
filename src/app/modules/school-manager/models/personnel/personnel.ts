@@ -15,6 +15,7 @@
  */
 
 import { LinksHolder } from 'src/app/implementation/repository/links-holder';
+import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
 
 /**
  * Model class the represents a teacher.
@@ -27,7 +28,7 @@ export class Personnel implements LinksHolder<Personnel> {
     lastName: string;
     email: string;
     cellPhone: string;
-    _links: {
+    links: {
         self: [
             { href: string; }
         ]
@@ -39,16 +40,16 @@ export class Personnel implements LinksHolder<Personnel> {
         this.lastName = json?.lastName;
         this.email = (json?.email === '') ? null : json?.email;
         this.cellPhone = json?.cellPhone;
-        this._links = json?._links;
+        this.links = json?.links;
     }
 
     clearLinks(): Personnel {
-        this._links = undefined;
+        this.links = undefined;
         return this;
     }
 
     getSelfLink(): string {
-        return this._links.self[0].href;
+        return LinkServiceService.selfLink(JSON.stringify(this));
     }
 
 }

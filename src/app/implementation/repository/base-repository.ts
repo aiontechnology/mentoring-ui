@@ -20,7 +20,7 @@ import { log } from 'src/app/shared/logging-decorator';
 import { environment } from 'src/environments/environment';
 import { LinksHolder } from './links-holder';
 import { tap } from 'rxjs/operators';
-
+import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
 export abstract class BaseRepository<T extends LinksHolder<any>> {
 
   protected _items: Subject<T[]>;
@@ -59,10 +59,10 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
     console.log('Loading all', uri);
     this.http.get<any>(uri)
       .subscribe(data => {
+        console.log("Data", data);
         this.dataStore.items = [];
-        if (data?._embedded) {
-          const collectionKey = Object.keys(data?._embedded)[0];
-          for (const item of data?._embedded[collectionKey]) {
+        if (data?.content) {
+          for (const item of data.content) {
             const i = this.fromJSON(item);
             this.dataStore.items.push(i);
           }
@@ -88,7 +88,8 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   @log
   protected getById(id: string): T {
     for (const item of this.dataStore.items) {
-      if (item.getSelfLink().endsWith(id)) {
+      const i = JSON.stringify(item);
+      if (LinkServiceService.selfLink(i).endsWith(id)) {
         console.log('Found an item', item);
         return item;
       }

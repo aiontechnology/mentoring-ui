@@ -55,9 +55,8 @@ export abstract class SchoolResourceRepository<T extends LinksHolder<any>> {
   private getCollectionData(data: any): void {
     console.log('Received school resource data:', data);
     let resources = [];
-    if (data?._embedded) {
-      const collectionKey = Object.keys(data?._embedded)[0];
-      resources = this.fromJSON(data?._embedded[collectionKey]);
+    if (data?.content) {
+      resources = this.fromJSON(data?.content);
     }
     this.publishResources(resources);
   }
