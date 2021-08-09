@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import 'zone.js/dist/zone-error';
+import 'zone.js/plugins/zone-error';
 import { EnvironmentOptions } from './environment-options';
 
 const windowEnv = window as EnvironmentOptions;

@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+@use '~@angular/material' as mat;
 
 @import '~src/style/_variables.scss';
 
-$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+$app-theme: mat.define-light-theme($app-primary, $app-accent, $app-warn);
 
-@include mat-core($ms-typography);
-@include angular-material-theme($app-theme);
-@include angular-material-typography($ms-typography);
+@include mat.core($ms-typography);
+@include mat.all-component-themes($app-theme);
+@include mat.all-component-typographies($ms-typography);
