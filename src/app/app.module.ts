@@ -77,7 +77,7 @@ const routes: Routes = [
     BrowserModule,
     HttpClientModule,
     MaterialModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })
   ],
   providers: [
     {

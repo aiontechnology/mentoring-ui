@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { SchoolManagerComponent } from './school-manager.component';
 
@@ -22,7 +22,7 @@ describe('SchoolmanagerComponent', () => {
   let component: SchoolManagerComponent;
   let fixture: ComponentFixture<SchoolManagerComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [SchoolManagerComponent]
     })

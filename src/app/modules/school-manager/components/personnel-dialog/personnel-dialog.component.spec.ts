@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { PersonnelDialogComponent } from './personnel-dialog.component';
 
@@ -22,7 +22,7 @@ describe('PersonnelDialogComponent', () => {
   let component: PersonnelDialogComponent;
   let fixture: ComponentFixture<PersonnelDialogComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ PersonnelDialogComponent ]
     })
