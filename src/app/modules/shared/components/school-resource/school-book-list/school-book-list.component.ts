@@ -20,12 +20,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SchoolBookCacheService } from '../../../services/school-resource/school-book/school-book-cache.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
 import { SchoolBookDialogComponent } from '../school-book-dialog/school-book-dialog.component';
 import { Book } from 'src/app/modules/shared/models/book/book';
+import { SchoolBookCacheService } from 'src/app/modules/shared/services/school-resource/school-book/school-book-cache.service';
 
 @Component({
   selector: 'ms-school-book-list',

@@ -15,28 +15,28 @@
  */
 
 import { Injectable } from '@angular/core';
-import { SchoolBookRepositoryService } from './school-book-repository.service';
 import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager/datasource-manager';
-import { Book } from 'src/app/modules/shared/models/book/book';
+import { Game } from 'src/app/modules/shared/models/game/game';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { SchoolGameRepositoryService } from 'src/app/modules/shared/services/school-resource/school-game/school-game-repository.service';
 
 @Injectable()
-export class SchoolBookCacheService extends DatasourceManager<Book> {
+export class SchoolGameCacheService extends DatasourceManager<Game> {
 
   private isLoading$: BehaviorSubject<boolean>;
 
-  constructor(private schoolBookService: SchoolBookRepositoryService) {
+  constructor(private schoolGameService: SchoolGameRepositoryService) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
   }
 
   establishDatasource(schoolId: string): void {
-    this.schoolBookService.readAllSchoolBooks(schoolId);
-    this.dataSource.data$ = this.schoolBookService.schoolBooks
+    this.schoolGameService.readAllSchoolGames(schoolId);
+    this.dataSource.data$ = this.schoolGameService.schoolGames
       .pipe(tap(() => {
         this.isLoading$.next(false);
-        console.log('Creating new school book datasource');
+        console.log('Creating new school game datasource');
       })
     );
   }
