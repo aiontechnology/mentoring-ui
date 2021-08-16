@@ -15,10 +15,16 @@ limitations under the License.
 -->
 
 <mat-tab-group [(selectedIndex)]="tabGroupIndex" class="wrapper" (selectedIndexChange)="onIndexChange($event)">
-  <mat-tab label="Books">
+  <mat-tab *ngIf="userSession.isProgAdmin" label="School Books">
+    <ms-school-book-list class="tab-content" [schoolId]="userSession.schoolUUID"></ms-school-book-list>
+  </mat-tab>
+  <mat-tab *ngIf="userSession.isProgAdmin" label="School Games">
+    <ms-school-game-list class="tab-content" [schoolId]="userSession.schoolUUID"></ms-school-game-list>
+  </mat-tab>
+  <mat-tab label="Global Books">
     <ms-book-list class="tab-content"></ms-book-list>
   </mat-tab>
-  <mat-tab label="Games">
+  <mat-tab label="Global Games">
     <ms-game-list class="tab-content"></ms-game-list>
   </mat-tab>
 </mat-tab-group>
