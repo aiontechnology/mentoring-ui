@@ -18,6 +18,7 @@ import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { UserSessionService } from 'src/app/services/user-session.service';
 
 @Component({
   selector: 'ms-resource-list',
@@ -30,7 +31,8 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   tabGroupIndex: number;
 
-  constructor(private menuState: MenuStateService,
+  constructor(public userSession: UserSessionService,
+              private menuState: MenuStateService,
               private route: ActivatedRoute) { }
 
   ngOnInit(): void {
@@ -58,11 +60,18 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
     switch (index) {
       case 0:
         this.menuState.makeGroupInvisible('game');
+        this.menuState.makeGroupInvisible('school-game');
         break;
      case 1:
-        this.menuState.makeGroupInvisible('book');
+      this.menuState.makeGroupInvisible('book');
+      this.menuState.makeGroupInvisible('school-book');
         break;
-      }
+      case 2:
+      case 3:
+        this.menuState.makeGroupInvisible('school-book');
+        this.menuState.makeGroupInvisible('school-game');
+        break;
+    }
   }
 
 }

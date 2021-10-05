@@ -29,29 +29,56 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { MetaDataService } from './services/meta-data/meta-data.service';
 import { BookRepositoryService } from './services/resources/book-repository.service';
 import { GameRepositoryService } from './services/resources/game-repository.service';
+import { SchoolBookRepositoryService } from './services/school-resource/school-book/school-book-repository.service';
+import { SchoolGameRepositoryService } from './services/school-resource/school-game/school-game-repository.service';
+import { SchoolBookCacheService } from './services/school-resource/school-book/school-book-cache.service';
+import { SchoolGameCacheService } from './services/school-resource/school-game/school-game-cache.service';
+import { SchoolBookListComponent } from './components/school-resource/school-book-list/school-book-list.component';
+import { SchoolBookDialogComponent } from './components/school-resource/school-book-dialog/school-book-dialog.component';
+import { SchoolGameDialogComponent } from './components/school-resource/school-game-dialog/school-game-dialog.component';
+import { SchoolGameListComponent } from './components/school-resource/school-game-list/school-game-list.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
+    // Components
     ConfimationDialogComponent,
+    SchoolBookDialogComponent,
+    SchoolBookListComponent,
+    SchoolGameDialogComponent,
+    SchoolGameListComponent,
+    SelectionCountDisplayComponent,
+
+    // Directives
     OnlyNumberDirective,
     PhoneFormatDirective,
-    SelectionCountDisplayComponent
+  ],
+  exports: [
+    // Components
+    ConfimationDialogComponent,
+    SchoolBookDialogComponent,
+    SchoolBookListComponent,
+    SchoolGameDialogComponent,
+    SchoolGameListComponent,
+    SelectionCountDisplayComponent,
+
+    // Directives
+    OnlyNumberDirective,
+    PhoneFormatDirective,
+
+    // Modules
+    CommonModule,
+    FormsModule,
+    LayoutModule,
+    MaterialModule,
+    ReactiveFormsModule,
   ],
   imports: [
     CommonModule,
-    MaterialModule
-  ],
-  exports: [
-    ConfimationDialogComponent,
-    OnlyNumberDirective,
-    PhoneFormatDirective,
-    SelectionCountDisplayComponent,
-    CommonModule,
     FormsModule,
     MaterialModule,
-    ReactiveFormsModule,
-    LayoutModule
-  ]
+    RouterModule
+  ],
 })
 export class SharedModule {
 
@@ -59,12 +86,17 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
-        LoggingService,
-        SchoolCacheService,
-        SchoolRepositoryService,
+        // Services
         BookRepositoryService,
         GameRepositoryService,
-        MetaDataService
+        SchoolBookCacheService,
+        SchoolBookRepositoryService,
+        SchoolGameCacheService,
+        SchoolGameRepositoryService,
+        LoggingService,
+        MetaDataService,
+        SchoolCacheService,
+        SchoolRepositoryService,
       ]
     };
   }
