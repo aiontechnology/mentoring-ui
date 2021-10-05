@@ -17,10 +17,10 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GameRepositoryService } from 'src/app/modules/shared/services/resources/game-repository.service';
-import { SchoolGameRepositoryService } from '../../../services/school-resource/school-game/school-game-repository.service';
 import { Subscription } from 'rxjs';
 import { Game } from 'src/app/modules/shared/models/game/game';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { SchoolGameRepositoryService } from 'src/app/modules/shared/services/school-resource/school-game/school-game-repository.service';
 import { DropListData } from '../drop-list-data';
 
 @Component({
