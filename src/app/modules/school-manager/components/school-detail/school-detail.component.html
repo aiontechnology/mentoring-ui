@@ -80,10 +80,10 @@ limitations under the License.
   <mat-tab label="Other Personnel">
     <ms-personnel-list class="tab-content" [schoolId]="schoolId"></ms-personnel-list>
   </mat-tab>
-  <mat-tab label="Books">
+  <mat-tab label="Books" *ngIf="userSession.isSysAdmin">
     <ms-school-book-list class="tab-content" [schoolId]="schoolId"></ms-school-book-list>
   </mat-tab>
-  <mat-tab label="Games">
+  <mat-tab label="Games" *ngIf="userSession.isSysAdmin">
     <ms-school-game-list class="tab-content" [schoolId]="schoolId"></ms-school-game-list>
   </mat-tab>
 </mat-tab-group>
