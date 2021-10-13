@@ -17,13 +17,12 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
-import { SchoolBookRepositoryService } from '../../../services/school-resource/school-book/school-book-repository.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Book } from 'src/app/modules/shared/models/book/book';
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { DropListBooks } from '../drop-list-books';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import { Observable } from 'rxjs';
+import { SchoolBookRepositoryService } from 'src/app/modules/shared/services/school-resource/school-book/school-book-repository.service';
 
 @Component({
   selector: 'ms-school-book-dialog',

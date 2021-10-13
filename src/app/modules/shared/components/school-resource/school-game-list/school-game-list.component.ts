@@ -20,12 +20,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MenuStateService } from 'src/app/services/menu-state.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SchoolGameCacheService } from '../../../services/school-resource/school-game/school-game-cache.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
 import { SchoolGameDialogComponent } from '../school-game-dialog/school-game-dialog.component';
 import { Game } from 'src/app/modules/shared/models/game/game';
+import { SchoolGameCacheService } from 'src/app/modules/shared/services/school-resource/school-game/school-game-cache.service';
 
 @Component({
   selector: 'ms-school-game-list',
