@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,6 +32,7 @@ import { PersonnelRepositoryService } from './services/personnel/personnel-repos
 import { PersonnelDialogComponent } from './components/personnel-dialog/personnel-dialog.component';
 import { CanActivateSysAdmin } from 'src/app/services/can-activate-sys-admin';
 import { ProgramAdminDetailComponent } from './components/program-admin-detail/program-admin-detail.component';
+import { SchoolSessionDialogComponent } from './components/school-session-dialog/school-session-dialog.component';
 
 const routes: Routes = [
   {
@@ -59,7 +60,8 @@ const routes: Routes = [
     TeacherDialogComponent,
     TeacherListComponent,
     PersonnelDialogComponent,
-    ProgramAdminDetailComponent
+    ProgramAdminDetailComponent,
+    SchoolSessionDialogComponent
   ],
   imports: [
     RouterModule.forChild(routes),
