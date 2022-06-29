@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { BaseRepository } from 'src/app/implementation/repository/base-repository';
-import { log } from 'src/app/shared/logging-decorator';
-import { Student } from '../../models/student/student';
-import { StudentInbound } from '../../models/student-inbound/student-inbound';
-import { StudentOutbound } from '../../models/student-outbound/student-outbound';
-import { Observable } from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {BaseRepository} from 'src/app/implementation/repository/base-repository';
+import {log} from 'src/app/shared/logging-decorator';
+import {Student} from '../../models/student/student';
+import {StudentInbound} from '../../models/student-inbound/student-inbound';
+import {StudentOutbound} from '../../models/student-outbound/student-outbound';
+import {Observable} from 'rxjs';
 
 @Injectable()
 export class StudentRepositoryService extends BaseRepository<Student> {
@@ -39,12 +39,12 @@ export class StudentRepositoryService extends BaseRepository<Student> {
   }
 
   @log
-  readAllStudents(schoolId: string): void {
-    super.readAll(this.buildUri(schoolId));
+  readAllStudents(schoolId: string, sessionId: string): void {
+    super.readAll(this.buildUri(schoolId, null, sessionId));
   }
 
-  readOneStudent(schoolId: string, studentId: string): void {
-    return super.readOne(`${this.buildUri(schoolId)}/${studentId}`);
+  readOneStudent(schoolId: string, studentId: string, sessionId?: string): void {
+    return super.readOne(this.buildUri(schoolId, studentId, sessionId));
   }
 
   getStudentById(id: string): StudentInbound {
@@ -67,8 +67,16 @@ export class StudentRepositoryService extends BaseRepository<Student> {
     return new StudentOutbound();
   }
 
-  private buildUri(schoolId: string) {
-    return this.uriBase.replace('{id}', schoolId);
+  private buildUri(schoolId: string, studentId?: string, sessionId?: string) {
+    let uri = this.uriBase.replace('{id}', schoolId);
+    if (studentId !== undefined && studentId != null) {
+      uri += `/${studentId}`;
+    }
+    if (sessionId !== undefined && sessionId != null) {
+      uri += `?session=${sessionId}`;
+    }
+    console.log('Created student URI', uri);
+    return uri;
   }
 
 }

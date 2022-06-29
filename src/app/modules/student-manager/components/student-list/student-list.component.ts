@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -36,7 +36,9 @@ import { LoggingService } from 'src/app/modules/shared/services/logging-service/
 import { Observable, Subscription } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Student } from '../../models/student/student';
+import { SchoolSession } from 'src/app/modules/shared/models/school/schoolsession';
 import { grades } from 'src/app/modules/shared/constants/grades';
+import { SchoolSessionRepositoryService } from 'src/app/modules/shared/services/school-session/school-session-repository.service';
 
 @Component({
   selector: 'ms-student-list',
@@ -62,11 +64,15 @@ export class StudentListComponent implements OnInit, OnDestroy {
   schoolId: string;
   selectedSchool: School;
 
+  schoolSessions$: Observable<SchoolSession[]>;
+  selectedSession: SchoolSession;
+
   private paramSubscription$: Subscription;
 
   constructor(public userSession: UserSessionService,
               public studentCacheService: StudentCacheService,
               private schoolRepository: SchoolRepositoryService,
+              private schoolSessionRepository: SchoolSessionRepositoryService,
               private logger: LoggingService,
               private breakpointObserver: BreakpointObserver,
               private dialog: MatDialog,
@@ -78,7 +84,6 @@ export class StudentListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     if (this.userSession.isSysAdmin) {
       this.schoolRepository.readAllSchools();
       this.schools$ = this.schoolRepository.schools.pipe(
@@ -88,16 +93,15 @@ export class StudentListComponent implements OnInit, OnDestroy {
             this.schoolId = params.get('schoolId');
             if (this.schoolId !== null) {
               this.selectedSchool = this.schoolRepository.getSchoolById(this.schoolId);
-              this.loadStudentData();
+              this.loadSchoolSessions();
             }
           });
         })
       );
     } else if (this.userSession.isProgAdmin) {
       this.schoolId = this.userSession.schoolUUID;
-      this.loadStudentData();
+      this.loadSchoolSessions();
     }
-
   }
 
   ngOnDestroy(): void {
@@ -144,19 +148,42 @@ export class StudentListComponent implements OnInit, OnDestroy {
     return grades[student.grade].valueView;
   }
 
-  private loadStudentData(): void {
+  updateSession() {
+    console.log('Updating session');
+    this.loadStudentData();
+  }
 
-    this.studentCacheService.establishDatasource(this.schoolId);
+  private loadSchoolSessions(): void {
+    this.schoolSessionRepository.readAllSchoolSessions(this.schoolId);
+    this.schoolSessions$ = this.schoolSessionRepository.schoolSessions.pipe(
+      tap(ss => {
+        if (this.selectedSession === undefined || this.selectedSession == null) {
+          ss.forEach(schoolSession => {
+            if (schoolSession.isCurrent) {
+              this.selectedSession = schoolSession;
+              console.log('Set session', schoolSession);
+            }
+          });
+        }
+      }),
+      tap(() => {
+        this.loadStudentData();
+      })
+    );
+  }
+
+  private loadStudentData(): void {
+    this.studentCacheService.establishDatasource(this.schoolId, this.selectedSession?.id);
 
     console.log('Adding student list menus');
     StudentListMenuManager.addMenus(this.menuState,
-                                    this.router,
-                                    this.dialog,
-                                    this.snackBar,
-                                    (s: Student) => this.jumpToNewItem(s),
-                                    this.studentCacheService,
-                                    this.schoolId);
-
+      this.router,
+      this.dialog,
+      this.snackBar,
+      (s: Student) => this.jumpToNewItem(s),
+      this.studentCacheService,
+      this.schoolId,
+      this.selectedSession);
   }
 
   /**
@@ -180,7 +207,8 @@ class StudentListMenuManager {
                   snackBar: MatSnackBar,
                   postAction: (s: Student) => void,
                   studentCacheService: StudentCacheService,
-                  schoolId: string): void {
+                  schoolId: string,
+                  selectedSession: SchoolSession): void {
 
     console.log('Constructing MenuHandler');
     menuState.clear();
@@ -196,7 +224,7 @@ class StudentListMenuManager {
       dialog,
       snackBar,
       (s: Student) => postAction(s),
-      () => schoolId != null));
+      () => schoolId != null && selectedSession.isCurrent));
     menuState.add(new EditDialogCommand(
       'Edit Student',
       'student',
@@ -208,7 +236,7 @@ class StudentListMenuManager {
       snackBar,
       () => ({ schoolId, model: studentCacheService.getFirstSelection() }),
       (s: Student) => postAction(s),
-      () => studentCacheService.selection.selected.length === 1));
+      () => studentCacheService.selection.selected.length === 1 && selectedSession.isCurrent));
     menuState.add(new DeleteDialogCommand(
       'Delete Student',
       'student',
@@ -222,7 +250,7 @@ class StudentListMenuManager {
       null,
       () => studentCacheService.selectionCount,
       () => studentCacheService.removeSelected(),
-      () => studentCacheService.selection.selected.length > 0));
+      () => studentCacheService.selection.selected.length > 0 && selectedSession.isCurrent));
 
   }
 
