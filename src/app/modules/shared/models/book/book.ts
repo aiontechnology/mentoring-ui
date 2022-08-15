@@ -19,6 +19,7 @@ import {Resource} from '../resource/resource';
 export class Book extends Resource {
 
   title: string;
+  description: string;
   author: string;
   gradeLevel: number;
   interests: string[];
@@ -31,6 +32,7 @@ export class Book extends Resource {
     super(json);
     this.displayName = json?.title;
     this.title = json?.title;
+    this.description = json?.description;
     this.author = json?.author;
     this.gradeLevel = json?.gradeLevel;
     this.interests = json?.interests;
