@@ -112,6 +112,7 @@ export class BookDialogComponent implements OnInit {
     const formGroup: FormGroup = formBuilder.group({
       book,
       title: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', [Validators.maxLength(255)]],
       author: ['', [Validators.required, Validators.maxLength(30)]],
       gradeLevel: ['', Validators.required],
       location: ['OFFLINE', Validators.required],
@@ -126,6 +127,7 @@ export class BookDialogComponent implements OnInit {
       formGroup.setValue({
         book,
         title: book?.title,
+        description: book?.description,
         author: book?.author,
         gradeLevel: book?.gradeLevel?.toString(),
         location: book?.location?.toString(),
