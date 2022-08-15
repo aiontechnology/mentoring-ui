@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -47,7 +47,7 @@ export abstract class Student implements LinksHolder<Student> {
   abstract teacher: any;
   abstract mentor: any;
 
-  constructor(json?: any) {
+  protected constructor(json?: any) {
     this.id = json?.id;
     this.firstName = json?.firstName;
     this.lastName = json?.lastName;
@@ -84,6 +84,19 @@ export abstract class Student implements LinksHolder<Student> {
 
   get displayLocation(): string {
     return personLocations[this.location] ?? '';
+  }
+
+  /**
+   * Calculate the teacher's name.
+   */
+  get teacherName(): string {
+    const firstName = this.teacher?.teacher?.firstName ?? '';
+    const lastName = this.teacher?.teacher?.lastName ?? '';
+    let fullName = '';
+    fullName += firstName ?? '';
+    fullName += (firstName && lastName) ? ' ' : '';
+    fullName += lastName ?? '';
+    return fullName;
   }
 
 }

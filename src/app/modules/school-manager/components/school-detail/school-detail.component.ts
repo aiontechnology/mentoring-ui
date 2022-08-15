@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-import { Component, AfterViewInit, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { School } from 'src/app/modules/shared/models/school/school';
-import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/school-repository.service';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
-import { Subscription } from 'rxjs';
-import { UserSessionService } from 'src/app/services/user-session.service';
-import { NavigationService } from 'src/app/services/navigation.service';
+import {Component, AfterViewInit, OnDestroy} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {School} from 'src/app/modules/shared/models/school/school';
+import {SchoolRepositoryService} from 'src/app/modules/shared/services/school/school-repository.service';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
+import {Subscription} from 'rxjs';
+import {UserSessionService} from 'src/app/services/user-session.service';
+import {NavigationService} from 'src/app/services/navigation.service';
+import {SchoolSessionDialogComponent} from '../school-session-dialog/school-session-dialog.component';
 
 @Component({
   selector: 'ms-school-detail',
@@ -168,6 +169,15 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
       }
     }
   }
+
+  createNewSession() {
+    const dialogRef = this.dialog.open(SchoolSessionDialogComponent, {
+      width: '700px',
+      disableClose: true,
+      data: {schoolId: this.school.id}
+    }).afterClosed().subscribe(schoolSession => this.school.currentSession = schoolSession);
+  }
+
 }
 
 class SchoolDetailMenuManager {
@@ -187,8 +197,9 @@ class SchoolDetailMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ model: school }),
-      () => { },
+      () => ({model: school}),
+      () => {
+      },
       () => true));
     menuState.add(new DeleteDialogCommand(
       'Remove School',

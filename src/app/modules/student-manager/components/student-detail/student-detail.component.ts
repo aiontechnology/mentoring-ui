@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -32,6 +32,7 @@ import { Subscription } from 'rxjs';
 import { LpgRepositoryService } from '../../services/lpg/lpg-repository.service';
 import { UserSessionService } from 'src/app/services/user-session.service';
 import { NavigationService } from 'src/app/services/navigation.service';
+import { SchoolSessionCacheService } from 'src/app/modules/shared/services/school-session/school-session-cache.service';
 
 @Component({
   selector: 'ms-student-detail',
@@ -43,6 +44,8 @@ export class StudentDetailComponent implements OnDestroy {
   private subscriptions$: Subscription;
   private studentId: string;
   private schoolId: string;
+  private sessionId: string;
+  isHistoric: boolean;
 
   student: StudentInbound;
   studentMentor: StudentMentorInbound;
@@ -61,7 +64,8 @@ export class StudentDetailComponent implements OnDestroy {
               private snackBar: MatSnackBar,
               private router: Router,
               private userSession: UserSessionService,
-              private navigation: NavigationService) {
+              private navigation: NavigationService,
+              private schoolSessionCacheService: SchoolSessionCacheService) {
 
     this.subscriptions$ = new Subscription();
 
@@ -69,39 +73,47 @@ export class StudentDetailComponent implements OnDestroy {
     if (this.userSession.isSysAdmin) {
       subscription1$ = this.route.paramMap.subscribe(params => {
         this.schoolId = params.get('schoolId');
+        schoolSessionCacheService.establishDatasource(this.schoolId);
         this.studentId = params.get('studentId');
         this.navigation.routeParams = ['/studentmanager', 'schools', this.schoolId];
       });
     } else {
       this.schoolId = this.userSession.schoolUUID;
+      schoolSessionCacheService.establishDatasource(this.schoolId);
       this.navigation.routeParams = ['/studentmanager'];
       subscription1$ = this.route.paramMap.subscribe(params => {
         this.studentId = params.get('studentId');
       });
     }
 
-    this.studentService.readOneStudent(this.schoolId, this.studentId);
-    const subscription2$ = this.studentService.students.subscribe(() => {
+    const subscription2$ = this.route.queryParamMap.subscribe( params => {
+      this.sessionId = params.get('session');
+      this.isHistoric = params.get('historic').toLowerCase() === 'true';
 
-      this.menuState.removeGroup('student');
+      this.studentService.readOneStudent(this.schoolId, this.studentId, this.sessionId);
+      const subscription3$ = this.studentService.students.subscribe(student => {
 
-      this.student = this.studentService.getStudentById(this.studentId);
-      this.contacts = this.student?.contacts ? this.student?.contacts : [];
-      this.parents = this.contacts.filter(contact => !contact.isEmergencyContact);
-      this.emergencyContact = this.contacts.find(contact => contact.isEmergencyContact);
-      this.studentGrade = grades.find(grade => grade.value === this.student?.grade.toString())?.valueView;
-      this.studentMentor = this.student?.mentor;
+        this.menuState.removeGroup('student');
 
-      console.log('Adding student detail menus');
-      StudentDetailMenuManager.addMenus(this.student,
-                                        this.menuState,
-                                        this.router,
-                                        this.dialog,
-                                        this.snackBar,
-                                        this.studentService,
-                                        this.schoolId,
-                                        this.navigation.routeParams.join('/'));
+        this.student = student[0];
+        this.contacts = this.student?.contacts ? this.student?.contacts : [];
+        this.parents = this.contacts.filter(contact => !contact.isEmergencyContact);
+        this.emergencyContact = this.contacts.find(contact => contact.isEmergencyContact);
+        this.studentGrade = grades.find(grade => grade.value === this.student?.grade.toString())?.valueView;
+        this.studentMentor = this.student?.mentor;
 
+        console.log('Adding student detail menus');
+        StudentDetailMenuManager.addMenus(this.student,
+          this.menuState,
+          this.router,
+          this.dialog,
+          this.snackBar,
+          this.studentService,
+          this.schoolId,
+          this.navigation.routeParams.join('/'),
+          this.isHistoric);
+        this.subscriptions$.add(subscription3$);
+      });
     });
 
     this.subscriptions$.add(subscription1$);
@@ -159,7 +171,8 @@ class StudentDetailMenuManager {
                   snackBar: MatSnackBar,
                   studentService: StudentRepositoryService,
                   schoolId: string,
-                  routeTo: string) {
+                  routeTo: string,
+                  isHistoric: boolean) {
     menuState.add(new EditDialogCommand(
       'Edit Student',
       'student',
@@ -171,7 +184,7 @@ class StudentDetailMenuManager {
       snackBar,
       () => ({ schoolId, model: student }),
       () => {},
-      () => true
+      () => !isHistoric
     ));
     menuState.add(new DeleteDialogCommand(
       'Remove Student',
@@ -186,7 +199,7 @@ class StudentDetailMenuManager {
       routeTo,
       () => 1,
       () => studentService.deleteStudents([student]),
-      () => true
+      () => !isHistoric
     ));
   }
 
