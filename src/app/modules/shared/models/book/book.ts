@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Resource } from '../resource/resource';
+import {Resource} from '../resource/resource';
 
 export class Book extends Resource {
 
@@ -25,7 +25,7 @@ export class Book extends Resource {
   leadershipTraits: string[];
   phonograms: string[];
   behaviors: string[];
-  tag: string;
+  tags: string[];
 
   constructor(json?: any) {
     super(json);
@@ -37,7 +37,15 @@ export class Book extends Resource {
     this.leadershipTraits = json?.leadershipTraits;
     this.phonograms = json?.phonograms;
     this.behaviors = json?.behaviors;
-    this.tag = json?.tag;
+    if (json?.tag !== undefined && json?.tag !== null) {
+      this.tags = [json?.tag];
+    } else {
+      this.tags = json?.tags;
+    }
+  }
+
+  public get tag() {
+    return (this.tags.length > 0) ? this.tags[0] : '';
   }
 
 }

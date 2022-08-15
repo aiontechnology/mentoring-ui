@@ -1,11 +1,11 @@
-/**
- * Copyright 2021 Aion Technology LLC
+/*
+ * Copyright 2021-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { SchoolBookCacheService } from './school-book-cache.service';
 
-describe('SchoolBookCacheService', () => {
+xdescribe('SchoolBookCacheService', () => {
   let service: SchoolBookCacheService;
 
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('SchoolBookCacheService', () => {
     service = TestBed.inject(SchoolBookCacheService);
   });
 
-  it('should be created', () => {
+  xit('should be created', () => {
     expect(service).toBeTruthy();
   });
 });
