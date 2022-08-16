@@ -1,24 +1,27 @@
 <!--
-Copyright 2020 - 2021 Aion Technology LLC
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
+  ~ Copyright 2020-2022 Aion Technology LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <mat-tab-group class="wrapper">
   <mat-tab label="Student Details">
     <mat-card>
       <mat-card-header>
         <mat-card-title>{{ student?.firstName + ' ' + student?.lastName }}</mat-card-title>
+        <div class="notification mat-h5" *ngIf="isHistoric">
+          Historic Data (Read Only)
+        </div>
       </mat-card-header>
       <mat-card-content class="mat-elevation-z8">
         <div class="student-details">
@@ -68,7 +71,10 @@ limitations under the License.
   <mat-tab label="Teacher Input">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Teacher: {{ student?.teacher?.teacher?.firstName + ' ' + student?.teacher?.teacher?.lastName }}</mat-card-title>
+        <mat-card-title>Teacher: {{ student?.teacherName || "&lt;Not Set&gt;" }}</mat-card-title>
+        <div class="notification mat-h5" *ngIf="isHistoric">
+          Historic Data (Read Only)
+        </div>
       </mat-card-header>
       <mat-card-content class="mat-elevation-z8">
         <div class="teacher-input">
@@ -107,6 +113,9 @@ limitations under the License.
     <mat-card>
       <mat-card-header>
         <mat-card-title>Contacts</mat-card-title>
+        <div class="notification mat-h5" *ngIf="isHistoric">
+          Historic Data (Read Only)
+        </div>
       </mat-card-header>
       <mat-card-content class="mat-elevation-z8">
         <div class="contacts">
@@ -181,7 +190,7 @@ limitations under the License.
       </mat-card-content>
     </mat-card>
   </mat-tab>
-  <mat-tab label="LPG">
+  <mat-tab label="LPG" *ngIf="!isHistoric">
     <div class="spinner-container" *ngIf="lpgService.isLoading | async">
       <mat-progress-spinner color="primary" mode="indeterminate" [diameter]="100" [strokeWidth]="10"></mat-progress-spinner>
     </div>

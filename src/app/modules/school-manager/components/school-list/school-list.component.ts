@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { SchoolDialogComponent } from '../school-dialog/school-dialog.component';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { SchoolCacheService } from 'src/app/modules/shared/services/school/school-cache.service';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { School } from 'src/app/modules/shared/models/school/school';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatSort} from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {SchoolCacheService} from 'src/app/modules/shared/services/school/school-cache.service';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {School} from 'src/app/modules/shared/models/school/school';
 
 @Component({
   selector: 'ms-school-list',
@@ -67,11 +67,11 @@ export class SchoolListComponent implements OnInit, OnDestroy {
 
     console.log('Adding school list menus');
     SchoolListMenuManager.addMenus(this.menuState,
-                                   this.router,
-                                   this.dialog,
-                                   this.snackBar,
-                                   (s: School) => this.jumpToNewItem(s),
-                                   this.schoolCacheService);
+      this.router,
+      this.dialog,
+      this.snackBar,
+      (s: School) => this.jumpToNewItem(s),
+      this.schoolCacheService);
   }
 
   ngOnDestroy(): void {
@@ -131,7 +131,7 @@ class SchoolListMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ model: schoolCacheService.getFirstSelection() }),
+      () => ({model: schoolCacheService.getFirstSelection()}),
       (s: School) => postAction(s),
       () => schoolCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
