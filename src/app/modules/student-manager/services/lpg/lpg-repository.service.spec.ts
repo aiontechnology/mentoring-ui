@@ -18,7 +18,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { LpgRepositoryService } from './lpg-repository.service';
 
-describe('LpgRepositoryService', () => {
+xdescribe('LpgRepositoryService', () => {
   let service: LpgRepositoryService;
 
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('LpgRepositoryService', () => {
     service = TestBed.inject(LpgRepositoryService);
   });
 
-  it('should be created', () => {
+  xit('should be created', () => {
     expect(service).toBeTruthy();
   });
 });

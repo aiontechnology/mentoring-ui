@@ -1,29 +1,29 @@
 <!--
-Copyright 2020 - 2021 Aion Technology LLC
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
+  ~ Copyright 2020-2022 Aion Technology LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
 <h2 mat-dialog-title>Add new book</h2>
 <mat-dialog-content>
   <form [formGroup]="model">
-    <input type="hidden" formControlName="book" />
+    <input type="hidden" formControlName="book"/>
 
     <p class="legend mat-small">* Denotes a required field</p>
 
     <div class="dialog-container">
       <mat-form-field>
-        <input matInput placeholder="Title" formControlName="title" required />
+        <input matInput placeholder="Title" formControlName="title" required/>
         <mat-error *ngIf="model.hasError('required', 'title')">
           You must enter a title
         </mat-error>
@@ -35,7 +35,16 @@ limitations under the License.
 
     <div class="dialog-container">
       <mat-form-field>
-        <input matInput placeholder="Author" formControlName="author" required />
+        <input matInput placeholder="Description" formControlName="description"/>
+        <mat-error *ngIf="model.hasError('maxlength', 'description')">
+          A description can be a maximum of 255 characters in length
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="dialog-container">
+      <mat-form-field>
+        <input matInput placeholder="Author" formControlName="author" required/>
         <mat-error *ngIf="model.hasError('required', 'author')">
           You must enter an author
         </mat-error>
@@ -72,7 +81,8 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Leadership Traits</mat-label>
         <mat-select formControlName="leadershipTraits" multiple>
-          <mat-option *ngFor="let leadershipTrait of (leadershipTraitList$ | async)" [value]="leadershipTrait">{{leadershipTrait}}</mat-option>
+          <mat-option *ngFor="let leadershipTrait of (leadershipTraitList$ | async)"
+                      [value]="leadershipTrait">{{leadershipTrait}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -81,7 +91,8 @@ limitations under the License.
       <mat-form-field>
         <mat-label>Leadership Success Skills</mat-label>
         <mat-select formControlName="leadershipSkills" multiple>
-          <mat-option *ngFor="let leadershipSkill of (leadershipSkillList$ | async)" [value]="leadershipSkill">{{leadershipSkill}}</mat-option>
+          <mat-option *ngFor="let leadershipSkill of (leadershipSkillList$ | async)"
+                      [value]="leadershipSkill">{{leadershipSkill}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -124,9 +135,11 @@ limitations under the License.
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button color="primary" (click)="save()" [disabled]="!model.valid">
-    <mat-icon>save</mat-icon> Save
+    <mat-icon>save</mat-icon>
+    Save
   </button>
   <button mat-button color="primary" (click)="dismiss()">
-    <mat-icon>cancel</mat-icon> Cancel
+    <mat-icon>cancel</mat-icon>
+    Cancel
   </button>
 </mat-dialog-actions>
