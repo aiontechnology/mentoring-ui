@@ -107,6 +107,7 @@ export class GameDialogComponent implements OnInit {
     const formGroup: FormGroup = formBuilder.group({
       game,
       name: ['', [Validators.required, Validators.maxLength(100)]],
+      description: ['', Validators.maxLength(255)],
       gradeRange: formBuilder.group({
         grade1: ['', Validators.required],
         grade2: ['', Validators.required]
@@ -120,6 +121,7 @@ export class GameDialogComponent implements OnInit {
       formGroup.setValue({
         game,
         name: game?.name,
+        description: game?.description,
         gradeRange: {
           grade1: game?.grade1?.toString(),
           grade2: game?.grade2?.toString()
