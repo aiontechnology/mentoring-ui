@@ -19,6 +19,7 @@ import { Resource } from '../resource/resource';
 export class Game extends Resource {
 
   name: string;
+  description: string;
   grade1: number;
   grade2: number;
   activityFocuses: string[];
@@ -27,6 +28,7 @@ export class Game extends Resource {
     super(json);
     this.displayName = json?.name;
     this.name = json?.name;
+    this.description = json?.description;
     if (json.gradeRange) {
       this.grade1 = json?.gradeRange?.grade1;
       this.grade2 = json?.gradeRange?.grade2;
