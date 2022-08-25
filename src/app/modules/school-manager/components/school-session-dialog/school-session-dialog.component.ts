@@ -15,7 +15,7 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {SchoolSession} from 'src/app/modules/shared/models/school/schoolsession';
 import {SchoolSessionRepositoryService} from 'src/app/modules/shared/services/school-session/school-session-repository.service';
@@ -27,21 +27,21 @@ import {SchoolSessionRepositoryService} from 'src/app/modules/shared/services/sc
 })
 export class SchoolSessionDialogComponent {
 
-  model: FormGroup;
+  model: UntypedFormGroup;
   isUpdate = false;
 
   schoolId: string;
 
   constructor(private dialogRef: MatDialogRef<SchoolSessionDialogComponent>,
               private schoolSessionService: SchoolSessionRepositoryService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.model = this.createModel(formBuilder);
     this.schoolId = data?.schoolId;
   }
 
-  private createModel(formBuilder: FormBuilder): FormGroup {
-    const formGroup: FormGroup = formBuilder.group({
+  private createModel(formBuilder: UntypedFormBuilder): UntypedFormGroup {
+    const formGroup: UntypedFormGroup = formBuilder.group({
       label: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', Validators.required]

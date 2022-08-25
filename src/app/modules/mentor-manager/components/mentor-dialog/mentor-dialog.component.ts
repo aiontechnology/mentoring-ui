@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { Mentor } from '../../models/mentor/mentor';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MentorRepositoryService } from '../../services/mentor/mentor-repository.service';
@@ -29,7 +29,7 @@ import { personLocations } from 'src/app/modules/shared/constants/locations';
 })
 export class MentorDialogComponent {
 
-  model: FormGroup;
+  model: UntypedFormGroup;
   isUpdate = false;
 
   schoolId: string;
@@ -38,7 +38,7 @@ export class MentorDialogComponent {
   constructor(private dialogRef: MatDialogRef<MentorDialogComponent>,
               private mentorService: MentorRepositoryService,
               private logger: LoggingService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
     this.isUpdate = this.determineUpdate(data);
@@ -81,10 +81,10 @@ export class MentorDialogComponent {
     return formData.model !== undefined && formData.model !== null;
   }
 
-  private createModel(formBuilder: FormBuilder, mentor: Mentor): FormGroup {
+  private createModel(formBuilder: UntypedFormBuilder, mentor: Mentor): UntypedFormGroup {
 
     console.log('Mentor', mentor);
-    const formGroup: FormGroup = formBuilder.group({
+    const formGroup: UntypedFormGroup = formBuilder.group({
       mentor,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],

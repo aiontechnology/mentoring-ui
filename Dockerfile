@@ -1,5 +1,5 @@
-# 
-# Copyright 2020 Aion Technology LLC
+#
+# Copyright 2020-2022 Aion Technology LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # stage 1
-FROM node:16.2.0-alpine3.13 as build-stage
+FROM node:14.20.0-alpine3.16 as build-stage
 
 WORKDIR /app
 COPY package.json .

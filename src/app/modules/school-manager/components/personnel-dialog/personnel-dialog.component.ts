@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PersonnelRepositoryService } from '../../services/personnel/personnel-repository.service';
 import { Personnel } from '../../models/personnel/personnel';
@@ -27,14 +27,14 @@ import { Personnel } from '../../models/personnel/personnel';
 })
 export class PersonnelDialogComponent {
 
-  model: FormGroup;
+  model: UntypedFormGroup;
   isUpdate = false;
 
   schoolId: string;
 
   constructor(private dialogRef: MatDialogRef<PersonnelDialogComponent>,
               private personnelService: PersonnelRepositoryService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -71,7 +71,7 @@ export class PersonnelDialogComponent {
     this.dialogRef.close(null);
   }
 
-  private createModel(formBuilder: FormBuilder, personnel: Personnel): FormGroup {
+  private createModel(formBuilder: UntypedFormBuilder, personnel: Personnel): UntypedFormGroup {
     const formGroup = formBuilder.group({
       personnel,
       type: ['', Validators.required],

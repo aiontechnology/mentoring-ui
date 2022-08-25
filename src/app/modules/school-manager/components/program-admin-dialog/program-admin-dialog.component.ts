@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProgramAdmin } from '../../models/program-admin/program-admin';
 import { ProgramAdminRepositoryService } from '../../services/program-admin/program-admin-repository.service';
@@ -27,14 +27,14 @@ import { ProgramAdminRepositoryService } from '../../services/program-admin/prog
 })
 export class ProgramAdminDialogComponent {
 
-  model: FormGroup;
+  model: UntypedFormGroup;
   isUpdate = false;
 
   schoolId: string;
 
   constructor(private dialogRef: MatDialogRef<ProgramAdminDialogComponent>,
               private programAdminService: ProgramAdminRepositoryService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -64,7 +64,7 @@ export class ProgramAdminDialogComponent {
     this.dialogRef.close(null);
   }
 
-  private createModel(formBuilder: FormBuilder, programAdmin: ProgramAdmin): FormGroup {
+  private createModel(formBuilder: UntypedFormBuilder, programAdmin: ProgramAdmin): UntypedFormGroup {
     const formGroup = formBuilder.group({
       programAdmin,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],

@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { Grade } from 'src/app/modules/shared/types/grade';
@@ -29,7 +29,7 @@ import { TeacherRepositoryService } from '../../services/teacher/teacher-reposit
 })
 export class TeacherDialogComponent {
 
-  model: FormGroup;
+  model: UntypedFormGroup;
   isUpdate = false;
 
   schoolId: string;
@@ -44,7 +44,7 @@ export class TeacherDialogComponent {
 
   constructor(private dialogRef: MatDialogRef<TeacherDialogComponent>,
               private teacherService: TeacherRepositoryService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) data: any) {
 
     this.isUpdate = this.determineUpdate(data);
@@ -85,7 +85,7 @@ export class TeacherDialogComponent {
     return this.studentGrade !== undefined;
   }
 
-  private createModel(formBuilder: FormBuilder, teacher: Teacher): FormGroup {
+  private createModel(formBuilder: UntypedFormBuilder, teacher: Teacher): UntypedFormGroup {
     console.log('Creating teacher model', teacher);
     const formGroup = formBuilder.group({
       teacher,

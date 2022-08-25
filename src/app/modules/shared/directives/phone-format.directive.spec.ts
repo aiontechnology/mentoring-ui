@@ -18,13 +18,13 @@ import { TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { PhoneFormatDirective } from './phone-format.directive';
-import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
 
 @Component({
   template: `<input msPhoneFormat [formControl]="testControl">`
 })
 class TestComponent {
-  testControl = new FormControl('');
+  testControl = new UntypedFormControl('');
 }
 
 describe('PhoneFormatDirective', () => {

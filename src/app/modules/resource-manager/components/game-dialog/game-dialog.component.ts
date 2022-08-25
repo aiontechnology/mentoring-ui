@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GameRepositoryService } from 'src/app/modules/shared/services/resources/game-repository.service';
@@ -32,7 +32,7 @@ import { resourceLocations } from 'src/app/modules/shared/constants/locations';
 })
 export class GameDialogComponent implements OnInit {
 
-  model: FormGroup;
+  model: UntypedFormGroup;
   isUpdate = false;
 
   grades: Grade[] = resourceGrades;
@@ -53,7 +53,7 @@ export class GameDialogComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<GameDialogComponent>,
               private gameService: GameRepositoryService,
               private metaDataService: MetaDataService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
     this.isUpdate = this.determineUpdate(data);
@@ -103,8 +103,8 @@ export class GameDialogComponent implements OnInit {
     return 0;
   }
 
-  private createModel(formBuilder: FormBuilder, game: Game): FormGroup {
-    const formGroup: FormGroup = formBuilder.group({
+  private createModel(formBuilder: UntypedFormBuilder, game: Game): UntypedFormGroup {
+    const formGroup: UntypedFormGroup = formBuilder.group({
       game,
       name: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', Validators.maxLength(255)],

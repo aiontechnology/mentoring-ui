@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { School } from 'src/app/modules/shared/models/school/school';
 import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/school-repository.service';
@@ -27,7 +27,7 @@ import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/
 })
 export class SchoolDialogComponent {
 
-  model: FormGroup;
+  model: UntypedFormGroup;
   isUpdate = false;
 
   states = [
@@ -101,7 +101,7 @@ export class SchoolDialogComponent {
    */
   constructor(private dialogRef: MatDialogRef<SchoolDialogComponent>,
               private schoolService: SchoolRepositoryService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
@@ -141,8 +141,8 @@ export class SchoolDialogComponent {
    * @param formBuilder A builder used to setup the form model.
    * @param school The School being edited (if any).
    */
-  private createModel(formBuilder: FormBuilder, school: School): FormGroup {
-    const formGroup: FormGroup = formBuilder.group({
+  private createModel(formBuilder: UntypedFormBuilder, school: School): UntypedFormGroup {
+    const formGroup: UntypedFormGroup = formBuilder.group({
       school,
       name: ['', [Validators.required, Validators.maxLength(100)]],
       address: formBuilder.group({

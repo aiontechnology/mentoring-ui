@@ -16,7 +16,7 @@
 
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Book } from 'src/app/modules/shared/models/book/book';
 import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
 import { Grade } from 'src/app/modules/shared/types/grade';
@@ -32,7 +32,7 @@ import { resourceLocations } from 'src/app/modules/shared/constants/locations';
 })
 export class BookDialogComponent implements OnInit {
 
-  model: FormGroup;
+  model: UntypedFormGroup;
   isUpdate = false;
 
   grades: Grade[] = resourceGrades;
@@ -47,7 +47,7 @@ export class BookDialogComponent implements OnInit {
   constructor(private dialogRef: MatDialogRef<BookDialogComponent>,
               private bookService: BookRepositoryService,
               private metaDataService: MetaDataService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
     this.isUpdate = this.determineUpdate(data);
@@ -107,9 +107,9 @@ export class BookDialogComponent implements OnInit {
     return 0;
   }
 
-  private createModel(formBuilder: FormBuilder, book: Book): FormGroup {
+  private createModel(formBuilder: UntypedFormBuilder, book: Book): UntypedFormGroup {
     console.log('Book', book);
-    const formGroup: FormGroup = formBuilder.group({
+    const formGroup: UntypedFormGroup = formBuilder.group({
       book,
       title: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', [Validators.maxLength(255)]],

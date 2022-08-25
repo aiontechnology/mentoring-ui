@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, ValidatorFn, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, ValidatorFn, UntypedFormArray } from '@angular/forms';
 import { Grade } from 'src/app/modules/shared/types/grade';
 import { grades } from 'src/app/modules/shared/constants/grades';
 import { Student } from '../../models/student/student';
@@ -50,10 +50,10 @@ import { LinkServiceService } from 'src/app/modules/shared/services/link-service
 })
 export class StudentDialogComponent implements OnInit {
 
-  model: FormGroup;
-  studentDetails: FormGroup;
-  teacherInput: FormGroup;
-  contacts: FormGroup;
+  model: UntypedFormGroup;
+  studentDetails: UntypedFormGroup;
+  teacherInput: UntypedFormGroup;
+  contacts: UntypedFormGroup;
 
   isUpdate = false;
 
@@ -81,7 +81,7 @@ export class StudentDialogComponent implements OnInit {
               private teacherService: TeacherRepositoryService,
               private mentorService: MentorRepositoryService,
               private logger: LoggingService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               private metaDataService: MetaDataService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
@@ -90,9 +90,9 @@ export class StudentDialogComponent implements OnInit {
     this.isUpdate = this.determineUpdate(data);
 
     this.model = this.createModel(formBuilder, data?.model);
-    this.studentDetails = this.model.get('studentDetails') as FormGroup;
-    this.teacherInput = this.model.get('teacherInput') as FormGroup;
-    this.contacts = this.model.get('contacts') as FormGroup;
+    this.studentDetails = this.model.get('studentDetails') as UntypedFormGroup;
+    this.teacherInput = this.model.get('teacherInput') as UntypedFormGroup;
+    this.contacts = this.model.get('contacts') as UntypedFormGroup;
 
     this.schoolId = data?.schoolId;
     this.locations = personLocations;
@@ -200,10 +200,10 @@ export class StudentDialogComponent implements OnInit {
     return formData.model !== undefined && formData.model !== null;
   }
 
-  private createModel(formBuilder: FormBuilder, student: StudentInbound): FormGroup {
+  private createModel(formBuilder: UntypedFormBuilder, student: StudentInbound): UntypedFormGroup {
 
     console.log('Student', student);
-    const formGroup: FormGroup = formBuilder.group({
+    const formGroup: UntypedFormGroup = formBuilder.group({
       studentDetails: formBuilder.group({
         student,
         firstName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -284,16 +284,16 @@ export class StudentDialogComponent implements OnInit {
       });
 
       if (emergencyContact.length) {
-        const contacts = formGroup.get('contacts') as FormGroup;
+        const contacts = formGroup.get('contacts') as UntypedFormGroup;
         contacts.addControl('emergencyContact', this.createContactForm(true));
-        (formGroup.get('contacts.emergencyContact') as FormGroup).setValue(emergencyContact[0]);
+        (formGroup.get('contacts.emergencyContact') as UntypedFormGroup).setValue(emergencyContact[0]);
       }
 
       // Instantiate parent/guardian and emergencyContact in form.
-      const parentsFormArray = formGroup.get('contacts.parents') as FormArray;
+      const parentsFormArray = formGroup.get('contacts.parents') as UntypedFormArray;
       parents.forEach((contact, index) => {
         parentsFormArray.push(this.createContactForm(false));
-        (parentsFormArray.at(index) as FormGroup).setValue(contact);
+        (parentsFormArray.at(index) as UntypedFormGroup).setValue(contact);
       });
 
     }
@@ -309,11 +309,11 @@ export class StudentDialogComponent implements OnInit {
   }
 
   get parents() {
-    return this.contacts.get('parents') as FormArray;
+    return this.contacts.get('parents') as UntypedFormArray;
   }
 
   get emergencyContact() {
-    return this.contacts.get('emergencyContact') as FormGroup;
+    return this.contacts.get('emergencyContact') as UntypedFormGroup;
   }
 
   contactsIsEmpty(): boolean {
@@ -348,7 +348,7 @@ export class StudentDialogComponent implements OnInit {
    * Reset #teacher form value when grade is changed.
    */
   onGradeSelected(): void {
-    const teacher = this.teacherInput.get('teacher') as FormGroup;
+    const teacher = this.teacherInput.get('teacher') as UntypedFormGroup;
     teacher.patchValue({ uri: '' });
   }
 
@@ -360,7 +360,7 @@ export class StudentDialogComponent implements OnInit {
     return index === 2;
   }
 
-  private createContactForm(isEmergencyContact?: boolean): FormGroup {
+  private createContactForm(isEmergencyContact?: boolean): UntypedFormGroup {
 
     return this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -379,7 +379,7 @@ export class StudentDialogComponent implements OnInit {
 
   private noContactMethodValidator(): ValidatorFn {
 
-    return (contact: FormGroup): {[key: string]: any} | null => {
+    return (contact: UntypedFormGroup): {[key: string]: any} | null => {
 
       const errorMsg = 'You must provide at least one contact method.';
 
@@ -437,7 +437,7 @@ export class StudentDialogComponent implements OnInit {
     this.loadAllTeachers();
 
     const teacher = new Teacher(t);
-    const teacherInput = this.teacherInput.get('teacher') as FormGroup;
+    const teacherInput = this.teacherInput.get('teacher') as UntypedFormGroup;
     teacherInput.patchValue({ uri: teacher.getSelfLink() });
 
   }
@@ -455,7 +455,7 @@ export class StudentDialogComponent implements OnInit {
     this.loadAllMentors();
 
     const mentor = new Mentor(m);
-    const mentorInput = this.studentDetails.get('mentor') as FormGroup;
+    const mentorInput = this.studentDetails.get('mentor') as UntypedFormGroup;
     mentorInput.patchValue({ uri: mentor.getSelfLink() });
 
   }

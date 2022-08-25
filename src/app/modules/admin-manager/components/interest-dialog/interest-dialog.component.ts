@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { AbstractControl, FormGroup, FormBuilder, ValidatorFn } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup, UntypedFormBuilder, ValidatorFn } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { InterestOutbound } from 'src/app/modules/shared/models/meta-data/interests/interest-outbound';
@@ -33,14 +33,14 @@ export class InterestDialogComponent implements OnInit, OnDestroy {
   private updateValue: string; // 'CREATE_ME' for new interest, and 'old_value' for edited interest.
 
   dialogTitle: string;
-  model: FormGroup;
+  model: UntypedFormGroup;
 
   interestSubscription$: Subscription;
   interests: string[];
 
   constructor(private dialogRef: MatDialogRef<InterestDialogComponent>,
               private metaDataService: MetaDataService,
-              private formBuilder: FormBuilder,
+              private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
 
     const updateInterest = data?.model ? data.model.name : '';
@@ -64,7 +64,7 @@ export class InterestDialogComponent implements OnInit, OnDestroy {
     this.interestSubscription$.unsubscribe();
   }
 
-  createModel(formBuilder: FormBuilder, interest: string): void {
+  createModel(formBuilder: UntypedFormBuilder, interest: string): void {
     this.model = formBuilder.group({
       name: [interest, this.duplicateInterestValidator()]
     });
