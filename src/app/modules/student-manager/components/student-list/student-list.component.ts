@@ -14,39 +14,79 @@
  * limitations under the License.
  */
 
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { UserSessionService } from 'src/app/services/user-session.service';
-import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/school-repository.service';
-import { School } from 'src/app/modules/shared/models/school/school';
-import { StudentCacheService } from '../../services/student/student-cache.service';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { StudentDialogComponent } from '../student-dialog/student-dialog.component';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Contact } from '../../models/contact/contact';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
-import { Observable, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Student } from '../../models/student/student';
-import { SchoolSession } from 'src/app/modules/shared/models/school/schoolsession';
-import { grades } from 'src/app/modules/shared/constants/grades';
-import { SchoolSessionRepositoryService } from 'src/app/modules/shared/services/school-session/school-session-repository.service';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {UserSessionService} from 'src/app/services/user-session.service';
+import {SchoolRepositoryService} from 'src/app/modules/shared/services/school/school-repository.service';
+import {School} from 'src/app/modules/shared/models/school/school';
+import {StudentCacheService} from '../../services/student/student-cache.service';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {StudentDialogComponent} from '../student-dialog/student-dialog.component';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {Contact} from '../../models/contact/contact';
+import {MatSort} from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {Subscription} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {Student} from '../../models/student/student';
+import {SchoolSession} from 'src/app/modules/shared/models/school/schoolsession';
+import {grades} from 'src/app/modules/shared/constants/grades';
+import {SchoolSessionRepositoryService} from 'src/app/modules/shared/services/school-session/school-session-repository.service';
+import {
+  SCHOOL_DATA_SOURCE,
+  SCHOOL_SESSION_DATA_SOURCE,
+  SCHOOL_SESSION_URI_SUPPLIER,
+  STUDENT_DATA_SOURCE,
+  STUDENT_URI_SUPPLIER
+} from '../../../shared/shared.module';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {RouteWatchingService} from '../../../../services/route-watching.service';
 
 @Component({
   selector: 'ms-student-list',
   templateUrl: './student-list.component.html',
   styleUrls: ['./student-list.component.scss'],
-  providers: [StudentCacheService]
+  providers: [RouteWatchingService]
 })
 export class StudentListComponent implements OnInit, OnDestroy {
+
+  schools$: Promise<School[]>;
+  selectedSchool: School;
+  schoolSessions$: Promise<SchoolSession[]>;
+  selectedSession: SchoolSession;
+
+  /**
+   * Action taken after a dialog is closed: Move
+   * to page that displayes the new item.
+   * @param newItem Added/edited item that helps the
+   * cache service determine which page to jump to.
+   */
+  private paramSubscription$: Subscription;
+
+  constructor(public studentCacheService: StudentCacheService,
+              public userSession: UserSessionService,
+              @Inject(SCHOOL_DATA_SOURCE) private schoolDataSource: DataSource<School>,
+              @Inject(SCHOOL_SESSION_DATA_SOURCE) private schoolSessionDataSource: DataSource<SchoolSession>,
+              @Inject(SCHOOL_SESSION_URI_SUPPLIER) private schoolSessionUriSupplier: UriSupplier,
+              @Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<Student>,
+              @Inject(STUDENT_URI_SUPPLIER) private studentUriSupplier: UriSupplier,
+              private schoolRepository: SchoolRepositoryService,
+              private schoolSessionRepository: SchoolSessionRepositoryService,
+              private breakpointObserver: BreakpointObserver,
+              private dialog: MatDialog,
+              private menuState: MenuStateService,
+              private snackBar: MatSnackBar,
+              private route: ActivatedRoute,
+              private router: Router,
+              private routeWatcher: RouteWatchingService) {
+  }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
     if (sort !== undefined) {
@@ -60,62 +100,32 @@ export class StudentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  schools$: Observable<School[]>;
-  schoolId: string;
-  selectedSchool: School;
-
-  schoolSessions$: Observable<SchoolSession[]>;
-  selectedSession: SchoolSession;
-
-  private paramSubscription$: Subscription;
-
-  constructor(public userSession: UserSessionService,
-              public studentCacheService: StudentCacheService,
-              private schoolRepository: SchoolRepositoryService,
-              private schoolSessionRepository: SchoolSessionRepositoryService,
-              private logger: LoggingService,
-              private breakpointObserver: BreakpointObserver,
-              private dialog: MatDialog,
-              private menuState: MenuStateService,
-              private router: Router,
-              private snackBar: MatSnackBar,
-              private route: ActivatedRoute) {
-    console.log('student list constructed');
+  get isSchoolSelected(): boolean {
+    return (this.routeWatcher.schoolId != null) || this.userSession.isProgAdmin;
   }
 
   ngOnInit(): void {
-    if (this.userSession.isSysAdmin) {
-      this.schoolRepository.readAllSchools();
-      this.schools$ = this.schoolRepository.schools.pipe(
-        tap(s => {
-          this.logger.log('Read schools', s);
-          this.paramSubscription$ = this.route.paramMap.subscribe(params => {
-            this.schoolId = params.get('schoolId');
-            if (this.schoolId !== null) {
-              this.selectedSchool = this.schoolRepository.getSchoolById(this.schoolId);
+    this.routeWatcher.open(this.route)
+      .pipe(
+        tap(() => this.schools$ = this.schoolDataSource.allValues())
+      )
+      .subscribe(params => {
+        const schoolId = params.get(RouteWatchingService.SCHOOL_ID);
+        this.routeWatcher.school
+          .then(school => {
+            if (school) {
+              this.selectedSchool = school ? school : null;
               this.loadSchoolSessions();
+              this.loadStudentData();
             }
+            return school;
           });
-        })
-      );
-    } else if (this.userSession.isProgAdmin) {
-      this.schoolId = this.userSession.schoolUUID;
-      this.loadSchoolSessions();
-    }
+      });
   }
 
   ngOnDestroy(): void {
     this.menuState.clear();
     this.paramSubscription$?.unsubscribe();
-  }
-
-  get isSchoolSelected(): boolean {
-    return (this.schoolId != null) || this.userSession.isProgAdmin;
-  }
-
-  setSchool(id$: string) {
-    this.schoolId = id$;
-    this.loadStudentData();
   }
 
   displayedColumns(): string[] {
@@ -149,58 +159,49 @@ export class StudentListComponent implements OnInit, OnDestroy {
   }
 
   updateSession() {
-    console.log('Updating session');
     this.loadStudentData();
   }
 
-  private loadSchoolSessions(): void {
-    this.schoolSessionRepository.readAllSchoolSessions(this.schoolId);
-    this.schoolSessions$ = this.schoolSessionRepository.schoolSessions.pipe(
-      tap(ss => {
-        if (this.selectedSession === undefined || this.selectedSession == null) {
-          ss.forEach(schoolSession => {
-            if (schoolSession.isCurrent) {
-              this.selectedSession = schoolSession;
-              console.log('Set session', schoolSession);
-            }
-          });
-        }
-      }),
-      tap(() => {
-        this.loadStudentData();
-      })
-    );
-  }
-
-  private loadStudentData(): void {
-    this.studentCacheService.establishDatasource(this.schoolId, this.selectedSession?.id);
-
-    console.log('Adding student list menus');
-    StudentListMenuManager.addMenus(this.menuState,
-      this.router,
-      this.dialog,
-      this.snackBar,
-      (s: Student) => this.jumpToNewItem(s),
-      this.studentCacheService,
-      this.schoolId,
-      this.selectedSession);
-  }
-
-  /**
-   * Action taken after a dialog is closed: Move
-   * to page that displayes the new item.
-   * @param newItem Added/edited item that helps the
-   * cache service determine which page to jump to.
-   */
-  private jumpToNewItem(newItem: Student): void {
+  jumpToNewItem(newItem: Student): void {
     this.studentCacheService.clearSelection();
     this.studentCacheService.jumpToItem(newItem);
+  }
+
+  private loadSchoolSessions(): void {
+    this.schoolSessions$ = this.schoolSessionDataSource.allValues()
+      .then(schoolSessions => {
+        if (!this.selectedSession) {
+          schoolSessions.forEach(schoolSession => {
+            if (schoolSession.isCurrent) {
+              this.selectedSession = schoolSession;
+            }
+          });
+          return schoolSessions;
+        }
+      });
+  }
+
+  private loadStudentData(): Promise<void> {
+    if (this.selectedSession?.id) {
+      this.studentUriSupplier.withParameter('session', this.selectedSession?.id);
+    }
+    this.studentDataSource.reset();
+    return this.studentCacheService.loadData()
+      .then(() => {
+        StudentListMenuManager.addMenus(this.menuState,
+          this.router,
+          this.dialog,
+          this.snackBar,
+          (s: Student) => this.jumpToNewItem(s),
+          this.studentCacheService,
+          this.routeWatcher.schoolId,
+          this.selectedSession);
+      });
   }
 
 }
 
 class StudentListMenuManager {
-
   static addMenus(menuState: MenuStateService,
                   router: Router,
                   dialog: MatDialog,
@@ -209,8 +210,6 @@ class StudentListMenuManager {
                   studentCacheService: StudentCacheService,
                   schoolId: string,
                   selectedSession: SchoolSession): void {
-
-    console.log('Constructing MenuHandler');
     menuState.clear();
 
     menuState.add(new NewDialogCommand(
@@ -219,7 +218,7 @@ class StudentListMenuManager {
       StudentDialogComponent,
       'Student added',
       ['/', 'studentmanager', 'schools', schoolId, 'students'],
-      { schoolId },
+      {schoolId},
       router,
       dialog,
       snackBar,
@@ -234,7 +233,7 @@ class StudentListMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ schoolId, model: studentCacheService.getFirstSelection() }),
+      () => ({schoolId, model: studentCacheService.getFirstSelection()}),
       (s: Student) => postAction(s),
       () => studentCacheService.selection.selected.length === 1 && selectedSession.isCurrent));
     menuState.add(new DeleteDialogCommand(
@@ -251,7 +250,6 @@ class StudentListMenuManager {
       () => studentCacheService.selectionCount,
       () => studentCacheService.removeSelected(),
       () => studentCacheService.selection.selected.length > 0 && selectedSession.isCurrent));
-
   }
 
 }

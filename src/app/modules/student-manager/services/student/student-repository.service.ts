@@ -75,7 +75,6 @@ export class StudentRepositoryService extends BaseRepository<Student> {
     if (sessionId !== undefined && sessionId != null) {
       uri += `?session=${sessionId}`;
     }
-    console.log('Created student URI', uri);
     return uri;
   }
 

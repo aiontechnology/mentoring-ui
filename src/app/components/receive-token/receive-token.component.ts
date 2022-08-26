@@ -34,8 +34,8 @@ export class ReceiveTokenComponent {
 
   }
 
-  private parseToken(fragment: string): void {
-    this.userSession.handleLogin(new URLSearchParams(fragment));
+  private parseToken(fragment: string | null): void {
+    this.userSession.handleLogin(new URLSearchParams(fragment || undefined));
   }
 
 }

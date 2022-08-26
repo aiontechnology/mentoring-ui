@@ -16,6 +16,26 @@
 
 import {Resource} from '../resource/resource';
 
+export interface BookInterface {
+  id: string;
+  location: string;
+  leadershipSkills: string[];
+  leadershipTraits: string[];
+  links: {
+    self: [
+      { href: string }
+    ]
+  };
+  title: string;
+  description: string;
+  author: string;
+  gradeLevel: number;
+  interests: string[];
+  phonograms: string[];
+  behaviors: string[];
+  tags: string[];
+}
+
 export class Book extends Resource {
 
   title: string;

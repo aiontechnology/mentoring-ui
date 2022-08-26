@@ -14,40 +14,26 @@
  * limitations under the License.
  */
 
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { InterestCacheService } from '../../services/interests/interest-cache.service';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { InterestDialogComponent } from '../interest-dialog/interest-dialog.component';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { InterestInbound } from '../../models/interest/interest-inbound';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {InterestCacheService} from '../../services/interests/interest-cache.service';
+import {MatSort} from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {InterestDialogComponent} from '../interest-dialog/interest-dialog.component';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {InterestInbound} from '../../models/interest/interest-inbound';
 
 @Component({
   selector: 'ms-interest-list',
   templateUrl: './interest-list.component.html',
-  styleUrls: ['./interest-list.component.scss'],
-  providers: [InterestCacheService]
+  styleUrls: ['./interest-list.component.scss']
 })
 export class InterestListComponent implements OnInit, OnDestroy {
 
-  @ViewChild(MatSort) set sort(sort: MatSort) {
-    if (sort !== undefined) {
-      this.interestCacheService.sort = sort;
-    }
-  }
-
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
-    if (paginator !== undefined) {
-      this.interestCacheService.paginator = paginator;
-    }
-  }
-
   displayedColumns: string[];
-
   editedInterest: string;
   isEdit: boolean;
 
@@ -61,16 +47,27 @@ export class InterestListComponent implements OnInit, OnDestroy {
 
   }
 
+  @ViewChild(MatSort) set sort(sort: MatSort) {
+    if (sort !== undefined) {
+      this.interestCacheService.sort = sort;
+    }
+  }
+
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
+    if (paginator !== undefined) {
+      this.interestCacheService.paginator = paginator;
+    }
+  }
+
   ngOnInit(): void {
     this.interestCacheService.establishDatasource();
     this.interestCacheService.clearSelection();
 
-    console.log('Adding interest list menus');
     InterestListMenuManager.addMenus(this.menuState,
-                                     this.matDialog,
-                                     this.snackBar,
-                                     (i: InterestInbound) => this.jumpToNewItem(i),
-                                     this.interestCacheService);
+      this.matDialog,
+      this.snackBar,
+      (i: InterestInbound) => this.jumpToNewItem(i),
+      this.interestCacheService);
   }
 
   ngOnDestroy(): void {
@@ -91,15 +88,11 @@ export class InterestListComponent implements OnInit, OnDestroy {
 }
 
 class InterestListMenuManager {
-
   static addMenus(menuState: MenuStateService,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   postAction: (i: InterestInbound) => void,
                   interestCacheService: InterestCacheService): void {
-
-    console.log('Constructing MenuHandler');
-
     menuState.add(new NewDialogCommand(
       'Add Interest',
       'interest',
@@ -121,10 +114,9 @@ class InterestListMenuManager {
       null,
       dialog,
       snackBar,
-      () => ({ model: interestCacheService.getFirstSelection() }),
+      () => ({model: interestCacheService.getFirstSelection()}),
       (i: InterestInbound) => postAction(i),
       () => interestCacheService.selection.selected.length === 1));
-
   }
 
 }

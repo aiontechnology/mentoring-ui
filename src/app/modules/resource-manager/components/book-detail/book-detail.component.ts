@@ -14,97 +14,102 @@
  * limitations under the License.
  */
 
-import { Component, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { Book } from 'src/app/modules/shared/models/book/book';
-import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { BookDialogComponent } from '../book-dialog/book-dialog.component';
-import { Subscription } from 'rxjs';
-import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
-import { Grade } from 'src/app/modules/shared/types/grade';
-import { UserSessionService } from 'src/app/services/user-session.service';
-import { NavigationService } from 'src/app/services/navigation.service';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {Book} from 'src/app/modules/shared/models/book/book';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {BookDialogComponent} from '../book-dialog/book-dialog.component';
+import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
+import {UserSessionService} from 'src/app/services/user-session.service';
+import {NavigationService} from 'src/app/services/navigation.service';
+import {BookCacheService} from '../../services/resources/book-cache.service';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {BOOK_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Component({
   selector: 'ms-book-detail',
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.scss']
 })
-export class BookDetailComponent implements OnDestroy {
-
-  private subscriptions$: Subscription;
+export class BookDetailComponent implements OnInit, OnDestroy {
+  book: Book;
   private bookId: string;
 
-  book: Book;
-  resourceGrades: Grade[];
-
-  constructor(route: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
+              @Inject(BOOK_DATA_SOURCE) private bookDataSource: DataSource<Book>,
+              private bookCacheService: BookCacheService,
               private userSession: UserSessionService,
               private dialog: MatDialog,
               private menuState: MenuStateService,
-              private bookService: BookRepositoryService,
               private snackBar: MatSnackBar,
               private router: Router,
               private navigation: NavigationService) {
+  }
 
-    this.subscriptions$ = new Subscription();
-    this.resourceGrades = resourceGrades;
+  get resourceGrades() {
+    return resourceGrades;
+  }
 
-    const subscription1$ = route.paramMap.subscribe(
-      params => {
-        this.bookId = params.get('id');
-      }
-    );
-
-    this.bookService.readOneBook(this.bookId);
-    const subscription2$ = this.bookService.books.subscribe(() => {
-
-      this.menuState.removeGroup('book');
-
-      this.book = this.bookService.getBookById(this.bookId);
-
-      if (this.userSession.isSysAdmin) {
-        console.log('Adding book detail menus');
-        BookDetailMenuManager.addMenus(this.book,
-                                       this.menuState,
-                                       this.router,
-                                       this.dialog,
-                                       this.snackBar,
-                                       this.bookService);
-      }
-
-    });
-
-    this.subscriptions$.add(subscription1$);
-    this.subscriptions$.add(subscription2$);
-
+  ngOnInit(): void {
     this.navigation.routeParams = ['resourcemanager'];
     this.navigation.fragment = 'books';
 
+    /* Watch the book UUID. Call event handler when it changes */
+    this.route.paramMap
+      .subscribe(params => this.onBookIdChange(params.get('id')));
+
+    this.setMenu();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.unsubscribe();
     this.navigation.clearRoute();
     this.menuState.clear();
+  }
+
+  /**
+   * Handle book ID changes.
+   * @param bookId The ID of the current book.
+   */
+  private onBookIdChange = (bookId: string): void => {
+    if (bookId) {
+      this.bookId = bookId;
+      this.bookDataSource.oneValue(this.bookId)
+        .then(book => {
+          this.book = book;
+        });
+    } else {
+      throw new Error('Unable to set book id');
+    }
+  }
+
+  private setMenu = (): void => {
+    this.menuState.removeGroup('book');
+    if (this.userSession.isSysAdmin) {
+      BookDetailMenuManager.addMenus(this,
+        this.menuState,
+        this.router,
+        this.dialog,
+        this.snackBar,
+        this.bookDataSource,
+        this.bookCacheService);
+    }
   }
 
 }
 
 class BookDetailMenuManager {
-
-  static addMenus(book: Book,
+  static addMenus(component: BookDetailComponent,
                   menuState: MenuStateService,
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
-                  bookService: BookRepositoryService) {
+                  bookDataSource: DataSource<Book>,
+                  bookCacheService: BookCacheService) {
     menuState.add(new EditDialogCommand(
       'Edit Book',
       'book',
@@ -114,10 +119,10 @@ class BookDetailMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ model: book }),
-      () => { },
+      () => ({model: component.book}),
+      (book: Book) => component.book = book,
       () => true));
-    menuState.add(new DeleteDialogCommand(
+    menuState.add(new DeleteDialogCommand<Book>(
       'Remove Book',
       'book',
       ConfimationDialogComponent,
@@ -129,7 +134,8 @@ class BookDetailMenuManager {
       snackBar,
       '/resourcemanager',
       () => 1,
-      () => bookService.deleteBooks([book]),
+      () => bookDataSource.remove(component.book)
+        .then(() => bookCacheService.loadData()),
       () => true));
   }
 

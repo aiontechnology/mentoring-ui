@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { MatTableDataSource } from '@angular/material/table';
-import { Observable, BehaviorSubject, Subscription } from 'rxjs';
+import {MatTableDataSource} from '@angular/material/table';
+import {BehaviorSubject, Observable, Subscription} from 'rxjs';
 
 /**
  * Handles table data emitted from the server. It does this
@@ -31,13 +31,12 @@ export class TableDataSource<T> extends MatTableDataSource<T> {
   }
 
   connect(): BehaviorSubject<T[]> {
-    this.subscription$ = this.data$.subscribe(t => this.data = t);
+    // this.subscription$ = this.data$.subscribe(t => this.data = t);
     return super.connect();
   }
 
-  disconnect(): void {
-    this.subscription$.unsubscribe();
+  disconnect() {
+    // this.subscription$.unsubscribe();
     super.disconnect();
   }
-
 }

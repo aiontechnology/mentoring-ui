@@ -14,45 +14,36 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { log } from 'src/app/shared/logging-decorator';
-import { SchoolSession } from '../../models/school/schoolsession';
-import { DatasourceManagerRemovable } from '../datasource-manager/datasource-manager-removable';
-import { SchoolSessionRepositoryService } from './school-session-repository.service';
+import {Inject, Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {SchoolSession} from '../../models/school/schoolsession';
+import {DatasourceManagerRemovable} from '../datasource-manager/datasource-manager-removable';
+import {SCHOOL_SESSION_DATA_SOURCE} from '../../shared.module';
+import {DataSource} from '../../../../implementation/data/data-source';
 
 @Injectable()
 export class SchoolSessionCacheService extends DatasourceManagerRemovable<SchoolSession> {
 
-  private isLoading$: BehaviorSubject<boolean>;
+  readonly isLoading$: BehaviorSubject<boolean>;
 
-  constructor(private schoolSessionService: SchoolSessionRepositoryService) {
+  constructor(@Inject(SCHOOL_SESSION_DATA_SOURCE) private schoolSessionDataSource: DataSource<SchoolSession>) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
-    console.log('Constructing a new SchoolSessionCacheService instance');
   }
 
-  /**
-   * Load backend data to table.
-   */
-   @log
-   establishDatasource(schoolId: string): void {
-     this.schoolSessionService.readAllSchoolSessions(schoolId);
-     this.dataSource.data$ = this.schoolSessionService.items.pipe(
-       tap(() => {
-         this.isLoading$.next(false);
-         console.log('Creating new school session datasource');
-       })
-     );
-   }
-
-   get isLoading(): Observable<boolean> {
+  get isLoading(): Observable<boolean> {
     return this.isLoading$;
   }
 
-  protected doRemoveItem(items: SchoolSession[]): Promise<void> {
-    return this.schoolSessionService.deleteSchoolSessions(items);
-  }
+  loadData = (): Promise<void> =>
+    this.schoolSessionDataSource.allValues()
+      .then(schoolSessions => {
+        this.isLoading$.next(false);
+        this.dataSource.data = schoolSessions;
+      })
+
+  protected doRemoveItem = (items: SchoolSession[]): Promise<void> =>
+    this.schoolSessionDataSource.removeSet(items)
+      .then(this.loadData)
 
 }

@@ -55,7 +55,6 @@ export class InterestDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.interestSubscription$ = this.metaDataService.interests.subscribe(data => {
-      console.log('Interest dialog component recieving meta-data interests:', data);
       this.interests = data;
     });
   }

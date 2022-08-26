@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,9 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
-
-import { MentorRepositoryService } from './mentor-repository.service';
-
-xdescribe('MentorRepositoryService', () => {
-  let service: MentorRepositoryService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(MentorRepositoryService);
-  });
-
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+/**
+ * Interface for classes that can provide their key.
+ */
+export interface IdAware<ID> {
+  get id(): ID;
+}

@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-import { Component, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { StudentInbound } from '../../models/student-inbound/student-inbound';
-import { StudentRepositoryService } from '../../services/student/student-repository.service';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { StudentDialogComponent } from '../student-dialog/student-dialog.component';
-import { Contact } from '../../models/contact/contact';
-import { grades } from 'src/app/modules/shared/constants/grades';
-import { StudentMentorInbound } from '../../models/student-inbound/student-inbound';
-import { Subscription } from 'rxjs';
-import { LpgRepositoryService } from '../../services/lpg/lpg-repository.service';
-import { UserSessionService } from 'src/app/services/user-session.service';
-import { NavigationService } from 'src/app/services/navigation.service';
-import { SchoolSessionCacheService } from 'src/app/modules/shared/services/school-session/school-session-cache.service';
+import {Component, OnDestroy} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {StudentInbound, StudentMentorInbound} from '../../models/student-inbound/student-inbound';
+import {StudentRepositoryService} from '../../services/student/student-repository.service';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {StudentDialogComponent} from '../student-dialog/student-dialog.component';
+import {Contact} from '../../models/contact/contact';
+import {grades} from 'src/app/modules/shared/constants/grades';
+import {Subscription} from 'rxjs';
+import {LpgRepositoryService} from '../../services/lpg/lpg-repository.service';
+import {UserSessionService} from 'src/app/services/user-session.service';
+import {NavigationService} from 'src/app/services/navigation.service';
+import {SchoolSessionCacheService} from 'src/app/modules/shared/services/school-session/school-session-cache.service';
 
 @Component({
   selector: 'ms-student-detail',
@@ -41,20 +40,17 @@ import { SchoolSessionCacheService } from 'src/app/modules/shared/services/schoo
 })
 export class StudentDetailComponent implements OnDestroy {
 
+  isHistoric: boolean;
+  student: StudentInbound;
+  studentMentor: StudentMentorInbound;
+  studentGrade: string;
+  contacts: Contact[];
+  parents: Contact[];
+  emergencyContact: Contact;
   private subscriptions$: Subscription;
   private studentId: string;
   private schoolId: string;
   private sessionId: string;
-  isHistoric: boolean;
-
-  student: StudentInbound;
-  studentMentor: StudentMentorInbound;
-
-  studentGrade: string;
-
-  contacts: Contact[];
-  parents: Contact[];
-  emergencyContact: Contact;
 
   constructor(public lpgService: LpgRepositoryService,
               private route: ActivatedRoute,
@@ -73,20 +69,20 @@ export class StudentDetailComponent implements OnDestroy {
     if (this.userSession.isSysAdmin) {
       subscription1$ = this.route.paramMap.subscribe(params => {
         this.schoolId = params.get('schoolId');
-        schoolSessionCacheService.establishDatasource(this.schoolId);
+        // schoolSessionCacheService.establishDatasource(this.schoolId);
         this.studentId = params.get('studentId');
         this.navigation.routeParams = ['/studentmanager', 'schools', this.schoolId];
       });
     } else {
       this.schoolId = this.userSession.schoolUUID;
-      schoolSessionCacheService.establishDatasource(this.schoolId);
+      // schoolSessionCacheService.establishDatasource(this.schoolId);
       this.navigation.routeParams = ['/studentmanager'];
       subscription1$ = this.route.paramMap.subscribe(params => {
         this.studentId = params.get('studentId');
       });
     }
 
-    const subscription2$ = this.route.queryParamMap.subscribe( params => {
+    const subscription2$ = this.route.queryParamMap.subscribe(params => {
       this.sessionId = params.get('session');
       this.isHistoric = params.get('historic').toLowerCase() === 'true';
 
@@ -102,7 +98,6 @@ export class StudentDetailComponent implements OnDestroy {
         this.studentGrade = grades.find(grade => grade.value === this.student?.grade.toString())?.valueView;
         this.studentMentor = this.student?.mentor;
 
-        console.log('Adding student detail menus');
         StudentDetailMenuManager.addMenus(this.student,
           this.menuState,
           this.router,
@@ -119,6 +114,10 @@ export class StudentDetailComponent implements OnDestroy {
     this.subscriptions$.add(subscription1$);
     this.subscriptions$.add(subscription2$);
 
+  }
+
+  get mentorFullName(): string {
+    return this.studentMentor ? this.studentMentor?.mentor?.firstName + ' ' + this.studentMentor?.mentor?.lastName : '';
   }
 
   ngOnDestroy(): void {
@@ -156,10 +155,6 @@ export class StudentDetailComponent implements OnDestroy {
     });
   }
 
-  get mentorFullName(): string {
-    return this.studentMentor ? this.studentMentor?.mentor?.firstName + ' ' + this.studentMentor?.mentor?.lastName : '';
-  }
-
 }
 
 class StudentDetailMenuManager {
@@ -182,8 +177,9 @@ class StudentDetailMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ schoolId, model: student }),
-      () => {},
+      () => ({schoolId, model: student}),
+      () => {
+      },
       () => !isHistoric
     ));
     menuState.add(new DeleteDialogCommand(

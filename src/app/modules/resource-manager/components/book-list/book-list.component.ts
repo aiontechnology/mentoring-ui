@@ -14,30 +14,38 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDialog } from '@angular/material/dialog';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { BookCacheService } from '../../services/resources/book-cache.service';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { BookDialogComponent } from '../book-dialog/book-dialog.component';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { UserSessionService } from 'src/app/services/user-session.service';
-import { Book } from 'src/app/modules/shared/models/book/book';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {MatDialog} from '@angular/material/dialog';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {BookCacheService} from '../../services/resources/book-cache.service';
+import {MatSort} from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {BookDialogComponent} from '../book-dialog/book-dialog.component';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {UserSessionService} from 'src/app/services/user-session.service';
+import {Book} from 'src/app/modules/shared/models/book/book';
 
 @Component({
   selector: 'ms-book-list',
   templateUrl: './book-list.component.html',
-  styleUrls: ['./book-list.component.scss'],
-  providers: [BookCacheService]
+  styleUrls: ['./book-list.component.scss']
 })
 export class BookListComponent implements OnInit {
+
+  constructor(public bookCacheService: BookCacheService,
+              public userSession: UserSessionService,
+              private breakpointObserver: BreakpointObserver,
+              private dialog: MatDialog,
+              private menuState: MenuStateService,
+              private router: Router,
+              private snackBar: MatSnackBar) {
+  }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
     if (sort !== undefined) {
@@ -51,31 +59,9 @@ export class BookListComponent implements OnInit {
     }
   }
 
-  constructor(public bookCacheService: BookCacheService,
-              public userSession: UserSessionService,
-              private breakpointObserver: BreakpointObserver,
-              private dialog: MatDialog,
-              private menuState: MenuStateService,
-              private router: Router,
-              private snackBar: MatSnackBar) {
-
-    console.log('Constructing BookListComponent', bookCacheService);
-
-  }
-
   ngOnInit(): void {
-    console.log('Establishing datasource');
-    this.bookCacheService.establishDatasource();
-
-    console.log('Adding book list menus');
-    if (this.userSession.isSysAdmin) {
-      BookListMenuManager.addMenus(this.menuState,
-                                   this.router,
-                                   this.dialog,
-                                   this.snackBar,
-                                   (b: Book) => this.jumpToNewItem(b),
-                                   this.bookCacheService);
-    }
+    this.bookCacheService.loadData()
+      .then(() => this.setMenu());
   }
 
   displayedColumns(): string[] {
@@ -88,6 +74,17 @@ export class BookListComponent implements OnInit {
       displayedColumns.push('gradeLevel', 'location');
     }
     return displayedColumns;
+  }
+
+  private setMenu = (): void => {
+    if (this.userSession.isSysAdmin) {
+      BookListMenuManager.addMenus(this.menuState,
+        this.router,
+        this.dialog,
+        this.snackBar,
+        (b: Book) => this.jumpToNewItem(b),
+        this.bookCacheService);
+    }
   }
 
   /**
@@ -111,9 +108,6 @@ class BookListMenuManager {
                   snackBar: MatSnackBar,
                   postAction: (b: Book) => void,
                   bookCacheService: BookCacheService): void {
-
-    console.log('Constructing MenuHandler');
-
     menuState.add(new NewDialogCommand(
       'Add Book',
       'book',
@@ -135,7 +129,7 @@ class BookListMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ model: bookCacheService.getFirstSelection() }),
+      () => ({model: bookCacheService.getFirstSelection()}),
       (b: Book) => postAction(b),
       () => bookCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
@@ -152,7 +146,6 @@ class BookListMenuManager {
       () => bookCacheService.selectionCount,
       () => bookCacheService.removeSelected(),
       () => bookCacheService.selection.selected.length > 0));
-
   }
 
 }

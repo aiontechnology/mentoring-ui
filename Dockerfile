@@ -20,7 +20,7 @@ WORKDIR /app
 COPY package.json .
 RUN npm install
 COPY . .
-RUN npm install -g @angular/cli@10.2.1
+RUN npm install -g @angular/cli@14.1.3
 RUN npm run build
 
 # stage 2

@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { ProgramAdmin } from '../../models/program-admin/program-admin';
-import { ProgramAdminRepositoryService } from '../../services/program-admin/program-admin-repository.service';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { ProgramAdminDialogComponent } from '../program-admin-dialog/program-admin-dialog.component';
-import { Subscription } from 'rxjs';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {ProgramAdmin} from '../../models/program-admin/program-admin';
+import {ProgramAdminRepositoryService} from '../../services/program-admin/program-admin-repository.service';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {ProgramAdminDialogComponent} from '../program-admin-dialog/program-admin-dialog.component';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'ms-program-admin-detail',
@@ -36,34 +36,29 @@ import { Subscription } from 'rxjs';
 export class ProgramAdminDetailComponent implements OnInit, OnDestroy {
 
   @Input() schoolId: string;
-
-  private subscription$: Subscription;
-
   programAdmin: ProgramAdmin;
+  private subscription$: Subscription;
 
   constructor(private programAdminService: ProgramAdminRepositoryService,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private snackBar: MatSnackBar,
               private router: Router) {
-
-    console.log('Adding program admin detail menu');
-
   }
 
   ngOnInit(): void {
+    ProgramAdminDetailMenuManager.addMenus(this.menuState,
+      this.router,
+      this.dialog,
+      this.snackBar,
+      this.programAdmin,
+      this.programAdminService,
+      this.schoolId);
+
     this.programAdminService.readAllProgramAdmins(this.schoolId);
     this.subscription$ = this.programAdminService.items.subscribe(value => {
-      console.log('Received program admin:', value);
       this.programAdmin = value[0];
       this.menuState.removeGroup('program-admin');
-      ProgramAdminDetailMenuManager.addMenus(this.menuState,
-                                             this.router,
-                                             this.dialog,
-                                             this.snackBar,
-                                             this.programAdmin,
-                                             this.programAdminService,
-                                             this.schoolId);
     });
   }
 
@@ -74,7 +69,6 @@ export class ProgramAdminDetailComponent implements OnInit, OnDestroy {
 }
 
 class ProgramAdminDetailMenuManager {
-
   static addMenus(menuState: MenuStateService,
                   router: Router,
                   dialog: MatDialog,
@@ -82,18 +76,18 @@ class ProgramAdminDetailMenuManager {
                   programAdmin: ProgramAdmin,
                   programAdminService: ProgramAdminRepositoryService,
                   schoolId: string): void {
-
     menuState.add(new NewDialogCommand(
       'Add Program Admin',
       'program-admin',
       ProgramAdminDialogComponent,
       'Program admin added',
       null,
-      { schoolId },
+      {schoolId},
       router,
       dialog,
       snackBar,
-      () => { },
+      () => {
+      },
       () => programAdmin === undefined));
     menuState.add(new EditDialogCommand(
       'Edit Program Admin',
@@ -104,8 +98,9 @@ class ProgramAdminDetailMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ model: programAdmin }),
-      () => { },
+      () => ({model: programAdmin}),
+      () => {
+      },
       () => programAdmin !== undefined));
     menuState.add(new DeleteDialogCommand(
       'Remove Program Admin(s)',
@@ -121,7 +116,6 @@ class ProgramAdminDetailMenuManager {
       () => 1,
       () => programAdminService.deleteProgramAdmins([programAdmin]),
       () => programAdmin !== undefined));
-
   }
 
 }

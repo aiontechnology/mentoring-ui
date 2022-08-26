@@ -14,13 +14,17 @@
  * limitations under the License.
  */
 
-import { Component, Inject } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, FormControl, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { grades } from 'src/app/modules/shared/constants/grades';
-import { Grade } from 'src/app/modules/shared/types/grade';
-import { Teacher } from '../../models/teacher/teacher';
-import { TeacherRepositoryService } from '../../services/teacher/teacher-repository.service';
+import {Component, Inject} from '@angular/core';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {grades} from 'src/app/modules/shared/constants/grades';
+import {Grade} from 'src/app/modules/shared/types/grade';
+import {Teacher} from '../../models/teacher/teacher';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../shared/shared.module';
+import {RouteWatchingService} from '../../../../services/route-watching.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'ms-teacher-dialog',
@@ -42,51 +46,49 @@ export class TeacherDialogComponent {
    */
   studentGrade: string;
 
-  constructor(private dialogRef: MatDialogRef<TeacherDialogComponent>,
-              private teacherService: TeacherRepositoryService,
+  constructor(@Inject(TEACHER_DATA_SOURCE) private teacherDataSource: DataSource<Teacher>,
+              @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: UriSupplier,
+              private route: ActivatedRoute,
+              private routeWatcher: RouteWatchingService,
+              private dialogRef: MatDialogRef<TeacherDialogComponent>,
               private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) data: any) {
-
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
     this.schoolId = data.schoolId;
 
     if (typeof data?.selectedGrade === 'function') {
       this.studentGrade = data?.selectedGrade();
-      this.model.patchValue({ grade1: this.studentGrade });
+      this.model.patchValue({grade1: this.studentGrade});
     }
-
-  }
-
-  save(): void {
-
-    const newTeacher = new Teacher(this.model.value);
-    let value: Promise<Teacher>;
-
-    if (this.isUpdate) {
-      console.log('Updating', this.model.value);
-      newTeacher.links = this.model.value.teacher.links;
-      value = this.teacherService.updateTeacher(newTeacher);
-    } else {
-      value = this.teacherService.createTeacher(this.schoolId, newTeacher);
-    }
-
-    value.then((t: Teacher) => {
-      this.dialogRef.close(t);
-    });
-
-  }
-
-  dismiss(): void {
-    this.dialogRef.close(null);
   }
 
   get hasStudentGrade(): boolean {
     return this.studentGrade !== undefined;
   }
 
+  save(): void {
+    const newTeacher = new Teacher(this.model.value);
+    let value: Promise<Teacher>;
+
+    if (this.isUpdate) {
+      newTeacher.links = this.model.value.teacher.links;
+      value = this.teacherDataSource.update(newTeacher);
+    } else {
+      this.teacherUriSupplier.withSubstitution('schoolId', this.schoolId);
+      value = this.teacherDataSource.add(newTeacher);
+    }
+
+    value.then((t: Teacher) => {
+      this.dialogRef.close(t);
+    });
+  }
+
+  dismiss(): void {
+    this.dialogRef.close(null);
+  }
+
   private createModel(formBuilder: UntypedFormBuilder, teacher: Teacher): UntypedFormGroup {
-    console.log('Creating teacher model', teacher);
     const formGroup = formBuilder.group({
       teacher,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],

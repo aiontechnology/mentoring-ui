@@ -14,39 +14,36 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
-import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
-import { Book } from 'src/app/modules/shared/models/book/book';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {DatasourceManagerRemovable} from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
+import {Book} from 'src/app/modules/shared/models/book/book';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {Inject, Injectable} from '@angular/core';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {BOOK_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Injectable()
 export class BookCacheService extends DatasourceManagerRemovable<Book> {
 
-  private isLoading$: BehaviorSubject<boolean>;
+  readonly isLoading$: BehaviorSubject<boolean>;
 
-  constructor(private bookService: BookRepositoryService) {
+  constructor(@Inject(BOOK_DATA_SOURCE) private bookDataSource: DataSource<Book>) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
-  }
-
-  establishDatasource(): void {
-    this.bookService.readAllBooks();
-    this.dataSource.data$ = this.bookService.items.pipe(
-      tap(() => {
-        this.isLoading$.next(false);
-        console.log('Creating new book datasource');
-      })
-    );
   }
 
   get isLoading(): Observable<boolean> {
     return this.isLoading$;
   }
 
-  protected doRemoveItem(items: Book[]): Promise<void> {
-    return this.bookService.deleteBooks(items);
-  }
+  loadData = (): Promise<void> =>
+    this.bookDataSource.allValues()
+      .then(books => {
+        this.isLoading$.next(false);
+        this.dataSource.data = books;
+      })
+
+  protected doRemoveItem = (items: Book[]): Promise<void> =>
+    this.bookDataSource.removeSet(items)
+      .then(this.loadData)
 
 }

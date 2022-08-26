@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 
-import { HttpClient } from '@angular/common/http';
-import { Subject, Observable, forkJoin } from 'rxjs';
-import { log } from 'src/app/shared/logging-decorator';
-import { environment } from 'src/environments/environment';
-import { LinksHolder } from './links-holder';
-import { tap } from 'rxjs/operators';
-import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
-export abstract class BaseRepository<T extends LinksHolder<any>> {
+import {HttpClient} from '@angular/common/http';
+import {forkJoin, Observable, Subject} from 'rxjs';
+import {log} from 'src/app/shared/logging-decorator';
+import {environment} from 'src/environments/environment';
+import {LinksHolder} from './links-holder';
+import {tap} from 'rxjs/operators';
+import {LinkServiceService} from 'src/app/modules/shared/services/link-service/link-service.service';
 
-  protected _items: Subject<T[]>;
+export abstract class BaseRepository<T extends LinksHolder<any>> {
 
   private dataStore: {
     items: T[];
@@ -31,19 +30,23 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
 
   constructor(protected path: string,
               private http: HttpClient) {
-    this.dataStore = { items: [] };
+    this.dataStore = {items: []};
     this._items = new Subject<T[]>();
   }
+
+  protected _items: Subject<T[]>;
 
   get items(): Observable<T[]> {
     return this._items;
   }
 
+  protected get uriBase() {
+    return environment.apiUri + this.path;
+  }
+
   @log
   protected create(uri: string, newItem: T): Promise<T> {
-    console.log('Creating', uri);
     return new Promise((resolver) => {
-      console.log('Adding item:', uri, newItem);
       this.http.post(uri, newItem)
         .subscribe(data => {
           const i = this.fromJSON(data);
@@ -56,10 +59,8 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
 
   @log
   protected readAll(uri: string): void {
-    console.log('Loading all', uri);
     this.http.get<any>(uri)
       .subscribe(data => {
-        console.log("Data", data);
         this.dataStore.items = [];
         if (data?.content) {
           for (const item of data.content) {
@@ -67,20 +68,17 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
             this.dataStore.items.push(i);
           }
         }
-        this.logCache();
         this.publishItems();
       });
   }
 
   @log
   protected readOne(uri: string): void {
-    console.log('Loading item', uri);
     this.http.get<any>(uri)
       .subscribe(data => {
         this.dataStore.items = [];
         const i = this.fromJSON(data);
         this.dataStore.items.push(i);
-        this.logCache();
         this.publishItems();
       });
   }
@@ -90,7 +88,6 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
     for (const item of this.dataStore.items) {
       const i = JSON.stringify(item);
       if (LinkServiceService.selfLink(i).endsWith(id)) {
-        console.log('Found an item', item);
         return item;
       }
     }
@@ -99,15 +96,12 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
 
   @log
   protected update(uri: string, item: T): Promise<T> {
-    console.log('Updating', uri);
     return new Promise((resolver) => {
       this.http.put(item.getSelfLink(), item)
         .subscribe(data => {
-          console.log('Recieved item: ', data);
           const i = this.fromJSON(data);
           for (const index in this.dataStore.items) {
             if (this.dataStore.items[index].getSelfLink() === i.getSelfLink()) {
-              console.log('Replacing item: ', this.dataStore.items[index], i);
               this.dataStore.items[index] = i;
               break;
             }
@@ -147,16 +141,6 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   protected abstract fromJSON(json: any): T;
 
   protected abstract newItem(): T;
-
-  protected get uriBase() {
-    return environment.apiUri + this.path;
-  }
-
-  private logCache(): void {
-    for (const item of this.dataStore.items) {
-      console.log('Cache entry: ', item);
-    }
-  }
 
   private publishItems(): void {
     this._items.next(this.dataStore.items);

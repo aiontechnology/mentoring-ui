@@ -1,11 +1,11 @@
-/**
- * Copyright 2021 Aion Technology LLC
+/*
+ * Copyright 2021-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { HttpClient } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
-import { environment } from 'src/environments/environment';
-import { LinksHolder } from 'src/app/implementation/repository/links-holder';
+import {HttpClient} from '@angular/common/http';
+import {Observable, Subject} from 'rxjs';
+import {environment} from 'src/environments/environment';
+import {LinksHolder} from 'src/app/implementation/repository/links-holder';
 
 export abstract class SchoolResourceRepository<T extends LinksHolder<any>> {
 
@@ -39,13 +39,11 @@ export abstract class SchoolResourceRepository<T extends LinksHolder<any>> {
   }
 
   protected readAllResources(uri: string): void {
-    console.log('Loading all resources for school:', uri);
     this.http.get(uri)
       .subscribe(data => this.getCollectionData(data));
   }
 
   protected updateResources(uri: string, resources: string[]): void {
-    console.log('Updating resources for school:', uri);
     this.http.put(uri, resources)
       .subscribe(data => this.getCollectionData(data));
   }
@@ -53,7 +51,6 @@ export abstract class SchoolResourceRepository<T extends LinksHolder<any>> {
   protected abstract fromJSON(json: any): T[];
 
   private getCollectionData(data: any): void {
-    console.log('Received school resource data:', data);
     let resources = [];
     if (data?.content) {
       resources = this.fromJSON(data?.content);

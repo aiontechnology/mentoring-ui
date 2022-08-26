@@ -14,22 +14,22 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDialog } from '@angular/material/dialog';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { GameCacheService } from '../../services/resources/game-cache.service';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { GameDialogComponent } from '../game-dialog/game-dialog.component';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { UserSessionService } from 'src/app/services/user-session.service';
-import { Game } from 'src/app/modules/shared/models/game/game';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {MatDialog} from '@angular/material/dialog';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {GameCacheService} from '../../services/resources/game-cache.service';
+import {MatSort} from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {GameDialogComponent} from '../game-dialog/game-dialog.component';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {UserSessionService} from 'src/app/services/user-session.service';
+import {Game} from 'src/app/modules/shared/models/game/game';
 
 @Component({
   selector: 'ms-game-list',
@@ -38,6 +38,15 @@ import { Game } from 'src/app/modules/shared/models/game/game';
   providers: [GameCacheService]
 })
 export class GameListComponent implements OnInit {
+
+  constructor(public gameCacheService: GameCacheService,
+              public userSession: UserSessionService,
+              private breakpointObserver: BreakpointObserver,
+              private dialog: MatDialog,
+              private menuState: MenuStateService,
+              private router: Router,
+              private snackBar: MatSnackBar) {
+  }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
     if (sort !== undefined) {
@@ -51,31 +60,9 @@ export class GameListComponent implements OnInit {
     }
   }
 
-  constructor(public gameCacheService: GameCacheService,
-              public userSession: UserSessionService,
-              private breakpointObserver: BreakpointObserver,
-              private dialog: MatDialog,
-              private menuState: MenuStateService,
-              private router: Router,
-              private snackBar: MatSnackBar) {
-
-    console.log('Constructing GameListComponent', gameCacheService);
-
-  }
-
   ngOnInit(): void {
-    console.log('Establishing datasource');
-    this.gameCacheService.establishDatasource();
-
-    console.log('Adding game list menus');
-    if (this.userSession.isSysAdmin) {
-      GameListMenuManager.addMenus(this.menuState,
-                                   this.router,
-                                   this.dialog,
-                                   this.snackBar,
-                                   (g: Game) => this.jumpToNewItem(g),
-                                   this.gameCacheService);
-    }
+    this.gameCacheService.loadData()
+      .then(this.setMenu);
   }
 
   displayedColumns(): string[] {
@@ -88,6 +75,17 @@ export class GameListComponent implements OnInit {
       displayedColumns.push('grade1', 'grade2', 'location');
     }
     return displayedColumns;
+  }
+
+  private setMenu = (): void => {
+    if (this.userSession.isSysAdmin) {
+      GameListMenuManager.addMenus(this.menuState,
+        this.router,
+        this.dialog,
+        this.snackBar,
+        (g: Game) => this.jumpToNewItem(g),
+        this.gameCacheService);
+    }
   }
 
   /**
@@ -104,16 +102,12 @@ export class GameListComponent implements OnInit {
 }
 
 class GameListMenuManager {
-
   static addMenus(menuState: MenuStateService,
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   postAction: (g: Game) => void,
                   gameCacheService: GameCacheService): void {
-
-    console.log('Constructing MenuHandler');
-
     menuState.add(new NewDialogCommand(
       'Add Game',
       'game',
@@ -135,7 +129,7 @@ class GameListMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ model: gameCacheService.getFirstSelection() }),
+      () => ({model: gameCacheService.getFirstSelection()}),
       (g: Game) => postAction(g),
       () => gameCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
@@ -152,7 +146,6 @@ class GameListMenuManager {
       () => gameCacheService.selectionCount,
       () => gameCacheService.removeSelected(),
       () => gameCacheService.selection.selected.length > 0));
-
   }
 
 }

@@ -14,38 +14,36 @@
  * limitations under the License.
  */
 
-import { Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators, ValidatorFn, UntypedFormArray } from '@angular/forms';
-import { Grade } from 'src/app/modules/shared/types/grade';
-import { grades } from 'src/app/modules/shared/constants/grades';
-import { Student } from '../../models/student/student';
-import { StudentInbound } from '../../models/student-inbound/student-inbound';
-import { StudentOutbound } from '../../models/student-outbound/student-outbound';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { StudentRepositoryService } from '../../services/student/student-repository.service';
-import { TeacherRepositoryService } from 'src/app/modules/school-manager/services/teacher/teacher-repository.service';
-import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
-import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
-import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import { MentorRepositoryService } from 'src/app/modules/mentor-manager/services/mentor/mentor-repository.service';
-import { Mentor } from 'src/app/modules/mentor-manager/models/mentor/mentor';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { personLocations } from 'src/app/modules/shared/constants/locations';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { TeacherDialogComponent } from 'src/app/modules/school-manager/components/teacher-dialog/teacher-dialog.component';
-import { MentorDialogComponent } from 'src/app/modules/mentor-manager/components/mentor-dialog/mentor-dialog.component';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
+import {Component, Inject, OnInit} from '@angular/core';
+import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {Grade} from 'src/app/modules/shared/types/grade';
+import {grades} from 'src/app/modules/shared/constants/grades';
+import {Student} from '../../models/student/student';
+import {StudentInbound} from '../../models/student-inbound/student-inbound';
+import {StudentOutbound} from '../../models/student-outbound/student-outbound';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {StudentRepositoryService} from '../../services/student/student-repository.service';
+import {Teacher} from 'src/app/modules/school-manager/models/teacher/teacher';
+import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import {Mentor} from 'src/app/modules/mentor-manager/models/mentor/mentor';
+import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
+import {Observable} from 'rxjs';
+import {personLocations} from 'src/app/modules/shared/constants/locations';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {TeacherDialogComponent} from 'src/app/modules/school-manager/components/teacher-dialog/teacher-dialog.component';
+import {MentorDialogComponent} from 'src/app/modules/mentor-manager/components/mentor-dialog/mentor-dialog.component';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {LinkServiceService} from 'src/app/modules/shared/services/link-service/link-service.service';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {MENTOR_DATA_SOURCE, MENTOR_URI_SUPPLIER, TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../shared/shared.module';
 
 @Component({
   selector: 'ms-student-dialog',
   templateUrl: './student-dialog.component.html',
   styleUrls: ['./student-dialog.component.scss'],
   providers: [
-    { provide: STEPPER_GLOBAL_OPTIONS, useValue: { showError: true } }
+    {provide: STEPPER_GLOBAL_OPTIONS, useValue: {showError: true}}
   ]
 })
 export class StudentDialogComponent implements OnInit {
@@ -60,8 +58,8 @@ export class StudentDialogComponent implements OnInit {
   schoolId: string;
   selectedGrade: string;
 
-  teachers$: Observable<Teacher[]>;
-  mentors$: Observable<Mentor[]>;
+  teachers$: Promise<Teacher[]>;
+  mentors$: Promise<Mentor[]>;
   grades: Grade[] = grades;
   contactMethods: string[] = ['Phone', 'Email', 'Either'];
   locations: { [key: string]: string };
@@ -76,11 +74,12 @@ export class StudentDialogComponent implements OnInit {
   newTeacherCommand: NewDialogCommand<TeacherDialogComponent, Teacher>;
   newMentorCommand: NewDialogCommand<MentorDialogComponent, Mentor>;
 
-  constructor(private dialogRef: MatDialogRef<StudentDialogComponent>,
+  constructor(@Inject(TEACHER_DATA_SOURCE) private teacherDataSource: DataSource<Teacher>,
+              @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: UriSupplier,
+              @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
+              @Inject(MENTOR_URI_SUPPLIER) private mentorUriSupplier: UriSupplier,
+              private dialogRef: MatDialogRef<StudentDialogComponent>,
               private studentService: StudentRepositoryService,
-              private teacherService: TeacherRepositoryService,
-              private mentorService: MentorRepositoryService,
-              private logger: LoggingService,
               private formBuilder: UntypedFormBuilder,
               private metaDataService: MetaDataService,
               private dialog: MatDialog,
@@ -106,7 +105,7 @@ export class StudentDialogComponent implements OnInit {
       TeacherDialogComponent,
       'Teacher added',
       null,
-      { schoolId: this.schoolId, selectedGrade: () => this.selectedGrade },
+      {schoolId: this.schoolId, selectedGrade: () => this.selectedGrade},
       null,
       this.dialog,
       this.snackBar,
@@ -119,7 +118,7 @@ export class StudentDialogComponent implements OnInit {
       MentorDialogComponent,
       'Mentor added',
       null,
-      { schoolId: this.schoolId },
+      {schoolId: this.schoolId},
       null,
       this.dialog,
       this.snackBar,
@@ -128,9 +127,16 @@ export class StudentDialogComponent implements OnInit {
 
   }
 
-  /* Get teacher data; to be displayed in a selection menu */
-  ngOnInit(): void {
+  get parents() {
+    return this.contacts.get('parents') as UntypedFormArray;
+  }
 
+  get emergencyContact() {
+    return this.contacts.get('emergencyContact') as UntypedFormGroup;
+  }
+
+  /* Get teacher data; to be displayed in a selection menu */
+  ngOnInit = (): void => {
     this.metaDataService.loadInterests();
     this.interestList$ = this.metaDataService.interests;
 
@@ -146,13 +152,11 @@ export class StudentDialogComponent implements OnInit {
     this.loadAllTeachers();
 
     this.loadAllMentors();
-
   }
 
-  save(): void {
-
+  save = (): void => {
     // Create outbound student.
-    const studentProperties = Object.assign(this.studentDetails.value, { teacher: this.teacherInput.value.teacher }, this.contacts.value);
+    const studentProperties = Object.assign(this.studentDetails.value, {teacher: this.teacherInput.value.teacher}, this.contacts.value);
     this.addContactsProperty(studentProperties);
     this.clearMentorIfNotProvided(studentProperties);
     this.reformatDate(studentProperties);
@@ -160,9 +164,7 @@ export class StudentDialogComponent implements OnInit {
     const newStudent = new StudentOutbound(studentProperties);
     let value: Promise<StudentInbound>;
 
-    console.log('Saving student', newStudent);
     if (this.isUpdate) {
-      console.log('Updating', studentProperties);
       value = this.studentService.updateStudent(newStudent);
     } else {
       value = this.studentService.createStudent(this.schoolId, newStudent);
@@ -171,38 +173,86 @@ export class StudentDialogComponent implements OnInit {
     value.then((s: Student) => {
       this.dialogRef.close(s);
     });
-
   }
 
-  dismiss(): void {
+  dismiss = (): void => {
     this.dialogRef.close(null);
   }
 
   // Used for the keyvalue pipe, to keep location properties in their default order.
-  unsorted(): number {
+  unsorted = (): number => {
     return 0;
+  }
+
+  enableTeacher = (): void => {
+    if (this.selectedGrade) {
+      this.teacherInput.get('teacher.uri').enable();
+    }
+  }
+
+  contactsIsEmpty = (): boolean => {
+    return !this.parents.length && !this.emergencyContact;
+  }
+
+  contactsIsFull = (): boolean => {
+    return this.parents.controls.length >= 2 && this.emergencyContact != null;
+  }
+
+  parentsIsFull = (): boolean => {
+    return this.parents.length >= 2;
+  }
+
+  addParent = (): void => {
+    this.parents.push(this.createContactForm(false));
+  }
+
+  addEmergencyContact = (): void => {
+    this.contacts.addControl('emergencyContact', this.createContactForm(true));
+  }
+
+  removeParent = (i: number): void => {
+    this.parents.removeAt(i);
+  }
+
+  removeEmergencyContact = (): void => {
+    this.contacts.removeControl('emergencyContact');
+  }
+
+  /**
+   * Reset #teacher form value when grade is changed.
+   */
+  onGradeSelected = (): void => {
+    const teacher = this.teacherInput.get('teacher') as UntypedFormGroup;
+    teacher.patchValue({uri: ''});
+  }
+
+  stepperAtStart = (index: number): boolean => {
+    return index === 0;
+  }
+
+  stepperAtFinish = (index: number): boolean => {
+    return index === 2;
   }
 
   /*
    * Combine form's contact properties for backend model.
    */
-  private addContactsProperty(modelValue: any): void {
+  private addContactsProperty = (modelValue: any): void => {
     const e = modelValue.emergencyContact ? modelValue.emergencyContact : [];
-    modelValue['contacts'] = modelValue.parents.concat(e);
+    modelValue.contacts = modelValue.parents.concat(e);
   }
 
-  private clearMentorIfNotProvided(modelValue: any): void {
+  private clearMentorIfNotProvided = (modelValue: any): void => {
     const mentor = modelValue.mentor;
     modelValue.mentor = (mentor.uri == null || mentor.uri === '') ? null : mentor;
   }
 
-  private determineUpdate(formData: any): boolean {
+  private determineUpdate = (formData: any): boolean => {
     return formData.model !== undefined && formData.model !== null;
   }
 
-  private createModel(formBuilder: UntypedFormBuilder, student: StudentInbound): UntypedFormGroup {
+  private createModel = (formBuilder: UntypedFormBuilder, student: StudentInbound): UntypedFormGroup => {
 
-    console.log('Student', student);
     const formGroup: UntypedFormGroup = formBuilder.group({
       studentDetails: formBuilder.group({
         student,
@@ -299,68 +349,9 @@ export class StudentDialogComponent implements OnInit {
     }
 
     return formGroup;
-
   }
 
-  enableTeacher(): void {
-    if (this.selectedGrade) {
-      this.teacherInput.get('teacher.uri').enable();
-    }
-  }
-
-  get parents() {
-    return this.contacts.get('parents') as UntypedFormArray;
-  }
-
-  get emergencyContact() {
-    return this.contacts.get('emergencyContact') as UntypedFormGroup;
-  }
-
-  contactsIsEmpty(): boolean {
-    return !this.parents.length && !this.emergencyContact;
-  }
-
-  contactsIsFull(): boolean {
-    return this.parents.controls.length >= 2 && this.emergencyContact != null;
-  }
-
-  parentsIsFull(): boolean {
-    return this.parents.length >= 2;
-  }
-
-  addParent(): void {
-    this.parents.push(this.createContactForm(false));
-  }
-
-  addEmergencyContact(): void {
-    this.contacts.addControl('emergencyContact', this.createContactForm(true));
-  }
-
-  removeParent(i: number): void {
-    this.parents.removeAt(i);
-  }
-
-  removeEmergencyContact(): void {
-    this.contacts.removeControl('emergencyContact');
-  }
-
-  /**
-   * Reset #teacher form value when grade is changed.
-   */
-  onGradeSelected(): void {
-    const teacher = this.teacherInput.get('teacher') as UntypedFormGroup;
-    teacher.patchValue({ uri: '' });
-  }
-
-  stepperAtStart(index: number): boolean {
-    return index === 0;
-  }
-
-  stepperAtFinish(index: number): boolean {
-    return index === 2;
-  }
-
-  private createContactForm(isEmergencyContact?: boolean): UntypedFormGroup {
+  private createContactForm = (isEmergencyContact?: boolean): UntypedFormGroup => {
 
     return this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -377,9 +368,8 @@ export class StudentDialogComponent implements OnInit {
 
   }
 
-  private noContactMethodValidator(): ValidatorFn {
-
-    return (contact: UntypedFormGroup): {[key: string]: any} | null => {
+  private noContactMethodValidator = (): ValidatorFn => {
+    return (contact: UntypedFormGroup): { [key: string]: any } | null => {
 
       const errorMsg = 'You must provide at least one contact method.';
 
@@ -387,19 +377,18 @@ export class StudentDialogComponent implements OnInit {
       const email = contact.get('email');
 
       if (!phone.value && !email.value) {
-        return { noContacts: { msg: errorMsg } };
+        return {noContacts: {msg: errorMsg}};
       }
 
       return null;
 
     };
-
   }
 
   /**
    * Parses a date string and returns the month's name.
    */
-  private getMonth(str: string): string {
+  private getMonth = (str: string): string => {
     const date = new Date(str);
     return str ? this.months[date.getUTCMonth()] : null;
   }
@@ -407,7 +396,7 @@ export class StudentDialogComponent implements OnInit {
   /**
    * Parses a date string and returns the year.
    */
-  private getYear(str: string): string {
+  private getYear = (str: string): string => {
     const date = new Date(str);
     return str ? date.getUTCFullYear().toString() : null;
   }
@@ -415,49 +404,38 @@ export class StudentDialogComponent implements OnInit {
   /**
    * Converts the start date into a valid API date object.
    */
-  private reformatDate(student: any): void {
+  private reformatDate = (student: any): void => {
     if (student.month === null || !student.year) {
-      student['startDate'] = null;
+      student.startDate = null;
       return;
     }
     const m = this.months.indexOf(student?.month);
-    student['startDate'] = new Date(student?.year, m);
+    student.startDate = new Date(student?.year, m);
   }
 
-  private loadAllTeachers(): void {
-    console.log('School data', this.schoolId);
-    this.teacherService.readAllTeachers(this.schoolId);
-    this.teachers$ = this.teacherService.teachers.pipe(
-      tap(teachers => this.logger.log('Read teachers from school', teachers))
-    );
+  private loadAllTeachers = (): void => {
+    this.teachers$ = this.teacherDataSource.allValues();
   }
 
-  private addNewTeacher(t: Teacher): void {
-
+  private addNewTeacher = (t: Teacher): void => {
     this.loadAllTeachers();
 
     const teacher = new Teacher(t);
     const teacherInput = this.teacherInput.get('teacher') as UntypedFormGroup;
-    teacherInput.patchValue({ uri: teacher.getSelfLink() });
-
+    teacherInput.patchValue({uri: teacher.getSelfLink()});
   }
 
-  private loadAllMentors(): void {
-    console.log('Mentor data', this.schoolId);
-    this.mentorService.readAllMentors(this.schoolId);
-    this.mentors$ = this.mentorService.mentors.pipe(
-      tap(mentors => this.logger.log('Read mentors from school', mentors))
-    );
+  private loadAllMentors = (): void => {
+    this.mentorUriSupplier.withSubstitution('schoolId', this.schoolId);
+    this.mentors$ = this.mentorDataSource.allValues();
   }
 
-  private addNewMentor(m: Mentor): void {
-
+  private addNewMentor = (m: Mentor): void => {
     this.loadAllMentors();
 
     const mentor = new Mentor(m);
     const mentorInput = this.studentDetails.get('mentor') as UntypedFormGroup;
-    mentorInput.patchValue({ uri: mentor.getSelfLink() });
-
+    mentorInput.patchValue({uri: mentor.getSelfLink()});
   }
 
 }

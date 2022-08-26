@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { Book } from 'src/app/modules/shared/models/book/book';
-import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
-import { Grade } from 'src/app/modules/shared/types/grade';
-import { resourceGrades } from 'src/app/modules/shared/constants/resourceGrades';
-import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import { Observable } from 'rxjs';
-import { resourceLocations } from 'src/app/modules/shared/constants/locations';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {Book} from 'src/app/modules/shared/models/book/book';
+import {Grade} from 'src/app/modules/shared/types/grade';
+import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
+import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import {Observable} from 'rxjs';
+import {resourceLocations} from 'src/app/modules/shared/constants/locations';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {BOOK_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Component({
   selector: 'ms-book-dialog',
@@ -44,20 +45,17 @@ export class BookDialogComponent implements OnInit {
   behaviorList$: Observable<string[]>;
   tagsList$: Observable<string[]>;
 
-  constructor(private dialogRef: MatDialogRef<BookDialogComponent>,
-              private bookService: BookRepositoryService,
+  constructor(@Inject(BOOK_DATA_SOURCE) private bookDataSource: DataSource<Book>,
+              private dialogRef: MatDialogRef<BookDialogComponent>,
               private metaDataService: MetaDataService,
               private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
-
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(this.formBuilder, this.data?.model);
     this.locations = resourceLocations;
-
   }
 
-  ngOnInit(): void {
-
+  ngOnInit = (): void => {
     this.metaDataService.loadInterests();
     this.interestList$ = this.metaDataService.interests;
 
@@ -75,40 +73,34 @@ export class BookDialogComponent implements OnInit {
 
     this.metaDataService.loadTags();
     this.tagsList$ = this.metaDataService.tags;
-
   }
 
-  save(): void {
-
+  save = (): void => {
     const newBook = new Book(this.model.value);
     let value: Promise<Book>;
 
-    console.log('Saving book', newBook);
     if (this.isUpdate) {
-      console.log('Updating', this.model.value);
       newBook.links = this.model.value.book.links;
-      value = this.bookService.updateBook(newBook);
+      value = this.bookDataSource.update(newBook);
     } else {
-      value = this.bookService.createBook(newBook);
+      value = this.bookDataSource.add(newBook);
     }
 
     value.then((b: Book) => {
       this.dialogRef.close(b);
     });
-
   }
 
-  dismiss(): void {
+  dismiss = (): void => {
     this.dialogRef.close(null);
   }
 
   // Used for the keyvalue pipe, to keep location properties in their default order.
-  unsorted(): number {
+  unsorted = (): number => {
     return 0;
   }
 
-  private createModel(formBuilder: UntypedFormBuilder, book: Book): UntypedFormGroup {
-    console.log('Book', book);
+  private createModel = (formBuilder: UntypedFormBuilder, book: Book): UntypedFormGroup => {
     const formGroup: UntypedFormGroup = formBuilder.group({
       book,
       title: ['', [Validators.required, Validators.maxLength(100)]],
@@ -142,7 +134,7 @@ export class BookDialogComponent implements OnInit {
     return formGroup;
   }
 
-  private determineUpdate(formData: any): boolean {
+  private determineUpdate = (formData: any): boolean => {
     return formData !== undefined && formData !== null;
   }
 

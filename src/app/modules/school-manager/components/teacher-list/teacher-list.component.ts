@@ -14,27 +14,30 @@
  * limitations under the License.
  */
 
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { TeacherCacheService } from '../../services/teacher/teacher-cache.service';
-import { TeacherDialogComponent } from '../teacher-dialog/teacher-dialog.component';
-import { Teacher } from '../../models/teacher/teacher';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {AfterViewInit, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute, Router} from '@angular/router';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {TeacherCacheService} from '../../services/teacher/teacher-cache.service';
+import {TeacherDialogComponent} from '../teacher-dialog/teacher-dialog.component';
+import {Teacher} from '../../models/teacher/teacher';
+import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {TEACHER_URI_SUPPLIER} from '../../../shared/shared.module';
+import {RouteWatchingService} from '../../../../services/route-watching.service';
 
 @Component({
   selector: 'ms-teacher-list',
   templateUrl: './teacher-list.component.html',
   styleUrls: ['./teacher-list.component.scss'],
-  providers: [TeacherCacheService]
+  providers: [RouteWatchingService]
 })
 export class TeacherListComponent implements OnInit, AfterViewInit {
 
@@ -43,30 +46,33 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
 
   @Input() schoolId: string;
 
-  constructor(private breakpointObserver: BreakpointObserver,
+  constructor(public teacherCacheService: TeacherCacheService,
+              @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: UriSupplier,
               private dialog: MatDialog,
               private menuState: MenuStateService,
+              private route: ActivatedRoute,
               private router: Router,
+              private routeWatcher: RouteWatchingService,
               private snackBar: MatSnackBar,
-              public teacherCacheService: TeacherCacheService) {
-
-    console.log('Constructing TeacherListComponent', teacherCacheService);
-
+              private breakpointObserver: BreakpointObserver) {
   }
 
   ngOnInit(): void {
-    console.log('Establishing datasource with school id', this.schoolId);
-    this.teacherCacheService.establishDatasource(this.schoolId);
-    this.teacherCacheService.clearSelection();
-
-    console.log('Adding teacher list menus');
     TeacherListMenuManager.addMenus(this.menuState,
-                                    this.router,
-                                    this.dialog,
-                                    this.snackBar,
-                                    (t: Teacher) => this.jumpToNewItem(t),
-                                    this.teacherCacheService,
-                                    this.schoolId);
+      this.router,
+      this.dialog,
+      this.snackBar,
+      (t: Teacher) => this.jumpToNewItem(t),
+      this.teacherCacheService,
+      this.schoolId);
+
+    this.routeWatcher.open(this.route)
+      .subscribe(params => {
+        this.teacherCacheService.loadData()
+          .then(() => {
+            this.teacherCacheService.clearSelection();
+          });
+      });
   }
 
   ngAfterViewInit(): void {
@@ -96,7 +102,6 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
 }
 
 class TeacherListMenuManager {
-
   static addMenus(menuState: MenuStateService,
                   router: Router,
                   dialog: MatDialog,
@@ -104,14 +109,13 @@ class TeacherListMenuManager {
                   postAction: (t: Teacher) => void,
                   teacherCacheService: TeacherCacheService,
                   schoolId: string): void {
-
     menuState.add(new NewDialogCommand(
       'Add Teacher',
       'teacher',
       TeacherDialogComponent,
       'Teacher added',
       null,
-      { schoolId },
+      {schoolId},
       router,
       dialog,
       snackBar,
@@ -126,7 +130,7 @@ class TeacherListMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ model: teacherCacheService.getFirstSelection() }),
+      () => ({model: teacherCacheService.getFirstSelection()}),
       (t: Teacher) => postAction(t),
       () => teacherCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
@@ -143,7 +147,6 @@ class TeacherListMenuManager {
       () => teacherCacheService.selectionCount,
       () => teacherCacheService.removeSelected(),
       () => teacherCacheService.selection.selected.length > 0));
-
   }
 
 }

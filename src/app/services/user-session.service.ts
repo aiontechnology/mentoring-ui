@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import {Injectable} from '@angular/core';
+import {JwtHelperService} from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -29,23 +29,6 @@ export class UserSessionService {
 
   constructor() {
     this.helper = new JwtHelperService();
-  }
-
-  handleLogin(params: URLSearchParams): void {
-    this.addToStorage(UserSessionService.ID_TOKEN, params.get(UserSessionService.ID_TOKEN));
-    this.addToStorage(UserSessionService.ACCESS_TOKEN, params.get(UserSessionService.ACCESS_TOKEN));
-  }
-
-  handleLogout(): void {
-    console.log('logging out');
-    localStorage.removeItem(UserSessionService.ID_TOKEN);
-    localStorage.removeItem(UserSessionService.ACCESS_TOKEN);
-  }
-
-  isLoggedIn(): boolean {
-    const idToken = localStorage.getItem(UserSessionService.ID_TOKEN);
-    const loggedIn = idToken !== undefined && idToken !== 'null' && idToken !== null;
-    return loggedIn;
   }
 
   get idToken(): any {
@@ -83,6 +66,22 @@ export class UserSessionService {
   private get group(): string {
     const decoded = this.decodeToken(this.accessToken);
     return decoded?.['cognito:groups'][0];
+  }
+
+  handleLogin(params: URLSearchParams): void {
+    this.addToStorage(UserSessionService.ID_TOKEN, params.get(UserSessionService.ID_TOKEN));
+    this.addToStorage(UserSessionService.ACCESS_TOKEN, params.get(UserSessionService.ACCESS_TOKEN));
+  }
+
+  handleLogout(): void {
+    localStorage.removeItem(UserSessionService.ID_TOKEN);
+    localStorage.removeItem(UserSessionService.ACCESS_TOKEN);
+  }
+
+  isLoggedIn(): boolean {
+    const idToken = localStorage.getItem(UserSessionService.ID_TOKEN);
+    const loggedIn = idToken !== undefined && idToken !== 'null' && idToken !== null;
+    return loggedIn;
   }
 
   private decodeToken(token: any): any {

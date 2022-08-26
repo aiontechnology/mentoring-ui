@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { Subject, ReplaySubject, Observable } from 'rxjs';
-import { InterestOutbound } from '../../models/meta-data/interests/interest-outbound';
+import {Injectable} from '@angular/core';
+import {environment} from 'src/environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Observable, ReplaySubject, Subject} from 'rxjs';
+import {InterestOutbound} from '../../models/meta-data/interests/interest-outbound';
+import {map} from 'rxjs/operators';
 
 @Injectable()
 export class MetaDataService {
@@ -31,14 +32,6 @@ export class MetaDataService {
   private behaviorUri = environment.apiUri + '/api/v1/behaviors';
   private tagsUri = environment.apiUri + '/api/v1/tags';
 
-  private _activityFocuses: Subject<string[]>;
-  private _leadershipTraits: Subject<string[]>;
-  private _leadershipSkills: Subject<string[]>;
-  private _phonograms: Subject<string[]>;
-  private _behaviors: Subject<string[]>;
-  private _tags: Subject<string[]>;
-  private _interests: ReplaySubject<string[]>;
-
   constructor(private http: HttpClient) {
     this._activityFocuses = new Subject<string[]>();
     this._leadershipTraits = new Subject<string[]>();
@@ -49,29 +42,43 @@ export class MetaDataService {
     this._interests = new ReplaySubject<string[]>(1);
   }
 
+  private _activityFocuses: Subject<string[]>;
+
   get activityFocuses(): Observable<string[]> {
     return this._activityFocuses;
   }
+
+  private _leadershipTraits: Subject<string[]>;
 
   get leadershipTraits(): Observable<string[]> {
     return this._leadershipTraits;
   }
 
+  private _leadershipSkills: Subject<string[]>;
+
   get leadershipSkills(): Observable<string[]> {
     return this._leadershipSkills;
   }
+
+  private _phonograms: Subject<string[]>;
 
   get phonograms(): Observable<string[]> {
     return this._phonograms;
   }
 
+  private _behaviors: Subject<string[]>;
+
   get behaviors(): Observable<string[]> {
     return this._behaviors;
   }
 
+  private _tags: Subject<string[]>;
+
   get tags(): Observable<string[]> {
     return this._tags;
   }
+
+  private _interests: ReplaySubject<string[]>;
 
   get interests(): Observable<string[]> {
     return this._interests;
@@ -80,80 +87,67 @@ export class MetaDataService {
   loadActivityFocuses(): void {
     this.http.get<any>(this.acctivityFocusesUri)
       .subscribe(data => {
-        console.log("Activity Focuses: ", data);
         const activityFocuses = data?.content ?? [];
         this._activityFocuses.next(activityFocuses);
-        this.logCache('activity focus', activityFocuses);
       });
   }
 
   loadLeadershipTraits(): void {
     this.http.get<any>(this.leadershipTraitsUri)
       .subscribe(data => {
-        console.log("LeadershipTraits: ", data);
         const leadershipTraits = data?.content ?? [];
         this._leadershipTraits.next(leadershipTraits);
-        this.logCache('leadership trait', leadershipTraits);
       });
   }
 
   loadLeadershipSkills(): void {
     this.http.get<any>(this.leadershipSkillsUri)
       .subscribe(data => {
-        console.log("LeadershipSkills: ", data);
         const leadershipSkills = data?.content ?? [];
         this._leadershipSkills.next(leadershipSkills);
-        this.logCache('leadership skill', leadershipSkills);
       });
   }
 
   loadPhonograms(): void {
     this.http.get<any>(this.phonogramUri)
       .subscribe(data => {
-        console.log("Phonograms: ", data);
         const phonograms = data?.content ?? [];
         this._phonograms.next(phonograms);
-        this.logCache('phonogram', phonograms);
       });
   }
 
   loadBehaviors(): void {
     this.http.get<any>(this.behaviorUri)
       .subscribe(data => {
-        console.log("Behaviors: ", data);
         const behaviors = data?.content ?? [];
         this._behaviors.next(behaviors);
-        this.logCache('behavior', behaviors);
       });
   }
 
   loadTags(): void {
     this.http.get<any>(this.tagsUri)
       .subscribe(data => {
-        console.log("Tags: ", data);
         const tags = data?.content ?? [];
         this._tags.next(tags);
-        this.logCache('tag', tags);
       });
   }
 
-  loadInterests(): void {
-    this.http.get<any>(this.interestsUri)
-      .subscribe(data => {
-        console.log("Interests: ", data);
-        const interests = data?.content ?? [];
-        this._interests.next(interests);
-        this.logCache('interest', interests);
-      });
+  loadInterests(): Promise<string[]> {
+    return this.http.get<any>(this.interestsUri)
+      .pipe(
+        map(data => {
+          const interests = data?.content ?? [];
+          this._interests.next(interests);
+          return interests;
+        }))
+      .toPromise();
   }
 
   updateInterests(newInterest: InterestOutbound): Promise<string[]> {
-    console.log('Updating interest', newInterest);
     return new Promise((resolver) => {
       this.http.put<any>(this.interestsUri, newInterest)
         .subscribe(
           data => {
-            console.log('Recieved interest list:', data);
             const interests = data?.content ?? [];
             this._interests.next(interests);
             resolver(interests);
@@ -162,12 +156,6 @@ export class MetaDataService {
             console.error('Error', error);
           });
     });
-  }
-
-  private logCache(type: string, values: string[]): void {
-    for (const value of values) {
-      console.log(`Cache entiry (${type})`, value);
-    }
   }
 
 }

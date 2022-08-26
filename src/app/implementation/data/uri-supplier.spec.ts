@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,13 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import {UriSupplier} from './uri-supplier';
 
-import { PersonnelRepositoryService } from './personnel-repository.service';
+describe('UriSupplier', () => {
 
-xdescribe('PersonnelService', () => {
-  let service: PersonnelRepositoryService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(PersonnelRepositoryService);
+  it('should return base uri', () => {
+    const uriSupplier = new UriSupplier('http://test.com');
+    expect(uriSupplier.apply()).toEqual('http://test.com');
   });
 
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
-  });
 });

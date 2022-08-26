@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-import { Component, Inject } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PersonnelRepositoryService } from '../../services/personnel/personnel-repository.service';
-import { Personnel } from '../../models/personnel/personnel';
+import {Component, Inject} from '@angular/core';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Personnel} from '../../models/personnel/personnel';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../../shared/shared.module';
 
 @Component({
   selector: 'ms-personnel-dialog',
@@ -31,9 +33,16 @@ export class PersonnelDialogComponent {
   isUpdate = false;
 
   schoolId: string;
+  titles: any[] = [
+    {value: 'SOCIAL_WORKER', valueView: 'Social Worker'},
+    {value: 'PRINCIPAL', valueView: 'Principal'},
+    {value: 'COUNSELOR', valueView: 'Counselor'},
+    {value: 'STAFF', valueView: 'Staff'}
+  ];
 
-  constructor(private dialogRef: MatDialogRef<PersonnelDialogComponent>,
-              private personnelService: PersonnelRepositoryService,
+  constructor(@Inject(PERSONNEL_DATA_SOURCE) private personnelDataSource: DataSource<Personnel>,
+              @Inject(PERSONNEL_URI_SUPPLIER) private personnelUriSupplier: UriSupplier,
+              private dialogRef: MatDialogRef<PersonnelDialogComponent>,
               private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
@@ -41,37 +50,28 @@ export class PersonnelDialogComponent {
     this.schoolId = data.schoolId;
   }
 
-  titles: any[] = [
-    { value: 'SOCIAL_WORKER', valueView: 'Social Worker' },
-    { value: 'PRINCIPAL', valueView: 'Principal' },
-    { value: 'COUNSELOR', valueView: 'Counselor' },
-    { value: 'STAFF', valueView: 'Staff' }
-  ];
-
-  save(): void {
-
+  save = (): void => {
     const newPersonnel = new Personnel(this.model.value);
     let value: Promise<Personnel>;
 
     if (this.isUpdate) {
-      console.log('Updating', this.model.value);
       newPersonnel.links = this.model.value.personnel.links;
-      value = this.personnelService.updatePersonnel(newPersonnel);
+      value = this.personnelDataSource.update(newPersonnel);
     } else {
-      value = this.personnelService.createPersonnel(this.schoolId, newPersonnel);
+      this.personnelUriSupplier.withSubstitution('schoolId', this.schoolId);
+      value = this.personnelDataSource.add(newPersonnel);
     }
 
     value.then((p: Personnel) => {
       this.dialogRef.close(p);
     });
-
   }
 
-  dismiss(): void {
+  dismiss = (): void => {
     this.dialogRef.close(null);
   }
 
-  private createModel(formBuilder: UntypedFormBuilder, personnel: Personnel): UntypedFormGroup {
+  private createModel = (formBuilder: UntypedFormBuilder, personnel: Personnel): UntypedFormGroup => {
     const formGroup = formBuilder.group({
       personnel,
       type: ['', Validators.required],
@@ -93,7 +93,7 @@ export class PersonnelDialogComponent {
     return formGroup;
   }
 
-  private determineUpdate(formData: any): boolean {
+  private determineUpdate = (formData: any): boolean => {
     return formData.model !== undefined && formData.model !== null;
   }
 

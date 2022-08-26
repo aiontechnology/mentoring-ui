@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { Command } from './command';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ComponentType } from '@angular/cdk/portal';
+import {Command} from './command';
+import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ComponentType} from '@angular/cdk/portal';
 
 export class DeleteDialogCommand<T> extends Command {
 
   constructor(title: string,
               group: string,
-              private componentType: ComponentType<T>,
+              private componentType: ComponentType<any>,
               private snackBarMessage: string,
               private singularName: string,
               private pluralName: string,
@@ -35,8 +35,14 @@ export class DeleteDialogCommand<T> extends Command {
               private countSupplier: () => number,
               private removeItem: () => Promise<void>,
               private determineEnabled: () => boolean) {
-  super(title, group);
-}
+    super(title, group);
+  }
+
+  private get message(): string {
+    const selectionCount = this.countSupplier();
+    const bookLabel = selectionCount > 1 ? this.pluralName : this.singularName;
+    return `Are you sure you want to delete ${selectionCount} ${bookLabel}?`;
+  }
 
   execute(): void {
     const dialogRef = this.dialog.open(this.componentType, {
@@ -49,7 +55,7 @@ export class DeleteDialogCommand<T> extends Command {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.removeItem().then(() => {
+        this.removeItem().then(item => {
           this.openSnackBar(this.snackBar, this.snackBarMessage, '');
           if (this.routeTo) {
             this.router.navigate([this.routeTo]);
@@ -61,12 +67,6 @@ export class DeleteDialogCommand<T> extends Command {
 
   isEnabled(): boolean {
     return this.determineEnabled();
-  }
-
-  private get message(): string {
-    const selectionCount = this.countSupplier();
-    const bookLabel = selectionCount > 1 ? this.pluralName : this.singularName;
-    return `Are you sure you want to delete ${ selectionCount } ${ bookLabel }?`;
   }
 
 }

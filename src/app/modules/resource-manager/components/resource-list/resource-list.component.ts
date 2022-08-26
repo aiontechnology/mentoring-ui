@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { UserSessionService } from 'src/app/services/user-session.service';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {UserSessionService} from 'src/app/services/user-session.service';
 
 @Component({
   selector: 'ms-resource-list',
@@ -27,13 +27,13 @@ import { UserSessionService } from 'src/app/services/user-session.service';
 })
 export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  private fragmentSubscription$: Subscription;
-
   tabGroupIndex: number;
+  private fragmentSubscription$: Subscription;
 
   constructor(public userSession: UserSessionService,
               private menuState: MenuStateService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
     this.fragmentSubscription$ = this.route.fragment.subscribe(fragment => {
@@ -55,16 +55,15 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onIndexChange(index: number): void {
-    console.log('Tab change', index, this.menuState.activeMenus);
     this.menuState.makeAllVisible();
     switch (index) {
       case 0:
         this.menuState.makeGroupInvisible('game');
         this.menuState.makeGroupInvisible('school-game');
         break;
-     case 1:
-      this.menuState.makeGroupInvisible('book');
-      this.menuState.makeGroupInvisible('school-book');
+      case 1:
+        this.menuState.makeGroupInvisible('book');
+        this.menuState.makeGroupInvisible('school-book');
         break;
       case 2:
       case 3:

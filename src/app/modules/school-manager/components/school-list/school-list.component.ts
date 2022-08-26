@@ -33,10 +33,17 @@ import {School} from 'src/app/modules/shared/models/school/school';
 @Component({
   selector: 'ms-school-list',
   templateUrl: './school-list.component.html',
-  styleUrls: ['./school-list.component.scss'],
-  providers: [SchoolCacheService]
+  styleUrls: ['./school-list.component.scss']
 })
 export class SchoolListComponent implements OnInit, OnDestroy {
+
+  constructor(public schoolCacheService: SchoolCacheService,
+              private dialog: MatDialog,
+              private breakpointObserver: BreakpointObserver,
+              private menuState: MenuStateService,
+              private router: Router,
+              private snackBar: MatSnackBar) {
+  }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
     if (sort !== undefined) {
@@ -50,22 +57,10 @@ export class SchoolListComponent implements OnInit, OnDestroy {
     }
   }
 
-  constructor(private dialog: MatDialog,
-              private breakpointObserver: BreakpointObserver,
-              private menuState: MenuStateService,
-              private router: Router,
-              public schoolCacheService: SchoolCacheService,
-              private snackBar: MatSnackBar) {
-
-    console.log('Constructing SchoolListComponent', schoolCacheService);
-
-  }
-
   ngOnInit(): void {
-    this.schoolCacheService.establishDatasource();
+    this.schoolCacheService.loadData();
     this.schoolCacheService.clearSelection();
 
-    console.log('Adding school list menus');
     SchoolListMenuManager.addMenus(this.menuState,
       this.router,
       this.dialog,
@@ -100,16 +95,12 @@ export class SchoolListComponent implements OnInit, OnDestroy {
 }
 
 class SchoolListMenuManager {
-
   static addMenus(menuState: MenuStateService,
                   router: Router,
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   postAction: (s: School) => void,
                   schoolCacheService: SchoolCacheService): void {
-
-    console.log('Constructing MenuHandler', schoolCacheService);
-
     menuState.add(new NewDialogCommand(
       'Add School',
       'school',
@@ -148,7 +139,6 @@ class SchoolListMenuManager {
       () => schoolCacheService.selectionCount,
       () => schoolCacheService.removeSelected(),
       () => schoolCacheService.selection.selected.length > 0));
-
   }
 
 }

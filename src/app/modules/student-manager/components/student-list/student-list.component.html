@@ -25,7 +25,7 @@
       <div *ngIf="userSession.isSysAdmin">
         <mat-form-field>
           <mat-label>Select a school</mat-label>
-          <mat-select [(ngModel)]="selectedSchool" (selectionChange)="setSchool($event.value.id)">
+          <mat-select [(ngModel)]="selectedSchool">
             <mat-option *ngFor="let school of (schools$ | async)" [value]="school"
                         [routerLink]="['/studentmanager', 'schools', school.id]">
               {{ school.name }}

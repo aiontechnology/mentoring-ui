@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import {IdAware} from '../repository/id-aware';
 
-import { GameRepositoryService } from './game-repository.service';
+export interface DataManager<T extends IdAware<string>> {
 
-xdescribe('GameService', () => {
-  let service: GameRepositoryService;
+  add: (value: T) => Promise<T>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(GameRepositoryService);
-  });
+  allValues: () => Promise<T[]>;
 
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+  oneValue: (id: string) => Promise<T>;
+
+  remove: (value: T) => Promise<T>;
+
+  removeSet: (values: T[]) => Promise<T[]>;
+
+  reset: () => void;
+
+  update: (value: T) => Promise<T>;
+
+}

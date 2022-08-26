@@ -22,10 +22,8 @@ import {StudentListComponent} from './components/student-list/student-list.compo
 import {StudentDialogComponent} from './components/student-dialog/student-dialog.component';
 import {LpgRepositoryService} from './services/lpg/lpg-repository.service';
 import {StudentRepositoryService} from './services/student/student-repository.service';
-import {TeacherRepositoryService} from 'src/app/modules/school-manager/services/teacher/teacher-repository.service';
 import {TeacherGradeFilterPipe} from '../shared/pipes/teacher-grade-filter.pipe';
 import {StudentDetailComponent} from './components/student-detail/student-detail.component';
-import {MentorRepositoryService} from 'src/app/modules/mentor-manager/services/mentor/mentor-repository.service';
 import {ScrollToDirective} from './directives/scroll-to.directive';
 import {CanActivateSysAdmin} from 'src/app/services/can-activate-sys-admin';
 import {CanActivateProgAdmin} from 'src/app/services/can-activate-prog-admin';
@@ -56,9 +54,7 @@ const routes: Routes = [
   ],
   providers: [
     StudentRepositoryService,
-    LpgRepositoryService,
-    TeacherRepositoryService,
-    MentorRepositoryService
+    LpgRepositoryService
   ]
 })
 export class StudentManagerModule {

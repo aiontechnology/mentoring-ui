@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,12 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import {Repository} from './repository';
 
-import { BookRepositoryService } from './book-repository.service';
+describe('Repository', () => {
 
-xdescribe('BookService', () => {
-  let service: BookRepositoryService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(BookRepositoryService);
+  it('should add a value', done => {
+    done();
   });
 
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
-  });
 });

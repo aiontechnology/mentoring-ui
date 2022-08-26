@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,47 +14,40 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { Teacher } from '../../models/teacher/teacher';
-import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
-import { TeacherRepositoryService } from './teacher-repository.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {Inject, Injectable} from '@angular/core';
+import {Teacher} from '../../models/teacher/teacher';
+import {DatasourceManagerRemovable} from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {TEACHER_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Injectable()
-export class TeacherCacheService extends DatasourceManagerRemovable<Teacher>  {
+export class TeacherCacheService extends DatasourceManagerRemovable<Teacher> {
 
-  private isLoading$: BehaviorSubject<boolean>;
+  readonly isLoading$: BehaviorSubject<boolean>;
 
   /**
    * Constructor
    * @param schoolService The SchoolService that is used for managing School instances.
    */
-  constructor(private teacherService: TeacherRepositoryService) {
+  constructor(@Inject(TEACHER_DATA_SOURCE) private teacherDataSource: DataSource<Teacher>) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
-  }
-
-  /**
-   * Load backend data to table.
-   * @param schoolId UUID of the school to load data from.
-   */
-  establishDatasource(schoolId: string): void {
-    this.teacherService.readAllTeachers(schoolId);
-    this.dataSource.data$ = this.teacherService.items.pipe(
-      tap(() => {
-        this.isLoading$.next(false);
-        console.log('Creating new teacher datasource');
-      })
-    );
   }
 
   get isLoading(): Observable<boolean> {
     return this.isLoading$;
   }
 
-  protected doRemoveItem(items: Teacher[]): Promise<void> {
-    return this.teacherService.deleteTeachers(items);
-  }
+  loadData = (): Promise<void> =>
+    this.teacherDataSource.allValues()
+      .then(teachers => {
+        this.isLoading$.next(false);
+        this.dataSource.data = teachers;
+      })
+
+  protected doRemoveItem = (items: Teacher[]): Promise<void> =>
+    this.teacherDataSource.removeSet(items)
+      .then(this.loadData)
 
 }

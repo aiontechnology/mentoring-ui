@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,54 +14,53 @@
  * limitations under the License.
  */
 
-import { SelectionModel } from '@angular/cdk/collections';
+import {SelectionModel} from '@angular/cdk/collections';
 
 /**
  * Class to manage the selection of a collection of model objects.
  */
 export abstract class SelectionManager<T> {
 
-    /** Manages the selection(s) of schools in the main-content table */
-    selection = new SelectionModel<T>(true, []);
+  /** Manages the selection(s) of schools in the main-content table */
+  selection = new SelectionModel<T>(true, []);
 
-    clearSelection(): void {
-        this.selection.clear();
-    }
+  get selectionCount(): number {
+    return this.selection.selected.length;
+  }
 
-    getFirstSelection(): T {
-        console.log('Getting first selection', this.selection);
-        return this.selection.selected[0];
-    }
+  /**
+   * Get the number of items in the data collection.
+   */
+  protected abstract get dataSize(): number;
 
-    get selectionCount(): number {
-        return this.selection.selected.length;
-    }
+  /**
+   * Get the items from the filtered collection.
+   */
+  protected abstract get filteredData(): T[];
 
-    /**
-     * Whether the number of selected elements matches the total number of rows.
-     */
-    isAllSelected(): boolean {
-        const numSelected = this.selection.selected.length;
-        return numSelected === this.dataSize;
-    }
+  clearSelection(): void {
+    this.selection.clear();
+  }
 
-    /**
-     * Selects all rows if they are not all selected; otherwise clear selection.
-     */
-    masterToggle(): void {
-        this.isAllSelected() ?
-            this.clearSelection() :
-            this.filteredData.forEach(row => this.selection.select(row));
-    }
+  getFirstSelection(): T {
+    return this.selection.selected[0];
+  }
 
-    /**
-     * Get the number of items in the data collection.
-     */
-    protected abstract get dataSize(): number;
+  /**
+   * Whether the number of selected elements matches the total number of rows.
+   */
+  isAllSelected(): boolean {
+    const numSelected = this.selection.selected.length;
+    return numSelected === this.dataSize;
+  }
 
-    /**
-     * Get the items from the filtered collection.
-     */
-    protected abstract get filteredData(): T[];
+  /**
+   * Selects all rows if they are not all selected; otherwise clear selection.
+   */
+  masterToggle(): void {
+    this.isAllSelected() ?
+      this.clearSelection() :
+      this.filteredData.forEach(row => this.selection.select(row));
+  }
 
 }

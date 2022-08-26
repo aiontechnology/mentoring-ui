@@ -1,11 +1,11 @@
-/**
- * Copyright 2022 Aion Technology LLC
+/*
+ * Copyright 2022-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -39,22 +39,21 @@ export class SchoolSession implements LinksHolder<SchoolSession> {
     this.links = json?.links;
   }
 
-  clearLinks(): SchoolSession {
-    this.links = undefined;
-    return this;
-  }
-
   get labelWithCurrent(): string {
     let label = this.label;
     label += this.isCurrent ? ' (current)' : '';
     return label;
   }
 
+  clearLinks(): SchoolSession {
+    this.links = undefined;
+    return this;
+  }
+
   getSelfLink(): string {
     const href = JSONPath({path: '$.links[?(@.rel == "self")].href', json: this});
     if (Array.isArray(href) && href.length === 1) {
       const self = href[0];
-      console.log('Self link:', self);
       return self;
     }
     throw new Error('No self link found');

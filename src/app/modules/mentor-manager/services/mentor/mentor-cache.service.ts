@@ -14,41 +14,36 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
-import { log } from 'src/app/shared/logging-decorator';
-import { Mentor } from '../../models/mentor/mentor';
-import { MentorRepositoryService } from './mentor-repository.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {Inject, Injectable} from '@angular/core';
+import {DatasourceManagerRemovable} from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
+import {Mentor} from '../../models/mentor/mentor';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {MENTOR_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Injectable()
 export class MentorCacheService extends DatasourceManagerRemovable<Mentor> {
 
-  private isLoading$: BehaviorSubject<boolean>;
+  readonly isLoading$: BehaviorSubject<boolean>;
 
-  constructor(private mentorService: MentorRepositoryService) {
+  constructor(@Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
-  }
-
-  @log
-  establishDatasource(schoolId: string): void {
-    this.mentorService.readAllMentors(schoolId);
-    this.dataSource.data$ = this.mentorService.items.pipe(
-      tap(() => {
-        this.isLoading$.next(false);
-        console.log('Creating new mentor datasource');
-      })
-    );
   }
 
   get isLoading(): Observable<boolean> {
     return this.isLoading$;
   }
 
-  protected doRemoveItem(items: Mentor[]): Promise<void> {
-    return this.mentorService.deleteMentors(items);
-  }
+  loadData = (): Promise<void> =>
+    this.mentorDataSource.allValues()
+      .then(mentors => {
+        this.isLoading$.next(false);
+        this.dataSource.data = mentors;
+      })
+
+  protected doRemoveItem = (items: Mentor[]): Promise<void> =>
+    this.mentorDataSource.removeSet(items)
+      .then(this.loadData)
 
 }

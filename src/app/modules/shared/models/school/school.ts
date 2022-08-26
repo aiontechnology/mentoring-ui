@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { JSONPath } from 'jsonpath-plus';
-import { LinksHolder } from 'src/app/implementation/repository/links-holder';
-import { Address } from '../address/address';
-import { SchoolSession } from './schoolsession';
+import {JSONPath} from 'jsonpath-plus';
+import {LinksHolder} from 'src/app/implementation/repository/links-holder';
+import {Address} from '../address/address';
+import {SchoolSession} from './schoolsession';
 
 export class School implements LinksHolder<School> {
 
@@ -51,10 +51,9 @@ export class School implements LinksHolder<School> {
   }
 
   getSelfLink(): string {
-    const href = JSONPath({ path: '$.links[?(@.rel == "self")].href', json: this });
-    if (Array.isArray(href) && href.length == 1 ) {
+    const href = JSONPath({path: '$.links[?(@.rel == "self")].href', json: this});
+    if (Array.isArray(href) && href.length === 1) {
       const self = href[0];
-      console.log('Self link:', self);
       return self;
     }
     throw new Error('No self link found');

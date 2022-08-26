@@ -48,7 +48,7 @@ export class HttpErrorInterceptorService {
               this.router.navigate(['/login']);
               break;
             default:
-              errorMsg = `Error: ${error.status} - ${error.message}`
+              errorMsg = `Error: ${error.status} - ${error.message}`;
           }
         }
 

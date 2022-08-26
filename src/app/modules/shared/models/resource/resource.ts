@@ -1,11 +1,11 @@
-/**
- * Copyright 2021 Aion Technology LLC
+/*
+ * Copyright 2021-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { LinksHolder } from 'src/app/implementation/repository/links-holder';
-import { resourceLocations } from '../../constants/locations';
-import { LinkServiceService } from '../../services/link-service/link-service.service';
+import {LinksHolder} from 'src/app/implementation/repository/links-holder';
+import {resourceLocations} from '../../constants/locations';
+import {LinkServiceService} from '../../services/link-service/link-service.service';
 
 export abstract class Resource implements LinksHolder<Resource> {
 
@@ -34,7 +34,6 @@ export abstract class Resource implements LinksHolder<Resource> {
   displayName: string;
 
   constructor(json?: any) {
-    console.log('Constructing resource', json);
     this.id = json?.id;
     this.location = json?.location;
     this.leadershipSkills = json?.leadershipSkills;

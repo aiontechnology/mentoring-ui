@@ -1,11 +1,11 @@
-/**
- * Copyright 2021 Aion Technology LLC
+/*
+ * Copyright 2021-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      Https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DatasourceManager } from './datasource-manager';
+import {DatasourceManager} from './datasource-manager';
 
 /**
  * Implemented by cache services that need to accommodate deleting multiple
@@ -25,20 +25,20 @@ import { DatasourceManager } from './datasource-manager';
 export abstract class DatasourceManagerRemovable<T> extends DatasourceManager<T> {
 
   /**
-   * Remove the currently selected items.
-   */
-  removeSelected(): Promise<void> {
-    const selected = this.data.filter((item) => this.selection.isSelected(item));
-    const ret = this.doRemoveItem(selected);
-    this.clearSelection();
-    return ret;
-  }
-
-  /**
    * Get the current list of items.
    */
   protected get data(): T[] {
     return this.dataSource.data;
+  }
+
+  /**
+   * Remove the currently selected items.
+   */
+  removeSelected(): Promise<void> {
+    const selected = this.data.filter(item => this.selection.isSelected(item));
+    const ret = this.doRemoveItem(selected);
+    this.clearSelection();
+    return ret;
   }
 
   /**

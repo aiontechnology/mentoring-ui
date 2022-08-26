@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SchoolSession} from 'src/app/modules/shared/models/school/schoolsession';
 import {SchoolSessionRepositoryService} from 'src/app/modules/shared/services/school-session/school-session-repository.service';
 
@@ -40,15 +40,6 @@ export class SchoolSessionDialogComponent {
     this.schoolId = data?.schoolId;
   }
 
-  private createModel(formBuilder: UntypedFormBuilder): UntypedFormGroup {
-    const formGroup: UntypedFormGroup = formBuilder.group({
-      label: ['', [Validators.required]],
-      startDate: ['', [Validators.required]],
-      endDate: ['', Validators.required]
-    });
-    return formGroup;
-  }
-
   /**
    * Save the form. Handles both new and updated schools.
    */
@@ -57,12 +48,10 @@ export class SchoolSessionDialogComponent {
     let value: Promise<SchoolSession>;
 
     if (this.isUpdate) {
-      console.log('Updating', this.model.value);
       newSession.links = this.model.value.school.links;
       value = this.schoolSessionService.updateSchoolSession(newSession);
     } else {
       value = this.schoolSessionService.createSchoolSession(this.schoolId, newSession);
-      console.log('Saving');
     }
 
     value.then((ss: SchoolSession) => {
@@ -75,6 +64,15 @@ export class SchoolSessionDialogComponent {
    */
   dismiss(): void {
     this.dialogRef.close(null);
+  }
+
+  private createModel(formBuilder: UntypedFormBuilder): UntypedFormGroup {
+    const formGroup: UntypedFormGroup = formBuilder.group({
+      label: ['', [Validators.required]],
+      startDate: ['', [Validators.required]],
+      endDate: ['', Validators.required]
+    });
+    return formGroup;
   }
 
 }

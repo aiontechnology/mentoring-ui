@@ -1,11 +1,11 @@
-/**
- * Copyright 2021 Aion Technology LLC
+/*
+ * Copyright 2021-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDialog } from '@angular/material/dialog';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { SchoolBookDialogComponent } from '../school-book-dialog/school-book-dialog.component';
-import { Book } from 'src/app/modules/shared/models/book/book';
-import { SchoolBookCacheService } from 'src/app/modules/shared/services/school-resource/school-book/school-book-cache.service';
+import {AfterViewInit, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {MatDialog} from '@angular/material/dialog';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatSort} from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {SchoolBookDialogComponent} from '../school-book-dialog/school-book-dialog.component';
+import {Book} from 'src/app/modules/shared/models/book/book';
+import {SchoolBookCacheService} from 'src/app/modules/shared/services/school-resource/school-book/school-book-cache.service';
+import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../shared.module';
+import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
 
 @Component({
   selector: 'ms-school-book-list',
@@ -41,30 +43,26 @@ export class SchoolBookListComponent implements OnInit, AfterViewInit {
   @Input() schoolId: string;
 
   constructor(public schoolBookCacheService: SchoolBookCacheService,
+              @Inject(SCHOOL_BOOK_URI_SUPPLIER) private schoolBookUriSupplier: UriSupplier,
               private breakpointObserver: BreakpointObserver,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private router: Router,
               private snackBar: MatSnackBar) {
-
-    console.log('Constructing SchoolBookListComponent', SchoolBookCacheService);
-
   }
 
   ngOnInit(): void {
+    this.schoolBookCacheService.loadData();
 
-    console.log('Establishing datasource with school id', this.schoolId);
-    this.schoolBookCacheService.establishDatasource(this.schoolId);
     this.schoolBookCacheService.clearSelection();
 
-    console.log('Adding book list menus');
     SchoolBookListMenuManager.addMenus(this.menuState,
-                                       this.router,
-                                       this.dialog,
-                                       this.snackBar,
-                                       this.schoolId,
-                                       this.schoolBookCacheService,
-                                       () => null);
+      this.router,
+      this.dialog,
+      this.snackBar,
+      this.schoolId,
+      this.schoolBookCacheService,
+      () => null);
 
   }
 
@@ -92,22 +90,18 @@ class SchoolBookListMenuManager {
                   schoolId: string,
                   schoolBookCacheService: SchoolBookCacheService,
                   postAction: (b: Book) => void): void {
-
-    console.log('Constructing MenuHandler');
-
     menuState.add(new NewDialogCommand(
       'Update Books',
       'school-book',
       SchoolBookDialogComponent,
       'Books updated',
       null,
-      { schoolId, schoolBooks: () => schoolBookCacheService.dataSource.data },
+      {schoolId, schoolBooks: () => schoolBookCacheService.dataSource.data},
       router,
       dialog,
       snackBar,
       (b: Book) => postAction(b),
       () => true));
-
   }
 
 }

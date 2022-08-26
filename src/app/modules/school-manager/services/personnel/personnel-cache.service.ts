@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,47 +14,40 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { Personnel } from '../../models/personnel/personnel';
-import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
-import { PersonnelRepositoryService } from './personnel-repository.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {Inject, Injectable} from '@angular/core';
+import {Personnel} from '../../models/personnel/personnel';
+import {DatasourceManagerRemovable} from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {PERSONNEL_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Injectable()
-export class PersonnelCacheService extends DatasourceManagerRemovable<Personnel>  {
+export class PersonnelCacheService extends DatasourceManagerRemovable<Personnel> {
 
-  private isLoading$: BehaviorSubject<boolean>;
+  readonly isLoading$: BehaviorSubject<boolean>;
 
   /**
    * Constructor
    * @param personnelService The PersonnelService that is used for managing Personnel instances.
    */
-  constructor(private personnelService: PersonnelRepositoryService) {
+  constructor(@Inject(PERSONNEL_DATA_SOURCE) private personnelDataSource: DataSource<Personnel>) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
-  }
-
-  /**
-   * Load backend data to table.
-   * @param schoolId UUID of the school to load data from.
-   */
-  establishDatasource(schoolId: string): void {
-    this.personnelService.readAllPersonnel(schoolId);
-    this.dataSource.data$ = this.personnelService.items.pipe(
-      tap(() => {
-        this.isLoading$.next(false);
-        console.log('Creating new mentor datasource');
-      })
-    );
   }
 
   get isLoading(): Observable<boolean> {
     return this.isLoading$;
   }
 
-  protected doRemoveItem(items: Personnel[]): Promise<void> {
-    return this.personnelService.deletePersonnel(items);
-  }
+  loadData = (): Promise<void> =>
+    this.personnelDataSource.allValues()
+      .then(personnel => {
+        this.isLoading$.next(false);
+        this.dataSource.data = personnel;
+      })
+
+  protected doRemoveItem = (items: Personnel[]): Promise<void> =>
+    this.personnelDataSource.removeSet(items)
+      .then(this.loadData)
 
 }

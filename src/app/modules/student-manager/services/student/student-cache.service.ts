@@ -14,41 +14,36 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
-import { log } from 'src/app/shared/logging-decorator';
-import { Student } from '../../models/student/student';
-import { StudentRepositoryService } from './student-repository.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {Inject, Injectable} from '@angular/core';
+import {DatasourceManagerRemovable} from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
+import {Student} from '../../models/student/student';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {STUDENT_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Injectable()
-export class StudentCacheService extends DatasourceManagerRemovable<Student>  {
+export class StudentCacheService extends DatasourceManagerRemovable<Student> {
 
-  private isLoading$: BehaviorSubject<boolean>;
+  readonly isLoading$: BehaviorSubject<boolean>;
 
-  constructor(private studentService: StudentRepositoryService) {
+  constructor(@Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<Student>) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
-  }
-
-  @log
-  establishDatasource(schoolId: string, sessionId: string): void {
-    this.studentService.readAllStudents(schoolId, sessionId);
-    this.dataSource.data$ = this.studentService.items.pipe(
-      tap(() => {
-        this.isLoading$.next(false);
-        console.log('Creating new student datasource');
-      })
-    );
   }
 
   get isLoading(): Observable<boolean> {
     return this.isLoading$;
   }
 
-  protected doRemoveItem(items: Student[]): Promise<void> {
-    return this.studentService.deleteStudents(items);
-  }
+  loadData = (): Promise<void> =>
+    this.studentDataSource.allValues()
+      .then(students => {
+        this.isLoading$.next(false);
+        this.dataSource.data = students;
+      })
+
+  protected doRemoveItem = (items: Student[]): Promise<void> =>
+    this.studentDataSource.removeSet(items)
+      .then(this.loadData)
 
 }

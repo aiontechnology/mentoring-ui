@@ -14,39 +14,36 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { DatasourceManagerRemovable } from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
-import { Game } from 'src/app/modules/shared/models/game/game';
-import { GameRepositoryService } from 'src/app/modules/shared/services/resources/game-repository.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {Inject, Injectable} from '@angular/core';
+import {DatasourceManagerRemovable} from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
+import {Game} from 'src/app/modules/shared/models/game/game';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {GAME_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Injectable()
 export class GameCacheService extends DatasourceManagerRemovable<Game> {
 
-  private isLoading$: BehaviorSubject<boolean>;
+  readonly isLoading$: BehaviorSubject<boolean>;
 
-  constructor(private gameService: GameRepositoryService) {
+  constructor(@Inject(GAME_DATA_SOURCE) private gameDataSource: DataSource<Game>) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
-  }
-
-  establishDatasource(): void {
-    this.gameService.readAllGames();
-    this.dataSource.data$ = this.gameService.items.pipe(
-      tap(() => {
-        this.isLoading$.next(false);
-        console.log('Creating new game datasource');
-      })
-    );
   }
 
   get isLoading(): Observable<boolean> {
     return this.isLoading$;
   }
 
-  protected doRemoveItem(items: Game[]): Promise<void> {
-    return this.gameService.deleteGames(items);
-  }
+  loadData = (): Promise<void> =>
+    this.gameDataSource.allValues()
+      .then(games => {
+        this.isLoading$.next(false);
+        this.dataSource.data = games;
+      })
+
+  protected doRemoveItem = (items: Game[]): Promise<void> =>
+    this.gameDataSource.removeSet(items)
+      .then(this.loadData)
 
 }

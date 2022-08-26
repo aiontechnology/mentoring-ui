@@ -1,11 +1,11 @@
-/**
- * Copyright 2021 Aion Technology LLC
+/*
+ * Copyright 2021-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,35 +14,32 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { DatasourceManager } from 'src/app/modules/shared/services/datasource-manager/datasource-manager';
-import { Game } from 'src/app/modules/shared/models/game/game';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { SchoolGameRepositoryService } from 'src/app/modules/shared/services/school-resource/school-game/school-game-repository.service';
+import {Inject, Injectable} from '@angular/core';
+import {DatasourceManager} from 'src/app/modules/shared/services/datasource-manager/datasource-manager';
+import {Game} from 'src/app/modules/shared/models/game/game';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {SCHOOL_GAME_DATA_SOURCE} from '../../../shared.module';
+import {DataSource} from '../../../../../implementation/data/data-source';
 
 @Injectable()
 export class SchoolGameCacheService extends DatasourceManager<Game> {
 
-  private isLoading$: BehaviorSubject<boolean>;
+  readonly isLoading$: BehaviorSubject<boolean>;
 
-  constructor(private schoolGameService: SchoolGameRepositoryService) {
+  constructor(@Inject(SCHOOL_GAME_DATA_SOURCE) private schoolGameDataSource: DataSource<Game>) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
-  }
-
-  establishDatasource(schoolId: string): void {
-    this.schoolGameService.readAllSchoolGames(schoolId);
-    this.dataSource.data$ = this.schoolGameService.schoolGames
-      .pipe(tap(() => {
-        this.isLoading$.next(false);
-        console.log('Creating new school game datasource');
-      })
-    );
   }
 
   get isLoading(): Observable<boolean> {
     return this.isLoading$;
   }
+
+  loadData = (): Promise<void> =>
+    this.schoolGameDataSource.allValues()
+      .then(games => {
+        this.isLoading$.next(false);
+        this.dataSource.data = games;
+      })
 
 }

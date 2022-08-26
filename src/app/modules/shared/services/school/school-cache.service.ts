@@ -14,60 +14,59 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { log } from 'src/app/shared/logging-decorator';
-import { School } from '../../models/school/school';
-import { DatasourceManagerRemovable } from '../datasource-manager/datasource-manager-removable';
-import { SchoolRepositoryService } from './school-repository.service';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {Inject, Injectable} from '@angular/core';
+import {School} from '../../models/school/school';
+import {DatasourceManagerRemovable} from '../datasource-manager/datasource-manager-removable';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {SCHOOL_DATA_SOURCE} from '../../shared.module';
 
 @Injectable()
 export class SchoolCacheService extends DatasourceManagerRemovable<School> {
 
-  private isLoading$: BehaviorSubject<boolean>;
+  readonly isLoading$: BehaviorSubject<boolean>;
 
   /**
    * Constructor
    * @param schoolService The SchoolService that is used for managing School instances.
    */
-  constructor(private schoolService: SchoolRepositoryService) {
+  constructor(@Inject(SCHOOL_DATA_SOURCE) private schoolDataSource: DataSource<School>) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
-    console.log('Constructing a new SchoolCacheService instance');
-  }
-
-  /**
-   * Load backend data to table.
-   */
-  @log
-  establishDatasource(): void {
-    this.schoolService.readAllSchools();
-    this.dataSource.data$ = this.schoolService.items.pipe(
-      tap(() => {
-        this.isLoading$.next(false);
-        this.dataSource.sortingDataAccessor = this.sortingDataAccessor;
-        console.log('Creating new school datasource');
-      })
-    );
   }
 
   get isLoading(): Observable<boolean> {
     return this.isLoading$;
   }
 
-  protected doRemoveItem(items: School[]): Promise<void> {
-    return this.schoolService.deleteSchools(items);
-  }
+  /**
+   * Load backend data to table.
+   */
+  loadData = (): Promise<void> =>
+    this.schoolDataSource.allValues()
+      .then(schools => {
+        this.isLoading$.next(false);
+        this.dataSource.data = schools;
+      })
+
+  protected doRemoveItem = (items: School[]): Promise<void> =>
+    this.schoolDataSource.removeSet(items)
+      .then(this.loadData)
 
   private sortingDataAccessor = (item: School, property: string) => {
     switch (property) {
-      case 'street1': return item.address.street1;
-      case 'street2': return item.address.street2;
-      case 'city': return item.address.city;
-      case 'state': return item.address.state;
-      case 'zip': return item.address.zip;
-      default: return item[property];
+      case 'street1':
+        return item.address.street1;
+      case 'street2':
+        return item.address.street2;
+      case 'city':
+        return item.address.city;
+      case 'state':
+        return item.address.state;
+      case 'zip':
+        return item.address.zip;
+      default:
+        return item[property];
     }
   }
 

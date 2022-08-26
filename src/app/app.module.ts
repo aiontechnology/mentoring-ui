@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, InjectionToken } from '@angular/core';
-import { AppComponent } from './app.component';
-import { RouterModule, Routes, ActivatedRouteSnapshot, ActivatedRoute } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LandingPageComponent } from './components/landing-page/landing-page.component';
-import { SidenavComponent } from './components/sidenav/sidenav.component';
-import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { MaterialModule } from './shared/material.module';
-import { HomeComponent } from './components/home/home.component';
-import { NoopComponent } from './components/noop/noop.component';
-import { HandleLogoutComponent } from './components/handle-logout/handle-logout.component';
-import { environment } from 'src/environments/environment';
-import { HttpErrorInterceptorService } from './services/http-error-interceptor.service';
-import { TokenInterceptorService } from './services/token-interceptor.service';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CanActivateSysAdmin } from './services/can-activate-sys-admin';
-import { CanActivateApp } from './services/can-activate-app';
-import { ReceiveTokenComponent } from './components/receive-token/receive-token.component';
+import {BrowserModule} from '@angular/platform-browser';
+import {InjectionToken, NgModule} from '@angular/core';
+import {AppComponent} from './app.component';
+import {ActivatedRoute, ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, Routes} from '@angular/router';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {LandingPageComponent} from './components/landing-page/landing-page.component';
+import {SidenavComponent} from './components/sidenav/sidenav.component';
+import {ToolbarComponent} from './components/toolbar/toolbar.component';
+import {MaterialModule} from './shared/material.module';
+import {HomeComponent} from './components/home/home.component';
+import {NoopComponent} from './components/noop/noop.component';
+import {HandleLogoutComponent} from './components/handle-logout/handle-logout.component';
+import {environment} from 'src/environments/environment';
+import {HttpErrorInterceptorService} from './services/http-error-interceptor.service';
+import {TokenInterceptorService} from './services/token-interceptor.service';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {CanActivateSysAdmin} from './services/can-activate-sys-admin';
+import {CanActivateApp} from './services/can-activate-app';
+import {ReceiveTokenComponent} from './components/receive-token/receive-token.component';
+import {CustomRouteReuseStrategy} from './shared/custom-route-reuse-strategy';
 
 const loginProvider = new InjectionToken('loginRedirectResolver');
 const logoutProvider = new InjectionToken('logoutRedirectResolver');
@@ -42,23 +43,63 @@ const loginUrl = `https://${environment.cognitoBaseUrl}/login?client_id=${enviro
 const logoutUrl = `https://${environment.cognitoBaseUrl}/logout?client_id=${environment.cognitoClientId}&logout_uri=${environment.logoutRedirect}`;
 
 const routes: Routes = [
-  { path: '', component: LandingPageComponent },
-  { path: 'logout', component: NoopComponent, canActivate: [logoutProvider, CanActivateApp] },
-  { path: 'home', component: HomeComponent, canActivate: [CanActivateApp] },
-  { path: 'handleLogout', component: HandleLogoutComponent, canActivate: [CanActivateApp] },
-  { path: 'adminmanager', loadChildren: () => import('./modules/admin-manager/admin-manager.module')
-    .then(m => m.AdminManagerModule), canActivate: [CanActivateSysAdmin] },
-  { path: 'resourcemanager', loadChildren: () => import('./modules/resource-manager/resource-manager.module')
-    .then(m => m.ResourceManagerModule), canActivate: [CanActivateApp] },
-  { path: 'schoolsmanager', loadChildren: () => import('./modules/school-manager/school-manager.module')
-    .then(m => m.SchoolManagerModule), canActivate: [CanActivateApp] },
-  { path: 'studentmanager', loadChildren: () => import('./modules/student-manager/student-manager.module')
-    .then(m => m.StudentManagerModule), canActivate: [CanActivateApp] },
-  { path: 'mentormanager', loadChildren: () => import('./modules/mentor-manager/mentor-manager.module')
-    .then(m => m.MentorManagerModule), canActivate: [CanActivateApp] },
-  { path: 'receiveToken', component: ReceiveTokenComponent },
-  { path: 'login', component: NoopComponent, canActivate: [loginProvider] },
-  { path: '**', redirectTo: '' }
+  {
+    path: '',
+    component: LandingPageComponent
+  },
+  {
+    path: 'logout',
+    component: NoopComponent,
+    canActivate: [logoutProvider, CanActivateApp]
+  },
+  {
+    path: 'home',
+    component: HomeComponent,
+    canActivate: [CanActivateApp]
+  },
+  {
+    path: 'handleLogout',
+    component: HandleLogoutComponent,
+    canActivate: [CanActivateApp]
+  },
+  {
+    path: 'adminmanager',
+    loadChildren: () => import('./modules/admin-manager/admin-manager.module').then(m => m.AdminManagerModule),
+    canActivate: [CanActivateSysAdmin]
+  },
+  {
+    path: 'resourcemanager',
+    loadChildren: () => import('./modules/resource-manager/resource-manager.module').then(m => m.ResourceManagerModule),
+    canActivate: [CanActivateApp]
+  },
+  {
+    path: 'schoolsmanager',
+    loadChildren: () => import('./modules/school-manager/school-manager.module').then(m => m.SchoolManagerModule),
+    canActivate: [CanActivateApp]
+  },
+  {
+    path: 'studentmanager',
+    loadChildren: () => import('./modules/student-manager/student-manager.module').then(m => m.StudentManagerModule),
+    canActivate: [CanActivateApp]
+  },
+  {
+    path: 'mentormanager',
+    loadChildren: () => import('./modules/mentor-manager/mentor-manager.module').then(m => m.MentorManagerModule),
+    canActivate: [CanActivateApp]
+  },
+  {
+    path: 'receiveToken',
+    component: ReceiveTokenComponent
+  },
+  {
+    path: 'login',
+    component: NoopComponent,
+    canActivate: [loginProvider]
+  },
+  {
+    path: '**',
+    redirectTo: ''
+  }
 ];
 
 @NgModule({
@@ -77,7 +118,7 @@ const routes: Routes = [
     BrowserModule,
     HttpClientModule,
     MaterialModule,
-    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })
+    RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'})
   ],
   providers: [
     {
@@ -105,8 +146,13 @@ const routes: Routes = [
       provide: HTTP_INTERCEPTORS,
       useClass: HttpErrorInterceptorService,
       multi: true
+    },
+    {
+      provide: RouteReuseStrategy,
+      useClass: CustomRouteReuseStrategy
     }
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

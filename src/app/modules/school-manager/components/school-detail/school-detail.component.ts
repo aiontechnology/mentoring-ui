@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, AfterViewInit, OnDestroy} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -25,59 +25,53 @@ import {School} from 'src/app/modules/shared/models/school/school';
 import {SchoolRepositoryService} from 'src/app/modules/shared/services/school/school-repository.service';
 import {MenuStateService} from 'src/app/services/menu-state.service';
 import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
-import {Subscription} from 'rxjs';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {NavigationService} from 'src/app/services/navigation.service';
 import {SchoolSessionDialogComponent} from '../school-session-dialog/school-session-dialog.component';
+import {RouteWatchingService} from '../../../../services/route-watching.service';
+import {SCHOOL_DATA_SOURCE} from '../../../shared/shared.module';
+import {DataSource} from '../../../../implementation/data/data-source';
 
 @Component({
   selector: 'ms-school-detail',
   templateUrl: './school-detail.component.html',
-  styleUrls: ['./school-detail.component.scss']
+  styleUrls: ['./school-detail.component.scss'],
+  providers: [RouteWatchingService]
 })
-export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
-
-  private subscriptions$: Subscription;
+export class SchoolDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   school: School;
-  schoolId: string;
 
-  constructor(route: ActivatedRoute,
-              public userSession: UserSessionService,
+  constructor(public userSession: UserSessionService,
+              @Inject(SCHOOL_DATA_SOURCE) private schoolDataSource: DataSource<School>,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private schoolService: SchoolRepositoryService,
               private snackBar: MatSnackBar,
+              private route: ActivatedRoute,
               private router: Router,
+              private routeWatcher: RouteWatchingService,
               private navigation: NavigationService) {
+  }
 
-    this.subscriptions$ = new Subscription();
+  get schoolId() {
+    return this.routeWatcher.schoolId;
+  }
 
-    const subscription1$ = route.paramMap.subscribe(
-      params => {
-        this.schoolId = params.get('id');
-      }
-    );
-
-    if (userSession.isSysAdmin) {
-      this.schoolService.readAllSchools();
-      this.navigation.routeParams = ['schoolsmanager'];
-    } else {
-      this.schoolService.readOneSchool(this.schoolId);
-    }
-
-    const subscription2$ = this.schoolService.schools.subscribe(() => {
-      this.menuState.removeGroup('school');
-      this.school = this.schoolService.getSchoolById(this.schoolId);
-      if (userSession.isSysAdmin) {
-        console.log('Adding school detail menus');
-        SchoolDetailMenuManager.addMenus(this.school, this.menuState, this.router, this.dialog, this.snackBar, this.schoolService);
-      }
-    });
-
-    this.subscriptions$.add(subscription1$);
-    this.subscriptions$.add(subscription2$);
-
+  ngOnInit(): void {
+    this.routeWatcher.open(this.route)
+      .subscribe(params => {
+        this.menuState.removeGroup('school');
+        if (this.userSession.isSysAdmin) {
+          this.routeWatcher.school
+            .then(school => {
+                this.school = school;
+                this.menuState.add(editDialogCommandFactory(school, this.router, this.dialog, this.snackBar));
+                this.menuState.add(deleteDialogCommandFactory(school, this.schoolService, this.router, this.dialog, this.snackBar));
+              }
+            );
+        }
+      });
   }
 
   ngAfterViewInit(): void {
@@ -85,13 +79,11 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions$.unsubscribe();
     this.navigation.clearRoute();
     this.menuState.clear();
   }
 
   onIndexChange(index: number): void {
-    console.log('Tab change', index, this.menuState.activeMenus);
     this.menuState.makeAllVisible();
     if (this.userSession.isSysAdmin) {
       switch (index) {
@@ -142,6 +134,7 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
       switch (index) {
         case 0:
           this.menuState.makeGroupInvisible('teacher');
+          this.menuState.makeGroupInvisible('program-admin');
           this.menuState.makeGroupInvisible('personnel');
           this.menuState.makeGroupInvisible('school-book');
           this.menuState.makeGroupInvisible('school-game');
@@ -170,51 +163,48 @@ export class SchoolDetailComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  createNewSession() {
-    const dialogRef = this.dialog.open(SchoolSessionDialogComponent, {
-      width: '700px',
-      disableClose: true,
-      data: {schoolId: this.school.id}
-    }).afterClosed().subscribe(schoolSession => this.school.currentSession = schoolSession);
+  createNewSession(): void {
+    const that = this;
+    this.routeWatcher.school
+      .then((s: School) => {
+        const dialogRef = this.dialog.open(SchoolSessionDialogComponent, {
+          width: '700px',
+          disableClose: true,
+          data: {schoolId: that.routeWatcher.schoolId}
+        }).afterClosed().subscribe(schoolSession => s.currentSession = schoolSession);
+      });
   }
 
 }
 
-class SchoolDetailMenuManager {
+const editDialogCommandFactory = (school: School, router: Router, dialog: MatDialog, snackBar: MatSnackBar): EditDialogCommand<School> =>
+  new EditDialogCommand<School>(
+    'Edit School',
+    'school',
+    SchoolDialogComponent,
+    'School updated',
+    null,
+    router,
+    dialog,
+    snackBar,
+    () => ({model: school}),
+    () => {
+    },
+    () => true);
 
-  static addMenus(school: School,
-                  menuState: MenuStateService,
-                  router: Router,
-                  dialog: MatDialog,
-                  snackBar: MatSnackBar,
-                  schoolService: SchoolRepositoryService) {
-    menuState.add(new EditDialogCommand(
-      'Edit School',
-      'school',
-      SchoolDialogComponent,
-      'School updated',
-      null,
-      router,
-      dialog,
-      snackBar,
-      () => ({model: school}),
-      () => {
-      },
-      () => true));
-    menuState.add(new DeleteDialogCommand(
-      'Remove School',
-      'school',
-      ConfimationDialogComponent,
-      'School(s) removed',
-      'school',
-      'schools',
-      router,
-      dialog,
-      snackBar,
-      '/schoolsmanager',
-      () => 1,
-      () => schoolService.deleteSchools([school]),
-      () => true));
-  }
-
-}
+const deleteDialogCommandFactory = (school: School, schoolService: SchoolRepositoryService, router: Router, dialog: MatDialog,
+                                    snackBar: MatSnackBar): DeleteDialogCommand<School> =>
+  new DeleteDialogCommand(
+    'Remove School',
+    'school',
+    ConfimationDialogComponent,
+    'School(s) removed',
+    'school',
+    'schools',
+    router,
+    dialog,
+    snackBar,
+    '/schoolsmanager',
+    () => 1,
+    () => schoolService.deleteSchools([school]),
+    () => true);

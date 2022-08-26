@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import { Component, Inject } from '@angular/core';
-import { UntypedFormGroup, UntypedFormBuilder, Validators } from '@angular/forms';
-import { Mentor } from '../../models/mentor/mentor';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MentorRepositoryService } from '../../services/mentor/mentor-repository.service';
-import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
-import { personLocations } from 'src/app/modules/shared/constants/locations';
+import {Component, Inject, OnInit} from '@angular/core';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {Mentor} from '../../models/mentor/mentor';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {personLocations} from 'src/app/modules/shared/constants/locations';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {MENTOR_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Component({
   selector: 'ms-mentor-dialog',
   templateUrl: './mentor-dialog.component.html',
   styleUrls: ['./mentor-dialog.component.scss']
 })
-export class MentorDialogComponent {
+export class MentorDialogComponent implements OnInit {
 
   model: UntypedFormGroup;
   isUpdate = false;
@@ -35,37 +35,33 @@ export class MentorDialogComponent {
   schoolId: string;
   locations: { [key: string]: string };
 
-  constructor(private dialogRef: MatDialogRef<MentorDialogComponent>,
-              private mentorService: MentorRepositoryService,
-              private logger: LoggingService,
+  constructor(@Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
+              private dialogRef: MatDialogRef<MentorDialogComponent>,
               private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
+  }
 
-    this.isUpdate = this.determineUpdate(data);
-    this.model = this.createModel(formBuilder, data?.model);
-    this.schoolId = data?.schoolId;
+  ngOnInit(): void {
+    this.isUpdate = this.determineUpdate(this.data);
+    this.model = this.createModel(this.formBuilder, this.data?.model);
+    this.schoolId = this.data?.schoolId;
     this.locations = personLocations;
-
   }
 
   save(): void {
-
     const newMentor = new Mentor(this.model.value);
     let value: Promise<Mentor>;
 
-    console.log('Saving mentor', newMentor);
     if (this.isUpdate) {
-      console.log('Updating', this.model.value);
       newMentor.links = this.model.value.mentor.links;
-      value = this.mentorService.updateMentor(newMentor);
+      value = this.mentorDataSource.update(newMentor);
     } else {
-      value = this.mentorService.createMentor(this.schoolId, newMentor);
+      value = this.mentorDataSource.add(newMentor);
     }
 
     value.then((m: Mentor) => {
       this.dialogRef.close(m);
     });
-
   }
 
   dismiss(): void {
@@ -82,15 +78,13 @@ export class MentorDialogComponent {
   }
 
   private createModel(formBuilder: UntypedFormBuilder, mentor: Mentor): UntypedFormGroup {
-
-    console.log('Mentor', mentor);
     const formGroup: UntypedFormGroup = formBuilder.group({
       mentor,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       email: [null, [Validators.email, Validators.maxLength(50)]],
       cellPhone: null,
-      availability: ['',  Validators.maxLength(100)],
+      availability: ['', Validators.maxLength(100)],
       mediaReleaseSigned: false,
       backgroundCheckCompleted: false,
       location: ['OFFLINE', Validators.required]
@@ -111,7 +105,6 @@ export class MentorDialogComponent {
     }
 
     return formGroup;
-
   }
 
 }

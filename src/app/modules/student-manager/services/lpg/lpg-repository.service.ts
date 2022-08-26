@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { log } from 'src/app/shared/logging-decorator';
-import { environment } from 'src/environments/environment';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
+import {log} from 'src/app/shared/logging-decorator';
+import {environment} from 'src/environments/environment';
 
 @Injectable()
 export class LpgRepositoryService {
@@ -32,15 +32,12 @@ export class LpgRepositoryService {
     this.isLoading$ = new BehaviorSubject(false);
   }
 
-  private get uriBase() {
-    return environment.lpgUri + this.path;
+  get isLoading(): Observable<boolean> {
+    return this.isLoading$;
   }
 
-  private buildUri(schoolId: string, studentId: string, month: string, year: string): string {
-    let url = this.uriBase.replace('{schoolId}', schoolId);
-    url = url.replace('{studentId}', studentId);
-    url = url.replace('{month}', month);
-    return url.replace('{year}', year);
+  private get uriBase() {
+    return environment.lpgUri + this.path;
   }
 
   @log
@@ -55,20 +52,21 @@ export class LpgRepositoryService {
       responseType: 'blob' as const
     };
 
-    console.log('Generating learning pathway for student:', url);
     return this.http.get(url, options)
       .pipe(
         tap(
           () => {
             this.isLoading$.next(false);
-            console.log('Learning pathway generated successfully');
           })
       );
 
   }
 
-  get isLoading(): Observable<boolean> {
-    return this.isLoading$;
+  private buildUri(schoolId: string, studentId: string, month: string, year: string): string {
+    let url = this.uriBase.replace('{schoolId}', schoolId);
+    url = url.replace('{studentId}', studentId);
+    url = url.replace('{month}', month);
+    return url.replace('{year}', year);
   }
 
 }

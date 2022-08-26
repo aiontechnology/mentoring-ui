@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-import { Component, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatDialog } from '@angular/material/dialog';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { PersonnelCacheService } from '../../services/personnel/personnel-cache.service';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { PersonnelDialogComponent } from '../personnel-dialog/personnel-dialog.component';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { Personnel } from '../../models/personnel/personnel';
+import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatSort} from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {MatDialog} from '@angular/material/dialog';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {Router} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {PersonnelCacheService} from '../../services/personnel/personnel-cache.service';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {PersonnelDialogComponent} from '../personnel-dialog/personnel-dialog.component';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {Personnel} from '../../models/personnel/personnel';
 
 @Component({
   selector: 'ms-personnel-list',
   templateUrl: './personnel-list.component.html',
-  styleUrls: ['./personnel-list.component.scss'],
-  providers: [PersonnelCacheService]
+  styleUrls: ['./personnel-list.component.scss']
 })
 export class PersonnelListComponent implements OnInit, AfterViewInit {
 
@@ -43,30 +42,26 @@ export class PersonnelListComponent implements OnInit, AfterViewInit {
 
   @Input() schoolId: string;
 
-  constructor(private breakpointObserver: BreakpointObserver,
+  constructor(public personnelCacheService: PersonnelCacheService,
+              private breakpointObserver: BreakpointObserver,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private router: Router,
-              private snackBar: MatSnackBar,
-              public personnelCacheService: PersonnelCacheService) {
-
-    console.log('Constructing PersonnelListComponent', PersonnelCacheService);
-
+              private snackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
-    console.log('Establishing datasource with school id', this.schoolId);
-    this.personnelCacheService.establishDatasource(this.schoolId);
+    this.personnelCacheService.loadData();
+
     this.personnelCacheService.clearSelection();
 
-    console.log('Adding personnel list menus');
     PersonnelMenuManager.addMenus(this.menuState,
-                                  this.router,
-                                  this.dialog,
-                                  this.snackBar,
-                                  (p: Personnel) => this.jumpToNewItem(p),
-                                  this.personnelCacheService,
-                                  this.schoolId);
+      this.router,
+      this.dialog,
+      this.snackBar,
+      (p: Personnel) => this.jumpToNewItem(p),
+      this.personnelCacheService,
+      this.schoolId);
   }
 
   ngAfterViewInit(): void {
@@ -111,7 +106,7 @@ class PersonnelMenuManager {
       PersonnelDialogComponent,
       'Personnel added',
       null,
-      { schoolId },
+      {schoolId},
       router,
       dialog,
       snackBar,
@@ -126,7 +121,7 @@ class PersonnelMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ model: personnelCacheService.getFirstSelection() }),
+      () => ({model: personnelCacheService.getFirstSelection()}),
       (p: Personnel) => postAction(p),
       () => personnelCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(

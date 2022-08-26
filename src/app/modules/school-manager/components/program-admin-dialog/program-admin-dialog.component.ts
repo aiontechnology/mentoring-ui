@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { Component, Inject } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ProgramAdmin } from '../../models/program-admin/program-admin';
-import { ProgramAdminRepositoryService } from '../../services/program-admin/program-admin-repository.service';
+import {Component, Inject} from '@angular/core';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ProgramAdmin} from '../../models/program-admin/program-admin';
+import {ProgramAdminRepositoryService} from '../../services/program-admin/program-admin-repository.service';
 
 @Component({
   selector: 'ms-program-admin-dialog',
@@ -26,7 +26,6 @@ import { ProgramAdminRepositoryService } from '../../services/program-admin/prog
   styleUrls: ['./program-admin-dialog.component.scss']
 })
 export class ProgramAdminDialogComponent {
-
   model: UntypedFormGroup;
   isUpdate = false;
 
@@ -47,7 +46,6 @@ export class ProgramAdminDialogComponent {
     let value: Promise<ProgramAdmin>;
 
     if (this.isUpdate) {
-      console.log('Updating', this.model.value);
       newProgramAdmin.links = this.model.value.programAdmin.links;
       value = this.programAdminService.updateProgramAdmin(newProgramAdmin);
     } else {

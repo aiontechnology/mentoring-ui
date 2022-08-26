@@ -1,11 +1,11 @@
-/**
- * Copyright 2021 Aion Technology LLC
+/*
+ * Copyright 2021-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,32 +14,30 @@
  * limitations under the License.
  */
 
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BookRepositoryService } from 'src/app/modules/shared/services/resources/book-repository.service';
-import { Observable, Subscription } from 'rxjs';
-import { Book } from 'src/app/modules/shared/models/book/book';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { DropListBooks } from '../drop-list-books';
-import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import { SchoolBookRepositoryService } from 'src/app/modules/shared/services/school-resource/school-book/school-book-repository.service';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Observable} from 'rxjs';
+import {Book} from 'src/app/modules/shared/models/book/book';
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {DropListBooks} from '../drop-list-books';
+import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import {SchoolBookRepositoryService} from 'src/app/modules/shared/services/school-resource/school-book/school-book-repository.service';
+import {SCHOOL_BOOK_DATA_SOURCE} from '../../../shared.module';
+import {DataSource} from '../../../../../implementation/data/data-source';
 
 @Component({
   selector: 'ms-school-book-dialog',
   templateUrl: './school-book-dialog.component.html',
   styleUrls: ['./school-book-dialog.component.scss']
 })
-export class SchoolBookDialogComponent implements OnInit, OnDestroy {
-
-  private schoolId: string;
+export class SchoolBookDialogComponent implements OnInit {
 
   tags$: Observable<string[]>;
-
-  booksSubscription$: Subscription;
   books: DropListBooks;
   localBooks: DropListBooks;
+  private schoolId: string;
 
-  constructor(private bookService: BookRepositoryService,
+  constructor(@Inject(SCHOOL_BOOK_DATA_SOURCE) private schoolBookDataSource: DataSource<Book>,
               private schoolBookService: SchoolBookRepositoryService,
               private dialogRef: MatDialogRef<SchoolBookDialogComponent>,
               private metaDataService: MetaDataService,
@@ -51,41 +49,28 @@ export class SchoolBookDialogComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit(): void {
-
-    this.bookService.readAllBooks();
-    this.booksSubscription$ = this.bookService.items.subscribe(
-      books => {
-        console.log('Creating new book datasource', books);
-        /**
-         * Filter out global books from the droplist
-         * which are already local to the school.
-         */
-        const books$ = books.filter(book => !this.schoolHasBook(book));
-        this.books = new DropListBooks(books$);
-      }
-    );
+  ngOnInit = (): void => {
+    this.schoolBookDataSource.allValues()
+      .then(books => books.filter(book => !this.schoolHasBook(book)))
+      .then(books => new DropListBooks(books))
+      .then(list => this.books = list);
 
     this.metaDataService.loadTags();
     this.tags$ = this.metaDataService.tags;
 
   }
 
-  ngOnDestroy(): void {
-    this.booksSubscription$.unsubscribe();
-  }
-
-  save(): void {
+  save = (): void => {
     const newBooks = this.localBooks.data.map(book => book.getSelfLink());
     this.schoolBookService.updateSchoolBooks(this.schoolId, newBooks);
     this.dialogRef.close();
   }
 
-  dismiss(): void {
+  dismiss = (): void => {
     this.dialogRef.close(null);
   }
 
-  drop(event$: CdkDragDrop<Book[]>): void {
+  drop = (event$: CdkDragDrop<Book[]>): void => {
 
     // If the droplist item is dropped back into the same container.
     if (event$.previousContainer === event$.container) {
@@ -120,15 +105,15 @@ export class SchoolBookDialogComponent implements OnInit, OnDestroy {
 
       // Now the filtered (visible) data can be updated.
       transferArrayItem(event$.previousContainer.data,
-                        event$.container.data,
-                        event$.previousIndex,
-                        event$.currentIndex);
+        event$.container.data,
+        event$.previousIndex,
+        event$.currentIndex);
 
     }
 
   }
 
-  moveGlobalToLocal(): void {
+  moveGlobalToLocal = (): void => {
     this.moveTo(this.books, this.localBooks);
   }
 

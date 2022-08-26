@@ -14,35 +14,50 @@
  * limitations under the License.
  */
 
-import { Component, ViewChild, OnInit, OnDestroy } from '@angular/core';
-import { UserSessionService } from 'src/app/services/user-session.service';
-import { SchoolRepositoryService } from 'src/app/modules/shared/services/school/school-repository.service';
-import { School } from 'src/app/modules/shared/models/school/school';
-import { MentorCacheService } from '../../services/mentor/mentor-cache.service';
-import { NewDialogCommand } from 'src/app/implementation/command/new-dialog-command';
-import { EditDialogCommand } from 'src/app/implementation/command/edit-dialog-command';
-import { DeleteDialogCommand } from 'src/app/implementation/command/delete-dialog-command';
-import { MentorDialogComponent } from '../mentor-dialog/mentor-dialog.component';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ConfimationDialogComponent } from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { LoggingService } from 'src/app/modules/shared/services/logging-service/logging.service';
-import { Observable, Subscription } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Mentor } from '../../models/mentor/mentor';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {UserSessionService} from 'src/app/services/user-session.service';
+import {School} from 'src/app/modules/shared/models/school/school';
+import {MentorCacheService} from '../../services/mentor/mentor-cache.service';
+import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {MentorDialogComponent} from '../mentor-dialog/mentor-dialog.component';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {MatSort} from '@angular/material/sort';
+import {MatPaginator} from '@angular/material/paginator';
+import {Mentor} from '../../models/mentor/mentor';
+import {SCHOOL_DATA_SOURCE} from '../../../shared/shared.module';
+import {RouteWatchingService} from '../../../../services/route-watching.service';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {tap} from 'rxjs/operators';
 
 @Component({
   selector: 'ms-mentor-list',
   templateUrl: './mentor-list.component.html',
   styleUrls: ['./mentor-list.component.scss'],
-  providers: [MentorCacheService]
+  providers: [RouteWatchingService]
 })
 export class MentorListComponent implements OnInit, OnDestroy {
+
+  schools$: Promise<School[]>;
+  selectedSchool: School;
+
+  constructor(public userSession: UserSessionService,
+              public mentorCacheService: MentorCacheService,
+              @Inject(SCHOOL_DATA_SOURCE) private schoolDataSource: DataSource<School>,
+              private breakpointObserver: BreakpointObserver,
+              private dialog: MatDialog,
+              private menuState: MenuStateService,
+              private snackBar: MatSnackBar,
+              private route: ActivatedRoute,
+              private router: Router,
+              private routeWatcher: RouteWatchingService) {
+  }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
     if (sort !== undefined) {
@@ -56,60 +71,29 @@ export class MentorListComponent implements OnInit, OnDestroy {
     }
   }
 
-  schools$: Observable<School[]>;
-  schoolId: string;
-  selectedSchool: School;
-
-  private paramSubscription$: Subscription;
-
-  constructor(public userSession: UserSessionService,
-              public mentorCacheService: MentorCacheService,
-              private schoolRepository: SchoolRepositoryService,
-              private logger: LoggingService,
-              private breakpointObserver: BreakpointObserver,
-              private dialog: MatDialog,
-              private menuState: MenuStateService,
-              private router: Router,
-              private snackBar: MatSnackBar,
-              private route: ActivatedRoute) {
-    console.log('mentor list constructed');
+  get isSchoolSelected(): boolean {
+    return (this.routeWatcher.schoolId != null) || this.userSession.isProgAdmin;
   }
 
   ngOnInit(): void {
-
-    if (this.userSession.isSysAdmin) {
-      this.schoolRepository.readAllSchools();
-      this.schools$ = this.schoolRepository.schools.pipe(
-        tap(s => {
-          this.logger.log('Read schools', s);
-          this.paramSubscription$ = this.route.paramMap.subscribe(params => {
-            this.schoolId = params.get('schoolId');
-            if (this.schoolId !== null) {
-              this.selectedSchool = this.schoolRepository.getSchoolById(this.schoolId);
+    this.routeWatcher.open(this.route)
+      .pipe(
+        tap(() => this.schools$ = this.schoolDataSource.allValues()),
+      )
+      .subscribe(() => {
+        this.routeWatcher.school
+          .then(school => {
+            if (school) {
+              this.selectedSchool = school;
               this.loadMentorData();
             }
           });
-        })
-      );
-    } else if (this.userSession.isProgAdmin) {
-      this.schoolId = this.userSession.schoolUUID;
-      this.loadMentorData();
-    }
-
+      });
   }
 
   ngOnDestroy(): void {
+    this.routeWatcher.close();
     this.menuState.clear();
-    this.paramSubscription$?.unsubscribe();
-  }
-
-  get isSchoolSelected(): boolean {
-    return (this.schoolId != null) || this.userSession.isProgAdmin;
-  }
-
-  setSchool(id$: string) {
-    this.schoolId = id$;
-    this.loadMentorData();
   }
 
   displayedColumns(): string[] {
@@ -125,18 +109,16 @@ export class MentorListComponent implements OnInit, OnDestroy {
   }
 
   private loadMentorData(): void {
-
-    this.mentorCacheService.establishDatasource(this.schoolId);
-
-    console.log('Adding mentor list menus');
-    MentorListMenuManager.addMenus(this.menuState,
-                                   this.router,
-                                   this.dialog,
-                                   this.snackBar,
-                                   (m: Mentor) => this.jumpToNewItem(m),
-                                   this.mentorCacheService,
-                                   this.schoolId);
-
+    this.mentorCacheService.loadData()
+      .then(() => {
+        MentorListMenuManager.addMenus(this.menuState,
+          this.router,
+          this.dialog,
+          this.snackBar,
+          (m: Mentor) => this.jumpToNewItem(m),
+          this.mentorCacheService,
+          this.routeWatcher.schoolId);
+      });
   }
 
   /**
@@ -153,7 +135,6 @@ export class MentorListComponent implements OnInit, OnDestroy {
 }
 
 class MentorListMenuManager {
-
   static addMenus(menuState: MenuStateService,
                   router: Router,
                   dialog: MatDialog,
@@ -161,8 +142,6 @@ class MentorListMenuManager {
                   postAction: (m: Mentor) => void,
                   mentorCacheService: MentorCacheService,
                   schoolId: string): void {
-
-    console.log('Constructing MenuHandler');
     menuState.clear();
 
     menuState.add(new NewDialogCommand(
@@ -171,7 +150,7 @@ class MentorListMenuManager {
       MentorDialogComponent,
       'Mentor added',
       null,
-      { schoolId },
+      {schoolId},
       router,
       dialog,
       snackBar,
@@ -186,7 +165,7 @@ class MentorListMenuManager {
       router,
       dialog,
       snackBar,
-      () => ({ schoolId, model: mentorCacheService.getFirstSelection() }),
+      () => ({schoolId, model: mentorCacheService.getFirstSelection()}),
       (m: Mentor) => postAction(m),
       () => mentorCacheService.selection.selected.length === 1));
     menuState.add(new DeleteDialogCommand(
@@ -203,7 +182,6 @@ class MentorListMenuManager {
       () => mentorCacheService.selectionCount,
       () => mentorCacheService.removeSelected(),
       () => mentorCacheService.selection.selected.length > 0));
-
   }
 
 }
