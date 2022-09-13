@@ -56,14 +56,14 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.setMenu();
+
     this.navigation.routeParams = ['resourcemanager'];
     this.navigation.fragment = 'books';
 
     /* Watch the book UUID. Call event handler when it changes */
     this.route.paramMap
       .subscribe(params => this.onBookIdChange(params.get('id')));
-
-    this.setMenu();
   }
 
   ngOnDestroy(): void {
@@ -87,7 +87,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  private setMenu = (): void => {
+  private setMenu(): void {
     this.menuState.removeGroup('book');
     if (this.userSession.isSysAdmin) {
       BookDetailMenuManager.addMenus(this,

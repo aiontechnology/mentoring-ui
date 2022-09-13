@@ -18,11 +18,10 @@ import {HttpClient} from '@angular/common/http';
 import {forkJoin, Observable, Subject} from 'rxjs';
 import {log} from 'src/app/shared/logging-decorator';
 import {environment} from 'src/environments/environment';
-import {LinksHolder} from './links-holder';
 import {tap} from 'rxjs/operators';
-import {LinkServiceService} from 'src/app/modules/shared/services/link-service/link-service.service';
+import {LinkService} from 'src/app/modules/shared/services/link-service/link.service';
 
-export abstract class BaseRepository<T extends LinksHolder<any>> {
+export abstract class BaseRepository<T> {
 
   private dataStore: {
     items: T[];
@@ -86,8 +85,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   @log
   protected getById(id: string): T {
     for (const item of this.dataStore.items) {
-      const i = JSON.stringify(item);
-      if (LinkServiceService.selfLink(i).endsWith(id)) {
+      if (LinkService.selfLink(item).endsWith(id)) {
         return item;
       }
     }
@@ -97,11 +95,11 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   @log
   protected update(uri: string, item: T): Promise<T> {
     return new Promise((resolver) => {
-      this.http.put(item.getSelfLink(), item)
+      this.http.put(LinkService.selfLink(item), item)
         .subscribe(data => {
           const i = this.fromJSON(data);
           for (const index in this.dataStore.items) {
-            if (this.dataStore.items[index].getSelfLink() === i.getSelfLink()) {
+            if (LinkService.selfLink(this.dataStore.items[index]) === LinkService.selfLink(i)) {
               this.dataStore.items[index] = i;
               break;
             }
@@ -116,7 +114,7 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
   protected delete(items: T[]): Promise<void> {
 
     const observables$ = items.map((item) => {
-      return this.http.delete(item.getSelfLink())
+      return this.http.delete(LinkService.selfLink(item))
         .pipe(
           tap(() => {
             const index = this.dataStore.items.indexOf(item);
@@ -144,10 +142,6 @@ export abstract class BaseRepository<T extends LinksHolder<any>> {
 
   private publishItems(): void {
     this._items.next(this.dataStore.items);
-  }
-
-  private stripLinks(item: T): T {
-    return Object.assign(this.newItem(), item).clearLinks();
   }
 
 }

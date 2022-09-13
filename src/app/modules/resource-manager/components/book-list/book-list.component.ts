@@ -60,8 +60,8 @@ export class BookListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.bookCacheService.loadData()
-      .then(() => this.setMenu());
+    this.setMenu();
+    this.bookCacheService.loadData();
   }
 
   displayedColumns(): string[] {

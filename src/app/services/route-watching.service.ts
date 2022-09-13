@@ -21,11 +21,20 @@ import {DataSource} from '../implementation/data/data-source';
 import {map} from 'rxjs/operators';
 import {Inject, Injectable} from '@angular/core';
 import {
+  INVITATION_DATA_SOURCE, INVITATION_URI_SUPPLIER,
   MENTOR_DATA_SOURCE,
-  MENTOR_URI_SUPPLIER, PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER, SCHOOL_BOOK_DATA_SOURCE, SCHOOL_BOOK_URI_SUPPLIER,
+  MENTOR_URI_SUPPLIER,
+  PERSONNEL_DATA_SOURCE,
+  PERSONNEL_URI_SUPPLIER,
+  PROGRAM_ADMIN_DATA_SOURCE,
+  PROGRAM_ADMIN_URI_SUPPLIER,
+  SCHOOL_BOOK_DATA_SOURCE,
+  SCHOOL_BOOK_URI_SUPPLIER,
   SCHOOL_DATA_SOURCE,
   SCHOOL_SESSION_DATA_SOURCE,
-  SCHOOL_SESSION_URI_SUPPLIER, STUDENT_DATA_SOURCE, STUDENT_URI_SUPPLIER,
+  SCHOOL_SESSION_URI_SUPPLIER,
+  STUDENT_DATA_SOURCE,
+  STUDENT_URI_SUPPLIER,
   TEACHER_DATA_SOURCE,
   TEACHER_URI_SUPPLIER
 } from '../modules/shared/shared.module';
@@ -37,6 +46,7 @@ import {SchoolSession} from '../modules/shared/models/school/schoolsession';
 import {Student} from '../modules/student-manager/models/student/student';
 import {Personnel} from '../modules/school-manager/models/personnel/personnel';
 import {Book} from '../modules/shared/models/book/book';
+import {ProgramAdmin} from '../modules/school-manager/models/program-admin/program-admin';
 
 @Injectable()
 export class RouteWatchingService {
@@ -47,10 +57,14 @@ export class RouteWatchingService {
   private ids = new Map<string, string>();
 
   constructor(private userSession: UserSessionService,
+              @Inject(INVITATION_DATA_SOURCE) private invitationDataSource: DataSource<Mentor>,
+              @Inject(INVITATION_URI_SUPPLIER) private invitationUriSupplier: UriSupplier,
               @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
               @Inject(MENTOR_URI_SUPPLIER) private mentorUriSupplier: UriSupplier,
               @Inject(PERSONNEL_DATA_SOURCE) private personnelDataSource: DataSource<Personnel>,
               @Inject(PERSONNEL_URI_SUPPLIER) private personnelUriSupplier: UriSupplier,
+              @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
+              @Inject(PROGRAM_ADMIN_URI_SUPPLIER) private programAdminUriSupplier: UriSupplier,
               @Inject(SCHOOL_DATA_SOURCE) private schoolDataSource: DataSource<School>,
               @Inject(SCHOOL_BOOK_DATA_SOURCE) private schoolBookDataSource: DataSource<Book>,
               @Inject(SCHOOL_BOOK_URI_SUPPLIER) private schoolBookUriSuppler: UriSupplier,
@@ -116,17 +130,23 @@ export class RouteWatchingService {
   }
 
   private onSchoolIdChange = (schoolId: string) => {
+    this.invitationUriSupplier.reset();
     this.mentorUriSupplier.reset();
     this.personnelUriSupplier.reset();
+    this.programAdminUriSupplier.reset();
     this.schoolBookUriSuppler.reset();
     this.schoolSessionUriSupplier.reset();
     this.studentUriSupplier.reset();
     this.teacherUriSupplier.reset();
     if (schoolId) {
+      this.invitationDataSource.reset();
+      this.invitationUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
       this.mentorDataSource.reset();
       this.mentorUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
       this.personnelDataSource.reset();
       this.personnelUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
+      this.programAdminDataSource.reset();
+      this.programAdminUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
       this.schoolBookDataSource.reset();
       this.schoolBookUriSuppler.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
       this.schoolSessionDataSource.reset();

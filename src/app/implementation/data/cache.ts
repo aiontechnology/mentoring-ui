@@ -16,11 +16,11 @@
 
 import {Injectable} from '@angular/core';
 import {DataManager} from './data-manager';
-import {IdAware} from '../repository/id-aware';
 import {forkJoin} from 'rxjs';
+import {IdService} from '../../modules/shared/services/id-service/id.service';
 
 @Injectable()
-export class Cache<T extends IdAware<string>> implements DataManager<T> {
+export class Cache<T> implements DataManager<T> {
 
   private values: T[];
   private valueMap: Map<string, T>;
@@ -37,7 +37,7 @@ export class Cache<T extends IdAware<string>> implements DataManager<T> {
     new Promise((resolve, reject) => {
       if (this.isLoaded) {
         this.values.push(value);
-        this.valueMap.set(value.id, value);
+        this.valueMap.set(IdService.calculateId(value), value);
         resolve(value);
       } else {
         reject('Unable to add to cache. Cache is not initialized');
@@ -76,7 +76,7 @@ export class Cache<T extends IdAware<string>> implements DataManager<T> {
   put = (values: T[]): void => {
     this.values = values;
     this.valueMap = new Map<string, T>();
-    values.forEach(value => this.valueMap.set(value.id, value));
+    values.forEach(value => this.valueMap.set(IdService.calculateId(value), value));
   }
 
   /**
@@ -86,12 +86,12 @@ export class Cache<T extends IdAware<string>> implements DataManager<T> {
   remove = (value: T): Promise<T> => {
     const that = this;
     return new Promise((resolve, reject) => {
-      if (this.isLoaded) {
-        const index = that.values.findIndex(v => v.id === value.id);
+      if (that.isLoaded) {
+        const index = that.values.findIndex(v => IdService.calculateId(v) === IdService.calculateId(value));
         if (index !== -1) {
           that.values.splice(index, 1);
         }
-        that.valueMap.delete(value.id);
+        that.valueMap.delete(IdService.calculateId(value));
         resolve(value);
       } else {
         reject('Unable to remove a value. Cache is not initialized');
@@ -119,9 +119,9 @@ export class Cache<T extends IdAware<string>> implements DataManager<T> {
     const that = this;
     return new Promise((resolve, reject) => {
       if (this.isLoaded) {
-        const index = that.values.findIndex(v => v.id === value.id);
+        const index = that.values.findIndex(v => IdService.calculateId(v) === IdService.calculateId(value));
         that.values[index] = value;
-        that.valueMap.set(value.id, value);
+        that.valueMap.set(IdService.calculateId(value), value);
         resolve(value);
       } else {
         reject('Unable to update a value. Cache is not initialized');

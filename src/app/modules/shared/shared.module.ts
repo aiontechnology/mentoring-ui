@@ -22,7 +22,6 @@ import {MaterialModule} from 'src/app/shared/material.module';
 import {OnlyNumberDirective} from './directives/only-number.directive';
 import {SelectionCountDisplayComponent} from './components/selection-count-display/selection-count-display.component';
 import {SchoolCacheService} from './services/school/school-cache.service';
-import {SchoolRepositoryService} from './services/school/school-repository.service';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {LayoutModule} from '@angular/cdk/layout';
 import {MetaDataService} from './services/meta-data/meta-data.service';
@@ -35,7 +34,6 @@ import {SchoolGameDialogComponent} from './components/school-resource/school-gam
 import {SchoolGameListComponent} from './components/school-resource/school-game-list/school-game-list.component';
 import {RouterModule} from '@angular/router';
 import {SchoolSessionCacheService} from './services/school-session/school-session-cache.service';
-import {SchoolSessionRepositoryService} from './services/school-session/school-session-repository.service';
 import {Repository} from '../../implementation/data/repository';
 import {School} from './models/school/school';
 import {Cache} from '../../implementation/data/cache';
@@ -64,6 +62,10 @@ import {StudentRepository} from '../student-manager/repositories/student-reposit
 import {StudentCacheService} from '../student-manager/services/student/student-cache.service';
 import {Personnel} from '../school-manager/models/personnel/personnel';
 import {PersonnelRepository} from '../student-manager/repositories/personnel-repository';
+import {ProgramAdmin} from '../school-manager/models/program-admin/program-admin';
+import {ProgramAdminRepository} from './repositories/program-admin-repository';
+import {Invitation} from '../school-manager/models/workflow/invitation';
+import {InvitationRepository} from './repositories/invitation-repository';
 
 export const BOOK_DATA_SOURCE = new InjectionToken<DataSource<Book>>('book-data-source');
 export const BOOK_CACHE = new InjectionToken<Cache<Book>>('book-cache');
@@ -73,6 +75,9 @@ export const GAME_DATA_SOURCE = new InjectionToken<DataSource<Game>>('game-data-
 export const GAME_CACHE = new InjectionToken<Cache<Game>>('game-cache');
 export const GAME_URI_SUPPLIER = new InjectionToken<UriSupplier>('game-uri-supplier');
 
+export const INVITATION_DATA_SOURCE = new InjectionToken<DataSource<Invitation>>('invitation-data-source');
+export const INVITATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('invitation-uri-supplier');
+
 export const MENTOR_DATA_SOURCE = new InjectionToken<DataSource<Mentor>>('mentor-data-source');
 export const MENTOR_CACHE = new InjectionToken<Cache<Mentor>>('mentor-cache');
 export const MENTOR_URI_SUPPLIER = new InjectionToken<UriSupplier>('mentor-uri-supplier');
@@ -80,6 +85,10 @@ export const MENTOR_URI_SUPPLIER = new InjectionToken<UriSupplier>('mentor-uri-s
 export const PERSONNEL_DATA_SOURCE = new InjectionToken<DataSource<Personnel>>('personnel-data-source');
 export const PERSONNEL_CACHE = new InjectionToken<Cache<Personnel>>('personnel-cache');
 export const PERSONNEL_URI_SUPPLIER = new InjectionToken<UriSupplier>('personnel-uri-supplier');
+
+export const PROGRAM_ADMIN_DATA_SOURCE = new InjectionToken<DataSource<ProgramAdmin>>('program-admin-data-source');
+export const PROGRAM_ADMIN_CACHE = new InjectionToken<Cache<Personnel>>('program-admin-cache');
+export const PROGRAM_ADMIN_URI_SUPPLIER = new InjectionToken<UriSupplier>('program-admin-uri-supplier');
 
 export const SCHOOL_DATA_SOURCE = new InjectionToken<DataSource<School>>('school-data-source');
 export const SCHOOL_CACHE = new InjectionToken<Cache<School>>('school-cache');
@@ -185,6 +194,18 @@ export class SharedModule {
         },
         GameCacheService,
 
+        /* Invitation resources */
+        {
+          provide: INVITATION_URI_SUPPLIER,
+          useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/invitations`)
+        },
+        InvitationRepository,
+        {
+          provide: INVITATION_DATA_SOURCE,
+          useFactory: (repository: Repository<Invitation>) => new DataSource<Invitation>(repository),
+          deps: [InvitationRepository]
+        },
+
         /* Mentor resources */
         {
           provide: MENTOR_URI_SUPPLIER,
@@ -216,6 +237,22 @@ export class SharedModule {
           provide: PERSONNEL_DATA_SOURCE,
           useFactory: (repository: Repository<Personnel>, cache: Cache<Personnel>) => new DataSource<Personnel>(repository, cache),
           deps: [PersonnelRepository, PERSONNEL_CACHE]
+        },
+
+        /* Program admin resources */
+        {
+          provide: PROGRAM_ADMIN_URI_SUPPLIER,
+          useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/programAdmins`)
+        },
+        ProgramAdminRepository,
+        {
+          provide: PROGRAM_ADMIN_CACHE,
+          useFactory: () => new Cache<ProgramAdmin>()
+        },
+        {
+          provide: PROGRAM_ADMIN_DATA_SOURCE,
+          useFactory: (repository: Repository<ProgramAdmin>, cache: Cache<ProgramAdmin>) => new DataSource<ProgramAdmin>(repository, cache),
+          deps: [ProgramAdminRepository, PROGRAM_ADMIN_CACHE]
         },
 
         /* School resources */
@@ -322,9 +359,7 @@ export class SharedModule {
 
         // Services
         SchoolGameRepositoryService,
-        MetaDataService,
-        SchoolRepositoryService,
-        SchoolSessionRepositoryService
+        MetaDataService
       ]
     };
   }

@@ -14,12 +14,20 @@
  * limitations under the License.
  */
 
-import {Repository} from './repository';
+import {findSelfLink, Repository} from './repository';
 
 describe('Repository', () => {
 
-  it('should add a value', done => {
-    done();
+  it('should find the self link', () => {
+    const value = {
+      links: {
+        self: [
+          {href: 'http://example.com'}
+        ]
+      }
+    };
+    const link = findSelfLink(value);
+    expect(link).toEqual('http://example.com');
   });
 
 });

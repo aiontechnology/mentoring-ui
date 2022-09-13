@@ -18,7 +18,8 @@ import {Component, Inject} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ProgramAdmin} from '../../models/program-admin/program-admin';
-import {ProgramAdminRepositoryService} from '../../services/program-admin/program-admin-repository.service';
+import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../shared/shared.module';
+import {DataSource} from '../../../../implementation/data/data-source';
 
 @Component({
   selector: 'ms-program-admin-dialog',
@@ -31,8 +32,8 @@ export class ProgramAdminDialogComponent {
 
   schoolId: string;
 
-  constructor(private dialogRef: MatDialogRef<ProgramAdminDialogComponent>,
-              private programAdminService: ProgramAdminRepositoryService,
+  constructor(@Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
+              private dialogRef: MatDialogRef<ProgramAdminDialogComponent>,
               private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
@@ -41,15 +42,14 @@ export class ProgramAdminDialogComponent {
   }
 
   save(): void {
-
     const newProgramAdmin = new ProgramAdmin(this.model.value);
     let value: Promise<ProgramAdmin>;
 
     if (this.isUpdate) {
       newProgramAdmin.links = this.model.value.programAdmin.links;
-      value = this.programAdminService.updateProgramAdmin(newProgramAdmin);
+      value = this.programAdminDataSource.update(newProgramAdmin);
     } else {
-      value = this.programAdminService.createProgramAdmin(this.schoolId, newProgramAdmin);
+      value = this.programAdminDataSource.add(newProgramAdmin);
     }
 
     value.then((p: ProgramAdmin) => {

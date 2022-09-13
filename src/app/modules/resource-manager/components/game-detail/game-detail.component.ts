@@ -60,14 +60,14 @@ export class GameDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.setMenu();
+
     this.navigation.routeParams = ['resourcemanager'];
     this.navigation.fragment = 'games';
 
     /* Watch the game UUID. Call event handler when it changes */
     this.route.paramMap
       .subscribe(params => this.onGameIdChange(params.get('id')));
-
-    this.setMenu();
   }
 
   ngOnDestroy(): void {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+export class Invitation {
+  constructor(public parentFirstName: string,
+              public parentLastName: string,
+              public parentEmailAddress: string,
+              public studentFirstName: string,
+              public studentLastName: string) {
+  }
 
-import { ProgramAdminCacheService } from './program-admin-cache.service';
-
-xdescribe('ProgramAdminCacheService', () => {
-  let service: ProgramAdminCacheService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ProgramAdminCacheService);
-  });
-
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+  static of(value: any): Invitation {
+    return new Invitation(
+      value.parentFirstName,
+      value.parentLastName,
+      value.parentEmailAddress,
+      value.studentFirstName,
+      value.studentLastName);
+  }
+}

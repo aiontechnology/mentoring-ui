@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-import { LinksHolder } from 'src/app/implementation/repository/links-holder';
-import { Contact } from '../contact/contact';
-import { personLocations } from 'src/app/modules/shared/constants/locations';
-import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
+import {Contact} from '../contact/contact';
+import {personLocations} from 'src/app/modules/shared/constants/locations';
 
-export abstract class Student implements LinksHolder<Student> {
-
+export abstract class Student {
   id: string;
   firstName: string;
   lastName: string;
@@ -39,9 +36,9 @@ export abstract class Student implements LinksHolder<Student> {
   leadershipTraits: string[];
   contacts: Contact[];
   links: {
-      self: [
-          { href: string; }
-      ]
+    self: [
+      { href: string; }
+    ]
   };
 
   abstract teacher: any;
@@ -73,15 +70,6 @@ export abstract class Student implements LinksHolder<Student> {
     this.links = json?.links;
   }
 
-  clearLinks(): Student {
-    this.links = undefined;
-    return this;
-  }
-
-  getSelfLink(): string {
-    return LinkServiceService.selfLink(JSON.stringify(this));
-  }
-
   get displayLocation(): string {
     return personLocations[this.location] ?? '';
   }
@@ -98,5 +86,4 @@ export abstract class Student implements LinksHolder<Student> {
     fullName += lastName ?? '';
     return fullName;
   }
-
 }

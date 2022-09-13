@@ -14,58 +14,62 @@
  * limitations under the License.
  */
 
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
 import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
 import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
 import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import {ProgramAdmin} from '../../models/program-admin/program-admin';
-import {ProgramAdminRepositoryService} from '../../services/program-admin/program-admin-repository.service';
 import {MenuStateService} from 'src/app/services/menu-state.service';
 import {ProgramAdminDialogComponent} from '../program-admin-dialog/program-admin-dialog.component';
-import {Subscription} from 'rxjs';
+import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../shared/shared.module';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {RouteWatchingService} from '../../../../services/route-watching.service';
 
 @Component({
   selector: 'ms-program-admin-detail',
   templateUrl: './program-admin-detail.component.html',
-  styleUrls: ['./program-admin-detail.component.scss']
+  styleUrls: ['./program-admin-detail.component.scss'],
+  providers: [RouteWatchingService]
 })
-export class ProgramAdminDetailComponent implements OnInit, OnDestroy {
+export class ProgramAdminDetailComponent implements OnInit {
 
   @Input() schoolId: string;
   programAdmin: ProgramAdmin;
-  private subscription$: Subscription;
 
-  constructor(private programAdminService: ProgramAdminRepositoryService,
+  constructor(@Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private snackBar: MatSnackBar,
-              private router: Router) {
+              private route: ActivatedRoute,
+              private router: Router,
+              private routeWatcher: RouteWatchingService) {
   }
 
   ngOnInit(): void {
+    this.menuState.removeGroup('program-admin');
     ProgramAdminDetailMenuManager.addMenus(this.menuState,
       this.router,
       this.dialog,
       this.snackBar,
       this.programAdmin,
-      this.programAdminService,
+      this.programAdminDataSource,
       this.schoolId);
 
-    this.programAdminService.readAllProgramAdmins(this.schoolId);
-    this.subscription$ = this.programAdminService.items.subscribe(value => {
-      this.programAdmin = value[0];
-      this.menuState.removeGroup('program-admin');
-    });
+    this.routeWatcher.open(this.route)
+      .subscribe(params => {
+        this.programAdminDataSource.allValues()
+          .then(admin => this.programAdmin = admin[0]);
+      });
+    //
+    // this.programAdminDataSource.this.programAdminService.readAllProgramAdmins(this.schoolId);
+    // this.subscription$ = this.programAdminService.items.subscribe(value => {
+    //   this.programAdmin = value[0];
+    // });
   }
-
-  ngOnDestroy(): void {
-    this.subscription$.unsubscribe();
-  }
-
 }
 
 class ProgramAdminDetailMenuManager {
@@ -74,7 +78,7 @@ class ProgramAdminDetailMenuManager {
                   dialog: MatDialog,
                   snackBar: MatSnackBar,
                   programAdmin: ProgramAdmin,
-                  programAdminService: ProgramAdminRepositoryService,
+                  programAdminDataSource: DataSource<ProgramAdmin>,
                   schoolId: string): void {
     menuState.add(new NewDialogCommand(
       'Add Program Admin',
@@ -114,7 +118,8 @@ class ProgramAdminDetailMenuManager {
       snackBar,
       null,
       () => 1,
-      () => programAdminService.deleteProgramAdmins([programAdmin]),
+      () => programAdminDataSource.remove(programAdmin)
+        .then(),
       () => programAdmin !== undefined));
   }
 

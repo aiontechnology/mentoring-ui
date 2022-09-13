@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -32,13 +32,15 @@ import {LpgRepositoryService} from '../../services/lpg/lpg-repository.service';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {NavigationService} from 'src/app/services/navigation.service';
 import {SchoolSessionCacheService} from 'src/app/modules/shared/services/school-session/school-session-cache.service';
+import {RouteWatchingService} from '../../../../services/route-watching.service';
 
 @Component({
   selector: 'ms-student-detail',
   templateUrl: './student-detail.component.html',
-  styleUrls: ['./student-detail.component.scss']
+  styleUrls: ['./student-detail.component.scss'],
+  providers: [RouteWatchingService]
 })
-export class StudentDetailComponent implements OnDestroy {
+export class StudentDetailComponent implements OnInit, OnDestroy {
 
   isHistoric: boolean;
   student: StudentInbound;
@@ -54,6 +56,7 @@ export class StudentDetailComponent implements OnDestroy {
 
   constructor(public lpgService: LpgRepositoryService,
               private route: ActivatedRoute,
+              private routeWatcher: RouteWatchingService,
               private dialog: MatDialog,
               private menuState: MenuStateService,
               private studentService: StudentRepositoryService,
@@ -89,7 +92,7 @@ export class StudentDetailComponent implements OnDestroy {
       this.studentService.readOneStudent(this.schoolId, this.studentId, this.sessionId);
       const subscription3$ = this.studentService.students.subscribe(student => {
 
-        this.menuState.removeGroup('student');
+        // this.menuState.removeGroup('student');
 
         this.student = student[0];
         this.contacts = this.student?.contacts ? this.student?.contacts : [];
@@ -98,16 +101,16 @@ export class StudentDetailComponent implements OnDestroy {
         this.studentGrade = grades.find(grade => grade.value === this.student?.grade.toString())?.valueView;
         this.studentMentor = this.student?.mentor;
 
-        StudentDetailMenuManager.addMenus(this.student,
-          this.menuState,
-          this.router,
-          this.dialog,
-          this.snackBar,
-          this.studentService,
-          this.schoolId,
-          this.navigation.routeParams.join('/'),
-          this.isHistoric);
-        this.subscriptions$.add(subscription3$);
+        // StudentDetailMenuManager.addMenus(this.student,
+        //   this.menuState,
+        //   this.router,
+        //   this.dialog,
+        //   this.snackBar,
+        //   this.studentService,
+        //   this.schoolId,
+        //   this.navigation.routeParams.join('/'),
+        //   this.isHistoric);
+        // this.subscriptions$.add(subscription3$);
       });
     });
 
@@ -118,6 +121,24 @@ export class StudentDetailComponent implements OnDestroy {
 
   get mentorFullName(): string {
     return this.studentMentor ? this.studentMentor?.mentor?.firstName + ' ' + this.studentMentor?.mentor?.lastName : '';
+  }
+
+  ngOnInit(): void {
+    this.menuState.removeGroup('student');
+    StudentDetailMenuManager.addMenus(this.student,
+      this.menuState,
+      this.router,
+      this.dialog,
+      this.snackBar,
+      this.studentService,
+      this.schoolId,
+      this.navigation.routeParams.join('/'),
+      this.isHistoric);
+
+    this.routeWatcher.open(this.route)
+      .subscribe(params => {
+
+      });
   }
 
   ngOnDestroy(): void {

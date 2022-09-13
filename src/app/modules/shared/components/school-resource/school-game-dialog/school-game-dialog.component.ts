@@ -23,6 +23,7 @@ import {SchoolGameRepositoryService} from 'src/app/modules/shared/services/schoo
 import {DropListData} from '../drop-list-data';
 import {GAME_DATA_SOURCE} from '../../../shared.module';
 import {DataSource} from '../../../../../implementation/data/data-source';
+import {LinkService} from '../../../services/link-service/link.service';
 
 @Component({
   selector: 'ms-school-game-dialog',
@@ -58,7 +59,7 @@ export class SchoolGameDialogComponent implements OnInit, OnDestroy {
   }
 
   save = (): void => {
-    const newGames = this.localGames.data.map(game => game.getSelfLink());
+    const newGames = this.localGames.data.map(game => LinkService.selfLink(game));
     this.schoolGameService.updateSchoolGames(this.schoolId, newGames);
     this.dialogRef.close();
   }

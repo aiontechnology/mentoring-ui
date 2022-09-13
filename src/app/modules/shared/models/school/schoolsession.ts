@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-import {JSONPath} from 'jsonpath-plus';
-import {LinksHolder} from 'src/app/implementation/repository/links-holder';
-
-export class SchoolSession implements LinksHolder<SchoolSession> {
-
+export class SchoolSession {
   id: string;
   startDate: Date;
   endDate: Date;
@@ -44,19 +40,4 @@ export class SchoolSession implements LinksHolder<SchoolSession> {
     label += this.isCurrent ? ' (current)' : '';
     return label;
   }
-
-  clearLinks(): SchoolSession {
-    this.links = undefined;
-    return this;
-  }
-
-  getSelfLink(): string {
-    const href = JSONPath({path: '$.links[?(@.rel == "self")].href', json: this});
-    if (Array.isArray(href) && href.length === 1) {
-      const self = href[0];
-      return self;
-    }
-    throw new Error('No self link found');
-  }
-
 }

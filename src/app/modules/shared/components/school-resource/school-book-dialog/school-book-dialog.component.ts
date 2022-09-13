@@ -24,6 +24,7 @@ import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-da
 import {SchoolBookRepositoryService} from 'src/app/modules/shared/services/school-resource/school-book/school-book-repository.service';
 import {SCHOOL_BOOK_DATA_SOURCE} from '../../../shared.module';
 import {DataSource} from '../../../../../implementation/data/data-source';
+import {LinkService} from '../../../services/link-service/link.service';
 
 @Component({
   selector: 'ms-school-book-dialog',
@@ -61,7 +62,7 @@ export class SchoolBookDialogComponent implements OnInit {
   }
 
   save = (): void => {
-    const newBooks = this.localBooks.data.map(book => book.getSelfLink());
+    const newBooks = this.localBooks.data.map(book => LinkService.selfLink(book));
     this.schoolBookService.updateSchoolBooks(this.schoolId, newBooks);
     this.dialogRef.close();
   }

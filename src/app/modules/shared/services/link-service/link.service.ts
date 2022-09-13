@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import {JSONPath} from 'jsonpath-plus';
 
-import { LinkServiceService } from './link-service.service';
+export class LinkService {
 
-xdescribe('LinkServiceService', () => {
-  let service: LinkServiceService;
+  static selfLink(element: any): string {
+    const href = JSONPath({path: '$.links[?(@.rel == "self")].href', json: element});
+    if (Array.isArray(href) && href.length === 1) {
+      const self = href[0];
+      return self;
+    }
+    throw new Error('No self link found');
+  }
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(LinkServiceService);
-  });
+  static clearLinks(element: any): void {
+    element.links = undefined;
+  }
 
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+}

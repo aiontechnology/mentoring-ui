@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-import {IdAware} from '../repository/id-aware';
-
-export interface DataManager<T extends IdAware<string>> {
+export interface DataManager<T> {
 
   add: (value: T) => Promise<T>;
 

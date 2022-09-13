@@ -1,5 +1,5 @@
-/*
- * Copyright 2020-2022 Aion Technology LLC
+/*!
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+p.legend {
+  color: red;
+  margin-bottom: 10px;
+}
 
-import { ProgramAdminRepositoryService } from './program-admin-repository.service';
+.dialog-container {
+  display: flex;
+}
 
-xdescribe('ProgramAdminService', () => {
-  let service: ProgramAdminRepositoryService;
+.dialog-container > * {
+  width: 100%;
+}
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ProgramAdminRepositoryService);
-  });
-
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+.dialog-container > .mat-form-field {
+  margin-left: 16px;
+}

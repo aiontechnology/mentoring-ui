@@ -36,7 +36,8 @@ import {map, tap} from 'rxjs/operators';
 @Component({
   selector: 'ms-mentor-detail',
   templateUrl: './mentor-detail.component.html',
-  styleUrls: ['./mentor-detail.component.scss']
+  styleUrls: ['./mentor-detail.component.scss'],
+  providers: [RouteWatchingService]
 })
 export class MentorDetailComponent implements OnInit, OnDestroy {
 

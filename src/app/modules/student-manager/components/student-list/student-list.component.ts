@@ -16,7 +16,6 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {UserSessionService} from 'src/app/services/user-session.service';
-import {SchoolRepositoryService} from 'src/app/modules/shared/services/school/school-repository.service';
 import {School} from 'src/app/modules/shared/models/school/school';
 import {StudentCacheService} from '../../services/student/student-cache.service';
 import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
@@ -37,7 +36,6 @@ import {tap} from 'rxjs/operators';
 import {Student} from '../../models/student/student';
 import {SchoolSession} from 'src/app/modules/shared/models/school/schoolsession';
 import {grades} from 'src/app/modules/shared/constants/grades';
-import {SchoolSessionRepositoryService} from 'src/app/modules/shared/services/school-session/school-session-repository.service';
 import {
   SCHOOL_DATA_SOURCE,
   SCHOOL_SESSION_DATA_SOURCE,
@@ -77,8 +75,6 @@ export class StudentListComponent implements OnInit, OnDestroy {
               @Inject(SCHOOL_SESSION_URI_SUPPLIER) private schoolSessionUriSupplier: UriSupplier,
               @Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<Student>,
               @Inject(STUDENT_URI_SUPPLIER) private studentUriSupplier: UriSupplier,
-              private schoolRepository: SchoolRepositoryService,
-              private schoolSessionRepository: SchoolSessionRepositoryService,
               private breakpointObserver: BreakpointObserver,
               private dialog: MatDialog,
               private menuState: MenuStateService,

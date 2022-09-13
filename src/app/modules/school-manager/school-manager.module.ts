@@ -23,23 +23,25 @@ import {SchoolDetailComponent} from './components/school-detail/school-detail.co
 import {TeacherListComponent} from './components/teacher-list/teacher-list.component';
 import {TeacherDialogComponent} from './components/teacher-dialog/teacher-dialog.component';
 import {GradesFormatPipe} from '../shared/pipes/grades-format.pipe';
-import {SharedModule} from '../shared/shared.module';
-import {ProgramAdminRepositoryService} from './services/program-admin/program-admin-repository.service';
+import {SharedModule, TEACHER_CACHE, TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../shared/shared.module';
 import {ProgramAdminDialogComponent} from './components/program-admin-dialog/program-admin-dialog.component';
 import {PersonnelListComponent} from './components/personnel-list/personnel-list.component';
 import {PersonnelDialogComponent} from './components/personnel-dialog/personnel-dialog.component';
 import {CanActivateSysAdmin} from 'src/app/services/can-activate-sys-admin';
 import {ProgramAdminDetailComponent} from './components/program-admin-detail/program-admin-detail.component';
 import {SchoolSessionDialogComponent} from './components/school-session-dialog/school-session-dialog.component';
-import {DataSource} from '../../implementation/data/data-source';
-import {Cache} from '../../implementation/data/cache';
 import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {environment} from '../../../environments/environment';
-import {Repository} from '../../implementation/data/repository';
-import {PersonnelRepository} from '../student-manager/repositories/personnel-repository';
-import {Personnel} from './models/personnel/personnel';
 import {PersonnelCacheService} from './services/personnel/personnel-cache.service';
-import {RouteWatchingService} from '../../services/route-watching.service';
+import {SchoolCacheService} from './services/school/school-cache.service';
+import {InviteStudentComponent} from './components/invite-student/invite-student.component';
+import {DataSource} from '../../implementation/data/data-source';
+import {Invitation} from './models/workflow/invitation';
+import {environment} from '../../../environments/environment';
+import {TeacherRepository} from './repositories/teacher-repository';
+import {Cache} from '../../implementation/data/cache';
+import {Teacher} from './models/teacher/teacher';
+import {Repository} from '../../implementation/data/repository';
+import {TeacherCacheService} from './services/teacher/teacher-cache.service';
 
 const routes: Routes = [
   {
@@ -68,7 +70,8 @@ const routes: Routes = [
     TeacherListComponent,
     PersonnelDialogComponent,
     ProgramAdminDetailComponent,
-    SchoolSessionDialogComponent
+    SchoolSessionDialogComponent,
+    InviteStudentComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -76,8 +79,7 @@ const routes: Routes = [
   ],
   providers: [
     PersonnelCacheService,
-
-    ProgramAdminRepositoryService
+    SchoolCacheService
   ]
 })
 export class SchoolManagerModule {

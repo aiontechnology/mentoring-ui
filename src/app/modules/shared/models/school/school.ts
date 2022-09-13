@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-import {JSONPath} from 'jsonpath-plus';
-import {LinksHolder} from 'src/app/implementation/repository/links-holder';
 import {Address} from '../address/address';
 import {SchoolSession} from './schoolsession';
 
-export class School implements LinksHolder<School> {
-
+export class School {
   id: string;
   name: string;
   address: Address;
@@ -44,19 +41,4 @@ export class School implements LinksHolder<School> {
     this.currentSession = new SchoolSession(json?.currentSession)
     this.links = json?.links;
   }
-
-  clearLinks(): School {
-    this.links = undefined;
-    return this;
-  }
-
-  getSelfLink(): string {
-    const href = JSONPath({path: '$.links[?(@.rel == "self")].href', json: this});
-    if (Array.isArray(href) && href.length === 1) {
-      const self = href[0];
-      return self;
-    }
-    throw new Error('No self link found');
-  }
-
 }

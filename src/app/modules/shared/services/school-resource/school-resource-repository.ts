@@ -17,9 +17,8 @@
 import {HttpClient} from '@angular/common/http';
 import {Observable, Subject} from 'rxjs';
 import {environment} from 'src/environments/environment';
-import {LinksHolder} from 'src/app/implementation/repository/links-holder';
 
-export abstract class SchoolResourceRepository<T extends LinksHolder<any>> {
+export abstract class SchoolResourceRepository<T> {
 
   private resources$: Subject<T[]>;
   private dataStore: T[];

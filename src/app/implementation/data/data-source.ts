@@ -17,25 +17,28 @@
 import {Injectable} from '@angular/core';
 import {Repository} from './repository';
 import {Cache} from './cache';
-import {LinksHolder} from '../repository/links-holder';
 import {DataManager} from './data-manager';
-import {IdAware} from '../repository/id-aware';
 
 /**
  * Acts as a datasource for objects of the given type. Data can be fetched from the cache if it is available or from the backend via REST
  * calls.
  */
 @Injectable()
-export class DataSource<T extends LinksHolder<any> & IdAware<string>> implements DataManager<T> {
+export class DataSource<T> implements DataManager<T> {
 
   constructor(private repository: Repository<T>,
-              private cache: Cache<T>) {
+              private cache?: Cache<T>) {
   }
 
-  add = (value: T): Promise<T> =>
-    this.loadCache()
-      .then(() => this.repository.add(value)
-        .then(this.cache.add))
+  add = (value: T): Promise<T> => {
+    if (this.cache) {
+      return this.loadCache()
+        .then(() => this.repository.add(value)
+          .then(this.cache.add));
+    } else {
+      return this.repository.add(value);
+    }
+  }
 
   allValues = (): Promise<T[]> =>
     this.loadCache()
@@ -56,7 +59,7 @@ export class DataSource<T extends LinksHolder<any> & IdAware<string>> implements
         .then(this.cache.removeSet))
 
   reset = (): void =>
-    this.cache.reset()
+    this.cache?.reset()
 
   update = (value: T): Promise<T> =>
     this.loadCache()
@@ -65,7 +68,7 @@ export class DataSource<T extends LinksHolder<any> & IdAware<string>> implements
 
   private loadCache = (): Promise<void> =>
     new Promise(resolve => {
-      if (this.cache.isLoaded) {
+      if (!this.cache || this.cache.isLoaded) {
         resolve();
       } else {
         this.repository.allValues()

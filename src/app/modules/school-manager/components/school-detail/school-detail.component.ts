@@ -18,19 +18,18 @@ import {AfterViewInit, Component, Inject, OnDestroy, OnInit} from '@angular/core
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
-import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import {School} from 'src/app/modules/shared/models/school/school';
-import {SchoolRepositoryService} from 'src/app/modules/shared/services/school/school-repository.service';
 import {MenuStateService} from 'src/app/services/menu-state.service';
-import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {NavigationService} from 'src/app/services/navigation.service';
 import {SchoolSessionDialogComponent} from '../school-session-dialog/school-session-dialog.component';
 import {RouteWatchingService} from '../../../../services/route-watching.service';
 import {SCHOOL_DATA_SOURCE} from '../../../shared/shared.module';
 import {DataSource} from '../../../../implementation/data/data-source';
+import {deleteDialogCommandFactory, editDialogCommandFactory, inviteStudentCommandFactory} from './command-factories';
+import {SchoolCacheService} from '../../services/school/school-cache.service';
+import {setState} from './menu-state-manager';
+import {InviteStudentComponent} from '../invite-student/invite-student.component';
 
 @Component({
   selector: 'ms-school-detail',
@@ -44,9 +43,9 @@ export class SchoolDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(public userSession: UserSessionService,
               @Inject(SCHOOL_DATA_SOURCE) private schoolDataSource: DataSource<School>,
+              private schoolCacheService: SchoolCacheService,
               private dialog: MatDialog,
               private menuState: MenuStateService,
-              private schoolService: SchoolRepositoryService,
               private snackBar: MatSnackBar,
               private route: ActivatedRoute,
               private router: Router,
@@ -67,7 +66,9 @@ export class SchoolDetailComponent implements OnInit, AfterViewInit, OnDestroy {
             .then(school => {
                 this.school = school;
                 this.menuState.add(editDialogCommandFactory(school, this.router, this.dialog, this.snackBar));
-                this.menuState.add(deleteDialogCommandFactory(school, this.schoolService, this.router, this.dialog, this.snackBar));
+                this.menuState.add(deleteDialogCommandFactory(school, this.schoolDataSource, this.schoolCacheService, this.router,
+                  this.dialog, this.snackBar));
+                this.menuState.add(inviteStudentCommandFactory(this.dialog, InviteStudentComponent, this.snackBar));
               }
             );
         }
@@ -84,83 +85,7 @@ export class SchoolDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onIndexChange(index: number): void {
-    this.menuState.makeAllVisible();
-    if (this.userSession.isSysAdmin) {
-      switch (index) {
-        case 0:
-          this.menuState.makeGroupInvisible('teacher');
-          this.menuState.makeGroupInvisible('program-admin');
-          this.menuState.makeGroupInvisible('personnel');
-          this.menuState.makeGroupInvisible('school-book');
-          this.menuState.makeGroupInvisible('school-game');
-          break;
-        case 1:
-          this.menuState.makeGroupInvisible('school');
-          this.menuState.makeGroupInvisible('teacher');
-          this.menuState.makeGroupInvisible('personnel');
-          this.menuState.makeGroupInvisible('school-book');
-          this.menuState.makeGroupInvisible('school-game');
-          break;
-        case 2:
-          this.menuState.makeGroupInvisible('school');
-          this.menuState.makeGroupInvisible('program-admin');
-          this.menuState.makeGroupInvisible('personnel');
-          this.menuState.makeGroupInvisible('school-book');
-          this.menuState.makeGroupInvisible('school-game');
-          break;
-        case 3:
-          this.menuState.makeGroupInvisible('school');
-          this.menuState.makeGroupInvisible('program-admin');
-          this.menuState.makeGroupInvisible('teacher');
-          this.menuState.makeGroupInvisible('school-book');
-          this.menuState.makeGroupInvisible('school-game');
-          break;
-        case 4:
-          this.menuState.makeGroupInvisible('school');
-          this.menuState.makeGroupInvisible('program-admin');
-          this.menuState.makeGroupInvisible('personnel');
-          this.menuState.makeGroupInvisible('teacher');
-          this.menuState.makeGroupInvisible('school-game');
-          break;
-        case 5:
-          this.menuState.makeGroupInvisible('school');
-          this.menuState.makeGroupInvisible('program-admin');
-          this.menuState.makeGroupInvisible('personnel');
-          this.menuState.makeGroupInvisible('teacher');
-          this.menuState.makeGroupInvisible('school-book');
-          break;
-      }
-    } else {
-      switch (index) {
-        case 0:
-          this.menuState.makeGroupInvisible('teacher');
-          this.menuState.makeGroupInvisible('program-admin');
-          this.menuState.makeGroupInvisible('personnel');
-          this.menuState.makeGroupInvisible('school-book');
-          this.menuState.makeGroupInvisible('school-game');
-          break;
-        case 1:
-          this.menuState.makeGroupInvisible('personnel');
-          this.menuState.makeGroupInvisible('school-book');
-          this.menuState.makeGroupInvisible('school-game');
-          break;
-        case 2:
-          this.menuState.makeGroupInvisible('teacher');
-          this.menuState.makeGroupInvisible('school-book');
-          this.menuState.makeGroupInvisible('school-game');
-          break;
-        case 3:
-          this.menuState.makeGroupInvisible('teacher');
-          this.menuState.makeGroupInvisible('personnel');
-          this.menuState.makeGroupInvisible('school-game');
-          break;
-        case 4:
-          this.menuState.makeGroupInvisible('teacher');
-          this.menuState.makeGroupInvisible('personnel');
-          this.menuState.makeGroupInvisible('school-book');
-          break;
-      }
-    }
+    setState(index, this.menuState, this.userSession);
   }
 
   createNewSession(): void {
@@ -177,34 +102,3 @@ export class SchoolDetailComponent implements OnInit, AfterViewInit, OnDestroy {
 
 }
 
-const editDialogCommandFactory = (school: School, router: Router, dialog: MatDialog, snackBar: MatSnackBar): EditDialogCommand<School> =>
-  new EditDialogCommand<School>(
-    'Edit School',
-    'school',
-    SchoolDialogComponent,
-    'School updated',
-    null,
-    router,
-    dialog,
-    snackBar,
-    () => ({model: school}),
-    () => {
-    },
-    () => true);
-
-const deleteDialogCommandFactory = (school: School, schoolService: SchoolRepositoryService, router: Router, dialog: MatDialog,
-                                    snackBar: MatSnackBar): DeleteDialogCommand<School> =>
-  new DeleteDialogCommand(
-    'Remove School',
-    'school',
-    ConfimationDialogComponent,
-    'School(s) removed',
-    'school',
-    'schools',
-    router,
-    dialog,
-    snackBar,
-    '/schoolsmanager',
-    () => 1,
-    () => schoolService.deleteSchools([school]),
-    () => true);

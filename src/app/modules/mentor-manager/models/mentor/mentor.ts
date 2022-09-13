@@ -15,7 +15,7 @@
  */
 
 import { personLocations } from 'src/app/modules/shared/constants/locations';
-import { LinkServiceService } from 'src/app/modules/shared/services/link-service/link-service.service';
+import { LinkService } from 'src/app/modules/shared/services/link-service/link.service';
 
 export class Mentor {
 
@@ -53,7 +53,7 @@ export class Mentor {
   }
 
   getSelfLink(): string {
-    return LinkServiceService.selfLink(JSON.stringify(this));
+    return LinkService.selfLink(this);
   }
 
   get displayLocation(): string {

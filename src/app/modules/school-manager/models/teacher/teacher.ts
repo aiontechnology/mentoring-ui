@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-import {LinksHolder} from 'src/app/implementation/repository/links-holder';
-import {LinkServiceService} from 'src/app/modules/shared/services/link-service/link-service.service';
-import {IdAware} from '../../../../implementation/repository/id-aware';
-
 /**
  * Model class the represents a teacher.
  * @author Whitney Hunter
  */
-export class Teacher implements LinksHolder<Teacher>, IdAware<string> {
+export class Teacher {
   firstName: string;
   lastName: string;
   email: string;
@@ -45,23 +41,7 @@ export class Teacher implements LinksHolder<Teacher>, IdAware<string> {
     this.links = json?.links;
   }
 
-  get id(): string {
-    return this.links?.self?.length > 0
-      ? this.links?.self[0]?.href
-      : undefined;
-  }
-
-  clearLinks(): Teacher {
-    this.links = undefined;
-    return this;
-  }
-
   grades(): string {
     return this.grade1 + this.grade2 ? ', ' + this.grade2 : '';
   }
-
-  getSelfLink(): string {
-    return LinkServiceService.selfLink(JSON.stringify(this));
-  }
-
 }

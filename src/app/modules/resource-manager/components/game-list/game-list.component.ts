@@ -61,8 +61,8 @@ export class GameListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.gameCacheService.loadData()
-      .then(this.setMenu);
+    this.setMenu();
+    this.gameCacheService.loadData();
   }
 
   displayedColumns(): string[] {

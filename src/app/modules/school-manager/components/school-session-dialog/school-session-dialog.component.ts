@@ -18,7 +18,8 @@ import {Component, Inject} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SchoolSession} from 'src/app/modules/shared/models/school/schoolsession';
-import {SchoolSessionRepositoryService} from 'src/app/modules/shared/services/school-session/school-session-repository.service';
+import {SCHOOL_SESSION_DATA_SOURCE} from '../../../shared/shared.module';
+import {DataSource} from '../../../../implementation/data/data-source';
 
 @Component({
   selector: 'ms-school-session-dialog',
@@ -32,8 +33,8 @@ export class SchoolSessionDialogComponent {
 
   schoolId: string;
 
-  constructor(private dialogRef: MatDialogRef<SchoolSessionDialogComponent>,
-              private schoolSessionService: SchoolSessionRepositoryService,
+  constructor(@Inject(SCHOOL_SESSION_DATA_SOURCE) private schoolSessionDataSource: DataSource<SchoolSession>,
+              private dialogRef: MatDialogRef<SchoolSessionDialogComponent>,
               private formBuilder: UntypedFormBuilder,
               @Inject(MAT_DIALOG_DATA) private data: any) {
     this.model = this.createModel(formBuilder);
@@ -49,9 +50,9 @@ export class SchoolSessionDialogComponent {
 
     if (this.isUpdate) {
       newSession.links = this.model.value.school.links;
-      value = this.schoolSessionService.updateSchoolSession(newSession);
+      value = this.schoolSessionDataSource.update(newSession);
     } else {
-      value = this.schoolSessionService.createSchoolSession(this.schoolId, newSession);
+      value = this.schoolSessionDataSource.add(newSession);
     }
 
     value.then((ss: SchoolSession) => {

@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-import {LinksHolder} from 'src/app/implementation/repository/links-holder';
 import {resourceLocations} from '../../constants/locations';
-import {LinkServiceService} from '../../services/link-service/link-service.service';
 
-export abstract class Resource implements LinksHolder<Resource> {
+export abstract class Resource {
 
   id: string;
   location: string;
@@ -33,21 +31,12 @@ export abstract class Resource implements LinksHolder<Resource> {
   // The name / title of the resource being referenced for drop list data.
   displayName: string;
 
-  constructor(json?: any) {
+  protected constructor(json?: any) {
     this.id = json?.id;
     this.location = json?.location;
     this.leadershipSkills = json?.leadershipSkills;
     this.leadershipTraits = json?.leadershipTraits;
     this.links = json?.links;
-  }
-
-  clearLinks(): Resource {
-    this.links = undefined;
-    return this;
-  }
-
-  getSelfLink(): string {
-    return LinkServiceService.selfLink(JSON.stringify(this));
   }
 
   get displayLocation(): string {

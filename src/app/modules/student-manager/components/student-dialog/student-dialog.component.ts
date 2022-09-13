@@ -33,16 +33,24 @@ import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-comman
 import {TeacherDialogComponent} from 'src/app/modules/school-manager/components/teacher-dialog/teacher-dialog.component';
 import {MentorDialogComponent} from 'src/app/modules/mentor-manager/components/mentor-dialog/mentor-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {LinkServiceService} from 'src/app/modules/shared/services/link-service/link-service.service';
+import {LinkService} from 'src/app/modules/shared/services/link-service/link.service';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {MENTOR_DATA_SOURCE, MENTOR_URI_SUPPLIER, TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../shared/shared.module';
+import {
+  MENTOR_DATA_SOURCE,
+  MENTOR_URI_SUPPLIER,
+  STUDENT_DATA_SOURCE,
+  TEACHER_DATA_SOURCE,
+  TEACHER_URI_SUPPLIER
+} from '../../../shared/shared.module';
+import {RouteWatchingService} from '../../../../services/route-watching.service';
 
 @Component({
   selector: 'ms-student-dialog',
   templateUrl: './student-dialog.component.html',
   styleUrls: ['./student-dialog.component.scss'],
   providers: [
+    RouteWatchingService,
     {provide: STEPPER_GLOBAL_OPTIONS, useValue: {showError: true}}
   ]
 })
@@ -74,12 +82,12 @@ export class StudentDialogComponent implements OnInit {
   newTeacherCommand: NewDialogCommand<TeacherDialogComponent, Teacher>;
   newMentorCommand: NewDialogCommand<MentorDialogComponent, Mentor>;
 
-  constructor(@Inject(TEACHER_DATA_SOURCE) private teacherDataSource: DataSource<Teacher>,
+  constructor(@Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<Student>,
+              @Inject(TEACHER_DATA_SOURCE) private teacherDataSource: DataSource<Teacher>,
               @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: UriSupplier,
               @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
               @Inject(MENTOR_URI_SUPPLIER) private mentorUriSupplier: UriSupplier,
               private dialogRef: MatDialogRef<StudentDialogComponent>,
-              private studentService: StudentRepositoryService,
               private formBuilder: UntypedFormBuilder,
               private metaDataService: MetaDataService,
               private dialog: MatDialog,
@@ -124,7 +132,6 @@ export class StudentDialogComponent implements OnInit {
       this.snackBar,
       (m: Mentor) => this.addNewMentor(m),
       () => true);
-
   }
 
   get parents() {
@@ -165,9 +172,9 @@ export class StudentDialogComponent implements OnInit {
     let value: Promise<StudentInbound>;
 
     if (this.isUpdate) {
-      value = this.studentService.updateStudent(newStudent);
+      value = this.studentDataSource.update(newStudent);
     } else {
-      value = this.studentService.createStudent(this.schoolId, newStudent);
+      value = this.studentDataSource.add(newStudent);
     }
 
     value.then((s: Student) => {
@@ -306,7 +313,7 @@ export class StudentDialogComponent implements OnInit {
           preferredTime: student?.preferredTime,
           actualTime: student?.actualTime,
           mentor: {
-            uri: LinkServiceService.selfLink(JSON.stringify(student?.mentor?.mentor))
+            uri: LinkService.selfLink(student?.mentor?.mentor)
           },
           interests: student?.interests,
           leadershipSkills: student?.leadershipSkills,
@@ -317,7 +324,7 @@ export class StudentDialogComponent implements OnInit {
         },
         teacherInput: {
           teacher: {
-            uri: LinkServiceService.selfLink(JSON.stringify(student?.teacher?.teacher)),
+            uri: LinkService.selfLink(student?.teacher?.teacher),
             comment: student?.teacher?.comment
           },
         },
@@ -422,7 +429,7 @@ export class StudentDialogComponent implements OnInit {
 
     const teacher = new Teacher(t);
     const teacherInput = this.teacherInput.get('teacher') as UntypedFormGroup;
-    teacherInput.patchValue({uri: teacher.getSelfLink()});
+    teacherInput.patchValue({uri: LinkService.selfLink(teacher)});
   }
 
   private loadAllMentors = (): void => {

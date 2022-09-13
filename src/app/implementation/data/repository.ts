@@ -17,25 +17,25 @@
 import {HttpClient} from '@angular/common/http';
 import {forkJoin} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {LinksHolder} from '../repository/links-holder';
 import {DataManager} from './data-manager';
-import {IdAware} from '../repository/id-aware';
 import {UriSupplier} from './uri-supplier';
+import {LinkService} from '../../modules/shared/services/link-service/link.service';
 
-export abstract class Repository<T extends LinksHolder<any> & IdAware<string>> implements DataManager<T> {
-
+export abstract class Repository<T> implements DataManager<T> {
   protected abstract toModel: (value: any) => T;
 
   protected constructor(private http: HttpClient,
                         private uriSupplier: UriSupplier) {
   }
 
-  add = (value: T): Promise<T> =>
-    this.http.post<T>(this.uriSupplier.apply(), value)
+  add = (value: T): Promise<T> => {
+    const that = this;
+    return this.http.post<T>(this.uriSupplier.apply(), value)
       .pipe(
-        map(this.toModel)
+        map(that.toModel)
       )
-      .toPromise()
+      .toPromise();
+  }
 
   allValues = (): Promise<T[]> =>
     this.http.get<{ content: T[] }>(this.uriSupplier.apply())
@@ -55,7 +55,7 @@ export abstract class Repository<T extends LinksHolder<any> & IdAware<string>> i
       .toPromise()
 
   remove = (value: T): Promise<T> =>
-    this.http.delete<T>(value.getSelfLink())
+    this.http.delete<T>(LinkService.selfLink(value))
       .pipe(
         map(this.toModel)
       )
@@ -75,10 +75,9 @@ export abstract class Repository<T extends LinksHolder<any> & IdAware<string>> i
   }
 
   update = (value: T): Promise<T> =>
-    this.http.put<T>(value.getSelfLink(), value)
+    this.http.put<T>(LinkService.selfLink(value), value)
       .pipe(
         map(this.toModel)
       )
       .toPromise()
-
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,10 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import {LinkService} from '../link-service/link.service';
 
-import { StudentRepositoryService } from './student-repository.service';
-
-xdescribe('StudentRepositoryService', () => {
-  let service: StudentRepositoryService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(StudentRepositoryService);
-  });
-
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+export class IdService {
+  static calculateId(element: any): string {
+    return element?.id || LinkService.selfLink(element);
+  }
+}
