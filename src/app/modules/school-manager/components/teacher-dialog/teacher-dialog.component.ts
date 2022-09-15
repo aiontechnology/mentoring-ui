@@ -29,7 +29,8 @@ import {ActivatedRoute} from '@angular/router';
 @Component({
   selector: 'ms-teacher-dialog',
   templateUrl: './teacher-dialog.component.html',
-  styleUrls: ['./teacher-dialog.component.scss']
+  styleUrls: ['./teacher-dialog.component.scss'],
+  providers: [RouteWatchingService]
 })
 export class TeacherDialogComponent {
 

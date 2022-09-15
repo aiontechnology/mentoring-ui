@@ -30,23 +30,23 @@
 
     <div class="dialog-container">
       <mat-form-field>
-        <input matInput placeholder="Parent first name" formControlName="parentFirstName" required>
+        <input matInput placeholder="Parent first name" formControlName="parent1FirstName" required>
       </mat-form-field>
       <mat-form-field>
-        <input matInput placeholder="Parent last name" formControlName="parentLastName" required>
+        <input matInput placeholder="Parent last name" formControlName="parent1LastName" required>
       </mat-form-field>
     </div>
 
     <div class="dialog-container">
       <mat-form-field>
-        <input matInput placeholder="Parent email address" formControlName="parentEmailAddress" required>
+        <input matInput placeholder="Parent email address" formControlName="parent1EmailAddress" required>
       </mat-form-field>
     </div>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button color="primary" (click)="save()" [disabled]="!model.valid">
-    <mat-icon>save</mat-icon> Save
+    <mat-icon>email</mat-icon> Send
   </button>
   <button mat-button color="primary" (click)="dismiss()">
     <mat-icon>cancel</mat-icon> Cancel

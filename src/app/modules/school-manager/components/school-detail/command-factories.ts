@@ -65,6 +65,7 @@ class InviteStudentCommand extends Command {
               private dialog: MatDialog,
               private componentType: any,
               private snackBar: MatSnackBar,
+              private snackBarMessage: string,
               private enabled: () => boolean) {
     super(title, group);
   }
@@ -79,14 +80,9 @@ class InviteStudentCommand extends Command {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // if (result) {
-      //   this.removeItem().then(item => {
-      //     this.openSnackBar(this.snackBar, this.snackBarMessage, '');
-      //     if (this.routeTo) {
-      //       this.router.navigate([this.routeTo]);
-      //     }
-      //   });
-      // }
+      if (result) {
+        this.openSnackBar(this.snackBar, this.snackBarMessage, '');
+      }
     });
   }
 
@@ -103,4 +99,5 @@ export const inviteStudentCommandFactory = (dialog: MatDialog,
     dialog,
     componentType,
     snackBar,
+    'Invitation sent',
     () => true);

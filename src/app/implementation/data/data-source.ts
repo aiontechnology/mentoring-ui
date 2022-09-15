@@ -44,9 +44,14 @@ export class DataSource<T> implements DataManager<T> {
     this.loadCache()
       .then(() => this.cache.allValues())
 
-  oneValue = (id: string): Promise<T> =>
-    this.loadCache()
-      .then(() => this.cache.oneValue(id))
+  oneValue = (id: string): Promise<T> => {
+    if (this.cache) {
+      return this.loadCache()
+        .then(() => this.cache.oneValue(id));
+    } else {
+      return this.repository.oneValue(id);
+    }
+  }
 
   remove = (value: T): Promise<T> =>
     this.loadCache()
@@ -61,10 +66,15 @@ export class DataSource<T> implements DataManager<T> {
   reset = (): void =>
     this.cache?.reset()
 
-  update = (value: T): Promise<T> =>
-    this.loadCache()
-      .then(() => this.repository.update(value)
-        .then(this.cache.update))
+  update = (value: T): Promise<T> => {
+    if (this.cache) {
+      this.loadCache()
+        .then(() => this.repository.update(value)
+          .then(this.cache.update));
+    } else {
+      return this.repository.update(value);
+    }
+  }
 
   private loadCache = (): Promise<void> =>
     new Promise(resolve => {

@@ -14,25 +14,27 @@
  * limitations under the License.
  */
 
-import {environment} from '../../../../../environments/environment';
+import {Teacher} from '../teacher/teacher';
 
-export class Invitation {
-  constructor(public studentRegistrationUri: string,
-              public parent1FirstName: string,
+export class StudentRegistrationLookup {
+  constructor(public parent1FirstName: string,
               public parent1LastName: string,
               public parent1EmailAddress: string,
               public studentFirstName: string,
-              public studentLastName: string) {
+              public studentLastName: string,
+              public links: { self: [{ href: string; }] },
+              public teachers?: Teacher[]) {
   }
 
-  static of(value: any): Invitation {
-    const registrationUri = environment.baseUri + '/workflowmanager';
-    return new Invitation(
-      registrationUri,
+  static of(value: any): StudentRegistrationLookup {
+    const teachers: Teacher[] = value?.teachers.map(t => new Teacher(t));
+    return new StudentRegistrationLookup(
       value.parent1FirstName,
       value.parent1LastName,
       value.parent1EmailAddress,
       value.studentFirstName,
-      value.studentLastName);
+      value.studentLastName,
+      value.links,
+      teachers);
   }
 }

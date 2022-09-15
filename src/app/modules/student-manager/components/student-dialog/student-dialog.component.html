@@ -165,7 +165,7 @@ limitations under the License.
                 </mat-option>
                 <mat-option
                   *ngFor="let teacher of (teachers$ | async) | teacherGradeFilter: selectedGrade"
-                  [value]="teacher.getSelfLink()">
+                  [value]="teacher.selfLink">
                   {{ teacher.firstName + ' ' + teacher.lastName }}
                 </mat-option>
               </mat-select>

@@ -53,6 +53,7 @@ export class RouteWatchingService {
 
   static SCHOOL_ID = 'schoolId';
   static MENTOR_ID = 'mentorId';
+  static REGISTRATION_ID = 'registrationId';
 
   private ids = new Map<string, string>();
 
@@ -98,13 +99,12 @@ export class RouteWatchingService {
     return route.paramMap
       .pipe(
         map(params => {
-          this.schoolId = this.userSession.isSysAdmin
+          this.schoolId = !this.userSession.isLoggedIn() || this.userSession.isSysAdmin
             ? this.findParameterAndCache(RouteWatchingService.SCHOOL_ID, params)
             : this.userSession.schoolUUID;
-          return params;
-        }),
-        map(params => {
           this.findParameterAndCache(RouteWatchingService.MENTOR_ID, params);
+          this.findParameterAndCache(RouteWatchingService.REGISTRATION_ID, params);
+          return params;
         }),
         map(() => this.ids)
       );

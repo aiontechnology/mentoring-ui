@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-import {findSelfLink, Repository} from './repository';
+import {Repository} from './repository';
+import {LinkService} from '../../modules/shared/services/link-service/link.service';
 
 describe('Repository', () => {
 
   it('should find the self link', () => {
     const value = {
-      links: {
-        self: [
-          {href: 'http://example.com'}
-        ]
-      }
+      links: [
+        {
+          rel: 'self',
+          href: 'http://example.com'
+        }
+      ]
     };
-    const link = findSelfLink(value);
+    const link = LinkService.selfLink(value);
     expect(link).toEqual('http://example.com');
   });
 

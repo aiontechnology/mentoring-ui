@@ -15,7 +15,7 @@
  */
 
 import {NgModule} from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import {RouterModule, RouterOutlet, Routes} from '@angular/router';
 import {MentorManagerComponent} from './mentor-manager.component';
 import {MentorListComponent} from './components/mentor-list/mentor-list.component';
 import {SharedModule} from '../shared/shared.module';
@@ -31,7 +31,7 @@ const routes: Routes = [
       {path: '', component: MentorListComponent},
       {path: 'schools/:schoolId', component: MentorListComponent, canActivate: [CanActivateSysAdmin]},
       {path: 'schools/:schoolId/mentors/:mentorId', component: MentorDetailComponent, canActivate: [CanActivateSysAdmin]},
-      {path: 'mentors/:mentorId', component: MentorDetailComponent, canActivate: [CanActivateProgAdmin]}
+      {path: 'mentors/:mentorId', component: MentorDetailComponent, canActivate: [CanActivateProgAdmin]},
     ]
   }
 ];
@@ -41,11 +41,12 @@ const routes: Routes = [
     MentorManagerComponent,
     MentorListComponent,
     MentorDialogComponent,
-    MentorDetailComponent
+    MentorDetailComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
-    SharedModule.forRoot()
+    RouterOutlet,
+    SharedModule.forRoot(),
   ]
 })
 export class MentorManagerModule {

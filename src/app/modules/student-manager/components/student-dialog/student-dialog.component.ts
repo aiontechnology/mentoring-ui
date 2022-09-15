@@ -22,7 +22,6 @@ import {Student} from '../../models/student/student';
 import {StudentInbound} from '../../models/student-inbound/student-inbound';
 import {StudentOutbound} from '../../models/student-outbound/student-outbound';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {StudentRepositoryService} from '../../services/student/student-repository.service';
 import {Teacher} from 'src/app/modules/school-manager/models/teacher/teacher';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {Mentor} from 'src/app/modules/mentor-manager/models/mentor/mentor';
@@ -143,7 +142,7 @@ export class StudentDialogComponent implements OnInit {
   }
 
   /* Get teacher data; to be displayed in a selection menu */
-  ngOnInit = (): void => {
+  ngOnInit(): void {
     this.metaDataService.loadInterests();
     this.interestList$ = this.metaDataService.interests;
 
@@ -161,7 +160,7 @@ export class StudentDialogComponent implements OnInit {
     this.loadAllMentors();
   }
 
-  save = (): void => {
+  save(): void {
     // Create outbound student.
     const studentProperties = Object.assign(this.studentDetails.value, {teacher: this.teacherInput.value.teacher}, this.contacts.value);
     this.addContactsProperty(studentProperties);
@@ -182,83 +181,83 @@ export class StudentDialogComponent implements OnInit {
     });
   }
 
-  dismiss = (): void => {
+  dismiss(): void {
     this.dialogRef.close(null);
   }
 
   // Used for the keyvalue pipe, to keep location properties in their default order.
-  unsorted = (): number => {
+  unsorted(): number {
     return 0;
   }
 
-  enableTeacher = (): void => {
+  enableTeacher(): void {
     if (this.selectedGrade) {
       this.teacherInput.get('teacher.uri').enable();
     }
   }
 
-  contactsIsEmpty = (): boolean => {
+  contactsIsEmpty(): boolean {
     return !this.parents.length && !this.emergencyContact;
   }
 
-  contactsIsFull = (): boolean => {
+  contactsIsFull(): boolean {
     return this.parents.controls.length >= 2 && this.emergencyContact != null;
   }
 
-  parentsIsFull = (): boolean => {
+  parentsIsFull(): boolean {
     return this.parents.length >= 2;
   }
 
-  addParent = (): void => {
+  addParent(): void {
     this.parents.push(this.createContactForm(false));
   }
 
-  addEmergencyContact = (): void => {
+  addEmergencyContact(): void {
     this.contacts.addControl('emergencyContact', this.createContactForm(true));
   }
 
-  removeParent = (i: number): void => {
+  removeParent(i: number): void {
     this.parents.removeAt(i);
   }
 
-  removeEmergencyContact = (): void => {
+  removeEmergencyContact(): void {
     this.contacts.removeControl('emergencyContact');
   }
 
   /**
    * Reset #teacher form value when grade is changed.
    */
-  onGradeSelected = (): void => {
+  onGradeSelected(): void {
     const teacher = this.teacherInput.get('teacher') as UntypedFormGroup;
     teacher.patchValue({uri: ''});
   }
 
-  stepperAtStart = (index: number): boolean => {
+  stepperAtStart(index: number): boolean {
     return index === 0;
   }
 
-  stepperAtFinish = (index: number): boolean => {
+  stepperAtFinish(index: number): boolean {
     return index === 2;
   }
 
   /*
    * Combine form's contact properties for backend model.
    */
-  private addContactsProperty = (modelValue: any): void => {
+  private addContactsProperty(modelValue: any): void {
     const e = modelValue.emergencyContact ? modelValue.emergencyContact : [];
     modelValue.contacts = modelValue.parents.concat(e);
   }
 
-  private clearMentorIfNotProvided = (modelValue: any): void => {
+  private clearMentorIfNotProvided(modelValue: any): void {
     const mentor = modelValue.mentor;
     modelValue.mentor = (mentor.uri == null || mentor.uri === '') ? null : mentor;
   }
 
-  private determineUpdate = (formData: any): boolean => {
+  private determineUpdate(formData: any): boolean {
     return formData.model !== undefined && formData.model !== null;
   }
 
-  private createModel = (formBuilder: UntypedFormBuilder, student: StudentInbound): UntypedFormGroup => {
+  private createModel(formBuilder: UntypedFormBuilder, student: StudentInbound): UntypedFormGroup {
 
     const formGroup: UntypedFormGroup = formBuilder.group({
       studentDetails: formBuilder.group({
@@ -358,7 +357,7 @@ export class StudentDialogComponent implements OnInit {
     return formGroup;
   }
 
-  private createContactForm = (isEmergencyContact?: boolean): UntypedFormGroup => {
+  private createContactForm(isEmergencyContact?: boolean): UntypedFormGroup {
 
     return this.formBuilder.group({
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -395,7 +394,7 @@ export class StudentDialogComponent implements OnInit {
   /**
    * Parses a date string and returns the month's name.
    */
-  private getMonth = (str: string): string => {
+  private getMonth(str: string): string {
     const date = new Date(str);
     return str ? this.months[date.getUTCMonth()] : null;
   }
@@ -403,7 +402,7 @@ export class StudentDialogComponent implements OnInit {
   /**
    * Parses a date string and returns the year.
    */
-  private getYear = (str: string): string => {
+  private getYear(str: string): string {
     const date = new Date(str);
     return str ? date.getUTCFullYear().toString() : null;
   }
@@ -411,7 +410,7 @@ export class StudentDialogComponent implements OnInit {
   /**
    * Converts the start date into a valid API date object.
    */
-  private reformatDate = (student: any): void => {
+  private reformatDate(student: any): void {
     if (student.month === null || !student.year) {
       student.startDate = null;
       return;
@@ -420,11 +419,11 @@ export class StudentDialogComponent implements OnInit {
     student.startDate = new Date(student?.year, m);
   }
 
-  private loadAllTeachers = (): void => {
+  private loadAllTeachers(): void {
     this.teachers$ = this.teacherDataSource.allValues();
   }
 
-  private addNewTeacher = (t: Teacher): void => {
+  private addNewTeacher(t: Teacher): void {
     this.loadAllTeachers();
 
     const teacher = new Teacher(t);
@@ -432,12 +431,12 @@ export class StudentDialogComponent implements OnInit {
     teacherInput.patchValue({uri: LinkService.selfLink(teacher)});
   }
 
-  private loadAllMentors = (): void => {
+  private loadAllMentors(): void {
     this.mentorUriSupplier.withSubstitution('schoolId', this.schoolId);
     this.mentors$ = this.mentorDataSource.allValues();
   }
 
-  private addNewMentor = (m: Mentor): void => {
+  private addNewMentor(m: Mentor): void {
     this.loadAllMentors();
 
     const mentor = new Mentor(m);

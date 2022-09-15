@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="140px" height="140px" viewBox="0 0 140 140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Big Check- Icon</title>
+    <g id="MentorSuccess" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="79-Registration-Complete-Dialogue" transform="translate(-650.000000, -470.000000)">
+            <g id="Admin--Module" transform="translate(261.000000, 300.000000)">
+                <g id="Container" transform="translate(105.000000, 50.000000)">
+                    <g id="Big-Check--Icon" transform="translate(284.000000, 120.000000)">
+                        <path d="M99.3241148,35.7329278 C101.751522,33.1752608 105.792724,33.0696646 108.350391,35.4970721 C111.453142,38.4418035 111.936754,43.2125477 109.488065,46.7200303 L70.6143656,102.402414 C69.6738698,103.749573 68.4093358,104.838261 66.9373603,105.568095 C62.8049777,107.61701 57.9228345,106.475973 55.0880322,103.087776 L27.3308081,81.0689609 C24.0046146,78.4305885 23.0833184,73.769062 25.15575,70.0637146 C26.8890849,66.9646457 30.8065221,65.8574996 33.905591,67.5908345 C34.1590863,67.7326165 34.4026827,67.8914132 34.6347062,68.0661333 L62.3160005,88.9114048 L98.7103811,36.4871599 C98.8337863,36.3093957 98.9661093,36.138078 99.1068212,35.9738565 Z" id="Combined-Shape" fill="#4988A0" transform="translate(67.549644, 70.166103) rotate(6.000000) translate(-67.549644, -70.166103) "></path>
+                        <circle id="Oval" stroke="#4988A0" stroke-width="11" cx="70" cy="70" r="64.5"></circle>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

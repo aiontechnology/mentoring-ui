@@ -16,7 +16,7 @@
 
 import { NgModule } from '@angular/core';
 import { AdminManagerComponent } from './admin-manager.component';
-import { RouterModule, Routes } from '@angular/router';
+import {RouterModule, RouterOutlet, Routes} from '@angular/router';
 import { InterestListComponent } from './components/interest-list/interest-list.component';
 import { SharedModule } from 'src/app/modules/shared/shared.module';
 import { InterestDialogComponent } from './components/interest-dialog/interest-dialog.component';
@@ -27,7 +27,7 @@ const routes: Routes = [
     path: '',
     component: AdminManagerComponent,
     children: [
-      { path: '', component: InterestListComponent }
+      { path: '', component: InterestListComponent },
     ]
   }
 ];
@@ -39,14 +39,15 @@ const routes: Routes = [
   declarations: [
     AdminManagerComponent,
     InterestListComponent,
-    InterestDialogComponent
+    InterestDialogComponent,
   ],
   imports: [
+    RouterModule.forChild(routes),
+    RouterOutlet,
     SharedModule.forRoot(),
-    RouterModule.forChild(routes)
   ],
   providers: [
-    InterestCacheService
+    InterestCacheService,
   ]
 })
 export class AdminManagerModule { }

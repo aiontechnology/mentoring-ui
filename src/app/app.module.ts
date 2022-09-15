@@ -17,7 +17,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {InjectionToken, NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
-import {ActivatedRoute, ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, Routes} from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, RouterOutlet, Routes} from '@angular/router';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {LandingPageComponent} from './components/landing-page/landing-page.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
@@ -34,6 +34,7 @@ import {CanActivateSysAdmin} from './services/can-activate-sys-admin';
 import {CanActivateApp} from './services/can-activate-app';
 import {ReceiveTokenComponent} from './components/receive-token/receive-token.component';
 import {CustomRouteReuseStrategy} from './shared/custom-route-reuse-strategy';
+import {WorkflowManagerModule} from './modules/workflow-manager/workflow-manager.module';
 
 const loginProvider = new InjectionToken('loginRedirectResolver');
 const logoutProvider = new InjectionToken('logoutRedirectResolver');
@@ -88,6 +89,10 @@ const routes: Routes = [
     canActivate: [CanActivateApp]
   },
   {
+    path: 'workflowmanager',
+    loadChildren: () => import('./modules/workflow-manager/workflow-manager.module').then(m => m.WorkflowManagerModule)
+  },
+  {
     path: 'receiveToken',
     component: ReceiveTokenComponent
   },
@@ -118,7 +123,8 @@ const routes: Routes = [
     BrowserModule,
     HttpClientModule,
     MaterialModule,
-    RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'})
+    RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
+    RouterOutlet,
   ],
   providers: [
     {
