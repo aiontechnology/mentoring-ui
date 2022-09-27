@@ -43,7 +43,6 @@ const routes: Routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
-    RouterOutlet,
     SharedModule.forRoot(),
   ],
   providers: [

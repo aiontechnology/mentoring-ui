@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StudentRegistrationThanksComponent } from './student-registration-thanks.component';
 
-describe('StudentRegistrationThanksComponent', () => {
+xdescribe('StudentRegistrationThanksComponent', () => {
   let component: StudentRegistrationThanksComponent;
   let fixture: ComponentFixture<StudentRegistrationThanksComponent>;
 
@@ -17,7 +17,7 @@ describe('StudentRegistrationThanksComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 });

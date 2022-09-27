@@ -34,7 +34,7 @@ export class InterestCacheService extends DatasourceManager<InterestInbound> {
     return this.isLoading$;
   }
 
-  establishDatasource = (): void => {
+  loadInterests(): void {
     this.metaDataService.loadInterests()
       .then(interests => {
         this.isLoading$.next(false);

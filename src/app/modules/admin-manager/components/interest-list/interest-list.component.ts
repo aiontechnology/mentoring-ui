@@ -15,16 +15,14 @@
  */
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {InterestCacheService} from '../../services/interests/interest-cache.service';
-import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
-import {MenuStateService} from 'src/app/services/menu-state.service';
 import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {InterestDialogComponent} from '../interest-dialog/interest-dialog.component';
-import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {MatSort} from '@angular/material/sort';
+import {MenuStateService} from 'src/app/services/menu-state.service';
 import {InterestInbound} from '../../models/interest/interest-inbound';
+import {InterestCacheService} from '../../services/interests/interest-cache.service';
+import {editDialogCommandFactory, newDialogCommandFactory} from './command-factories';
 
 @Component({
   selector: 'ms-interest-list',
@@ -34,17 +32,11 @@ import {InterestInbound} from '../../models/interest/interest-inbound';
 export class InterestListComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[];
-  editedInterest: string;
-  isEdit: boolean;
 
   constructor(public interestCacheService: InterestCacheService,
               private menuState: MenuStateService,
               private matDialog: MatDialog,
               private snackBar: MatSnackBar) {
-
-    this.displayedColumns = ['select', 'name'];
-    this.isEdit = false;
-
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -60,14 +52,15 @@ export class InterestListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.interestCacheService.establishDatasource();
+    this.displayedColumns = ['select', 'name'];
+
+    this.interestCacheService.loadInterests();
     this.interestCacheService.clearSelection();
 
-    InterestListMenuManager.addMenus(this.menuState,
-      this.matDialog,
-      this.snackBar,
-      (i: InterestInbound) => this.jumpToNewItem(i),
-      this.interestCacheService);
+    const postFunc = postActionFactory(this.interestCacheService);
+    this.menuState.add(newDialogCommandFactory(this.matDialog, this.snackBar, postFunc));
+    this.menuState.add(editDialogCommandFactory(this.matDialog, this.snackBar, (i: InterestInbound) => this.jumpToNewItem(i),
+      this.interestCacheService));
   }
 
   ngOnDestroy(): void {
@@ -87,36 +80,13 @@ export class InterestListComponent implements OnInit, OnDestroy {
 
 }
 
-class InterestListMenuManager {
-  static addMenus(menuState: MenuStateService,
-                  dialog: MatDialog,
-                  snackBar: MatSnackBar,
-                  postAction: (i: InterestInbound) => void,
-                  interestCacheService: InterestCacheService): void {
-    menuState.add(new NewDialogCommand(
-      'Add Interest',
-      'interest',
-      InterestDialogComponent,
-      'Interest added',
-      null,
-      null,
-      null,
-      dialog,
-      snackBar,
-      (i: InterestInbound) => postAction(i),
-      () => true));
-    menuState.add(new EditDialogCommand(
-      'Edit Interest',
-      'interest',
-      InterestDialogComponent,
-      'Interest updated',
-      null,
-      null,
-      dialog,
-      snackBar,
-      () => ({model: interestCacheService.getFirstSelection()}),
-      (i: InterestInbound) => postAction(i),
-      () => interestCacheService.selection.selected.length === 1));
-  }
-
+/**
+ * Factory function that creates the function passed to the NewDialogCommand as a post action function.
+ * @param cacheService The cache service used by the component.
+ */
+export const postActionFactory = (cacheService: InterestCacheService): ((interest: InterestInbound) => void) => {
+  return (i: InterestInbound) => {
+    cacheService.loadInterests();
+    cacheService.jumpToItem(i);
+  };
 }

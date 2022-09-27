@@ -20,18 +20,18 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ComponentType } from '@angular/cdk/portal';
 
-export class NewDialogCommand<T, S> extends Command {
+export class NewDialogCommand<T, C> extends Command {
 
   constructor(title: string,
               group: string,
-              private componentType: ComponentType<T>,
+              private componentType: ComponentType<C>,
               private snackBarMessage: string,
               private navigationBase: string[],
               private data: object,
               private router: Router,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
-              private postAction: (newItem: S) => void,
+              private postAction: (newItem: T) => void,
               private determineEnabled: () => boolean) {
     super(title, group);
   }

@@ -14,29 +14,16 @@
  * limitations under the License.
  */
 
-import {InjectionToken, NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {StudentRegistrationComponent} from './components/student-registration/student-registration.component';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {SharedModule} from '../shared/shared.module';
-import {DataSource} from '../../implementation/data/data-source';
-import {StudentRegistrationLookup} from '../school-manager/models/workflow/student-registration-lookup';
-import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {environment} from '../../../environments/environment';
-import {StudentRegistrationLookupRepository} from '../school-manager/repositories/student-registration-lookup-repository';
-import {Repository} from '../../implementation/data/repository';
-import {StudentRegistration} from '../school-manager/models/workflow/student-registration';
-import {StudentRegistrationRepository} from '../school-manager/repositories/student-registration-repository';
-import { StudentRegistrationThanksComponent } from './components/student-registration-thanks/student-registration-thanks.component';
+import {StudentRegistrationThanksComponent} from './components/student-registration-thanks/student-registration-thanks.component';
+import {StudentRegistrationComponent} from './components/student-registration/student-registration.component';
 
 const routes: Routes = [
-  { path: 'schools/:schoolId/registrations/:registrationId', component: StudentRegistrationComponent },
-  { path: 'schools/:schoolId/registrations/:registrationId/thanks', component: StudentRegistrationThanksComponent },
+  {path: 'schools/:schoolId/registrations/:registrationId', component: StudentRegistrationComponent},
+  {path: 'schools/:schoolId/registrations/:registrationId/thanks', component: StudentRegistrationThanksComponent},
 ];
-
-export const REGISTRATION_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistrationLookup>>('registration-lookup-data-source');
-export const REGISTRATION_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistration>>('registration-data-source');
-export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('registration-uri-supplier');
 
 @NgModule({
   declarations: [
@@ -44,29 +31,9 @@ export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('regist
     StudentRegistrationThanksComponent
   ],
   imports: [
-    CommonModule,
     RouterModule.forChild(routes),
     SharedModule.forRoot()
   ],
-  providers: [
-    /* Registration resources */
-    {
-      provide: REGISTRATION_URI_SUPPLIER,
-      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/registrations`)
-    },
-    StudentRegistrationLookupRepository,
-    {
-      provide: REGISTRATION_LOOKUP_DATA_SOURCE,
-      useFactory: (repository: Repository<StudentRegistrationLookup>) => new DataSource<StudentRegistrationLookup>(repository),
-      deps: [StudentRegistrationLookupRepository]
-    },
-    StudentRegistrationRepository,
-    {
-      provide: REGISTRATION_DATA_SOURCE,
-      useFactory: (repository: Repository<StudentRegistration>) => new DataSource<StudentRegistration>(repository),
-      deps: [StudentRegistrationRepository]
-    },
-  ]
 })
 export class WorkflowManagerModule {
 }
