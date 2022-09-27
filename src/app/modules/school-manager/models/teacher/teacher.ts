@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import {LinkService} from '../../../shared/services/link-service/link.service';
+
 /**
  * Model class the represents a teacher.
  * @author Whitney Hunter
@@ -36,9 +38,13 @@ export class Teacher {
     this.lastName = json?.lastName;
     this.email = (json?.email === '') ? null : json?.email;
     this.cellPhone = json?.cellPhone;
-    this.grade1 = json?.grade1;
-    this.grade2 = json?.grade2;
+    this.grade1 = Number(json?.grade1);
+    this.grade2 = Number(json?.grade2);
     this.links = json?.links;
+  }
+
+  get selfLink(): string {
+    return LinkService.selfLink(this);
   }
 
   grades(): string {

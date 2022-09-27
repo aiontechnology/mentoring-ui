@@ -19,6 +19,7 @@ export interface EnvironmentOptions {
     production: string;
     apiUri: string;
     lpgUri: string;
+    baseUri: string;
     tokenRedirect: string;
     logoutRedirect: string;
     cognitoBaseUrl: string;

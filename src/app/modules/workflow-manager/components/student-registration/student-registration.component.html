@@ -1,0 +1,276 @@
+<!--
+  ~ Copyright 2022 Aion Technology LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="page-container">
+  <div class="page-header">
+    <img class="ms-logo" src="../../../../../assets/ms-logo-white.png"/>
+  </div>
+  <div class="form">
+    <mat-card class="form-card mat-elevation-z0">
+      <mat-card-title class="form-title">STUDENT REGISTRATION FORM</mat-card-title>
+      <mat-card-content class="form-content">
+        <div>Please fill in all necessary information to register your child</div>
+        <div class="required-warning">* Denotes a required field</div>
+
+        <form [formGroup]="model">
+          <div class="row row3">
+            <div>
+              <label>Student First Name *</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Student First Name" formControlName="studentFirstName" required/>
+                <mat-error *ngIf="model.hasError('required', 'studentFirstName')">
+                  You must enter the student's first name
+                </mat-error>
+                <mat-error *ngIf="model.hasError('maxlength', 'studentFirstName')">
+                  The student's first name can be a maximum of 50 characters in length
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <label>Student Last Name *</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Student Last Name" formControlName="studentLastName" required/>
+                <mat-error *ngIf="model.hasError('required', 'studentLastName')">
+                  You must enter the student's last name
+                </mat-error>
+                <mat-error *ngIf="model.hasError('maxlength', 'studentLastName')">
+                  The student's last name can be a maximum of 50 characters in length
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <label>Grade *</label>
+              <mat-form-field appearance="outline">
+                <mat-select formControlName="grade" required>
+                  <mat-option *ngFor="let grade of grades" [value]="grade.value">
+                    {{grade.valueView}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="model.hasError('required', 'grade')">
+                  You must select a grade level
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row row2">
+            <div>
+              <label>Primary Parent/Guardian (First Name) *</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Primary Parent/Guardian (First Name)" formControlName="parent1FirstName"
+                       required/>
+                <mat-error *ngIf="model.hasError('required', 'parent1FirstName')">
+                  You must enter the parent's first name
+                </mat-error>
+                <mat-error *ngIf="model.hasError('maxlength', 'parent1FirstName')">
+                  The parent's first name can be a maximum of 50 characters in length
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <label>Primary Parent/Guardian (Last Name) *</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Primary Parent/Guardian (Last Name)" formControlName="parent1LastName"
+                       required/>
+                <mat-error *ngIf="model.hasError('required', 'parent1LastName')">
+                  You must enter the parent's last name
+                </mat-error>
+                <mat-error *ngIf="model.hasError('maxlength', 'parent1LastName')">
+                  The parent's last name can be a maximum of 50 characters in length
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row row2">
+            <div>
+              <label>Email</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Email" formControlName="parent1EmailAddress"/>
+              </mat-form-field>
+              <mat-error *ngIf="model.hasError('contactInvalid', '')">
+                Please enter a phone number or email address
+              </mat-error>
+            </div>
+
+            <div>
+              <label>Cell Phone</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Cell Phone" formControlName="parent1PhoneNumber"/>
+              </mat-form-field>
+              <mat-error *ngIf="model.hasError('contactInvalid')">
+                Please enter a phone number or email address
+              </mat-error>
+            </div>
+          </div>
+
+          <div class="row row-radio">
+            <div>
+              <label class="contact-preference">Preferred method of contact *</label>
+              <mat-radio-group formControlName="parent1PreferredContactMethod" required>
+                <mat-radio-button value="PHONE">Phone</mat-radio-button>
+                <mat-radio-button value="EMAIL">Email</mat-radio-button>
+                <mat-radio-button value="EITHER">Either</mat-radio-button>
+              </mat-radio-group>
+              <mat-error *ngIf="model.hasError('required', 'parent1PreferredContactMethod')">
+                You must select a preferred contact method
+              </mat-error>
+            </div>
+          </div>
+
+          <div class="row row2">
+            <div>
+              <label>Secondary Parent/Guardian (First Name)</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Secondary Parent/Guardian (First Name)"
+                       formControlName="parent2FirstName"/>
+                <mat-error *ngIf="model.hasError('maxlength', 'parent2FirstName')">
+                  The parent's first name can be a maximum of 50 characters in length
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <label>Secondary Parent/Guardian (Last Name)</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Secondary Parent/Guardian (Last Name)" formControlName="parent2LastName"/>
+                <mat-error *ngIf="model.hasError('maxlength', 'parent2LastName')">
+                  The parent's last name can be a maximum of 50 characters in length
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row row2">
+            <div>
+              <label>Email</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Email" formControlName="parent2EmailAddress"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <label>Cell Phone</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Cell Phone" formControlName="parent2PhoneNumber"/>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row row-radio">
+            <div>
+              <label class="contact-preference">Preferred method of contact</label>
+              <mat-radio-group formControlName="parent2PreferredContactMethod">
+                <mat-radio-button value="PHONE">Phone</mat-radio-button>
+                <mat-radio-button value="EMAIL">Email</mat-radio-button>
+                <mat-radio-button value="EITHER">Either</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+
+          <div class="row row2">
+            <div>
+              <label *ngIf="model.get('grade').value">Teacher</label>
+              <label *ngIf="!model.get('grade').value">Teacher (please select grade first)</label>
+              <mat-form-field appearance="outline">
+                <mat-select formControlName="teacher">
+                  <mat-option *ngFor="let teacher of teachers" [value]="selfLinkFunction()(teacher)">
+                    {{ teacher.firstName + ' ' + teacher.lastName }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <label>Preferred Session (Day/Time)</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Preferred Session (Day/Time)" formControlName="preferredSession"/>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row row2">
+            <div>
+              <label>Emergency Contact (First Name)</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Emergency Contact Name" formControlName="emergencyContactFirstName"/>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <label>Emergency Contact (Last Name)</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Emergency Contact Name" formControlName="emergencyContactLastName"/>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row row2">
+            <div>
+              <label>Cell Phone</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Cell Phone" formControlName="emergencyContactPhone"/>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row row2">
+            <div>
+              <label>Parent Signature *</label>
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="Parent Signature" formControlName="parentSignature" required/>
+                <mat-error *ngIf="model.hasError('required', 'parentSignature')">
+                  You provide a parent signature
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div>
+              <label>Date</label>
+              <mat-form-field appearance="outline">
+                <input matInput value="{{today}}" disabled/>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+
+        <div class="form-footer">
+          <p>
+            If you have any additional questions, we would love to have you come and meet with our Program Manager to
+            discuss any further details regarding the MentorSuccess™ program.
+          </p>
+          <br/>
+          <p>
+            Email: kathy.hansberry@hisheartfoundation.org<br/>
+            Phone: 360-597-5739
+          </p>
+        </div>
+
+        <div class="controls">
+          <button [disabled]="!model.valid" (click)="submitForm()">
+            Submit
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <div class="page-footer">
+    <img class="hhf-logo" src="../../../../../assets/hhf-logo-white.png"/>
+  </div>
+</div>

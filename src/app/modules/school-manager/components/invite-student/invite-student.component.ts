@@ -4,6 +4,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Invitation} from '../../models/workflow/invitation';
 import {INVITATION_DATA_SOURCE} from '../../../shared/shared.module';
 import {DataSource} from '../../../../implementation/data/data-source';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'ms-invite-student',
@@ -36,11 +37,11 @@ export class InviteStudentComponent implements OnInit {
 
   private createModel(formBuilder: FormBuilder, invitation: Invitation): FormGroup {
     return formBuilder.group({
-      parentFirstName: [invitation?.parentFirstName, [Validators.required, Validators.maxLength(100)]],
-      parentLastName: [invitation?.parentLastName, [Validators.required, Validators.maxLength(100)]],
-      parentEmailAddress: [invitation?.parentEmailAddress, [Validators.required, Validators.maxLength(100)]],
-      studentFirstName: [invitation?.studentFirstName, [Validators.required, Validators.maxLength(100)]],
-      studentLastName: [invitation?.studentLastName, [Validators.required, Validators.maxLength(100)]],
+      parent1FirstName: [invitation?.parent1FirstName, [Validators.required, Validators.maxLength(50)]],
+      parent1LastName: [invitation?.parent1LastName, [Validators.required, Validators.maxLength(50)]],
+      parent1EmailAddress: [invitation?.parent1EmailAddress, [Validators.required, Validators.maxLength(50)]],
+      studentFirstName: [invitation?.studentFirstName, [Validators.required, Validators.maxLength(50)]],
+      studentLastName: [invitation?.studentLastName, [Validators.required, Validators.maxLength(50)]],
     });
   }
 

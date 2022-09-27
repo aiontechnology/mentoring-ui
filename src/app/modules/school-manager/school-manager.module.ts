@@ -14,34 +14,25 @@
  * limitations under the License.
  */
 
-import {InjectionToken, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {SchoolManagerComponent} from './school-manager.component';
-import {RouterModule, Routes} from '@angular/router';
+import {RouterModule, RouterOutlet, Routes} from '@angular/router';
 import {SchoolListComponent} from './components/school-list/school-list.component';
 import {SchoolDialogComponent} from './components/school-dialog/school-dialog.component';
 import {SchoolDetailComponent} from './components/school-detail/school-detail.component';
 import {TeacherListComponent} from './components/teacher-list/teacher-list.component';
 import {TeacherDialogComponent} from './components/teacher-dialog/teacher-dialog.component';
 import {GradesFormatPipe} from '../shared/pipes/grades-format.pipe';
-import {SharedModule, TEACHER_CACHE, TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../shared/shared.module';
+import {SharedModule} from '../shared/shared.module';
 import {ProgramAdminDialogComponent} from './components/program-admin-dialog/program-admin-dialog.component';
 import {PersonnelListComponent} from './components/personnel-list/personnel-list.component';
 import {PersonnelDialogComponent} from './components/personnel-dialog/personnel-dialog.component';
 import {CanActivateSysAdmin} from 'src/app/services/can-activate-sys-admin';
 import {ProgramAdminDetailComponent} from './components/program-admin-detail/program-admin-detail.component';
 import {SchoolSessionDialogComponent} from './components/school-session-dialog/school-session-dialog.component';
-import {UriSupplier} from '../../implementation/data/uri-supplier';
 import {PersonnelCacheService} from './services/personnel/personnel-cache.service';
 import {SchoolCacheService} from './services/school/school-cache.service';
 import {InviteStudentComponent} from './components/invite-student/invite-student.component';
-import {DataSource} from '../../implementation/data/data-source';
-import {Invitation} from './models/workflow/invitation';
-import {environment} from '../../../environments/environment';
-import {TeacherRepository} from './repositories/teacher-repository';
-import {Cache} from '../../implementation/data/cache';
-import {Teacher} from './models/teacher/teacher';
-import {Repository} from '../../implementation/data/repository';
-import {TeacherCacheService} from './services/teacher/teacher-cache.service';
 
 const routes: Routes = [
   {
@@ -75,6 +66,7 @@ const routes: Routes = [
   ],
   imports: [
     RouterModule.forChild(routes),
+    RouterOutlet,
     SharedModule.forRoot()
   ],
   providers: [

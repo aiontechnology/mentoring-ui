@@ -17,7 +17,7 @@
 import {InjectionToken, NgModule} from '@angular/core';
 import {ResourceManagerComponent} from './resource-manager.component';
 import {SharedModule} from '../shared/shared.module';
-import {RouterModule, Routes} from '@angular/router';
+import {RouterModule, RouterOutlet, Routes} from '@angular/router';
 import {ResourceListComponent} from './components/resource-list/resource-list.component';
 import {BookDialogComponent} from './components/book-dialog/book-dialog.component';
 import {GameDialogComponent} from './components/game-dialog/game-dialog.component';
@@ -43,7 +43,7 @@ const routes: Routes = [
     children: [
       {path: '', component: ResourceListComponent},
       {path: 'books/:id', component: BookDetailComponent},
-      {path: 'games/:id', component: GameDetailComponent}
+      {path: 'games/:id', component: GameDetailComponent},
     ]
   }
 ];
@@ -57,14 +57,13 @@ const routes: Routes = [
     GameDialogComponent,
     GameListComponent,
     ResourceListComponent,
-    ResourceManagerComponent
+    ResourceManagerComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
-    SharedModule.forRoot()
+    RouterOutlet,
+    SharedModule.forRoot(),
   ],
-  providers: [
-  ]
 })
 export class ResourceManagerModule {
 }

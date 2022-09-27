@@ -21,8 +21,7 @@ export class LinkService {
   static selfLink(element: any): string {
     const href = JSONPath({path: '$.links[?(@.rel == "self")].href', json: element});
     if (Array.isArray(href) && href.length === 1) {
-      const self = href[0];
-      return self;
+      return href[0];
     }
     throw new Error('No self link found');
   }

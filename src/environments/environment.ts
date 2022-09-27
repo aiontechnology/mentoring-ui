@@ -23,6 +23,7 @@ export const environment = {
   production: windowEnv?.env?.production,
   apiUri: windowEnv?.env?.apiUri,
   lpgUri: windowEnv?.env?.lpgUri,
+  baseUri: windowEnv?.env?.baseUri,
   tokenRedirect: windowEnv?.env?.tokenRedirect,
   logoutRedirect: windowEnv?.env?.logoutRedirect,
   cognitoBaseUrl: windowEnv?.env?.cognitoBaseUrl,

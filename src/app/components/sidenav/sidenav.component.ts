@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,34 +14,29 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import { map, shareReplay } from 'rxjs/operators';
-import { SelectionModel } from '@angular/cdk/collections';
-import { UserSessionService } from 'src/app/services/user-session.service';
-import { School } from 'src/app/modules/shared/models/school/school';
+import {Component, OnInit} from '@angular/core';
+import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {Observable} from 'rxjs';
+import {map, shareReplay} from 'rxjs/operators';
+import {UserSessionService} from 'src/app/services/user-session.service';
 
 @Component({
   selector: 'ms-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss']
 })
-export class SidenavComponent {
-
-  selection = new SelectionModel<School>(true, []);
-
-  isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
-    .pipe(
-      map(result => (result.matches && this.userSession.isLoggedIn())),
-      shareReplay()
-    );
+export class SidenavComponent implements OnInit {
+  isHandset$: Observable<boolean>;
 
   constructor(public userSession: UserSessionService,
-              private breakpointObserver: BreakpointObserver) { }
-
-  canShowSidenav(isHandset: boolean): boolean {
-    return !isHandset && this.userSession.isLoggedIn();
+              private breakpointObserver: BreakpointObserver) {
   }
 
+  ngOnInit(): void {
+    this.isHandset$ = this.breakpointObserver.observe(Breakpoints.Handset)
+      .pipe(
+        map(result => (result.matches)),
+        shareReplay()
+      );
+  }
 }
