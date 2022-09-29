@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # stage 1
-FROM node:14.20.0-alpine3.16 as build-stage
+FROM node:16.17.1-alpine3.15 as build-stage
 
 WORKDIR /app
 COPY package.json .

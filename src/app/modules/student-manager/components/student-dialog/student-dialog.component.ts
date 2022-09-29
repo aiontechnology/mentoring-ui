@@ -78,8 +78,8 @@ export class StudentDialogComponent implements OnInit {
 
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-  newTeacherCommand: NewDialogCommand<TeacherDialogComponent, Teacher>;
-  newMentorCommand: NewDialogCommand<MentorDialogComponent, Mentor>;
+  newTeacherCommand: NewDialogCommand<Teacher, TeacherDialogComponent>;
+  newMentorCommand: NewDialogCommand<Mentor, MentorDialogComponent>;
 
   constructor(@Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<Student>,
               @Inject(TEACHER_DATA_SOURCE) private teacherDataSource: DataSource<Teacher>,

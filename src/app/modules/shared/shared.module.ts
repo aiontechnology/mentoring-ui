@@ -16,6 +16,10 @@
 
 import {InjectionToken, ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {StudentRegistration} from '../school-manager/models/workflow/student-registration';
+import {StudentRegistrationLookup} from '../school-manager/models/workflow/student-registration-lookup';
+import {StudentRegistrationLookupRepository} from '../school-manager/repositories/student-registration-lookup-repository';
+import {StudentRegistrationRepository} from '../school-manager/repositories/student-registration-repository';
 import {PhoneFormatDirective} from './directives/phone-format.directive';
 import {ConfimationDialogComponent} from './components/confimation-dialog/confimation-dialog.component';
 import {MaterialModule} from 'src/app/shared/material.module';
@@ -89,6 +93,10 @@ export const PERSONNEL_URI_SUPPLIER = new InjectionToken<UriSupplier>('personnel
 export const PROGRAM_ADMIN_DATA_SOURCE = new InjectionToken<DataSource<ProgramAdmin>>('program-admin-data-source');
 export const PROGRAM_ADMIN_CACHE = new InjectionToken<Cache<Personnel>>('program-admin-cache');
 export const PROGRAM_ADMIN_URI_SUPPLIER = new InjectionToken<UriSupplier>('program-admin-uri-supplier');
+
+export const REGISTRATION_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistrationLookup>>('registration-lookup-data-source');
+export const REGISTRATION_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistration>>('registration-data-source');
+export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('registration-uri-supplier');
 
 export const SCHOOL_DATA_SOURCE = new InjectionToken<DataSource<School>>('school-data-source');
 export const SCHOOL_CACHE = new InjectionToken<Cache<School>>('school-cache');
@@ -253,6 +261,24 @@ export class SharedModule {
           provide: PROGRAM_ADMIN_DATA_SOURCE,
           useFactory: (repository: Repository<ProgramAdmin>, cache: Cache<ProgramAdmin>) => new DataSource<ProgramAdmin>(repository, cache),
           deps: [ProgramAdminRepository, PROGRAM_ADMIN_CACHE]
+        },
+
+        /* Registration resources */
+        {
+          provide: REGISTRATION_URI_SUPPLIER,
+          useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/registrations`)
+        },
+        StudentRegistrationLookupRepository,
+        {
+          provide: REGISTRATION_LOOKUP_DATA_SOURCE,
+          useFactory: (repository: Repository<StudentRegistrationLookup>) => new DataSource<StudentRegistrationLookup>(repository),
+          deps: [StudentRegistrationLookupRepository]
+        },
+        StudentRegistrationRepository,
+        {
+          provide: REGISTRATION_DATA_SOURCE,
+          useFactory: (repository: Repository<StudentRegistration>) => new DataSource<StudentRegistration>(repository),
+          deps: [StudentRegistrationRepository]
         },
 
         /* School resources */

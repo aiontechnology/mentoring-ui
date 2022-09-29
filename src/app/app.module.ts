@@ -44,24 +44,10 @@ const loginUrl = `https://${environment.cognitoBaseUrl}/login?client_id=${enviro
 const logoutUrl = `https://${environment.cognitoBaseUrl}/logout?client_id=${environment.cognitoClientId}&logout_uri=${environment.logoutRedirect}`;
 
 const routes: Routes = [
-  {
-    path: '',
-    component: LandingPageComponent
-  },
-  {
-    path: 'logout',
-    component: NoopComponent,
-    canActivate: [logoutProvider, CanActivateApp]
-  },
-  {
-    path: 'home',
-    component: HomeComponent,
-    canActivate: [CanActivateApp]
-  },
-  {
-    path: 'handleLogout',
-    component: HandleLogoutComponent,
-    canActivate: [CanActivateApp]
+  { path: '', component: LandingPageComponent },
+  { path: 'logout', component: NoopComponent, canActivate: [logoutProvider, CanActivateApp] },
+  { path: 'home', component: HomeComponent, canActivate: [CanActivateApp] },
+  { path: 'handleLogout', component: HandleLogoutComponent, canActivate: [CanActivateApp]
   },
   {
     path: 'adminmanager',
@@ -92,19 +78,9 @@ const routes: Routes = [
     path: 'workflowmanager',
     loadChildren: () => import('./modules/workflow-manager/workflow-manager.module').then(m => m.WorkflowManagerModule)
   },
-  {
-    path: 'receiveToken',
-    component: ReceiveTokenComponent
-  },
-  {
-    path: 'login',
-    component: NoopComponent,
-    canActivate: [loginProvider]
-  },
-  {
-    path: '**',
-    redirectTo: ''
-  }
+  { path: 'receiveToken', component: ReceiveTokenComponent },
+  { path: 'login', component: NoopComponent, canActivate: [loginProvider] },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
