@@ -34,15 +34,18 @@ export class InterestCacheService extends DatasourceManager<InterestInbound> {
     return this.isLoading$;
   }
 
-  loadInterests(): void {
-    this.metaDataService.loadInterests()
+  loadInterests(): Promise<InterestInbound[]> {
+    return this.metaDataService.loadInterests()
       .then(interests => {
         this.isLoading$.next(false);
         return interests.map(i => ({
           name: i
         }) as InterestInbound);
       })
-      .then(interests => this.dataSource.data = interests);
+      .then(interests => {
+        this.dataSource.data = interests;
+        return interests;
+      });
   }
 
 }
