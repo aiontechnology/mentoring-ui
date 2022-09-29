@@ -65,28 +65,18 @@ export class InterestListComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.menuState.clear();
   }
-
-  /**
-   * Action taken after a dialog is closed: Move
-   * to page that displays the new item.
-   * @param newItem Added/edited item that helps the
-   * cache service determine which page to jump to.
-   */
-  private jumpToNewItem(newItem: InterestInbound): void {
-    this.interestCacheService.clearSelection();
-    this.interestCacheService.jumpToItem(newItem);
-  }
-
 }
 
 /**
  * Factory function that creates the function passed to the NewDialogCommand as a post action function.
  * @param cacheService The cache service used by the component.
  */
-export const postActionFactory = (cacheService: InterestCacheService): ((interest: InterestInbound) => void) => {
+export const postActionFactory = (cacheService: InterestCacheService): ((interest: InterestInbound) => Promise<void>) => {
   return (i: InterestInbound) => {
-    cacheService.loadInterests();
-    cacheService.clearSelection();
-    cacheService.jumpToItem(i);
+    return cacheService.loadInterests()
+      .then(() => {
+        cacheService.clearSelection();
+        cacheService.jumpToItem(i);
+      })
   };
 }
