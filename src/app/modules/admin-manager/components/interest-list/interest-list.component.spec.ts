@@ -80,6 +80,7 @@ describe('InterestListComponent', () => {
 describe('postActionFactory', () => {
   it('should reload interests', () => {
     const mockCacheService = {
+      clearSelection() {},
       loadInterests() {},
       jumpToItem(i: InterestInbound) {}
     }
