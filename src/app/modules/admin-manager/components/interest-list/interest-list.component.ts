@@ -59,8 +59,7 @@ export class InterestListComponent implements OnInit, OnDestroy {
 
     const postFunc = postActionFactory(this.interestCacheService);
     this.menuState.add(newDialogCommandFactory(this.matDialog, this.snackBar, postFunc));
-    this.menuState.add(editDialogCommandFactory(this.matDialog, this.snackBar, (i: InterestInbound) => this.jumpToNewItem(i),
-      this.interestCacheService));
+    this.menuState.add(editDialogCommandFactory(this.matDialog, this.snackBar, postFunc, this.interestCacheService));
   }
 
   ngOnDestroy(): void {
@@ -87,6 +86,7 @@ export class InterestListComponent implements OnInit, OnDestroy {
 export const postActionFactory = (cacheService: InterestCacheService): ((interest: InterestInbound) => void) => {
   return (i: InterestInbound) => {
     cacheService.loadInterests();
+    cacheService.clearSelection();
     cacheService.jumpToItem(i);
   };
 }
