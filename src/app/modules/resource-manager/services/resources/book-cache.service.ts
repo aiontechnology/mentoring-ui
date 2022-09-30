@@ -42,7 +42,7 @@ export class BookCacheService extends DatasourceManagerRemovable<Book> {
         this.dataSource.data = books;
       })
 
-  protected doRemoveItem = (items: Book[]): Promise<void> =>
+  protected doRemoveItemOld = (items: Book[]): Promise<void> =>
     this.bookDataSource.removeSet(items)
       .then(this.loadData)
 

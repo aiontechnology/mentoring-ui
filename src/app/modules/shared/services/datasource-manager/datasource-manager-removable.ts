@@ -34,11 +34,16 @@ export abstract class DatasourceManagerRemovable<T> extends DatasourceManager<T>
   /**
    * Remove the currently selected items.
    */
-  removeSelected(): Promise<void> {
+  removeSelectedOld(): Promise<void> {
     const selected = this.data.filter(item => this.selection.isSelected(item));
-    const ret = this.doRemoveItem(selected);
+    const ret = this.doRemoveItemOld(selected);
     this.clearSelection();
     return ret;
+  }
+
+  removeSelected(): Promise<T[]> {
+    const selected = this.data.filter(item => this.selection.isSelected(item));
+    return this.doRemoveItem(selected);
   }
 
   /**
@@ -46,6 +51,10 @@ export abstract class DatasourceManagerRemovable<T> extends DatasourceManager<T>
    * items.
    * @param items The items to remove.
    */
-  protected abstract doRemoveItem(items: T[]): Promise<void>;
+  protected abstract doRemoveItemOld(items: T[]): Promise<void>;
+
+  protected doRemoveItem(items: T[]): Promise<T[]> {
+    return Promise.resolve([]);
+  }
 
 }

@@ -46,7 +46,7 @@ export class TeacherCacheService extends DatasourceManagerRemovable<Teacher> {
         this.dataSource.data = teachers;
       })
 
-  protected doRemoveItem = (items: Teacher[]): Promise<void> =>
+  protected doRemoveItemOld = (items: Teacher[]): Promise<void> =>
     this.teacherDataSource.removeSet(items)
       .then(this.loadData)
 

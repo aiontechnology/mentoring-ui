@@ -46,7 +46,7 @@ export class PersonnelCacheService extends DatasourceManagerRemovable<Personnel>
         this.dataSource.data = personnel;
       })
 
-  protected doRemoveItem = (items: Personnel[]): Promise<void> =>
+  protected doRemoveItemOld = (items: Personnel[]): Promise<void> =>
     this.personnelDataSource.removeSet(items)
       .then(this.loadData)
 

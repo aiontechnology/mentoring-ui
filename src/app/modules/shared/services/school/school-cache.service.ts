@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -42,18 +42,24 @@ export class SchoolCacheService extends DatasourceManagerRemovable<School> {
   /**
    * Load backend data to table.
    */
-  loadData = (): Promise<void> =>
-    this.schoolDataSource.allValues()
+  loadSchools(): Promise<void> {
+    return this.schoolDataSource.allValues()
       .then(schools => {
         this.isLoading$.next(false);
         this.dataSource.data = schools;
-      })
+      });
+  }
 
-  protected doRemoveItem = (items: School[]): Promise<void> =>
-    this.schoolDataSource.removeSet(items)
-      .then(this.loadData)
+  protected doRemoveItemOld(items: School[]): Promise<void> {
+    return this.schoolDataSource.removeSet(items)
+      .then(this.loadSchools);
+  }
 
-  private sortingDataAccessor = (item: School, property: string) => {
+  protected doRemoveItem(items: School[]): Promise<School[]> {
+    return this.schoolDataSource.removeSet(items);
+  }
+
+  private sortingDataAccessor(item: School, property: string) {
     switch (property) {
       case 'street1':
         return item.address.street1;

@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatSort} from '@angular/material/sort';
 import {Router} from '@angular/router';
-import {MenuStateService} from 'src/app/services/menu-state.service';
-import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
-import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
-import {SchoolCacheService} from 'src/app/modules/shared/services/school/school-cache.service';
-import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import {School} from 'src/app/modules/shared/models/school/school';
+import {SchoolCacheService} from 'src/app/modules/shared/services/school/school-cache.service';
+import {MenuStateService} from 'src/app/services/menu-state.service';
+import {deleteDialogCommandFactory, editDialogCommandFactory, newDialogCommandFactory} from './command-factories';
 
 @Component({
   selector: 'ms-school-list',
@@ -58,15 +54,13 @@ export class SchoolListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.schoolCacheService.loadData();
-    this.schoolCacheService.clearSelection();
+    this.schoolCacheService.loadSchools()
+      .then(() => this.schoolCacheService.clearSelection());
 
-    SchoolListMenuManager.addMenus(this.menuState,
-      this.router,
-      this.dialog,
-      this.snackBar,
-      (s: School) => this.jumpToNewItem(s),
-      this.schoolCacheService);
+    const postFunc = postActionFactory(this.schoolCacheService);
+    this.menuState.add(newDialogCommandFactory(this.router, this.dialog, this.snackBar, postFunc));
+    this.menuState.add(editDialogCommandFactory(this.router, this.dialog, this.snackBar, postFunc, this.schoolCacheService));
+    this.menuState.add(deleteDialogCommandFactory(this.router, this.dialog, this.snackBar, postFunc, this.schoolCacheService));
   }
 
   ngOnDestroy(): void {
@@ -81,64 +75,17 @@ export class SchoolListComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * Action taken after a dialog is closed: Move
-   * to page that displayes the new item.
-   * @param newItem Added/edited item that helps the
-   * cache service determine which page to jump to.
-   */
-  private jumpToNewItem(newItem: School): void {
-    this.schoolCacheService.clearSelection();
-    this.schoolCacheService.jumpToItem(newItem);
-  }
-
 }
 
-class SchoolListMenuManager {
-  static addMenus(menuState: MenuStateService,
-                  router: Router,
-                  dialog: MatDialog,
-                  snackBar: MatSnackBar,
-                  postAction: (s: School) => void,
-                  schoolCacheService: SchoolCacheService): void {
-    menuState.add(new NewDialogCommand(
-      'Add School',
-      'school',
-      SchoolDialogComponent,
-      'School added',
-      ['/', 'schoolsmanager', 'schools'],
-      undefined,
-      router,
-      dialog,
-      snackBar,
-      (s: School) => postAction(s),
-      () => true));
-    menuState.add(new EditDialogCommand(
-      'Edit School',
-      'school',
-      SchoolDialogComponent,
-      'School updated',
-      ['/', 'schoolsmanager', 'schools'],
-      router,
-      dialog,
-      snackBar,
-      () => ({model: schoolCacheService.getFirstSelection()}),
-      (s: School) => postAction(s),
-      () => schoolCacheService.selection.selected.length === 1));
-    menuState.add(new DeleteDialogCommand(
-      'Remove School(s)',
-      'school',
-      ConfimationDialogComponent,
-      'School(s) removed',
-      'school',
-      'schools',
-      router,
-      dialog,
-      snackBar,
-      null,
-      () => schoolCacheService.selectionCount,
-      () => schoolCacheService.removeSelected(),
-      () => schoolCacheService.selection.selected.length > 0));
-  }
-
-}
+/**
+ * Factory function that creates the function passed to Command objects as a post action function.
+ * @param cacheService The cache service used by the component.
+ */
+export const postActionFactory = (cacheService: SchoolCacheService): (school?: School) => Promise<void> =>
+  school => cacheService.loadSchools()
+    .then(() => {
+      cacheService.clearSelection();
+      if (school) {
+        cacheService.jumpToItem(school);
+      }
+    });

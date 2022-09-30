@@ -42,7 +42,7 @@ export class MentorCacheService extends DatasourceManagerRemovable<Mentor> {
         this.dataSource.data = mentors;
       })
 
-  protected doRemoveItem = (items: Mentor[]): Promise<void> =>
+  protected doRemoveItemOld = (items: Mentor[]): Promise<void> =>
     this.mentorDataSource.removeSet(items)
       .then(this.loadData)
 

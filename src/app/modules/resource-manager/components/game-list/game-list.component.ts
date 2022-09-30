@@ -144,7 +144,7 @@ class GameListMenuManager {
       snackBar,
       null,
       () => gameCacheService.selectionCount,
-      () => gameCacheService.removeSelected(),
+      () => gameCacheService.removeSelectedOld(),
       () => gameCacheService.selection.selected.length > 0));
   }
 

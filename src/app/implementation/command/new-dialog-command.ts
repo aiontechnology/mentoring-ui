@@ -14,53 +14,41 @@
  * limitations under the License.
  */
 
-import { Command } from './command';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ComponentType } from '@angular/cdk/portal';
+import {ComponentType} from '@angular/cdk/portal';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+import {Command} from './command';
+import {NewEditDialogCommand} from './new-edit-dialog-command';
 
-export class NewDialogCommand<T, C> extends Command {
+export class NewDialogCommand<T, C> extends NewEditDialogCommand<T> {
 
   constructor(title: string,
               group: string,
               private componentType: ComponentType<C>,
-              private snackBarMessage: string,
-              private navigationBase: string[],
+              snackBarMessage: string,
+              navigationBase: string[],
               private data: object,
-              private router: Router,
+              router: Router,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              private postAction: (newItem: T) => void,
+              snackBar: MatSnackBar,
+              postAction: (newItem: T) => void,
               private determineEnabled: () => boolean) {
-    super(title, group);
+    super(title, group, navigationBase, postAction, router, snackBar, snackBarMessage);
   }
 
   /**
    * Opens a dialog for adding a new school.
    */
-  execute(): void {
-    const dialogRef = this.dialog.open(this.componentType, {
+  protected override doExecute(): MatDialogRef<any> {
+    return this.dialog.open(this.componentType, {
       width: '700px',
       disableClose: true,
       data: this?.data
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (this.navigationBase) {
-          this.openSnackBar(this.snackBar, this.snackBarMessage, 'Navigate')
-            .onAction().subscribe(() => {
-              this.router.navigate([...this.navigationBase, result.id]);
-            });
-        }
-        this.openSnackBar(this.snackBar, this.snackBarMessage, '');
-        this.postAction(result);
-      }
-    });
   }
 
-  isEnabled(): boolean {
+  protected override isEnabled(): boolean {
     return this.determineEnabled();
   }
 

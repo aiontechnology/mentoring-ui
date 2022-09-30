@@ -42,7 +42,7 @@ export class GameCacheService extends DatasourceManagerRemovable<Game> {
         this.dataSource.data = games;
       })
 
-  protected doRemoveItem = (items: Game[]): Promise<void> =>
+  protected doRemoveItemOld = (items: Game[]): Promise<void> =>
     this.gameDataSource.removeSet(items)
       .then(this.loadData)
 
