@@ -136,7 +136,7 @@ class PersonnelMenuManager {
       snackBar,
       null,
       () => personnelCacheService.selectionCount,
-      () => personnelCacheService.removeSelected(),
+      () => personnelCacheService.removeSelectedOld(),
       () => personnelCacheService.selection.selected.length > 0));
 
   }

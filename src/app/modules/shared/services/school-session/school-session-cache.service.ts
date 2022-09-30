@@ -42,7 +42,7 @@ export class SchoolSessionCacheService extends DatasourceManagerRemovable<School
         this.dataSource.data = schoolSessions;
       })
 
-  protected doRemoveItem = (items: SchoolSession[]): Promise<void> =>
+  protected doRemoveItemOld = (items: SchoolSession[]): Promise<void> =>
     this.schoolSessionDataSource.removeSet(items)
       .then(this.loadData)
 

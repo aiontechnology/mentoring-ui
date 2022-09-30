@@ -68,15 +68,13 @@ export class InterestListComponent implements OnInit, OnDestroy {
 }
 
 /**
- * Factory function that creates the function passed to the NewDialogCommand as a post action function.
+ * Factory function that creates the function passed to Command objects as a post action function.
  * @param cacheService The cache service used by the component.
  */
-export const postActionFactory = (cacheService: InterestCacheService): ((interest: InterestInbound) => Promise<void>) => {
-  return (i: InterestInbound) => {
-    return cacheService.loadInterests()
-      .then(() => {
-        cacheService.clearSelection();
-        cacheService.jumpToItem(i);
-      })
-  };
-}
+export const postActionFactory = (cacheService: InterestCacheService): (interest: InterestInbound) => Promise<void> =>
+  interest => cacheService.loadInterests()
+    .then(() => {
+      cacheService.clearSelection();
+      cacheService.jumpToItem(interest);
+    });
+

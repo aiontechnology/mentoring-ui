@@ -145,7 +145,7 @@ class TeacherListMenuManager {
       snackBar,
       null,
       () => teacherCacheService.selectionCount,
-      () => teacherCacheService.removeSelected(),
+      () => teacherCacheService.removeSelectedOld(),
       () => teacherCacheService.selection.selected.length > 0));
   }
 

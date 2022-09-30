@@ -144,7 +144,7 @@ class BookListMenuManager {
       snackBar,
       null,
       () => bookCacheService.selectionCount,
-      () => bookCacheService.removeSelected(),
+      () => bookCacheService.removeSelectedOld(),
       () => bookCacheService.selection.selected.length > 0));
   }
 

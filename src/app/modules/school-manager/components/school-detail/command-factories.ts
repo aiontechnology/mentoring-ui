@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-import {School} from '../../../shared/models/school/school';
-import {Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {EditDialogCommand} from '../../../../implementation/command/edit-dialog-command';
-import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
-import {DataSource} from '../../../../implementation/data/data-source';
-import {DeleteDialogCommand} from '../../../../implementation/command/delete-dialog-command';
-import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {Router} from '@angular/router';
 import {Command} from '../../../../implementation/command/command';
+import {DeleteDialogCommand} from '../../../../implementation/command/delete-dialog-command';
+import {EditDialogCommand} from '../../../../implementation/command/edit-dialog-command';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {School} from '../../../shared/models/school/school';
 import {SchoolCacheService} from '../../services/school/school-cache.service';
+import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
 
-export const editDialogCommandFactory = (school: School, router: Router, dialog: MatDialog, snackBar: MatSnackBar):
-  EditDialogCommand<School> => new EditDialogCommand<School>(
-  'Edit School',
-  'school',
-  SchoolDialogComponent,
-  'School updated',
-  null,
-  router,
-  dialog,
-  snackBar,
-  () => ({model: school}),
-  () => {
-  },
-  () => true);
+export const editDialogCommandFactory = (school: School, router: Router, dialog: MatDialog, snackBar: MatSnackBar): EditDialogCommand<School> =>
+  new EditDialogCommand<School>(
+    'Edit School',
+    'school',
+    SchoolDialogComponent,
+    'School updated',
+    null,
+    router,
+    dialog,
+    snackBar,
+    () => ({model: school}),
+    () => {
+    },
+    () => true);
 
 export const deleteDialogCommandFactory = (school: School, dataSource: DataSource<School>, repositoryService: SchoolCacheService,
                                            router: Router, dialog: MatDialog, snackBar: MatSnackBar): DeleteDialogCommand<School> =>
@@ -70,23 +70,25 @@ class InviteStudentCommand extends Command {
     super(title, group);
   }
 
-  execute(): void {
-    const dialogRef = this.dialog.open(this.componentType, {
+  protected override doExecute(): MatDialogRef<any> {
+    return this.dialog.open(this.componentType, {
       width: '500px',
       disableClose: true,
       data: {
         message: 'Hello'
       }
     });
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
+  protected override doPostExecute(dialog: MatDialogRef<any>) {
+    dialog.afterClosed().subscribe(result => {
       if (result) {
         this.openSnackBar(this.snackBar, this.snackBarMessage, '');
       }
     });
   }
 
-  isEnabled(): boolean {
+  protected override isEnabled(): boolean {
     return this.enabled();
   }
 }

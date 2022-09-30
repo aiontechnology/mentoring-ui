@@ -180,7 +180,7 @@ class MentorListMenuManager {
       snackBar,
       null,
       () => mentorCacheService.selectionCount,
-      () => mentorCacheService.removeSelected(),
+      () => mentorCacheService.removeSelectedOld(),
       () => mentorCacheService.selection.selected.length > 0));
   }
 

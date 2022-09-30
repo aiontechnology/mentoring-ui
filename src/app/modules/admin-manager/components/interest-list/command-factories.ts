@@ -49,5 +49,5 @@ export const editDialogCommandFactory = (dialog: MatDialog, snackBar: MatSnackBa
     dialog,
     snackBar,
     () => ({model: interestCacheService.getFirstSelection()}),
-    (i: InterestInbound) => postAction(i),
+    postAction,
     () => interestCacheService.selection.selected.length === 1);

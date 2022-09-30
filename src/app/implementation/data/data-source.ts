@@ -68,7 +68,7 @@ export class DataSource<T> implements DataManager<T> {
 
   update = (value: T): Promise<T> => {
     if (this.cache) {
-      this.loadCache()
+      return this.loadCache()
         .then(() => this.repository.update(value)
           .then(this.cache.update));
     } else {

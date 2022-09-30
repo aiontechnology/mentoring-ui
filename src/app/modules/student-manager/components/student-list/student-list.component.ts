@@ -244,7 +244,7 @@ class StudentListMenuManager {
       snackBar,
       null,
       () => studentCacheService.selectionCount,
-      () => studentCacheService.removeSelected(),
+      () => studentCacheService.removeSelectedOld(),
       () => studentCacheService.selection.selected.length > 0 && selectedSession.isCurrent));
   }
 

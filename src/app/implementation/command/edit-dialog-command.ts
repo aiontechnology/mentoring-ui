@@ -16,50 +16,38 @@
 
 import {Command} from './command';
 import {Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {NewEditDialogCommand} from './new-edit-dialog-command';
 
-export class EditDialogCommand<T> extends Command {
+export class EditDialogCommand<T> extends NewEditDialogCommand<T> {
 
   constructor(title: string,
               group: string,
               private componentType: any,
-              private snackBarMessage: string,
-              private navigationBase: string[],
-              private router: Router,
+              snackBarMessage: string,
+              navigationBase: string[],
+              router: Router,
               private dialog: MatDialog,
-              private snackBar: MatSnackBar,
+              snackBar: MatSnackBar,
               private dataSupplier: () => object,
-              private postAction: (newItem: T) => void,
+              postAction: (newItem: T) => void,
               private determineEnabled: () => boolean) {
-    super(title, group);
+    super(title, group, navigationBase, postAction, router, snackBar, snackBarMessage);
   }
 
   /**
    * Opens a dialog for editing an existing school.
    */
-  execute(): void {
-    const dialogRef = this.dialog.open(this.componentType, {
+  protected override doExecute(): MatDialogRef<any> {
+    return this.dialog.open(this.componentType, {
       width: '700px',
       disableClose: true,
       data: this.dataSupplier()
     });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (this.navigationBase) {
-          this.openSnackBar(this.snackBar, this.snackBarMessage, 'Navigate')
-            .onAction().subscribe(() => {
-            this.router.navigate([...this.navigationBase, result.id]);
-          });
-        }
-        this.openSnackBar(this.snackBar, this.snackBarMessage, '');
-        this.postAction(result);
-      }
-    });
   }
 
-  isEnabled(): boolean {
+  protected override isEnabled(): boolean {
     return this.determineEnabled();
   }
 

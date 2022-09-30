@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import {Command} from './command';
-import {Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {ComponentType} from '@angular/cdk/portal';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
+import {Command} from './command';
 
 export class DeleteDialogCommand<T> extends Command {
 
@@ -33,8 +33,9 @@ export class DeleteDialogCommand<T> extends Command {
               private snackBar: MatSnackBar,
               private routeTo: string,
               private countSupplier: () => number,
-              private removeItem: () => Promise<void>,
-              private determineEnabled: () => boolean) {
+              private removeItem: () => Promise<void | T[]>,
+              private determineEnabled: () => boolean,
+              private postAction?: (item?: T) => void) {
     super(title, group);
   }
 
@@ -44,28 +45,29 @@ export class DeleteDialogCommand<T> extends Command {
     return `Are you sure you want to delete ${selectionCount} ${bookLabel}?`;
   }
 
-  execute(): void {
-    const dialogRef = this.dialog.open(this.componentType, {
+  protected override doExecute(): MatDialogRef<any> {
+    return this.dialog.open(this.componentType, {
       width: '500px',
       disableClose: true,
       data: {
         message: this.message
       }
     });
+  }
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.removeItem().then(item => {
-          this.openSnackBar(this.snackBar, this.snackBarMessage, '');
-          if (this.routeTo) {
-            this.router.navigate([this.routeTo]);
-          }
-        });
-      }
+  protected override doPostExecute(dialog: MatDialogRef<any>) {
+    dialog.afterClosed().subscribe(result => {
+      this.removeItem().then(() => {
+        this.openSnackBar(this.snackBar, this.snackBarMessage, '');
+        if (this.routeTo) {
+          this.router.navigate([this.routeTo]);
+        }
+        this?.postAction();
+      });
     });
   }
 
-  isEnabled(): boolean {
+  protected override isEnabled(): boolean {
     return this.determineEnabled();
   }
 

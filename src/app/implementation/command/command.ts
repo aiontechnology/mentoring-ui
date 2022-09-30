@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import {MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar, MatSnackBarRef, SimpleSnackBar} from '@angular/material/snack-bar';
 
 export abstract class Command {
@@ -24,9 +25,21 @@ export abstract class Command {
                         public group: string) {
   }
 
-  abstract execute(...args: any[]): void;
+  execute(): void {
+    this.doPreExecute();
+    const dialog = this.doExecute();
+    this.doPostExecute(dialog);
+  }
 
-  abstract isEnabled(...args: any[]): boolean;
+  protected doPreExecute(): void {
+  }
+
+  protected abstract doExecute(): MatDialogRef<any>;
+
+  protected doPostExecute(dialog: MatDialogRef<any>): void {
+  }
+
+  protected abstract isEnabled(...args: any[]): boolean;
 
   protected openSnackBar(snackBar: MatSnackBar, message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
     return snackBar.open(message, action, {
