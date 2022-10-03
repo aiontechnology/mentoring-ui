@@ -26,7 +26,7 @@ import {School} from '../../../shared/models/school/school';
 import {SchoolCacheService} from '../../services/school/school-cache.service';
 import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
 
-export const editDialogCommandFactory = (school: School, router: Router, dialog: MatDialog, snackBar: MatSnackBar): EditDialogCommand<School> =>
+export const editDialogCommandFactory = (school: School, router: Router, dialog: MatDialog, snackBar: MatSnackBar, postAction: (School) => void): EditDialogCommand<School> =>
   new EditDialogCommand<School>(
     'Edit School',
     'school',
@@ -37,8 +37,7 @@ export const editDialogCommandFactory = (school: School, router: Router, dialog:
     dialog,
     snackBar,
     () => ({model: school}),
-    () => {
-    },
+    postAction,
     () => true);
 
 export const deleteDialogCommandFactory = (school: School, dataSource: DataSource<School>, repositoryService: SchoolCacheService,
