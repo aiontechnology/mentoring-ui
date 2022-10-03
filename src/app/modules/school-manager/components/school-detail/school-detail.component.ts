@@ -65,7 +65,8 @@ export class SchoolDetailComponent implements OnInit, AfterViewInit, OnDestroy {
           this.routeWatcher.school
             .then(school => {
                 this.school = school;
-                this.menuState.add(editDialogCommandFactory(school, this.router, this.dialog, this.snackBar));
+                this.menuState.add(editDialogCommandFactory(school, this.router, this.dialog, this.snackBar,
+                  (s: School) => this.school = s));
                 this.menuState.add(deleteDialogCommandFactory(school, this.schoolDataSource, this.schoolCacheService, this.router,
                   this.dialog, this.snackBar));
                 this.menuState.add(inviteStudentCommandFactory(this.dialog, InviteStudentComponent, this.snackBar));

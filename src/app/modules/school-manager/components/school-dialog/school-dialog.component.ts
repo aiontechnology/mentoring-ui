@@ -15,12 +15,12 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, UntypedFormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {School} from 'src/app/modules/shared/models/school/school';
+import {DataSource} from '../../../../implementation/data/data-source';
 import {states} from '../../../../shared/states';
 import {SCHOOL_DATA_SOURCE} from '../../../shared/shared.module';
-import {DataSource} from '../../../../implementation/data/data-source';
 
 @Component({
   selector: 'ms-new-school-dialog',
@@ -29,7 +29,7 @@ import {DataSource} from '../../../../implementation/data/data-source';
 })
 export class SchoolDialogComponent {
 
-  model: UntypedFormGroup;
+  model: FormGroup;
   isUpdate = false;
 
   /**
@@ -82,8 +82,8 @@ export class SchoolDialogComponent {
    * @param formBuilder A builder used to setup the form model.
    * @param school The School being edited (if any).
    */
-  private createModel(formBuilder: UntypedFormBuilder, school: School): UntypedFormGroup {
-    const formGroup: UntypedFormGroup = formBuilder.group({
+  private createModel(formBuilder: FormBuilder, school: School): FormGroup {
+    const formGroup: FormGroup = formBuilder.group({
       school,
       name: ['', [Validators.required, Validators.maxLength(100)]],
       address: formBuilder.group({
