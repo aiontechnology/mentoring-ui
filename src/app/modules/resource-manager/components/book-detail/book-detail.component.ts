@@ -88,7 +88,6 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   }
 
   private setMenu(): void {
-    this.menuState.removeGroup('book');
     if (this.userSession.isSysAdmin) {
       BookDetailMenuManager.addMenus(this,
         this.menuState,

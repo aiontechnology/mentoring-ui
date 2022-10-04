@@ -20,16 +20,16 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {School} from 'src/app/modules/shared/models/school/school';
 import {MenuStateService} from 'src/app/services/menu-state.service';
-import {UserSessionService} from 'src/app/services/user-session.service';
 import {NavigationService} from 'src/app/services/navigation.service';
-import {SchoolSessionDialogComponent} from '../school-session-dialog/school-session-dialog.component';
+import {UserSessionService} from 'src/app/services/user-session.service';
+import {DataSource} from '../../../../implementation/data/data-source';
 import {RouteWatchingService} from '../../../../services/route-watching.service';
 import {SCHOOL_DATA_SOURCE} from '../../../shared/shared.module';
-import {DataSource} from '../../../../implementation/data/data-source';
-import {deleteDialogCommandFactory, editDialogCommandFactory, inviteStudentCommandFactory} from './command-factories';
 import {SchoolCacheService} from '../../services/school/school-cache.service';
-import {setState} from './menu-state-manager';
 import {InviteStudentComponent} from '../invite-student/invite-student.component';
+import {SchoolSessionDialogComponent} from '../school-session-dialog/school-session-dialog.component';
+import {deleteDialogCommandFactory, editDialogCommandFactory, inviteStudentCommandFactory} from './command-factories';
+import {setState} from './menu-state-manager';
 
 @Component({
   selector: 'ms-school-detail',
@@ -60,18 +60,19 @@ export class SchoolDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.routeWatcher.open(this.route)
       .subscribe(params => {
-        this.menuState.removeGroup('school');
         if (this.userSession.isSysAdmin) {
           this.routeWatcher.school
             .then(school => {
-                this.school = school;
-                this.menuState.add(editDialogCommandFactory(school, this.router, this.dialog, this.snackBar,
-                  (s: School) => this.school = s));
-                this.menuState.add(deleteDialogCommandFactory(school, this.schoolDataSource, this.schoolCacheService, this.router,
-                  this.dialog, this.snackBar));
-                this.menuState.add(inviteStudentCommandFactory(this.dialog, InviteStudentComponent, this.snackBar));
-              }
-            );
+              this.school = school;
+              return school;
+            })
+            .then(school => {
+              this.menuState.add(editDialogCommandFactory(school, this.router, this.dialog, this.snackBar,
+                (s: School) => this.school = s));
+              this.menuState.add(deleteDialogCommandFactory(school, this.schoolDataSource, this.schoolCacheService, this.router,
+                this.dialog, this.snackBar));
+              this.menuState.add(inviteStudentCommandFactory(this.dialog, InviteStudentComponent, this.snackBar));
+            })
         }
       });
   }

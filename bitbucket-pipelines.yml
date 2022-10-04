@@ -1,5 +1,5 @@
-# 
-# Copyright 2020 - 2021 Aion Technology LLC
+#
+# Copyright 2020-2022 Aion Technology LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,10 +31,8 @@ pipelines:
                     - aws ecr get-login-password | docker login --username AWS --password-stdin 661143960593.dkr.ecr.us-west-2.amazonaws.com
                     - docker build -t ui:$TAG .
                     - docker tag ui:$TAG $IMAGE:latest
-                    - docker tag ui:$TAG $IMAGE:test
                     - docker tag ui:$TAG $IMAGE:$TAG
                     - docker push $IMAGE:latest
-                    - docker push $IMAGE:test
                     - docker push $IMAGE:$TAG
         develop:
             - step:

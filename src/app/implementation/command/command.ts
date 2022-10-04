@@ -31,6 +31,8 @@ export abstract class Command {
     this.doPostExecute(dialog);
   }
 
+  abstract isEnabled(...args: any[]): boolean;
+
   protected doPreExecute(): void {
   }
 
@@ -38,8 +40,6 @@ export abstract class Command {
 
   protected doPostExecute(dialog: MatDialogRef<any>): void {
   }
-
-  protected abstract isEnabled(...args: any[]): boolean;
 
   protected openSnackBar(snackBar: MatSnackBar, message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
     return snackBar.open(message, action, {

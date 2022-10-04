@@ -124,7 +124,6 @@ export class StudentDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.menuState.removeGroup('student');
     StudentDetailMenuManager.addMenus(this.student,
       this.menuState,
       this.router,
