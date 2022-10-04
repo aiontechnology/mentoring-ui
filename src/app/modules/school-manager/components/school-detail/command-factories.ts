@@ -69,6 +69,10 @@ class InviteStudentCommand extends Command {
     super(title, group);
   }
 
+  override isEnabled(): boolean {
+    return this.enabled();
+  }
+
   protected override doExecute(): MatDialogRef<any> {
     return this.dialog.open(this.componentType, {
       width: '500px',
@@ -85,10 +89,6 @@ class InviteStudentCommand extends Command {
         this.openSnackBar(this.snackBar, this.snackBarMessage, '');
       }
     });
-  }
-
-  protected override isEnabled(): boolean {
-    return this.enabled();
   }
 }
 

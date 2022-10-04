@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import {Command} from './command';
-import {Router} from '@angular/router';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router';
 import {NewEditDialogCommand} from './new-edit-dialog-command';
 
 export class EditDialogCommand<T> extends NewEditDialogCommand<T> {
@@ -36,6 +35,10 @@ export class EditDialogCommand<T> extends NewEditDialogCommand<T> {
     super(title, group, navigationBase, postAction, router, snackBar, snackBarMessage);
   }
 
+  override isEnabled(): boolean {
+    return this.determineEnabled();
+  }
+
   /**
    * Opens a dialog for editing an existing school.
    */
@@ -45,10 +48,6 @@ export class EditDialogCommand<T> extends NewEditDialogCommand<T> {
       disableClose: true,
       data: this.dataSupplier()
     });
-  }
-
-  protected override isEnabled(): boolean {
-    return this.determineEnabled();
   }
 
 }

@@ -18,7 +18,6 @@ import {ComponentType} from '@angular/cdk/portal';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
-import {Command} from './command';
 import {NewEditDialogCommand} from './new-edit-dialog-command';
 
 export class NewDialogCommand<T, C> extends NewEditDialogCommand<T> {
@@ -37,6 +36,10 @@ export class NewDialogCommand<T, C> extends NewEditDialogCommand<T> {
     super(title, group, navigationBase, postAction, router, snackBar, snackBarMessage);
   }
 
+  override isEnabled(): boolean {
+    return this.determineEnabled();
+  }
+
   /**
    * Opens a dialog for adding a new school.
    */
@@ -46,10 +49,6 @@ export class NewDialogCommand<T, C> extends NewEditDialogCommand<T> {
       disableClose: true,
       data: this?.data
     });
-  }
-
-  protected override isEnabled(): boolean {
-    return this.determineEnabled();
   }
 
 }

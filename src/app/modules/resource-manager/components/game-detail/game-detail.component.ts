@@ -76,7 +76,6 @@ export class GameDetailComponent implements OnInit, OnDestroy {
   }
 
   private setMenu = (): void => {
-    this.menuState.removeGroup('game');
     if (this.userSession.isSysAdmin) {
       GameDetailMenuManager.addMenus(this,
         this.menuState,

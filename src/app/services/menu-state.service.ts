@@ -17,43 +17,53 @@
 import {Injectable} from '@angular/core';
 import {Command} from '../implementation/command/command';
 
+class Group {
+  menus = new Array<Command>();
+  constructor(public isVisible: boolean) {
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class MenuStateService {
-
-  activeMenus: Array<Command> = new Array();
+  groups = new Map<string, Group>();
   title: string;
 
-  constructor() {
+  get activeMenus(): Array<Command> {
+    const activeMenus = new Array<Command>();
+    for (let group of this.groups.values()) {
+      if (group.isVisible) {
+        activeMenus.push(...group.menus);
+      }
+    }
+    return activeMenus;
   }
 
   add(command: Command): void {
-    this.activeMenus.push(command);
+    this.group(command.group).menus.push(command);
   }
 
   clear(): void {
-    this.activeMenus = new Array();
+    this.groups = new Map<string, Group>();
   }
 
   makeAllVisible(): void {
-    for (const menu of this.activeMenus) {
-      menu.isVisible = true;
+    for (const group of this.groups.values()) {
+      group.isVisible = true;
     }
   }
 
-  makeGroupInvisible(group: string): void {
-    for (const menu of this.activeMenus) {
-      if (menu.group === group) {
-        menu.isVisible = false;
-      }
+  makeGroupInvisible(name: string): void {
+    this.group(name).isVisible = false;
+  }
+
+  private group(name: string): Group {
+    let group = this.groups.get(name);
+    if (!group) {
+      group = new Group(true);
+      this.groups.set(name, group);
     }
+    return group;
   }
-
-  removeGroup(group: string): void {
-    this.activeMenus = this.activeMenus.filter(menu => {
-      return menu.group !== group;
-    });
-  }
-
 }

@@ -76,7 +76,6 @@ export class MentorDetailComponent implements OnInit, OnDestroy {
           this.mentorDataSource.oneValue(this.mentorId)
             .then(mentor => {
               this.mentor = mentor;
-              this.menuState.removeGroup('mentor');
               MentorDetailMenuManager.addMenus(this.mentor,
                 this.menuState,
                 this.router,

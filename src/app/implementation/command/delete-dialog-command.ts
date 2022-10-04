@@ -45,6 +45,10 @@ export class DeleteDialogCommand<T> extends Command {
     return `Are you sure you want to delete ${selectionCount} ${bookLabel}?`;
   }
 
+  override isEnabled(): boolean {
+    return this.determineEnabled();
+  }
+
   protected override doExecute(): MatDialogRef<any> {
     return this.dialog.open(this.componentType, {
       width: '500px',
@@ -65,10 +69,6 @@ export class DeleteDialogCommand<T> extends Command {
         this?.postAction();
       });
     });
-  }
-
-  protected override isEnabled(): boolean {
-    return this.determineEnabled();
   }
 
 }
