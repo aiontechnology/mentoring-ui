@@ -17,9 +17,9 @@
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
-import {DeleteDialogCommand} from '../../../../implementation/command/delete-dialog-command';
-import {EditDialogCommand} from '../../../../implementation/command/edit-dialog-command';
-import {NewDialogCommand} from '../../../../implementation/command/new-dialog-command';
+import {DeleteDialogCommandOld} from '../../../../implementation/command/delete-dialog-command-old';
+import {EditDialogCommandOld} from '../../../../implementation/command/edit-dialog-command-old';
+import {NewDialogCommandOld} from '../../../../implementation/command/new-dialog-command-old';
 import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
 import {School} from '../../../shared/models/school/school';
 import {SchoolCacheService} from '../../../shared/services/school/school-cache.service';
@@ -28,8 +28,8 @@ import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
 type SchoolPostActionFunc = (s: School) => void;
 
 export const newDialogCommandFactory = (router: Router, dialog: MatDialog, snackBar: MatSnackBar,
-                                        postAction: SchoolPostActionFunc): NewDialogCommand<School, SchoolDialogComponent> =>
-  new NewDialogCommand<School, SchoolDialogComponent>(
+                                        postAction: SchoolPostActionFunc): NewDialogCommandOld<School, SchoolDialogComponent> =>
+  new NewDialogCommandOld<School, SchoolDialogComponent>(
     'Add School',
     'school',
     SchoolDialogComponent,
@@ -43,8 +43,8 @@ export const newDialogCommandFactory = (router: Router, dialog: MatDialog, snack
     () => true)
 
 export const editDialogCommandFactory = (router: Router, dialog: MatDialog, snackBar: MatSnackBar, postAction: SchoolPostActionFunc,
-                                         schoolCacheService: SchoolCacheService): EditDialogCommand<School> =>
-  new EditDialogCommand<School>(
+                                         schoolCacheService: SchoolCacheService): EditDialogCommandOld<School> =>
+  new EditDialogCommandOld<School>(
     'Edit School',
     'school',
     SchoolDialogComponent,
@@ -58,8 +58,8 @@ export const editDialogCommandFactory = (router: Router, dialog: MatDialog, snac
     () => schoolCacheService.selection.selected.length === 1)
 
 export const deleteDialogCommandFactory = (router: Router, dialog: MatDialog, snackBar: MatSnackBar, postAction: SchoolPostActionFunc,
-                                           schoolCacheService: SchoolCacheService): DeleteDialogCommand<School> =>
-  new DeleteDialogCommand<School>(
+                                           schoolCacheService: SchoolCacheService): DeleteDialogCommandOld<School> =>
+  new DeleteDialogCommandOld<School>(
     'Remove School(s)',
     'school',
     ConfimationDialogComponent,

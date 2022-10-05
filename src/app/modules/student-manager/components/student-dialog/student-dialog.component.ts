@@ -28,7 +28,7 @@ import {Mentor} from 'src/app/modules/mentor-manager/models/mentor/mentor';
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {Observable} from 'rxjs';
 import {personLocations} from 'src/app/modules/shared/constants/locations';
-import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
 import {TeacherDialogComponent} from 'src/app/modules/school-manager/components/teacher-dialog/teacher-dialog.component';
 import {MentorDialogComponent} from 'src/app/modules/mentor-manager/components/mentor-dialog/mentor-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -78,8 +78,8 @@ export class StudentDialogComponent implements OnInit {
 
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-  newTeacherCommand: NewDialogCommand<Teacher, TeacherDialogComponent>;
-  newMentorCommand: NewDialogCommand<Mentor, MentorDialogComponent>;
+  newTeacherCommand: NewDialogCommandOld<Teacher, TeacherDialogComponent>;
+  newMentorCommand: NewDialogCommandOld<Mentor, MentorDialogComponent>;
 
   constructor(@Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<Student>,
               @Inject(TEACHER_DATA_SOURCE) private teacherDataSource: DataSource<Teacher>,
@@ -106,7 +106,7 @@ export class StudentDialogComponent implements OnInit {
     /**
      * Opens teacher creation dialog with a fixed grade.
      */
-    this.newTeacherCommand = new NewDialogCommand(
+    this.newTeacherCommand = new NewDialogCommandOld(
       'Add Teacher',
       'teacher',
       TeacherDialogComponent,
@@ -119,7 +119,7 @@ export class StudentDialogComponent implements OnInit {
       (t: Teacher) => this.addNewTeacher(t),
       () => true);
 
-    this.newMentorCommand = new NewDialogCommand(
+    this.newMentorCommand = new NewDialogCommandOld(
       'Add Mentor',
       'mentor',
       MentorDialogComponent,

@@ -18,8 +18,8 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
+import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
 import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import {Mentor} from '../../models/mentor/mentor';
 import {MenuStateService} from 'src/app/services/menu-state.service';
@@ -106,7 +106,7 @@ class MentorDetailMenuManager {
                   mentorCacheService: MentorCacheService,
                   schoolId: string,
                   routeTo: string) {
-    menuState.add(new EditDialogCommand(
+    menuState.add(new EditDialogCommandOld(
       'Edit Mentor',
       'mentor',
       MentorDialogComponent,
@@ -119,7 +119,7 @@ class MentorDetailMenuManager {
       () => {
       },
       () => true));
-    menuState.add(new DeleteDialogCommand<Mentor>(
+    menuState.add(new DeleteDialogCommandOld<Mentor>(
       'Remove Mentor',
       'mentor',
       ConfimationDialogComponent,

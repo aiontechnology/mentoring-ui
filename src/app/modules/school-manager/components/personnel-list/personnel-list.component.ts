@@ -23,11 +23,11 @@ import {MenuStateService} from 'src/app/services/menu-state.service';
 import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {PersonnelCacheService} from '../../services/personnel/personnel-cache.service';
-import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
 import {PersonnelDialogComponent} from '../personnel-dialog/personnel-dialog.component';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
 import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
 import {Personnel} from '../../models/personnel/personnel';
 
 @Component({
@@ -100,7 +100,7 @@ class PersonnelMenuManager {
                   personnelCacheService: PersonnelCacheService,
                   schoolId: string): void {
 
-    menuState.add(new NewDialogCommand(
+    menuState.add(new NewDialogCommandOld(
       'Add Personnel',
       'personnel',
       PersonnelDialogComponent,
@@ -112,7 +112,7 @@ class PersonnelMenuManager {
       snackBar,
       (p: Personnel) => postAction(p),
       () => true));
-    menuState.add(new EditDialogCommand(
+    menuState.add(new EditDialogCommandOld(
       'Edit Personnel',
       'personnel',
       PersonnelDialogComponent,
@@ -124,7 +124,7 @@ class PersonnelMenuManager {
       () => ({model: personnelCacheService.getFirstSelection()}),
       (p: Personnel) => postAction(p),
       () => personnelCacheService.selection.selected.length === 1));
-    menuState.add(new DeleteDialogCommand(
+    menuState.add(new DeleteDialogCommandOld(
       'Remove Personnel',
       'personnel',
       ConfimationDialogComponent,

@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
+import {AfterViewInit, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {MenuStateService} from 'src/app/services/menu-state.service';
-import {Router} from '@angular/router';
+import {MatPaginator} from '@angular/material/paginator';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
-import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
-import {SchoolBookDialogComponent} from '../school-book-dialog/school-book-dialog.component';
+import {Router} from '@angular/router';
+import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
 import {Book} from 'src/app/modules/shared/models/book/book';
 import {SchoolBookCacheService} from 'src/app/modules/shared/services/school-resource/school-book/school-book-cache.service';
-import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../shared.module';
+import {MenuStateService} from 'src/app/services/menu-state.service';
 import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
+import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../shared.module';
+import {SchoolBookDialogComponent} from '../school-book-dialog/school-book-dialog.component';
 
 @Component({
   selector: 'ms-school-book-list',
@@ -90,7 +90,7 @@ class SchoolBookListMenuManager {
                   schoolId: string,
                   schoolBookCacheService: SchoolBookCacheService,
                   postAction: (b: Book) => void): void {
-    menuState.add(new NewDialogCommand(
+    menuState.add(new NewDialogCommandOld(
       'Update Books',
       'school-book',
       SchoolBookDialogComponent,

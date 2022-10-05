@@ -18,9 +18,9 @@ import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {School} from 'src/app/modules/shared/models/school/school';
 import {MentorCacheService} from '../../services/mentor/mentor-cache.service';
-import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
+import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
+import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
 import {MentorDialogComponent} from '../mentor-dialog/mentor-dialog.component';
 import {MenuStateService} from 'src/app/services/menu-state.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -144,7 +144,7 @@ class MentorListMenuManager {
                   schoolId: string): void {
     menuState.clear();
 
-    menuState.add(new NewDialogCommand(
+    menuState.add(new NewDialogCommandOld(
       'Add Mentor',
       'mentor',
       MentorDialogComponent,
@@ -156,7 +156,7 @@ class MentorListMenuManager {
       snackBar,
       (m: Mentor) => postAction(m),
       () => schoolId != null));
-    menuState.add(new EditDialogCommand(
+    menuState.add(new EditDialogCommandOld(
       'Edit Mentor',
       'mentor',
       MentorDialogComponent,
@@ -168,7 +168,7 @@ class MentorListMenuManager {
       () => ({schoolId, model: mentorCacheService.getFirstSelection()}),
       (m: Mentor) => postAction(m),
       () => mentorCacheService.selection.selected.length === 1));
-    menuState.add(new DeleteDialogCommand(
+    menuState.add(new DeleteDialogCommandOld(
       'Delete Mentor',
       'mentor',
       ConfimationDialogComponent,

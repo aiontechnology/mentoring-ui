@@ -18,18 +18,18 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
 import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
 import {Book} from 'src/app/modules/shared/models/book/book';
 import {MenuStateService} from 'src/app/services/menu-state.service';
-import {BookDialogComponent} from '../book-dialog/book-dialog.component';
-import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
-import {UserSessionService} from 'src/app/services/user-session.service';
 import {NavigationService} from 'src/app/services/navigation.service';
-import {BookCacheService} from '../../services/resources/book-cache.service';
+import {UserSessionService} from 'src/app/services/user-session.service';
+import {Command} from '../../../../implementation/command/command';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {BOOK_DATA_SOURCE} from '../../../shared/shared.module';
+import {DETAIL_MENU} from '../../resource-manager.module';
+import {BookCacheService} from '../../services/resources/book-cache.service';
 
 @Component({
   selector: 'ms-book-detail',
@@ -48,7 +48,8 @@ export class BookDetailComponent implements OnInit, OnDestroy {
               private menuState: MenuStateService,
               private snackBar: MatSnackBar,
               private router: Router,
-              private navigation: NavigationService) {
+              private navigation: NavigationService,
+              @Inject(DETAIL_MENU) private menuCommands: ((component: BookDetailComponent) => Command)[]) {
   }
 
   get resourceGrades() {
@@ -89,6 +90,10 @@ export class BookDetailComponent implements OnInit, OnDestroy {
 
   private setMenu(): void {
     if (this.userSession.isSysAdmin) {
+      this.menuState.add(
+        this.menuCommands.map(menuFactory => menuFactory(this))
+      )
+
       BookDetailMenuManager.addMenus(this,
         this.menuState,
         this.router,
@@ -109,33 +114,21 @@ class BookDetailMenuManager {
                   snackBar: MatSnackBar,
                   bookDataSource: DataSource<Book>,
                   bookCacheService: BookCacheService) {
-    menuState.add(new EditDialogCommand(
-      'Edit Book',
-      'book',
-      BookDialogComponent,
-      'Book updated',
-      null,
-      router,
-      dialog,
-      snackBar,
-      () => ({model: component.book}),
-      (book: Book) => component.book = book,
-      () => true));
-    menuState.add(new DeleteDialogCommand<Book>(
-      'Remove Book',
-      'book',
-      ConfimationDialogComponent,
-      'Book(s) removed',
-      'book',
-      'books',
-      router,
-      dialog,
-      snackBar,
-      '/resourcemanager',
-      () => 1,
-      () => bookDataSource.remove(component.book)
-        .then(() => bookCacheService.loadData()),
-      () => true));
+    // menuState.add(new DeleteDialogCommandOld<Book>(
+    //   'Remove Book',
+    //   'book',
+    //   ConfimationDialogComponent,
+    //   'Book(s) removed',
+    //   'book',
+    //   'books',
+    //   router,
+    //   dialog,
+    //   snackBar,
+    //   '/resourcemanager',
+    //   () => 1,
+    //   () => bookDataSource.remove(component.book)
+    //     .then(() => bookCacheService.loadData()),
+    //   () => true));
   }
 
 }

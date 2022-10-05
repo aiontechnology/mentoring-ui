@@ -22,7 +22,7 @@ import {Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
-import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
 import {SchoolGameDialogComponent} from '../school-game-dialog/school-game-dialog.component';
 import {Game} from 'src/app/modules/shared/models/game/game';
 import {SchoolGameCacheService} from 'src/app/modules/shared/services/school-resource/school-game/school-game-cache.service';
@@ -90,7 +90,7 @@ class SchoolGameListMenuManager {
                   schoolId: string,
                   schoolGameCacheService: SchoolGameCacheService,
                   postAction: (g: Game) => void): void {
-    menuState.add(new NewDialogCommand(
+    menuState.add(new NewDialogCommandOld(
       'Update Games',
       'school-game',
       SchoolGameDialogComponent,

@@ -17,9 +17,9 @@
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
-import {DeleteDialogCommand} from '../../../../implementation/command/delete-dialog-command';
-import {EditDialogCommand} from '../../../../implementation/command/edit-dialog-command';
-import {NewDialogCommand} from '../../../../implementation/command/new-dialog-command';
+import {DeleteDialogCommandOld} from '../../../../implementation/command/delete-dialog-command-old';
+import {EditDialogCommandOld} from '../../../../implementation/command/edit-dialog-command-old';
+import {NewDialogCommandOld} from '../../../../implementation/command/new-dialog-command-old';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
 import {ProgramAdmin} from '../../models/program-admin/program-admin';
@@ -27,7 +27,7 @@ import {ProgramAdminDialogComponent} from '../program-admin-dialog/program-admin
 
 export const deleteDialogCommandFactory = (router: Router, dialog: MatDialog, snackBar: MatSnackBar, programAdmin: ProgramAdmin,
                                            programAdminDataSource: DataSource<ProgramAdmin>) =>
-  new DeleteDialogCommand(
+  new DeleteDialogCommandOld(
     'Remove Program Admin(s)',
     'program-admin',
     ConfimationDialogComponent,
@@ -44,8 +44,8 @@ export const deleteDialogCommandFactory = (router: Router, dialog: MatDialog, sn
     () => programAdmin !== undefined)
 
 export const editDialogCommandFactory = (router: Router, dialog: MatDialog, snackBar: MatSnackBar,
-                                         programAdmin: ProgramAdmin): EditDialogCommand<ProgramAdmin> =>
-  new EditDialogCommand<ProgramAdmin>(
+                                         programAdmin: ProgramAdmin): EditDialogCommandOld<ProgramAdmin> =>
+  new EditDialogCommandOld<ProgramAdmin>(
     'Edit Program Admin',
     'program-admin',
     ProgramAdminDialogComponent,
@@ -61,7 +61,7 @@ export const editDialogCommandFactory = (router: Router, dialog: MatDialog, snac
 
 export const newDialogCommandFactory = (router: Router, dialog: MatDialog, snackBar: MatSnackBar, programAdmin: ProgramAdmin,
                                         programAdminDataSource: DataSource<ProgramAdmin>, schoolId: string) =>
-  new NewDialogCommand(
+  new NewDialogCommandOld(
     'Add Program Admin',
     'program-admin',
     ProgramAdminDialogComponent,

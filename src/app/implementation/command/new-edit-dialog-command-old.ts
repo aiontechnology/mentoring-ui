@@ -19,7 +19,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {Command} from './command';
 
-export abstract class NewEditDialogCommand<T> extends Command {
+export abstract class NewEditDialogCommandOld<T> extends Command {
 
   protected constructor(title: string,
                         group: string,

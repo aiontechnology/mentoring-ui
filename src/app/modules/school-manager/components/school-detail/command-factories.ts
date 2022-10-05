@@ -18,16 +18,16 @@ import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {Command} from '../../../../implementation/command/command';
-import {DeleteDialogCommand} from '../../../../implementation/command/delete-dialog-command';
-import {EditDialogCommand} from '../../../../implementation/command/edit-dialog-command';
+import {DeleteDialogCommandOld} from '../../../../implementation/command/delete-dialog-command-old';
+import {EditDialogCommandOld} from '../../../../implementation/command/edit-dialog-command-old';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
 import {School} from '../../../shared/models/school/school';
 import {SchoolCacheService} from '../../services/school/school-cache.service';
 import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
 
-export const editDialogCommandFactory = (school: School, router: Router, dialog: MatDialog, snackBar: MatSnackBar, postAction: (School) => void): EditDialogCommand<School> =>
-  new EditDialogCommand<School>(
+export const editDialogCommandFactory = (school: School, router: Router, dialog: MatDialog, snackBar: MatSnackBar, postAction: (School) => void): EditDialogCommandOld<School> =>
+  new EditDialogCommandOld<School>(
     'Edit School',
     'school',
     SchoolDialogComponent,
@@ -41,8 +41,8 @@ export const editDialogCommandFactory = (school: School, router: Router, dialog:
     () => true);
 
 export const deleteDialogCommandFactory = (school: School, dataSource: DataSource<School>, repositoryService: SchoolCacheService,
-                                           router: Router, dialog: MatDialog, snackBar: MatSnackBar): DeleteDialogCommand<School> =>
-  new DeleteDialogCommand(
+                                           router: Router, dialog: MatDialog, snackBar: MatSnackBar): DeleteDialogCommandOld<School> =>
+  new DeleteDialogCommandOld(
     'Remove School',
     'school',
     ConfimationDialogComponent,

@@ -20,7 +20,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
 import {Command} from './command';
 
-export class DeleteDialogCommand<T> extends Command {
+export class DeleteDialogCommandOld<T> extends Command {
 
   constructor(title: string,
               group: string,

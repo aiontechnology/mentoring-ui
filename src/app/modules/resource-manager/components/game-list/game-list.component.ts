@@ -23,10 +23,10 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {GameCacheService} from '../../services/resources/game-cache.service';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
-import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
 import {GameDialogComponent} from '../game-dialog/game-dialog.component';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
+import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
 import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {Game} from 'src/app/modules/shared/models/game/game';
@@ -108,7 +108,7 @@ class GameListMenuManager {
                   snackBar: MatSnackBar,
                   postAction: (g: Game) => void,
                   gameCacheService: GameCacheService): void {
-    menuState.add(new NewDialogCommand(
+    menuState.add(new NewDialogCommandOld(
       'Add Game',
       'game',
       GameDialogComponent,
@@ -120,7 +120,7 @@ class GameListMenuManager {
       snackBar,
       (g: Game) => postAction(g),
       () => true));
-    menuState.add(new EditDialogCommand(
+    menuState.add(new EditDialogCommandOld(
       'Edit Game',
       'game',
       GameDialogComponent,
@@ -132,7 +132,7 @@ class GameListMenuManager {
       () => ({model: gameCacheService.getFirstSelection()}),
       (g: Game) => postAction(g),
       () => gameCacheService.selection.selected.length === 1));
-    menuState.add(new DeleteDialogCommand(
+    menuState.add(new DeleteDialogCommandOld(
       'Remove Game(s)',
       'game',
       ConfimationDialogComponent,

@@ -18,13 +18,13 @@ import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {InterestInbound} from '../../models/interest/interest-inbound';
 import {InterestCacheService} from '../../services/interests/interest-cache.service';
-import {NewDialogCommand} from '../../../../implementation/command/new-dialog-command';
+import {NewDialogCommandOld} from '../../../../implementation/command/new-dialog-command-old';
 import {InterestDialogComponent} from '../interest-dialog/interest-dialog.component';
-import {EditDialogCommand} from '../../../../implementation/command/edit-dialog-command';
+import {EditDialogCommandOld} from '../../../../implementation/command/edit-dialog-command-old';
 
 export const newDialogCommandFactory = (dialog: MatDialog, snackBar: MatSnackBar, postAction: (i: InterestInbound) => void):
-  NewDialogCommand<InterestInbound, InterestDialogComponent> =>
-  new NewDialogCommand<InterestInbound, InterestDialogComponent>(
+  NewDialogCommandOld<InterestInbound, InterestDialogComponent> =>
+  new NewDialogCommandOld<InterestInbound, InterestDialogComponent>(
     'Add Interest',
     'interest',
     InterestDialogComponent,
@@ -38,8 +38,8 @@ export const newDialogCommandFactory = (dialog: MatDialog, snackBar: MatSnackBar
     () => true);
 
 export const editDialogCommandFactory = (dialog: MatDialog, snackBar: MatSnackBar, postAction: (i: InterestInbound) => void,
-                                         interestCacheService: InterestCacheService): EditDialogCommand<InterestInbound> =>
-  new EditDialogCommand<InterestInbound>(
+                                         interestCacheService: InterestCacheService): EditDialogCommandOld<InterestInbound> =>
+  new EditDialogCommandOld<InterestInbound>(
     'Edit Interest',
     'interest',
     InterestDialogComponent,

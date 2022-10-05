@@ -18,8 +18,8 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
+import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
 import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import {Game} from 'src/app/modules/shared/models/game/game';
 import {MenuStateService} from 'src/app/services/menu-state.service';
@@ -113,7 +113,7 @@ class GameDetailMenuManager {
                   snackBar: MatSnackBar,
                   gameDataSource: DataSource<Game>,
                   gameCacheService: GameCacheService) {
-    menuState.add(new EditDialogCommand(
+    menuState.add(new EditDialogCommandOld(
       'Edit Game',
       'game',
       GameDialogComponent,
@@ -125,7 +125,7 @@ class GameDetailMenuManager {
       () => ({model: component.game}),
       (game: Game) => component.game = game,
       () => true));
-    menuState.add(new DeleteDialogCommand(
+    menuState.add(new DeleteDialogCommandOld(
       'Remove Game',
       'game',
       ConfimationDialogComponent,

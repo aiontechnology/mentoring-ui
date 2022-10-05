@@ -24,11 +24,16 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class ConfimationDialogComponent {
 
-  message = 'Are you sure you want to delete these items?';
+  message: string;
 
   constructor(private dialogRef: MatDialogRef<ConfimationDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.message = data.message;
+    const singularName = data.singularName;
+    const pluralName = data.pluralName;
+    const countSupplier = data.countSupplier;
+    const selectionCount = countSupplier();
+    const bookLabel = selectionCount > 1 ? pluralName : singularName;
+    this.message = `Are you sure you want to delete ${selectionCount} ${bookLabel}?`;
   }
 
   delete() {

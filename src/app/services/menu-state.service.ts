@@ -19,6 +19,7 @@ import {Command} from '../implementation/command/command';
 
 class Group {
   menus = new Array<Command>();
+
   constructor(public isVisible: boolean) {
   }
 }
@@ -40,8 +41,12 @@ export class MenuStateService {
     return activeMenus;
   }
 
-  add(command: Command): void {
-    this.group(command.group).menus.push(command);
+  add(command: Command | Command[]): void {
+    if (Array.isArray(command)) {
+      command.forEach(c => this.group(c.group).menus.push(c));
+    } else {
+      this.group(command.group).menus.push(command);
+    }
   }
 
   clear(): void {

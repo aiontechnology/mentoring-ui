@@ -17,9 +17,9 @@
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
-import {NewEditDialogCommand} from './new-edit-dialog-command';
+import {NewEditDialogCommandOld} from './new-edit-dialog-command-old';
 
-export class EditDialogCommand<T> extends NewEditDialogCommand<T> {
+export class EditDialogCommandOld<T> extends NewEditDialogCommandOld<T> {
 
   constructor(title: string,
               group: string,

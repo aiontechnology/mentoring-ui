@@ -15,14 +15,14 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {Book} from 'src/app/modules/shared/models/book/book';
-import {Grade} from 'src/app/modules/shared/types/grade';
-import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
-import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {resourceLocations} from 'src/app/modules/shared/constants/locations';
+import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
+import {Book} from 'src/app/modules/shared/models/book/book';
+import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import {Grade} from 'src/app/modules/shared/types/grade';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {BOOK_DATA_SOURCE} from '../../../shared/shared.module';
 
@@ -55,7 +55,7 @@ export class BookDialogComponent implements OnInit {
     this.locations = resourceLocations;
   }
 
-  ngOnInit = (): void => {
+  ngOnInit(): void {
     this.metaDataService.loadInterests();
     this.interestList$ = this.metaDataService.interests;
 
@@ -75,7 +75,7 @@ export class BookDialogComponent implements OnInit {
     this.tagsList$ = this.metaDataService.tags;
   }
 
-  save = (): void => {
+  save(): void {
     const newBook = new Book(this.model.value);
     let value: Promise<Book>;
 
@@ -91,16 +91,16 @@ export class BookDialogComponent implements OnInit {
     });
   }
 
-  dismiss = (): void => {
+  dismiss(): void {
     this.dialogRef.close(null);
   }
 
   // Used for the keyvalue pipe, to keep location properties in their default order.
-  unsorted = (): number => {
+  unsorted(): number {
     return 0;
   }
 
-  private createModel = (formBuilder: UntypedFormBuilder, book: Book): UntypedFormGroup => {
+  private createModel(formBuilder: UntypedFormBuilder, book: Book): UntypedFormGroup {
     const formGroup: UntypedFormGroup = formBuilder.group({
       book,
       title: ['', [Validators.required, Validators.maxLength(100)]],
@@ -134,7 +134,7 @@ export class BookDialogComponent implements OnInit {
     return formGroup;
   }
 
-  private determineUpdate = (formData: any): boolean => {
+  private determineUpdate(formData: any): boolean {
     return formData !== undefined && formData !== null;
   }
 

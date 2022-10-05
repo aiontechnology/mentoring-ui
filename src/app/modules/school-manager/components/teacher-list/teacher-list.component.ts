@@ -21,9 +21,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
-import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
+import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
+import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
+import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
 import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import {MenuStateService} from 'src/app/services/menu-state.service';
 import {TeacherCacheService} from '../../services/teacher/teacher-cache.service';
@@ -109,7 +109,7 @@ class TeacherListMenuManager {
                   postAction: (t: Teacher) => void,
                   teacherCacheService: TeacherCacheService,
                   schoolId: string): void {
-    menuState.add(new NewDialogCommand(
+    menuState.add(new NewDialogCommandOld(
       'Add Teacher',
       'teacher',
       TeacherDialogComponent,
@@ -121,7 +121,7 @@ class TeacherListMenuManager {
       snackBar,
       (t: Teacher) => postAction(t),
       () => true));
-    menuState.add(new EditDialogCommand(
+    menuState.add(new EditDialogCommandOld(
       'Edit Teacher',
       'teacher',
       TeacherDialogComponent,
@@ -133,7 +133,7 @@ class TeacherListMenuManager {
       () => ({model: teacherCacheService.getFirstSelection()}),
       (t: Teacher) => postAction(t),
       () => teacherCacheService.selection.selected.length === 1));
-    menuState.add(new DeleteDialogCommand(
+    menuState.add(new DeleteDialogCommandOld(
       'Remove Teacher(s)',
       'teacher',
       ConfimationDialogComponent,

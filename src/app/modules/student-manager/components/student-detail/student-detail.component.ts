@@ -18,8 +18,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
+import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
+import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
 import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import {StudentInbound, StudentMentorInbound} from '../../models/student-inbound/student-inbound';
 import {StudentRepositoryService} from '../../services/student/student-repository.service';
@@ -188,7 +188,7 @@ class StudentDetailMenuManager {
                   schoolId: string,
                   routeTo: string,
                   isHistoric: boolean) {
-    menuState.add(new EditDialogCommand(
+    menuState.add(new EditDialogCommandOld(
       'Edit Student',
       'student',
       StudentDialogComponent,
@@ -202,7 +202,7 @@ class StudentDetailMenuManager {
       },
       () => !isHistoric
     ));
-    menuState.add(new DeleteDialogCommand(
+    menuState.add(new DeleteDialogCommandOld(
       'Remove Student',
       'student',
       ConfimationDialogComponent,

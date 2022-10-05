@@ -18,9 +18,9 @@ import {ComponentType} from '@angular/cdk/portal';
 import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router';
-import {NewEditDialogCommand} from './new-edit-dialog-command';
+import {NewEditDialogCommandOld} from './new-edit-dialog-command-old';
 
-export class NewDialogCommand<T, C> extends NewEditDialogCommand<T> {
+export class NewDialogCommandOld<T, C> extends NewEditDialogCommandOld<T> {
 
   constructor(title: string,
               group: string,

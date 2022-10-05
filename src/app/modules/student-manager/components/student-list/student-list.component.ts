@@ -18,9 +18,9 @@ import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {School} from 'src/app/modules/shared/models/school/school';
 import {StudentCacheService} from '../../services/student/student-cache.service';
-import {NewDialogCommand} from 'src/app/implementation/command/new-dialog-command';
-import {EditDialogCommand} from 'src/app/implementation/command/edit-dialog-command';
-import {DeleteDialogCommand} from 'src/app/implementation/command/delete-dialog-command';
+import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
+import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
+import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
 import {MenuStateService} from 'src/app/services/menu-state.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
@@ -208,7 +208,7 @@ class StudentListMenuManager {
                   selectedSession: SchoolSession): void {
     menuState.clear();
 
-    menuState.add(new NewDialogCommand(
+    menuState.add(new NewDialogCommandOld(
       'Add Student',
       'student',
       StudentDialogComponent,
@@ -220,7 +220,7 @@ class StudentListMenuManager {
       snackBar,
       (s: Student) => postAction(s),
       () => schoolId != null && selectedSession.isCurrent));
-    menuState.add(new EditDialogCommand(
+    menuState.add(new EditDialogCommandOld(
       'Edit Student',
       'student',
       StudentDialogComponent,
@@ -232,7 +232,7 @@ class StudentListMenuManager {
       () => ({schoolId, model: studentCacheService.getFirstSelection()}),
       (s: Student) => postAction(s),
       () => studentCacheService.selection.selected.length === 1 && selectedSession.isCurrent));
-    menuState.add(new DeleteDialogCommand(
+    menuState.add(new DeleteDialogCommandOld(
       'Delete Student',
       'student',
       ConfimationDialogComponent,
