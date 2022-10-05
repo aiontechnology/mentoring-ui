@@ -15,7 +15,7 @@
  */
 
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { AbstractControl, UntypedFormGroup, UntypedFormBuilder, ValidatorFn } from '@angular/forms';
+import { AbstractControl, UntypedFormGroup, UntypedFormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import { InterestOutbound } from 'src/app/modules/shared/models/meta-data/interests/interest-outbound';
@@ -65,12 +65,12 @@ export class InterestDialogComponent implements OnInit, OnDestroy {
 
   createModel(formBuilder: UntypedFormBuilder, interest: string): void {
     this.model = formBuilder.group({
-      name: [interest, this.duplicateInterestValidator()]
+      name: [interest, [this.duplicateInterestValidator(), Validators.required]]
     });
   }
 
   duplicateInterestValidator(): ValidatorFn {
-    const errorMsg = 'This interest already exists';
+    const errorMsg = 'This interest already exists'
     return (control: AbstractControl): { [key: string]: any } | null => {
       if (this.interests?.includes(control.value) && this.interests !== undefined) {
         return { duplicateInterest: { msg: errorMsg } };
