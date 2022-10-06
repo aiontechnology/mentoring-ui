@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/services/menu-state.service';
-import {InterestInbound} from '../../models/interest/interest-inbound';
+import {Command} from '../../../../implementation/command/command';
+import {ADMIN_LIST_MENU} from '../../admin-manager.module';
 import {InterestCacheService} from '../../services/interests/interest-cache.service';
-import {editDialogCommandFactory, newDialogCommandFactory} from './command-factories';
 
 @Component({
   selector: 'ms-interest-list',
@@ -35,8 +33,7 @@ export class InterestListComponent implements OnInit, OnDestroy {
 
   constructor(public interestCacheService: InterestCacheService,
               private menuState: MenuStateService,
-              private matDialog: MatDialog,
-              private snackBar: MatSnackBar) {
+              @Inject(ADMIN_LIST_MENU) private menuCommands: Command[]) {
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -57,24 +54,10 @@ export class InterestListComponent implements OnInit, OnDestroy {
     this.interestCacheService.loadInterests();
     this.interestCacheService.clearSelection();
 
-    const postFunc = postActionFactory(this.interestCacheService);
-    this.menuState.add(newDialogCommandFactory(this.matDialog, this.snackBar, postFunc));
-    this.menuState.add(editDialogCommandFactory(this.matDialog, this.snackBar, postFunc, this.interestCacheService));
+    this.menuState.add(this.menuCommands)
   }
 
   ngOnDestroy(): void {
     this.menuState.clear();
   }
 }
-
-/**
- * Factory function that creates the function passed to Command objects as a post action function.
- * @param cacheService The cache service used by the component.
- */
-export const postActionFactory = (cacheService: InterestCacheService): (interest: InterestInbound) => Promise<void> =>
-  interest => cacheService.loadInterests()
-    .then(() => {
-      cacheService.clearSelection();
-      cacheService.jumpToItem(interest);
-    });
-

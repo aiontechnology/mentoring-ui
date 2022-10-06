@@ -16,8 +16,8 @@
 
 import {InjectionToken, NgModule} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router, RouterModule, Routes} from '@angular/router';
+import {SNACKBAR_MANAGER} from '../../app.module';
 import {Command} from '../../implementation/command/command';
 import {DialogCommand} from '../../implementation/command/dialog-command';
 import {DialogManager} from '../../implementation/command/dialog-manager';
@@ -56,18 +56,17 @@ export const DETAIL_MENU = new InjectionToken<Command[]>('detail-menu');
 export const DETAIL_MENU_DELETE = new InjectionToken<DialogCommand<Book>>('detail-menu-delete');
 export const DETAIL_MENU_EDIT = new InjectionToken<DialogCommand<Book>>('detail-menu-edit');
 
-export const LIST_AFTER_CLOSED_DELETE = new InjectionToken<(s: string) => (a: any) => void>('list-after-closed-delete');
-export const LIST_AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('list-after-closed-edit');
-export const LIST_DIALOG_MANAGER_DELETE = new InjectionToken<DialogManager<ConfimationDialogComponent>>('list-dialog-manager-delete');
-export const LIST_DIALOG_MANAGER_EDIT = new InjectionToken<DialogManager<BookDialogComponent>>('list-dialog-manager-edit');
-export const LIST_MENU = new InjectionToken<Command[]>('list-menu');
-export const LIST_MENU_ADD = new InjectionToken<DialogCommand<Book>>('list-menu-add');
-export const LIST_MENU_EDIT = new InjectionToken<DialogCommand<Book>>('list-menu-edit');
-export const LIST_MENU_DELETE = new InjectionToken<DialogCommand<Book>>('list-menu-delete');
-export const LIST_POST_ACTION = new InjectionToken<DialogCommand<Book>>('list-post-action');
+export const BOOK_LIST_AFTER_CLOSED_DELETE = new InjectionToken<(s: string) => (a: any) => void>('book-list-after-closed-delete');
+export const BOOK_LIST_AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('book-list-after-closed-edit');
+export const BOOK_LIST_DIALOG_MANAGER_DELETE = new InjectionToken<DialogManager<ConfimationDialogComponent>>('book-list-dialog-manager-delete');
+export const BOOK_LIST_DIALOG_MANAGER_EDIT = new InjectionToken<DialogManager<BookDialogComponent>>('book-list-dialog-manager-edit');
+export const BOOK_LIST_MENU = new InjectionToken<Command[]>('book-list-menu');
+export const BOOK_LIST_MENU_ADD = new InjectionToken<DialogCommand<Book>>('book-list-menu-add');
+export const BOOK_LIST_MENU_EDIT = new InjectionToken<DialogCommand<Book>>('book-list-menu-edit');
+export const BOOK_LIST_MENU_DELETE = new InjectionToken<DialogCommand<Book>>('book-list-menu-delete');
+export const BOOK_LIST_POST_ACTION = new InjectionToken<DialogCommand<Book>>('book-list-post-action');
 
 export const BOOK_NAVIGATION_MANAGER = new InjectionToken<NavigationManager>('book-navigation-manager');
-export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-manager');
 
 @NgModule({
   declarations: [
@@ -85,12 +84,6 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
     SharedModule.forRoot(),
   ],
   providers: [
-    {
-      provide: SNACKBAR_MANAGER,
-      useFactory: (snackbar: MatSnackBar) => new SnackbarManager(snackbar),
-      deps: [MatSnackBar]
-    },
-
     // ********************************************************************************
     // Books **************************************************************************
     // ********************************************************************************
@@ -182,16 +175,16 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
 
     // List delete dialog manager
     {
-      provide: LIST_DIALOG_MANAGER_DELETE,
+      provide: BOOK_LIST_DIALOG_MANAGER_DELETE,
       useFactory: (dialog: MatDialog, afterCloseFunction: (s: string) => (a: any) => void) =>
         DialogManager<ConfimationDialogComponent>.builder(dialog, ConfimationDialogComponent)
           .withAfterCloseFunction(afterCloseFunction)
           .withConfig({width: '500px', disableClose: true})
           .build(),
-      deps: [MatDialog, LIST_AFTER_CLOSED_DELETE]
+      deps: [MatDialog, BOOK_LIST_AFTER_CLOSED_DELETE]
     },
     {
-      provide: LIST_AFTER_CLOSED_DELETE,
+      provide: BOOK_LIST_AFTER_CLOSED_DELETE,
       useFactory: (bookCacheService: BookCacheService, snackbarManager: SnackbarManager) =>
         (snackbarMessage: string) => result => {
           if (result) {
@@ -206,15 +199,15 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
 
     // List edit dialog manager
     {
-      provide: LIST_DIALOG_MANAGER_EDIT,
+      provide: BOOK_LIST_DIALOG_MANAGER_EDIT,
       useFactory: (dialog: MatDialog, afterCloseFunction: (s: string) => (a: any) => void) =>
         DialogManager<BookDialogComponent>.builder(dialog, BookDialogComponent)
           .withAfterCloseFunction(afterCloseFunction)
           .build(),
-      deps: [MatDialog, LIST_AFTER_CLOSED_EDIT]
+      deps: [MatDialog, BOOK_LIST_AFTER_CLOSED_EDIT]
     },
     {
-      provide: LIST_AFTER_CLOSED_EDIT,
+      provide: BOOK_LIST_AFTER_CLOSED_EDIT,
       useFactory: (bookCacheService: BookCacheService, navigationManager: NavigationManager, snackbarManager: SnackbarManager,
                    listPostAction: (book: Book) => Promise<void>) =>
         (snackbarMessage: string) => result => {
@@ -228,29 +221,29 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
             listPostAction(result)
           }
         },
-      deps: [BookCacheService, BOOK_NAVIGATION_MANAGER, SNACKBAR_MANAGER, LIST_POST_ACTION]
+      deps: [BookCacheService, BOOK_NAVIGATION_MANAGER, SNACKBAR_MANAGER, BOOK_LIST_POST_ACTION]
     },
 
     // Menu definitions for book list
     {
-      provide: LIST_MENU_ADD,
+      provide: BOOK_LIST_MENU_ADD,
       useFactory: (dialogManager: DialogManager<BookDialogComponent>) => DialogCommand<Book>
         .builder('Add Book', 'book', dialogManager, () => true)
         .withSnackbarMessage('Book added')
         .build(),
-      deps: [LIST_DIALOG_MANAGER_EDIT]
+      deps: [BOOK_LIST_DIALOG_MANAGER_EDIT]
     },
     {
-      provide: LIST_MENU_EDIT,
+      provide: BOOK_LIST_MENU_EDIT,
       useFactory: (bookCacheService: BookCacheService, dialogManager: DialogManager<BookDialogComponent>) => DialogCommand<Book>
         .builder('Edit Book', 'book', dialogManager, () => bookCacheService.selection.selected.length === 1)
         .withDataSupplier(() => ({model: bookCacheService.getFirstSelection()}))
         .withSnackbarMessage('Book edited')
         .build(),
-      deps: [BookCacheService, LIST_DIALOG_MANAGER_EDIT]
+      deps: [BookCacheService, BOOK_LIST_DIALOG_MANAGER_EDIT]
     },
     {
-      provide: LIST_MENU_DELETE,
+      provide: BOOK_LIST_MENU_DELETE,
       useFactory: (bookCacheService: BookCacheService, dialogManager: DialogManager<ConfimationDialogComponent>) => DialogCommand<Book>
         .builder('Remove Book(s)', 'book', dialogManager, () => bookCacheService.selection.selected.length > 0)
         .withDataSupplier(() => {
@@ -262,15 +255,15 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
         })
         .withSnackbarMessage('Book(s) removed')
         .build(),
-      deps: [BookCacheService, LIST_DIALOG_MANAGER_DELETE]
+      deps: [BookCacheService, BOOK_LIST_DIALOG_MANAGER_DELETE]
     },
     {
-      provide: LIST_MENU,
+      provide: BOOK_LIST_MENU,
       useFactory: (addCommand: Command, deleteCommand: Command, editCommand: Command) => [addCommand, editCommand, deleteCommand],
-      deps: [LIST_MENU_ADD, LIST_MENU_DELETE, LIST_MENU_EDIT]
+      deps: [BOOK_LIST_MENU_ADD, BOOK_LIST_MENU_DELETE, BOOK_LIST_MENU_EDIT]
     },
     {
-      provide: LIST_POST_ACTION,
+      provide: BOOK_LIST_POST_ACTION,
       useFactory: (bookCacheService: BookCacheService) =>
         (book) => bookCacheService.loadData()
           .then(() => {

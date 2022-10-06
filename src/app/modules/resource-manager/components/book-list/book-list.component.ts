@@ -21,7 +21,7 @@ import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/services/menu-state.service';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
-import {LIST_MENU} from '../../resource-manager.module';
+import {BOOK_LIST_MENU} from '../../resource-manager.module';
 import {BookCacheService} from '../../services/resources/book-cache.service';
 
 @Component({
@@ -34,7 +34,7 @@ export class BookListComponent implements OnInit {
               public userSession: UserSessionService,
               private breakpointObserver: BreakpointObserver,
               private menuState: MenuStateService,
-              @Inject(LIST_MENU) private menuCommands: Command[]) {
+              @Inject(BOOK_LIST_MENU) private menuCommands: Command[]) {
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {

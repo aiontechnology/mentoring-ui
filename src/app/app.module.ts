@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-import {BrowserModule} from '@angular/platform-browser';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {InjectionToken, NgModule} from '@angular/core';
-import {AppComponent} from './app.component';
-import {ActivatedRoute, ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, RouterOutlet, Routes} from '@angular/router';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ActivatedRoute, ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, RouterOutlet, Routes} from '@angular/router';
+import {environment} from 'src/environments/environment';
+import {AppComponent} from './app.component';
+import {HandleLogoutComponent} from './components/handle-logout/handle-logout.component';
+import {HomeComponent} from './components/home/home.component';
 import {LandingPageComponent} from './components/landing-page/landing-page.component';
+import {NoopComponent} from './components/noop/noop.component';
+import {ReceiveTokenComponent} from './components/receive-token/receive-token.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {ToolbarComponent} from './components/toolbar/toolbar.component';
-import {MaterialModule} from './shared/material.module';
-import {HomeComponent} from './components/home/home.component';
-import {NoopComponent} from './components/noop/noop.component';
-import {HandleLogoutComponent} from './components/handle-logout/handle-logout.component';
-import {environment} from 'src/environments/environment';
+import {SnackbarManager} from './implementation/command/snackbar-manager';
+import {CanActivateApp} from './services/can-activate-app';
+import {CanActivateSysAdmin} from './services/can-activate-sys-admin';
 import {HttpErrorInterceptorService} from './services/http-error-interceptor.service';
 import {TokenInterceptorService} from './services/token-interceptor.service';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {CanActivateSysAdmin} from './services/can-activate-sys-admin';
-import {CanActivateApp} from './services/can-activate-app';
-import {ReceiveTokenComponent} from './components/receive-token/receive-token.component';
 import {CustomRouteReuseStrategy} from './shared/custom-route-reuse-strategy';
-import {WorkflowManagerModule} from './modules/workflow-manager/workflow-manager.module';
+import {MaterialModule} from './shared/material.module';
 
 const loginProvider = new InjectionToken('loginRedirectResolver');
 const logoutProvider = new InjectionToken('logoutRedirectResolver');
@@ -44,10 +45,11 @@ const loginUrl = `https://${environment.cognitoBaseUrl}/login?client_id=${enviro
 const logoutUrl = `https://${environment.cognitoBaseUrl}/logout?client_id=${environment.cognitoClientId}&logout_uri=${environment.logoutRedirect}`;
 
 const routes: Routes = [
-  { path: '', component: LandingPageComponent },
-  { path: 'logout', component: NoopComponent, canActivate: [logoutProvider, CanActivateApp] },
-  { path: 'home', component: HomeComponent, canActivate: [CanActivateApp] },
-  { path: 'handleLogout', component: HandleLogoutComponent, canActivate: [CanActivateApp]
+  {path: '', component: LandingPageComponent},
+  {path: 'logout', component: NoopComponent, canActivate: [logoutProvider, CanActivateApp]},
+  {path: 'home', component: HomeComponent, canActivate: [CanActivateApp]},
+  {
+    path: 'handleLogout', component: HandleLogoutComponent, canActivate: [CanActivateApp]
   },
   {
     path: 'adminmanager',
@@ -78,10 +80,12 @@ const routes: Routes = [
     path: 'workflowmanager',
     loadChildren: () => import('./modules/workflow-manager/workflow-manager.module').then(m => m.WorkflowManagerModule)
   },
-  { path: 'receiveToken', component: ReceiveTokenComponent },
-  { path: 'login', component: NoopComponent, canActivate: [loginProvider] },
-  { path: '**', redirectTo: '' }
+  {path: 'receiveToken', component: ReceiveTokenComponent},
+  {path: 'login', component: NoopComponent, canActivate: [loginProvider]},
+  {path: '**', redirectTo: ''}
 ];
+
+export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-manager');
 
 @NgModule({
   declarations: [
@@ -132,7 +136,13 @@ const routes: Routes = [
     {
       provide: RouteReuseStrategy,
       useClass: CustomRouteReuseStrategy
-    }
+    },
+
+    {
+      provide: SNACKBAR_MANAGER,
+      useFactory: (snackbar: MatSnackBar) => new SnackbarManager(snackbar),
+      deps: [MatSnackBar]
+    },
   ],
   bootstrap: [AppComponent]
 })

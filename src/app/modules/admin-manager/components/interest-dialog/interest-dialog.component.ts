@@ -50,7 +50,6 @@ export class InterestDialogComponent implements OnInit, OnDestroy {
 
     this.dialogTitle = this.isUpdate ? 'Edit Interest' : 'Add New Interest';
     this.createModel(formBuilder, updateInterest);
-
   }
 
   ngOnInit(): void {
@@ -80,7 +79,6 @@ export class InterestDialogComponent implements OnInit, OnDestroy {
   }
 
   save(): void {
-
     const newInterest = this.model.value.name;
     const value: InterestOutbound = {
       [newInterest]: this.updateValue
@@ -91,7 +89,6 @@ export class InterestDialogComponent implements OnInit, OnDestroy {
       const n: InterestInbound = { name: newInterest };
       this.dialogRef.close(n);
     });
-
   }
 
   dismiss(): void {

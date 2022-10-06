@@ -22,18 +22,18 @@ xdescribe('BookDetailComponent', () => {
   let component: BookDetailComponent;
   let fixture: ComponentFixture<BookDetailComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ BookDetailComponent ]
-    })
-    .compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(BookDetailComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  // beforeEach(async () => {
+  //   await TestBed.configureTestingModule({
+  //     declarations: [ BookDetailComponent ]
+  //   })
+  //   .compileComponents();
+  // });
+  //
+  // beforeEach(() => {
+  //   fixture = TestBed.createComponent(BookDetailComponent);
+  //   component = fixture.componentInstance;
+  //   fixture.detectChanges();
+  // });
 
   xit('should create', () => {
     expect(component).toBeTruthy();
