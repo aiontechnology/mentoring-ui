@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import {SelectionManager} from '../../../school-manager/services/selection-manager';
+import {SelectionManager} from './selection-manager';
 import {TableDataSource} from './table-data-source';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 
-export abstract class DatasourceManager<T> extends SelectionManager<T> {
+export abstract class AbstractTableCache<T> extends SelectionManager<T> {
 
   /** Datasource that is used by the table in the main-content component */
-  dataSource: TableDataSource<T>;
+  tableDataSource: TableDataSource<T>;
 
   /** Binds to the filter input control. Used to clear the control when requested. */
   filterBinding: string;
@@ -35,7 +35,7 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
 
   constructor() {
     super();
-    this.dataSource = new TableDataSource<T>();
+    this.tableDataSource = new TableDataSource<T>();
     this.pageSize = 10;
     this.currentPage = 0;
   }
@@ -44,15 +44,15 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
    * Get the value of the data source filter.
    */
   get filter() {
-    return this.dataSource.filter;
+    return this.tableDataSource.filter;
   }
 
   /**
    * Set the paginator for the current DataSource
    */
   set paginator(paginator: MatPaginator) {
-    this.dataSource.paginator = paginator;
-    this.dataSource.paginator.page.subscribe((pageEvent: PageEvent) => {
+    this.tableDataSource.paginator = paginator;
+    this.tableDataSource.paginator.page.subscribe((pageEvent: PageEvent) => {
       this.currentPage = pageEvent.pageIndex;
       this.pageSize = pageEvent.pageSize;
       this.clearSelection();
@@ -63,7 +63,7 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
    * Set the sort of the current DataSource
    */
   set sort(sort: MatSort) {
-    this.dataSource.sort = sort;
+    this.tableDataSource.sort = sort;
   }
 
   protected get dataSize(): number {
@@ -73,11 +73,11 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
   protected get filteredData(): T[] {
     const startIndex = this.currentPage * this.pageSize;
     const endIndex = startIndex + this.pageSize;
-    return this.dataSource.filteredData.slice(startIndex, endIndex);
+    return this.tableDataSource.filteredData.slice(startIndex, endIndex);
   }
 
   private get sortedData(): T[] {
-    return this.dataSource.sortData(this.dataSource.filteredData, this.dataSource.sort);
+    return this.tableDataSource.sortData(this.tableDataSource.filteredData, this.tableDataSource.sort);
   }
 
   /**
@@ -87,7 +87,7 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
   applyFilter(filterValue: string): void {
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
-    this.dataSource.filter = filterValue;
+    this.tableDataSource.filter = filterValue;
     this.clearSelection();
   }
 
@@ -95,7 +95,7 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
    * Clear the filter. Clear both the data source filter and the input binding
    */
   clearFilter(): void {
-    this.dataSource.filter = '';
+    this.tableDataSource.filter = '';
     this.filterBinding = '';
   }
 
@@ -119,11 +119,11 @@ export abstract class DatasourceManager<T> extends SelectionManager<T> {
    * @param index Page number to jump to.
    */
   private jumpToPage(index: number): void {
-    this.dataSource.paginator.pageIndex = index;
-    this.dataSource.paginator.page.next({
+    this.tableDataSource.paginator.pageIndex = index;
+    this.tableDataSource.paginator.page.next({
       pageIndex: index,
       pageSize: this.pageSize,
-      length: this.dataSource.paginator.length
+      length: this.tableDataSource.paginator.length
     });
   }
 

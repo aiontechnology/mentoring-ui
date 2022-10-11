@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2021-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,30 +19,29 @@ import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute} from '@angular/router';
+import {SchoolBookCacheService} from 'src/app/modules/school-manager/services/school-book/school-book-cache.service';
 import {MenuStateService} from 'src/app/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {TEACHER_URI_SUPPLIER} from '../../../shared/shared.module';
-import {Teacher} from '../../models/teacher/teacher';
-import {TEACHER_LIST_MENU, TEACHER_TABLE_CACHE} from '../../school-manager.module';
+import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../shared/shared.module';
+import {SCHOOL_BOOK_LIST_MENU} from '../../school-manager.module';
 
 @Component({
-  selector: 'ms-teacher-list',
-  templateUrl: './teacher-list.component.html',
-  styleUrls: ['./teacher-list.component.scss'],
+  selector: 'ms-school-book-list',
+  templateUrl: './school-book-list.component.html',
+  styleUrls: ['./school-book-list.component.scss']
 })
-export class TeacherListComponent implements OnInit, AfterViewInit {
+export class SchoolBookListComponent implements OnInit, AfterViewInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(@Inject(TEACHER_TABLE_CACHE) public tableCache: TableCache<Teacher>,
+  constructor(public schoolBookCacheService: SchoolBookCacheService,
               private menuState: MenuStateService,
               private route: ActivatedRoute,
               private breakpointObserver: BreakpointObserver,
-              @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: UriSupplier,
-              @Inject(TEACHER_LIST_MENU) private menuCommands: Command[]) {
+              @Inject(SCHOOL_BOOK_URI_SUPPLIER) private schoolBookUriSupplier: UriSupplier,
+              @Inject(SCHOOL_BOOK_LIST_MENU) private menuCommands: Command[]) {
   }
 
   ngOnInit(): void {
@@ -51,24 +50,24 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
 
     this.route.paramMap
       .subscribe(params => {
-        this.teacherUriSupplier.withSubstitution('schoolId', params.get('id'))
-        this.tableCache.loadData()
+        this.schoolBookUriSupplier.withSubstitution('schoolId', params.get('id'))
+        this.schoolBookCacheService.loadData()
           .then(() => {
-            this.tableCache.clearSelection();
+            this.schoolBookCacheService.clearSelection()
           });
-      });
+      })
   }
 
   ngAfterViewInit(): void {
-    this.tableCache.sort = this.sort;
-    this.tableCache.paginator = this.paginator;
+    this.schoolBookCacheService.sort = this.sort;
+    this.schoolBookCacheService.paginator = this.paginator;
   }
 
   displayedColumns(): string[] {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['select', 'firstName', 'lastName'];
+      return ['title', 'author'];
     } else {
-      return ['select', 'firstName', 'lastName', 'email', 'cellPhone', 'grades'];
+      return ['title', 'author', 'gradeLevel', 'location'];
     }
   }
 }

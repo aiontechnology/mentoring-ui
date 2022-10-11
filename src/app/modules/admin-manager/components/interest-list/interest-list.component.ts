@@ -19,7 +19,7 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
-import {ADMIN_LIST_MENU} from '../../admin-manager.module';
+import {ADMIN_LIST_MENU} from '../../providers/interest-list-menus';
 import {InterestCacheService} from '../../services/interests/interest-cache.service';
 
 @Component({

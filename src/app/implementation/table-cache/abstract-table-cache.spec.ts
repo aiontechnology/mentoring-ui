@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DatasourceManager } from './datasource-manager';
+import { AbstractTableCache } from './abstract-table-cache';
 
 const MOCK_TABLE_ENTRIES: number[] = [];
 
@@ -24,7 +24,7 @@ function populateMockTableEntries(): void {
   }
 }
 
-class MockCacheService extends DatasourceManager<number> {
+class MockCacheService extends AbstractTableCache<number> {
 
   constructor() {
     super();
@@ -32,7 +32,7 @@ class MockCacheService extends DatasourceManager<number> {
   }
 
   establishMockDatasource(): void {
-    this.dataSource.data = MOCK_TABLE_ENTRIES;
+    this.tableDataSource.data = MOCK_TABLE_ENTRIES;
   }
 
   doRemoveItem(items: number[]): void { }

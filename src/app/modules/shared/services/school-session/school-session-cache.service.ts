@@ -17,12 +17,12 @@
 import {Inject, Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {SchoolSession} from '../../models/school/schoolsession';
-import {DatasourceManagerRemovable} from '../datasource-manager/datasource-manager-removable';
+import {AbstractRemovableTableCache} from '../../../../implementation/table-cache/abstract-removable-table-cache';
 import {SCHOOL_SESSION_DATA_SOURCE} from '../../shared.module';
 import {DataSource} from '../../../../implementation/data/data-source';
 
 @Injectable()
-export class SchoolSessionCacheService extends DatasourceManagerRemovable<SchoolSession> {
+export class SchoolSessionCacheService extends AbstractRemovableTableCache<SchoolSession> {
 
   readonly isLoading$: BehaviorSubject<boolean>;
 
@@ -35,15 +35,18 @@ export class SchoolSessionCacheService extends DatasourceManagerRemovable<School
     return this.isLoading$;
   }
 
-  loadData = (): Promise<void> =>
-    this.schoolSessionDataSource.allValues()
+  override loadData(): Promise<SchoolSession[]> {
+    return this.schoolSessionDataSource.allValues()
       .then(schoolSessions => {
-        this.isLoading$.next(false);
-        this.dataSource.data = schoolSessions;
+        this.isLoading$.next(false)
+        this.tableDataSource.data = schoolSessions
+        return schoolSessions
       })
+  }
 
-  protected doRemoveItemOld = (items: SchoolSession[]): Promise<void> =>
-    this.schoolSessionDataSource.removeSet(items)
+  protected override doRemoveItem(items: SchoolSession[]): Promise<SchoolSession[]> {
+    return this.schoolSessionDataSource.removeSet(items)
       .then(this.loadData)
+  }
 
 }

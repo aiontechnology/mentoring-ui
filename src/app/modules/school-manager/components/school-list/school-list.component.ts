@@ -15,56 +15,53 @@
  */
 
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
 import {Router} from '@angular/router';
-import {School} from 'src/app/modules/shared/models/school/school';
-import {SchoolCacheService} from 'src/app/modules/shared/services/school/school-cache.service';
 import {MenuStateService} from 'src/app/services/menu-state.service';
-import {deleteDialogCommandFactory, editDialogCommandFactory, newDialogCommandFactory} from './command-factories';
+import {Command} from '../../../../implementation/command/command';
+import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {School} from '../../../shared/models/school/school';
+import {SCHOOL_LIST_MENU, SCHOOL_TABLE_CACHE} from '../../school-manager.module';
 
 @Component({
   selector: 'ms-school-list',
   templateUrl: './school-list.component.html',
   styleUrls: ['./school-list.component.scss']
 })
-export class SchoolListComponent implements OnInit, OnDestroy {
+export class SchoolListComponent implements OnInit {
 
-  constructor(public schoolCacheService: SchoolCacheService,
+  constructor(@Inject(SCHOOL_TABLE_CACHE) public tableCache: TableCache<School>,
               private dialog: MatDialog,
               private breakpointObserver: BreakpointObserver,
               private menuState: MenuStateService,
               private router: Router,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar,
+              @Inject(SCHOOL_LIST_MENU) private menuCommands: Command[]) {
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
     if (sort !== undefined) {
-      this.schoolCacheService.sort = sort;
+      this.tableCache.sort = sort;
     }
   }
 
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
     if (paginator !== undefined) {
-      this.schoolCacheService.paginator = paginator;
+      this.tableCache.paginator = paginator;
     }
   }
 
   ngOnInit(): void {
-    this.schoolCacheService.loadSchools()
-      .then(() => this.schoolCacheService.clearSelection());
+    this.menuState
+      .clear()
+      .add(this.menuCommands)
 
-    const postFunc = postActionFactory(this.schoolCacheService);
-    this.menuState.add(newDialogCommandFactory(this.router, this.dialog, this.snackBar, postFunc));
-    this.menuState.add(editDialogCommandFactory(this.router, this.dialog, this.snackBar, postFunc, this.schoolCacheService));
-    this.menuState.add(deleteDialogCommandFactory(this.router, this.dialog, this.snackBar, postFunc, this.schoolCacheService));
-  }
-
-  ngOnDestroy(): void {
-    this.menuState.clear();
+    this.tableCache.loadData()
+      .then(() => this.tableCache.clearSelection());
   }
 
   displayedColumns(): string[] {
@@ -74,18 +71,4 @@ export class SchoolListComponent implements OnInit, OnDestroy {
       return ['select', 'name', 'city', 'state', 'district', 'phone', 'isPrivate'];
     }
   }
-
 }
-
-/**
- * Factory function that creates the function passed to Command objects as a post action function.
- * @param cacheService The cache service used by the component.
- */
-export const postActionFactory = (cacheService: SchoolCacheService): (school?: School) => Promise<void> =>
-  school => cacheService.loadSchools()
-    .then(() => {
-      cacheService.clearSelection();
-      if (school) {
-        cacheService.jumpToItem(school);
-      }
-    });

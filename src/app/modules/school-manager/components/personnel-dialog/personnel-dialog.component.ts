@@ -15,12 +15,15 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {School} from '../../../shared/models/school/school';
 import {Personnel} from '../../models/personnel/personnel';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../../shared/shared.module';
+import {SCHOOL_INSTANCE_CACHE} from '../../school-manager.module';
 
 @Component({
   selector: 'ms-personnel-dialog',
@@ -29,10 +32,9 @@ import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../../shared/sha
 })
 export class PersonnelDialogComponent {
 
-  model: UntypedFormGroup;
+  model: FormGroup;
   isUpdate = false;
 
-  schoolId: string;
   titles: any[] = [
     {value: 'SOCIAL_WORKER', valueView: 'Social Worker'},
     {value: 'PRINCIPAL', valueView: 'Principal'},
@@ -40,17 +42,17 @@ export class PersonnelDialogComponent {
     {value: 'STAFF', valueView: 'Staff'}
   ];
 
-  constructor(@Inject(PERSONNEL_DATA_SOURCE) private personnelDataSource: DataSource<Personnel>,
+  constructor(private dialogRef: MatDialogRef<PersonnelDialogComponent>,
+              private formBuilder: FormBuilder,
+              @Inject(PERSONNEL_DATA_SOURCE) private personnelDataSource: DataSource<Personnel>,
               @Inject(PERSONNEL_URI_SUPPLIER) private personnelUriSupplier: UriSupplier,
-              private dialogRef: MatDialogRef<PersonnelDialogComponent>,
-              private formBuilder: UntypedFormBuilder,
+              @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
-    this.schoolId = data.schoolId;
   }
 
-  save = (): void => {
+  save(): void {
     const newPersonnel = new Personnel(this.model.value);
     let value: Promise<Personnel>;
 
@@ -58,7 +60,7 @@ export class PersonnelDialogComponent {
       newPersonnel.links = this.model.value.personnel.links;
       value = this.personnelDataSource.update(newPersonnel);
     } else {
-      this.personnelUriSupplier.withSubstitution('schoolId', this.schoolId);
+      this.personnelUriSupplier.withSubstitution('schoolId', this.schoolCache.item.id)
       value = this.personnelDataSource.add(newPersonnel);
     }
 
@@ -67,11 +69,11 @@ export class PersonnelDialogComponent {
     });
   }
 
-  dismiss = (): void => {
+  dismiss(): void {
     this.dialogRef.close(null);
   }
 
-  private createModel = (formBuilder: UntypedFormBuilder, personnel: Personnel): UntypedFormGroup => {
+  private createModel(formBuilder: UntypedFormBuilder, personnel: Personnel): UntypedFormGroup {
     const formGroup = formBuilder.group({
       personnel,
       type: ['', Validators.required],
@@ -94,7 +96,7 @@ export class PersonnelDialogComponent {
   }
 
   private determineUpdate = (formData: any): boolean => {
-    return formData.model !== undefined && formData.model !== null;
+    return formData !== undefined && formData !== null;
   }
 
 }

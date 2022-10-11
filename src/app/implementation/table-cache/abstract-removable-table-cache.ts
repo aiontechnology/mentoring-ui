@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {DatasourceManager} from './datasource-manager';
+import {AbstractTableCache} from './abstract-table-cache';
 
 /**
  * Implemented by cache services that need to accommodate deleting multiple
@@ -22,39 +22,32 @@ import {DatasourceManager} from './datasource-manager';
  * school-game services do not need this, so they should inherit the parent
  * datasource-manager class.
  */
-export abstract class DatasourceManagerRemovable<T> extends DatasourceManager<T> {
+export abstract class AbstractRemovableTableCache<T> extends AbstractTableCache<T> {
 
   /**
    * Get the current list of items.
    */
   protected get data(): T[] {
-    return this.dataSource.data;
+    return this.tableDataSource.data;
   }
+
+  abstract loadData(): Promise<T[]>
 
   /**
    * Remove the currently selected items.
    */
   removeSelectedOld(): Promise<void> {
     const selected = this.data.filter(item => this.selection.isSelected(item));
-    const ret = this.doRemoveItemOld(selected);
+    const ret = this.doRemoveItem(selected);
     this.clearSelection();
-    return ret;
+    return Promise.resolve();
   }
 
   removeSelected(): Promise<T[]> {
     const selected = this.data.filter(item => this.selection.isSelected(item));
-    return this.doRemoveItem(selected);
+    return this.doRemoveItem(selected)
+      .then(this.loadData);
   }
 
-  /**
-   * Allow the concrete class to do whatever is necessary to remove the array of
-   * items.
-   * @param items The items to remove.
-   */
-  protected abstract doRemoveItemOld(items: T[]): Promise<void>;
-
-  protected doRemoveItem(items: T[]): Promise<T[]> {
-    return Promise.resolve([]);
-  }
-
+  protected abstract doRemoveItem(items: T[]): Promise<T[]>;
 }

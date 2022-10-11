@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<div class="spinner-container" *ngIf="teacherCacheService.isLoading | async">
+<div class="spinner-container" *ngIf="tableCache.isLoading$ | async">
   <mat-progress-spinner color="primary" mode="indeterminate" [diameter]="100" [strokeWidth]="10"></mat-progress-spinner>
 </div>
 
@@ -22,27 +22,27 @@
   <div class="list-container mat-elevation-z2">
     <div class="header">
       <mat-form-field>
-        <input matInput [(ngModel)]="teacherCacheService.filterBinding" (keyup)="teacherCacheService.applyFilter($event.target.value)" placeholder="Filter"/>
-        <button mat-button *ngIf="teacherCacheService.filter" matSuffix mat-icon-button (click)="teacherCacheService.clearFilter()">
+        <input matInput [(ngModel)]="tableCache.filterBinding" (keyup)="tableCache.applyFilter($event.target.value)" placeholder="Filter"/>
+        <button mat-button *ngIf="tableCache.filter" matSuffix mat-icon-button (click)="tableCache.clearFilter()">
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
     </div>
-    <table mat-table [dataSource]="teacherCacheService.dataSource" matSort>
+    <table mat-table [dataSource]="tableCache.tableDataSource" matSort>
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef>
           <mat-checkbox
-            (change)="$event ? teacherCacheService.masterToggle() : null"
-            [checked]="teacherCacheService.selection.hasValue() && teacherCacheService.isAllSelected()"
-            [indeterminate]="teacherCacheService.selection.hasValue() && !teacherCacheService.isAllSelected()"
+            (change)="$event ? tableCache.masterToggle() : null"
+            [checked]="tableCache.selection.hasValue() && tableCache.isAllSelected()"
+            [indeterminate]="tableCache.selection.hasValue() && !tableCache.isAllSelected()"
           >
           </mat-checkbox>
         </th>
         <td mat-cell *matCellDef="let row">
           <mat-checkbox
             (click)="$event.stopPropagation()"
-            (change)="$event ? teacherCacheService.selection.toggle(row) : null"
-            [checked]="teacherCacheService.selection.isSelected(row)"
+            (change)="$event ? tableCache.selection.toggle(row) : null"
+            [checked]="tableCache.selection.isSelected(row)"
           >
           </mat-checkbox>
         </td>
@@ -83,14 +83,14 @@
       <tr
         mat-row
         *matRowDef="let row; columns: displayedColumns()"
-        (click)="teacherCacheService.selection.toggle(row)"
+        (click)="tableCache.selection.toggle(row)"
       ></tr>
     </table>
 
     <table class="footer mat-elevation-z1">
       <tr>
-        <td><ms-selection-count-display [selectionCount]="teacherCacheService.selectionCount"></ms-selection-count-display></td>
-        <td><mat-paginator #paginator [pageSize]="teacherCacheService.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
+        <td><ms-selection-count-display [selectionCount]="tableCache.selectionCount"></ms-selection-count-display></td>
+        <td><mat-paginator #paginator [pageSize]="tableCache.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
       </tr>
     </table>
   </div>

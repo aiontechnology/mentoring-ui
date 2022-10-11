@@ -46,8 +46,4 @@ export class Teacher {
   get selfLink(): string {
     return LinkService.selfLink(this);
   }
-
-  grades(): string {
-    return this.grade1 + this.grade2 ? ', ' + this.grade2 : '';
-  }
 }

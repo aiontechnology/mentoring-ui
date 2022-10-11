@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {DataManager} from './data-manager';
-import {forkJoin} from 'rxjs';
-import {IdService} from '../../modules/shared/services/id-service/id.service';
+import {Injectable} from '@angular/core'
+import {forkJoin} from 'rxjs'
+import {IdService} from '../../modules/shared/services/id-service/id.service'
+import {DataManager} from './data-manager'
 
 @Injectable()
 export class Cache<T> implements DataManager<T> {
-
-  private values: T[];
-  private valueMap: Map<string, T>;
+  private values: T[]
+  private valueMap: Map<string, T>
 
   get isLoaded() {
-    return this.values !== undefined;
+    return this.values !== undefined
   }
 
   /**
@@ -36,11 +35,11 @@ export class Cache<T> implements DataManager<T> {
   add = (value: T): Promise<T> =>
     new Promise((resolve, reject) => {
       if (this.isLoaded) {
-        this.values.push(value);
-        this.valueMap.set(IdService.calculateId(value), value);
-        resolve(value);
+        this.values.push(value)
+        this.valueMap.set(IdService.calculateId(value), value)
+        resolve(value)
       } else {
-        reject('Unable to add to cache. Cache is not initialized');
+        reject('Unable to add to cache. Cache is not initialized')
       }
     })
 
@@ -50,9 +49,9 @@ export class Cache<T> implements DataManager<T> {
   allValues = (): Promise<T[]> =>
     new Promise((resolve, reject) => {
       if (this.isLoaded) {
-        resolve(this.values);
+        resolve(this.values)
       } else {
-        reject('Unable to retrieve all values. Cache is not initialized');
+        reject('Unable to retrieve all values. Cache is not initialized')
       }
     })
 
@@ -63,9 +62,9 @@ export class Cache<T> implements DataManager<T> {
   oneValue = (id: string): Promise<T> =>
     new Promise((resolve, reject) => {
       if (this.isLoaded) {
-        resolve(this.valueMap.get(id));
+        resolve(this.valueMap.get(id))
       } else {
-        reject('Unable to retrieve a value. Cache is not initialized');
+        resolve(undefined)
       }
     })
 
@@ -75,58 +74,58 @@ export class Cache<T> implements DataManager<T> {
    */
   put = (values: T[]): void => {
     this.values = values;
-    this.valueMap = new Map<string, T>();
-    values.forEach(value => this.valueMap.set(IdService.calculateId(value), value));
+    this.valueMap = new Map<string, T>()
+    values.forEach(value => this.valueMap.set(IdService.calculateId(value), value))
   }
 
   /**
    * Remove the given object from the cache.
    * @param value The value to remove from the cache.
    */
-  remove = (value: T): Promise<T> => {
-    const that = this;
-    return new Promise((resolve, reject) => {
-      if (that.isLoaded) {
-        const index = that.values.findIndex(v => IdService.calculateId(v) === IdService.calculateId(value));
+  remove = (value: T): Promise<T> =>
+    new Promise((resolve, reject) => {
+      if (this.isLoaded) {
+        const index = this.values.findIndex(v => IdService.calculateId(v) === IdService.calculateId(value))
         if (index !== -1) {
-          that.values.splice(index, 1);
+          this.values.splice(index, 1)
         }
-        that.valueMap.delete(IdService.calculateId(value));
+        this.valueMap.delete(IdService.calculateId(value))
         resolve(value);
       } else {
-        reject('Unable to remove a value. Cache is not initialized');
+        reject('Unable to remove a value. Cache is not initialized')
       }
-    });
-  }
+    })
 
   removeSet = (values: T[]): Promise<T[]> => {
-    const promises = values.map(this.remove);
-    const joinedPromises = forkJoin({...promises});
+    const promises = values.map(this.remove)
+    const joinedPromises = forkJoin({...promises})
     return new Promise(resolve =>
-      joinedPromises.subscribe(() => resolve(values)));
+      joinedPromises.subscribe(() => resolve(values)))
   }
 
   reset = (): void => {
-    this.values = undefined;
-    this.valueMap = undefined;
+    this.values = undefined
+    this.valueMap = undefined
   }
 
   /**
    * Update the given value in the cache.
    * @param value The value to update.
    */
-  update = (value: T): Promise<T> => {
-    const that = this;
-    return new Promise((resolve, reject) => {
+  update = (value: T): Promise<T> =>
+    new Promise((resolve, reject) => {
       if (this.isLoaded) {
-        const index = that.values.findIndex(v => IdService.calculateId(v) === IdService.calculateId(value));
-        that.values[index] = value;
-        that.valueMap.set(IdService.calculateId(value), value);
+        const index = this.values.findIndex(v => IdService.calculateId(v) === IdService.calculateId(value))
+        this.values[index] = value
+        this.valueMap.set(IdService.calculateId(value), value)
         resolve(value);
       } else {
-        reject('Unable to update a value. Cache is not initialized');
+        reject('Unable to update a value. Cache is not initialized')
       }
-    });
-  }
+    })
 
+  updateSet = (values: T[]): Promise<T[]> => {
+    this.put(values)
+    return Promise.resolve(values)
+  }
 }

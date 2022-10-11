@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
+import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {Book} from 'src/app/modules/shared/models/book/book';
-import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {DropListBooks} from '../drop-list-books';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import {SchoolBookRepositoryService} from 'src/app/modules/shared/services/school-resource/school-book/school-book-repository.service';
-import {SCHOOL_BOOK_DATA_SOURCE} from '../../../shared.module';
-import {DataSource} from '../../../../../implementation/data/data-source';
-import {LinkService} from '../../../services/link-service/link.service';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {DropListBooks} from '../../../shared/components/school-resource/drop-list-books';
+import {School} from '../../../shared/models/school/school';
+import {BOOK_DATA_SOURCE, SCHOOL_BOOK_DATA_SOURCE} from '../../../shared/shared.module';
+import {SCHOOL_INSTANCE_CACHE} from '../../school-manager.module';
+import {SchoolBookCacheService} from '../../services/school-book/school-book-cache.service';
 
 @Component({
   selector: 'ms-school-book-dialog',
@@ -36,43 +38,40 @@ export class SchoolBookDialogComponent implements OnInit {
   tags$: Observable<string[]>;
   books: DropListBooks;
   localBooks: DropListBooks;
-  private schoolId: string;
 
-  constructor(@Inject(SCHOOL_BOOK_DATA_SOURCE) private schoolBookDataSource: DataSource<Book>,
-              private schoolBookService: SchoolBookRepositoryService,
+  constructor(@Inject(BOOK_DATA_SOURCE) private bookDataSource: DataSource<Book>,
+              @Inject(SCHOOL_BOOK_DATA_SOURCE) private schoolBookDataSource: DataSource<Book>,
+              private schoolBookCacheService: SchoolBookCacheService,
               private dialogRef: MatDialogRef<SchoolBookDialogComponent>,
               private metaDataService: MetaDataService,
+              @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
               @Inject(MAT_DIALOG_DATA) private data: any) {
-
-    this.schoolId = this.data?.schoolId;
-    this.books = new DropListBooks();
-    this.localBooks = new DropListBooks(this.data?.schoolBooks());
-
   }
 
-  ngOnInit = (): void => {
-    this.schoolBookDataSource.allValues()
+  ngOnInit(): void {
+    this.books = new DropListBooks();
+    this.localBooks = new DropListBooks(this.data?.localItems());
+
+    this.bookDataSource.allValues()
       .then(books => books.filter(book => !this.schoolHasBook(book)))
       .then(books => new DropListBooks(books))
       .then(list => this.books = list);
 
     this.metaDataService.loadTags();
     this.tags$ = this.metaDataService.tags;
-
   }
 
-  save = (): void => {
-    const newBooks = this.localBooks.data.map(book => LinkService.selfLink(book));
-    this.schoolBookService.updateSchoolBooks(this.schoolId, newBooks);
-    this.dialogRef.close();
+  save(): void {
+    this.schoolBookDataSource.updateSet(this.localBooks.data as Book[])
+    this.schoolBookCacheService.loadData()
+    this.dialogRef.close()
   }
 
-  dismiss = (): void => {
+  dismiss(): void {
     this.dialogRef.close(null);
   }
 
-  drop = (event$: CdkDragDrop<Book[]>): void => {
-
+  drop(event$: CdkDragDrop<Book[]>): void {
     // If the droplist item is dropped back into the same container.
     if (event$.previousContainer === event$.container) {
 
@@ -111,10 +110,9 @@ export class SchoolBookDialogComponent implements OnInit {
         event$.currentIndex);
 
     }
-
   }
 
-  moveGlobalToLocal = (): void => {
+  moveGlobalToLocal(): void {
     this.moveTo(this.books, this.localBooks);
   }
 
@@ -132,7 +130,6 @@ export class SchoolBookDialogComponent implements OnInit {
   }
 
   private moveTo(origin: DropListBooks, destination: DropListBooks): void {
-
     origin.filteredData.forEach((value) => {
       destination.insertToDataSorted(value);
       destination.insertToFilteredSorted(value);
@@ -141,7 +138,6 @@ export class SchoolBookDialogComponent implements OnInit {
     });
 
     origin.filteredData = [];
-
   }
 
 }

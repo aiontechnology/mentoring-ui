@@ -20,8 +20,9 @@ import {DialogManager} from './dialog-manager';
 
 export class DialogCommand<T> extends Command {
   static DialogCommandBuilder = class<T> {
-    private dataSupplier: () => object;
-    private snackbarMessage: string;
+    private isAdminOnly: boolean
+    private dataSupplier: () => object
+    private snackbarMessage: string
 
     constructor(private title: string,
                 private group: string,
@@ -33,10 +34,16 @@ export class DialogCommand<T> extends Command {
       return new DialogCommand<T>(
         this.title,
         this.group,
+        this.isAdminOnly,
         this.dataSupplier,
         this.dialogManager,
         this.isEnabledFunction,
         this.snackbarMessage)
+    }
+
+    withAdminOnly(isAdminOnly: boolean) {
+      this.isAdminOnly = isAdminOnly
+      return this;
     }
 
     withDataSupplier(dataSupplier: () => object) {
@@ -52,11 +59,12 @@ export class DialogCommand<T> extends Command {
 
   private constructor(title: string,
                       group: string,
-                      private readonly dataSupplier: () => void,
+                      isAdminOnly: boolean,
+                      private readonly dataSupplier: () => object,
                       private readonly dialogManager: DialogManager<T>,
                       private readonly isEnabledFunction: () => boolean,
                       private readonly snackbarMessage: string) {
-    super(title, group);
+    super(title, group, isAdminOnly);
   }
 
   static builder<T>(title: string,

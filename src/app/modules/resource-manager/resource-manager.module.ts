@@ -15,18 +15,17 @@
  */
 
 import {InjectionToken, NgModule} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {Router, RouterModule, Routes} from '@angular/router';
-import {SNACKBAR_MANAGER} from '../../app.module';
+import {RouterModule, Routes} from '@angular/router';
 import {Command} from '../../implementation/command/command';
-import {DialogCommand} from '../../implementation/command/dialog-command';
-import {DialogManager} from '../../implementation/command/dialog-manager';
-import {NavigationManager} from '../../implementation/command/navigation-manager';
-import {SnackbarManager} from '../../implementation/command/snackbar-manager';
 import {DataSource} from '../../implementation/data/data-source';
-import {ConfimationDialogComponent} from '../shared/components/confimation-dialog/confimation-dialog.component';
+import {SingleItemCache} from '../../implementation/data/single-item-cache';
+import {TableCache} from '../../implementation/table-cache/table-cache';
+import {detailProvidersFactory} from '../../providers/detail-menus-providers-factory';
+import {listProvidersFactory} from '../../providers/list-menus-providers-factory';
 import {Book} from '../shared/models/book/book';
-import {BOOK_DATA_SOURCE, SharedModule} from '../shared/shared.module';
+import {Game} from '../shared/models/game/game';
+import {School} from '../shared/models/school/school';
+import {BOOK_DATA_SOURCE, GAME_DATA_SOURCE, SharedModule} from '../shared/shared.module';
 import {BookDetailComponent} from './components/book-detail/book-detail.component';
 import {BookDialogComponent} from './components/book-dialog/book-dialog.component';
 import {BookListComponent} from './components/book-list/book-list.component';
@@ -35,7 +34,6 @@ import {GameDialogComponent} from './components/game-dialog/game-dialog.componen
 import {GameListComponent} from './components/game-list/game-list.component';
 import {ResourceListComponent} from './components/resource-list/resource-list.component';
 import {ResourceManagerComponent} from './resource-manager.component';
-import {BookCacheService} from './services/resources/book-cache.service';
 
 const routes: Routes = [
   {
@@ -48,25 +46,17 @@ const routes: Routes = [
   }
 ];
 
-export const DETAIL_AFTER_CLOSED_DELETE = new InjectionToken<(s: string) => (a: any) => void>('detail-after-closed-delete');
-export const DETAIL_AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('detail-after-closed-edit');
-export const DETAIL_DIALOG_MANAGER_DELETE = new InjectionToken<DialogManager<ConfimationDialogComponent>>('detail-dialog-manager-delete');
-export const DETAIL_DIALOG_MANAGER_EDIT = new InjectionToken<DialogManager<BookDialogComponent>>('detail-dialog-manager-edit');
-export const DETAIL_MENU = new InjectionToken<Command[]>('detail-menu');
-export const DETAIL_MENU_DELETE = new InjectionToken<DialogCommand<Book>>('detail-menu-delete');
-export const DETAIL_MENU_EDIT = new InjectionToken<DialogCommand<Book>>('detail-menu-edit');
-
-export const BOOK_LIST_AFTER_CLOSED_DELETE = new InjectionToken<(s: string) => (a: any) => void>('book-list-after-closed-delete');
-export const BOOK_LIST_AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('book-list-after-closed-edit');
-export const BOOK_LIST_DIALOG_MANAGER_DELETE = new InjectionToken<DialogManager<ConfimationDialogComponent>>('book-list-dialog-manager-delete');
-export const BOOK_LIST_DIALOG_MANAGER_EDIT = new InjectionToken<DialogManager<BookDialogComponent>>('book-list-dialog-manager-edit');
+// Menus
+export const BOOK_DETAIL_MENU = new InjectionToken<Command[]>('book-detail-menu');
 export const BOOK_LIST_MENU = new InjectionToken<Command[]>('book-list-menu');
-export const BOOK_LIST_MENU_ADD = new InjectionToken<DialogCommand<Book>>('book-list-menu-add');
-export const BOOK_LIST_MENU_EDIT = new InjectionToken<DialogCommand<Book>>('book-list-menu-edit');
-export const BOOK_LIST_MENU_DELETE = new InjectionToken<DialogCommand<Book>>('book-list-menu-delete');
-export const BOOK_LIST_POST_ACTION = new InjectionToken<DialogCommand<Book>>('book-list-post-action');
+export const BOOK_SINGLE_CACHE = new InjectionToken<SingleItemCache<Book>>('book-single-cache')
+export const GAME_DETAIL_MENU = new InjectionToken<Command[]>('game-detail-menu');
+export const GAME_LIST_MENU = new InjectionToken<Command[]>('game-list-menu');
+export const GAME_SINGLE_CACHE = new InjectionToken<SingleItemCache<Book>>('game-single-cache')
 
-export const BOOK_NAVIGATION_MANAGER = new InjectionToken<NavigationManager>('book-navigation-manager');
+// Services
+export const BOOK_TABLE_CACHE = new InjectionToken<TableCache<School>>('book-table-cache')
+export const GAME_TABLE_CACHE = new InjectionToken<TableCache<School>>('game-table-cache')
 
 @NgModule({
   declarations: [
@@ -84,196 +74,38 @@ export const BOOK_NAVIGATION_MANAGER = new InjectionToken<NavigationManager>('bo
     SharedModule.forRoot(),
   ],
   providers: [
-    // ********************************************************************************
-    // Books **************************************************************************
-    // ********************************************************************************
+    // Books
+    {
+      provide: BOOK_TABLE_CACHE,
+      useFactory: (dataSource: DataSource<Book>) => new TableCache(dataSource),
+      deps: [BOOK_DATA_SOURCE]
+    },
+    {
+      provide: BOOK_SINGLE_CACHE,
+      useFactory: (dataSource: DataSource<Book>) => new SingleItemCache<Book>(dataSource),
+      deps: [BOOK_DATA_SOURCE]
+    },
+    ...listProvidersFactory<Book, BookDialogComponent, TableCache<Book>>(BOOK_LIST_MENU, 'book', 'book', BookDialogComponent,
+      BOOK_TABLE_CACHE),
+    ...detailProvidersFactory<Book, BookDialogComponent, TableCache<Book>>(BOOK_DETAIL_MENU, 'book', 'book',
+      ['/resourcemanager'], BookDialogComponent, BOOK_TABLE_CACHE, BOOK_SINGLE_CACHE),
 
-    // Navigation
+    // Games
     {
-      provide: BOOK_NAVIGATION_MANAGER,
-      useFactory: (router: Router) => new NavigationManager(router, ['/', 'resourcemanager', 'books']),
-      deps: [Router]
+      provide: GAME_TABLE_CACHE,
+      useFactory: (dataSource: DataSource<Game>) => new TableCache(dataSource),
+      deps: [GAME_DATA_SOURCE]
     },
+    {
+      provide: GAME_SINGLE_CACHE,
+      useFactory: (dataSource: DataSource<Game>) => new SingleItemCache<Game>(dataSource),
+      deps: [GAME_DATA_SOURCE]
+    },
+    ...listProvidersFactory<Game, GameDialogComponent, TableCache<Game>>(GAME_LIST_MENU, 'game', 'game', GameDialogComponent,
+      GAME_TABLE_CACHE),
+    ...detailProvidersFactory<Game, GameDialogComponent, TableCache<Game>>(GAME_DETAIL_MENU, 'game', 'game',
+      ['/resourcemanager'], GameDialogComponent, GAME_TABLE_CACHE, GAME_SINGLE_CACHE),
 
-    // Detail delete manager
-    {
-      provide: DETAIL_DIALOG_MANAGER_DELETE,
-      useFactory: (dialog: MatDialog, afterCloseFunction: (Component: BookDetailComponent) => (s: string) => (a: any) => void) =>
-        (component: BookDetailComponent) => DialogManager<ConfimationDialogComponent>.builder(dialog, ConfimationDialogComponent)
-          .withAfterCloseFunction(afterCloseFunction(component))
-          .build(),
-      deps: [MatDialog, DETAIL_AFTER_CLOSED_DELETE]
-    },
-    {
-      provide: DETAIL_AFTER_CLOSED_DELETE,
-      useFactory: (bookDataSource: DataSource<Book>, bookCacheService: BookCacheService, snackbarManager: SnackbarManager, router: Router) =>
-        (component: BookDetailComponent) => (snackbarMessage: string) => result => {
-          if (result) {
-            snackbarManager.open(snackbarMessage)
-            bookDataSource.remove(component.book)
-              .then(() => bookCacheService.loadData())
-              .then(() => bookCacheService.clearSelection())
-              .then(() => router.navigate(['/resourcemanager']))
-          }
-        },
-      deps: [BOOK_DATA_SOURCE, BookCacheService, SNACKBAR_MANAGER, Router]
-    },
-
-    // Detail edit dialog manager
-    {
-      provide: DETAIL_DIALOG_MANAGER_EDIT,
-      useFactory: (dialog: MatDialog, afterCloseFunction: (Component: BookDetailComponent) => (s: string) => (a: any) => void) =>
-        (component: BookDetailComponent) => DialogManager<BookDialogComponent>.builder(dialog, BookDialogComponent)
-          .withAfterCloseFunction(afterCloseFunction(component))
-          .build(),
-      deps: [MatDialog, DETAIL_AFTER_CLOSED_EDIT]
-    },
-    {
-      provide: DETAIL_AFTER_CLOSED_EDIT,
-      useFactory: (bookCacheService: BookCacheService, snackbarManager: SnackbarManager) =>
-        (component: BookDetailComponent) => (snackbarMessage: string) => result => {
-          if (result) {
-            snackbarManager.open(snackbarMessage)
-            component.book = result;
-          }
-        },
-      deps: [BookCacheService, SNACKBAR_MANAGER]
-    },
-
-    // Menu definitions for book detail
-    {
-      provide: DETAIL_MENU_DELETE,
-      useFactory: (bookCacheService: BookCacheService, dialogManager: (component: BookDetailComponent) => DialogManager<ConfimationDialogComponent>) =>
-        (component: BookDetailComponent) => DialogCommand<Book>
-          .builder('Remove Book', 'book', dialogManager(component), () => true)
-          .withSnackbarMessage('Book removed')
-          .withDataSupplier(() => ({
-            model: component.book,
-            singularName: 'book',
-            pluralName: 'books',
-            countSupplier: () => 1
-          }))
-          .build(),
-      deps: [BookCacheService, DETAIL_DIALOG_MANAGER_DELETE]
-    },
-    {
-      provide: DETAIL_MENU_EDIT,
-      useFactory: (dialogManager: (component: BookDetailComponent) => DialogManager<BookDialogComponent>) =>
-        (component: BookDetailComponent) => DialogCommand<Book>
-          .builder('Edit Book', 'book', dialogManager(component), () => true)
-          .withSnackbarMessage('Book edited')
-          .withDataSupplier(() => ({model: component.book}))
-          .build(),
-      deps: [DETAIL_DIALOG_MANAGER_EDIT]
-    },
-    {
-      provide: DETAIL_MENU,
-      useFactory: (deleteCommand: (component: BookDetailComponent) => Command, editCommand: (component: BookDetailComponent) => Command) =>
-        [editCommand, deleteCommand],
-      deps: [DETAIL_MENU_DELETE, DETAIL_MENU_EDIT]
-    },
-
-    // List delete dialog manager
-    {
-      provide: BOOK_LIST_DIALOG_MANAGER_DELETE,
-      useFactory: (dialog: MatDialog, afterCloseFunction: (s: string) => (a: any) => void) =>
-        DialogManager<ConfimationDialogComponent>.builder(dialog, ConfimationDialogComponent)
-          .withAfterCloseFunction(afterCloseFunction)
-          .withConfig({width: '500px', disableClose: true})
-          .build(),
-      deps: [MatDialog, BOOK_LIST_AFTER_CLOSED_DELETE]
-    },
-    {
-      provide: BOOK_LIST_AFTER_CLOSED_DELETE,
-      useFactory: (bookCacheService: BookCacheService, snackbarManager: SnackbarManager) =>
-        (snackbarMessage: string) => result => {
-          if (result) {
-            bookCacheService.removeSelectedOld()
-              .then(books => {
-                snackbarManager.open(snackbarMessage)
-              })
-          }
-        },
-      deps: [BookCacheService, SNACKBAR_MANAGER]
-    },
-
-    // List edit dialog manager
-    {
-      provide: BOOK_LIST_DIALOG_MANAGER_EDIT,
-      useFactory: (dialog: MatDialog, afterCloseFunction: (s: string) => (a: any) => void) =>
-        DialogManager<BookDialogComponent>.builder(dialog, BookDialogComponent)
-          .withAfterCloseFunction(afterCloseFunction)
-          .build(),
-      deps: [MatDialog, BOOK_LIST_AFTER_CLOSED_EDIT]
-    },
-    {
-      provide: BOOK_LIST_AFTER_CLOSED_EDIT,
-      useFactory: (bookCacheService: BookCacheService, navigationManager: NavigationManager, snackbarManager: SnackbarManager,
-                   listPostAction: (book: Book) => Promise<void>) =>
-        (snackbarMessage: string) => result => {
-          if (result) {
-            if (navigationManager) {
-              snackbarManager.open(snackbarMessage, 'Navigate').onAction()
-                .subscribe(() => navigationManager.navigate(result.id))
-            } else {
-              snackbarManager.open(snackbarMessage)
-            }
-            listPostAction(result)
-          }
-        },
-      deps: [BookCacheService, BOOK_NAVIGATION_MANAGER, SNACKBAR_MANAGER, BOOK_LIST_POST_ACTION]
-    },
-
-    // Menu definitions for book list
-    {
-      provide: BOOK_LIST_MENU_ADD,
-      useFactory: (dialogManager: DialogManager<BookDialogComponent>) => DialogCommand<Book>
-        .builder('Add Book', 'book', dialogManager, () => true)
-        .withSnackbarMessage('Book added')
-        .build(),
-      deps: [BOOK_LIST_DIALOG_MANAGER_EDIT]
-    },
-    {
-      provide: BOOK_LIST_MENU_EDIT,
-      useFactory: (bookCacheService: BookCacheService, dialogManager: DialogManager<BookDialogComponent>) => DialogCommand<Book>
-        .builder('Edit Book', 'book', dialogManager, () => bookCacheService.selection.selected.length === 1)
-        .withDataSupplier(() => ({model: bookCacheService.getFirstSelection()}))
-        .withSnackbarMessage('Book edited')
-        .build(),
-      deps: [BookCacheService, BOOK_LIST_DIALOG_MANAGER_EDIT]
-    },
-    {
-      provide: BOOK_LIST_MENU_DELETE,
-      useFactory: (bookCacheService: BookCacheService, dialogManager: DialogManager<ConfimationDialogComponent>) => DialogCommand<Book>
-        .builder('Remove Book(s)', 'book', dialogManager, () => bookCacheService.selection.selected.length > 0)
-        .withDataSupplier(() => {
-          return {
-            singularName: 'book',
-            pluralName: 'books',
-            countSupplier: () => bookCacheService.selectionCount
-          }
-        })
-        .withSnackbarMessage('Book(s) removed')
-        .build(),
-      deps: [BookCacheService, BOOK_LIST_DIALOG_MANAGER_DELETE]
-    },
-    {
-      provide: BOOK_LIST_MENU,
-      useFactory: (addCommand: Command, deleteCommand: Command, editCommand: Command) => [addCommand, editCommand, deleteCommand],
-      deps: [BOOK_LIST_MENU_ADD, BOOK_LIST_MENU_DELETE, BOOK_LIST_MENU_EDIT]
-    },
-    {
-      provide: BOOK_LIST_POST_ACTION,
-      useFactory: (bookCacheService: BookCacheService) =>
-        (book) => bookCacheService.loadData()
-          .then(() => {
-            bookCacheService.clearSelection();
-            if (book) {
-              bookCacheService.jumpToItem(book);
-            }
-          }),
-      deps: [BookCacheService]
-    },
   ]
 })
 export class ResourceManagerModule {

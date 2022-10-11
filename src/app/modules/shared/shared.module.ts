@@ -14,62 +14,53 @@
  * limitations under the License.
  */
 
-import {InjectionToken, ModuleWithProviders, NgModule} from '@angular/core';
+import {LayoutModule} from '@angular/cdk/layout';
 import {CommonModule} from '@angular/common';
+import {InjectionToken, ModuleWithProviders, NgModule} from '@angular/core';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
+import {MaterialModule} from 'src/app/shared/material.module';
+import {environment} from '../../../environments/environment';
+import {Cache} from '../../implementation/data/cache';
+import {DataSource} from '../../implementation/data/data-source';
+import {Repository} from '../../implementation/data/repository';
+import {UriSupplier} from '../../implementation/data/uri-supplier';
+import {Mentor} from '../mentor-manager/models/mentor/mentor';
+import {MentorRepository} from '../mentor-manager/repositories/mentor-repository';
+import {MentorCacheService} from '../mentor-manager/services/mentor/mentor-cache.service';
+import {BookRepository} from '../resource-manager/repositories/book-repository';
+import {GameRepository} from '../resource-manager/repositories/game-repository';
+import {Personnel} from '../school-manager/models/personnel/personnel';
+import {ProgramAdmin} from '../school-manager/models/program-admin/program-admin';
+import {Teacher} from '../school-manager/models/teacher/teacher';
+import {Invitation} from '../school-manager/models/workflow/invitation';
 import {StudentRegistration} from '../school-manager/models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../school-manager/models/workflow/student-registration-lookup';
 import {StudentRegistrationLookupRepository} from '../school-manager/repositories/student-registration-lookup-repository';
 import {StudentRegistrationRepository} from '../school-manager/repositories/student-registration-repository';
-import {PhoneFormatDirective} from './directives/phone-format.directive';
-import {ConfimationDialogComponent} from './components/confimation-dialog/confimation-dialog.component';
-import {MaterialModule} from 'src/app/shared/material.module';
-import {OnlyNumberDirective} from './directives/only-number.directive';
-import {SelectionCountDisplayComponent} from './components/selection-count-display/selection-count-display.component';
-import {SchoolCacheService} from './services/school/school-cache.service';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {LayoutModule} from '@angular/cdk/layout';
-import {MetaDataService} from './services/meta-data/meta-data.service';
-import {SchoolGameRepositoryService} from './services/school-resource/school-game/school-game-repository.service';
-import {SchoolBookCacheService} from './services/school-resource/school-book/school-book-cache.service';
-import {SchoolGameCacheService} from './services/school-resource/school-game/school-game-cache.service';
-import {SchoolBookListComponent} from './components/school-resource/school-book-list/school-book-list.component';
-import {SchoolBookDialogComponent} from './components/school-resource/school-book-dialog/school-book-dialog.component';
-import {SchoolGameDialogComponent} from './components/school-resource/school-game-dialog/school-game-dialog.component';
-import {SchoolGameListComponent} from './components/school-resource/school-game-list/school-game-list.component';
-import {RouterModule} from '@angular/router';
-import {SchoolSessionCacheService} from './services/school-session/school-session-cache.service';
-import {Repository} from '../../implementation/data/repository';
-import {School} from './models/school/school';
-import {Cache} from '../../implementation/data/cache';
-import {DataSource} from '../../implementation/data/data-source';
-import {SchoolRepository} from './repositories/school-repository';
-import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {SchoolSession} from './models/school/schoolsession';
-import {SchoolSessionRepository} from './repositories/school-session-repository';
-import {environment} from '../../../environments/environment';
-import {Book} from './models/book/book';
-import {SchoolBookRepository} from './repositories/school-book-repository';
-import {Game} from './models/game/game';
-import {SchoolGameRepository} from './repositories/school-game-repository';
-import {BookRepository} from '../resource-manager/repositories/book-repository';
-import {BookCacheService} from '../resource-manager/services/resources/book-cache.service';
-import {GameRepository} from '../resource-manager/repositories/game-repository';
-import {GameCacheService} from '../resource-manager/services/resources/game-cache.service';
-import {Mentor} from '../mentor-manager/models/mentor/mentor';
-import {MentorRepository} from '../mentor-manager/repositories/mentor-repository';
-import {MentorCacheService} from '../mentor-manager/services/mentor/mentor-cache.service';
-import {Teacher} from '../school-manager/models/teacher/teacher';
 import {TeacherRepository} from '../school-manager/repositories/teacher-repository';
-import {TeacherCacheService} from '../school-manager/services/teacher/teacher-cache.service';
+import {SchoolBookCacheService} from '../school-manager/services/school-book/school-book-cache.service';
 import {Student} from '../student-manager/models/student/student';
+import {PersonnelRepository} from '../student-manager/repositories/personnel-repository';
 import {StudentRepository} from '../student-manager/repositories/student-repository';
 import {StudentCacheService} from '../student-manager/services/student/student-cache.service';
-import {Personnel} from '../school-manager/models/personnel/personnel';
-import {PersonnelRepository} from '../student-manager/repositories/personnel-repository';
-import {ProgramAdmin} from '../school-manager/models/program-admin/program-admin';
-import {ProgramAdminRepository} from './repositories/program-admin-repository';
-import {Invitation} from '../school-manager/models/workflow/invitation';
+import {ConfimationDialogComponent} from './components/confimation-dialog/confimation-dialog.component';
+import {SelectionCountDisplayComponent} from './components/selection-count-display/selection-count-display.component';
+import {OnlyNumberDirective} from './directives/only-number.directive';
+import {PhoneFormatDirective} from './directives/phone-format.directive';
+import {Book} from './models/book/book';
+import {Game} from './models/game/game';
+import {School} from './models/school/school';
+import {SchoolSession} from './models/school/schoolsession';
 import {InvitationRepository} from './repositories/invitation-repository';
+import {ProgramAdminRepository} from './repositories/program-admin-repository';
+import {SchoolBookRepository} from './repositories/school-book-repository';
+import {SchoolGameRepository} from './repositories/school-game-repository';
+import {SchoolRepository} from './repositories/school-repository';
+import {SchoolSessionRepository} from './repositories/school-session-repository';
+import {MetaDataService} from './services/meta-data/meta-data.service';
+import {SchoolGameCacheService} from './services/school-resource/school-game/school-game-cache.service';
+import {SchoolSessionCacheService} from './services/school-session/school-session-cache.service';
 
 export const BOOK_DATA_SOURCE = new InjectionToken<DataSource<Book>>('book-data-source');
 export const BOOK_CACHE = new InjectionToken<Cache<Book>>('book-cache');
@@ -90,9 +81,9 @@ export const PERSONNEL_DATA_SOURCE = new InjectionToken<DataSource<Personnel>>('
 export const PERSONNEL_CACHE = new InjectionToken<Cache<Personnel>>('personnel-cache');
 export const PERSONNEL_URI_SUPPLIER = new InjectionToken<UriSupplier>('personnel-uri-supplier');
 
-export const PROGRAM_ADMIN_DATA_SOURCE = new InjectionToken<DataSource<ProgramAdmin>>('program-admin-data-source');
-export const PROGRAM_ADMIN_CACHE = new InjectionToken<Cache<Personnel>>('program-admin-cache');
-export const PROGRAM_ADMIN_URI_SUPPLIER = new InjectionToken<UriSupplier>('program-admin-uri-supplier');
+export const PROGRAM_ADMIN_DATA_SOURCE = new InjectionToken<DataSource<ProgramAdmin>>('program-admin-detail-data-source');
+export const PROGRAM_ADMIN_CACHE = new InjectionToken<Cache<Personnel>>('program-admin-detail-cache');
+export const PROGRAM_ADMIN_URI_SUPPLIER = new InjectionToken<UriSupplier>('program-admin-detail-uri-supplier');
 
 export const REGISTRATION_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistrationLookup>>('registration-lookup-data-source');
 export const REGISTRATION_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistration>>('registration-data-source');
@@ -126,10 +117,6 @@ export const TEACHER_URI_SUPPLIER = new InjectionToken<UriSupplier>('teacher-uri
   declarations: [
     // Components
     ConfimationDialogComponent,
-    SchoolBookDialogComponent,
-    SchoolBookListComponent,
-    SchoolGameDialogComponent,
-    SchoolGameListComponent,
     SelectionCountDisplayComponent,
 
     // Directives
@@ -139,10 +126,6 @@ export const TEACHER_URI_SUPPLIER = new InjectionToken<UriSupplier>('teacher-uri
   exports: [
     // Components
     ConfimationDialogComponent,
-    SchoolBookDialogComponent,
-    SchoolBookListComponent,
-    SchoolGameDialogComponent,
-    SchoolGameListComponent,
     SelectionCountDisplayComponent,
 
     // Directives
@@ -183,7 +166,6 @@ export class SharedModule {
           useFactory: (repository: Repository<Book>, cache: Cache<Book>) => new DataSource<Book>(repository, cache),
           deps: [BookRepository, BOOK_CACHE]
         },
-        BookCacheService,
 
         /* Game resources */
         {
@@ -200,7 +182,6 @@ export class SharedModule {
           useFactory: (repository: Repository<Game>, cache: Cache<Game>) => new DataSource<Game>(repository, cache),
           deps: [GameRepository, GAME_CACHE]
         },
-        GameCacheService,
 
         /* Invitation resources */
         {
@@ -296,7 +277,6 @@ export class SharedModule {
           useFactory: (repository: Repository<School>, cache: Cache<School>) => new DataSource(repository, cache),
           deps: [SchoolRepository, SCHOOL_CACHE]
         },
-        SchoolCacheService,
 
         /* School session resources */
         {
@@ -381,10 +361,8 @@ export class SharedModule {
           useFactory: (repository: Repository<Teacher>, cache: Cache<Teacher>) => new DataSource<Teacher>(repository, cache),
           deps: [TeacherRepository, TEACHER_CACHE]
         },
-        TeacherCacheService,
 
         // Services
-        SchoolGameRepositoryService,
         MetaDataService
       ]
     };

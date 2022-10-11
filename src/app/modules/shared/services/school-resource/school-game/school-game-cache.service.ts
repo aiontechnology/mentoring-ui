@@ -15,14 +15,14 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {DatasourceManager} from 'src/app/modules/shared/services/datasource-manager/datasource-manager';
+import {AbstractTableCache} from 'src/app/implementation/table-cache/abstract-table-cache';
 import {Game} from 'src/app/modules/shared/models/game/game';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {SCHOOL_GAME_DATA_SOURCE} from '../../../shared.module';
 import {DataSource} from '../../../../../implementation/data/data-source';
 
 @Injectable()
-export class SchoolGameCacheService extends DatasourceManager<Game> {
+export class SchoolGameCacheService extends AbstractTableCache<Game> {
 
   readonly isLoading$: BehaviorSubject<boolean>;
 
@@ -39,7 +39,7 @@ export class SchoolGameCacheService extends DatasourceManager<Game> {
     this.schoolGameDataSource.allValues()
       .then(games => {
         this.isLoading$.next(false);
-        this.dataSource.data = games;
+        this.tableDataSource.data = games;
       })
 
 }

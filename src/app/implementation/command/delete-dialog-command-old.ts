@@ -36,7 +36,7 @@ export class DeleteDialogCommandOld<T> extends Command {
               private removeItem: () => Promise<void | T[]>,
               private determineEnabled: () => boolean,
               private postAction?: (item?: T) => void) {
-    super(title, group);
+    super(title, group, false);
   }
 
   private get message(): string {

@@ -21,11 +21,10 @@ import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 @Pipe({
   name: 'grades'
 })
-
 export class GradesFormatPipe implements PipeTransform {
   transform(teacher: Teacher): string {
     const part1 = grades[teacher.grade1]?.valueView;
-    const part2 = grades[teacher.grade2]?.valueView ? ', ' + grades[teacher.grade2].valueView : '';
+    const part2 = teacher.grade2 ? ', ' + grades[teacher.grade2].valueView : '';
     return part1 + part2;
   }
 }

@@ -15,21 +15,17 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ActivatedRoute, Router} from '@angular/router';
-import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
-import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
-import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {ActivatedRoute} from '@angular/router';
+import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
 import {Game} from 'src/app/modules/shared/models/game/game';
 import {MenuStateService} from 'src/app/services/menu-state.service';
-import {GameDialogComponent} from '../game-dialog/game-dialog.component';
-import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
-import {UserSessionService} from 'src/app/services/user-session.service';
 import {NavigationService} from 'src/app/services/navigation.service';
+import {UserSessionService} from 'src/app/services/user-session.service';
+import {Command} from '../../../../implementation/command/command';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {GameCacheService} from '../../services/resources/game-cache.service';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {GAME_DATA_SOURCE} from '../../../shared/shared.module';
+import {GAME_DETAIL_MENU, GAME_SINGLE_CACHE} from '../../resource-manager.module';
 
 @Component({
   selector: 'ms-game-detail',
@@ -42,13 +38,11 @@ export class GameDetailComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               @Inject(GAME_DATA_SOURCE) private gameDataSource: DataSource<Game>,
-              private gameCacheService: GameCacheService,
               private userSession: UserSessionService,
-              private dialog: MatDialog,
               private menuState: MenuStateService,
-              private snackBar: MatSnackBar,
-              private router: Router,
-              private navigation: NavigationService) {
+              private navigation: NavigationService,
+              @Inject(GAME_SINGLE_CACHE) private singleItemCache: SingleItemCache<Game>,
+              @Inject(GAME_DETAIL_MENU) private menuCommands: Command[]) {
   }
 
   get gradeRangeDisplay(): string {
@@ -60,14 +54,16 @@ export class GameDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.setMenu();
+    this.menuState
+      .clear()
+      .add(this.menuCommands)
 
     this.navigation.routeParams = ['resourcemanager'];
     this.navigation.fragment = 'games';
 
     /* Watch the game UUID. Call event handler when it changes */
     this.route.paramMap
-      .subscribe(params => this.onGameIdChange(params.get('id')));
+      .subscribe(params => this.onIdChange(params.get('id')));
   }
 
   ngOnDestroy(): void {
@@ -75,23 +71,11 @@ export class GameDetailComponent implements OnInit, OnDestroy {
     this.menuState.clear();
   }
 
-  private setMenu = (): void => {
-    if (this.userSession.isSysAdmin) {
-      GameDetailMenuManager.addMenus(this,
-        this.menuState,
-        this.router,
-        this.dialog,
-        this.snackBar,
-        this.gameDataSource,
-        this.gameCacheService);
-    }
-  }
-
   /**
    * Handle game ID changes.
    * @param gameId The ID of the current game.
    */
-  private onGameIdChange = (gameId: string): void => {
+  private onIdChange = (gameId: string): void => {
     if (gameId) {
       this.gameId = gameId;
       this.gameDataSource.oneValue(this.gameId)
@@ -102,44 +86,4 @@ export class GameDetailComponent implements OnInit, OnDestroy {
       throw new Error('Unable to set game id');
     }
   }
-
-}
-
-class GameDetailMenuManager {
-  static addMenus(component: GameDetailComponent,
-                  menuState: MenuStateService,
-                  router: Router,
-                  dialog: MatDialog,
-                  snackBar: MatSnackBar,
-                  gameDataSource: DataSource<Game>,
-                  gameCacheService: GameCacheService) {
-    menuState.add(new EditDialogCommandOld(
-      'Edit Game',
-      'game',
-      GameDialogComponent,
-      'Game updated',
-      null,
-      router,
-      dialog,
-      snackBar,
-      () => ({model: component.game}),
-      (game: Game) => component.game = game,
-      () => true));
-    menuState.add(new DeleteDialogCommandOld(
-      'Remove Game',
-      'game',
-      ConfimationDialogComponent,
-      'Game(s) removed',
-      'game',
-      'games',
-      router,
-      dialog,
-      snackBar,
-      '/resourcemanager',
-      () => 1,
-      () => gameDataSource.remove(component.game)
-        .then(() => gameCacheService.loadData()),
-      () => true));
-  }
-
 }

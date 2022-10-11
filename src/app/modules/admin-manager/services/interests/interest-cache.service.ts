@@ -16,12 +16,12 @@
 
 import {Injectable} from '@angular/core';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import {DatasourceManager} from 'src/app/modules/shared/services/datasource-manager/datasource-manager';
+import {AbstractTableCache} from 'src/app/implementation/table-cache/abstract-table-cache';
 import {InterestInbound} from '../../models/interest/interest-inbound';
 import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable()
-export class InterestCacheService extends DatasourceManager<InterestInbound> {
+export class InterestCacheService extends AbstractTableCache<InterestInbound> {
 
   readonly isLoading$: BehaviorSubject<boolean>;
 
@@ -43,7 +43,7 @@ export class InterestCacheService extends DatasourceManager<InterestInbound> {
         }) as InterestInbound);
       })
       .then(interests => {
-        this.dataSource.data = interests;
+        this.tableDataSource.data = interests;
         return interests;
       });
   }

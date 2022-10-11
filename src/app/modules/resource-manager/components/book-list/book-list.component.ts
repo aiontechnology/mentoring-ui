@@ -21,8 +21,9 @@ import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/services/menu-state.service';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
-import {BOOK_LIST_MENU} from '../../resource-manager.module';
-import {BookCacheService} from '../../services/resources/book-cache.service';
+import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {Book} from '../../../shared/models/book/book';
+import {BOOK_LIST_MENU, BOOK_TABLE_CACHE} from '../../resource-manager.module';
 
 @Component({
   selector: 'ms-book-list',
@@ -30,7 +31,7 @@ import {BookCacheService} from '../../services/resources/book-cache.service';
   styleUrls: ['./book-list.component.scss']
 })
 export class BookListComponent implements OnInit {
-  constructor(public bookCacheService: BookCacheService,
+  constructor(@Inject(BOOK_TABLE_CACHE) public tableCache: TableCache<Book>,
               public userSession: UserSessionService,
               private breakpointObserver: BreakpointObserver,
               private menuState: MenuStateService,
@@ -39,21 +40,24 @@ export class BookListComponent implements OnInit {
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
     if (sort !== undefined) {
-      this.bookCacheService.sort = sort;
+      this.tableCache.sort = sort;
     }
   }
 
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
     if (paginator !== undefined) {
-      this.bookCacheService.paginator = paginator;
+      this.tableCache.paginator = paginator;
     }
   }
 
   ngOnInit(): void {
     if (this.userSession.isSysAdmin) {
-      this.menuState.add(this.menuCommands)
+      this.menuState
+        .clear()
+        .add(this.menuCommands)
     }
-    this.bookCacheService.loadData();
+    this.tableCache.loadData()
+      .then(() => this.tableCache.clearSelection());
   }
 
   displayedColumns(): string[] {

@@ -15,9 +15,9 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Repository} from './repository';
 import {Cache} from './cache';
 import {DataManager} from './data-manager';
+import {Repository} from './repository';
 
 /**
  * Acts as a datasource for objects of the given type. Data can be fetched from the cache if it is available or from the backend via REST
@@ -36,7 +36,7 @@ export class DataSource<T> implements DataManager<T> {
         .then(() => this.repository.add(value)
           .then(this.cache.add));
     } else {
-      return this.repository.add(value);
+      return this.repository.add(value)
     }
   }
 
@@ -46,8 +46,8 @@ export class DataSource<T> implements DataManager<T> {
 
   oneValue = (id: string): Promise<T> => {
     if (this.cache) {
-      return this.loadCache()
-        .then(() => this.cache.oneValue(id));
+      return this.cache.oneValue(id)
+        .then(value => value || this.repository.oneValue(id))
     } else {
       return this.repository.oneValue(id);
     }
@@ -72,19 +72,23 @@ export class DataSource<T> implements DataManager<T> {
         .then(() => this.repository.update(value)
           .then(this.cache.update));
     } else {
-      return this.repository.update(value);
+      return this.repository.update(value)
     }
   }
+
+  updateSet = (values: T[]): Promise<T[]> =>
+    this.cache.updateSet(values)
+      .then(() => this.repository.updateSet(values))
 
   private loadCache = (): Promise<void> =>
     new Promise(resolve => {
       if (!this.cache || this.cache.isLoaded) {
-        resolve();
+        resolve()
       } else {
         this.repository.allValues()
           .then(values => {
-            this.cache.put(values);
-            resolve();
+            this.cache.put(values)
+            resolve()
           });
       }
     })

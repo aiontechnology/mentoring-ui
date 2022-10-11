@@ -16,6 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {Command} from '../implementation/command/command';
+import {UserSessionService} from './user-session.service';
 
 class Group {
   menus = new Array<Command>();
@@ -31,36 +32,43 @@ export class MenuStateService {
   groups = new Map<string, Group>();
   title: string;
 
+  constructor(private userSessionService: UserSessionService) {}
+
   get activeMenus(): Array<Command> {
     const activeMenus = new Array<Command>();
     for (let group of this.groups.values()) {
       if (group.isVisible) {
-        activeMenus.push(...group.menus);
+        const validMenus = group.menus.filter(menu => this.userSessionService.isSysAdmin || !menu.isAdminOnly)
+        activeMenus.push(...validMenus);
       }
     }
     return activeMenus;
   }
 
-  add(command: Command | Command[]): void {
+  add(command: Command | Command[]): MenuStateService {
     if (Array.isArray(command)) {
       command.forEach(c => this.group(c.group).menus.push(c));
     } else {
       this.group(command.group).menus.push(command);
     }
+    return this;
   }
 
-  clear(): void {
+  clear(): MenuStateService {
     this.groups = new Map<string, Group>();
+    return this;
   }
 
-  makeAllVisible(): void {
+  makeAllVisible(): MenuStateService {
     for (const group of this.groups.values()) {
       group.isVisible = true;
     }
+    return this;
   }
 
-  makeGroupInvisible(name: string): void {
+  makeGroupInvisible(name: string): MenuStateService {
     this.group(name).isVisible = false;
+    return this;
   }
 
   private group(name: string): Group {

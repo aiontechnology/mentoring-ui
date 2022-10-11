@@ -14,21 +14,18 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, Input, OnInit, ViewChild} from '@angular/core';
-import {MatSort} from '@angular/material/sort';
-import {MatPaginator} from '@angular/material/paginator';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {MatDialog} from '@angular/material/dialog';
+import {AfterViewInit, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/services/menu-state.service';
-import {Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {PersonnelCacheService} from '../../services/personnel/personnel-cache.service';
-import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
-import {PersonnelDialogComponent} from '../personnel-dialog/personnel-dialog.component';
-import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
-import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
+import {Command} from '../../../../implementation/command/command';
+import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {PERSONNEL_URI_SUPPLIER} from '../../../shared/shared.module';
 import {Personnel} from '../../models/personnel/personnel';
+import {PERSONNEL_LIST_MENU, PERSONNEL_TABLE_CACHE} from '../../school-manager.module';
 
 @Component({
   selector: 'ms-personnel-list',
@@ -42,31 +39,31 @@ export class PersonnelListComponent implements OnInit, AfterViewInit {
 
   @Input() schoolId: string;
 
-  constructor(public personnelCacheService: PersonnelCacheService,
-              private breakpointObserver: BreakpointObserver,
-              private dialog: MatDialog,
+  constructor(@Inject(PERSONNEL_TABLE_CACHE) public tableCache: TableCache<Personnel>,
               private menuState: MenuStateService,
-              private router: Router,
-              private snackBar: MatSnackBar) {
+              private route: ActivatedRoute,
+              private breakpointObserver: BreakpointObserver,
+              @Inject(PERSONNEL_URI_SUPPLIER) private personnelUriSupplier: UriSupplier,
+              @Inject(PERSONNEL_LIST_MENU) private menuCommands: Command[]) {
   }
 
   ngOnInit(): void {
-    this.personnelCacheService.loadData();
+    this.menuState
+      .add(this.menuCommands)
 
-    this.personnelCacheService.clearSelection();
-
-    PersonnelMenuManager.addMenus(this.menuState,
-      this.router,
-      this.dialog,
-      this.snackBar,
-      (p: Personnel) => this.jumpToNewItem(p),
-      this.personnelCacheService,
-      this.schoolId);
+    this.route.paramMap
+      .subscribe(params => {
+        this.personnelUriSupplier.withSubstitution('schoolId', params.get('id'))
+        this.tableCache.loadData()
+          .then(() => {
+            this.tableCache.clearSelection();
+          });
+      })
   }
 
   ngAfterViewInit(): void {
-    this.personnelCacheService.sort = this.sort;
-    this.personnelCacheService.paginator = this.paginator;
+    this.tableCache.sort = this.sort;
+    this.tableCache.paginator = this.paginator;
   }
 
   displayedColumns(): string[] {
@@ -84,61 +81,7 @@ export class PersonnelListComponent implements OnInit, AfterViewInit {
    * cache service determine which page to jump to.
    */
   private jumpToNewItem(newItem: Personnel): void {
-    this.personnelCacheService.clearSelection();
-    this.personnelCacheService.jumpToItem(newItem);
+    this.tableCache.clearSelection();
+    this.tableCache.jumpToItem(newItem);
   }
-
-}
-
-class PersonnelMenuManager {
-
-  static addMenus(menuState: MenuStateService,
-                  router: Router,
-                  dialog: MatDialog,
-                  snackBar: MatSnackBar,
-                  postAction: (p: Personnel) => void,
-                  personnelCacheService: PersonnelCacheService,
-                  schoolId: string): void {
-
-    menuState.add(new NewDialogCommandOld(
-      'Add Personnel',
-      'personnel',
-      PersonnelDialogComponent,
-      'Personnel added',
-      null,
-      {schoolId},
-      router,
-      dialog,
-      snackBar,
-      (p: Personnel) => postAction(p),
-      () => true));
-    menuState.add(new EditDialogCommandOld(
-      'Edit Personnel',
-      'personnel',
-      PersonnelDialogComponent,
-      'Personnel updated',
-      null,
-      router,
-      dialog,
-      snackBar,
-      () => ({model: personnelCacheService.getFirstSelection()}),
-      (p: Personnel) => postAction(p),
-      () => personnelCacheService.selection.selected.length === 1));
-    menuState.add(new DeleteDialogCommandOld(
-      'Remove Personnel',
-      'personnel',
-      ConfimationDialogComponent,
-      'Personnel removed',
-      'personnel',
-      'personnel',
-      router,
-      dialog,
-      snackBar,
-      null,
-      () => personnelCacheService.selectionCount,
-      () => personnelCacheService.removeSelectedOld(),
-      () => personnelCacheService.selection.selected.length > 0));
-
-  }
-
 }

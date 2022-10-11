@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2021-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,18 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {Personnel} from '../../models/personnel/personnel';
-import {DatasourceManagerRemovable} from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
+import {AbstractTableCache} from 'src/app/implementation/table-cache/abstract-table-cache';
+import {Book} from 'src/app/modules/shared/models/book/book';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {SCHOOL_BOOK_DATA_SOURCE} from '../../../shared/shared.module';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {PERSONNEL_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Injectable()
-export class PersonnelCacheService extends DatasourceManagerRemovable<Personnel> {
+export class SchoolBookCacheService extends AbstractTableCache<Book> {
 
   readonly isLoading$: BehaviorSubject<boolean>;
 
-  /**
-   * Constructor
-   * @param personnelService The PersonnelService that is used for managing Personnel instances.
-   */
-  constructor(@Inject(PERSONNEL_DATA_SOURCE) private personnelDataSource: DataSource<Personnel>) {
+  constructor(@Inject(SCHOOL_BOOK_DATA_SOURCE) private schoolBookDataSource: DataSource<Book>) {
     super();
     this.isLoading$ = new BehaviorSubject(true);
   }
@@ -39,15 +35,11 @@ export class PersonnelCacheService extends DatasourceManagerRemovable<Personnel>
     return this.isLoading$;
   }
 
-  loadData = (): Promise<void> =>
-    this.personnelDataSource.allValues()
-      .then(personnel => {
+  loadData(): Promise<void> {
+    return this.schoolBookDataSource.allValues()
+      .then(books => {
         this.isLoading$.next(false);
-        this.dataSource.data = personnel;
+        this.tableDataSource.data = books;
       })
-
-  protected doRemoveItemOld = (items: Personnel[]): Promise<void> =>
-    this.personnelDataSource.removeSet(items)
-      .then(this.loadData)
-
+  }
 }

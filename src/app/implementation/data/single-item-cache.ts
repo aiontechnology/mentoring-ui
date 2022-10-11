@@ -14,22 +14,31 @@
  * limitations under the License.
  */
 
-export interface DataManager<T> {
+import {Injectable} from '@angular/core';
+import {DataSource} from './data-source';
 
-  add: (value: T) => Promise<T>;
+@Injectable()
+export class SingleItemCache<T> {
+  constructor(private dataSource: DataSource<T>) {
+  }
 
-  allValues: () => Promise<T[]>;
+  private _item: T
 
-  oneValue: (id: string) => Promise<T>;
+  get item(): T {
+    return this._item
+  }
 
-  remove: (value: T) => Promise<T>;
+  set item(newItem: T) {
+    this._item = newItem
+  }
 
-  removeSet: (values: T[]) => Promise<T[]>;
+  fromId(id: string): Promise<T> {
+    return this.dataSource.oneValue(id)
+      .then(item => this._item = item)
+  }
 
-  reset: () => void;
-
-  update: (value: T) => Promise<T>;
-
-  updateSet: (values: T[]) => Promise<T[]>;
-
+  remove(): Promise<T> {
+    return this.dataSource.remove(this._item)
+      .then(this._item = undefined)
+  }
 }

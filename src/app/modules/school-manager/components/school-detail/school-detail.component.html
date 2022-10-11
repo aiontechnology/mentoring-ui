@@ -75,18 +75,18 @@
     </mat-card>
   </mat-tab>
   <mat-tab label="Program Administrator" *ngIf="userSession.isSysAdmin">
-    <ms-program-admin-detail class="tab-content" [schoolId]="schoolId"></ms-program-admin-detail>
+    <ms-program-admin-detail class="tab-content"></ms-program-admin-detail>
   </mat-tab>
   <mat-tab label="Teachers">
-    <ms-teacher-list class="tab-content" [schoolId]="schoolId"></ms-teacher-list>
+    <ms-teacher-list class="tab-content"></ms-teacher-list>
   </mat-tab>
   <mat-tab label="Other Personnel">
-    <ms-personnel-list class="tab-content" [schoolId]="schoolId"></ms-personnel-list>
+    <ms-personnel-list class="tab-content"></ms-personnel-list>
   </mat-tab>
   <mat-tab label="Books" *ngIf="userSession.isSysAdmin">
-    <ms-school-book-list class="tab-content" [schoolId]="schoolId"></ms-school-book-list>
+    <ms-school-book-list class="tab-content"></ms-school-book-list>
   </mat-tab>
   <mat-tab label="Games" *ngIf="userSession.isSysAdmin">
-    <ms-school-game-list class="tab-content" [schoolId]="schoolId"></ms-school-game-list>
+    <ms-school-game-list class="tab-content"></ms-school-game-list>
   </mat-tab>
 </mat-tab-group>

@@ -14,47 +14,45 @@
  * limitations under the License.
  */
 
-import {Component, Inject, Input, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Component, Inject, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/services/menu-state.service';
+import {Command} from '../../../../implementation/command/command';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {RouteWatchingService} from '../../../../services/route-watching.service';
-import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../shared/shared.module';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../../shared/shared.module';
 import {ProgramAdmin} from '../../models/program-admin/program-admin';
-import {deleteDialogCommandFactory, editDialogCommandFactory, newDialogCommandFactory} from './command-factories';
+import {PROGRAM_ADMIN_INSTANCE_CACHE, PROGRAM_ADMIN_MENU} from '../../school-manager.module';
 
 @Component({
   selector: 'ms-program-admin-detail',
   templateUrl: './program-admin-detail.component.html',
-  styleUrls: ['./program-admin-detail.component.scss'],
-  providers: [RouteWatchingService]
+  styleUrls: ['./program-admin-detail.component.scss']
 })
 export class ProgramAdminDetailComponent implements OnInit {
-  @Input() schoolId: string;
-  programAdmin: ProgramAdmin;
-
-  constructor(@Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
-              private dialog: MatDialog,
-              private menuState: MenuStateService,
-              private snackBar: MatSnackBar,
+  constructor(private menuState: MenuStateService,
               private route: ActivatedRoute,
-              private router: Router,
-              private routeWatcher: RouteWatchingService) {
+              @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
+              @Inject(PROGRAM_ADMIN_INSTANCE_CACHE) private programAdminCache: SingleItemCache<ProgramAdmin>,
+              @Inject(PROGRAM_ADMIN_URI_SUPPLIER) private programAdminUriSupplier: UriSupplier,
+              @Inject(PROGRAM_ADMIN_MENU) private menuCommands: Command[]) {
+  }
+
+  get programAdmin() {
+    return this.programAdminCache.item;
   }
 
   ngOnInit(): void {
-    this.routeWatcher.open(this.route)
+    this.menuState
+      .add(this.menuCommands)
+
+    this.route.paramMap
       .subscribe(params => {
+        this.programAdminUriSupplier.withSubstitution('schoolId', params.get('id'));
         this.programAdminDataSource.allValues()
           .then(admin => {
-            this.programAdmin = admin[0];
-
-            this.menuState.add(newDialogCommandFactory(this.router, this.dialog, this.snackBar, this.programAdmin, this.programAdminDataSource,
-              this.schoolId));
-            this.menuState.add(editDialogCommandFactory(this.router, this.dialog, this.snackBar, this.programAdmin));
-            this.menuState.add(deleteDialogCommandFactory(this.router, this.dialog, this.snackBar, this.programAdmin, this.programAdminDataSource));
+            this.programAdminCache.item = admin[0];
           });
       });
   }

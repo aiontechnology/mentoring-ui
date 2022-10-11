@@ -42,7 +42,7 @@
     </div>
 
     <div *ngIf="isSchoolSelected">
-      <table mat-table [dataSource]="mentorCacheService.dataSource" matSort>
+      <table mat-table [dataSource]="mentorCacheService.tableDataSource" matSort>
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox

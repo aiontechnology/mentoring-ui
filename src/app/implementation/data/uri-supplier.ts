@@ -25,7 +25,7 @@ export class UriSupplier {
     this.reset();
   }
 
-  apply = (resourceId?: string): URI => {
+  apply(resourceId?: string): URI {
     let uri = this.base;
     uri = this.substitute(uri);
     uri = resourceId ? uri + `/${resourceId}` : uri;
@@ -34,29 +34,30 @@ export class UriSupplier {
     return uri;
   }
 
-  reset = (): void => {
+  reset(): UriSupplier {
     this.substitutions = new Map<string, string>();
     this.parameters = new Map<string, string>();
+    return this;
   }
 
-  withSubstitution = (key: string, value: string): UriSupplier => {
+  withSubstitution(key: string, value: string): UriSupplier {
     this.substitutions.set(key, value);
     return this;
   }
 
-  withParameter = (key: string, value: string): UriSupplier => {
+  withParameter(key: string, value: string): UriSupplier {
     this.parameters.set(key, value);
     return this;
   }
 
-  private substitute = (uri: string): string => {
+  private substitute(uri: string): string {
     this.substitutions.forEach((value, key) => {
       uri = uri.replace(`{${key}}`, value);
     });
     return uri;
   }
 
-  private addParameters = (uri: string): string => {
+  private addParameters(uri: string): string {
     let isFirst = true;
     this.parameters.forEach((value, key) => {
       uri += isFirst ? '?' : '&';

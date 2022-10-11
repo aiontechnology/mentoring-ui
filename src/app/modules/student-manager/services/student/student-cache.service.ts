@@ -15,14 +15,14 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {DatasourceManagerRemovable} from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
-import {Student} from '../../models/student/student';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {AbstractRemovableTableCache} from 'src/app/implementation/table-cache/abstract-removable-table-cache';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {STUDENT_DATA_SOURCE} from '../../../shared/shared.module';
+import {Student} from '../../models/student/student';
 
 @Injectable()
-export class StudentCacheService extends DatasourceManagerRemovable<Student> {
+export class StudentCacheService extends AbstractRemovableTableCache<Student> {
 
   readonly isLoading$: BehaviorSubject<boolean>;
 
@@ -35,15 +35,17 @@ export class StudentCacheService extends DatasourceManagerRemovable<Student> {
     return this.isLoading$;
   }
 
-  loadData = (): Promise<void> =>
-    this.studentDataSource.allValues()
+  override loadData(): Promise<Student[]> {
+    return this.studentDataSource.allValues()
       .then(students => {
-        this.isLoading$.next(false);
-        this.dataSource.data = students;
+        this.isLoading$.next(false)
+        this.tableDataSource.data = students
+        return students
       })
+  }
 
-  protected doRemoveItemOld = (items: Student[]): Promise<void> =>
-    this.studentDataSource.removeSet(items)
+  protected override doRemoveItem(items: Student[]): Promise<Student[]> {
+    return this.studentDataSource.removeSet(items)
       .then(this.loadData)
-
+  }
 }

@@ -28,7 +28,7 @@ export abstract class NewEditDialogCommandOld<T> extends Command {
                         private router: Router,
                         private snackBar: MatSnackBar,
                         private snackBarMessage: string) {
-    super(title, group);
+    super(title, group, false);
   }
 
   protected override doPostExecute(dialog: MatDialogRef<any>) {

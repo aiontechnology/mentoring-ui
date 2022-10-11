@@ -17,12 +17,12 @@
 import {Component, Inject} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ProgramAdmin} from '../../models/program-admin/program-admin';
-import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../shared/shared.module';
 import {DataSource} from '../../../../implementation/data/data-source';
+import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../shared/shared.module';
+import {ProgramAdmin} from '../../models/program-admin/program-admin';
 
 @Component({
-  selector: 'ms-program-admin-dialog',
+  selector: 'ms-program-admin-detail-dialog',
   templateUrl: './program-admin-dialog.component.html',
   styleUrls: ['./program-admin-dialog.component.scss']
 })
@@ -30,15 +30,12 @@ export class ProgramAdminDialogComponent {
   model: UntypedFormGroup;
   isUpdate = false;
 
-  schoolId: string;
-
-  constructor(@Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
-              private dialogRef: MatDialogRef<ProgramAdminDialogComponent>,
+  constructor(private dialogRef: MatDialogRef<ProgramAdminDialogComponent>,
               private formBuilder: UntypedFormBuilder,
+              @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
               @Inject(MAT_DIALOG_DATA) data: any) {
     this.isUpdate = this.determineUpdate(data);
     this.model = this.createModel(formBuilder, data?.model);
-    this.schoolId = data.schoolId;
   }
 
   save(): void {
@@ -83,7 +80,7 @@ export class ProgramAdminDialogComponent {
   }
 
   private determineUpdate(formData: any): boolean {
-    return formData.model !== undefined && formData.model !== null;
+    return formData !== undefined && formData !== null;
   }
 
 }

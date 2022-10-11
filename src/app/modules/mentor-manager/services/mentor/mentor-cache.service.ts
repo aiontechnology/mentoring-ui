@@ -15,14 +15,14 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {DatasourceManagerRemovable} from 'src/app/modules/shared/services/datasource-manager/datasource-manager-removable';
-import {Mentor} from '../../models/mentor/mentor';
 import {BehaviorSubject, Observable} from 'rxjs';
+import {AbstractRemovableTableCache} from 'src/app/implementation/table-cache/abstract-removable-table-cache';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {MENTOR_DATA_SOURCE} from '../../../shared/shared.module';
+import {Mentor} from '../../models/mentor/mentor';
 
 @Injectable()
-export class MentorCacheService extends DatasourceManagerRemovable<Mentor> {
+export class MentorCacheService extends AbstractRemovableTableCache<Mentor> {
 
   readonly isLoading$: BehaviorSubject<boolean>;
 
@@ -35,15 +35,18 @@ export class MentorCacheService extends DatasourceManagerRemovable<Mentor> {
     return this.isLoading$;
   }
 
-  loadData = (): Promise<void> =>
-    this.mentorDataSource.allValues()
+  override loadData(): Promise<Mentor[]> {
+    return this.mentorDataSource.allValues()
       .then(mentors => {
         this.isLoading$.next(false);
-        this.dataSource.data = mentors;
+        this.tableDataSource.data = mentors;
+        return mentors;
       })
+  }
 
-  protected doRemoveItemOld = (items: Mentor[]): Promise<void> =>
-    this.mentorDataSource.removeSet(items)
+  protected override doRemoveItem(items: Mentor[]): Promise<Mentor[]> {
+    return this.mentorDataSource.removeSet(items)
       .then(this.loadData)
+  }
 
 }

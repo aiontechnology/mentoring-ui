@@ -14,61 +14,52 @@
  * limitations under the License.
  */
 
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Subscription} from 'rxjs';
-import {Game} from 'src/app/modules/shared/models/game/game';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {SchoolGameRepositoryService} from 'src/app/modules/shared/services/school-resource/school-game/school-game-repository.service';
-import {DropListData} from '../drop-list-data';
-import {GAME_DATA_SOURCE} from '../../../shared.module';
-import {DataSource} from '../../../../../implementation/data/data-source';
-import {LinkService} from '../../../services/link-service/link.service';
+import {Component, Inject, OnInit} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Game} from 'src/app/modules/shared/models/game/game';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {DropListData} from '../../../shared/components/school-resource/drop-list-data';
+import {SchoolGameCacheService} from '../../../shared/services/school-resource/school-game/school-game-cache.service';
+import {GAME_DATA_SOURCE, SCHOOL_GAME_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Component({
   selector: 'ms-school-game-dialog',
   templateUrl: './school-game-dialog.component.html',
   styleUrls: ['./school-game-dialog.component.scss']
 })
-export class SchoolGameDialogComponent implements OnInit, OnDestroy {
+export class SchoolGameDialogComponent implements OnInit {
 
-  gamesSubscription$: Subscription;
   games: DropListData;
   localGames: DropListData;
 
-  private schoolId: string;
-
   constructor(@Inject(GAME_DATA_SOURCE) private gameDataSource: DataSource<Game>,
-              private schoolGameService: SchoolGameRepositoryService,
+              @Inject(SCHOOL_GAME_DATA_SOURCE) private schoolGameDataSource: DataSource<Game>,
+              private schoolGameCacheService: SchoolGameCacheService,
               private dialogRef: MatDialogRef<SchoolGameDialogComponent>,
               @Inject(MAT_DIALOG_DATA) private data: any) {
-    this.schoolId = this.data?.schoolId;
     this.games = new DropListData();
-    this.localGames = new DropListData(this.data?.schoolGames());
+    this.localGames = new DropListData(this.data?.localItems());
   }
 
-  ngOnInit = (): void => {
+  ngOnInit(): void {
     this.gameDataSource.allValues()
       .then(games => games.filter(game => !this.schoolHasGame(game)))
       .then(games => new DropListData(games))
       .then(list => this.games = list);
   }
 
-  ngOnDestroy = (): void => {
-    this.gamesSubscription$.unsubscribe();
-  }
-
-  save = (): void => {
-    const newGames = this.localGames.data.map(game => LinkService.selfLink(game));
-    this.schoolGameService.updateSchoolGames(this.schoolId, newGames);
+  save(): void {
+    this.schoolGameDataSource.updateSet(this.localGames.data as Game[])
+    this.schoolGameCacheService.loadData()
     this.dialogRef.close();
   }
 
-  dismiss = (): void => {
+  dismiss(): void {
     this.dialogRef.close(null);
   }
 
-  drop = (event$: CdkDragDrop<Game[]>): void => {
+  drop(event$: CdkDragDrop<Game[]>): void {
     if (event$.previousContainer === event$.container) {
       // If the item is dropped back in the same container, insert it back into (previous) sorted order.
       moveItemInArray(event$.container.data, event$.previousIndex, event$.previousIndex);
@@ -121,7 +112,7 @@ export class SchoolGameDialogComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  private moveTo = (origin: DropListData, destination: DropListData): void => {
+  private moveTo(origin: DropListData, destination: DropListData): void {
     origin.filteredData.forEach((value) => {
       destination.insertToDataSorted(value);
       destination.insertToFilteredSorted(value);
@@ -131,5 +122,4 @@ export class SchoolGameDialogComponent implements OnInit, OnDestroy {
 
     origin.filteredData = [];
   }
-
 }

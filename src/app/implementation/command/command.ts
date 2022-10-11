@@ -22,7 +22,8 @@ export abstract class Command {
   isVisible = true;
 
   protected constructor(public title: string,
-                        public group: string) {
+                        public group: string,
+                        public isAdminOnly) {
   }
 
   execute(): void {
