@@ -19,8 +19,8 @@ import {FormBuilder, FormGroup, UntypedFormBuilder, Validators} from '@angular/f
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {School} from 'src/app/modules/shared/models/school/school';
 import {DataSource} from '../../../../implementation/data/data-source';
+import {SCHOOL_DATA_SOURCE} from '../../../../providers/global-school-providers-factory';
 import {states} from '../../../../shared/states';
-import {SCHOOL_DATA_SOURCE} from '../../../shared/shared.module';
 
 @Component({
   selector: 'ms-new-school-dialog',

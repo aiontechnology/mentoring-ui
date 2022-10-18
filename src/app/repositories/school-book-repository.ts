@@ -15,22 +15,22 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {Repository} from '../../../implementation/data/repository';
+import {Repository} from '../implementation/data/repository';
 import {HttpClient} from '@angular/common/http';
-import {SCHOOL_GAME_URI_SUPPLIER} from '../shared.module';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Game} from '../models/game/game';
+import {UriSupplier} from '../implementation/data/uri-supplier';
+import {Book} from '../modules/shared/models/book/book';
+import {SCHOOL_BOOK_URI_SUPPLIER} from '../providers/global-school-book-providers-factory';
 
 @Injectable()
-export class SchoolGameRepository extends Repository<Game> {
+export class SchoolBookRepository extends Repository<Book> {
 
   constructor(http: HttpClient,
-              @Inject(SCHOOL_GAME_URI_SUPPLIER) uriSupplier: UriSupplier) {
+              @Inject(SCHOOL_BOOK_URI_SUPPLIER) uriSupplier: UriSupplier) {
     super(http, uriSupplier);
   }
 
-  protected override toModel = (value: any): Game => {
-    return new Game(value);
+  protected override toModel = (value: any): Book => {
+    return new Book(value);
   }
 
 }

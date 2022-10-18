@@ -61,24 +61,30 @@ export const interestListProviders = [
   // Menu definitions for interest list
   {
     provide: ADMIN_LIST_MENU_ADD,
-    useFactory: (dialogManager: DialogManager<InterestDialogComponent>) => DialogCommand<InterestInbound>
-      .builder('Add Interest', 'interest', dialogManager, () => true)
-      .withSnackbarMessage('Interest added')
-      .build(),
+    useFactory: (dialogManager: DialogManager<InterestDialogComponent>) =>
+      (isAdminOnly: boolean) => DialogCommand<InterestInbound>
+        .builder('Add Interest', 'interest', dialogManager, () => true)
+        .withAdminOnly(isAdminOnly)
+        .withSnackbarMessage('Interest added')
+        .build(),
     deps: [ADMIN_LIST_DIALOG_MANAGER_EDIT]
   },
   {
     provide: ADMIN_LIST_MENU_EDIT,
-    useFactory: (interestCacheComponent: InterestCacheService, dialogManager: DialogManager<InterestDialogComponent>) => DialogCommand<InterestInbound>
-      .builder('Edit Interest', 'interest', dialogManager, () => interestCacheComponent.selection.selected.length === 1)
-      .withDataSupplier(() => ({model: interestCacheComponent.getFirstSelection()}))
-      .withSnackbarMessage('Interest edited')
-      .build(),
+    useFactory: (interestCacheComponent: InterestCacheService, dialogManager: DialogManager<InterestDialogComponent>) =>
+      (isAdminOnly: boolean) => DialogCommand<InterestInbound>
+        .builder('Edit Interest', 'interest', dialogManager, () => interestCacheComponent.selection.selected.length === 1)
+        .withAdminOnly(isAdminOnly)
+        .withDataSupplier(() => ({model: interestCacheComponent.getFirstSelection()}))
+        .withSnackbarMessage('Interest edited')
+        .build(),
     deps: [InterestCacheService, ADMIN_LIST_DIALOG_MANAGER_EDIT]
   },
   {
     provide: ADMIN_LIST_MENU,
-    useFactory: (addCommand: Command, editCommand: Command) => [addCommand, editCommand],
+    useFactory: (addCommand: (isAdminOnly: boolean) => Command,
+                 editCommand: (isAdminOnly: boolean) => Command) =>
+      [{name: 'add', factory: addCommand}, {name: 'edit', factory: editCommand}],
     deps: [ADMIN_LIST_MENU_ADD, ADMIN_LIST_MENU_EDIT]
   },
   {

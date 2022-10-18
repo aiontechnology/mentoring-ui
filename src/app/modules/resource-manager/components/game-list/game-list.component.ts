@@ -23,7 +23,7 @@ import {MenuStateService} from 'src/app/services/menu-state.service';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {GAME_LIST_MENU, GAME_TABLE_CACHE} from '../../resource-manager.module';
+import {GAME_LIST_MENU, GAME_TABLE_CACHE} from '../../providers/game-providers-factory';
 
 @Component({
   selector: 'ms-game-list',
@@ -36,7 +36,7 @@ export class GameListComponent implements OnInit {
               public userSession: UserSessionService,
               private breakpointObserver: BreakpointObserver,
               private menuState: MenuStateService,
-              @Inject(GAME_LIST_MENU) private menuCommands: Command[]) {
+              @Inject(GAME_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -52,9 +52,9 @@ export class GameListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.menuState
-      .clear()
-      .add(this.menuCommands)
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(true))
+    })
 
     this.tableCache.loadData()
       .then(() => this.tableCache.clearSelection());

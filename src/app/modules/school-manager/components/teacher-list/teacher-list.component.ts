@@ -42,12 +42,13 @@ export class TeacherListComponent implements OnInit, AfterViewInit {
               private route: ActivatedRoute,
               private breakpointObserver: BreakpointObserver,
               @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: UriSupplier,
-              @Inject(TEACHER_LIST_MENU) private menuCommands: Command[]) {
+              @Inject(TEACHER_LIST_MENU) private menuCommands: { name: string, factory: ((isAdminOnly: boolean) => Command) }[]) {
   }
 
   ngOnInit(): void {
-    this.menuState
-      .add(this.menuCommands)
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(false))
+    })
 
     this.route.paramMap
       .subscribe(params => {

@@ -23,7 +23,7 @@ import {UserSessionService} from 'src/app/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {Book} from '../../../shared/models/book/book';
-import {BOOK_LIST_MENU, BOOK_TABLE_CACHE} from '../../resource-manager.module';
+import {BOOK_LIST_MENU, BOOK_TABLE_CACHE} from '../../providers/book-providers-factory';
 
 @Component({
   selector: 'ms-book-list',
@@ -35,7 +35,7 @@ export class BookListComponent implements OnInit {
               public userSession: UserSessionService,
               private breakpointObserver: BreakpointObserver,
               private menuState: MenuStateService,
-              @Inject(BOOK_LIST_MENU) private menuCommands: Command[]) {
+              @Inject(BOOK_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -51,11 +51,11 @@ export class BookListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.userSession.isSysAdmin) {
-      this.menuState
-        .clear()
-        .add(this.menuCommands)
-    }
+    this.menuState.clear()
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(true))
+    })
+
     this.tableCache.loadData()
       .then(() => this.tableCache.clearSelection());
   }

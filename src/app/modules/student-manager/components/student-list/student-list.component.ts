@@ -17,6 +17,8 @@
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {School} from 'src/app/modules/shared/models/school/school';
+import {SCHOOL_DATA_SOURCE} from '../../../../providers/global-school-providers-factory';
+import {SCHOOL_SESSION_DATA_SOURCE, SCHOOL_SESSION_URI_SUPPLIER} from '../../../school-manager/providers/school-session-providers-factory';
 import {StudentCacheService} from '../../services/student/student-cache.service';
 import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
 import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
@@ -37,9 +39,6 @@ import {Student} from '../../models/student/student';
 import {SchoolSession} from 'src/app/modules/shared/models/school/schoolsession';
 import {grades} from 'src/app/modules/shared/constants/grades';
 import {
-  SCHOOL_DATA_SOURCE,
-  SCHOOL_SESSION_DATA_SOURCE,
-  SCHOOL_SESSION_URI_SUPPLIER,
   STUDENT_DATA_SOURCE,
   STUDENT_URI_SUPPLIER
 } from '../../../shared/shared.module';

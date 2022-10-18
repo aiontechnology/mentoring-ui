@@ -24,7 +24,7 @@ import {Book} from 'src/app/modules/shared/models/book/book';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {Grade} from 'src/app/modules/shared/types/grade';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {BOOK_DATA_SOURCE} from '../../../shared/shared.module';
+import {BOOK_DATA_SOURCE} from '../../providers/book-providers-factory';
 
 @Component({
   selector: 'ms-book-dialog',

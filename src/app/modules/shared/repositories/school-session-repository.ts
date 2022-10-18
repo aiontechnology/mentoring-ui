@@ -17,9 +17,9 @@
 import {Inject, Injectable} from '@angular/core';
 import {Repository} from '../../../implementation/data/repository';
 import {HttpClient} from '@angular/common/http';
+import {SCHOOL_SESSION_URI_SUPPLIER} from '../../school-manager/providers/school-session-providers-factory';
 import {SchoolSession} from '../models/school/schoolsession';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {SCHOOL_SESSION_URI_SUPPLIER} from '../shared.module';
 
 @Injectable()
 export class SchoolSessionRepository extends Repository<SchoolSession> {

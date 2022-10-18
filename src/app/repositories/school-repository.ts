@@ -15,11 +15,11 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {Repository} from '../../../implementation/data/repository';
+import {Repository} from '../implementation/data/repository';
 import {HttpClient} from '@angular/common/http';
-import {School} from '../models/school/school';
-import {SCHOOL_URI_SUPPLIER} from '../shared.module';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
+import {SCHOOL_URI_SUPPLIER} from '../providers/global-school-providers-factory';
+import {School} from '../modules/shared/models/school/school';
+import {UriSupplier} from '../implementation/data/uri-supplier';
 
 @Injectable()
 export class SchoolRepository extends Repository<School> {

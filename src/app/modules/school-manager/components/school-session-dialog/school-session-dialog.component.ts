@@ -18,8 +18,8 @@ import {Component, Inject} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SchoolSession} from 'src/app/modules/shared/models/school/schoolsession';
-import {SCHOOL_SESSION_DATA_SOURCE} from '../../../shared/shared.module';
 import {DataSource} from '../../../../implementation/data/data-source';
+import {SCHOOL_SESSION_DATA_SOURCE} from '../../providers/school-session-providers-factory';
 
 @Component({
   selector: 'ms-school-session-dialog',

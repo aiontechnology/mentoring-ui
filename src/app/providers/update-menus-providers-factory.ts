@@ -15,7 +15,7 @@
  */
 
 import {ComponentType} from '@angular/cdk/portal';
-import {InjectionToken, Injector, INJECTOR, Type} from '@angular/core';
+import {InjectionToken, Injector, INJECTOR} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Command} from '../implementation/command/command';
 import {DialogCommand} from '../implementation/command/dialog-command';
@@ -24,8 +24,11 @@ import {AbstractTableCache} from '../implementation/table-cache/abstract-table-c
 import {titleCase} from '../shared/title-case';
 
 export function updateProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends AbstractTableCache<any>>(
-  injectionToken: InjectionToken<Command[]>, group: string, name: string, componentType: ComponentType<COMPONENT_TYPE>,
-  serviceType: Type<SERVICE_TYPE>) {
+  injectionToken: InjectionToken<Command[]>,
+  group: string,
+  name: string,
+  componentType: ComponentType<COMPONENT_TYPE>,
+  serviceToken: InjectionToken<SERVICE_TYPE>) {
 
   const UPDATE_MENU = new InjectionToken<DialogCommand<MODEL_TYPE>>('update-menu');
   const UPDATE_DIALOG_MANAGER = new InjectionToken<DialogCommand<MODEL_TYPE>>('update-dialog-manager');
@@ -41,21 +44,23 @@ export function updateProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE 
     },
     {
       provide: UPDATE_MENU,
-      useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) => {
-        const service: SERVICE_TYPE = injector.get(serviceType)
-        return DialogCommand<MODEL_TYPE>
-          .builder(`Update ${titleCase(name)}s`, group, dialogManager, () => true)
-          .withSnackbarMessage(`${titleCase(name)}s Updated`)
-          .withDataSupplier(() => {
-            return {localItems: () => service.tableDataSource.data}
-          })
-          .build()
-      },
+      useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) =>
+        (isAdminOnly: boolean) => {
+          const service: SERVICE_TYPE = injector.get(serviceToken)
+          return DialogCommand<MODEL_TYPE>
+            .builder(`Update ${titleCase(name)}s`, group, dialogManager, () => true)
+            .withSnackbarMessage(`${titleCase(name)}s Updated`)
+            .withDataSupplier(() => {
+              return {localItems: () => service.tableDataSource.data}
+            })
+            .build()
+        },
       deps: [INJECTOR, UPDATE_DIALOG_MANAGER]
     },
     {
       provide: injectionToken,
-      useFactory: (updateCommand: Command) => [updateCommand],
+      useFactory: (updateCommand: (isAdminOnly: boolean) => Command) =>
+        [{name: 'update', factory: updateCommand}],
       deps: [UPDATE_MENU]
     },
 

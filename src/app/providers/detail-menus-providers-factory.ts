@@ -29,8 +29,12 @@ import {ConfimationDialogComponent} from '../modules/shared/components/confimati
 import {titleCase} from '../shared/title-case';
 
 export function detailProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
-  injectionToken: InjectionToken<Command[]>, group: string, name: string, routeAfterDelete: string[], componentType: ComponentType<COMPONENT_TYPE>,
-  serviceToken: InjectionToken<SERVICE_TYPE>, singleItemCacheToken: InjectionToken<SingleItemCache<MODEL_TYPE>>) {
+  injectionToken: InjectionToken<Command[]>,
+  group: string,
+  name: string, routeAfterDelete: string[],
+  componentType: ComponentType<COMPONENT_TYPE>,
+  serviceToken: InjectionToken<SERVICE_TYPE>,
+  singleItemCacheToken: InjectionToken<SingleItemCache<MODEL_TYPE>>) {
 
   const DETAIL_AFTER_CLOSED_DELETE = new InjectionToken<(s: string) => (a: any) => void>('detail-after-closed-delete');
   const DETAIL_AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('detail-after-closed-edit');
@@ -93,37 +97,42 @@ export function detailProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE 
     // Menu definitions for details
     {
       provide: DETAIL_MENU_DELETE,
-      useFactory: (injector: Injector, dialogManager: DialogManager<ConfimationDialogComponent>) => {
-        const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
-        return DialogCommand<MODEL_TYPE>
-          .builder(`Remove ${titleCase(name)}`, group, dialogManager, () => true)
-          .withAdminOnly(true)
-          .withSnackbarMessage(`${titleCase(name)} Removed`)
-          .withDataSupplier(() => ({
-            model: singleItemCache.item,
-            singularName: name,
-            pluralName: `${name}s`,
-            countSupplier: () => 1
-          }))
-          .build()
-      },
+      useFactory: (injector: Injector, dialogManager: DialogManager<ConfimationDialogComponent>) =>
+        (isAdminOnly: boolean) => {
+          const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
+          return DialogCommand<MODEL_TYPE>
+            .builder(`Remove ${titleCase(name)}`, group, dialogManager, () => true)
+            .withAdminOnly(isAdminOnly)
+            .withSnackbarMessage(`${titleCase(name)} Removed`)
+            .withDataSupplier(() => ({
+              model: singleItemCache.item,
+              singularName: name,
+              pluralName: `${name}s`,
+              countSupplier: () => 1
+            }))
+            .build()
+        },
       deps: [INJECTOR, DETAIL_DIALOG_MANAGER_DELETE]
     },
     {
       provide: DETAIL_MENU_EDIT,
-      useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) => {
-        const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
-        return DialogCommand<MODEL_TYPE>
-          .builder(`Edit ${titleCase(name)}`, group, dialogManager, () => true)
-          .withSnackbarMessage(`${titleCase(name)} Edited`)
-          .withDataSupplier(() => ({model: singleItemCache.item}))
-          .build()
-      },
+      useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) =>
+        (isAdminOnly: boolean) => {
+          const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
+          return DialogCommand<MODEL_TYPE>
+            .builder(`Edit ${titleCase(name)}`, group, dialogManager, () => true)
+            .withAdminOnly(isAdminOnly)
+            .withSnackbarMessage(`${titleCase(name)} Edited`)
+            .withDataSupplier(() => ({model: singleItemCache.item}))
+            .build()
+        },
       deps: [INJECTOR, DETAIL_DIALOG_MANAGER_EDIT]
     },
     {
       provide: injectionToken,
-      useFactory: (deleteCommand: Command, editCommand: Command) => [editCommand, deleteCommand],
+      useFactory: (deleteCommand: (isAdminOnly: boolean) => Command,
+                   editCommand: (isAdminOnly: boolean) => Command) =>
+        [{name: 'edit', factory: editCommand}, {name: 'delete', factory: deleteCommand}],
       deps: [DETAIL_MENU_DELETE, DETAIL_MENU_EDIT]
     },
   ]

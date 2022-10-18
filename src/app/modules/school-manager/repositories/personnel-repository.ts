@@ -17,20 +17,20 @@
 import {Inject, Injectable} from '@angular/core';
 import {Repository} from '../../../implementation/data/repository';
 import {HttpClient} from '@angular/common/http';
-import {SCHOOL_BOOK_URI_SUPPLIER} from '../shared.module';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Book} from '../models/book/book';
+import {Personnel} from '../models/personnel/personnel';
+import {PERSONNEL_URI_SUPPLIER} from '../providers/personnel-providers-factory';
 
 @Injectable()
-export class SchoolBookRepository extends Repository<Book> {
+export class PersonnelRepository extends Repository<Personnel> {
 
   constructor(http: HttpClient,
-              @Inject(SCHOOL_BOOK_URI_SUPPLIER) uriSupplier: UriSupplier) {
+              @Inject(PERSONNEL_URI_SUPPLIER) uriSupplier: UriSupplier) {
     super(http, uriSupplier);
   }
 
-  protected override toModel = (value: any): Book => {
-    return new Book(value);
+  protected override toModel = (value: any): Personnel => {
+    return new Personnel(value);
   }
 
 }

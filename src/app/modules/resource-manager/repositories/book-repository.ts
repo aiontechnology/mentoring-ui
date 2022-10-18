@@ -19,7 +19,7 @@ import {Book} from '../../shared/models/book/book';
 import {HttpClient} from '@angular/common/http';
 import {Repository} from '../../../implementation/data/repository';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {BOOK_URI_SUPPLIER} from '../../shared/shared.module';
+import {BOOK_URI_SUPPLIER} from '../providers/book-providers-factory';
 
 @Injectable()
 export class BookRepository extends Repository<Book> {

@@ -24,8 +24,7 @@ import {UserSessionService} from 'src/app/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
-import {BOOK_DATA_SOURCE} from '../../../shared/shared.module';
-import {BOOK_DETAIL_MENU, BOOK_SINGLE_CACHE} from '../../resource-manager.module';
+import {BOOK_DATA_SOURCE, BOOK_DETAIL_MENU, BOOK_SINGLE_CACHE} from '../../providers/book-providers-factory';
 
 @Component({
   selector: 'ms-book-detail',
@@ -39,7 +38,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
               private menuState: MenuStateService,
               private navigation: NavigationService,
               @Inject(BOOK_SINGLE_CACHE) private singleItemCache: SingleItemCache<Book>,
-              @Inject(BOOK_DETAIL_MENU) private menuCommands: Command[]) {
+              @Inject(BOOK_DETAIL_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
   }
 
   get book() {
@@ -55,11 +54,10 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    if (this.userSession.isSysAdmin) {
-      this.menuState
-        .clear()
-        .add(this.menuCommands)
-    }
+    this.menuState.clear()
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(false))
+    })
 
     this.navigation.routeParams = ['resourcemanager'];
     this.navigation.fragment = 'books';

@@ -40,7 +40,7 @@ export class SchoolListComponent implements OnInit {
               private menuState: MenuStateService,
               private router: Router,
               private snackBar: MatSnackBar,
-              @Inject(SCHOOL_LIST_MENU) private menuCommands: Command[]) {
+              @Inject(SCHOOL_LIST_MENU) private menuCommands: { name: string, factory: ((isAdminOnly: boolean) => Command) }[]) {
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -56,9 +56,9 @@ export class SchoolListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.menuState
-      .clear()
-      .add(this.menuCommands)
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(false));
+    })
 
     this.tableCache.loadData()
       .then(() => this.tableCache.clearSelection());

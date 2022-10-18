@@ -17,15 +17,10 @@
 import {InjectionToken, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {Command} from '../../implementation/command/command';
-import {DataSource} from '../../implementation/data/data-source';
-import {SingleItemCache} from '../../implementation/data/single-item-cache';
-import {TableCache} from '../../implementation/table-cache/table-cache';
-import {detailProvidersFactory} from '../../providers/detail-menus-providers-factory';
-import {listProvidersFactory} from '../../providers/list-menus-providers-factory';
-import {Book} from '../shared/models/book/book';
-import {Game} from '../shared/models/game/game';
-import {School} from '../shared/models/school/school';
-import {BOOK_DATA_SOURCE, GAME_DATA_SOURCE, SharedModule} from '../shared/shared.module';
+import {globalSchoolBookProvidersFactory} from '../../providers/global-school-book-providers-factory';
+import {globalSchoolGameProvidersFactory} from '../../providers/global-school-game-providers-factory';
+import {globalSchoolProvidersFactory} from '../../providers/global-school-providers-factory';
+import {SharedModule} from '../shared/shared.module';
 import {BookDetailComponent} from './components/book-detail/book-detail.component';
 import {BookDialogComponent} from './components/book-dialog/book-dialog.component';
 import {BookListComponent} from './components/book-list/book-list.component';
@@ -33,7 +28,25 @@ import {GameDetailComponent} from './components/game-detail/game-detail.componen
 import {GameDialogComponent} from './components/game-dialog/game-dialog.component';
 import {GameListComponent} from './components/game-list/game-list.component';
 import {ResourceListComponent} from './components/resource-list/resource-list.component';
+import {SchoolBookDialogComponent} from './components/school-book-dialog/school-book-dialog.component';
+import {SchoolBookListComponent} from './components/school-book-list/school-book-list.component';
+import {SchoolGameDialogComponent} from './components/school-game-dialog/school-game-dialog.component';
+import {SchoolGameListComponent} from './components/school-game-list/school-game-list.component';
+import {bookProvidersFactory} from './providers/book-providers-factory';
+import {gameProvidersFactory} from './providers/game-providers-factory';
+import {schoolBookProvidersFactory} from './providers/school-book-providers-factory';
+import {schoolGameProvidersFactory} from './providers/school-game-providers-factory';
 import {ResourceManagerComponent} from './resource-manager.component';
+
+// Menus
+export const SCHOOL_BOOK_LIST_MENU = new InjectionToken<Command[]>('school-book-list-menu')
+export const SCHOOL_GAME_LIST_MENU = new InjectionToken<Command[]>('school-game-list-menu')
+
+// Groups
+export const BOOK_GROUP = 'book'
+export const GAME_GROUP = 'game'
+export const SCHOOL_BOOK_GROUP = 'school-book'
+export const SCHOOL_GAME_GROUP = 'school-game'
 
 const routes: Routes = [
   {
@@ -46,18 +59,6 @@ const routes: Routes = [
   }
 ];
 
-// Menus
-export const BOOK_DETAIL_MENU = new InjectionToken<Command[]>('book-detail-menu');
-export const BOOK_LIST_MENU = new InjectionToken<Command[]>('book-list-menu');
-export const BOOK_SINGLE_CACHE = new InjectionToken<SingleItemCache<Book>>('book-single-cache')
-export const GAME_DETAIL_MENU = new InjectionToken<Command[]>('game-detail-menu');
-export const GAME_LIST_MENU = new InjectionToken<Command[]>('game-list-menu');
-export const GAME_SINGLE_CACHE = new InjectionToken<SingleItemCache<Book>>('game-single-cache')
-
-// Services
-export const BOOK_TABLE_CACHE = new InjectionToken<TableCache<School>>('book-table-cache')
-export const GAME_TABLE_CACHE = new InjectionToken<TableCache<School>>('game-table-cache')
-
 @NgModule({
   declarations: [
     BookDetailComponent,
@@ -68,44 +69,23 @@ export const GAME_TABLE_CACHE = new InjectionToken<TableCache<School>>('game-tab
     GameListComponent,
     ResourceListComponent,
     ResourceManagerComponent,
+    SchoolBookDialogComponent,
+    SchoolBookListComponent,
+    SchoolGameDialogComponent,
+    SchoolGameListComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
     SharedModule.forRoot(),
   ],
   providers: [
-    // Books
-    {
-      provide: BOOK_TABLE_CACHE,
-      useFactory: (dataSource: DataSource<Book>) => new TableCache(dataSource),
-      deps: [BOOK_DATA_SOURCE]
-    },
-    {
-      provide: BOOK_SINGLE_CACHE,
-      useFactory: (dataSource: DataSource<Book>) => new SingleItemCache<Book>(dataSource),
-      deps: [BOOK_DATA_SOURCE]
-    },
-    ...listProvidersFactory<Book, BookDialogComponent, TableCache<Book>>(BOOK_LIST_MENU, 'book', 'book', BookDialogComponent,
-      BOOK_TABLE_CACHE),
-    ...detailProvidersFactory<Book, BookDialogComponent, TableCache<Book>>(BOOK_DETAIL_MENU, 'book', 'book',
-      ['/resourcemanager'], BookDialogComponent, BOOK_TABLE_CACHE, BOOK_SINGLE_CACHE),
-
-    // Games
-    {
-      provide: GAME_TABLE_CACHE,
-      useFactory: (dataSource: DataSource<Game>) => new TableCache(dataSource),
-      deps: [GAME_DATA_SOURCE]
-    },
-    {
-      provide: GAME_SINGLE_CACHE,
-      useFactory: (dataSource: DataSource<Game>) => new SingleItemCache<Game>(dataSource),
-      deps: [GAME_DATA_SOURCE]
-    },
-    ...listProvidersFactory<Game, GameDialogComponent, TableCache<Game>>(GAME_LIST_MENU, 'game', 'game', GameDialogComponent,
-      GAME_TABLE_CACHE),
-    ...detailProvidersFactory<Game, GameDialogComponent, TableCache<Game>>(GAME_DETAIL_MENU, 'game', 'game',
-      ['/resourcemanager'], GameDialogComponent, GAME_TABLE_CACHE, GAME_SINGLE_CACHE),
-
+    ...globalSchoolProvidersFactory(),
+    ...globalSchoolBookProvidersFactory(),
+    ...globalSchoolGameProvidersFactory(),
+    ...bookProvidersFactory(),
+    ...gameProvidersFactory(),
+    ...schoolBookProvidersFactory(),
+    ...schoolGameProvidersFactory(),
   ]
 })
 export class ResourceManagerModule {

@@ -19,11 +19,13 @@ import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute} from '@angular/router';
-import {SchoolBookCacheService} from 'src/app/modules/school-manager/services/school-book/school-book-cache.service';
 import {MenuStateService} from 'src/app/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../shared/shared.module';
+import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../../providers/global-school-book-providers-factory';
+import {Book} from '../../../shared/models/book/book';
+import {SCHOOL_BOOK_TABLE_CACHE} from '../../providers/school-book-providers-factory';
 import {SCHOOL_BOOK_LIST_MENU} from '../../school-manager.module';
 
 @Component({
@@ -36,31 +38,32 @@ export class SchoolBookListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(public schoolBookCacheService: SchoolBookCacheService,
+  constructor(@Inject(SCHOOL_BOOK_TABLE_CACHE) public tableCache: TableCache<Book>,
               private menuState: MenuStateService,
               private route: ActivatedRoute,
               private breakpointObserver: BreakpointObserver,
               @Inject(SCHOOL_BOOK_URI_SUPPLIER) private schoolBookUriSupplier: UriSupplier,
-              @Inject(SCHOOL_BOOK_LIST_MENU) private menuCommands: Command[]) {
+              @Inject(SCHOOL_BOOK_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
   }
 
   ngOnInit(): void {
-    this.menuState
-      .add(this.menuCommands)
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(false))
+    })
 
     this.route.paramMap
       .subscribe(params => {
         this.schoolBookUriSupplier.withSubstitution('schoolId', params.get('id'))
-        this.schoolBookCacheService.loadData()
+        this.tableCache.loadData()
           .then(() => {
-            this.schoolBookCacheService.clearSelection()
+            this.tableCache.clearSelection()
           });
       })
   }
 
   ngAfterViewInit(): void {
-    this.schoolBookCacheService.sort = this.sort;
-    this.schoolBookCacheService.paginator = this.paginator;
+    this.tableCache.sort = this.sort;
+    this.tableCache.paginator = this.paginator;
   }
 
   displayedColumns(): string[] {

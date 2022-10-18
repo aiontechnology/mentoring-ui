@@ -23,8 +23,9 @@ import {NavigationService} from 'src/app/services/navigation.service';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 import {RouteWatchingService} from '../../../../services/route-watching.service';
-import {SCHOOL_DETAIL_MENU, SCHOOL_INSTANCE_CACHE} from '../../school-manager.module';
+import {SCHOOL_DETAIL_MENU} from '../../school-manager.module';
 import {SchoolSessionDialogComponent} from '../school-session-dialog/school-session-dialog.component';
 import {setState} from './menu-state-manager';
 
@@ -42,7 +43,7 @@ export class SchoolDetailComponent implements OnInit, AfterViewInit, OnDestroy {
               private routeWatcher: RouteWatchingService,
               private navigation: NavigationService,
               @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
-              @Inject(SCHOOL_DETAIL_MENU) private menuCommands: Command[]) {
+              @Inject(SCHOOL_DETAIL_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
   }
 
   get school() {
@@ -54,9 +55,17 @@ export class SchoolDetailComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.menuState
-      .clear()
-      .add(this.menuCommands)
+    this.menuState.clear()
+    this.menuCommands.forEach(command => {
+      switch (command.name) {
+        case 'delete':
+          this.menuState.add(command.factory(true))
+          break
+        default:
+          this.menuState.add(command.factory(false))
+          break;
+      }
+    })
 
     this.route.paramMap
       .subscribe(params => this.onIdChange(params.get('id')))

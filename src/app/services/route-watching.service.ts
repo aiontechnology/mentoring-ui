@@ -15,7 +15,15 @@
  */
 
 import {ActivatedRoute, ParamMap} from '@angular/router';
+import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../modules/school-manager/providers/personnel-providers-factory';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../modules/school-manager/providers/program-admin-providers-factory';
+import {
+  SCHOOL_SESSION_DATA_SOURCE,
+  SCHOOL_SESSION_URI_SUPPLIER
+} from '../modules/school-manager/providers/school-session-providers-factory';
 import {School} from '../modules/shared/models/school/school';
+import {SCHOOL_BOOK_DATA_SOURCE, SCHOOL_BOOK_URI_SUPPLIER} from '../providers/global-school-book-providers-factory';
+import {SCHOOL_DATA_SOURCE} from '../providers/global-school-providers-factory';
 import {UserSessionService} from './user-session.service';
 import {DataSource} from '../implementation/data/data-source';
 import {map} from 'rxjs/operators';
@@ -24,15 +32,6 @@ import {
   INVITATION_DATA_SOURCE, INVITATION_URI_SUPPLIER,
   MENTOR_DATA_SOURCE,
   MENTOR_URI_SUPPLIER,
-  PERSONNEL_DATA_SOURCE,
-  PERSONNEL_URI_SUPPLIER,
-  PROGRAM_ADMIN_DATA_SOURCE,
-  PROGRAM_ADMIN_URI_SUPPLIER,
-  SCHOOL_BOOK_DATA_SOURCE,
-  SCHOOL_BOOK_URI_SUPPLIER,
-  SCHOOL_DATA_SOURCE,
-  SCHOOL_SESSION_DATA_SOURCE,
-  SCHOOL_SESSION_URI_SUPPLIER,
   STUDENT_DATA_SOURCE,
   STUDENT_URI_SUPPLIER,
   TEACHER_DATA_SOURCE,

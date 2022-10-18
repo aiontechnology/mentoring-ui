@@ -33,7 +33,7 @@ export class InterestListComponent implements OnInit, OnDestroy {
 
   constructor(public interestCacheService: InterestCacheService,
               private menuState: MenuStateService,
-              @Inject(ADMIN_LIST_MENU) private menuCommands: Command[]) {
+              @Inject(ADMIN_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -54,7 +54,9 @@ export class InterestListComponent implements OnInit, OnDestroy {
     this.interestCacheService.loadInterests();
     this.interestCacheService.clearSelection();
 
-    this.menuState.add(this.menuCommands)
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(false))
+    })
   }
 
   ngOnDestroy(): void {

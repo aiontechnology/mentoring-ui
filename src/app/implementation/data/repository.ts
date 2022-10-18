@@ -39,7 +39,6 @@ export abstract class Repository<T> implements DataManager<T> {
       this.http.get<{ content: T[] }>(this.uriSupplier.apply())
         .pipe(
           map(element => {
-            console.log('Elements', element)
             return element.content
           }),
           map(values => {

@@ -18,12 +18,12 @@ import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 import {School} from '../../../shared/models/school/school';
 import {Personnel} from '../../models/personnel/personnel';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../../shared/shared.module';
-import {SCHOOL_INSTANCE_CACHE} from '../../school-manager.module';
+import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../providers/personnel-providers-factory';
 
 @Component({
   selector: 'ms-personnel-dialog',

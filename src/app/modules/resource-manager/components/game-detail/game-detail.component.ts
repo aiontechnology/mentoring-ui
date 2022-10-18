@@ -24,8 +24,7 @@ import {UserSessionService} from 'src/app/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
-import {GAME_DATA_SOURCE} from '../../../shared/shared.module';
-import {GAME_DETAIL_MENU, GAME_SINGLE_CACHE} from '../../resource-manager.module';
+import {GAME_DATA_SOURCE, GAME_DETAIL_MENU, GAME_SINGLE_CACHE} from '../../providers/game-providers-factory';
 
 @Component({
   selector: 'ms-game-detail',
@@ -42,7 +41,7 @@ export class GameDetailComponent implements OnInit, OnDestroy {
               private menuState: MenuStateService,
               private navigation: NavigationService,
               @Inject(GAME_SINGLE_CACHE) private singleItemCache: SingleItemCache<Game>,
-              @Inject(GAME_DETAIL_MENU) private menuCommands: Command[]) {
+              @Inject(GAME_DETAIL_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
   }
 
   get gradeRangeDisplay(): string {
@@ -54,9 +53,10 @@ export class GameDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.menuState
-      .clear()
-      .add(this.menuCommands)
+    this.menuState.clear()
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(false))
+    })
 
     this.navigation.routeParams = ['resourcemanager'];
     this.navigation.fragment = 'games';

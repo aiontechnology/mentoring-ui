@@ -21,8 +21,8 @@ import {Command} from '../../../../implementation/command/command';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../../shared/shared.module';
 import {ProgramAdmin} from '../../models/program-admin/program-admin';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../providers/program-admin-providers-factory';
 import {PROGRAM_ADMIN_INSTANCE_CACHE, PROGRAM_ADMIN_MENU} from '../../school-manager.module';
 
 @Component({
@@ -36,7 +36,7 @@ export class ProgramAdminDetailComponent implements OnInit {
               @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
               @Inject(PROGRAM_ADMIN_INSTANCE_CACHE) private programAdminCache: SingleItemCache<ProgramAdmin>,
               @Inject(PROGRAM_ADMIN_URI_SUPPLIER) private programAdminUriSupplier: UriSupplier,
-              @Inject(PROGRAM_ADMIN_MENU) private menuCommands: Command[]) {
+              @Inject(PROGRAM_ADMIN_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
   }
 
   get programAdmin() {
@@ -44,8 +44,9 @@ export class ProgramAdminDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.menuState
-      .add(this.menuCommands)
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(false))
+    })
 
     this.route.paramMap
       .subscribe(params => {

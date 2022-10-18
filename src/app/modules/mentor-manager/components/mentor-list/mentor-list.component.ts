@@ -17,6 +17,7 @@
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {UserSessionService} from 'src/app/services/user-session.service';
 import {School} from 'src/app/modules/shared/models/school/school';
+import {SCHOOL_DATA_SOURCE} from '../../../../providers/global-school-providers-factory';
 import {MentorCacheService} from '../../services/mentor/mentor-cache.service';
 import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
 import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
@@ -31,7 +32,6 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
 import {Mentor} from '../../models/mentor/mentor';
-import {SCHOOL_DATA_SOURCE} from '../../../shared/shared.module';
 import {RouteWatchingService} from '../../../../services/route-watching.service';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {tap} from 'rxjs/operators';

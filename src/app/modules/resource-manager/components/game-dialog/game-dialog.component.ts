@@ -24,7 +24,7 @@ import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
 import {Observable} from 'rxjs';
 import {resourceLocations} from 'src/app/modules/shared/constants/locations';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {GAME_DATA_SOURCE} from '../../../shared/shared.module';
+import {GAME_DATA_SOURCE} from '../../providers/game-providers-factory';
 
 @Component({
   selector: 'ms-game-dialog',

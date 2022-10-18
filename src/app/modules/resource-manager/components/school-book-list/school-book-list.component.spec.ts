@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SchoolBookCacheService } from './school-book-cache.service';
+import { SchoolBookListComponent } from './school-book-list.component';
 
-xdescribe('SchoolBookCacheService', () => {
-  let service: SchoolBookCacheService;
+xdescribe('SchoolBookListComponent', () => {
+  let component: SchoolBookListComponent;
+  let fixture: ComponentFixture<SchoolBookListComponent>;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(SchoolBookCacheService);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [ SchoolBookListComponent ]
+    })
+    .compileComponents();
   });
 
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SchoolBookListComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  xit('should create', () => {
+    expect(component).toBeTruthy();
   });
 });

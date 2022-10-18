@@ -18,21 +18,20 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
 import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
 import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
-import {StudentInbound, StudentMentorInbound} from '../../models/student-inbound/student-inbound';
-import {StudentRepositoryService} from '../../services/student/student-repository.service';
-import {MenuStateService} from 'src/app/services/menu-state.service';
-import {StudentDialogComponent} from '../student-dialog/student-dialog.component';
-import {Contact} from '../../models/contact/contact';
 import {grades} from 'src/app/modules/shared/constants/grades';
-import {Subscription} from 'rxjs';
-import {LpgRepositoryService} from '../../services/lpg/lpg-repository.service';
-import {UserSessionService} from 'src/app/services/user-session.service';
+import {MenuStateService} from 'src/app/services/menu-state.service';
 import {NavigationService} from 'src/app/services/navigation.service';
-import {SchoolSessionCacheService} from 'src/app/modules/shared/services/school-session/school-session-cache.service';
+import {UserSessionService} from 'src/app/services/user-session.service';
 import {RouteWatchingService} from '../../../../services/route-watching.service';
+import {Contact} from '../../models/contact/contact';
+import {StudentInbound, StudentMentorInbound} from '../../models/student-inbound/student-inbound';
+import {LpgRepositoryService} from '../../services/lpg/lpg-repository.service';
+import {StudentRepositoryService} from '../../services/student/student-repository.service';
+import {StudentDialogComponent} from '../student-dialog/student-dialog.component';
 
 @Component({
   selector: 'ms-student-detail',
@@ -63,8 +62,7 @@ export class StudentDetailComponent implements OnInit, OnDestroy {
               private snackBar: MatSnackBar,
               private router: Router,
               private userSession: UserSessionService,
-              private navigation: NavigationService,
-              private schoolSessionCacheService: SchoolSessionCacheService) {
+              private navigation: NavigationService) {
 
     this.subscriptions$ = new Subscription();
 

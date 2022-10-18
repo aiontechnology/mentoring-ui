@@ -17,9 +17,9 @@
 import {Inject, Injectable} from '@angular/core';
 import {Repository} from '../../../implementation/data/repository';
 import {HttpClient} from '@angular/common/http';
-import {PROGRAM_ADMIN_URI_SUPPLIER} from '../shared.module';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {ProgramAdmin} from '../../school-manager/models/program-admin/program-admin';
+import {ProgramAdmin} from '../models/program-admin/program-admin';
+import {PROGRAM_ADMIN_URI_SUPPLIER} from '../providers/program-admin-providers-factory';
 
 @Injectable()
 export class ProgramAdminRepository extends Repository<ProgramAdmin> {

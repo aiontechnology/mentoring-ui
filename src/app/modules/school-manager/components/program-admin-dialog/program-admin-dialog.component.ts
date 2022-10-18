@@ -18,8 +18,8 @@ import {Component, Inject} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../shared/shared.module';
 import {ProgramAdmin} from '../../models/program-admin/program-admin';
+import {PROGRAM_ADMIN_DATA_SOURCE} from '../../providers/program-admin-providers-factory';
 
 @Component({
   selector: 'ms-program-admin-detail-dialog',

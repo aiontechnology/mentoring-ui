@@ -15,7 +15,7 @@
  */
 
 import {ComponentType} from '@angular/cdk/portal';
-import {InjectionToken, INJECTOR, Injector, Type} from '@angular/core';
+import {InjectionToken, INJECTOR, Injector} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {SNACKBAR_MANAGER} from '../app.module';
@@ -26,11 +26,13 @@ import {NavigationManager} from '../implementation/command/navigation-manager';
 import {SnackbarManager} from '../implementation/command/snackbar-manager';
 import {TableCache} from '../implementation/table-cache/table-cache';
 import {ConfimationDialogComponent} from '../modules/shared/components/confimation-dialog/confimation-dialog.component';
-import {AbstractRemovableTableCache} from '../implementation/table-cache/abstract-removable-table-cache';
 import {titleCase} from '../shared/title-case';
 
 export function listProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
-  injectionToken: InjectionToken<Command[]>, group: string, name: string, componentType: ComponentType<COMPONENT_TYPE>,
+  injectionToken: InjectionToken<Command[]>,
+  group: string,
+  name: string,
+  componentType: ComponentType<COMPONENT_TYPE>,
   serviceToken: InjectionToken<SERVICE_TYPE>) {
 
   const NAVIGATION_MANAGER = new InjectionToken<NavigationManager>('navigation-manager');
@@ -108,45 +110,54 @@ export function listProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE ex
     {
       provide: LIST_MENU_ADD,
       useFactory: (dialogManager: DialogManager<COMPONENT_TYPE>) =>
-        DialogCommand<MODEL_TYPE>
-          .builder(`Add ${titleCase(name)}`, group, dialogManager, () => true)
-          .withSnackbarMessage(`${titleCase(name)} Added`)
-          .build(),
+        (isAdminOnly: boolean) =>
+          DialogCommand<MODEL_TYPE>
+            .builder(`Add ${titleCase(name)}`, group, dialogManager, () => true)
+            .withAdminOnly(isAdminOnly)
+            .withSnackbarMessage(`${titleCase(name)} Added`)
+            .build(),
       deps: [LIST_DIALOG_MANAGER_EDIT]
     },
     {
       provide: LIST_MENU_EDIT,
-      useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) => {
-        const service: SERVICE_TYPE = injector.get(serviceToken)
-        return DialogCommand<MODEL_TYPE>
-          .builder(`Edit ${titleCase(name)}`, group, dialogManager, () => service.selection.selected.length === 1)
-          .withDataSupplier(() => ({model: service.getFirstSelection()}))
-          .withSnackbarMessage(`${titleCase(name)} Edited`)
-          .build()
-      },
+      useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) =>
+        (isAdminOnly: boolean) => {
+          const service: SERVICE_TYPE = injector.get(serviceToken)
+          return DialogCommand<MODEL_TYPE>
+            .builder(`Edit ${titleCase(name)}`, group, dialogManager, () => service.selection.selected.length === 1)
+            .withAdminOnly(isAdminOnly)
+            .withDataSupplier(() => ({model: service.getFirstSelection()}))
+            .withSnackbarMessage(`${titleCase(name)} Edited`)
+            .build()
+        },
       deps: [INJECTOR, LIST_DIALOG_MANAGER_EDIT]
     },
     {
       provide: LIST_MENU_DELETE,
-      useFactory: (injector: Injector, dialogManager: DialogManager<ConfimationDialogComponent>) => {
-        const service: SERVICE_TYPE = injector.get(serviceToken)
-        return DialogCommand<MODEL_TYPE>
-          .builder(`Remove ${titleCase(name)}(s)`, group, dialogManager, () => service.selection.selected.length > 0)
-          .withDataSupplier(() => {
-            return {
-              singularName: name,
-              pluralName: `${name}s`,
-              countSupplier: () => service.selectionCount
-            }
-          })
-          .withSnackbarMessage(`${titleCase(name)}(s) Removed`)
-          .build()
-      },
+      useFactory: (injector: Injector, dialogManager: DialogManager<ConfimationDialogComponent>) =>
+        (isAdminOnly: boolean) => {
+          const service: SERVICE_TYPE = injector.get(serviceToken)
+          return DialogCommand<MODEL_TYPE>
+            .builder(`Remove ${titleCase(name)}(s)`, group, dialogManager, () => service.selection.selected.length > 0)
+            .withAdminOnly(isAdminOnly)
+            .withDataSupplier(() => {
+              return {
+                singularName: name,
+                pluralName: `${name}s`,
+                countSupplier: () => service.selectionCount
+              }
+            })
+            .withSnackbarMessage(`${titleCase(name)}(s) Removed`)
+            .build()
+        },
       deps: [INJECTOR, LIST_DIALOG_MANAGER_DELETE]
     },
     {
       provide: injectionToken,
-      useFactory: (addCommand: Command, deleteCommand: Command, editCommand: Command) => [addCommand, editCommand, deleteCommand],
+      useFactory: (addCommand: (isAdminOnly: boolean) => Command,
+                   deleteCommand: (isAdminOnly: boolean) => Command,
+                   editCommand: (isAdminOnly: boolean) => Command) =>
+        [{name: 'add', factory: addCommand}, {name: 'edit', factory: editCommand}, {name: 'delete', factory: deleteCommand}],
       deps: [LIST_MENU_ADD, LIST_MENU_DELETE, LIST_MENU_EDIT]
     },
     {

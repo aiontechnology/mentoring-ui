@@ -18,16 +18,16 @@ import {ComponentType} from '@angular/cdk/portal';
 import {InjectionToken, INJECTOR, Injector} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
-import {SNACKBAR_MANAGER} from '../app.module';
-import {Command} from '../implementation/command/command';
-import {DialogCommand} from '../implementation/command/dialog-command';
-import {DialogManager} from '../implementation/command/dialog-manager';
-import {SnackbarManager} from '../implementation/command/snackbar-manager';
-import {SingleItemCache} from '../implementation/data/single-item-cache';
-import {ConfimationDialogComponent} from '../modules/shared/components/confimation-dialog/confimation-dialog.component';
-import {titleCase} from '../shared/title-case';
+import {SNACKBAR_MANAGER} from '../../../app.module';
+import {Command} from '../../../implementation/command/command';
+import {DialogCommand} from '../../../implementation/command/dialog-command';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
+import {SnackbarManager} from '../../../implementation/command/snackbar-manager';
+import {SingleItemCache} from '../../../implementation/data/single-item-cache';
+import {titleCase} from '../../../shared/title-case';
+import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 
-export function programAdminProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
+export function programAdminMenuProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
   injectionToken: InjectionToken<Command[]>, group: string, name: string, routeAfterDelete: string[],
   componentType: ComponentType<COMPONENT_TYPE>, singleItemCacheToken: InjectionToken<SingleItemCache<MODEL_TYPE>>) {
 
@@ -91,47 +91,53 @@ export function programAdminProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
     // Menu definitions for program admin detail
     {
       provide: MENU_ADD,
-      useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) => {
-        const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
-        return DialogCommand<MODEL_TYPE>
-          .builder(`Add ${titleCase(name)}`, group, dialogManager, () => singleItemCache.item === undefined)
-          .withSnackbarMessage(`${titleCase(name)} Added`)
-          .build()
-      },
+      useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) =>
+        (isAdminOnly: boolean) => {
+          const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
+          return DialogCommand<MODEL_TYPE>
+            .builder(`Add ${titleCase(name)}`, group, dialogManager, () => singleItemCache.item === undefined)
+            .withSnackbarMessage(`${titleCase(name)} Added`)
+            .build()
+        },
       deps: [INJECTOR, DIALOG_MANAGER_EDIT]
     },
     {
       provide: MENU_DELETE,
-      useFactory: (injector: Injector, dialogManager: DialogManager<ConfimationDialogComponent>) => {
-        const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
-        return DialogCommand<MODEL_TYPE>
-          .builder(`Remove ${titleCase(name)}`, group, dialogManager, () => singleItemCache.item !== undefined)
-          .withSnackbarMessage(`${titleCase(name)} Removed`)
-          .withDataSupplier(() => ({
-            model: singleItemCache.item,
-            singularName: name,
-            pluralName: `${name}s`,
-            countSupplier: () => 1
-          }))
-          .build()
-      },
+      useFactory: (injector: Injector, dialogManager: DialogManager<ConfimationDialogComponent>) =>
+        (isAdminOnly: boolean) => {
+          const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
+          return DialogCommand<MODEL_TYPE>
+            .builder(`Remove ${titleCase(name)}`, group, dialogManager, () => singleItemCache.item !== undefined)
+            .withSnackbarMessage(`${titleCase(name)} Removed`)
+            .withDataSupplier(() => ({
+              model: singleItemCache.item,
+              singularName: name,
+              pluralName: `${name}s`,
+              countSupplier: () => 1
+            }))
+            .build()
+        },
       deps: [INJECTOR, DIALOG_MANAGER_DELETE]
     },
     {
       provide: MENU_EDIT,
-      useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) => {
-        const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
-        return DialogCommand<MODEL_TYPE>
-          .builder(`Edit ${titleCase(name)}`, group, dialogManager, () => singleItemCache.item !== undefined)
-          .withSnackbarMessage(`${titleCase(name)} Edited`)
-          .withDataSupplier(() => ({model: singleItemCache.item}))
-          .build()
-      },
+      useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) =>
+        (isAdminOnly: boolean) => {
+          const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
+          return DialogCommand<MODEL_TYPE>
+            .builder(`Edit ${titleCase(name)}`, group, dialogManager, () => singleItemCache.item !== undefined)
+            .withSnackbarMessage(`${titleCase(name)} Edited`)
+            .withDataSupplier(() => ({model: singleItemCache.item}))
+            .build()
+        },
       deps: [INJECTOR, DIALOG_MANAGER_EDIT]
     },
     {
       provide: injectionToken,
-      useFactory: (addCommand: Command, deleteCommand: Command, editCommand: Command) => [addCommand, editCommand, deleteCommand],
+      useFactory: (addCommand: (isAdminOnly: boolean) => Command,
+                   deleteCommand: (isAdminOnly: boolean) => Command,
+                   editCommand: (isAdminOnly: boolean) => Command) =>
+        [{name: 'add', factory: addCommand}, {name: 'delete', factory: editCommand}, {name: 'edit', factory: deleteCommand}],
       deps: [MENU_ADD, MENU_DELETE, MENU_EDIT]
     },
   ]

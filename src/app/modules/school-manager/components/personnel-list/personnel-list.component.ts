@@ -15,7 +15,7 @@
  */
 
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {AfterViewInit, Component, Inject, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute} from '@angular/router';
@@ -23,8 +23,8 @@ import {MenuStateService} from 'src/app/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {PERSONNEL_URI_SUPPLIER} from '../../../shared/shared.module';
 import {Personnel} from '../../models/personnel/personnel';
+import {PERSONNEL_URI_SUPPLIER} from '../../providers/personnel-providers-factory';
 import {PERSONNEL_LIST_MENU, PERSONNEL_TABLE_CACHE} from '../../school-manager.module';
 
 @Component({
@@ -37,19 +37,18 @@ export class PersonnelListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  @Input() schoolId: string;
-
   constructor(@Inject(PERSONNEL_TABLE_CACHE) public tableCache: TableCache<Personnel>,
               private menuState: MenuStateService,
               private route: ActivatedRoute,
               private breakpointObserver: BreakpointObserver,
               @Inject(PERSONNEL_URI_SUPPLIER) private personnelUriSupplier: UriSupplier,
-              @Inject(PERSONNEL_LIST_MENU) private menuCommands: Command[]) {
+              @Inject(PERSONNEL_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
   }
 
   ngOnInit(): void {
-    this.menuState
-      .add(this.menuCommands)
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(false))
+    })
 
     this.route.paramMap
       .subscribe(params => {
@@ -72,16 +71,5 @@ export class PersonnelListComponent implements OnInit, AfterViewInit {
     } else {
       return ['select', 'type', 'firstName', 'lastName', 'email', 'cellPhone'];
     }
-  }
-
-  /**
-   * Action taken after a dialog is closed: Move
-   * to page that displayes the new item.
-   * @param newItem Added/edited item that helps the
-   * cache service determine which page to jump to.
-   */
-  private jumpToNewItem(newItem: Personnel): void {
-    this.tableCache.clearSelection();
-    this.tableCache.jumpToItem(newItem);
   }
 }

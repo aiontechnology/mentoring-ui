@@ -19,6 +19,7 @@ import {MenuStateService} from 'src/app/services/menu-state.service';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {UserSessionService} from 'src/app/services/user-session.service';
+import {BOOK_GROUP, GAME_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP} from '../../resource-manager.module';
 
 @Component({
   selector: 'ms-resource-list',
@@ -36,6 +37,7 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.menuState.clear()
     this.fragmentSubscription$ = this.route.fragment.subscribe(fragment => {
       if (fragment === 'books') {
         this.tabGroupIndex = 0;
@@ -56,20 +58,38 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onIndexChange(index: number): void {
     this.menuState.makeAllVisible();
-    switch (index) {
-      case 0:
-        this.menuState.makeGroupInvisible('game');
-        this.menuState.makeGroupInvisible('school-game');
-        break;
-      case 1:
-        this.menuState.makeGroupInvisible('book');
-        this.menuState.makeGroupInvisible('school-book');
-        break;
-      case 2:
-      case 3:
-        this.menuState.makeGroupInvisible('school-book');
-        this.menuState.makeGroupInvisible('school-game');
-        break;
+    if(this.userSession.isProgAdmin) {
+      switch (index) {
+        case 0:
+          this.menuState.makeGroupInvisible(BOOK_GROUP);
+          this.menuState.makeGroupInvisible(GAME_GROUP);
+          this.menuState.makeGroupInvisible(SCHOOL_GAME_GROUP);
+          break;
+        case 1:
+          this.menuState.makeGroupInvisible(BOOK_GROUP);
+          this.menuState.makeGroupInvisible(GAME_GROUP);
+          this.menuState.makeGroupInvisible(SCHOOL_BOOK_GROUP);
+          break;
+        case 2:
+          this.menuState.makeGroupInvisible(GAME_GROUP);
+          this.menuState.makeGroupInvisible(SCHOOL_BOOK_GROUP);
+          this.menuState.makeGroupInvisible(SCHOOL_GAME_GROUP);
+          break;
+        case 3:
+          this.menuState.makeGroupInvisible(BOOK_GROUP);
+          this.menuState.makeGroupInvisible(SCHOOL_BOOK_GROUP);
+          this.menuState.makeGroupInvisible(SCHOOL_GAME_GROUP);
+          break;
+      }
+    } else {
+      switch (index) {
+        case 0:
+          this.menuState.makeGroupInvisible(GAME_GROUP);
+          break;
+        case 1:
+          this.menuState.makeGroupInvisible(BOOK_GROUP);
+          break;
+      }
     }
   }
 
