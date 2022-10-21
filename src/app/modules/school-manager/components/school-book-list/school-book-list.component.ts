@@ -19,12 +19,13 @@ import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute} from '@angular/router';
-import {MenuStateService} from 'src/app/services/menu-state.service';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {SCHOOL_ID} from '../../../../implementation/route/route-constants';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../../providers/global-school-book-providers-factory';
-import {Book} from '../../../shared/models/book/book';
+import {Book} from '../../../../implementation/models/book/book';
 import {SCHOOL_BOOK_TABLE_CACHE} from '../../providers/school-book-providers-factory';
 import {SCHOOL_BOOK_LIST_MENU} from '../../school-manager.module';
 
@@ -53,7 +54,7 @@ export class SchoolBookListComponent implements OnInit, AfterViewInit {
 
     this.route.paramMap
       .subscribe(params => {
-        this.schoolBookUriSupplier.withSubstitution('schoolId', params.get('id'))
+        this.schoolBookUriSupplier.withSubstitution('schoolId', params.get(SCHOOL_ID))
         this.tableCache.loadData()
           .then(() => {
             this.tableCache.clearSelection()

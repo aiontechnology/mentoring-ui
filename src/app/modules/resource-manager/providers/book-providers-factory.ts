@@ -15,28 +15,21 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {environment} from '../../../../environments/environment';
 import {Command} from '../../../implementation/command/command';
-import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
-import {Repository} from '../../../implementation/data/repository';
 import {SingleItemCache} from '../../../implementation/data/single-item-cache';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
+import {BOOK_DATA_SOURCE} from '../../../providers/global-book-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
-import {Book} from '../../shared/models/book/book';
-import {School} from '../../shared/models/school/school';
+import {Book} from '../../../implementation/models/book/book';
+import {School} from '../../../implementation/models/school/school';
 import {BookDialogComponent} from '../components/book-dialog/book-dialog.component';
-import {BookRepository} from '../repositories/book-repository';
 import {BOOK_GROUP} from '../resource-manager.module';
 
 export const BOOK_DETAIL_MENU = new InjectionToken<Command[]>('book-detail-menu');
 export const BOOK_LIST_MENU = new InjectionToken<Command[]>('book-list-menu');
 export const BOOK_SINGLE_CACHE = new InjectionToken<SingleItemCache<Book>>('book-single-cache')
-export const BOOK_DATA_SOURCE = new InjectionToken<DataSource<Book>>('book-data-source');
-export const BOOK_CACHE = new InjectionToken<Cache<Book>>('book-cache');
-export const BOOK_URI_SUPPLIER = new InjectionToken<UriSupplier>('book-uri-supplier');
 export const BOOK_TABLE_CACHE = new InjectionToken<TableCache<School>>('book-table-cache')
 
 export function bookProvidersFactory() {
@@ -54,20 +47,6 @@ export function bookProvidersFactory() {
       provide: BOOK_SINGLE_CACHE,
       useFactory: (dataSource: DataSource<Book>) => new SingleItemCache<Book>(dataSource),
       deps: [BOOK_DATA_SOURCE]
-    },
-    {
-      provide: BOOK_URI_SUPPLIER,
-      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/books`)
-    },
-    BookRepository,
-    {
-      provide: BOOK_CACHE,
-      useFactory: () => new Cache<Book>()
-    },
-    {
-      provide: BOOK_DATA_SOURCE,
-      useFactory: (repository: Repository<Book>, cache: Cache<Book>) => new DataSource<Book>(repository, cache),
-      deps: [BookRepository, BOOK_CACHE]
     },
   ]
 }

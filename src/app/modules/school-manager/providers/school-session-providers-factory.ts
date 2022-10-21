@@ -20,8 +20,8 @@ import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {Repository} from '../../../implementation/data/repository';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {SchoolSession} from '../../shared/models/school/schoolsession';
-import {SchoolSessionRepository} from '../../shared/repositories/school-session-repository';
+import {SchoolSession} from '../../../implementation/models/school/schoolsession';
+import {SchoolSessionRepository} from '../../../implementation/repositories/school-session-repository';
 
 export const SCHOOL_SESSION_DATA_SOURCE = new InjectionToken<DataSource<SchoolSession>>('school-session-data-source');
 export const SCHOOL_SESSION_CACHE = new InjectionToken<Cache<SchoolSession>>('school-session-cache');

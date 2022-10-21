@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {environment} from 'src/environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {Observable, ReplaySubject, Subject} from 'rxjs';
-import {InterestOutbound} from '../../models/meta-data/interests/interest-outbound';
+import {InterestOutbound} from '../../../../implementation/models/meta-data/interests/interest-outbound';
 import {map} from 'rxjs/operators';
 
 @Injectable()

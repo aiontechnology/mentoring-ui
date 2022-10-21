@@ -20,8 +20,8 @@ import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
 import {UriSupplier} from '../implementation/data/uri-supplier';
-import {SchoolBookRepository} from '../repositories/school-book-repository';
-import {Book} from '../modules/shared/models/book/book';
+import {SchoolBookRepository} from '../implementation/repositories/school-book-repository';
+import {Book} from '../implementation/models/book/book';
 
 export const SCHOOL_BOOK_DATA_SOURCE = new InjectionToken<DataSource<Book>>('school-book-data-source');
 export const SCHOOL_BOOK_CACHE = new InjectionToken<Cache<Book>>('school-book-cache');

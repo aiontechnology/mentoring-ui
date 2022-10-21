@@ -30,12 +30,12 @@ import {ReceiveTokenComponent} from './components/receive-token/receive-token.co
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {ToolbarComponent} from './components/toolbar/toolbar.component';
 import {SnackbarManager} from './implementation/command/snackbar-manager';
-import {CanActivateApp} from './services/can-activate-app';
-import {CanActivateSysAdmin} from './services/can-activate-sys-admin';
-import {HttpErrorInterceptorService} from './services/http-error-interceptor.service';
-import {TokenInterceptorService} from './services/token-interceptor.service';
-import {CustomRouteReuseStrategy} from './shared/custom-route-reuse-strategy';
-import {MaterialModule} from './shared/material.module';
+import {CanActivateApp} from './implementation/services/can-activate-app';
+import {CanActivateSysAdmin} from './implementation/services/can-activate-sys-admin';
+import {HttpErrorInterceptorService} from './implementation/services/http-error-interceptor.service';
+import {TokenInterceptorService} from './implementation/services/token-interceptor.service';
+import {CustomRouteReuseStrategy} from './implementation/route/custom-route-reuse-strategy';
+import {MaterialModule} from './implementation/shared/material.module';
 
 const loginProvider = new InjectionToken('loginRedirectResolver');
 const logoutProvider = new InjectionToken('logoutRedirectResolver');
@@ -133,10 +133,10 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
       useClass: HttpErrorInterceptorService,
       multi: true
     },
-    {
-      provide: RouteReuseStrategy,
-      useClass: CustomRouteReuseStrategy
-    },
+    // {
+    //   provide: RouteReuseStrategy,
+    //   useClass: CustomRouteReuseStrategy
+    // },
 
     {
       provide: SNACKBAR_MANAGER,

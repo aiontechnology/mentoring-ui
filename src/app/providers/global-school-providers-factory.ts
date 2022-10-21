@@ -15,19 +15,22 @@
  */
 
 import {InjectionToken} from '@angular/core';
+import {ActivatedRoute, ActivatedRouteSnapshot} from '@angular/router';
 import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
 import {SingleItemCache} from '../implementation/data/single-item-cache';
 import {UriSupplier} from '../implementation/data/uri-supplier';
-import {School} from '../modules/shared/models/school/school';
-import {SchoolRepository} from '../repositories/school-repository';
+import {School} from '../implementation/models/school/school';
+import {SchoolRepository} from '../implementation/repositories/school-repository';
+import {SchoolRouteWatcher} from '../implementation/route/school-route-watcher';
 
-export const SCHOOL_DATA_SOURCE = new InjectionToken<DataSource<School>>('school-data-source');
 export const SCHOOL_CACHE = new InjectionToken<Cache<School>>('school-cache');
-export const SCHOOL_URI_SUPPLIER = new InjectionToken<UriSupplier>('school-uri-supplier');
+export const SCHOOL_DATA_SOURCE = new InjectionToken<DataSource<School>>('school-data-source');
 export const SCHOOL_INSTANCE_CACHE = new InjectionToken<SingleItemCache<School>>('school-instance-cache')
+export const SCHOOL_ROUTE_WATCHER = new InjectionToken<SchoolRouteWatcher>('school-route-watcher')
+export const SCHOOL_URI_SUPPLIER = new InjectionToken<UriSupplier>('school-uri-supplier');
 
 export function globalSchoolProvidersFactory() {
   return [
@@ -50,5 +53,11 @@ export function globalSchoolProvidersFactory() {
       useFactory: (dataSource: DataSource<School>) => new SingleItemCache<School>(dataSource),
       deps: [SCHOOL_DATA_SOURCE]
     },
+    {
+      provide: SCHOOL_ROUTE_WATCHER,
+      useFactory: (schoolCache: SingleItemCache<School>) =>
+        new SchoolRouteWatcher(schoolCache),
+      deps: [SCHOOL_INSTANCE_CACHE]
+    }
   ]
 }

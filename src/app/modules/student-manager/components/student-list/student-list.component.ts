@@ -15,15 +15,16 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {UserSessionService} from 'src/app/services/user-session.service';
-import {School} from 'src/app/modules/shared/models/school/school';
+import {UserSessionService} from 'src/app/implementation/services/user-session.service';
+import {School} from 'src/app/implementation/models/school/school';
+import {SCHOOL_ID} from '../../../../implementation/route/route-constants';
 import {SCHOOL_DATA_SOURCE} from '../../../../providers/global-school-providers-factory';
 import {SCHOOL_SESSION_DATA_SOURCE, SCHOOL_SESSION_URI_SUPPLIER} from '../../../school-manager/providers/school-session-providers-factory';
 import {StudentCacheService} from '../../services/student/student-cache.service';
 import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
 import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
 import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
-import {MenuStateService} from 'src/app/services/menu-state.service';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -36,15 +37,15 @@ import {MatPaginator} from '@angular/material/paginator';
 import {Subscription} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {Student} from '../../models/student/student';
-import {SchoolSession} from 'src/app/modules/shared/models/school/schoolsession';
-import {grades} from 'src/app/modules/shared/constants/grades';
+import {SchoolSession} from 'src/app/implementation/models/school/schoolsession';
+import {grades} from 'src/app/implementation/constants/grades';
 import {
   STUDENT_DATA_SOURCE,
   STUDENT_URI_SUPPLIER
 } from '../../../shared/shared.module';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {RouteWatchingService} from '../../../../services/route-watching.service';
+import {RouteWatchingService} from '../../../../implementation/route/route-watching.service';
 
 @Component({
   selector: 'ms-student-list',
@@ -105,7 +106,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
         tap(() => this.schools$ = this.schoolDataSource.allValues())
       )
       .subscribe(params => {
-        const schoolId = params.get(RouteWatchingService.SCHOOL_ID);
+        const schoolId = params.get(SCHOOL_ID);
         this.routeWatcher.school
           .then(school => {
             if (school) {

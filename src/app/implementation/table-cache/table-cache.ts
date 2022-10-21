@@ -28,16 +28,14 @@ export class TableCache<T> extends AbstractRemovableTableCache<T> {
     this.isLoading$ = new BehaviorSubject(true);
   }
 
-  override loadData(): Promise<T[]> {
-    return this.dataSource.allValues()
+  override loadData = (): Promise<T[]> =>
+    this.dataSource.allValues()
       .then(values => {
         this.isLoading$.next(false)
         this.tableDataSource.data = values
         return values
       });
-  }
 
-  protected doRemoveItem(items: T[]): Promise<T[]> {
-    return this.dataSource.removeSet(items);
-  }
+  protected doRemoveItem = (items: T[]): Promise<T[]> =>
+    this.dataSource.removeSet(items);
 }

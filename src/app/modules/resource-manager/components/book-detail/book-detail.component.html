@@ -19,47 +19,47 @@
     <mat-card-title>Book Details</mat-card-title>
   </mat-card-header>
   <mat-card-content class="mat-elevation-z8">
-    <h1>{{ book?.title }}</h1>
+    <h1>{{ bookCache.item?.title }}</h1>
     <table>
       <tr>
         <td>Description</td>
-        <td>{{ book?.description }}</td>
+        <td>{{ bookCache.item?.description }}</td>
       </tr>
       <tr>
         <td>Author</td>
-        <td>{{ book?.author }}</td>
+        <td>{{ bookCache.item?.author }}</td>
       </tr>
       <tr>
         <td>Reading Level</td>
-        <td>{{ resourceGrades[book?.gradeLevel - 1]?.valueView }}</td>
+        <td>{{ resourceGrades[bookCache.item?.gradeLevel - 1]?.valueView }}</td>
       </tr>
       <tr>
         <td>Interests</td>
-        <td>{{ book?.interests.join(', ') }}</td>
+        <td>{{ bookCache.item?.interests.join(', ') }}</td>
       </tr>
       <tr>
         <td>Leadership Traits</td>
-        <td>{{ book?.leadershipTraits.join(', ') }}</td>
+        <td>{{ bookCache.item?.leadershipTraits.join(', ') }}</td>
       </tr>
       <tr>
         <td>Leadership Success Skills</td>
-        <td>{{ book?.leadershipSkills.join(', ') }}</td>
+        <td>{{ bookCache.item?.leadershipSkills.join(', ') }}</td>
       </tr>
       <tr>
         <td>Phonograms</td>
-        <td>{{ book?.phonograms.join(', ') }}</td>
+        <td>{{ bookCache.item?.phonograms.join(', ') }}</td>
       </tr>
       <tr>
         <td>Behaviors</td>
-        <td>{{ book?.behaviors.join(', ') }}</td>
+        <td>{{ bookCache.item?.behaviors.join(', ') }}</td>
       </tr>
       <tr>
         <td>Tag</td>
-        <td>{{ book?.tag | titlecase }}</td>
+        <td>{{ bookCache.item?.tag | titlecase }}</td>
       </tr>
       <tr>
         <td>Location</td>
-        <td>{{ book?.displayLocation }}</td>
+        <td>{{ bookCache.item?.displayLocation }}</td>
       </tr>
     </table>
   </mat-card-content>

@@ -19,7 +19,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {MenuStateService} from '../../../../services/menu-state.service';
+import {MenuStateService} from '../../../../implementation/services/menu-state.service';
 import {InterestCacheService} from '../../services/interests/interest-cache.service';
 
 import {InterestListComponent} from './interest-list.component';

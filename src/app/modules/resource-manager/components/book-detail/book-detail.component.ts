@@ -16,37 +16,31 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
-import {Book} from 'src/app/modules/shared/models/book/book';
-import {MenuStateService} from 'src/app/services/menu-state.service';
-import {NavigationService} from 'src/app/services/navigation.service';
-import {UserSessionService} from 'src/app/services/user-session.service';
+import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
+import {Book} from 'src/app/implementation/models/book/book';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
-import {DataSource} from '../../../../implementation/data/data-source';
+import {AbstractDetailComponent} from '../../../../implementation/component/abstract-detail-component';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
-import {BOOK_DATA_SOURCE, BOOK_DETAIL_MENU, BOOK_SINGLE_CACHE} from '../../providers/book-providers-factory';
+import {BOOK_ID} from '../../../../implementation/route/route-constants';
+import {BOOK_DETAIL_MENU, BOOK_SINGLE_CACHE} from '../../providers/book-providers-factory';
 
 @Component({
   selector: 'ms-book-detail',
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.scss']
 })
-export class BookDetailComponent implements OnInit, OnDestroy {
-  constructor(private route: ActivatedRoute,
-              @Inject(BOOK_DATA_SOURCE) private bookDataSource: DataSource<Book>,
-              private userSession: UserSessionService,
-              private menuState: MenuStateService,
-              private navigation: NavigationService,
-              @Inject(BOOK_SINGLE_CACHE) private singleItemCache: SingleItemCache<Book>,
-              @Inject(BOOK_DETAIL_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
-  }
-
-  get book() {
-    return this.singleItemCache.item;
-  }
-
-  set book(book: Book) {
-    this.singleItemCache.item = book;
+export class BookDetailComponent extends AbstractDetailComponent implements OnInit, OnDestroy {
+  constructor(
+    // for super
+    menuState: MenuStateService,
+    @Inject(BOOK_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    route: ActivatedRoute,
+    // other
+    @Inject(BOOK_SINGLE_CACHE) public bookCache: SingleItemCache<Book>,
+  ) {
+    super(menuState, menuCommands, route)
+    menuState.clear()
   }
 
   get resourceGrades() {
@@ -54,30 +48,23 @@ export class BookDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.menuState.clear()
-    this.menuCommands.forEach(command => {
-      this.menuState.add(command.factory(false))
-    })
-
-    this.navigation.routeParams = ['resourcemanager'];
-    this.navigation.fragment = 'books';
-
-    /* Watch the book UUID. Call event handler when it changes */
-    this.route.paramMap
-      .subscribe(params => this.onIdChange(params.get('id')))
+    this.init()
   }
 
   ngOnDestroy(): void {
-    this.navigation.clearRoute();
-    this.menuState.clear();
+    this.destroy()
   }
 
-  /**
-   * Handle book ID changes.
-   * @param id The ID of the current book.
-   */
-  private onIdChange(id: string): void {
-    this.singleItemCache.fromId(id)
-      .then(item => console.log('item loaded', item))
+  protected doHandleRoute(route: ActivatedRoute) {
+    route.paramMap
+      .subscribe(params => {
+        this.bookCache.fromId(params.get(BOOK_ID));
+      })
+  }
+
+  protected registerMenus(menuState: MenuStateService, menuCommands: { name: string; factory: (isAdminOnly: boolean) => Command }[]) {
+    menuCommands.forEach(command => {
+      menuState.add(command.factory(false))
+    })
   }
 }

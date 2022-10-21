@@ -19,16 +19,12 @@ import {CommonModule} from '@angular/common';
 import {InjectionToken, ModuleWithProviders, NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
-import {MaterialModule} from 'src/app/shared/material.module';
+import {MaterialModule} from 'src/app/implementation/shared/material.module';
 import {environment} from '../../../environments/environment';
 import {Cache} from '../../implementation/data/cache';
 import {DataSource} from '../../implementation/data/data-source';
 import {Repository} from '../../implementation/data/repository';
 import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {Mentor} from '../mentor-manager/models/mentor/mentor';
-import {MentorRepository} from '../mentor-manager/repositories/mentor-repository';
-import {MentorCacheService} from '../mentor-manager/services/mentor/mentor-cache.service';
-import {GameRepository} from '../resource-manager/repositories/game-repository';
 import {Teacher} from '../school-manager/models/teacher/teacher';
 import {Invitation} from '../school-manager/models/workflow/invitation';
 import {StudentRegistration} from '../school-manager/models/workflow/student-registration';
@@ -42,18 +38,11 @@ import {ConfimationDialogComponent} from './components/confimation-dialog/confim
 import {SelectionCountDisplayComponent} from './components/selection-count-display/selection-count-display.component';
 import {OnlyNumberDirective} from './directives/only-number.directive';
 import {PhoneFormatDirective} from './directives/phone-format.directive';
-import {Game} from './models/game/game';
-import {School} from './models/school/school';
-import {InvitationRepository} from './repositories/invitation-repository';
-import {SchoolRepository} from '../../repositories/school-repository';
+import {InvitationRepository} from '../../implementation/repositories/invitation-repository';
 import {MetaDataService} from './services/meta-data/meta-data.service';
 
 export const INVITATION_DATA_SOURCE = new InjectionToken<DataSource<Invitation>>('invitation-data-source');
 export const INVITATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('invitation-uri-supplier');
-
-export const MENTOR_DATA_SOURCE = new InjectionToken<DataSource<Mentor>>('mentor-data-source');
-export const MENTOR_CACHE = new InjectionToken<Cache<Mentor>>('mentor-cache');
-export const MENTOR_URI_SUPPLIER = new InjectionToken<UriSupplier>('mentor-uri-supplier');
 
 export const REGISTRATION_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistrationLookup>>('registration-lookup-data-source');
 export const REGISTRATION_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistration>>('registration-data-source');
@@ -62,10 +51,6 @@ export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('regist
 export const STUDENT_DATA_SOURCE = new InjectionToken<DataSource<Student>>('student-data-source');
 export const STUDENT_CACHE = new InjectionToken<Cache<Student>>('student-cache');
 export const STUDENT_URI_SUPPLIER = new InjectionToken<UriSupplier>('student-uri-supplier');
-
-export const TEACHER_DATA_SOURCE = new InjectionToken<DataSource<Teacher>>('teacher-data-source');
-export const TEACHER_CACHE = new InjectionToken<Cache<Teacher>>('teacher-cache');
-export const TEACHER_URI_SUPPLIER = new InjectionToken<UriSupplier>('teacher-uri-supplier');
 
 @NgModule({
   declarations: [
@@ -105,8 +90,6 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
-        /* Game resources */
-
         /* Invitation resources */
         {
           provide: INVITATION_URI_SUPPLIER,
@@ -120,21 +103,6 @@ export class SharedModule {
         },
 
         /* Mentor resources */
-        {
-          provide: MENTOR_URI_SUPPLIER,
-          useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/mentors`)
-        },
-        MentorRepository,
-        {
-          provide: MENTOR_CACHE,
-          useFactory: () => new Cache<Mentor>()
-        },
-        {
-          provide: MENTOR_DATA_SOURCE,
-          useFactory: (repository: Repository<Mentor>, cache: Cache<Mentor>) => new DataSource<Mentor>(repository, cache),
-          deps: [MentorRepository, MENTOR_CACHE]
-        },
-        MentorCacheService,
 
         /* Registration resources */
         {

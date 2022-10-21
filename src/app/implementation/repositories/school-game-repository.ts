@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {Repository} from '../../../implementation/data/repository';
 import {HttpClient} from '@angular/common/http';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Mentor} from '../models/mentor/mentor';
-import {MENTOR_URI_SUPPLIER} from '../../shared/shared.module';
+import {Inject, Injectable} from '@angular/core';
+import {Repository} from '../data/repository';
+import {UriSupplier} from '../data/uri-supplier';
+import {Game} from '../models/game/game';
+import {SCHOOL_GAME_URI_SUPPLIER} from '../../providers/global-school-game-providers-factory';
 
 @Injectable()
-export class MentorRepository extends Repository<Mentor> {
+export class SchoolGameRepository extends Repository<Game> {
 
   constructor(http: HttpClient,
-              @Inject(MENTOR_URI_SUPPLIER) uriSupplier: UriSupplier) {
+              @Inject(SCHOOL_GAME_URI_SUPPLIER) uriSupplier: UriSupplier) {
     super(http, uriSupplier);
   }
 
-  protected override toModel = (value: any): Mentor => {
-    return new Mentor(value);
+  protected override toModel = (value: any): Game => {
+    return new Game(value);
   }
 
 }

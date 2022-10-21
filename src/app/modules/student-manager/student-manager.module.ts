@@ -25,8 +25,8 @@ import {StudentRepositoryService} from './services/student/student-repository.se
 import {TeacherGradeFilterPipe} from '../shared/pipes/teacher-grade-filter.pipe';
 import {StudentDetailComponent} from './components/student-detail/student-detail.component';
 import {ScrollToDirective} from './directives/scroll-to.directive';
-import {CanActivateSysAdmin} from 'src/app/services/can-activate-sys-admin';
-import {CanActivateProgAdmin} from 'src/app/services/can-activate-prog-admin';
+import {CanActivateSysAdmin} from 'src/app/implementation/services/can-activate-sys-admin';
+import {CanActivateProgAdmin} from 'src/app/implementation/services/can-activate-prog-admin';
 
 const routes: Routes = [
   {

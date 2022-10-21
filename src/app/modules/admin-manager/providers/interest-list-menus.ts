@@ -22,7 +22,7 @@ import {DialogCommand} from '../../../implementation/command/dialog-command';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {SnackbarManager} from '../../../implementation/command/snackbar-manager';
 import {BookDialogComponent} from '../../resource-manager/components/book-dialog/book-dialog.component';
-import {Book} from '../../shared/models/book/book';
+import {Book} from '../../../implementation/models/book/book';
 import {InterestDialogComponent} from '../components/interest-dialog/interest-dialog.component';
 import {InterestInbound} from '../models/interest/interest-inbound';
 import {InterestCacheService} from '../services/interests/interest-cache.service';

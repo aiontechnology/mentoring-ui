@@ -24,7 +24,7 @@ import {DialogCommand} from '../../../implementation/command/dialog-command';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {SnackbarManager} from '../../../implementation/command/snackbar-manager';
 import {SingleItemCache} from '../../../implementation/data/single-item-cache';
-import {titleCase} from '../../../shared/title-case';
+import {titleCase} from '../../../implementation/shared/title-case';
 import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 
 export function programAdminMenuProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(

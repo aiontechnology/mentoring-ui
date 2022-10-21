@@ -17,14 +17,15 @@
 import {AfterViewInit, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {ActivatedRoute} from '@angular/router';
-import {School} from 'src/app/modules/shared/models/school/school';
-import {MenuStateService} from 'src/app/services/menu-state.service';
-import {NavigationService} from 'src/app/services/navigation.service';
-import {UserSessionService} from 'src/app/services/user-session.service';
+import {School} from 'src/app/implementation/models/school/school';
+import {NavigationService} from 'src/app/implementation/route/navigation.service';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
+import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
+import {AbstractDetailComponent} from '../../../../implementation/component/abstract-detail-component';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
-import {RouteWatchingService} from '../../../../services/route-watching.service';
+import {SchoolRouteWatcher} from '../../../../implementation/route/school-route-watcher';
+import {SCHOOL_INSTANCE_CACHE, SCHOOL_ROUTE_WATCHER} from '../../../../providers/global-school-providers-factory';
 import {SCHOOL_DETAIL_MENU} from '../../school-manager.module';
 import {SchoolSessionDialogComponent} from '../school-session-dialog/school-session-dialog.component';
 import {setState} from './menu-state-manager';
@@ -32,73 +33,63 @@ import {setState} from './menu-state-manager';
 @Component({
   selector: 'ms-school-detail',
   templateUrl: './school-detail.component.html',
-  styleUrls: ['./school-detail.component.scss'],
-  providers: [RouteWatchingService]
+  styleUrls: ['./school-detail.component.scss']
 })
-export class SchoolDetailComponent implements OnInit, AfterViewInit, OnDestroy {
-  constructor(public userSession: UserSessionService,
-              private dialog: MatDialog,
-              private menuState: MenuStateService,
-              private route: ActivatedRoute,
-              private routeWatcher: RouteWatchingService,
-              private navigation: NavigationService,
-              @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
-              @Inject(SCHOOL_DETAIL_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
-  }
-
-  get school() {
-    return this.schoolCache.item;
-  }
-
-  set school(school: School) {
-    this.schoolCache.item = school;
+export class SchoolDetailComponent extends AbstractDetailComponent implements OnInit, OnDestroy, AfterViewInit {
+  constructor(
+    // public
+    public userSession: UserSessionService,
+    // for super
+    menuState: MenuStateService,
+    @Inject(SCHOOL_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    route: ActivatedRoute,
+    @Inject(SCHOOL_ROUTE_WATCHER) schoolRouteWatcher: SchoolRouteWatcher,
+    // other
+    private dialog: MatDialog,
+    private navigation: NavigationService,
+    @Inject(SCHOOL_INSTANCE_CACHE) public schoolCache: SingleItemCache<School>,
+  ) {
+    super(menuState, menuCommands, route, schoolRouteWatcher)
   }
 
   ngOnInit(): void {
-    this.menuState.clear()
-    this.menuCommands.forEach(command => {
-      switch (command.name) {
-        case 'delete':
-          this.menuState.add(command.factory(true))
-          break
-        default:
-          this.menuState.add(command.factory(false))
-          break;
-      }
-    })
-
-    this.route.paramMap
-      .subscribe(params => this.onIdChange(params.get('id')))
+    this.init()
   }
 
   ngAfterViewInit(): void {
-    this.onIndexChange(0);
+    this.onTabChange(0);
   }
 
   ngOnDestroy(): void {
+    this.destroy()
     this.navigation.clearRoute();
-    this.menuState.clear();
-  }
-
-  onIdChange(id: string): void {
-    this.schoolCache.fromId(id)
-      .then(item => console.log('item loaded', item))
-  }
-
-  onIndexChange(index: number): void {
-    setState(index, this.menuState, this.userSession);
   }
 
   createNewSession(): void {
     const that = this;
-    this.routeWatcher.school
-      .then((s: School) => {
-        const dialogRef = this.dialog.open(SchoolSessionDialogComponent, {
-          width: '700px',
-          disableClose: true,
-          data: {schoolId: that.routeWatcher.schoolId}
-        }).afterClosed().subscribe(schoolSession => s.currentSession = schoolSession);
-      });
+    const school = this.schoolCache.item
+    const dialogRef = this.dialog.open(SchoolSessionDialogComponent, {
+      width: '700px',
+      disableClose: true,
+      data: {schoolId: that.schoolCache.item.id}
+    }).afterClosed().subscribe(schoolSession => school.currentSession = schoolSession);
+  }
+
+  protected override doTabChange(index: number, menuState: MenuStateService) {
+    setState(index, menuState, this.userSession);
+  }
+
+  protected registerMenus(menuState: MenuStateService, menuCommands: { name: string; factory: (isAdminOnly: boolean) => Command }[]) {
+    menuCommands.forEach(command => {
+      switch (command.name) {
+        case 'delete':
+          menuState.add(command.factory(true))
+          break
+        default:
+          menuState.add(command.factory(false))
+          break;
+      }
+    })
   }
 
 }

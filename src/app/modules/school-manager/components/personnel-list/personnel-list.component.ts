@@ -19,9 +19,10 @@ import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute} from '@angular/router';
-import {MenuStateService} from 'src/app/services/menu-state.service';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {SCHOOL_ID} from '../../../../implementation/route/route-constants';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {Personnel} from '../../models/personnel/personnel';
 import {PERSONNEL_URI_SUPPLIER} from '../../providers/personnel-providers-factory';
@@ -52,7 +53,7 @@ export class PersonnelListComponent implements OnInit, AfterViewInit {
 
     this.route.paramMap
       .subscribe(params => {
-        this.personnelUriSupplier.withSubstitution('schoolId', params.get('id'))
+        this.personnelUriSupplier.withSubstitution('schoolId', params.get(SCHOOL_ID))
         this.tableCache.loadData()
           .then(() => {
             this.tableCache.clearSelection();

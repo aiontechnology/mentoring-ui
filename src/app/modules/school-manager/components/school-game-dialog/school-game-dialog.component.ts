@@ -17,11 +17,11 @@
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Game} from 'src/app/modules/shared/models/game/game';
+import {Game} from 'src/app/implementation/models/game/game';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {GAME_DATA_SOURCE} from '../../../../providers/global-game-providers-factory';
 import {SCHOOL_GAME_DATA_SOURCE, SCHOOL_GAME_TABLE_CACHE} from '../../../../providers/global-school-game-providers-factory';
-import {GAME_DATA_SOURCE} from '../../../resource-manager/providers/game-providers-factory';
 import {DropListData} from '../../../shared/components/school-resource/drop-list-data';
 
 @Component({

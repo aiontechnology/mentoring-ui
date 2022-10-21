@@ -15,10 +15,10 @@
  */
 
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {MenuStateService} from 'src/app/services/menu-state.service';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {UserSessionService} from 'src/app/services/user-session.service';
+import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {BOOK_GROUP, GAME_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP} from '../../resource-manager.module';
 
 @Component({

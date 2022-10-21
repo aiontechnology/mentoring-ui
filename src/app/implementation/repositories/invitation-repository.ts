@@ -15,22 +15,22 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {Repository} from '../implementation/data/repository';
+import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
-import {SCHOOL_URI_SUPPLIER} from '../providers/global-school-providers-factory';
-import {School} from '../modules/shared/models/school/school';
-import {UriSupplier} from '../implementation/data/uri-supplier';
+import {UriSupplier} from '../data/uri-supplier';
+import {Invitation} from '../../modules/school-manager/models/workflow/invitation';
+import {INVITATION_URI_SUPPLIER} from '../../modules/shared/shared.module';
 
 @Injectable()
-export class SchoolRepository extends Repository<School> {
+export class InvitationRepository extends Repository<Invitation> {
 
   constructor(http: HttpClient,
-              @Inject(SCHOOL_URI_SUPPLIER) uriSupplier: UriSupplier) {
+              @Inject(INVITATION_URI_SUPPLIER) uriSupplier: UriSupplier) {
     super(http, uriSupplier);
   }
 
-  protected override toModel = (value: any): School => {
-    return new School(value);
+  protected override toModel = (value: any): Invitation => {
+    return Invitation.of(value);
   }
 
 }

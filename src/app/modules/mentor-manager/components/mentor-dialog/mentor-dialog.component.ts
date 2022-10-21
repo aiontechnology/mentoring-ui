@@ -15,12 +15,16 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {Mentor} from '../../models/mentor/mentor';
+import {FormBuilder, FormGroup, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {personLocations} from 'src/app/modules/shared/constants/locations';
+import {personLocations} from 'src/app/implementation/constants/locations';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {MENTOR_DATA_SOURCE} from '../../../shared/shared.module';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
+import {School} from '../../../../implementation/models/school/school';
+import {Mentor} from '../../models/mentor/mentor';
 
 @Component({
   selector: 'ms-mentor-dialog',
@@ -29,22 +33,24 @@ import {MENTOR_DATA_SOURCE} from '../../../shared/shared.module';
 })
 export class MentorDialogComponent implements OnInit {
 
-  model: UntypedFormGroup;
+  model: FormGroup;
   isUpdate = false;
 
   schoolId: string;
   locations: { [key: string]: string };
 
-  constructor(@Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
-              private dialogRef: MatDialogRef<MentorDialogComponent>,
-              private formBuilder: UntypedFormBuilder,
+  constructor(private dialogRef: MatDialogRef<MentorDialogComponent>,
+              private formBuilder: FormBuilder,
+              @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
+              @Inject(MENTOR_INSTANCE_CACHE) private mentorCache: SingleItemCache<Mentor>,
+              @Inject(MENTOR_URI_SUPPLIER) private mentorUriSupplier: UriSupplier,
+              @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
               @Inject(MAT_DIALOG_DATA) private data: any) {
   }
 
   ngOnInit(): void {
     this.isUpdate = this.determineUpdate(this.data);
     this.model = this.createModel(this.formBuilder, this.data?.model);
-    this.schoolId = this.data?.schoolId;
     this.locations = personLocations;
   }
 
@@ -56,6 +62,7 @@ export class MentorDialogComponent implements OnInit {
       newMentor.links = this.model.value.mentor.links;
       value = this.mentorDataSource.update(newMentor);
     } else {
+      this.mentorUriSupplier.withSubstitution('schoolId', this.schoolCache.item.id)
       value = this.mentorDataSource.add(newMentor);
     }
 
@@ -74,10 +81,10 @@ export class MentorDialogComponent implements OnInit {
   }
 
   private determineUpdate(formData: any): boolean {
-    return formData.model !== undefined && formData.model !== null;
+    return formData !== undefined && formData !== null;
   }
 
-  private createModel(formBuilder: UntypedFormBuilder, mentor: Mentor): UntypedFormGroup {
+  private createModel(formBuilder: FormBuilder, mentor: Mentor): FormGroup {
     const formGroup: UntypedFormGroup = formBuilder.group({
       mentor,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],

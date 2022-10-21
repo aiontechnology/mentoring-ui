@@ -19,7 +19,7 @@ import {FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
-import {School} from '../../../shared/models/school/school';
+import {School} from '../../../../implementation/models/school/school';
 import {Personnel} from '../../models/personnel/personnel';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';

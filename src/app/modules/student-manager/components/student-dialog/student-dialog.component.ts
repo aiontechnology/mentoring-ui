@@ -14,35 +14,31 @@
  * limitations under the License.
  */
 
+import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {Component, Inject, OnInit} from '@angular/core';
 import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators} from '@angular/forms';
-import {Grade} from 'src/app/modules/shared/types/grade';
-import {grades} from 'src/app/modules/shared/constants/grades';
-import {Student} from '../../models/student/student';
-import {StudentInbound} from '../../models/student-inbound/student-inbound';
-import {StudentOutbound} from '../../models/student-outbound/student-outbound';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {Teacher} from 'src/app/modules/school-manager/models/teacher/teacher';
-import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import {Mentor} from 'src/app/modules/mentor-manager/models/mentor/mentor';
-import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
-import {Observable} from 'rxjs';
-import {personLocations} from 'src/app/modules/shared/constants/locations';
-import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
-import {TeacherDialogComponent} from 'src/app/modules/school-manager/components/teacher-dialog/teacher-dialog.component';
-import {MentorDialogComponent} from 'src/app/modules/mentor-manager/components/mentor-dialog/mentor-dialog.component';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {Observable} from 'rxjs';
+import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
+import {grades} from 'src/app/implementation/constants/grades';
+import {personLocations} from 'src/app/implementation/constants/locations';
+import {Grade} from 'src/app/implementation/types/grade';
+import {MentorDialogComponent} from 'src/app/modules/mentor-manager/components/mentor-dialog/mentor-dialog.component';
+import {Mentor} from 'src/app/modules/mentor-manager/models/mentor/mentor';
+import {TeacherDialogComponent} from 'src/app/modules/school-manager/components/teacher-dialog/teacher-dialog.component';
+import {Teacher} from 'src/app/modules/school-manager/models/teacher/teacher';
 import {LinkService} from 'src/app/modules/shared/services/link-service/link.service';
+import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {
-  MENTOR_DATA_SOURCE,
-  MENTOR_URI_SUPPLIER,
-  STUDENT_DATA_SOURCE,
-  TEACHER_DATA_SOURCE,
-  TEACHER_URI_SUPPLIER
-} from '../../../shared/shared.module';
-import {RouteWatchingService} from '../../../../services/route-watching.service';
+import {RouteWatchingService} from '../../../../implementation/route/route-watching.service';
+import {MENTOR_DATA_SOURCE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
+import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../school-manager/providers/teacher-providers-factory';
+import {STUDENT_DATA_SOURCE,} from '../../../shared/shared.module';
+import {StudentInbound} from '../../models/student-inbound/student-inbound';
+import {StudentOutbound} from '../../models/student-outbound/student-outbound';
+import {Student} from '../../models/student/student';
 
 @Component({
   selector: 'ms-student-dialog',

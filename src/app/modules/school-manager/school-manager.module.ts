@@ -16,14 +16,17 @@
 
 import {InjectionToken, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {CanActivateSysAdmin} from 'src/app/services/can-activate-sys-admin';
+import {CanActivateSysAdmin} from 'src/app/implementation/services/can-activate-sys-admin';
 import {Command} from '../../implementation/command/command';
 import {SingleItemCache} from '../../implementation/data/single-item-cache';
+import {School} from '../../implementation/models/school/school';
+import {SCHOOL_ID} from '../../implementation/route/route-constants';
 import {TableCache} from '../../implementation/table-cache/table-cache';
+import {globalBookProvidersFactory} from '../../providers/global-book-providers-factory';
+import {globalGameProvidersFactory} from '../../providers/global-game-providers-factory';
 import {globalSchoolBookProvidersFactory} from '../../providers/global-school-book-providers-factory';
 import {globalSchoolGameProvidersFactory} from '../../providers/global-school-game-providers-factory';
 import {globalSchoolProvidersFactory} from '../../providers/global-school-providers-factory';
-import {School} from '../shared/models/school/school';
 import {GradesFormatPipe} from '../shared/pipes/grades-format.pipe';
 import {SharedModule} from '../shared/shared.module';
 import {InviteStudentComponent} from './components/invite-student/invite-student.component';
@@ -61,7 +64,7 @@ const routes: Routes = [
     canActivate: [CanActivateSysAdmin]
   },
   {
-    path: 'schools/:id', component: SchoolDetailComponent
+    path: `schools/:${SCHOOL_ID}`, component: SchoolDetailComponent
   }
 ];
 
@@ -93,6 +96,7 @@ export const PROGRAM_ADMIN_INSTANCE_CACHE = new InjectionToken<SingleItemCache<P
 @NgModule({
   declarations: [
     GradesFormatPipe,
+    InviteStudentComponent,
     PersonnelListComponent,
     ProgramAdminDialogComponent,
     SchoolBookDialogComponent,
@@ -108,7 +112,6 @@ export const PROGRAM_ADMIN_INSTANCE_CACHE = new InjectionToken<SingleItemCache<P
     PersonnelDialogComponent,
     ProgramAdminDetailComponent,
     SchoolSessionDialogComponent,
-    InviteStudentComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -116,6 +119,8 @@ export const PROGRAM_ADMIN_INSTANCE_CACHE = new InjectionToken<SingleItemCache<P
   ],
   providers: [
     ...globalSchoolProvidersFactory(),
+    ...globalBookProvidersFactory(),
+    ...globalGameProvidersFactory(),
     ...globalSchoolBookProvidersFactory(),
     ...globalSchoolGameProvidersFactory(),
     ...schoolProvidersFactory(),

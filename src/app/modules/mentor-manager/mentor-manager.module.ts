@@ -14,39 +14,59 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {RouterModule, RouterOutlet, Routes} from '@angular/router';
-import {MentorManagerComponent} from './mentor-manager.component';
-import {MentorListComponent} from './components/mentor-list/mentor-list.component';
+import {InjectionToken, NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {CanActivateProgAdmin} from 'src/app/implementation/services/can-activate-prog-admin';
+import {CanActivateSysAdmin} from 'src/app/implementation/services/can-activate-sys-admin';
+import {Command} from '../../implementation/command/command';
+import {SCHOOL_ID} from '../../implementation/route/route-constants';
+import {TableCache} from '../../implementation/table-cache/table-cache';
+import {globalMentorProvidersFactory} from '../../providers/global-mentor-providers-factory';
+import {globalSchoolProvidersFactory} from '../../providers/global-school-providers-factory';
+import {School} from '../../implementation/models/school/school';
 import {SharedModule} from '../shared/shared.module';
-import {MentorDialogComponent} from './components/mentor-dialog/mentor-dialog.component';
 import {MentorDetailComponent} from './components/mentor-detail/mentor-detail.component';
-import {CanActivateSysAdmin} from 'src/app/services/can-activate-sys-admin';
-import {CanActivateProgAdmin} from 'src/app/services/can-activate-prog-admin';
-import {RouteWatchingService} from '../../services/route-watching.service';
+import {MentorDialogComponent} from './components/mentor-dialog/mentor-dialog.component';
+import {MentorListComponent} from './components/mentor-list/mentor-list.component';
+import {MentorManagerComponent} from './mentor-manager.component';
+import {mentorProvidersFactory} from './providers/mentor-providers-factory';
 
 const routes: Routes = [
   {
     path: '', component: MentorManagerComponent, children: [
       {path: '', component: MentorListComponent},
-      {path: 'schools/:schoolId', component: MentorListComponent, canActivate: [CanActivateSysAdmin]},
-      {path: 'schools/:schoolId/mentors/:mentorId', component: MentorDetailComponent, canActivate: [CanActivateSysAdmin]},
+      {path: `schools/:${SCHOOL_ID}`, component: MentorListComponent, canActivate: [CanActivateSysAdmin]},
+      {path: `schools/:${SCHOOL_ID}/mentors/:mentorId`, component: MentorDetailComponent, canActivate: [CanActivateSysAdmin]},
       {path: 'mentors/:mentorId', component: MentorDetailComponent, canActivate: [CanActivateProgAdmin]},
     ]
   }
 ];
 
+// Menus
+export const MENTOR_DETAIL_MENU = new InjectionToken<Command[]>('mentor-detail-menu')
+export const MENTOR_LIST_MENU = new InjectionToken<Command[]>('mentor-list-menu')
+
+// Groups
+export const MENTOR_GROUP = 'mentor'
+
+// Services
+export const MENTOR_TABLE_CACHE = new InjectionToken<TableCache<School>>('mentor-table-cache')
+
 @NgModule({
   declarations: [
-    MentorManagerComponent,
-    MentorListComponent,
-    MentorDialogComponent,
     MentorDetailComponent,
+    MentorDialogComponent,
+    MentorListComponent,
+    MentorManagerComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
-    RouterOutlet,
     SharedModule.forRoot(),
+  ],
+  providers: [
+    ...globalSchoolProvidersFactory(),
+    ...globalMentorProvidersFactory(),
+    ...mentorProvidersFactory(),
   ]
 })
 export class MentorManagerModule {

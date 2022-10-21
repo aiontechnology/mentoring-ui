@@ -16,7 +16,7 @@
 
 import {HttpClient} from '@angular/common/http';
 import {forkJoin, Observable, Subject} from 'rxjs';
-import {log} from 'src/app/shared/logging-decorator';
+import {log} from 'src/app/implementation/shared/logging-decorator';
 import {environment} from 'src/environments/environment';
 import {tap} from 'rxjs/operators';
 import {LinkService} from 'src/app/modules/shared/services/link-service/link.service';

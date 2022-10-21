@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<div class="spinner-container" *ngIf="isLoading(mentorCacheService.isLoading | async)">
+<div class="spinner-container" *ngIf="isLoading(tableCache.isLoading$ | async)">
   <mat-progress-spinner color="primary" mode="indeterminate" [diameter]="100" [strokeWidth]="10"></mat-progress-spinner>
 </div>
 
@@ -25,8 +25,9 @@
       <div *ngIf="userSession.isSysAdmin">
         <mat-form-field>
           <mat-label>Select a school</mat-label>
-          <mat-select [(ngModel)]="selectedSchool">
-            <mat-option *ngFor="let school of (schools$ | async)" [value]="school" [routerLink]="['/mentormanager', 'schools', school.id]">
+          <mat-select [(ngModel)]="schoolCache.item">
+            <mat-option *ngFor="let school of (schools$ | async)" [value]="school"
+                        [routerLink]="['/mentormanager', 'schools', school.id]">
               {{ school.name }}
             </mat-option>
           </mat-select>
@@ -34,29 +35,30 @@
         <div class="spacer"></div>
       </div>
       <mat-form-field *ngIf="isSchoolSelected">
-        <input matInput [(ngModel)]="mentorCacheService.filterBinding" (keyup)="mentorCacheService.applyFilter($event.target.value)" placeholder="Filter"/>
-        <button mat-button *ngIf="mentorCacheService.filter" matSuffix mat-icon-button (click)="mentorCacheService.clearFilter()">
+        <input matInput [(ngModel)]="tableCache.filterBinding" (keyup)="tableCache.applyFilter($event.target.value)"
+               placeholder="Filter"/>
+        <button mat-button *ngIf="tableCache.filter" matSuffix mat-icon-button (click)="tableCache.clearFilter()">
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
     </div>
 
     <div *ngIf="isSchoolSelected">
-      <table mat-table [dataSource]="mentorCacheService.tableDataSource" matSort>
+      <table mat-table [dataSource]="tableCache.tableDataSource" matSort>
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox
-              (change)="$event ? mentorCacheService.masterToggle() : null"
-              [checked]="mentorCacheService.selection.hasValue() && mentorCacheService.isAllSelected()"
-              [indeterminate]="mentorCacheService.selection.hasValue() && !mentorCacheService.isAllSelected()"
+              (change)="$event ? tableCache.masterToggle() : null"
+              [checked]="tableCache.selection.hasValue() && tableCache.isAllSelected()"
+              [indeterminate]="tableCache.selection.hasValue() && !tableCache.isAllSelected()"
             >
             </mat-checkbox>
           </th>
           <td mat-cell *matCellDef="let row">
             <mat-checkbox
               (click)="$event.stopPropagation()"
-              (change)="$event ? mentorCacheService.selection.toggle(row) : null"
-              [checked]="mentorCacheService.selection.isSelected(row)"
+              (change)="$event ? tableCache.selection.toggle(row) : null"
+              [checked]="tableCache.selection.isSelected(row)"
             >
             </mat-checkbox>
           </td>
@@ -107,14 +109,18 @@
         <tr
           mat-row
           *matRowDef="let row; columns: displayedColumns()"
-          (click)="mentorCacheService.selection.toggle(row)"
+          (click)="tableCache.selection.toggle(row)"
         ></tr>
       </table>
 
       <table class="footer mat-elevation-z1">
         <tr>
-          <td><ms-selection-count-display [selectionCount]="mentorCacheService.selectionCount"></ms-selection-count-display></td>
-          <td><mat-paginator #paginator [pageSize]="mentorCacheService.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
+          <td>
+            <ms-selection-count-display [selectionCount]="tableCache.selectionCount"></ms-selection-count-display>
+          </td>
+          <td>
+            <mat-paginator #paginator [pageSize]="tableCache.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+          </td>
         </tr>
       </table>
     </div>

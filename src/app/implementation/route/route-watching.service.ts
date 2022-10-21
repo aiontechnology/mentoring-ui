@@ -14,43 +14,45 @@
  * limitations under the License.
  */
 
+import {Inject, Injectable} from '@angular/core';
 import {ActivatedRoute, ParamMap} from '@angular/router';
-import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../modules/school-manager/providers/personnel-providers-factory';
-import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../modules/school-manager/providers/program-admin-providers-factory';
+import {Observable, of} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {Mentor} from '../../modules/mentor-manager/models/mentor/mentor';
+import {Personnel} from '../../modules/school-manager/models/personnel/personnel';
+import {ProgramAdmin} from '../../modules/school-manager/models/program-admin/program-admin';
+import {Teacher} from '../../modules/school-manager/models/teacher/teacher';
+import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../modules/school-manager/providers/personnel-providers-factory';
+import {
+  PROGRAM_ADMIN_DATA_SOURCE,
+  PROGRAM_ADMIN_URI_SUPPLIER
+} from '../../modules/school-manager/providers/program-admin-providers-factory';
 import {
   SCHOOL_SESSION_DATA_SOURCE,
   SCHOOL_SESSION_URI_SUPPLIER
-} from '../modules/school-manager/providers/school-session-providers-factory';
-import {School} from '../modules/shared/models/school/school';
-import {SCHOOL_BOOK_DATA_SOURCE, SCHOOL_BOOK_URI_SUPPLIER} from '../providers/global-school-book-providers-factory';
-import {SCHOOL_DATA_SOURCE} from '../providers/global-school-providers-factory';
-import {UserSessionService} from './user-session.service';
-import {DataSource} from '../implementation/data/data-source';
-import {map} from 'rxjs/operators';
-import {Inject, Injectable} from '@angular/core';
+} from '../../modules/school-manager/providers/school-session-providers-factory';
+import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../modules/school-manager/providers/teacher-providers-factory';
 import {
-  INVITATION_DATA_SOURCE, INVITATION_URI_SUPPLIER,
-  MENTOR_DATA_SOURCE,
-  MENTOR_URI_SUPPLIER,
+  INVITATION_DATA_SOURCE,
+  INVITATION_URI_SUPPLIER,
   STUDENT_DATA_SOURCE,
   STUDENT_URI_SUPPLIER,
-  TEACHER_DATA_SOURCE,
-  TEACHER_URI_SUPPLIER
-} from '../modules/shared/shared.module';
-import {UriSupplier} from '../implementation/data/uri-supplier';
-import {Observable, of} from 'rxjs';
-import {Mentor} from '../modules/mentor-manager/models/mentor/mentor';
-import {Teacher} from '../modules/school-manager/models/teacher/teacher';
-import {SchoolSession} from '../modules/shared/models/school/schoolsession';
-import {Student} from '../modules/student-manager/models/student/student';
-import {Personnel} from '../modules/school-manager/models/personnel/personnel';
-import {Book} from '../modules/shared/models/book/book';
-import {ProgramAdmin} from '../modules/school-manager/models/program-admin/program-admin';
+} from '../../modules/shared/shared.module';
+import {Student} from '../../modules/student-manager/models/student/student';
+import {MENTOR_DATA_SOURCE, MENTOR_URI_SUPPLIER} from '../../providers/global-mentor-providers-factory';
+import {SCHOOL_BOOK_DATA_SOURCE, SCHOOL_BOOK_URI_SUPPLIER} from '../../providers/global-school-book-providers-factory';
+import {SCHOOL_DATA_SOURCE} from '../../providers/global-school-providers-factory';
+import {DataSource} from '../data/data-source';
+import {UriSupplier} from '../data/uri-supplier';
+import {Book} from '../models/book/book';
+import {School} from '../models/school/school';
+import {SchoolSession} from '../models/school/schoolsession';
+import {UserSessionService} from '../services/user-session.service';
+import {SCHOOL_ID} from './route-constants';
 
 @Injectable()
 export class RouteWatchingService {
 
-  static SCHOOL_ID = 'schoolId';
   static MENTOR_ID = 'mentorId';
   static REGISTRATION_ID = 'registrationId';
 
@@ -77,12 +79,12 @@ export class RouteWatchingService {
   }
 
   get schoolId(): string {
-    return this.ids.get(RouteWatchingService.SCHOOL_ID);
+    return this.ids.get(SCHOOL_ID);
   }
 
   set schoolId(schoolId) {
     if (schoolId) {
-      this.ids.set(RouteWatchingService.SCHOOL_ID, schoolId);
+      this.ids.set(SCHOOL_ID, schoolId);
     }
     this.onSchoolIdChange(schoolId);
   }
@@ -99,7 +101,7 @@ export class RouteWatchingService {
       .pipe(
         map(params => {
           this.schoolId = !this.userSession.isLoggedIn() || this.userSession.isSysAdmin
-            ? this.findParameterAndCache(RouteWatchingService.SCHOOL_ID, params)
+            ? this.findParameterAndCache(SCHOOL_ID, params)
             : this.userSession.schoolUUID;
           this.findParameterAndCache(RouteWatchingService.MENTOR_ID, params);
           this.findParameterAndCache(RouteWatchingService.REGISTRATION_ID, params);
@@ -124,7 +126,7 @@ export class RouteWatchingService {
 
   private programAdminStrategy = (): Observable<Map<string, string>> => {
     this.schoolId = this.userSession.schoolUUID;
-    const ids = new Map([[RouteWatchingService.SCHOOL_ID, this.schoolId]]);
+    const ids = new Map([[SCHOOL_ID, this.schoolId]]);
     return of(ids);
   }
 
@@ -139,21 +141,21 @@ export class RouteWatchingService {
     this.teacherUriSupplier.reset();
     if (schoolId) {
       this.invitationDataSource.reset();
-      this.invitationUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
+      this.invitationUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
       this.mentorDataSource.reset();
-      this.mentorUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
+      this.mentorUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
       this.personnelDataSource.reset();
-      this.personnelUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
+      this.personnelUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
       this.programAdminDataSource.reset();
-      this.programAdminUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
+      this.programAdminUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
       this.schoolBookDataSource.reset();
-      this.schoolBookUriSuppler.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
+      this.schoolBookUriSuppler.withSubstitution(SCHOOL_ID, schoolId);
       this.schoolSessionDataSource.reset();
-      this.schoolSessionUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
+      this.schoolSessionUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
       this.studentDataSource.reset();
-      this.studentUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
+      this.studentUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
       this.teacherDataSource.reset();
-      this.teacherUriSupplier.withSubstitution(RouteWatchingService.SCHOOL_ID, schoolId);
+      this.teacherUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
     }
   }
 

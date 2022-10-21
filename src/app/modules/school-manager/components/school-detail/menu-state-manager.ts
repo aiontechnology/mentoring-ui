@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {MenuStateService} from '../../../../services/menu-state.service';
-import {UserSessionService} from '../../../../services/user-session.service';
+import {MenuStateService} from '../../../../implementation/services/menu-state.service';
+import {UserSessionService} from '../../../../implementation/services/user-session.service';
 import {
   PERSONNEL_GROUP,
   PROGRAM_ADMIN_GROUP,

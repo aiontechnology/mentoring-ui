@@ -26,7 +26,7 @@ import {NavigationManager} from '../implementation/command/navigation-manager';
 import {SnackbarManager} from '../implementation/command/snackbar-manager';
 import {TableCache} from '../implementation/table-cache/table-cache';
 import {ConfimationDialogComponent} from '../modules/shared/components/confimation-dialog/confimation-dialog.component';
-import {titleCase} from '../shared/title-case';
+import {titleCase} from '../implementation/shared/title-case';
 
 export function listProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
   injectionToken: InjectionToken<Command[]>,

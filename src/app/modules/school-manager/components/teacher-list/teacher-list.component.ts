@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute} from '@angular/router';
-import {MenuStateService} from 'src/app/services/menu-state.service';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
+import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {SCHOOL_ID} from '../../../../implementation/route/route-constants';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {TEACHER_URI_SUPPLIER} from '../../../shared/shared.module';
 import {Teacher} from '../../models/teacher/teacher';
+import {TEACHER_URI_SUPPLIER} from '../../providers/teacher-providers-factory';
 import {TEACHER_LIST_MENU, TEACHER_TABLE_CACHE} from '../../school-manager.module';
 
 @Component({
@@ -32,44 +33,44 @@ import {TEACHER_LIST_MENU, TEACHER_TABLE_CACHE} from '../../school-manager.modul
   templateUrl: './teacher-list.component.html',
   styleUrls: ['./teacher-list.component.scss'],
 })
-export class TeacherListComponent implements OnInit, AfterViewInit {
+export class TeacherListComponent extends AbstractListComponent<Teacher> implements OnInit, OnDestroy {
+  columns = ['select', 'firstName', 'lastName', 'email', 'cellPhone', 'grades']
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  constructor(@Inject(TEACHER_TABLE_CACHE) public tableCache: TableCache<Teacher>,
-              private menuState: MenuStateService,
-              private route: ActivatedRoute,
-              private breakpointObserver: BreakpointObserver,
-              @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: UriSupplier,
-              @Inject(TEACHER_LIST_MENU) private menuCommands: { name: string, factory: ((isAdminOnly: boolean) => Command) }[]) {
+  constructor(
+    // for super
+    menuState: MenuStateService,
+    @Inject(TEACHER_LIST_MENU) menuCommands: { name: string, factory: ((isAdminOnly: boolean) => Command) }[],
+    @Inject(TEACHER_TABLE_CACHE) tableCache: TableCache<Teacher>,
+    // other
+    private route: ActivatedRoute,
+    @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: UriSupplier,
+  ) {
+    super(menuState, menuCommands, tableCache)
   }
 
-  ngOnInit(): void {
-    this.menuCommands.forEach(command => {
-      this.menuState.add(command.factory(false))
-    })
+  @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
 
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
+
+  ngOnInit(): void {
+    this.init()
     this.route.paramMap
       .subscribe(params => {
-        this.teacherUriSupplier.withSubstitution('schoolId', params.get('id'))
-        this.tableCache.loadData()
-          .then(() => {
-            this.tableCache.clearSelection();
-          });
+        this.teacherUriSupplier.withSubstitution('schoolId', params.get(SCHOOL_ID))
+        // this.tableCache.loadData()
+        //   .then(() => {
+        //     this.tableCache.clearSelection();
+        //   });
       });
   }
 
-  ngAfterViewInit(): void {
-    this.tableCache.sort = this.sort;
-    this.tableCache.paginator = this.paginator;
+  ngOnDestroy(): void {
+    this.destroy()
   }
 
-  displayedColumns(): string[] {
-    if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['select', 'firstName', 'lastName'];
-    } else {
-      return ['select', 'firstName', 'lastName', 'email', 'cellPhone', 'grades'];
-    }
+  protected registerMenus(menuState: MenuStateService, menuCommands: { name: string; factory: (isAdminOnly: boolean) => Command }[]) {
+    menuCommands.forEach(command => {
+      menuState.add(command.factory(false))
+    })
   }
 }

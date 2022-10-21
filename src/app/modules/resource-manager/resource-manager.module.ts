@@ -17,6 +17,9 @@
 import {InjectionToken, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {Command} from '../../implementation/command/command';
+import {BOOK_ID, GAME_ID} from '../../implementation/route/route-constants';
+import {globalBookProvidersFactory} from '../../providers/global-book-providers-factory';
+import {globalGameProvidersFactory} from '../../providers/global-game-providers-factory';
 import {globalSchoolBookProvidersFactory} from '../../providers/global-school-book-providers-factory';
 import {globalSchoolGameProvidersFactory} from '../../providers/global-school-game-providers-factory';
 import {globalSchoolProvidersFactory} from '../../providers/global-school-providers-factory';
@@ -53,8 +56,8 @@ const routes: Routes = [
     path: '', component: ResourceManagerComponent,
     children: [
       {path: '', component: ResourceListComponent},
-      {path: 'books/:id', component: BookDetailComponent},
-      {path: 'games/:id', component: GameDetailComponent},
+      {path: `books/:${BOOK_ID}`, component: BookDetailComponent},
+      {path: `games/:${GAME_ID}`, component: GameDetailComponent},
     ]
   }
 ];
@@ -80,6 +83,8 @@ const routes: Routes = [
   ],
   providers: [
     ...globalSchoolProvidersFactory(),
+    ...globalBookProvidersFactory(),
+    ...globalGameProvidersFactory(),
     ...globalSchoolBookProvidersFactory(),
     ...globalSchoolGameProvidersFactory(),
     ...bookProvidersFactory(),

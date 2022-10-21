@@ -17,15 +17,15 @@
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {grades} from 'src/app/modules/shared/constants/grades';
-import {Grade} from 'src/app/modules/shared/types/grade';
+import {grades} from 'src/app/implementation/constants/grades';
+import {Grade} from 'src/app/implementation/types/grade';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {School} from '../../../../implementation/models/school/school';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
-import {School} from '../../../shared/models/school/school';
-import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../shared/shared.module';
 import {Teacher} from '../../models/teacher/teacher';
+import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../providers/teacher-providers-factory';
 
 @Component({
   selector: 'ms-teacher-dialog',

@@ -20,8 +20,8 @@ import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
 import {UriSupplier} from '../implementation/data/uri-supplier';
-import {Game} from '../modules/shared/models/game/game';
-import {SchoolGameRepository} from '../repositories/school-game-repository';
+import {Game} from '../implementation/models/game/game';
+import {SchoolGameRepository} from '../implementation/repositories/school-game-repository';
 
 export const SCHOOL_GAME_DATA_SOURCE = new InjectionToken<DataSource<Game>>('school-game-data-source');
 export const SCHOOL_GAME_CACHE = new InjectionToken<Cache<Game>>('school-game-cache');

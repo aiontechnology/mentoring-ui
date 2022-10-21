@@ -18,7 +18,7 @@ import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { AbstractControl, UntypedFormGroup, UntypedFormBuilder, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import { InterestOutbound } from 'src/app/modules/shared/models/meta-data/interests/interest-outbound';
+import { InterestOutbound } from 'src/app/implementation/models/meta-data/interests/interest-outbound';
 import { InterestInbound } from '../../models/interest/interest-inbound';
 import { Subscription } from 'rxjs';
 

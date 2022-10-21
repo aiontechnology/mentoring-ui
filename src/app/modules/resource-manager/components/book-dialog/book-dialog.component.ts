@@ -18,13 +18,13 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
-import {resourceLocations} from 'src/app/modules/shared/constants/locations';
-import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
-import {Book} from 'src/app/modules/shared/models/book/book';
+import {resourceLocations} from 'src/app/implementation/constants/locations';
+import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
+import {Book} from 'src/app/implementation/models/book/book';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import {Grade} from 'src/app/modules/shared/types/grade';
+import {Grade} from 'src/app/implementation/types/grade';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {BOOK_DATA_SOURCE} from '../../providers/book-providers-factory';
+import {BOOK_DATA_SOURCE} from '../../../../providers/global-book-providers-factory';
 
 @Component({
   selector: 'ms-book-dialog',

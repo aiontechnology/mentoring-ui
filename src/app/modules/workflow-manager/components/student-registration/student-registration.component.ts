@@ -19,14 +19,14 @@ import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, 
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {RouteWatchingService} from '../../../../services/route-watching.service';
+import {RouteWatchingService} from '../../../../implementation/route/route-watching.service';
 import {Teacher} from '../../../school-manager/models/teacher/teacher';
 import {StudentRegistration} from '../../../school-manager/models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../../../school-manager/models/workflow/student-registration-lookup';
-import {grades} from '../../../shared/constants/grades';
+import {grades} from '../../../../implementation/constants/grades';
 import {LinkService} from '../../../shared/services/link-service/link.service';
 import {REGISTRATION_DATA_SOURCE, REGISTRATION_LOOKUP_DATA_SOURCE, REGISTRATION_URI_SUPPLIER} from '../../../shared/shared.module';
-import {Grade} from '../../../shared/types/grade';
+import {Grade} from '../../../../implementation/types/grade';
 
 @Component({
   selector: 'ms-student-registration',

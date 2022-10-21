@@ -34,7 +34,10 @@ export class SingleItemCache<T> {
 
   fromId(id: string): Promise<T> {
     return this.dataSource.oneValue(id)
-      .then(item => this._item = item)
+      .then(item => {
+        this._item = item
+        return item
+      })
   }
 
   remove(): Promise<T> {

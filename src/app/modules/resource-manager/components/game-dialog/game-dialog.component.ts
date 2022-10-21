@@ -16,15 +16,15 @@
 
 import {Component, Inject, OnInit} from '@angular/core';
 import {AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {Grade} from 'src/app/modules/shared/types/grade';
+import {Grade} from 'src/app/implementation/types/grade';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import {Game} from 'src/app/modules/shared/models/game/game';
-import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
+import {Game} from 'src/app/implementation/models/game/game';
+import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
 import {Observable} from 'rxjs';
-import {resourceLocations} from 'src/app/modules/shared/constants/locations';
+import {resourceLocations} from 'src/app/implementation/constants/locations';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {GAME_DATA_SOURCE} from '../../providers/game-providers-factory';
+import {GAME_DATA_SOURCE} from '../../../../providers/global-game-providers-factory';
 
 @Component({
   selector: 'ms-game-dialog',

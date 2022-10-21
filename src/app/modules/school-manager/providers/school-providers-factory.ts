@@ -15,12 +15,11 @@
  */
 
 import {DataSource} from '../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../implementation/data/single-item-cache';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
 import {SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
-import {School} from '../../shared/models/school/school';
+import {School} from '../../../implementation/models/school/school';
 import {SchoolDialogComponent} from '../components/school-dialog/school-dialog.component';
 import {SCHOOL_DETAIL_MENU, SCHOOL_GROUP, SCHOOL_LIST_MENU, SCHOOL_TABLE_CACHE} from '../school-manager.module';
 

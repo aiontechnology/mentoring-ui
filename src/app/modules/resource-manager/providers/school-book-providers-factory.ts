@@ -20,7 +20,7 @@ import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {SCHOOL_BOOK_DATA_SOURCE} from '../../../providers/global-school-book-providers-factory';
 import {updateProvidersFactory} from '../../../providers/update-menus-providers-factory';
-import {Book} from '../../shared/models/book/book';
+import {Book} from '../../../implementation/models/book/book';
 import {SchoolBookDialogComponent} from '../components/school-book-dialog/school-book-dialog.component';
 import {SCHOOL_BOOK_GROUP, SCHOOL_BOOK_LIST_MENU} from '../resource-manager.module';
 

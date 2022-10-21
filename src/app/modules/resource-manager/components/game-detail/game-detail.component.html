@@ -19,11 +19,11 @@
     <mat-card-title>Game Details</mat-card-title>
   </mat-card-header>
   <mat-card-content class="mat-elevation-z8">
-    <h1>{{ game?.name }}</h1>
+    <h1>{{ gameCache.item?.name }}</h1>
     <table>
       <tr>
         <td>Description</td>
-        <td>{{ game?.description }}</td>
+        <td>{{ gameCache.item?.description }}</td>
       </tr>
       <tr>
         <td>Grade Level</td>
@@ -31,19 +31,19 @@
       </tr>
       <tr>
         <td>Activity Focuses</td>
-        <td>{{ game?.activityFocuses.join(', ') }}</td>
+        <td>{{ gameCache.item?.activityFocuses.join(', ') }}</td>
       </tr>
       <tr>
         <td>Leadership Success Skills</td>
-        <td>{{ game?.leadershipSkills.join(', ') }}</td>
+        <td>{{ gameCache.item?.leadershipSkills.join(', ') }}</td>
       </tr>
       <tr>
         <td>Leadership Traits</td>
-        <td>{{ game?.leadershipTraits.join(', ') }}</td>
+        <td>{{ gameCache.item?.leadershipTraits.join(', ') }}</td>
       </tr>
       <tr>
         <td>Location</td>
-        <td>{{ game?.displayLocation }}</td>
+        <td>{{ gameCache.item?.displayLocation }}</td>
       </tr>
     </table>
   </mat-card-content>

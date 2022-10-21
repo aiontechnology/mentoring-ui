@@ -21,7 +21,7 @@ import {Command} from '../implementation/command/command';
 import {DialogCommand} from '../implementation/command/dialog-command';
 import {DialogManager} from '../implementation/command/dialog-manager';
 import {AbstractTableCache} from '../implementation/table-cache/abstract-table-cache';
-import {titleCase} from '../shared/title-case';
+import {titleCase} from '../implementation/shared/title-case';
 
 export function updateProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends AbstractTableCache<any>>(
   injectionToken: InjectionToken<Command[]>,

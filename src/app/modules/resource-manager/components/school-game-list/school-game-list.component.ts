@@ -19,13 +19,13 @@ import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute} from '@angular/router';
-import {MenuStateService} from 'src/app/services/menu-state.service';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {SCHOOL_GAME_TABLE_CACHE, SCHOOL_GAME_URI_SUPPLIER} from '../../../../providers/global-school-game-providers-factory';
-import {UserSessionService} from '../../../../services/user-session.service';
-import {Game} from '../../../shared/models/game/game';
+import {UserSessionService} from '../../../../implementation/services/user-session.service';
+import {Game} from '../../../../implementation/models/game/game';
 import {SCHOOL_GAME_LIST_MENU} from '../../resource-manager.module';
 
 @Component({

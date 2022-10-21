@@ -14,85 +14,89 @@
  * limitations under the License.
  */
 
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {UserSessionService} from 'src/app/services/user-session.service';
-import {School} from 'src/app/modules/shared/models/school/school';
-import {SCHOOL_DATA_SOURCE} from '../../../../providers/global-school-providers-factory';
-import {MentorCacheService} from '../../services/mentor/mentor-cache.service';
-import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
-import {EditDialogCommandOld} from 'src/app/implementation/command/edit-dialog-command-old';
-import {DeleteDialogCommandOld} from 'src/app/implementation/command/delete-dialog-command-old';
-import {MentorDialogComponent} from '../mentor-dialog/mentor-dialog.component';
-import {MenuStateService} from 'src/app/services/menu-state.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {ConfimationDialogComponent} from 'src/app/modules/shared/components/confimation-dialog/confimation-dialog.component';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {MatSort} from '@angular/material/sort';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
-import {Mentor} from '../../models/mentor/mentor';
-import {RouteWatchingService} from '../../../../services/route-watching.service';
+import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute} from '@angular/router';
+import {School} from 'src/app/implementation/models/school/school';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
+import {UserSessionService} from 'src/app/implementation/services/user-session.service';
+import {Command} from '../../../../implementation/command/command';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {tap} from 'rxjs/operators';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {SchoolRouteWatcher} from '../../../../implementation/route/school-route-watcher';
+import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {MENTOR_DATA_SOURCE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
+import {SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE, SCHOOL_ROUTE_WATCHER} from '../../../../providers/global-school-providers-factory';
+import {MENTOR_LIST_MENU, MENTOR_TABLE_CACHE} from '../../mentor-manager.module';
+import {Mentor} from '../../models/mentor/mentor';
 
 @Component({
   selector: 'ms-mentor-list',
   templateUrl: './mentor-list.component.html',
   styleUrls: ['./mentor-list.component.scss'],
-  providers: [RouteWatchingService]
 })
 export class MentorListComponent implements OnInit, OnDestroy {
 
   schools$: Promise<School[]>;
-  selectedSchool: School;
 
   constructor(public userSession: UserSessionService,
-              public mentorCacheService: MentorCacheService,
+              @Inject(MENTOR_TABLE_CACHE) public tableCache: TableCache<Mentor>,
+              @Inject(SCHOOL_INSTANCE_CACHE) public schoolCache: SingleItemCache<School>,
               @Inject(SCHOOL_DATA_SOURCE) private schoolDataSource: DataSource<School>,
+              @Inject(MENTOR_URI_SUPPLIER) private uriSupplier: UriSupplier,
+              @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
+              @Inject(MENTOR_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+              @Inject(SCHOOL_ROUTE_WATCHER) private schoolRouteWatcher: SchoolRouteWatcher,
               private breakpointObserver: BreakpointObserver,
-              private dialog: MatDialog,
               private menuState: MenuStateService,
-              private snackBar: MatSnackBar,
-              private route: ActivatedRoute,
-              private router: Router,
-              private routeWatcher: RouteWatchingService) {
+              private route: ActivatedRoute) {
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
     if (sort !== undefined) {
-      this.mentorCacheService.sort = sort;
+      this.tableCache.sort = sort;
     }
   }
 
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
     if (paginator !== undefined) {
-      this.mentorCacheService.paginator = paginator;
+      this.tableCache.paginator = paginator;
     }
   }
 
   get isSchoolSelected(): boolean {
-    return (this.routeWatcher.schoolId != null) || this.userSession.isProgAdmin;
+    return (this.schoolCache.item != null) || this.userSession.isProgAdmin;
   }
 
   ngOnInit(): void {
-    this.routeWatcher.open(this.route)
-      .pipe(
-        tap(() => this.schools$ = this.schoolDataSource.allValues()),
-      )
-      .subscribe(() => {
-        this.routeWatcher.school
-          .then(school => {
-            if (school) {
-              this.selectedSchool = school;
-              this.loadMentorData();
-            }
-          });
-      });
+    this.menuState.clear()
+    this.menuCommands.forEach(command => {
+      this.menuState.add(command.factory(false))
+    })
+
+    if(this.userSession.isSysAdmin) {
+      this.schools$ = this.schoolDataSource.allValues()
+      this.schoolRouteWatcher
+      this.route.paramMap
+        .subscribe(params => this.onIdChange(params.get('schoolId')))
+    } else {
+      this.onIdChange(this.userSession.schoolUUID)
+    }
+  }
+
+  onIdChange(id: string) {
+    if (id) {
+      this.schoolCache.fromId(id)
+        .then(school => {
+          this.loadMentorData()
+        })
+    }
   }
 
   ngOnDestroy(): void {
-    this.routeWatcher.close();
     this.menuState.clear();
   }
 
@@ -109,79 +113,8 @@ export class MentorListComponent implements OnInit, OnDestroy {
   }
 
   private loadMentorData(): void {
-    this.mentorCacheService.loadData()
-      .then(() => {
-        MentorListMenuManager.addMenus(this.menuState,
-          this.router,
-          this.dialog,
-          this.snackBar,
-          (m: Mentor) => this.jumpToNewItem(m),
-          this.mentorCacheService,
-          this.routeWatcher.schoolId);
-      });
+    this.uriSupplier.withSubstitution('schoolId', this.schoolCache.item.id)
+    this.mentorDataSource.reset()
+    this.tableCache.loadData();
   }
-
-  /**
-   * Action taken after a dialog is closed: Move
-   * to page that displayes the new item.
-   * @param newItem Added/edited item that helps the
-   * cache service determine which page to jump to.
-   */
-  private jumpToNewItem(newItem: Mentor): void {
-    this.mentorCacheService.clearSelection();
-    this.mentorCacheService.jumpToItem(newItem);
-  }
-
-}
-
-class MentorListMenuManager {
-  static addMenus(menuState: MenuStateService,
-                  router: Router,
-                  dialog: MatDialog,
-                  snackBar: MatSnackBar,
-                  postAction: (m: Mentor) => void,
-                  mentorCacheService: MentorCacheService,
-                  schoolId: string): void {
-    menuState.clear();
-
-    menuState.add(new NewDialogCommandOld(
-      'Add Mentor',
-      'mentor',
-      MentorDialogComponent,
-      'Mentor added',
-      null,
-      {schoolId},
-      router,
-      dialog,
-      snackBar,
-      (m: Mentor) => postAction(m),
-      () => schoolId != null));
-    menuState.add(new EditDialogCommandOld(
-      'Edit Mentor',
-      'mentor',
-      MentorDialogComponent,
-      'Mentor updated',
-      null,
-      router,
-      dialog,
-      snackBar,
-      () => ({schoolId, model: mentorCacheService.getFirstSelection()}),
-      (m: Mentor) => postAction(m),
-      () => mentorCacheService.selection.selected.length === 1));
-    menuState.add(new DeleteDialogCommandOld(
-      'Delete Mentor',
-      'mentor',
-      ConfimationDialogComponent,
-      'Mentor(s) removed',
-      'mentor',
-      'mentors',
-      router,
-      dialog,
-      snackBar,
-      null,
-      () => mentorCacheService.selectionCount,
-      () => mentorCacheService.removeSelectedOld(),
-      () => mentorCacheService.selection.selected.length > 0));
-  }
-
 }

@@ -17,9 +17,9 @@
 import { Component, Input } from '@angular/core';
 import { MatDrawer } from '@angular/material/sidenav';
 import { Observable } from 'rxjs';
-import { MenuStateService } from 'src/app/services/menu-state.service';
-import { UserSessionService } from 'src/app/services/user-session.service';
-import { NavigationService } from 'src/app/services/navigation.service';
+import { MenuStateService } from 'src/app/implementation/services/menu-state.service';
+import { UserSessionService } from 'src/app/implementation/services/user-session.service';
+import { NavigationService } from 'src/app/implementation/route/navigation.service';
 
 @Component({
   selector: 'ms-toolbar',

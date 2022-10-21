@@ -15,29 +15,22 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {environment} from '../../../../environments/environment';
 import {Command} from '../../../implementation/command/command';
-import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
-import {Repository} from '../../../implementation/data/repository';
 import {SingleItemCache} from '../../../implementation/data/single-item-cache';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
+import {GAME_DATA_SOURCE} from '../../../providers/global-game-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
-import {Book} from '../../shared/models/book/book';
-import {Game} from '../../shared/models/game/game';
-import {School} from '../../shared/models/school/school';
+import {Book} from '../../../implementation/models/book/book';
+import {Game} from '../../../implementation/models/game/game';
+import {School} from '../../../implementation/models/school/school';
 import {GameDialogComponent} from '../components/game-dialog/game-dialog.component';
-import {GameRepository} from '../repositories/game-repository';
 import {GAME_GROUP} from '../resource-manager.module';
 
 export const GAME_DETAIL_MENU = new InjectionToken<Command[]>('game-detail-menu');
 export const GAME_LIST_MENU = new InjectionToken<Command[]>('game-list-menu');
 export const GAME_SINGLE_CACHE = new InjectionToken<SingleItemCache<Book>>('game-single-cache')
-export const GAME_DATA_SOURCE = new InjectionToken<DataSource<Game>>('game-data-source');
-export const GAME_CACHE = new InjectionToken<Cache<Game>>('game-cache');
-export const GAME_URI_SUPPLIER = new InjectionToken<UriSupplier>('game-uri-supplier');
 export const GAME_TABLE_CACHE = new InjectionToken<TableCache<School>>('game-table-cache')
 
 export function gameProvidersFactory() {
@@ -55,20 +48,6 @@ export function gameProvidersFactory() {
       provide: GAME_SINGLE_CACHE,
       useFactory: (dataSource: DataSource<Game>) => new SingleItemCache<Game>(dataSource),
       deps: [GAME_DATA_SOURCE]
-    },
-    {
-      provide: GAME_URI_SUPPLIER,
-      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/games`)
-    },
-    GameRepository,
-    {
-      provide: GAME_CACHE,
-      useFactory: () => new Cache<Game>()
-    },
-    {
-      provide: GAME_DATA_SOURCE,
-      useFactory: (repository: Repository<Game>, cache: Cache<Game>) => new DataSource<Game>(repository, cache),
-      deps: [GameRepository, GAME_CACHE]
     },
   ]
 }

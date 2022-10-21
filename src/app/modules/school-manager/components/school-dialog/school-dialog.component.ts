@@ -17,10 +17,10 @@
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, UntypedFormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {School} from 'src/app/modules/shared/models/school/school';
+import {School} from 'src/app/implementation/models/school/school';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {SCHOOL_DATA_SOURCE} from '../../../../providers/global-school-providers-factory';
-import {states} from '../../../../shared/states';
+import {states} from '../../../../implementation/shared/states';
 
 @Component({
   selector: 'ms-new-school-dialog',

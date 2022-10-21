@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Command} from '../implementation/command/command';
+import {Command} from '../command/command';
 import {UserSessionService} from './user-session.service';
 
 class Group {

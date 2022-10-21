@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {Game} from 'src/app/modules/shared/models/game/game';
-import {MenuStateService} from 'src/app/services/menu-state.service';
-import {UserSessionService} from 'src/app/services/user-session.service';
+import {Game} from 'src/app/implementation/models/game/game';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
+import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
+import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {GAME_LIST_MENU, GAME_TABLE_CACHE} from '../../providers/game-providers-factory';
 
@@ -30,45 +30,38 @@ import {GAME_LIST_MENU, GAME_TABLE_CACHE} from '../../providers/game-providers-f
   templateUrl: './game-list.component.html',
   styleUrls: ['./game-list.component.scss']
 })
-export class GameListComponent implements OnInit {
+export class GameListComponent extends AbstractListComponent<Game> implements OnInit, OnDestroy {
+  public columns = ['name', 'grade1', 'grade2', 'location']
 
-  constructor(@Inject(GAME_TABLE_CACHE) public tableCache: TableCache<Game>,
-              public userSession: UserSessionService,
-              private breakpointObserver: BreakpointObserver,
-              private menuState: MenuStateService,
-              @Inject(GAME_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
-  }
-
-  @ViewChild(MatSort) set sort(sort: MatSort) {
-    if (sort !== undefined) {
-      this.tableCache.sort = sort;
+  constructor(
+    // for super
+    menuState: MenuStateService,
+    @Inject(GAME_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(GAME_TABLE_CACHE) tableCache: TableCache<Game>,
+    // other
+    public userSession: UserSessionService,
+  ) {
+    super(menuState, menuCommands, tableCache)
+    if (userSession.isSysAdmin) {
+      this.columns = ['select'].concat(this.columns)
     }
   }
 
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
-    if (paginator !== undefined) {
-      this.tableCache.paginator = paginator;
-    }
-  }
+  @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
+
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.menuCommands.forEach(command => {
-      this.menuState.add(command.factory(true))
-    })
-
-    this.tableCache.loadData()
-      .then(() => this.tableCache.clearSelection());
+    this.init()
   }
 
-  displayedColumns(): string[] {
-    const displayedColumns = [];
-    if (this.userSession.isSysAdmin) {
-      displayedColumns.push('select');
-    }
-    displayedColumns.push('name');
-    if (!this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      displayedColumns.push('grade1', 'grade2', 'location');
-    }
-    return displayedColumns;
+  ngOnDestroy(): void {
+    this.destroy()
+  }
+
+  protected registerMenus(menuState: MenuStateService, menuCommands: { name: string; factory: (isAdminOnly: boolean) => Command }[]) {
+    menuCommands.forEach(command => {
+      menuState.add(command.factory(true))
+    })
   }
 }

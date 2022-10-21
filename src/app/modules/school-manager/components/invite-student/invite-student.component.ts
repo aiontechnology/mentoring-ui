@@ -17,10 +17,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Invitation} from '../../models/workflow/invitation';
-import {INVITATION_DATA_SOURCE} from '../../../shared/shared.module';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {INVITATION_DATA_SOURCE} from '../../../shared/shared.module';
+import {Invitation} from '../../models/workflow/invitation';
 
 @Component({
   selector: 'ms-invite-student',

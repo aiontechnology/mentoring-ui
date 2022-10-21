@@ -15,7 +15,7 @@
  */
 
 import {Contact} from '../contact/contact';
-import {personLocations} from 'src/app/modules/shared/constants/locations';
+import {personLocations} from 'src/app/implementation/constants/locations';
 
 export abstract class Student {
   id: string;

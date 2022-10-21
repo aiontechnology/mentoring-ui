@@ -16,74 +16,59 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {resourceGrades} from 'src/app/modules/shared/constants/resourceGrades';
-import {Game} from 'src/app/modules/shared/models/game/game';
-import {MenuStateService} from 'src/app/services/menu-state.service';
-import {NavigationService} from 'src/app/services/navigation.service';
-import {UserSessionService} from 'src/app/services/user-session.service';
+import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
+import {Game} from 'src/app/implementation/models/game/game';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
-import {DataSource} from '../../../../implementation/data/data-source';
+import {AbstractDetailComponent} from '../../../../implementation/component/abstract-detail-component';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
-import {GAME_DATA_SOURCE, GAME_DETAIL_MENU, GAME_SINGLE_CACHE} from '../../providers/game-providers-factory';
+import {GAME_ID} from '../../../../implementation/route/route-constants';
+import {GAME_DETAIL_MENU, GAME_SINGLE_CACHE} from '../../providers/game-providers-factory';
 
 @Component({
   selector: 'ms-game-detail',
   templateUrl: './game-detail.component.html',
   styleUrls: ['./game-detail.component.scss']
 })
-export class GameDetailComponent implements OnInit, OnDestroy {
-  game: Game;
-  private gameId: string;
-
-  constructor(private route: ActivatedRoute,
-              @Inject(GAME_DATA_SOURCE) private gameDataSource: DataSource<Game>,
-              private userSession: UserSessionService,
-              private menuState: MenuStateService,
-              private navigation: NavigationService,
-              @Inject(GAME_SINGLE_CACHE) private singleItemCache: SingleItemCache<Game>,
-              @Inject(GAME_DETAIL_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
+export class GameDetailComponent extends AbstractDetailComponent implements OnInit, OnDestroy {
+  constructor(
+    // for super
+    menuState: MenuStateService,
+    @Inject(GAME_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    route: ActivatedRoute,
+    // other
+    @Inject(GAME_SINGLE_CACHE) public gameCache: SingleItemCache<Game>,
+  ) {
+    super(menuState, menuCommands, route)
+    menuState.clear()
   }
 
   get gradeRangeDisplay(): string {
-    let grades = resourceGrades[this.game?.grade1 - 1]?.valueView;
-    if (resourceGrades[this.game?.grade2 - 1]?.valueView) {
-      grades += ` - ${resourceGrades[this.game?.grade2 - 1]?.valueView}`;
+    let grades = resourceGrades[this.gameCache.item?.grade1 - 1]?.valueView;
+    if (resourceGrades[this.gameCache.item?.grade2 - 1]?.valueView) {
+      grades += ` - ${resourceGrades[this.gameCache.item?.grade2 - 1]?.valueView}`;
     }
     return grades;
   }
 
   ngOnInit(): void {
-    this.menuState.clear()
-    this.menuCommands.forEach(command => {
-      this.menuState.add(command.factory(false))
-    })
-
-    this.navigation.routeParams = ['resourcemanager'];
-    this.navigation.fragment = 'games';
-
-    /* Watch the game UUID. Call event handler when it changes */
-    this.route.paramMap
-      .subscribe(params => this.onIdChange(params.get('id')));
+    this.init()
   }
 
   ngOnDestroy(): void {
-    this.navigation.clearRoute();
-    this.menuState.clear();
+    this.destroy()
   }
 
-  /**
-   * Handle game ID changes.
-   * @param gameId The ID of the current game.
-   */
-  private onIdChange = (gameId: string): void => {
-    if (gameId) {
-      this.gameId = gameId;
-      this.gameDataSource.oneValue(this.gameId)
-        .then(game => {
-          this.game = game;
-        });
-    } else {
-      throw new Error('Unable to set game id');
-    }
+  protected doHandleRoute(route: ActivatedRoute) {
+    route.paramMap
+      .subscribe(params => {
+        this.gameCache.fromId(params.get(GAME_ID));
+      })
+  }
+
+  protected registerMenus(menuState: MenuStateService, menuCommands: { name: string; factory: (isAdminOnly: boolean) => Command }[]) {
+    menuCommands.forEach(command => {
+      menuState.add(command.factory(false))
+    })
   }
 }

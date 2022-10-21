@@ -19,12 +19,13 @@ import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute} from '@angular/router';
-import {MenuStateService} from 'src/app/services/menu-state.service';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {SCHOOL_ID} from '../../../../implementation/route/route-constants';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {SCHOOL_GAME_TABLE_CACHE, SCHOOL_GAME_URI_SUPPLIER} from '../../../../providers/global-school-game-providers-factory';
-import {Game} from '../../../shared/models/game/game';
+import {Game} from '../../../../implementation/models/game/game';
 import {SCHOOL_GAME_LIST_MENU} from '../../school-manager.module';
 
 @Component({
@@ -52,7 +53,7 @@ export class SchoolGameListComponent implements OnInit, AfterViewInit {
 
     this.route.paramMap
       .subscribe(params => {
-        this.schoolGameUriSupplier.withSubstitution('schoolId', params.get('id'));
+        this.schoolGameUriSupplier.withSubstitution('schoolId', params.get(SCHOOL_ID));
         this.tableCache.loadData()
           .then(() => {
             this.tableCache.clearSelection()

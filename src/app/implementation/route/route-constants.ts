@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,6 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
-
-import { MentorCacheService } from './mentor-cache.service';
-
-xdescribe('MentorCacheService', () => {
-  let service: MentorCacheService;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(MentorCacheService);
-  });
-
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+export const BOOK_ID = 'bookId'
+export const GAME_ID = 'gameId'
+export const SCHOOL_ID = 'schoolId'

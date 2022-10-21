@@ -16,11 +16,12 @@
 
 import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {MenuStateService} from 'src/app/services/menu-state.service';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {SCHOOL_ID} from '../../../../implementation/route/route-constants';
 import {ProgramAdmin} from '../../models/program-admin/program-admin';
 import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../providers/program-admin-providers-factory';
 import {PROGRAM_ADMIN_INSTANCE_CACHE, PROGRAM_ADMIN_MENU} from '../../school-manager.module';
@@ -50,7 +51,7 @@ export class ProgramAdminDetailComponent implements OnInit {
 
     this.route.paramMap
       .subscribe(params => {
-        this.programAdminUriSupplier.withSubstitution('schoolId', params.get('id'));
+        this.programAdminUriSupplier.withSubstitution('schoolId', params.get(SCHOOL_ID));
         this.programAdminDataSource.allValues()
           .then(admin => {
             this.programAdminCache.item = admin[0];

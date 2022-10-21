@@ -16,7 +16,7 @@
 
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { UserSessionService } from 'src/app/services/user-session.service';
+import { UserSessionService } from 'src/app/implementation/services/user-session.service';
 
 @Component({
   selector: 'ms-receive-token',

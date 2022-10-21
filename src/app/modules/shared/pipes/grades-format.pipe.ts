@@ -15,7 +15,7 @@
  */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { grades } from '../constants/grades';
+import { grades } from '../../../implementation/constants/grades';
 import { Teacher } from 'src/app/modules/school-manager/models/teacher/teacher';
 
 @Pipe({

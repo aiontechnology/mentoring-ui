@@ -18,13 +18,11 @@ import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatSort} from '@angular/material/sort';
-import {Router} from '@angular/router';
-import {MenuStateService} from 'src/app/services/menu-state.service';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {School} from '../../../shared/models/school/school';
+import {School} from '../../../../implementation/models/school/school';
 import {SCHOOL_LIST_MENU, SCHOOL_TABLE_CACHE} from '../../school-manager.module';
 
 @Component({
@@ -38,9 +36,7 @@ export class SchoolListComponent implements OnInit {
               private dialog: MatDialog,
               private breakpointObserver: BreakpointObserver,
               private menuState: MenuStateService,
-              private router: Router,
-              private snackBar: MatSnackBar,
-              @Inject(SCHOOL_LIST_MENU) private menuCommands: { name: string, factory: ((isAdminOnly: boolean) => Command) }[]) {
+              @Inject(SCHOOL_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
@@ -57,7 +53,7 @@ export class SchoolListComponent implements OnInit {
 
   ngOnInit(): void {
     this.menuCommands.forEach(command => {
-      this.menuState.add(command.factory(false));
+      this.menuState.add(command.factory(false))
     })
 
     this.tableCache.loadData()
