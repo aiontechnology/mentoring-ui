@@ -31,18 +31,6 @@ export abstract class AbstractRemovableTableCache<T> extends AbstractTableCache<
     return this.tableDataSource.data;
   }
 
-  abstract loadData(): Promise<T[]>
-
-  /**
-   * Remove the currently selected items.
-   */
-  removeSelectedOld(): Promise<void> {
-    const selected = this.data.filter(item => this.selection.isSelected(item));
-    const ret = this.doRemoveItem(selected);
-    this.clearSelection();
-    return Promise.resolve();
-  }
-
   removeSelected(): Promise<T[]> {
     const selected = this.data.filter(item => this.selection.isSelected(item));
     return this.doRemoveItem(selected)

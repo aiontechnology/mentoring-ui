@@ -17,19 +17,17 @@
 import {InjectionToken} from '@angular/core';
 import {Command} from '../../../implementation/command/command';
 import {DataSource} from '../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../implementation/data/single-item-cache';
-import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
-import {BOOK_DATA_SOURCE} from '../../../providers/global-book-providers-factory';
-import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
 import {Book} from '../../../implementation/models/book/book';
 import {School} from '../../../implementation/models/school/school';
+import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
+import {BOOK_DATA_SOURCE, BOOK_INSTANCE_CACHE} from '../../../providers/global-book-providers-factory';
+import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
 import {BookDialogComponent} from '../components/book-dialog/book-dialog.component';
 import {BOOK_GROUP} from '../resource-manager.module';
 
 export const BOOK_DETAIL_MENU = new InjectionToken<Command[]>('book-detail-menu');
 export const BOOK_LIST_MENU = new InjectionToken<Command[]>('book-list-menu');
-export const BOOK_SINGLE_CACHE = new InjectionToken<SingleItemCache<Book>>('book-single-cache')
 export const BOOK_TABLE_CACHE = new InjectionToken<TableCache<School>>('book-table-cache')
 
 export function bookProvidersFactory() {
@@ -37,15 +35,10 @@ export function bookProvidersFactory() {
     ...listProvidersFactory<Book, BookDialogComponent, TableCache<Book>>(BOOK_LIST_MENU, BOOK_GROUP, 'book', BookDialogComponent,
       BOOK_TABLE_CACHE),
     ...detailProvidersFactory<Book, BookDialogComponent, TableCache<Book>>(BOOK_DETAIL_MENU, 'book', 'book',
-      ['/resourcemanager'], BookDialogComponent, BOOK_TABLE_CACHE, BOOK_SINGLE_CACHE),
+      ['/resourcemanager'], BookDialogComponent, BOOK_TABLE_CACHE, BOOK_INSTANCE_CACHE),
     {
       provide: BOOK_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Book>) => new TableCache(dataSource),
-      deps: [BOOK_DATA_SOURCE]
-    },
-    {
-      provide: BOOK_SINGLE_CACHE,
-      useFactory: (dataSource: DataSource<Book>) => new SingleItemCache<Book>(dataSource),
       deps: [BOOK_DATA_SOURCE]
     },
   ]

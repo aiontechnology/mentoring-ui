@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<button mat-icon-button *ngIf="!navService.isEmpty" (click)="navService.pop()"
+<button mat-icon-button *ngIf="!navService.isEmpty"
         [routerLink]="navService.peek().routeSpec"
         [fragment]="navService.peek().fragment">
   <mat-icon>arrow_back_ios_new</mat-icon>

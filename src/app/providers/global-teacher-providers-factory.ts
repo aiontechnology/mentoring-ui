@@ -20,6 +20,7 @@ import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
 import {SchoolUriSupplier} from '../implementation/data/school-uri-supplier';
+import {SingleItemCache} from '../implementation/data/single-item-cache';
 import {UriSupplier} from '../implementation/data/uri-supplier';
 import {Teacher} from '../implementation/models/teacher/teacher';
 import {TeacherRepository} from '../implementation/repositories/teacher-repository';
@@ -28,6 +29,7 @@ import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 export const TEACHER_DATA_SOURCE = new InjectionToken<DataSource<Teacher>>('teacher-data-source');
 export const TEACHER_CACHE = new InjectionToken<Cache<Teacher>>('teacher-cache');
 export const TEACHER_URI_SUPPLIER = new InjectionToken<UriSupplier>('teacher-uri-supplier');
+export const TEACHER_INSTANCE_CACHE = new InjectionToken<SingleItemCache<Teacher>>('teacher-instance-cache')
 
 export function globalTeacherProvidersFactory() {
   return [
@@ -46,6 +48,11 @@ export function globalTeacherProvidersFactory() {
       provide: TEACHER_DATA_SOURCE,
       useFactory: (repository: Repository<Teacher>, cache: Cache<Teacher>) => new DataSource<Teacher>(repository, cache),
       deps: [TeacherRepository, TEACHER_CACHE]
+    },
+    {
+      provide: TEACHER_INSTANCE_CACHE,
+      useFactory: (dataSource: DataSource<Teacher>) => new SingleItemCache<Teacher>(dataSource),
+      deps: [TEACHER_DATA_SOURCE]
     },
   ]
 }

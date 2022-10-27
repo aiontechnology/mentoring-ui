@@ -24,7 +24,8 @@ import {AbstractDetailComponent} from '../../../../implementation/component/abst
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {GAME_ID} from '../../../../implementation/route/route-constants';
-import {GAME_DETAIL_MENU, GAME_SINGLE_CACHE} from '../../providers/game-providers-factory';
+import {GAME_INSTANCE_CACHE} from '../../../../providers/global-game-providers-factory';
+import {GAME_DETAIL_MENU} from '../../providers/game-providers-factory';
 
 @Component({
   selector: 'ms-game-detail',
@@ -39,7 +40,7 @@ export class GameDetailComponent extends AbstractDetailComponent implements OnIn
     route: ActivatedRoute,
     navService: NavigationService,
     // other
-    @Inject(GAME_SINGLE_CACHE) public gameCache: SingleItemCache<Game>,
+    @Inject(GAME_INSTANCE_CACHE) public gameCache: SingleItemCache<Game>,
   ) {
     super(menuState, menuCommands, route, undefined, navService)
     menuState.clear()

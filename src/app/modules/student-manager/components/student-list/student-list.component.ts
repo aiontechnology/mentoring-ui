@@ -29,7 +29,7 @@ import {Contact} from '../../../../implementation/models/contact/contact';
 import {Student} from '../../../../implementation/models/student/student';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {SCHOOL_SESSION_DATA_SOURCE, SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global-school-session-providers-factory';
-import {STUDENT_URI_SUPPLIER} from '../../../../providers/global-student-providers-factory';
+import {STUDENT_INSTANCE_CACHE, STUDENT_URI_SUPPLIER} from '../../../../providers/global-student-providers-factory';
 import {STUDENT_TABLE_CACHE} from '../../providers/student-providers-factory';
 import {STUDENT_LIST_MENU} from '../../student-manager.module';
 
@@ -48,12 +48,13 @@ export class StudentListComponent extends AbstractListComponent<Student> impleme
     menuState: MenuStateService,
     @Inject(STUDENT_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     @Inject(STUDENT_TABLE_CACHE) tableCache: TableCache<Student>,
+    @Inject(STUDENT_INSTANCE_CACHE) studentInstanceCache: SingleItemCache<Student>,
     // other
     @Inject(STUDENT_URI_SUPPLIER) private studentUriSupplier: SchoolUriSupplier,
     @Inject(SCHOOL_SESSION_DATA_SOURCE) private schoolSessionDataSource: DataSource<SchoolSession>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
   ) {
-    super(menuState, menuCommands, tableCache)
+    super(menuState, menuCommands, tableCache, studentInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -62,7 +63,7 @@ export class StudentListComponent extends AbstractListComponent<Student> impleme
 
   ngOnInit(): void {
     this.menuState.clear()
-    this.studentUriSupplier.observable.subscribe(this.reloadTableCache)
+    this.studentUriSupplier.observable.subscribe(this.loadTableCache)
     this.init()
       .then(() => console.log('Initialization complete', this))
       .then(this.loadSchoolSessions)
@@ -87,7 +88,7 @@ export class StudentListComponent extends AbstractListComponent<Student> impleme
   }
 
   updateSession() {
-    this.reloadTableCache();
+    this.loadTableCache();
   }
 
   protected override preTableCacheLoad = async (): Promise<void> => {

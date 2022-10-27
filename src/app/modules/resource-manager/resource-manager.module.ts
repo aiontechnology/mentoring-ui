@@ -82,11 +82,6 @@ const routes: Routes = [
     SharedModule.forRoot(),
   ],
   providers: [
-    ...globalSchoolProvidersFactory(),
-    ...globalBookProvidersFactory(),
-    ...globalGameProvidersFactory(),
-    ...globalSchoolBookProvidersFactory(),
-    ...globalSchoolGameProvidersFactory(),
     ...bookProvidersFactory(),
     ...gameProvidersFactory(),
     ...schoolBookProvidersFactory(),

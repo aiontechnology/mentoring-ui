@@ -28,9 +28,7 @@ export class TableCache<T> extends AbstractRemovableTableCache<T> {
   }
 
   override loadData = (): Promise<T[]> => {
-    console.info('Loading table data')
     this.isLoading$.next(true)
-    this.dataSource.reset()
     return this.dataSource.allValues()
       .then(values => {
         this.isLoading$.next(false)

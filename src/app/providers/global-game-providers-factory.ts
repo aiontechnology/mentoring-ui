@@ -19,13 +19,17 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
+import {SingleItemCache} from '../implementation/data/single-item-cache';
 import {UriSupplier} from '../implementation/data/uri-supplier';
-import {GameRepository} from '../implementation/repositories/game-repository';
 import {Game} from '../implementation/models/game/game';
+import {School} from '../implementation/models/school/school';
+import {GameRepository} from '../implementation/repositories/game-repository';
+import {TableCache} from '../implementation/table-cache/table-cache';
 
 export const GAME_DATA_SOURCE = new InjectionToken<DataSource<Game>>('game-data-source');
 export const GAME_CACHE = new InjectionToken<Cache<Game>>('game-cache');
 export const GAME_URI_SUPPLIER = new InjectionToken<UriSupplier>('game-uri-supplier');
+export const GAME_INSTANCE_CACHE = new InjectionToken<TableCache<School>>('game-instance-cache')
 
 export function globalGameProvidersFactory() {
   return [
@@ -42,6 +46,11 @@ export function globalGameProvidersFactory() {
       provide: GAME_DATA_SOURCE,
       useFactory: (repository: Repository<Game>, cache: Cache<Game>) => new DataSource<Game>(repository, cache),
       deps: [GameRepository, GAME_CACHE]
+    },
+    {
+      provide: GAME_INSTANCE_CACHE,
+      useFactory: (dataSource: DataSource<Game>) => new SingleItemCache<Game>(dataSource),
+      deps: [GAME_DATA_SOURCE]
     },
   ]
 }

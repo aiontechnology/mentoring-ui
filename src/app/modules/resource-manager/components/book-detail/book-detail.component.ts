@@ -24,7 +24,8 @@ import {AbstractDetailComponent} from '../../../../implementation/component/abst
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {BOOK_ID} from '../../../../implementation/route/route-constants';
-import {BOOK_DETAIL_MENU, BOOK_SINGLE_CACHE} from '../../providers/book-providers-factory';
+import {BOOK_INSTANCE_CACHE} from '../../../../providers/global-book-providers-factory';
+import {BOOK_DETAIL_MENU} from '../../providers/book-providers-factory';
 
 @Component({
   selector: 'ms-book-detail',
@@ -39,7 +40,7 @@ export class BookDetailComponent extends AbstractDetailComponent implements OnIn
     route: ActivatedRoute,
     navService: NavigationService,
     // other
-    @Inject(BOOK_SINGLE_CACHE) public bookCache: SingleItemCache<Book>,
+    @Inject(BOOK_INSTANCE_CACHE) public bookCache: SingleItemCache<Book>,
   ) {
     super(menuState, menuCommands, route, undefined, navService)
     menuState.clear()

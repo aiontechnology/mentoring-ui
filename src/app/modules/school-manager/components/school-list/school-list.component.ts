@@ -20,8 +20,10 @@ import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {School} from '../../../../implementation/models/school/school';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 import {SCHOOL_TABLE_CACHE} from '../../providers/school-providers-factory';
 import {SCHOOL_LIST_MENU} from '../../school-manager.module';
 
@@ -38,8 +40,9 @@ export class SchoolListComponent extends AbstractListComponent<School> implement
     menuState: MenuStateService,
     @Inject(SCHOOL_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     @Inject(SCHOOL_TABLE_CACHE) tableCache: TableCache<School>,
+    @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
   ) {
-    super(menuState, menuCommands, tableCache)
+    super(menuState, menuCommands, tableCache, schoolInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }

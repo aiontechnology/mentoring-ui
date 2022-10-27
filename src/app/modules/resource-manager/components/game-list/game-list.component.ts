@@ -23,7 +23,9 @@ import {UserSessionService} from 'src/app/implementation/services/user-session.s
 import {Command} from '../../../../implementation/command/command';
 import {CommandArray} from '../../../../implementation/component/abstract-component';
 import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {GAME_INSTANCE_CACHE} from '../../../../providers/global-game-providers-factory';
 import {GAME_LIST_MENU, GAME_TABLE_CACHE} from '../../providers/game-providers-factory';
 
 @Component({
@@ -39,10 +41,11 @@ export class GameListComponent extends AbstractListComponent<Game> implements On
     menuState: MenuStateService,
     @Inject(GAME_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     @Inject(GAME_TABLE_CACHE) tableCache: TableCache<Game>,
+    @Inject(GAME_INSTANCE_CACHE) gameInstanceCache: SingleItemCache<Game>,
     // other
     public userSession: UserSessionService,
   ) {
-    super(menuState, menuCommands, tableCache)
+    super(menuState, menuCommands, tableCache, gameInstanceCache)
     if (userSession.isSysAdmin) {
       this.columns = ['select'].concat(this.columns)
     }

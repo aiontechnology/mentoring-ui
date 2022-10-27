@@ -21,9 +21,10 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {Command} from '../../../../../implementation/command/command';
 import {AbstractListComponent} from '../../../../../implementation/component/abstract-list-component';
 import {SchoolUriSupplier} from '../../../../../implementation/data/school-uri-supplier';
+import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
 import {Personnel} from '../../../../../implementation/models/personnel/personnel';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
-import {PERSONNEL_URI_SUPPLIER} from '../../../../../providers/global-personnel-providers-factory';
+import {PERSONNEL_INSTANCE_CACHE, PERSONNEL_URI_SUPPLIER} from '../../../../../providers/global-personnel-providers-factory';
 import {PERSONNEL_TABLE_CACHE} from '../../../providers/personnel-providers-factory';
 import {PERSONNEL_LIST_MENU} from '../../../school-manager.module';
 
@@ -40,10 +41,11 @@ export class PersonnelListComponent extends AbstractListComponent<Personnel> imp
     menuState: MenuStateService,
     @Inject(PERSONNEL_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     @Inject(PERSONNEL_TABLE_CACHE) tableCache: TableCache<Personnel>,
+    @Inject(PERSONNEL_INSTANCE_CACHE) personnelInstanceCache: SingleItemCache<Personnel>,
     //other
     @Inject(PERSONNEL_URI_SUPPLIER) private uriSupplier: SchoolUriSupplier,
   ) {
-    super(menuState, menuCommands, tableCache)
+    super(menuState, menuCommands, tableCache, personnelInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -51,7 +53,7 @@ export class PersonnelListComponent extends AbstractListComponent<Personnel> imp
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.uriSupplier.observable.subscribe(this.reloadTableCache)
+    this.uriSupplier.observable.subscribe(this.loadTableCache)
     this.init()
       .then(() => console.log('Initialization complete', this))
   }

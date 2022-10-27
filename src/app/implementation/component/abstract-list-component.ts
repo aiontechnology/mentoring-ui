@@ -17,6 +17,7 @@
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {Command} from '../command/command';
+import {SingleItemCache} from '../data/single-item-cache';
 import {MenuStateService} from '../services/menu-state.service';
 import {TableCache} from '../table-cache/table-cache';
 import {AbstractComponent} from './abstract-component';
@@ -28,6 +29,7 @@ export abstract class AbstractListComponent<T> extends AbstractComponent {
     menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     // other
     public tableCache: TableCache<T>,
+    private instanceCache: SingleItemCache<T>,
   ) {
     super(menuState, menuCommands)
   }
@@ -45,10 +47,13 @@ export abstract class AbstractListComponent<T> extends AbstractComponent {
   }
 
   protected doInit = async (): Promise<void> => {
-    await this.reloadTableCache()
+    await this.loadTableCache()
+    if (!this.instanceCache.isEmpty) {
+      this.tableCache.jumpToItem(this.instanceCache.item)
+    }
   }
 
-  protected reloadTableCache = async (): Promise<void> => {
+  protected loadTableCache = async (): Promise<void> => {
     await this.preTableCacheLoad()
     await this.tableCache.loadData()
     await this.tableCache.clearSelection()

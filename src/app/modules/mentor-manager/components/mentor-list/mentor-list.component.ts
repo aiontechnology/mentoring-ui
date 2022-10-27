@@ -22,8 +22,9 @@ import {Command} from '../../../../implementation/command/command';
 import {CommandArray} from '../../../../implementation/component/abstract-component';
 import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
 import {SchoolUriSupplier} from '../../../../implementation/data/school-uri-supplier';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
+import {MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
 import {MENTOR_LIST_MENU, MENTOR_TABLE_CACHE} from '../../mentor-manager.module';
 import {Mentor} from '../../models/mentor/mentor';
 
@@ -40,10 +41,11 @@ export class MentorListComponent extends AbstractListComponent<Mentor> implement
     menuState: MenuStateService,
     @Inject(MENTOR_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     @Inject(MENTOR_TABLE_CACHE) tableCache: TableCache<Mentor>,
+    @Inject(MENTOR_INSTANCE_CACHE) mentorInstanceCache: SingleItemCache<Mentor>,
     // other
     @Inject(MENTOR_URI_SUPPLIER) private schoolUriSupplier: SchoolUriSupplier,
   ) {
-    super(menuState, menuCommands, tableCache)
+    super(menuState, menuCommands, tableCache, mentorInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -51,7 +53,7 @@ export class MentorListComponent extends AbstractListComponent<Mentor> implement
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.schoolUriSupplier.observable.subscribe(this.reloadTableCache)
+    this.schoolUriSupplier.observable.subscribe(this.loadTableCache)
     this.init()
       .then(() => console.log('Initialization complete', this))
   }

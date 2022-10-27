@@ -19,13 +19,15 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
+import {SingleItemCache} from '../implementation/data/single-item-cache';
 import {UriSupplier} from '../implementation/data/uri-supplier';
-import {BookRepository} from '../implementation/repositories/book-repository';
 import {Book} from '../implementation/models/book/book';
+import {BookRepository} from '../implementation/repositories/book-repository';
 
 export const BOOK_DATA_SOURCE = new InjectionToken<DataSource<Book>>('book-data-source');
 export const BOOK_CACHE = new InjectionToken<Cache<Book>>('book-cache');
 export const BOOK_URI_SUPPLIER = new InjectionToken<UriSupplier>('book-uri-supplier');
+export const BOOK_INSTANCE_CACHE = new InjectionToken<SingleItemCache<Book>>('book-instance-cache')
 
 export function globalBookProvidersFactory() {
   return [
@@ -42,6 +44,11 @@ export function globalBookProvidersFactory() {
       provide: BOOK_DATA_SOURCE,
       useFactory: (repository: Repository<Book>, cache: Cache<Book>) => new DataSource<Book>(repository, cache),
       deps: [BookRepository, BOOK_CACHE]
+    },
+    {
+      provide: BOOK_INSTANCE_CACHE,
+      useFactory: (dataSource: DataSource<Book>) => new SingleItemCache<Book>(dataSource),
+      deps: [BOOK_DATA_SOURCE]
     },
   ]
 }

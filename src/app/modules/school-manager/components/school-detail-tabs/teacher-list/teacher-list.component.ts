@@ -21,9 +21,10 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {Command} from '../../../../../implementation/command/command';
 import {AbstractListComponent} from '../../../../../implementation/component/abstract-list-component';
 import {SchoolUriSupplier} from '../../../../../implementation/data/school-uri-supplier';
+import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
 import {Teacher} from '../../../../../implementation/models/teacher/teacher';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
-import {TEACHER_URI_SUPPLIER} from '../../../../../providers/global-teacher-providers-factory';
+import {TEACHER_INSTANCE_CACHE, TEACHER_URI_SUPPLIER} from '../../../../../providers/global-teacher-providers-factory';
 import {TEACHER_TABLE_CACHE} from '../../../providers/teacher-providers-factory';
 import {TEACHER_LIST_MENU} from '../../../school-manager.module';
 
@@ -40,10 +41,11 @@ export class TeacherListComponent extends AbstractListComponent<Teacher> impleme
     menuState: MenuStateService,
     @Inject(TEACHER_LIST_MENU) menuCommands: { name: string, factory: ((isAdminOnly: boolean) => Command) }[],
     @Inject(TEACHER_TABLE_CACHE) tableCache: TableCache<Teacher>,
+    @Inject(TEACHER_INSTANCE_CACHE) teacherInstanceCache: SingleItemCache<Teacher>,
     // other
     @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: SchoolUriSupplier,
   ) {
-    super(menuState, menuCommands, tableCache)
+    super(menuState, menuCommands, tableCache, teacherInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -51,7 +53,7 @@ export class TeacherListComponent extends AbstractListComponent<Teacher> impleme
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.teacherUriSupplier.observable.subscribe(this.reloadTableCache)
+    this.teacherUriSupplier.observable.subscribe(this.loadTableCache)
     this.init()
       .then(() => console.log('Initialization complete', this))
   }

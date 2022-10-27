@@ -66,6 +66,11 @@ export abstract class AbstractTableCache<T> extends SelectionManager<T> {
     this.tableDataSource.sort = sort;
   }
 
+  loadData(): Promise<T[]> {
+    return Promise.resolve([])
+  }
+
+
   protected get dataSize(): number {
     return this.filteredData.length;
   }

@@ -22,8 +22,10 @@ import {UserSessionService} from 'src/app/implementation/services/user-session.s
 import {Command} from '../../../../implementation/command/command';
 import {CommandArray} from '../../../../implementation/component/abstract-component';
 import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {Book} from '../../../../implementation/models/book/book';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {BOOK_INSTANCE_CACHE} from '../../../../providers/global-book-providers-factory';
 import {BOOK_LIST_MENU, BOOK_TABLE_CACHE} from '../../providers/book-providers-factory';
 
 @Component({
@@ -39,10 +41,11 @@ export class BookListComponent extends AbstractListComponent<Book> implements On
     menuState: MenuStateService,
     @Inject(BOOK_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     @Inject(BOOK_TABLE_CACHE) tableCache: TableCache<Book>,
+    @Inject(BOOK_INSTANCE_CACHE) bookInstanceCache: SingleItemCache<Book>,
     // other
     public userSession: UserSessionService,
   ) {
-    super(menuState, menuCommands, tableCache)
+    super(menuState, menuCommands, tableCache, bookInstanceCache)
     if (userSession.isSysAdmin) {
       this.columns = ['select'].concat(this.columns)
     }
