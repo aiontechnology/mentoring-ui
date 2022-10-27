@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<mat-tab-group class="wrapper" (selectedIndexChange)="onTabChange($event)">
+<mat-tab-group class="wrapper" [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
   <mat-tab *ngIf="userSession.isProgAdmin" label="School Books">
     <ms-school-book-list class="tab-content"></ms-school-book-list>
   </mat-tab>

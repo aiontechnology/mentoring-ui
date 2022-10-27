@@ -24,8 +24,11 @@ import {DataSource} from '../../../../../implementation/data/data-source';
 import {SchoolUriSupplier} from '../../../../../implementation/data/school-uri-supplier';
 import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
 import {URI} from '../../../../../implementation/data/uri-supplier';
+import {School} from '../../../../../implementation/models/school/school';
 import {StudentInbound, StudentMentorInbound} from '../../../../../implementation/models/student-inbound/student-inbound';
+import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {STUDENT_ID} from '../../../../../implementation/route/route-constants';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
 import {STUDENT_DATA_SOURCE, STUDENT_INSTANCE_CACHE, STUDENT_URI_SUPPLIER} from '../../../../../providers/global-student-providers-factory';
 import {LpgRepositoryService} from '../../../services/lpg/lpg-repository.service';
 import {STUDENT_DETAIL_MENU} from '../../../student-manager.module';
@@ -46,12 +49,14 @@ export class StudentDetailComponent extends AbstractDetailComponent implements O
     @Inject(STUDENT_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     route: ActivatedRoute,
     @Inject(STUDENT_URI_SUPPLIER) studentUriSupplier: SchoolUriSupplier,
+    navService: NavigationService,
     // other
     @Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<StudentInbound>,
     @Inject(STUDENT_INSTANCE_CACHE) public studentInstanceCache: SingleItemCache<StudentInbound>,
+    @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
     public lpgService: LpgRepositoryService,
   ) {
-    super(menuState, menuCommands, route, studentUriSupplier)
+    super(menuState, menuCommands, route, studentUriSupplier, navService)
   }
 
   @Input() set historic(isHistoric: boolean) { this.isHistoric = isHistoric }
@@ -74,6 +79,11 @@ export class StudentDetailComponent extends AbstractDetailComponent implements O
       .then(() => console.log('Destruction complete', this))
   }
 
+  protected doHandleBackButton = async (navService: NavigationService): Promise<void> =>
+    new Promise(resolve => {
+      navService.push({routeSpec: ['/studentmanager', 'schools', this.schoolInstanceCache.item.id], fragment: undefined})
+      resolve()
+    })
 
   protected onUriChange = (uri: URI) => {
     this.routeParams

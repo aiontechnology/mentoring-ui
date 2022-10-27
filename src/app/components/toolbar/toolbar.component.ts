@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import { Component, Input } from '@angular/core';
-import { MatDrawer } from '@angular/material/sidenav';
-import { Observable } from 'rxjs';
-import { MenuStateService } from 'src/app/implementation/services/menu-state.service';
-import { UserSessionService } from 'src/app/implementation/services/user-session.service';
-import { NavigationService } from 'src/app/implementation/route/navigation.service';
+import {Component, Input} from '@angular/core';
+import {MatDrawer} from '@angular/material/sidenav';
+import {Observable} from 'rxjs';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
+import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 
 @Component({
   selector: 'ms-toolbar',
@@ -31,8 +30,9 @@ export class ToolbarComponent {
   @Input() isHandset$: Observable<boolean>;
   @Input() drawer: MatDrawer;
 
-  constructor(public menuState: MenuStateService,
-              public userSession: UserSessionService,
-              public navigationService: NavigationService) { }
+  constructor(
+    public menuState: MenuStateService,
+    public userSession: UserSessionService,
+  ) {}
 
 }

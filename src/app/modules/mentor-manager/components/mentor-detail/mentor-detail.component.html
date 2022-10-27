@@ -19,31 +19,31 @@
     <mat-card-title>Mentor Details</mat-card-title>
   </mat-card-header>
   <mat-card-content class="mat-elevation-z8">
-    <h1>{{ mentorCache.item?.firstName + ' ' + mentorCache.item?.lastName }}</h1>
+    <h1>{{ mentorInstanceCache.item?.firstName + ' ' + mentorInstanceCache.item?.lastName }}</h1>
     <table>
       <tr>
         <td>Phone number</td>
-        <td>{{ mentorCache.item?.cellPhone }}</td>
+        <td>{{ mentorInstanceCache.item?.cellPhone }}</td>
       </tr>
       <tr>
         <td>Email address</td>
-        <td>{{ mentorCache.item?.email }}</td>
+        <td>{{ mentorInstanceCache.item?.email }}</td>
       </tr>
       <tr>
         <td>Availability</td>
-        <td>{{ mentorCache.item?.availability }}</td>
+        <td>{{ mentorInstanceCache.item?.availability }}</td>
       </tr>
       <tr>
         <td>Media release signed</td>
-        <td>{{ mentorCache.item?.mediaReleaseSigned ? 'yes' : 'no' }}</td>
+        <td>{{ mentorInstanceCache.item?.mediaReleaseSigned ? 'yes' : 'no' }}</td>
       </tr>
       <tr>
         <td>Background check completed</td>
-        <td>{{ mentorCache.item?.backgroundCheckCompleted ? 'yes' : 'no' }}</td>
+        <td>{{ mentorInstanceCache.item?.backgroundCheckCompleted ? 'yes' : 'no' }}</td>
       </tr>
       <tr>
         <td>Location</td>
-        <td>{{ mentorCache.item?.displayLocation }}</td>
+        <td>{{ mentorInstanceCache.item?.displayLocation }}</td>
       </tr>
     </table>
   </mat-card-content>

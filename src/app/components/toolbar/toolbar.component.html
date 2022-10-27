@@ -15,13 +15,7 @@
   -->
 
 <mat-toolbar color="primary">
-  <button
-    mat-icon-button
-    [routerLink]="navigationService.routeParams"
-    [fragment]="navigationService.fragment"
-    *ngIf="navigationService.hasPrev()">
-    <mat-icon>arrow_back_ios_new</mat-icon>
-  </button>
+  <ms-back-arrow></ms-back-arrow>
   <button
     type="button"
     aria-label="Toggle sidenav"

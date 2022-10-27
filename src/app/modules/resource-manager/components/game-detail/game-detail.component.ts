@@ -22,6 +22,7 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {Command} from '../../../../implementation/command/command';
 import {AbstractDetailComponent} from '../../../../implementation/component/abstract-detail-component';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {GAME_ID} from '../../../../implementation/route/route-constants';
 import {GAME_DETAIL_MENU, GAME_SINGLE_CACHE} from '../../providers/game-providers-factory';
 
@@ -36,10 +37,11 @@ export class GameDetailComponent extends AbstractDetailComponent implements OnIn
     menuState: MenuStateService,
     @Inject(GAME_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     route: ActivatedRoute,
+    navService: NavigationService,
     // other
     @Inject(GAME_SINGLE_CACHE) public gameCache: SingleItemCache<Game>,
   ) {
-    super(menuState, menuCommands, route)
+    super(menuState, menuCommands, route, undefined, navService)
     menuState.clear()
   }
 
@@ -60,6 +62,12 @@ export class GameDetailComponent extends AbstractDetailComponent implements OnIn
     this.destroy()
       .then(() => console.log('Destruction complete', this))
   }
+
+  protected doHandleBackButton = async (navService: NavigationService): Promise<void> =>
+    new Promise(resolve => {
+      navService.push({routeSpec: ['/resourcemanager'], fragment: 'game'})
+      resolve()
+    })
 
   protected override doHandleRoute = async (route: ActivatedRoute): Promise<void> => {
     await route.paramMap

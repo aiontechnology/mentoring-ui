@@ -20,9 +20,7 @@ import {SCHOOL_INSTANCE_CACHE} from '../../providers/global-school-providers-fac
 import {SingleItemCache} from '../data/single-item-cache';
 import {School} from '../models/school/school';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UserSessionService {
 
   private static ID_TOKEN = 'id_token';

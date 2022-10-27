@@ -19,6 +19,7 @@ import {Observable} from 'rxjs';
 import {Command} from '../command/command';
 import {SchoolUriSupplier} from '../data/school-uri-supplier';
 import {URI} from '../data/uri-supplier';
+import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
 import {AbstractComponent} from './abstract-component';
 
@@ -28,6 +29,7 @@ export abstract class AbstractDetailComponent extends AbstractComponent {
     menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     private route: ActivatedRoute,
     private uriSuppler?: SchoolUriSupplier,
+    private navService?: NavigationService,
   ) {
     super(menuState, menuCommands)
   }
@@ -42,7 +44,12 @@ export abstract class AbstractDetailComponent extends AbstractComponent {
 
   protected override doInit = async (): Promise<void> => {
     this.uriSuppler?.observable?.subscribe(this.onUriChange)
-    this.doHandleRoute(this.route)
+    await this.doHandleRoute(this.route)
+    await this.handleBackButton(this.navService)
+  }
+
+  protected async doDestroy(): Promise<void> {
+    return this.navService.clear();
   }
 
   /**
@@ -53,7 +60,16 @@ export abstract class AbstractDetailComponent extends AbstractComponent {
   protected doHandleRoute = async (route: ActivatedRoute): Promise<void> =>
     Promise.resolve()
 
+  protected doHandleBackButton = async (navService: NavigationService): Promise<void> =>
+    Promise.resolve()
+
   protected onUriChange = (uri: URI): void => {
     // do nothing
+  }
+
+  private handleBackButton = async (navService:NavigationService): Promise<void> => {
+    if(navService) {
+      await this.doHandleBackButton(navService)
+    }
   }
 }

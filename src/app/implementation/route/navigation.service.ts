@@ -14,28 +14,34 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
-@Injectable({
-  providedIn: 'root'
-})
+type RouteSpec = string[]
+type FullSpec = { routeSpec: RouteSpec, fragment: string }
+
+@Injectable()
 export class NavigationService {
+  private routeSpecStack: FullSpec[] = []
 
-  routeParams: string[];
-  fragment: string;
-
-  constructor() {
-    this.routeParams = [];
-    this.fragment = null;
+  get isEmpty() {
+    return this.routeSpecStack.length === 0
   }
 
-  hasPrev(): boolean {
-    return this.routeParams.length !== 0;
+  clear(): void {
+    this.routeSpecStack = []
   }
 
-  clearRoute(): void {
-    this.routeParams = [];
-    this.fragment = null;
+  push(spec: FullSpec): void {
+    this.routeSpecStack.push(spec)
   }
 
+  pop(): FullSpec {
+    return this.routeSpecStack.pop()
+  }
+
+  peek(): FullSpec | null {
+    return this.isEmpty
+      ? null
+      : this.routeSpecStack[this.routeSpecStack.length - 1]
+  }
 }

@@ -17,15 +17,17 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
 import {AbstractDetailComponent} from '../../../../implementation/component/abstract-detail-component';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {SchoolUriSupplier} from '../../../../implementation/data/school-uri-supplier';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
 import {URI} from '../../../../implementation/data/uri-supplier';
+import {School} from '../../../../implementation/models/school/school';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {MENTOR_ID} from '../../../../implementation/route/route-constants';
 import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 import {MENTOR_DETAIL_MENU} from '../../mentor-manager.module';
 import {Mentor} from '../../models/mentor/mentor';
 
@@ -36,18 +38,18 @@ import {Mentor} from '../../models/mentor/mentor';
 })
 export class MentorDetailComponent extends AbstractDetailComponent implements OnInit, OnDestroy {
   constructor(
-    // public
-    public userSession: UserSessionService,
     // for super
     menuState: MenuStateService,
     @Inject(MENTOR_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     route: ActivatedRoute,
     @Inject(MENTOR_URI_SUPPLIER) mentorUriSupplier: SchoolUriSupplier,
+    navService: NavigationService,
     // other
-    @Inject(MENTOR_INSTANCE_CACHE) public mentorCache: SingleItemCache<Mentor>,
     @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
+    @Inject(MENTOR_INSTANCE_CACHE) public mentorInstanceCache: SingleItemCache<Mentor>,
+    @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
   ) {
-    super(menuState, menuCommands, route, mentorUriSupplier)
+    super(menuState, menuCommands, route, mentorUriSupplier, navService)
   }
 
   ngOnInit() {
@@ -60,13 +62,19 @@ export class MentorDetailComponent extends AbstractDetailComponent implements On
       .then(() => console.log('Destruction complete', this))
   }
 
+  protected doHandleBackButton = async (navService: NavigationService): Promise<void> =>
+    new Promise(resolve => {
+      navService.push({routeSpec: ['/mentormanager', 'schools', this.schoolInstanceCache.item.id], fragment: undefined})
+      resolve()
+    })
+
   protected onUriChange = (uri: URI) => {
     this.routeParams
       .subscribe(params => {
         const mentorId = params.get(MENTOR_ID)
         this.mentorDataSource.oneValue(mentorId)
           .then(mentor => {
-            this.mentorCache.item = mentor
+            this.mentorInstanceCache.item = mentor
           })
       })
   }

@@ -22,6 +22,7 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {Command} from '../../../../implementation/command/command';
 import {AbstractDetailComponent} from '../../../../implementation/component/abstract-detail-component';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {BOOK_ID} from '../../../../implementation/route/route-constants';
 import {BOOK_DETAIL_MENU, BOOK_SINGLE_CACHE} from '../../providers/book-providers-factory';
 
@@ -36,10 +37,11 @@ export class BookDetailComponent extends AbstractDetailComponent implements OnIn
     menuState: MenuStateService,
     @Inject(BOOK_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     route: ActivatedRoute,
+    navService: NavigationService,
     // other
     @Inject(BOOK_SINGLE_CACHE) public bookCache: SingleItemCache<Book>,
   ) {
-    super(menuState, menuCommands, route)
+    super(menuState, menuCommands, route, undefined, navService)
     menuState.clear()
   }
 
@@ -56,6 +58,12 @@ export class BookDetailComponent extends AbstractDetailComponent implements OnIn
     this.destroy()
       .then(() => console.log('Destruction complete', this))
   }
+
+  protected doHandleBackButton = async (navService: NavigationService): Promise<void> =>
+    new Promise(resolve => {
+      navService.push({routeSpec: ['/resourcemanager'], fragment: 'book'})
+      resolve()
+    })
 
   protected override doHandleRoute = async (route: ActivatedRoute): Promise<void> => {
     await route.paramMap

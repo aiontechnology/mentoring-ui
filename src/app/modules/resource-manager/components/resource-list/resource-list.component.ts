@@ -15,6 +15,7 @@
  */
 
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {BOOK_GROUP, GAME_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP} from '../../resource-manager.module';
@@ -26,11 +27,23 @@ import {setState} from './menu-state-manager';
   styleUrls: ['./resource-list.component.scss']
 })
 export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
+  tabIndex: number
 
   constructor(
     public userSession: UserSessionService,
     private menuState: MenuStateService,
+    private route: ActivatedRoute,
   ) {
+    route.fragment.subscribe(fragment => {
+      switch (fragment) {
+        case 'book':
+          this.tabIndex = 0
+          break
+        case 'game':
+          this.tabIndex = 1
+          break
+      }
+    })
   }
 
   ngOnInit(): void {

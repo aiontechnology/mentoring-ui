@@ -48,8 +48,7 @@ import {SchoolManagerComponent} from './school-manager.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: SchoolManagerComponent,
+    path: '', component: SchoolManagerComponent,
     children: [
       {path: '', component: SchoolListComponent}
     ],

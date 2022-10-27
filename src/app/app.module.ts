@@ -33,10 +33,12 @@ import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {ToolbarComponent} from './components/toolbar/toolbar.component';
 import {SnackbarManager} from './implementation/command/snackbar-manager';
 import {GlobalErrorHandler} from './implementation/errors/global-error-handler';
+import {NavigationService} from './implementation/route/navigation.service';
 import {CanActivateApp} from './implementation/services/can-activate-app';
 import {CanActivateSysAdmin} from './implementation/services/can-activate-sys-admin';
 import {HttpErrorInterceptorService} from './implementation/services/http-error-interceptor.service';
 import {TokenInterceptorService} from './implementation/services/token-interceptor.service';
+import {UserSessionService} from './implementation/services/user-session.service';
 import {MaterialModule} from './implementation/shared/material.module';
 import {globalBookProvidersFactory} from './providers/global-book-providers-factory';
 import {globalGameProvidersFactory} from './providers/global-game-providers-factory';
@@ -49,9 +51,10 @@ import {globalSchoolProvidersFactory} from './providers/global-school-providers-
 import {globalSchoolSessionProvidersFactory} from './providers/global-school-session-providers-factory';
 import {globalStudentProvidersFactory} from './providers/global-student-providers-factory';
 import {globalTeacherProvidersFactory} from './providers/global-teacher-providers-factory';
+import { BackArrowComponent } from './components/back-arrow/back-arrow.component';
 
-const loginProvider = new InjectionToken('loginRedirectResolver');
-const logoutProvider = new InjectionToken('logoutRedirectResolver');
+const LOGIN_PROVIDER = new InjectionToken('loginRedirectResolver');
+const LOGOUT_PROVIDER = new InjectionToken('logoutRedirectResolver');
 
 const oauthScopes = 'openid profile';
 const loginUrl = `https://${environment.cognitoBaseUrl}/login?client_id=${environment.cognitoClientId}&response_type=token&scope=${oauthScopes}&redirect_uri=${environment.tokenRedirect}`;
@@ -59,11 +62,9 @@ const logoutUrl = `https://${environment.cognitoBaseUrl}/logout?client_id=${envi
 
 const routes: Routes = [
   {path: '', component: LandingPageComponent},
-  {path: 'logout', component: NoopComponent, canActivate: [logoutProvider, CanActivateApp]},
+  {path: 'logout', component: NoopComponent, canActivate: [LOGOUT_PROVIDER, CanActivateApp]},
   {path: 'home', component: HomeComponent, canActivate: [CanActivateApp]},
-  {
-    path: 'handleLogout', component: HandleLogoutComponent, canActivate: [CanActivateApp]
-  },
+  {path: 'handleLogout', component: HandleLogoutComponent, canActivate: [CanActivateApp]},
   {
     path: 'adminmanager',
     loadChildren: () => import('./modules/admin-manager/admin-manager.module').then(m => m.AdminManagerModule),
@@ -94,7 +95,7 @@ const routes: Routes = [
     loadChildren: () => import('./modules/workflow-manager/workflow-manager.module').then(m => m.WorkflowManagerModule)
   },
   {path: 'receiveToken', component: ReceiveTokenComponent},
-  {path: 'login', component: NoopComponent, canActivate: [loginProvider]},
+  {path: 'login', component: NoopComponent, canActivate: [LOGIN_PROVIDER]},
   {path: '**', redirectTo: ''}
 ];
 
@@ -102,7 +103,9 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
 
 @NgModule({
   declarations: [
+    // components
     AppComponent,
+    BackArrowComponent,
     HandleLogoutComponent,
     HomeComponent,
     LandingPageComponent,
@@ -122,17 +125,15 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
     RouterOutlet,
   ],
   providers: [
+    NavigationService,
+    UserSessionService,
     {
-      provide: loginProvider,
-      useValue: (route: ActivatedRouteSnapshot) => {
-        window.open(loginUrl, '_self');
-      }
+      provide: LOGIN_PROVIDER,
+      useValue: (route: ActivatedRouteSnapshot) => {window.open(loginUrl, '_self')}
     },
     {
-      provide: logoutProvider,
-      useValue: (route: ActivatedRoute) => {
-        window.open(logoutUrl, '_self');
-      }
+      provide: LOGOUT_PROVIDER,
+      useValue: (route: ActivatedRoute) => {window.open(logoutUrl, '_self')}
     },
     {
       provide: 'TOKEN_REDIRECT',
@@ -152,11 +153,6 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
     },
-    // {
-    //   provide: RouteReuseStrategy,
-    //   useClass: CustomRouteReuseStrategy
-    // },
-
     ...globalSchoolProvidersFactory(),
     ...globalPersonnelProvidersFactory(),
     ...globalProgramAdminProvidersFactory(),

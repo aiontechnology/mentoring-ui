@@ -23,6 +23,7 @@ import {AbstractDetailComponent} from '../../../../../implementation/component/a
 import {SchoolUriSupplier} from '../../../../../implementation/data/school-uri-supplier';
 import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
 import {School} from '../../../../../implementation/models/school/school';
+import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {SCHOOL_INSTANCE_CACHE, SCHOOL_URI_SUPPLIER} from '../../../../../providers/global-school-providers-factory';
 import {SCHOOL_DETAIL_MENU} from '../../../school-manager.module';
 
@@ -38,10 +39,11 @@ export class SchoolDetailComponent extends AbstractDetailComponent implements On
     @Inject(SCHOOL_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     route: ActivatedRoute,
     @Inject(SCHOOL_URI_SUPPLIER) uriSupplier: SchoolUriSupplier,
+    navService: NavigationService,
     // other
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
   ) {
-    super(menuState, menuCommands, route, uriSupplier)
+    super(menuState, menuCommands, route, uriSupplier, navService)
   }
 
   ngOnInit(): void {
@@ -53,6 +55,12 @@ export class SchoolDetailComponent extends AbstractDetailComponent implements On
     this.destroy()
       .then(() => console.log('Destruction complete', this))
   }
+
+  protected doHandleBackButton = async (navService: NavigationService): Promise<void> =>
+    new Promise(resolve => {
+      navService.push({routeSpec: ['/schoolsmanager'], fragment: undefined})
+      resolve()
+    })
 
   protected override registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
     menuCommands.forEach(command => {
