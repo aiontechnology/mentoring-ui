@@ -19,7 +19,7 @@ import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {SCHOOL_GAME_DATA_SOURCE, SCHOOL_GAME_TABLE_CACHE} from '../../../providers/global-school-game-providers-factory';
 import {updateProvidersFactory} from '../../../providers/update-menus-providers-factory';
 import {Game} from '../../../implementation/models/game/game';
-import {SchoolGameDialogComponent} from '../components/school-game-dialog/school-game-dialog.component';
+import {SchoolGameDialogComponent} from '../components/school-detail-tabs/school-game-dialog/school-game-dialog.component';
 import {SCHOOL_GAME_GROUP, SCHOOL_GAME_LIST_MENU} from '../school-manager.module';
 
 export function schoolGameProvidersFactory() {

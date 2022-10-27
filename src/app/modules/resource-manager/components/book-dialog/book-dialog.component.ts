@@ -15,14 +15,15 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {resourceLocations} from 'src/app/implementation/constants/locations';
 import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
 import {Book} from 'src/app/implementation/models/book/book';
-import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {Grade} from 'src/app/implementation/types/grade';
+import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import {AbstractDialogComponent} from '../../../../implementation/component/abstract-dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {BOOK_DATA_SOURCE} from '../../../../providers/global-book-providers-factory';
 
@@ -31,13 +32,9 @@ import {BOOK_DATA_SOURCE} from '../../../../providers/global-book-providers-fact
   templateUrl: './book-dialog.component.html',
   styleUrls: ['./book-dialog.component.scss']
 })
-export class BookDialogComponent implements OnInit {
-
-  model: UntypedFormGroup;
-  isUpdate = false;
-
+export class BookDialogComponent extends AbstractDialogComponent<Book, BookDialogComponent> implements OnInit {
   grades: Grade[] = resourceGrades;
-  locations: { [key: string]: string };
+  locations: { [key: string]: string } = resourceLocations;
   interestList$: Observable<string[]>;
   leadershipTraitList$: Observable<string[]>;
   leadershipSkillList$: Observable<string[]>;
@@ -45,14 +42,16 @@ export class BookDialogComponent implements OnInit {
   behaviorList$: Observable<string[]>;
   tagsList$: Observable<string[]>;
 
-  constructor(@Inject(BOOK_DATA_SOURCE) private bookDataSource: DataSource<Book>,
-              private dialogRef: MatDialogRef<BookDialogComponent>,
-              private metaDataService: MetaDataService,
-              private formBuilder: UntypedFormBuilder,
-              @Inject(MAT_DIALOG_DATA) private data: any) {
-    this.isUpdate = this.determineUpdate(data);
-    this.model = this.createModel(this.formBuilder, this.data?.model);
-    this.locations = resourceLocations;
+  constructor(
+    // for super
+    @Inject(MAT_DIALOG_DATA) data: any,
+    formBuilder: FormBuilder,
+    dialogRef: MatDialogRef<BookDialogComponent>,
+    @Inject(BOOK_DATA_SOURCE) bookDataSource: DataSource<Book>,
+    // other
+    private metaDataService: MetaDataService,
+  ) {
+    super(data?.model as Book, formBuilder, dialogRef, bookDataSource)
   }
 
   ngOnInit(): void {
@@ -75,33 +74,21 @@ export class BookDialogComponent implements OnInit {
     this.tagsList$ = this.metaDataService.tags;
   }
 
-  save(): void {
-    const newBook = new Book(this.model.value);
-    let value: Promise<Book>;
-
-    if (this.isUpdate) {
-      newBook.links = this.model.value.book.links;
-      value = this.bookDataSource.update(newBook);
-    } else {
-      value = this.bookDataSource.add(newBook);
-    }
-
-    value.then((b: Book) => {
-      this.dialogRef.close(b);
-    });
-  }
-
-  dismiss(): void {
-    this.dialogRef.close(null);
-  }
-
   // Used for the keyvalue pipe, to keep location properties in their default order.
   unsorted(): number {
     return 0;
   }
 
-  private createModel(formBuilder: UntypedFormBuilder, book: Book): UntypedFormGroup {
-    const formGroup: UntypedFormGroup = formBuilder.group({
+  protected toModel(formValue: any): Book {
+    const book: Book = new Book(formValue);
+    if (this.isUpdate) {
+      book.links = formValue.book.links
+    }
+    return book;
+  }
+
+  protected doCreateFormGroup(formBuilder: FormBuilder, book: Book): FormGroup {
+    return formBuilder.group({
       book,
       title: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', [Validators.maxLength(255)]],
@@ -115,27 +102,22 @@ export class BookDialogComponent implements OnInit {
       behaviors: [],
       tag: ['']
     });
-    if (this.isUpdate) {
-      formGroup.setValue({
-        book,
-        title: book?.title,
-        description: book?.description,
-        author: book?.author,
-        gradeLevel: book?.gradeLevel?.toString(),
-        location: book?.location?.toString(),
-        interests: book?.interests,
-        leadershipSkills: book?.leadershipSkills,
-        leadershipTraits: book?.leadershipTraits,
-        phonograms: book?.phonograms,
-        behaviors: book?.behaviors,
-        tag: book?.tag
-      });
-    }
-    return formGroup;
   }
 
-  private determineUpdate(formData: any): boolean {
-    return formData !== undefined && formData !== null;
+  protected doUpdateFormGroup(formGroup: FormGroup, book: Book): void {
+    formGroup.setValue({
+      book,
+      title: book?.title,
+      description: book?.description,
+      author: book?.author,
+      gradeLevel: book?.gradeLevel?.toString(),
+      location: book?.location?.toString(),
+      interests: book?.interests,
+      leadershipSkills: book?.leadershipSkills,
+      leadershipTraits: book?.leadershipTraits,
+      phonograms: book?.phonograms,
+      behaviors: book?.behaviors,
+      tag: book?.tag
+    })
   }
-
 }

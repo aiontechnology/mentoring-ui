@@ -19,29 +19,25 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Mentor} from '../../modules/mentor-manager/models/mentor/mentor';
-import {Personnel} from '../../modules/school-manager/models/personnel/personnel';
-import {ProgramAdmin} from '../../modules/school-manager/models/program-admin/program-admin';
-import {Teacher} from '../../modules/school-manager/models/teacher/teacher';
-import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../modules/school-manager/providers/personnel-providers-factory';
-import {
-  PROGRAM_ADMIN_DATA_SOURCE,
-  PROGRAM_ADMIN_URI_SUPPLIER
-} from '../../modules/school-manager/providers/program-admin-providers-factory';
+import {STUDENT_DATA_SOURCE, STUDENT_URI_SUPPLIER} from '../../providers/global-student-providers-factory';
+import {Personnel} from '../models/personnel/personnel';
+import {ProgramAdmin} from '../models/program-admin/program-admin';
+import {Teacher} from '../models/teacher/teacher';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../providers/global-program-admin-providers-factory';
 import {
   SCHOOL_SESSION_DATA_SOURCE,
   SCHOOL_SESSION_URI_SUPPLIER
-} from '../../modules/school-manager/providers/school-session-providers-factory';
-import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../modules/school-manager/providers/teacher-providers-factory';
+} from '../../providers/global-school-session-providers-factory';
 import {
   INVITATION_DATA_SOURCE,
   INVITATION_URI_SUPPLIER,
-  STUDENT_DATA_SOURCE,
-  STUDENT_URI_SUPPLIER,
 } from '../../modules/shared/shared.module';
-import {Student} from '../../modules/student-manager/models/student/student';
+import {Student} from '../models/student/student';
 import {MENTOR_DATA_SOURCE, MENTOR_URI_SUPPLIER} from '../../providers/global-mentor-providers-factory';
+import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../providers/global-personnel-providers-factory';
 import {SCHOOL_BOOK_DATA_SOURCE, SCHOOL_BOOK_URI_SUPPLIER} from '../../providers/global-school-book-providers-factory';
 import {SCHOOL_DATA_SOURCE} from '../../providers/global-school-providers-factory';
+import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../providers/global-teacher-providers-factory';
 import {DataSource} from '../data/data-source';
 import {UriSupplier} from '../data/uri-supplier';
 import {Book} from '../models/book/book';

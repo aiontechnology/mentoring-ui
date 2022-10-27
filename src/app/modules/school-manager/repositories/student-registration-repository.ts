@@ -16,7 +16,7 @@
 
 import {Repository} from '../../../implementation/data/repository';
 import {REGISTRATION_URI_SUPPLIER} from '../../shared/shared.module';
-import {StudentRegistration} from '../models/workflow/student-registration';
+import {StudentRegistration} from '../../../implementation/models/workflow/student-registration';
 import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';

@@ -15,75 +15,52 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {FormBuilder, FormGroup, UntypedFormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {School} from 'src/app/implementation/models/school/school';
+import {AbstractDialogComponent} from '../../../../implementation/component/abstract-dialog-component';
+import {states as globalStates} from '../../../../implementation/constants/states';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {SCHOOL_DATA_SOURCE} from '../../../../providers/global-school-providers-factory';
-import {states} from '../../../../implementation/shared/states';
+import {MultiItemCache} from '../../../../implementation/data/multi-item-cache';
+import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 
 @Component({
   selector: 'ms-new-school-dialog',
   templateUrl: './school-dialog.component.html',
   styleUrls: ['./school-dialog.component.scss']
 })
-export class SchoolDialogComponent {
+export class SchoolDialogComponent extends AbstractDialogComponent<School, SchoolDialogComponent> {
+  states = globalStates
 
-  model: FormGroup;
-  isUpdate = false;
-
-  /**
-   * Set up the form model and determine if this is an new school or an update of an existing school.
-   * @param dialogRef A reference to the dialog that is to be used.
-   * @param schoolService A reference to the SchoolService.
-   * @param formBuilder A builder used to setup the form model.
-   * @param data The data of the dialog.
-   */
-  constructor(@Inject(SCHOOL_DATA_SOURCE) private schoolDataSource: DataSource<School>,
-              private dialogRef: MatDialogRef<SchoolDialogComponent>,
-              private formBuilder: UntypedFormBuilder,
-              @Inject(MAT_DIALOG_DATA) private data: any) {
-    this.isUpdate = this.determineUpdate(data);
-    this.model = this.createModel(formBuilder, data?.model);
+  constructor(
+    // for super
+    @Inject(MAT_DIALOG_DATA) data: any,
+    formBuilder: FormBuilder,
+    dialogRef: MatDialogRef<SchoolDialogComponent>,
+    @Inject(SCHOOL_DATA_SOURCE) schoolDataSource: DataSource<School>,
+    // other
+    @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
+    @Inject(SCHOOL_COLLECTION_CACHE) private schoolCollectionCache: MultiItemCache<School>,
+  ) {
+    super(data?.model as School, formBuilder, dialogRef, schoolDataSource)
   }
 
-  get states() {
-    return states;
+  protected postDialogClose(school: School) {
+    this.schoolInstanceCache.item = school;
+    this.schoolCollectionCache.load()
   }
 
-  /**
-   * Save the form. Handles both new and updated schools.
-   */
-  save(): void {
-    const newSchool = new School(this.model.value);
-    let value: Promise<School>;
-
+  protected toModel(formValue: any): School {
+    const school: School = new School(formValue);
     if (this.isUpdate) {
-      newSchool.links = this.model.value.school.links;
-      value = this.schoolDataSource.update(newSchool);
-    } else {
-      value = this.schoolDataSource.add(newSchool);
+      school.links = formValue.school.links
     }
-
-    value.then((s: School) => {
-      this.dialogRef.close(s);
-    });
+    return school;
   }
 
-  /**
-   * Dismiss the dialog without saving.
-   */
-  dismiss(): void {
-    this.dialogRef.close(null);
-  }
-
-  /**
-   * Create the form model.
-   * @param formBuilder A builder used to setup the form model.
-   * @param school The School being edited (if any).
-   */
-  private createModel(formBuilder: FormBuilder, school: School): FormGroup {
-    const formGroup: FormGroup = formBuilder.group({
+  protected doCreateFormGroup(formBuilder: FormBuilder, school: School): FormGroup {
+    return formBuilder.group({
       school,
       name: ['', [Validators.required, Validators.maxLength(100)]],
       address: formBuilder.group({
@@ -97,31 +74,22 @@ export class SchoolDialogComponent {
       district: [null, Validators.maxLength(50)],
       isPrivate: false
     });
-    if (this.isUpdate) {
-      formGroup.setValue({
-        school,
-        name: school?.name,
-        address: {
-          street1: school?.address?.street1,
-          street2: school?.address?.street2,
-          city: school?.address?.city,
-          state: school?.address?.state,
-          zip: school?.address?.zip
-        },
-        phone: school?.phone,
-        district: school?.district,
-        isPrivate: school?.isPrivate
-      });
-    }
-    return formGroup;
   }
 
-  /**
-   * Determine if a school is being updated (as opposed to created).
-   * @param formData The form data to check.
-   */
-  private determineUpdate(formData: any): boolean {
-    return formData !== undefined && formData !== null;
+  protected doUpdateFormGroup(formGroup: FormGroup, school: School): void {
+    formGroup.setValue({
+      school,
+      name: school?.name,
+      address: {
+        street1: school?.address?.street1,
+        street2: school?.address?.street2,
+        city: school?.address?.city,
+        state: school?.address?.state,
+        zip: school?.address?.zip
+      },
+      phone: school?.phone,
+      district: school?.district,
+      isPrivate: school?.isPrivate
+    })
   }
-
 }

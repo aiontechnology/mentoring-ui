@@ -16,45 +16,40 @@
 
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {Component, Inject, OnInit} from '@angular/core';
-import {UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup, ValidatorFn, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {Observable} from 'rxjs';
-import {NewDialogCommandOld} from 'src/app/implementation/command/new-dialog-command-old';
 import {grades} from 'src/app/implementation/constants/grades';
 import {personLocations} from 'src/app/implementation/constants/locations';
+import {Teacher} from 'src/app/implementation/models/teacher/teacher';
 import {Grade} from 'src/app/implementation/types/grade';
-import {MentorDialogComponent} from 'src/app/modules/mentor-manager/components/mentor-dialog/mentor-dialog.component';
 import {Mentor} from 'src/app/modules/mentor-manager/models/mentor/mentor';
-import {TeacherDialogComponent} from 'src/app/modules/school-manager/components/teacher-dialog/teacher-dialog.component';
-import {Teacher} from 'src/app/modules/school-manager/models/teacher/teacher';
 import {LinkService} from 'src/app/modules/shared/services/link-service/link.service';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {RouteWatchingService} from '../../../../implementation/route/route-watching.service';
+import {StudentInbound} from '../../../../implementation/models/student-inbound/student-inbound';
+import {StudentOutbound} from '../../../../implementation/models/student-outbound/student-outbound';
+import {Student} from '../../../../implementation/models/student/student';
 import {MENTOR_DATA_SOURCE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
-import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../school-manager/providers/teacher-providers-factory';
-import {STUDENT_DATA_SOURCE,} from '../../../shared/shared.module';
-import {StudentInbound} from '../../models/student-inbound/student-inbound';
-import {StudentOutbound} from '../../models/student-outbound/student-outbound';
-import {Student} from '../../models/student/student';
+import {STUDENT_DATA_SOURCE} from '../../../../providers/global-student-providers-factory';
+import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../../providers/global-teacher-providers-factory';
 
 @Component({
   selector: 'ms-student-dialog',
   templateUrl: './student-dialog.component.html',
   styleUrls: ['./student-dialog.component.scss'],
   providers: [
-    RouteWatchingService,
     {provide: STEPPER_GLOBAL_OPTIONS, useValue: {showError: true}}
   ]
 })
 export class StudentDialogComponent implements OnInit {
 
-  model: UntypedFormGroup;
-  studentDetails: UntypedFormGroup;
-  teacherInput: UntypedFormGroup;
-  contacts: UntypedFormGroup;
+  model: FormGroup;
+  studentDetails: FormGroup;
+  teacherInput: FormGroup;
+  contacts: FormGroup;
 
   isUpdate = false;
 
@@ -74,8 +69,8 @@ export class StudentDialogComponent implements OnInit {
 
   months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-  newTeacherCommand: NewDialogCommandOld<Teacher, TeacherDialogComponent>;
-  newMentorCommand: NewDialogCommandOld<Mentor, MentorDialogComponent>;
+  // newTeacherCommand: NewDialogCommandOld<Teacher, TeacherDialogComponent>;
+  // newMentorCommand: NewDialogCommandOld<Mentor, MentorDialogComponent>;
 
   constructor(@Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<Student>,
               @Inject(TEACHER_DATA_SOURCE) private teacherDataSource: DataSource<Teacher>,
@@ -83,7 +78,7 @@ export class StudentDialogComponent implements OnInit {
               @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
               @Inject(MENTOR_URI_SUPPLIER) private mentorUriSupplier: UriSupplier,
               private dialogRef: MatDialogRef<StudentDialogComponent>,
-              private formBuilder: UntypedFormBuilder,
+              private formBuilder: FormBuilder,
               private metaDataService: MetaDataService,
               private dialog: MatDialog,
               private snackBar: MatSnackBar,
@@ -102,31 +97,31 @@ export class StudentDialogComponent implements OnInit {
     /**
      * Opens teacher creation dialog with a fixed grade.
      */
-    this.newTeacherCommand = new NewDialogCommandOld(
-      'Add Teacher',
-      'teacher',
-      TeacherDialogComponent,
-      'Teacher added',
-      null,
-      {schoolId: this.schoolId, selectedGrade: () => this.selectedGrade},
-      null,
-      this.dialog,
-      this.snackBar,
-      (t: Teacher) => this.addNewTeacher(t),
-      () => true);
-
-    this.newMentorCommand = new NewDialogCommandOld(
-      'Add Mentor',
-      'mentor',
-      MentorDialogComponent,
-      'Mentor added',
-      null,
-      {schoolId: this.schoolId},
-      null,
-      this.dialog,
-      this.snackBar,
-      (m: Mentor) => this.addNewMentor(m),
-      () => true);
+    // this.newTeacherCommand = new NewDialogCommandOld(
+    //   'Add Teacher',
+    //   'teacher',
+    //   TeacherDialogComponent,
+    //   'Teacher added',
+    //   null,
+    //   {schoolId: this.schoolId, selectedGrade: () => this.selectedGrade},
+    //   null,
+    //   this.dialog,
+    //   this.snackBar,
+    //   (t: Teacher) => this.addNewTeacher(t),
+    //   () => true);
+    //
+    // this.newMentorCommand = new NewDialogCommandOld(
+    //   'Add Mentor',
+    //   'mentor',
+    //   MentorDialogComponent,
+    //   'Mentor added',
+    //   null,
+    //   {schoolId: this.schoolId},
+    //   null,
+    //   this.dialog,
+    //   this.snackBar,
+    //   (m: Mentor) => this.addNewMentor(m),
+    //   () => true);
   }
 
   get parents() {
@@ -250,12 +245,12 @@ export class StudentDialogComponent implements OnInit {
   }
 
   private determineUpdate(formData: any): boolean {
-    return formData.model !== undefined && formData.model !== null;
+    return formData !== undefined && formData !== null;
   }
 
-  private createModel(formBuilder: UntypedFormBuilder, student: StudentInbound): UntypedFormGroup {
+  private createModel(formBuilder: FormBuilder, student: StudentInbound): FormGroup {
 
-    const formGroup: UntypedFormGroup = formBuilder.group({
+    const formGroup: FormGroup = formBuilder.group({
       studentDetails: formBuilder.group({
         student,
         firstName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -428,7 +423,6 @@ export class StudentDialogComponent implements OnInit {
   }
 
   private loadAllMentors(): void {
-    this.mentorUriSupplier.withSubstitution('schoolId', this.schoolId);
     this.mentors$ = this.mentorDataSource.allValues();
   }
 

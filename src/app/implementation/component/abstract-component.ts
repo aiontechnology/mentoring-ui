@@ -17,6 +17,8 @@
 import {Command} from '../command/command';
 import {MenuStateService} from '../services/menu-state.service';
 
+export type CommandArray = { name: string, factory: (isAdminOnly: boolean) => Command }[]
+
 export abstract class AbstractComponent {
   protected constructor(
     protected menuState: MenuStateService,
@@ -26,23 +28,23 @@ export abstract class AbstractComponent {
   /**
    * Run the component set up.
    */
-  protected init(): void {
-    this.doInit()
+  protected async init(): Promise<void> {
+    await this.doInit()
     this.registerMenus(this.menuState, this.menuCommands)
   }
 
-  protected doInit(): void {
+  protected async doInit(): Promise<void> {
     // do nothing
   }
 
   /**
    * Run the component teardown.
    */
-  protected destroy(): void {
-    this.doDestroy()
+  protected async destroy(): Promise<void> {
+    await this.doDestroy()
   }
 
-  protected doDestroy(): void {
+  protected async doDestroy(): Promise<void> {
     // do nothing
   }
 
@@ -52,6 +54,10 @@ export abstract class AbstractComponent {
    * @param menuCommands The array of menu commands.
    * @protected
    */
-  protected abstract registerMenus(menuState: MenuStateService, menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]);
+  protected registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
+    menuCommands.forEach(command => {
+      menuState.add(command.factory(false))
+    })
+  }
 
 }

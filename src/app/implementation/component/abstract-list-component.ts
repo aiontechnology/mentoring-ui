@@ -32,16 +32,28 @@ export abstract class AbstractListComponent<T> extends AbstractComponent {
     super(menuState, menuCommands)
   }
 
-  protected doInit() {
-    this.tableCache.loadData()
-      .then(() => this.tableCache.clearSelection())
-  }
-
   protected set sort(sort: MatSort) {
-    this.tableCache.sort = sort
+    if (sort) {
+      this.tableCache.sort = sort
+    }
   }
 
   protected set paginator(paginator: MatPaginator) {
-    this.tableCache.paginator = paginator
+    if (paginator) {
+      this.tableCache.paginator = paginator
+    }
   }
+
+  protected doInit = async (): Promise<void> => {
+    await this.reloadTableCache()
+  }
+
+  protected reloadTableCache = async (): Promise<void> => {
+    await this.preTableCacheLoad()
+    await this.tableCache.loadData()
+    await this.tableCache.clearSelection()
+  }
+
+  protected preTableCacheLoad = async (): Promise<void> =>
+    Promise.resolve()
 }

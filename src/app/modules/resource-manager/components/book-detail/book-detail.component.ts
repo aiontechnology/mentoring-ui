@@ -49,22 +49,18 @@ export class BookDetailComponent extends AbstractDetailComponent implements OnIn
 
   ngOnInit(): void {
     this.init()
+      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
     this.destroy()
+      .then(() => console.log('Destruction complete', this))
   }
 
-  protected doHandleRoute(route: ActivatedRoute) {
-    route.paramMap
+  protected override doHandleRoute = async (route: ActivatedRoute): Promise<void> => {
+    await route.paramMap
       .subscribe(params => {
         this.bookCache.fromId(params.get(BOOK_ID));
       })
-  }
-
-  protected registerMenus(menuState: MenuStateService, menuCommands: { name: string; factory: (isAdminOnly: boolean) => Command }[]) {
-    menuCommands.forEach(command => {
-      menuState.add(command.factory(false))
-    })
   }
 }

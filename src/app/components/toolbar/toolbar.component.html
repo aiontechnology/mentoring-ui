@@ -31,6 +31,7 @@
     <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
   </button>
   <span class="mat-display-1 title">{{ menuState.title }}</span>
+  <ms-school-selector></ms-school-selector>
   <a mat-button [routerLink]="['/login']" *ngIf="!userSession.isLoggedIn()">
     <span class="mat-h2">Login</span>
     <mat-icon>account_circle</mat-icon>

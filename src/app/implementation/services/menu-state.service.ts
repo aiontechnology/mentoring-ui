@@ -45,6 +45,12 @@ export class MenuStateService {
     return activeMenus;
   }
 
+  set groupNames(groupNames: string[]) {
+    groupNames.forEach(groupName => {
+      this.groups.set(groupName, new Group(false))
+    })
+  }
+
   add(command: Command | Command[]): MenuStateService {
     if (Array.isArray(command)) {
       command.forEach(c => this.group(c.group).menus.push(c));
@@ -59,15 +65,15 @@ export class MenuStateService {
     return this;
   }
 
-  makeAllVisible(): MenuStateService {
+  makeAllInvisible(): MenuStateService {
     for (const group of this.groups.values()) {
-      group.isVisible = true;
+      group.isVisible = false;
     }
     return this;
   }
 
-  makeGroupInvisible(name: string): MenuStateService {
-    this.group(name).isVisible = false;
+  makeGroupVisible(name: string): MenuStateService {
+    this.group(name).isVisible = true;
     return this;
   }
 

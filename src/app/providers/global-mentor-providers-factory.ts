@@ -19,10 +19,12 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
+import {SchoolUriSupplier} from '../implementation/data/school-uri-supplier';
 import {SingleItemCache} from '../implementation/data/single-item-cache';
 import {UriSupplier} from '../implementation/data/uri-supplier';
 import {Mentor} from '../modules/mentor-manager/models/mentor/mentor';
 import {MentorRepository} from '../implementation/repositories/mentor-repository';
+import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
 export const MENTOR_DATA_SOURCE = new InjectionToken<DataSource<Mentor>>('mentor-data-source');
 export const MENTOR_CACHE = new InjectionToken<Cache<Mentor>>('mentor-cache');
@@ -33,7 +35,9 @@ export function globalMentorProvidersFactory() {
   return [
     {
       provide: MENTOR_URI_SUPPLIER,
-      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/mentors`)
+      useFactory: (schoolInstanceCache) =>
+        new SchoolUriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/mentors`, schoolInstanceCache),
+      deps: [SCHOOL_INSTANCE_CACHE]
     },
     MentorRepository,
     {

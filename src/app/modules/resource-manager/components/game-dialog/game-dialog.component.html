@@ -16,18 +16,18 @@
 
 <h2 mat-dialog-title>Add new game</h2>
 <mat-dialog-content>
-  <form [formGroup]="model">
-    <input type="hidden" formControlName="game" />
+  <form [formGroup]="modelFormGroup">
+    <input type="hidden" formControlName="game"/>
 
     <p class="legend mat-small">* Denotes a required field</p>
 
     <div class="dialog-container">
       <mat-form-field>
-        <input matInput placeholder="Name" formControlName="name" required />
-        <mat-error *ngIf="model.hasError('required', 'name')">
+        <input matInput placeholder="Name" formControlName="name" required/>
+        <mat-error *ngIf="modelFormGroup.hasError('required', 'name')">
           You must enter a name
         </mat-error>
-        <mat-error *ngIf="model.hasError('maxlength', 'name')">
+        <mat-error *ngIf="modelFormGroup.hasError('maxlength', 'name')">
           A game name can be a maximum of 100 characters in length
         </mat-error>
       </mat-form-field>
@@ -35,8 +35,8 @@
 
     <div class="dialog-container">
       <mat-form-field>
-        <input matInput placeholder="Description" formControlName="description" />
-        <mat-error *ngIf="model.hasError('maxlength', 'description')">
+        <input matInput placeholder="Description" formControlName="description"/>
+        <mat-error *ngIf="modelFormGroup.hasError('maxlength', 'description')">
           A game name can be a maximum of 255 characters in length
         </mat-error>
       </mat-form-field>
@@ -50,7 +50,7 @@
             {{ grade.valueView }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="model.hasError('required', 'grade1')">
+        <mat-error *ngIf="modelFormGroup.hasError('required', 'grade1')">
           You must select a beginning grade level
         </mat-error>
       </mat-form-field>
@@ -61,12 +61,12 @@
             {{ grade.valueView }}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="model.hasError('required', 'grade2')">
+        <mat-error *ngIf="modelFormGroup.hasError('required', 'grade2')">
           <div>You must select an ending grade level</div>
         </mat-error>
       </mat-form-field>
     </div>
-    <mat-error *ngIf="model.hasError('invalidRange', 'gradeRange')">
+    <mat-error *ngIf="modelFormGroup.hasError('invalidRange', 'gradeRange')">
       Starting grade must be less than or equal to ending grade
     </mat-error>
 
@@ -74,7 +74,8 @@
       <mat-form-field>
         <mat-label>Activity Focuses</mat-label>
         <mat-select formControlName="activityFocuses" multiple>
-          <mat-option *ngFor="let activityFocus of (activityFocusList$ | async)" [value]="activityFocus">{{activityFocus}}</mat-option>
+          <mat-option *ngFor="let activityFocus of (activityFocusList$ | async)"
+                      [value]="activityFocus">{{activityFocus}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -83,7 +84,8 @@
       <mat-form-field>
         <mat-label>Leadership Success Skills</mat-label>
         <mat-select formControlName="leadershipSkills" multiple>
-          <mat-option *ngFor="let leadershipSkill of (leadershipSkillList$ | async)" [value]="leadershipSkill">{{leadershipSkill}}</mat-option>
+          <mat-option *ngFor="let leadershipSkill of (leadershipSkillList$ | async)"
+                      [value]="leadershipSkill">{{leadershipSkill}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -92,7 +94,8 @@
       <mat-form-field>
         <mat-label>Leadership Traits</mat-label>
         <mat-select formControlName="leadershipTraits" multiple>
-          <mat-option *ngFor="let leadershipTrait of (leadershipTraitList$ | async)" [value]="leadershipTrait">{{leadershipTrait}}</mat-option>
+          <mat-option *ngFor="let leadershipTrait of (leadershipTraitList$ | async)"
+                      [value]="leadershipTrait">{{leadershipTrait}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
@@ -107,10 +110,12 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button color="primary" (click)="save()" [disabled]="!model.valid">
-    <mat-icon>save</mat-icon> Save
+  <button mat-button color="primary" (click)="save()" [disabled]="!modelFormGroup.valid">
+    <mat-icon>save</mat-icon>
+    Save
   </button>
   <button mat-button color="primary" (click)="dismiss()">
-    <mat-icon>cancel</mat-icon> Cancel
+    <mat-icon>cancel</mat-icon>
+    Cancel
   </button>
 </mat-dialog-actions>

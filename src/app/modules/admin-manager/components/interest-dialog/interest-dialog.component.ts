@@ -28,7 +28,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./interest-dialog.component.scss']
 })
 export class InterestDialogComponent implements OnInit, OnDestroy {
-
   private isUpdate: boolean;
   private updateValue: string; // 'CREATE_ME' for new interest, and 'old_value' for edited interest.
 

@@ -1,0 +1,95 @@
+<!--
+  ~ Copyright 2022 Aion Technology LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Contacts</mat-card-title>
+    <div class="notification mat-h5" *ngIf="isHistoric">
+      Historic Data (Read Only)
+    </div>
+  </mat-card-header>
+  <mat-card-content class="mat-elevation-z8">
+    <div class="contacts">
+      <ng-container *ngFor="let parent of parents; let i = index">
+        <div class="parent">
+          <h1>Parent / Guardian {{ i + 1 }}</h1>
+          <table>
+            <tr>
+              <td>First name</td>
+              <td>{{ parent?.firstName }}</td>
+            </tr>
+            <tr>
+              <td>Last name</td>
+              <td>{{ parent?.lastName }}</td>
+            </tr>
+            <tr>
+              <td>Phone number</td>
+              <td>{{ parent?.phone ? parent.phone : '' }}</td>
+            </tr>
+            <tr>
+              <td>Email address</td>
+              <td>{{ parent?.email ? parent.email : '' }}</td>
+            </tr>
+            <tr>
+              <td>Preferred contact method</td>
+              <td>{{ (parent?.preferredContactMethod ? parent.preferredContactMethod : '') | lowercase }}</td>
+            </tr>
+            <tr>
+              <td>Comments</td>
+              <td>{{ parent?.comment ? parent.comment : '' }}</td>
+            </tr>
+          </table>
+        </div>
+      </ng-container>
+      <div *ngIf="emergencyContact" class="emergency-contact">
+        <h1>Emergency Contact</h1>
+        <table>
+          <tr>
+            <td>First name</td>
+            <td>{{ emergencyContact?.firstName }}</td>
+          </tr>
+          <tr>
+            <td>Last name</td>
+            <td>{{ emergencyContact?.lastName }}</td>
+          </tr>
+          <tr>
+            <td>Relation</td>
+            <td>{{ emergencyContact?.label | lowercase }}</td>
+          </tr>
+          <tr>
+            <td>Phone number</td>
+            <td>{{ emergencyContact?.phone ? emergencyContact.phone : '' }}</td>
+          </tr>
+          <tr>
+            <td>Email address</td>
+            <td>{{ emergencyContact?.email ? emergencyContact.email : '' }}</td>
+          </tr>
+          <tr>
+            <td>Preferred contact method</td>
+            <td>{{ (emergencyContact?.preferredContactMethod ? emergencyContact.preferredContactMethod : '') | lowercase }}</td>
+          </tr>
+          <tr>
+            <td>Comments</td>
+            <td>{{ emergencyContact?.comment ? emergencyContact.comment : '' }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="no-contacts" *ngIf="!contacts?.length">
+      <h1>No contacts provided</h1>
+    </div>
+  </mat-card-content>
+</mat-card>

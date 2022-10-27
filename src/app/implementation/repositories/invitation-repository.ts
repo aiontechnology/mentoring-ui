@@ -18,7 +18,7 @@ import {Inject, Injectable} from '@angular/core';
 import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../data/uri-supplier';
-import {Invitation} from '../../modules/school-manager/models/workflow/invitation';
+import {Invitation} from '../models/workflow/invitation';
 import {INVITATION_URI_SUPPLIER} from '../../modules/shared/shared.module';
 
 @Injectable()

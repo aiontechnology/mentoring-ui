@@ -1,0 +1,30 @@
+<!--
+  ~ Copyright 2022 Aion Technology LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<mat-tab-group class="wrapper">
+  <mat-tab label="Student Details">
+    <ms-student-detail [historic]="isHistoric"></ms-student-detail>
+  </mat-tab>
+  <mat-tab label="Teacher Input">
+    <ms-student-teacher-input></ms-student-teacher-input>
+  </mat-tab>
+  <mat-tab label="Contacts">
+    <ms-student-contacts></ms-student-contacts>
+  </mat-tab>
+  <mat-tab label="LPG" *ngIf="!isHistoric">
+    <ms-student-lpg></ms-student-lpg>
+  </mat-tab>
+</mat-tab-group>

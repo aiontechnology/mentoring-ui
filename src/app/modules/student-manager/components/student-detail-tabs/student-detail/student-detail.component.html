@@ -1,0 +1,67 @@
+<!--
+  ~ Copyright 2020-2022 Aion Technology LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ studentInstanceCache.item?.firstName + ' ' + studentInstanceCache.item?.lastName }}</mat-card-title>
+    <div class="notification mat-h5" *ngIf="isHistoric">
+      Historic Data (Read Only)
+    </div>
+  </mat-card-header>
+  <mat-card-content class="mat-elevation-z8">
+    <div class="student-details">
+      <h1>Details</h1>
+      <table>
+        <tr>
+          <td>Student ID</td>
+          <td>{{ studentInstanceCache.item?.studentId }}</td>
+        </tr>
+        <tr>
+          <td>Grade</td>
+          <td>{{ studentGrade }}</td>
+        </tr>
+        <tr>
+          <td>Interests</td>
+          <td>{{ studentInstanceCache.item?.interests.join(', ') }}</td>
+        </tr>
+        <tr>
+          <td>Media release signed</td>
+          <td>{{ studentInstanceCache.item?.mediaReleaseSigned ? 'yes' : 'no' }}</td>
+        </tr>
+        <tr>
+          <td>Start date</td>
+          <td>{{ studentInstanceCache.item?.startDate | date: 'MMMM, yyyy' : 'utc' }}</td>
+        </tr>
+        <tr>
+          <td>Preferred time</td>
+          <td>{{ studentInstanceCache.item?.preferredTime }}</td>
+        </tr>
+        <tr>
+          <td>Actual time</td>
+          <td>{{ studentInstanceCache.item?.actualTime }}</td>
+        </tr>
+        <tr>
+          <td>Mentor</td>
+          <td>{{ mentorFullName }}</td>
+        </tr>
+        <tr>
+          <td>Location</td>
+          <td>{{ studentInstanceCache.item?.displayLocation }}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -15,14 +15,15 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
-import {Grade} from 'src/app/implementation/types/grade';
+import {AbstractControl, FormBuilder, FormGroup, UntypedFormBuilder, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import {Game} from 'src/app/implementation/models/game/game';
-import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
 import {Observable} from 'rxjs';
 import {resourceLocations} from 'src/app/implementation/constants/locations';
+import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
+import {Game} from 'src/app/implementation/models/game/game';
+import {Grade} from 'src/app/implementation/types/grade';
+import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import {AbstractDialogComponent} from '../../../../implementation/component/abstract-dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {GAME_DATA_SOURCE} from '../../../../providers/global-game-providers-factory';
 
@@ -31,25 +32,23 @@ import {GAME_DATA_SOURCE} from '../../../../providers/global-game-providers-fact
   templateUrl: './game-dialog.component.html',
   styleUrls: ['./game-dialog.component.scss']
 })
-export class GameDialogComponent implements OnInit {
-
-  model: UntypedFormGroup;
-  isUpdate = false;
-
+export class GameDialogComponent extends AbstractDialogComponent<Game, GameDialogComponent> implements OnInit {
   grades: Grade[] = resourceGrades;
-  locations: { [key: string]: string };
+  locations: { [key: string]: string } = resourceLocations;
   activityFocusList$: Observable<string[]>;
   leadershipSkillList$: Observable<string[]>;
   leadershipTraitList$: Observable<string[]>;
 
-  constructor(@Inject(GAME_DATA_SOURCE) private gameDataSource: DataSource<Game>,
-              private dialogRef: MatDialogRef<GameDialogComponent>,
-              private metaDataService: MetaDataService,
-              private formBuilder: UntypedFormBuilder,
-              @Inject(MAT_DIALOG_DATA) private data: any) {
-    this.isUpdate = this.determineUpdate(data);
-    this.model = this.createModel(formBuilder, data?.model);
-    this.locations = resourceLocations;
+  constructor(
+    // For super
+    @Inject(MAT_DIALOG_DATA) data: any,
+    formBuilder: UntypedFormBuilder,
+    dialogRef: MatDialogRef<GameDialogComponent>,
+    @Inject(GAME_DATA_SOURCE) gameDataSource: DataSource<Game>,
+    // Other
+    private metaDataService: MetaDataService,
+  ) {
+    super(data?.model as Game, formBuilder, dialogRef, gameDataSource)
   }
 
   gradeRangeValidator = (control: AbstractControl): { [key: string]: boolean } => {
@@ -61,7 +60,7 @@ export class GameDialogComponent implements OnInit {
     return (grade1.value > grade2.value) ? {invalidRange: true} : null;
   }
 
-  ngOnInit = (): void => {
+  ngOnInit(): void {
     this.metaDataService.loadActivityFocuses();
     this.activityFocusList$ = this.metaDataService.activityFocuses;
 
@@ -72,34 +71,21 @@ export class GameDialogComponent implements OnInit {
     this.leadershipTraitList$ = this.metaDataService.leadershipTraits;
   }
 
-  save = (): void => {
-    const newGame = new Game(this.model.value);
-    let value: Promise<Game>;
-
-    if (this.isUpdate) {
-      newGame.links = this.model.value.game.links;
-      value = this.gameDataSource.update(newGame);
-    } else {
-      value = this.gameDataSource.add(newGame);
-    }
-
-    value.then((g: Game) => {
-      this.dialogRef.close(g);
-    });
-
-  }
-
-  dismiss = (): void => {
-    this.dialogRef.close(null);
-  }
-
   // Used for the keyvalue pipe, to keep location properties in their default order.
-  unsorted = (): number => {
+  unsorted(): number {
     return 0;
   }
 
-  private createModel = (formBuilder: UntypedFormBuilder, game: Game): UntypedFormGroup => {
-    const formGroup: UntypedFormGroup = formBuilder.group({
+  protected toModel(formValue: any): Game {
+    const game: Game = new Game(formValue);
+    if (this.isUpdate) {
+      game.links = formValue.game.links
+    }
+    return game;
+  }
+
+  protected doCreateFormGroup(formBuilder: FormBuilder, game: Game): FormGroup {
+    return formBuilder.group({
       game,
       name: ['', [Validators.required, Validators.maxLength(100)]],
       description: ['', Validators.maxLength(255)],
@@ -111,27 +97,22 @@ export class GameDialogComponent implements OnInit {
       activityFocuses: [],
       leadershipSkills: [],
       leadershipTraits: []
-    });
-    if (this.isUpdate) {
-      formGroup.setValue({
-        game,
-        name: game?.name,
-        description: game?.description,
-        gradeRange: {
-          grade1: game?.grade1?.toString(),
-          grade2: game?.grade2?.toString()
-        },
-        location: game?.location?.toString(),
-        activityFocuses: game?.activityFocuses,
-        leadershipSkills: game?.leadershipSkills,
-        leadershipTraits: game?.leadershipTraits
-      });
-    }
-    return formGroup;
+    })
   }
 
-  private determineUpdate = (formData: any): boolean => {
-    return formData !== undefined && formData !== null;
+  protected doUpdateFormGroup(formGroup: FormGroup, game: Game): void {
+    formGroup.setValue({
+      game,
+      name: game?.name,
+      description: game?.description,
+      gradeRange: {
+        grade1: game?.grade1?.toString(),
+        grade2: game?.grade2?.toString()
+      },
+      location: game?.location?.toString(),
+      activityFocuses: game?.activityFocuses,
+      leadershipSkills: game?.leadershipSkills,
+      leadershipTraits: game?.leadershipTraits
+    })
   }
-
 }

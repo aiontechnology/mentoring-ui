@@ -1,0 +1,55 @@
+<!--
+  ~ Copyright 2022 Aion Technology LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Teacher: {{ studentCache.item?.teacherName || "&lt;Not Set&gt;" }}</mat-card-title>
+    <div class="notification mat-h5" *ngIf="isHistoric">
+      Historic Data (Read Only)
+    </div>
+  </mat-card-header>
+  <mat-card-content class="mat-elevation-z8">
+    <div class="teacher-input">
+      <h1>Teacher's Input</h1>
+      <table>
+        <tr>
+          <td>Comments</td>
+          <td>{{ studentCache.item?.teacher?.comment ? studentCache.item.teacher.comment : '' }}</td>
+        </tr>
+        <tr>
+          <td>Pre-behavioral assessment</td>
+          <td>{{ studentCache.item?.preBehavioralAssessment }}</td>
+        </tr>
+        <tr>
+          <td>Post-behavioral assessment</td>
+          <td>{{ studentCache.item?.postBehavioralAssessment }}</td>
+        </tr>
+        <tr>
+          <td>Leadership traits</td>
+          <td>{{ studentCache.item?.leadershipTraits.join(', ') }}</td>
+        </tr>
+        <tr>
+          <td>Leadership success skills</td>
+          <td>{{ studentCache.item?.leadershipSkills.join(', ') }}</td>
+        </tr>
+        <tr>
+          <td>Behaviors</td>
+          <td>{{ studentCache.item?.behaviors.join(', ') }}</td>
+        </tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

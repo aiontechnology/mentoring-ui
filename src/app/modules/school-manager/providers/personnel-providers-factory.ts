@@ -15,21 +15,16 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {environment} from '../../../../environments/environment';
-import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
-import {Repository} from '../../../implementation/data/repository';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
+import {Personnel} from '../../../implementation/models/personnel/personnel';
+import {School} from '../../../implementation/models/school/school';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {PERSONNEL_DATA_SOURCE} from '../../../providers/global-personnel-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
-import {PersonnelDialogComponent} from '../components/personnel-dialog/personnel-dialog.component';
-import {Personnel} from '../models/personnel/personnel';
-import {PersonnelRepository} from '../repositories/personnel-repository';
-import {PERSONNEL_GROUP, PERSONNEL_LIST_MENU, PERSONNEL_TABLE_CACHE} from '../school-manager.module';
+import {PersonnelDialogComponent} from '../components/school-detail-tabs/personnel-dialog/personnel-dialog.component';
+import {PERSONNEL_GROUP, PERSONNEL_LIST_MENU} from '../school-manager.module';
 
-export const PERSONNEL_DATA_SOURCE = new InjectionToken<DataSource<Personnel>>('personnel-data-source');
-export const PERSONNEL_CACHE = new InjectionToken<Cache<Personnel>>('personnel-cache');
-export const PERSONNEL_URI_SUPPLIER = new InjectionToken<UriSupplier>('personnel-uri-supplier');
+export const PERSONNEL_TABLE_CACHE = new InjectionToken<TableCache<School>>('personnel-table-cache')
 
 export function personnelProvidersFactory() {
   return [
@@ -39,20 +34,6 @@ export function personnelProvidersFactory() {
       provide: PERSONNEL_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Personnel>) => new TableCache(dataSource),
       deps: [PERSONNEL_DATA_SOURCE]
-    },
-    {
-      provide: PERSONNEL_URI_SUPPLIER,
-      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/personnel`)
-    },
-    PersonnelRepository,
-    {
-      provide: PERSONNEL_CACHE,
-      useFactory: () => new Cache<Personnel>()
-    },
-    {
-      provide: PERSONNEL_DATA_SOURCE,
-      useFactory: (repository: Repository<Personnel>, cache: Cache<Personnel>) => new DataSource<Personnel>(repository, cache),
-      deps: [PersonnelRepository, PERSONNEL_CACHE]
     },
   ]
 }

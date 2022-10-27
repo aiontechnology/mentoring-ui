@@ -14,57 +14,67 @@
  * limitations under the License.
  */
 
+import {MalformedUrlError} from '../errors/malformed-url-error';
+
 export type URI = string;
 
 export class UriSupplier {
 
-  private substitutions;
-  private parameters;
+  private substitutions
+  private parameters
 
   constructor(private base: string) {
-    this.reset();
+    this.reset()
   }
 
-  apply(resourceId?: string): URI {
-    let uri = this.base;
+  apply = (resourceId?: string): URI => {
+    let uri = this.base
     uri = this.substitute(uri);
-    uri = resourceId ? uri + `/${resourceId}` : uri;
-    uri = this.addParameters(uri);
-    console.log('Constructed URI', uri);
-    return uri;
+    uri = resourceId ? uri + `/${resourceId}` : uri
+    uri = this.addParameters(uri)
+    console.log('Constructed URI', uri)
+    return uri
   }
 
-  reset(): UriSupplier {
-    this.substitutions = new Map<string, string>();
-    this.parameters = new Map<string, string>();
+  reset = (): UriSupplier => {
+    this.substitutions = new Map<string, string>()
+    this.parameters = new Map<string, string>()
+    return this
+  }
+
+  removeSubstitution = (key: string) => {
+    this.substitutions.delete(key)
     return this;
   }
 
-  withSubstitution(key: string, value: string): UriSupplier {
-    this.substitutions.set(key, value);
-    return this;
+  withSubstitution = (key: string, value: string): UriSupplier => {
+    this.substitutions.set(key, value)
+    return this
   }
 
-  withParameter(key: string, value: string): UriSupplier {
-    this.parameters.set(key, value);
-    return this;
+  withParameter = (key: string, value: string): UriSupplier => {
+    this.parameters.set(key, value)
+    return this
   }
 
-  private substitute(uri: string): string {
+  private substitute = (uri: string): string => {
     this.substitutions.forEach((value, key) => {
-      uri = uri.replace(`{${key}}`, value);
+      uri = uri.replace(`{${key}}`, value)
     });
+    if(uri.search('{.*}') != -1) {
+      throw new MalformedUrlError('URI malformed', uri)
+    }
     return uri;
   }
 
-  private addParameters(uri: string): string {
-    let isFirst = true;
+  private addParameters = (uri: string): string => {
+    let isFirst = true
     this.parameters.forEach((value, key) => {
-      uri += isFirst ? '?' : '&';
-      uri += `${key}=${value}`;
-      isFirst = false;
+      uri += isFirst ? '?' : '&'
+      uri += `${key}=${value}`
+      isFirst = false
     });
-    return uri;
+    return uri
   }
 
 }

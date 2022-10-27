@@ -25,7 +25,7 @@
   >
     <mat-toolbar>
       <a [routerLink]="['home']">
-        <img src="assets/ms-logo.png" />
+        <img src="assets/ms-logo.png"/>
       </a>
     </mat-toolbar>
     <mat-nav-list>
@@ -35,16 +35,21 @@
       <a mat-list-item [routerLink]="['schoolsmanager']" *ngIf="userSession.isSysAdmin">
         <span class="mat-h2">Schools</span>
       </a>
-      <a mat-list-item [routerLink]="['schoolsmanager/schools', userSession.schoolUUID]" *ngIf="userSession.isProgAdmin">
+      <a mat-list-item [routerLink]="['schoolsmanager/schools', userSession.schoolUUID]"
+         *ngIf="userSession.isProgAdmin">
         <span class="mat-h2">School</span>
       </a>
       <a mat-list-item [routerLink]="['resourcemanager']" [disabled]="!userSession.isLoggedIn()">
         <span class="mat-h2">Resources</span>
       </a>
-      <a mat-list-item [routerLink]="['studentmanager']" [disabled]="!userSession.isLoggedIn()">
+      <a mat-list-item
+         [routerLink]="['studentmanager', 'schools', schoolInstanceCache.item?.id]"
+         [disabled]="!userSession.isLoggedIn() || schoolInstanceCache.isEmpty">
         <span class="mat-h2">Students</span>
       </a>
-      <a mat-list-item [routerLink]="['mentormanager']" [disabled]="!userSession.isLoggedIn()">
+      <a mat-list-item
+         [routerLink]="['mentormanager', 'schools', schoolInstanceCache.item?.id]"
+         [disabled]="!userSession.isLoggedIn() || schoolInstanceCache.isEmpty">
         <span class="mat-h2">Mentors</span>
       </a>
     </mat-nav-list>

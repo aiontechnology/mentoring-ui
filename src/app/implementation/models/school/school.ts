@@ -41,4 +41,8 @@ export class School {
     this.currentSession = new SchoolSession(json?.currentSession)
     this.links = json?.links;
   }
+
+  static compare(school1: any, school2: any): boolean {
+    return (school1?.id === school2?.id)
+  }
 }

@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Observable} from 'rxjs';
 import {map, shareReplay} from 'rxjs/operators';
 import {UserSessionService} from 'src/app/implementation/services/user-session.service';
+import {SingleItemCache} from '../../implementation/data/single-item-cache';
+import {School} from '../../implementation/models/school/school';
+import {SCHOOL_INSTANCE_CACHE} from '../../providers/global-school-providers-factory';
 
 @Component({
   selector: 'ms-sidenav',
@@ -29,6 +32,7 @@ export class SidenavComponent implements OnInit {
   isHandset$: Observable<boolean>;
 
   constructor(public userSession: UserSessionService,
+              @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
               private breakpointObserver: BreakpointObserver) {
   }
 

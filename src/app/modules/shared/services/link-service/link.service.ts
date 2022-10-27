@@ -18,12 +18,12 @@ import {JSONPath} from 'jsonpath-plus';
 
 export class LinkService {
 
-  static selfLink(element: any): string {
+  static selfLink(element: any): string | null {
     const href = JSONPath({path: '$.links[?(@.rel == "self")].href', json: element});
     if (Array.isArray(href) && href.length === 1) {
       return href[0];
     }
-    throw new Error('No self link found');
+    return null;
   }
 
   static clearLinks(element: any): void {

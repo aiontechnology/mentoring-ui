@@ -14,14 +14,17 @@
  * limitations under the License.
  */
 
+import {InjectionToken} from '@angular/core';
 import {DataSource} from '../../../implementation/data/data-source';
+import {School} from '../../../implementation/models/school/school';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
 import {SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
-import {School} from '../../../implementation/models/school/school';
 import {SchoolDialogComponent} from '../components/school-dialog/school-dialog.component';
-import {SCHOOL_DETAIL_MENU, SCHOOL_GROUP, SCHOOL_LIST_MENU, SCHOOL_TABLE_CACHE} from '../school-manager.module';
+import {SCHOOL_DETAIL_MENU, SCHOOL_GROUP, SCHOOL_LIST_MENU} from '../school-manager.module';
+
+export const SCHOOL_TABLE_CACHE = new InjectionToken<TableCache<School>>('school-table-cache')
 
 export function schoolProvidersFactory() {
   return [

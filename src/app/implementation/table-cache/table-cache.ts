@@ -21,20 +21,22 @@ import {AbstractRemovableTableCache} from './abstract-removable-table-cache';
 
 @Injectable()
 export class TableCache<T> extends AbstractRemovableTableCache<T> {
-  readonly isLoading$: BehaviorSubject<boolean>;
+  readonly isLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
   constructor(private dataSource: DataSource<T>) {
     super();
-    this.isLoading$ = new BehaviorSubject(true);
   }
 
-  override loadData = (): Promise<T[]> =>
-    this.dataSource.allValues()
+  override loadData = (): Promise<T[]> => {
+    this.isLoading$.next(true)
+    this.dataSource.reset()
+    return this.dataSource.allValues()
       .then(values => {
         this.isLoading$.next(false)
         this.tableDataSource.data = values
         return values
       });
+  }
 
   protected doRemoveItem = (items: T[]): Promise<T[]> =>
     this.dataSource.removeSet(items);

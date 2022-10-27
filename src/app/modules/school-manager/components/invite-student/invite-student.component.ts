@@ -19,7 +19,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {INVITATION_DATA_SOURCE} from '../../../shared/shared.module';
-import {Invitation} from '../../models/workflow/invitation';
+import {Invitation} from '../../../../implementation/models/workflow/invitation';
 
 @Component({
   selector: 'ms-invite-student',

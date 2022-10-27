@@ -14,30 +14,43 @@
  * limitations under the License.
  */
 
-import {NgModule} from '@angular/core';
-import {RouterModule, RouterOutlet, Routes} from '@angular/router';
-import {SharedModule} from '../shared/shared.module';
-import {StudentManagerComponent} from './student-manager.component';
-import {StudentListComponent} from './components/student-list/student-list.component';
-import {StudentDialogComponent} from './components/student-dialog/student-dialog.component';
-import {LpgRepositoryService} from './services/lpg/lpg-repository.service';
-import {StudentRepositoryService} from './services/student/student-repository.service';
-import {TeacherGradeFilterPipe} from '../shared/pipes/teacher-grade-filter.pipe';
-import {StudentDetailComponent} from './components/student-detail/student-detail.component';
-import {ScrollToDirective} from './directives/scroll-to.directive';
-import {CanActivateSysAdmin} from 'src/app/implementation/services/can-activate-sys-admin';
+import {InjectionToken, NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 import {CanActivateProgAdmin} from 'src/app/implementation/services/can-activate-prog-admin';
+import {CanActivateSysAdmin} from 'src/app/implementation/services/can-activate-sys-admin';
+import {Command} from '../../implementation/command/command';
+import {SCHOOL_ID, STUDENT_ID} from '../../implementation/route/route-constants';
+import {TeacherGradeFilterPipe} from '../shared/pipes/teacher-grade-filter.pipe';
+import {SharedModule} from '../shared/shared.module';
+import {StudentDetailContainerComponent} from './components/student-detail-container/student-detail-container.component';
+import {StudentContactsComponent} from './components/student-detail-tabs/student-contacts/student-contacts.component';
+import {StudentDetailComponent} from './components/student-detail-tabs/student-detail/student-detail.component';
+import {StudentLpgComponent} from './components/student-detail-tabs/student-lpg/student-lpg.component';
+import {StudentTeacherInputComponent} from './components/student-detail-tabs/student-teacher-input/student-teacher-input.component';
+import {StudentDialogComponent} from './components/student-dialog/student-dialog.component';
+import {StudentListComponent} from './components/student-list/student-list.component';
+import {ScrollToDirective} from './directives/scroll-to.directive';
+import {studentProvidersFactory} from './providers/student-providers-factory';
+import {LpgRepositoryService} from './services/lpg/lpg-repository.service';
+import {StudentManagerComponent} from './student-manager.component';
 
 const routes: Routes = [
   {
     path: '', component: StudentManagerComponent, children: [
       {path: '', component: StudentListComponent},
-      {path: 'schools/:schoolId', component: StudentListComponent, canActivate: [CanActivateSysAdmin]},
-      {path: 'schools/:schoolId/students/:studentId', component: StudentDetailComponent, canActivate: [CanActivateSysAdmin]},
-      {path: 'students/:studentId', component: StudentDetailComponent, canActivate: [CanActivateProgAdmin]},
+      {path: `schools/:${SCHOOL_ID}`, component: StudentListComponent},
+      {path: `schools/:${SCHOOL_ID}/students/:${STUDENT_ID}`, component: StudentDetailContainerComponent},
+      {path: `students/:${STUDENT_ID}`, component: StudentDetailComponent},
     ]
   }
 ];
+
+// Menus
+export const STUDENT_DETAIL_MENU = new InjectionToken<Command[]>('student-detail-menu')
+export const STUDENT_LIST_MENU = new InjectionToken<Command[]>('student-list-menu')
+
+// Groups
+export const STUDENT_GROUP = 'student'
 
 @NgModule({
   declarations: [
@@ -47,13 +60,17 @@ const routes: Routes = [
     TeacherGradeFilterPipe,
     StudentDetailComponent,
     ScrollToDirective,
+    StudentDetailContainerComponent,
+    StudentTeacherInputComponent,
+    StudentContactsComponent,
+    StudentLpgComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
     SharedModule.forRoot(),
   ],
   providers: [
-    StudentRepositoryService,
+    ...studentProvidersFactory(),
     LpgRepositoryService,
   ]
 })

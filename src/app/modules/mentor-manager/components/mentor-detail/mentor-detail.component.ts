@@ -16,19 +16,16 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {NavigationService} from 'src/app/implementation/route/navigation.service';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
 import {AbstractDetailComponent} from '../../../../implementation/component/abstract-detail-component';
 import {DataSource} from '../../../../implementation/data/data-source';
+import {SchoolUriSupplier} from '../../../../implementation/data/school-uri-supplier';
 import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
-import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {School} from '../../../../implementation/models/school/school';
-import {SCHOOL_ID} from '../../../../implementation/route/route-constants';
-import {SchoolRouteWatcher} from '../../../../implementation/route/school-route-watcher';
+import {URI} from '../../../../implementation/data/uri-supplier';
+import {MENTOR_ID} from '../../../../implementation/route/route-constants';
 import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
-import {SCHOOL_ROUTE_WATCHER} from '../../../../providers/global-school-providers-factory';
 import {MENTOR_DETAIL_MENU} from '../../mentor-manager.module';
 import {Mentor} from '../../models/mentor/mentor';
 
@@ -45,41 +42,33 @@ export class MentorDetailComponent extends AbstractDetailComponent implements On
     menuState: MenuStateService,
     @Inject(MENTOR_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     route: ActivatedRoute,
-    @Inject(SCHOOL_ROUTE_WATCHER) schoolRouteWatcher: SchoolRouteWatcher,
+    @Inject(MENTOR_URI_SUPPLIER) mentorUriSupplier: SchoolUriSupplier,
     // other
     @Inject(MENTOR_INSTANCE_CACHE) public mentorCache: SingleItemCache<Mentor>,
     @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
-    @Inject(MENTOR_URI_SUPPLIER) private mentorUriSupplier: UriSupplier,
-    private navigation: NavigationService,
   ) {
-    super(menuState, menuCommands, route, schoolRouteWatcher)
+    super(menuState, menuCommands, route, mentorUriSupplier)
   }
 
   ngOnInit() {
-    super.init();
+    this.init()
+      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
-    super.destroy()
-    this.navigation.clearRoute();
+    this.destroy()
+      .then(() => console.log('Destruction complete', this))
   }
 
-  protected registerMenus(menuState: MenuStateService, menuCommands: { name: string; factory: (isAdminOnly: boolean) => Command }[]) {
-    menuState.clear()
-    menuCommands.forEach(command => {
-      menuState.add(command.factory(false))
-    })
-  }
-
-  protected override doSchoolChange = (school: School) => {
+  protected onUriChange = (uri: URI) => {
     this.routeParams
       .subscribe(params => {
-        const mentorId = params.get('mentorId')
-        this.mentorUriSupplier.withSubstitution(SCHOOL_ID, school.id)
+        const mentorId = params.get(MENTOR_ID)
         this.mentorDataSource.oneValue(mentorId)
           .then(mentor => {
             this.mentorCache.item = mentor
           })
       })
   }
+
 }

@@ -17,16 +17,16 @@
 import {Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
+import {grades} from '../../../../implementation/constants/grades';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {Teacher} from '../../../../implementation/models/teacher/teacher';
+import {StudentRegistration} from '../../../../implementation/models/workflow/student-registration';
+import {StudentRegistrationLookup} from '../../../../implementation/models/workflow/student-registration-lookup';
 import {RouteWatchingService} from '../../../../implementation/route/route-watching.service';
-import {Teacher} from '../../../school-manager/models/teacher/teacher';
-import {StudentRegistration} from '../../../school-manager/models/workflow/student-registration';
-import {StudentRegistrationLookup} from '../../../school-manager/models/workflow/student-registration-lookup';
-import {grades} from '../../../../implementation/constants/grades';
+import {Grade} from '../../../../implementation/types/grade';
 import {LinkService} from '../../../shared/services/link-service/link.service';
 import {REGISTRATION_DATA_SOURCE, REGISTRATION_LOOKUP_DATA_SOURCE, REGISTRATION_URI_SUPPLIER} from '../../../shared/shared.module';
-import {Grade} from '../../../../implementation/types/grade';
 
 @Component({
   selector: 'ms-student-registration',
@@ -40,13 +40,15 @@ export class StudentRegistrationComponent implements OnInit {
   model: FormGroup;
   registration: StudentRegistrationLookup;
 
-  constructor(@Inject(REGISTRATION_LOOKUP_DATA_SOURCE) private registrationLookupDataSource: DataSource<StudentRegistrationLookup>,
-              @Inject(REGISTRATION_DATA_SOURCE) private registrationDataSource: DataSource<StudentRegistration>,
-              @Inject(REGISTRATION_URI_SUPPLIER) private registrationUriSuppler: UriSupplier,
-              private formBuilder: FormBuilder,
-              private route: ActivatedRoute,
-              private router: Router,
-              private routeWatcher: RouteWatchingService) {
+  constructor(
+    @Inject(REGISTRATION_LOOKUP_DATA_SOURCE) private registrationLookupDataSource: DataSource<StudentRegistrationLookup>,
+    @Inject(REGISTRATION_DATA_SOURCE) private registrationDataSource: DataSource<StudentRegistration>,
+    @Inject(REGISTRATION_URI_SUPPLIER) private registrationUriSuppler: UriSupplier,
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private routeWatcher: RouteWatchingService,
+  ) {
   }
 
   get today(): string {

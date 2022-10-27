@@ -14,46 +14,15 @@
  * limitations under the License.
  */
 
-import {InjectionToken} from '@angular/core';
-import {environment} from '../../../../environments/environment';
-import {Cache} from '../../../implementation/data/cache';
-import {DataSource} from '../../../implementation/data/data-source';
-import {Repository} from '../../../implementation/data/repository';
-import {SingleItemCache} from '../../../implementation/data/single-item-cache';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {ProgramAdminDialogComponent} from '../components/program-admin-dialog/program-admin-dialog.component';
-import {Personnel} from '../models/personnel/personnel';
-import {ProgramAdmin} from '../models/program-admin/program-admin';
-import {ProgramAdminRepository} from '../repositories/program-admin-repository';
-import {PROGRAM_ADMIN_GROUP, PROGRAM_ADMIN_INSTANCE_CACHE, PROGRAM_ADMIN_MENU} from '../school-manager.module';
+import {PROGRAM_ADMIN_INSTANCE_CACHE} from '../../../providers/global-program-admin-providers-factory';
+import {ProgramAdminDialogComponent} from '../components/school-detail-tabs/program-admin-dialog/program-admin-dialog.component';
+import {ProgramAdmin} from '../../../implementation/models/program-admin/program-admin';
+import {PROGRAM_ADMIN_GROUP, PROGRAM_ADMIN_MENU} from '../school-manager.module';
 import {programAdminMenuProvidersFactory} from './program-admin-menu-providers-factory';
-
-export const PROGRAM_ADMIN_DATA_SOURCE = new InjectionToken<DataSource<ProgramAdmin>>('program-admin-detail-data-source');
-export const PROGRAM_ADMIN_CACHE = new InjectionToken<Cache<Personnel>>('program-admin-detail-cache');
-export const PROGRAM_ADMIN_URI_SUPPLIER = new InjectionToken<UriSupplier>('program-admin-detail-uri-supplier');
 
 export function programAdminProvidersFactory() {
   return [
     ...programAdminMenuProvidersFactory<ProgramAdmin, ProgramAdminDialogComponent>(PROGRAM_ADMIN_MENU, PROGRAM_ADMIN_GROUP,
       'Program Admin', [], ProgramAdminDialogComponent, PROGRAM_ADMIN_INSTANCE_CACHE),
-    {
-      provide: PROGRAM_ADMIN_INSTANCE_CACHE,
-      useFactory: (dataSource: DataSource<ProgramAdmin>) => new SingleItemCache<ProgramAdmin>(dataSource),
-      deps: [PROGRAM_ADMIN_DATA_SOURCE]
-    },
-    {
-      provide: PROGRAM_ADMIN_URI_SUPPLIER,
-      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/programAdmins`)
-    },
-    ProgramAdminRepository,
-    {
-      provide: PROGRAM_ADMIN_CACHE,
-      useFactory: () => new Cache<ProgramAdmin>()
-    },
-    {
-      provide: PROGRAM_ADMIN_DATA_SOURCE,
-      useFactory: (repository: Repository<ProgramAdmin>, cache: Cache<ProgramAdmin>) => new DataSource<ProgramAdmin>(repository, cache),
-      deps: [ProgramAdminRepository, PROGRAM_ADMIN_CACHE]
-    },
   ]
 }

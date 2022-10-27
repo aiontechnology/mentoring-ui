@@ -15,11 +15,12 @@
  */
 
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {InjectionToken, NgModule} from '@angular/core';
+import {ErrorHandler, InjectionToken, NgModule} from '@angular/core';
+import {FormsModule} from '@angular/forms';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ActivatedRoute, ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, RouterOutlet, Routes} from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, RouterModule, RouterOutlet, Routes} from '@angular/router';
 import {environment} from 'src/environments/environment';
 import {AppComponent} from './app.component';
 import {HandleLogoutComponent} from './components/handle-logout/handle-logout.component';
@@ -27,15 +28,27 @@ import {HomeComponent} from './components/home/home.component';
 import {LandingPageComponent} from './components/landing-page/landing-page.component';
 import {NoopComponent} from './components/noop/noop.component';
 import {ReceiveTokenComponent} from './components/receive-token/receive-token.component';
+import {SchoolSelectorComponent} from './components/school-selector/school-selector.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {ToolbarComponent} from './components/toolbar/toolbar.component';
 import {SnackbarManager} from './implementation/command/snackbar-manager';
+import {GlobalErrorHandler} from './implementation/errors/global-error-handler';
 import {CanActivateApp} from './implementation/services/can-activate-app';
 import {CanActivateSysAdmin} from './implementation/services/can-activate-sys-admin';
 import {HttpErrorInterceptorService} from './implementation/services/http-error-interceptor.service';
 import {TokenInterceptorService} from './implementation/services/token-interceptor.service';
-import {CustomRouteReuseStrategy} from './implementation/route/custom-route-reuse-strategy';
 import {MaterialModule} from './implementation/shared/material.module';
+import {globalBookProvidersFactory} from './providers/global-book-providers-factory';
+import {globalGameProvidersFactory} from './providers/global-game-providers-factory';
+import {globalMentorProvidersFactory} from './providers/global-mentor-providers-factory';
+import {globalPersonnelProvidersFactory} from './providers/global-personnel-providers-factory';
+import {globalProgramAdminProvidersFactory} from './providers/global-program-admin-providers-factory';
+import {globalSchoolBookProvidersFactory} from './providers/global-school-book-providers-factory';
+import {globalSchoolGameProvidersFactory} from './providers/global-school-game-providers-factory';
+import {globalSchoolProvidersFactory} from './providers/global-school-providers-factory';
+import {globalSchoolSessionProvidersFactory} from './providers/global-school-session-providers-factory';
+import {globalStudentProvidersFactory} from './providers/global-student-providers-factory';
+import {globalTeacherProvidersFactory} from './providers/global-teacher-providers-factory';
 
 const loginProvider = new InjectionToken('loginRedirectResolver');
 const logoutProvider = new InjectionToken('logoutRedirectResolver');
@@ -90,17 +103,19 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
 @NgModule({
   declarations: [
     AppComponent,
+    HandleLogoutComponent,
+    HomeComponent,
     LandingPageComponent,
+    NoopComponent,
+    ReceiveTokenComponent,
+    SchoolSelectorComponent,
     SidenavComponent,
     ToolbarComponent,
-    HomeComponent,
-    NoopComponent,
-    HandleLogoutComponent,
-    ReceiveTokenComponent
   ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
+    FormsModule,
     HttpClientModule,
     MaterialModule,
     RouterModule.forRoot(routes, {relativeLinkResolution: 'legacy'}),
@@ -133,11 +148,26 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
       useClass: HttpErrorInterceptorService,
       multi: true
     },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    },
     // {
     //   provide: RouteReuseStrategy,
     //   useClass: CustomRouteReuseStrategy
     // },
 
+    ...globalSchoolProvidersFactory(),
+    ...globalPersonnelProvidersFactory(),
+    ...globalProgramAdminProvidersFactory(),
+    ...globalTeacherProvidersFactory(),
+    ...globalMentorProvidersFactory(),
+    ...globalStudentProvidersFactory(),
+    ...globalBookProvidersFactory(),
+    ...globalGameProvidersFactory(),
+    ...globalSchoolBookProvidersFactory(),
+    ...globalSchoolGameProvidersFactory(),
+    ...globalSchoolSessionProvidersFactory(),
     {
       provide: SNACKBAR_MANAGER,
       useFactory: (snackbar: MatSnackBar) => new SnackbarManager(snackbar),

@@ -18,39 +18,31 @@ import {InjectionToken, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CanActivateSysAdmin} from 'src/app/implementation/services/can-activate-sys-admin';
 import {Command} from '../../implementation/command/command';
-import {SingleItemCache} from '../../implementation/data/single-item-cache';
-import {School} from '../../implementation/models/school/school';
 import {SCHOOL_ID} from '../../implementation/route/route-constants';
-import {TableCache} from '../../implementation/table-cache/table-cache';
-import {globalBookProvidersFactory} from '../../providers/global-book-providers-factory';
-import {globalGameProvidersFactory} from '../../providers/global-game-providers-factory';
-import {globalSchoolBookProvidersFactory} from '../../providers/global-school-book-providers-factory';
-import {globalSchoolGameProvidersFactory} from '../../providers/global-school-game-providers-factory';
-import {globalSchoolProvidersFactory} from '../../providers/global-school-providers-factory';
 import {GradesFormatPipe} from '../shared/pipes/grades-format.pipe';
 import {SharedModule} from '../shared/shared.module';
 import {InviteStudentComponent} from './components/invite-student/invite-student.component';
-import {PersonnelDialogComponent} from './components/personnel-dialog/personnel-dialog.component';
-import {PersonnelListComponent} from './components/personnel-list/personnel-list.component';
-import {ProgramAdminDetailComponent} from './components/program-admin-detail/program-admin-detail.component';
-import {ProgramAdminDialogComponent} from './components/program-admin-dialog/program-admin-dialog.component';
-import {SchoolBookDialogComponent} from './components/school-book-dialog/school-book-dialog.component';
-import {SchoolBookListComponent} from './components/school-book-list/school-book-list.component';
-import {SchoolDetailComponent} from './components/school-detail/school-detail.component';
+import {SchoolDetailContainerComponent} from './components/school-detail-container/school-detail-container.component';
+import {PersonnelDialogComponent} from './components/school-detail-tabs/personnel-dialog/personnel-dialog.component';
+import {PersonnelListComponent} from './components/school-detail-tabs/personnel-list/personnel-list.component';
+import {ProgramAdminDetailComponent} from './components/school-detail-tabs/program-admin-detail/program-admin-detail.component';
+import {ProgramAdminDialogComponent} from './components/school-detail-tabs/program-admin-dialog/program-admin-dialog.component';
+import {SchoolBookDialogComponent} from './components/school-detail-tabs/school-book-dialog/school-book-dialog.component';
+import {SchoolBookListComponent} from './components/school-detail-tabs/school-book-list/school-book-list.component';
+import {SchoolDetailComponent} from './components/school-detail-tabs/school-detail/school-detail.component';
+import {SchoolGameDialogComponent} from './components/school-detail-tabs/school-game-dialog/school-game-dialog.component';
+import {SchoolGameListComponent} from './components/school-detail-tabs/school-game-list/school-game-list.component';
+import {TeacherDialogComponent} from './components/school-detail-tabs/teacher-dialog/teacher-dialog.component';
+import {TeacherListComponent} from './components/school-detail-tabs/teacher-list/teacher-list.component';
 import {SchoolDialogComponent} from './components/school-dialog/school-dialog.component';
-import {SchoolGameDialogComponent} from './components/school-game-dialog/school-game-dialog.component';
-import {SchoolGameListComponent} from './components/school-game-list/school-game-list.component';
 import {SchoolListComponent} from './components/school-list/school-list.component';
-import {SchoolSessionDialogComponent} from './components/school-session-dialog/school-session-dialog.component';
-import {TeacherDialogComponent} from './components/teacher-dialog/teacher-dialog.component';
-import {TeacherListComponent} from './components/teacher-list/teacher-list.component';
-import {ProgramAdmin} from './models/program-admin/program-admin';
+import {SchoolSessionDialogComponent} from './components/school-session/school-session-dialog/school-session-dialog.component';
+import {SchoolSessionDisplayComponent} from './components/school-session/school-session-display/school-session-display.component';
 import {personnelProvidersFactory} from './providers/personnel-providers-factory';
 import {programAdminProvidersFactory} from './providers/program-admin-providers-factory';
 import {schoolBookProvidersFactory} from './providers/school-book-providers-factory';
 import {schoolGameProvidersFactory} from './providers/school-game-providers-factory';
 import {schoolProvidersFactory} from './providers/school-providers-factory';
-import {schoolSessionProvidersFactory} from './providers/school-session-providers-factory';
 import {teacherProvidersFactory} from './providers/teacher-providers-factory';
 import {SchoolManagerComponent} from './school-manager.component';
 
@@ -64,7 +56,7 @@ const routes: Routes = [
     canActivate: [CanActivateSysAdmin]
   },
   {
-    path: `schools/:${SCHOOL_ID}`, component: SchoolDetailComponent
+    path: `schools/:${SCHOOL_ID}`, component: SchoolDetailContainerComponent
   }
 ];
 
@@ -85,13 +77,7 @@ export const SCHOOL_GAME_GROUP = 'school-game'
 export const SCHOOL_GROUP = 'school'
 export const TEACHER_GROUP = 'teacher'
 
-// Services
-export const PERSONNEL_TABLE_CACHE = new InjectionToken<TableCache<School>>('personnel-table-cache')
-export const SCHOOL_TABLE_CACHE = new InjectionToken<TableCache<School>>('school-table-cache')
-export const TEACHER_TABLE_CACHE = new InjectionToken<TableCache<School>>('teacher-table-cache')
-
 // Caches
-export const PROGRAM_ADMIN_INSTANCE_CACHE = new InjectionToken<SingleItemCache<ProgramAdmin>>('program-admin-instance-cache')
 
 @NgModule({
   declarations: [
@@ -101,30 +87,26 @@ export const PROGRAM_ADMIN_INSTANCE_CACHE = new InjectionToken<SingleItemCache<P
     ProgramAdminDialogComponent,
     SchoolBookDialogComponent,
     SchoolBookListComponent,
+    SchoolDetailContainerComponent,
     SchoolDetailComponent,
     SchoolDialogComponent,
     SchoolGameDialogComponent,
     SchoolGameListComponent,
     SchoolListComponent,
     SchoolManagerComponent,
+    SchoolSessionDialogComponent,
+    SchoolSessionDisplayComponent,
     TeacherDialogComponent,
     TeacherListComponent,
     PersonnelDialogComponent,
     ProgramAdminDetailComponent,
-    SchoolSessionDialogComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
     SharedModule.forRoot()
   ],
   providers: [
-    ...globalSchoolProvidersFactory(),
-    ...globalBookProvidersFactory(),
-    ...globalGameProvidersFactory(),
-    ...globalSchoolBookProvidersFactory(),
-    ...globalSchoolGameProvidersFactory(),
     ...schoolProvidersFactory(),
-    ...schoolSessionProvidersFactory(),
     ...programAdminProvidersFactory(),
     ...teacherProvidersFactory(),
     ...personnelProvidersFactory(),

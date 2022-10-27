@@ -20,6 +20,7 @@ import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
+import {CommandArray} from '../../../../implementation/component/abstract-component';
 import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
 import {Book} from '../../../../implementation/models/book/book';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
@@ -53,13 +54,15 @@ export class BookListComponent extends AbstractListComponent<Book> implements On
 
   ngOnInit(): void {
     this.init()
+      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
     this.destroy()
+      .then(() => console.log('Destruction complete', this))
   }
 
-  protected registerMenus(menuState: MenuStateService, menuCommands: { name: string; factory: (isAdminOnly: boolean) => Command }[]) {
+  protected override registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
     menuCommands.forEach(command => {
       menuState.add(command.factory(true))
     })

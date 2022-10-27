@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {ActivatedRoute} from '@angular/router';
-import {School} from 'src/app/implementation/models/school/school';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
-import {DataSource} from '../../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
-import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {SchoolRouteWatcher} from '../../../../implementation/route/school-route-watcher';
+import {CommandArray} from '../../../../implementation/component/abstract-component';
+import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
+import {SchoolUriSupplier} from '../../../../implementation/data/school-uri-supplier';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {MENTOR_DATA_SOURCE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
-import {SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE, SCHOOL_ROUTE_WATCHER} from '../../../../providers/global-school-providers-factory';
+import {MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
 import {MENTOR_LIST_MENU, MENTOR_TABLE_CACHE} from '../../mentor-manager.module';
 import {Mentor} from '../../models/mentor/mentor';
 
@@ -38,83 +32,32 @@ import {Mentor} from '../../models/mentor/mentor';
   templateUrl: './mentor-list.component.html',
   styleUrls: ['./mentor-list.component.scss'],
 })
-export class MentorListComponent implements OnInit, OnDestroy {
+export class MentorListComponent extends AbstractListComponent<Mentor> implements OnInit, OnDestroy {
+  columns = ['select', 'firstName', 'lastName', 'availability', 'cellPhone', 'email', 'mediaReleaseSigned', 'backgroundCheckCompleted']
 
-  schools$: Promise<School[]>;
-
-  constructor(public userSession: UserSessionService,
-              @Inject(MENTOR_TABLE_CACHE) public tableCache: TableCache<Mentor>,
-              @Inject(SCHOOL_INSTANCE_CACHE) public schoolCache: SingleItemCache<School>,
-              @Inject(SCHOOL_DATA_SOURCE) private schoolDataSource: DataSource<School>,
-              @Inject(MENTOR_URI_SUPPLIER) private uriSupplier: UriSupplier,
-              @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
-              @Inject(MENTOR_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
-              @Inject(SCHOOL_ROUTE_WATCHER) private schoolRouteWatcher: SchoolRouteWatcher,
-              private breakpointObserver: BreakpointObserver,
-              private menuState: MenuStateService,
-              private route: ActivatedRoute) {
+  constructor(
+    // for super
+    menuState: MenuStateService,
+    @Inject(MENTOR_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(MENTOR_TABLE_CACHE) tableCache: TableCache<Mentor>,
+    // other
+    @Inject(MENTOR_URI_SUPPLIER) private schoolUriSupplier: SchoolUriSupplier,
+  ) {
+    super(menuState, menuCommands, tableCache)
   }
 
-  @ViewChild(MatSort) set sort(sort: MatSort) {
-    if (sort !== undefined) {
-      this.tableCache.sort = sort;
-    }
-  }
+  @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
 
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
-    if (paginator !== undefined) {
-      this.tableCache.paginator = paginator;
-    }
-  }
-
-  get isSchoolSelected(): boolean {
-    return (this.schoolCache.item != null) || this.userSession.isProgAdmin;
-  }
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.menuState.clear()
-    this.menuCommands.forEach(command => {
-      this.menuState.add(command.factory(false))
-    })
-
-    if(this.userSession.isSysAdmin) {
-      this.schools$ = this.schoolDataSource.allValues()
-      this.schoolRouteWatcher
-      this.route.paramMap
-        .subscribe(params => this.onIdChange(params.get('schoolId')))
-    } else {
-      this.onIdChange(this.userSession.schoolUUID)
-    }
-  }
-
-  onIdChange(id: string) {
-    if (id) {
-      this.schoolCache.fromId(id)
-        .then(school => {
-          this.loadMentorData()
-        })
-    }
+    this.schoolUriSupplier.observable.subscribe(this.reloadTableCache)
+    this.init()
+      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
-    this.menuState.clear();
-  }
-
-  displayedColumns(): string[] {
-    if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['select', 'lastName', 'availability', 'cellPhone'];
-    } else {
-      return ['select', 'firstName', 'lastName', 'availability', 'cellPhone', 'email', 'mediaReleaseSigned', 'backgroundCheckCompleted'];
-    }
-  }
-
-  isLoading(gettingData: boolean): boolean {
-    return gettingData && this.isSchoolSelected;
-  }
-
-  private loadMentorData(): void {
-    this.uriSupplier.withSubstitution('schoolId', this.schoolCache.item.id)
-    this.mentorDataSource.reset()
-    this.tableCache.loadData();
+    this.destroy()
+      .then(() => console.log('Destruction complete', this))
   }
 }

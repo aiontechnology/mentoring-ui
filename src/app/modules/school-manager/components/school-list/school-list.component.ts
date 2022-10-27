@@ -14,57 +14,45 @@
  * limitations under the License.
  */
 
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
 import {School} from '../../../../implementation/models/school/school';
-import {SCHOOL_LIST_MENU, SCHOOL_TABLE_CACHE} from '../../school-manager.module';
+import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {SCHOOL_TABLE_CACHE} from '../../providers/school-providers-factory';
+import {SCHOOL_LIST_MENU} from '../../school-manager.module';
 
 @Component({
   selector: 'ms-school-list',
   templateUrl: './school-list.component.html',
   styleUrls: ['./school-list.component.scss']
 })
-export class SchoolListComponent implements OnInit {
+export class SchoolListComponent extends AbstractListComponent<School> implements OnInit, OnDestroy {
+  columns = ['select', 'name', 'city', 'state', 'district', 'phone', 'isPrivate']
 
-  constructor(@Inject(SCHOOL_TABLE_CACHE) public tableCache: TableCache<School>,
-              private dialog: MatDialog,
-              private breakpointObserver: BreakpointObserver,
-              private menuState: MenuStateService,
-              @Inject(SCHOOL_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
+  constructor(
+    // for super
+    menuState: MenuStateService,
+    @Inject(SCHOOL_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(SCHOOL_TABLE_CACHE) tableCache: TableCache<School>,
+  ) {
+    super(menuState, menuCommands, tableCache)
   }
 
-  @ViewChild(MatSort) set sort(sort: MatSort) {
-    if (sort !== undefined) {
-      this.tableCache.sort = sort;
-    }
-  }
+  @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
 
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
-    if (paginator !== undefined) {
-      this.tableCache.paginator = paginator;
-    }
-  }
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.menuCommands.forEach(command => {
-      this.menuState.add(command.factory(false))
-    })
-
-    this.tableCache.loadData()
-      .then(() => this.tableCache.clearSelection());
+    this.init()
+      .then(() => console.log('Initialization complete', this))
   }
 
-  displayedColumns(): string[] {
-    if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['select', 'name'];
-    } else {
-      return ['select', 'name', 'city', 'state', 'district', 'phone', 'isPrivate'];
-    }
+  ngOnDestroy(): void {
+    this.destroy()
+      .then(() => console.log('Destruction complete', this))
   }
 }

@@ -17,8 +17,8 @@
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Observable} from 'rxjs';
 import {Command} from '../command/command';
-import {School} from '../models/school/school';
-import {SchoolRouteWatcher} from '../route/school-route-watcher';
+import {SchoolUriSupplier} from '../data/school-uri-supplier';
+import {URI} from '../data/uri-supplier';
 import {MenuStateService} from '../services/menu-state.service';
 import {AbstractComponent} from './abstract-component';
 
@@ -27,7 +27,7 @@ export abstract class AbstractDetailComponent extends AbstractComponent {
     menuState: MenuStateService,
     menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     private route: ActivatedRoute,
-    private schoolRouteWatcher?: SchoolRouteWatcher,
+    private uriSuppler?: SchoolUriSupplier,
   ) {
     super(menuState, menuCommands)
   }
@@ -40,9 +40,8 @@ export abstract class AbstractDetailComponent extends AbstractComponent {
     return this.route.paramMap
   }
 
-  protected override doInit(): void {
-    this.schoolRouteWatcher?.watch(this.route)
-      .subscribe(this.onSchoolChange)
+  protected override doInit = async (): Promise<void> => {
+    this.uriSuppler?.observable?.subscribe(this.onUriChange)
     this.doHandleRoute(this.route)
   }
 
@@ -51,36 +50,10 @@ export abstract class AbstractDetailComponent extends AbstractComponent {
    * @param route The activate route
    * @protected
    */
-  protected doHandleRoute(route: ActivatedRoute) {
+  protected doHandleRoute = async (route: ActivatedRoute): Promise<void> =>
+    Promise.resolve()
+
+  protected onUriChange = (uri: URI): void => {
     // do nothing
-  }
-
-  // final
-  protected onTabChange(index: number) {
-    this.doTabChange(index, this.menuState)
-  }
-
-  protected doTabChange(index: number, menuState: MenuStateService) {
-    // do nothing
-  }
-
-  /**
-   * Allow the subclass to respond to a school change event.
-   * @param school The new school.
-   * @protected
-   */
-  protected doSchoolChange = (school: School): void => {
-    // do nothing
-  }
-
-  /**
-   * Handle a new school change event.
-   * @param school The new school.
-   * @private
-   */
-  private onSchoolChange = (school: School): void => {
-    if (school) {
-      this.doSchoolChange(school)
-    }
   }
 }

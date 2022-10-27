@@ -16,4 +16,6 @@
 
 export const BOOK_ID = 'bookId'
 export const GAME_ID = 'gameId'
+export const MENTOR_ID = 'mentorId'
 export const SCHOOL_ID = 'schoolId'
+export const STUDENT_ID = 'studentId'

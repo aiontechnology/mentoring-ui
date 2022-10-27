@@ -35,9 +35,9 @@ const routes: Routes = [
   {
     path: '', component: MentorManagerComponent, children: [
       {path: '', component: MentorListComponent},
-      {path: `schools/:${SCHOOL_ID}`, component: MentorListComponent, canActivate: [CanActivateSysAdmin]},
-      {path: `schools/:${SCHOOL_ID}/mentors/:mentorId`, component: MentorDetailComponent, canActivate: [CanActivateSysAdmin]},
-      {path: 'mentors/:mentorId', component: MentorDetailComponent, canActivate: [CanActivateProgAdmin]},
+      {path: `schools/:${SCHOOL_ID}`, component: MentorListComponent},
+      {path: `schools/:${SCHOOL_ID}/mentors/:mentorId`, component: MentorDetailComponent},
+      {path: 'mentors/:mentorId', component: MentorDetailComponent},
     ]
   }
 ];
@@ -64,8 +64,6 @@ export const MENTOR_TABLE_CACHE = new InjectionToken<TableCache<School>>('mentor
     SharedModule.forRoot(),
   ],
   providers: [
-    ...globalSchoolProvidersFactory(),
-    ...globalMentorProvidersFactory(),
     ...mentorProvidersFactory(),
   ]
 })

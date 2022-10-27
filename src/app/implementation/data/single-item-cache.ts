@@ -15,11 +15,13 @@
  */
 
 import {Injectable} from '@angular/core';
+import {Publisher} from './publisher';
 import {DataSource} from './data-source';
 
 @Injectable()
-export class SingleItemCache<T> {
+export class SingleItemCache<T> extends Publisher<T> {
   constructor(private dataSource: DataSource<T>) {
+    super()
   }
 
   private _item: T
@@ -28,20 +30,28 @@ export class SingleItemCache<T> {
     return this._item
   }
 
-  set item(newItem: T) {
-    this._item = newItem
+  set item(item: T) {
+    if(item === null) {
+      throw new Error('Invalid value provided to SingleItemCache')
+    }
+    this._item = item
+    this.publish(item)
+  }
+
+  get isEmpty(): boolean {
+    return this._item === undefined || this._item === null
   }
 
   fromId(id: string): Promise<T> {
     return this.dataSource.oneValue(id)
       .then(item => {
-        this._item = item
+        this.item = item
         return item
       })
   }
 
   remove(): Promise<T> {
     return this.dataSource.remove(this._item)
-      .then(this._item = undefined)
+      .then(this.item = undefined)
   }
 }

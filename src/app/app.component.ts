@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
+import {Component, Inject} from '@angular/core';
+import {SingleItemCache} from './implementation/data/single-item-cache';
+import {School} from './implementation/models/school/school';
+import {UserSessionService} from './implementation/services/user-session.service';
+import {SCHOOL_INSTANCE_CACHE} from './providers/global-school-providers-factory';
 
 @Component({
   selector: 'ms-root',
@@ -23,4 +27,13 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'mentorsuccess-ui';
+
+  constructor(
+    userSession: UserSessionService,
+    @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>
+  ) {
+    if (userSession.isProgAdmin && schoolInstanceCache.isEmpty) {
+      schoolInstanceCache.fromId(userSession.schoolUUID)
+    }
+  }
 }

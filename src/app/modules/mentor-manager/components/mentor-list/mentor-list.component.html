@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<div class="spinner-container" *ngIf="isLoading(tableCache.isLoading$ | async)">
+<div class="spinner-container" *ngIf="tableCache.isLoading$ | async">
   <mat-progress-spinner color="primary" mode="indeterminate" [diameter]="100" [strokeWidth]="10"></mat-progress-spinner>
 </div>
 
@@ -22,19 +22,7 @@
   <div class="list-container mat-elevation-z2">
 
     <div class="header">
-      <div *ngIf="userSession.isSysAdmin">
-        <mat-form-field>
-          <mat-label>Select a school</mat-label>
-          <mat-select [(ngModel)]="schoolCache.item">
-            <mat-option *ngFor="let school of (schools$ | async)" [value]="school"
-                        [routerLink]="['/mentormanager', 'schools', school.id]">
-              {{ school.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <div class="spacer"></div>
-      </div>
-      <mat-form-field *ngIf="isSchoolSelected">
+      <mat-form-field>
         <input matInput [(ngModel)]="tableCache.filterBinding" (keyup)="tableCache.applyFilter($event.target.value)"
                placeholder="Filter"/>
         <button mat-button *ngIf="tableCache.filter" matSuffix mat-icon-button (click)="tableCache.clearFilter()">
@@ -43,7 +31,7 @@
       </mat-form-field>
     </div>
 
-    <div *ngIf="isSchoolSelected">
+    <div>
       <table mat-table [dataSource]="tableCache.tableDataSource" matSort>
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
@@ -105,10 +93,10 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+        <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
         <tr
           mat-row
-          *matRowDef="let row; columns: displayedColumns()"
+          *matRowDef="let row; columns: columns"
           (click)="tableCache.selection.toggle(row)"
         ></tr>
       </table>
