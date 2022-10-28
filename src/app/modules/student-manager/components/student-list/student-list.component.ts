@@ -39,7 +39,7 @@ import {STUDENT_LIST_MENU} from '../../student-manager.module';
   styleUrls: ['./student-list.component.scss'],
 })
 export class StudentListComponent extends AbstractListComponent<Student> implements OnInit, OnDestroy {
-  columns = ['select', 'firstName', 'lastName', 'studentId', 'grade', 'teacher', 'preferredTime', 'contacts']
+  columns = ['select', 'firstName', 'lastName', 'studentId', 'grade', 'teacher', 'actualTime', 'contacts']
 
   schoolSessions$: Promise<SchoolSession[]>;
 
