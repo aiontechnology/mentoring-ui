@@ -40,14 +40,15 @@ export abstract class DialogComponent<T extends { links: any }, COMPONENT> {
 
   save(): void {
     const item: T = this.toModel(this.modelFormGroup.value)
-    this.isUpdate
+    const value: Promise<T> = this.isUpdate
       ? this.dataSource.update(item)
       : this.dataSource.add(item)
-        .then(result => {
-          this.dialogRef.close(result)
-          return result
-        })
-        .then(result => this.postDialogClose(result))
+    value
+      .then(result => {
+        this.dialogRef.close(result)
+        return result
+      })
+      .then(result => this.postDialogClose(result))
   }
 
   protected postDialogClose(item: T) {
