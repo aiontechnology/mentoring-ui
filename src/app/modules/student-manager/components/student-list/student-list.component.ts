@@ -42,7 +42,7 @@ import {STUDENT_LIST_MENU} from '../../student-manager.module';
   styleUrls: ['./student-list.component.scss'],
 })
 export class StudentListComponent extends ListComponent<Student> implements OnInit, OnDestroy {
-  columns = ['select', 'firstName', 'lastName', 'studentId', 'grade', 'teacher', 'preferredTime', 'contacts']
+  columns = ['select', 'firstName', 'lastName', 'studentId', 'grade', 'teacher', 'actualTime', 'contacts']
   compareSessions = SchoolSession.compare
 
   constructor(
@@ -89,12 +89,5 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
       c.disableFunction = () => !this.schoolSessionInstanceCache.item?.isCurrent || false
       menuState.add(c)
     })
-  }
-
-  private async resetSessions() {
-    await this.schoolSessionCollectionCache.load()
-    this.schoolSessionCollectionCache.items
-      .filter(item => item.isCurrent)
-      .forEach(schoolSession => this.schoolSessionInstanceCache.item = schoolSession);
   }
 }
