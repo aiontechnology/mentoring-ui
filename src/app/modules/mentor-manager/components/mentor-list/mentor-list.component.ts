@@ -50,6 +50,7 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
+    this.menuState.reset()
     this.init()
   }
 

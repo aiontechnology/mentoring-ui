@@ -63,6 +63,7 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
+    this.menuState.reset()
     this.init()
   }
 

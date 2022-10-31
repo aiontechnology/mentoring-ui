@@ -58,6 +58,7 @@ export class MentorDetailComponent extends SchoolWatchingDetailComponent impleme
   }
 
   ngOnInit() {
+    this.menuState.reset()
     this.init()
     this.subscriptions.push(this.mentorRouteWatcher.watch(this.route))
   }
