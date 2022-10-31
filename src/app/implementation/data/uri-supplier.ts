@@ -15,10 +15,11 @@
  */
 
 import {MalformedUrlError} from '../errors/malformed-url-error';
+import {Resettable} from '../state-management/resettable';
 
 export type URI = string;
 
-export class UriSupplier {
+export class UriSupplier implements Resettable {
 
   private substitutions
   private parameters
@@ -44,15 +45,26 @@ export class UriSupplier {
 
   removeSubstitution = (key: string) => {
     this.substitutions.delete(key)
-    return this;
+    return this
   }
 
   withSubstitution = (key: string, value: string): UriSupplier => {
+    if(value === undefined || value === null) {
+      throw new MalformedUrlError(`Invalid value provided for URI substitution: ${key}=${value}`)
+    }
     this.substitutions.set(key, value)
     return this
   }
 
+  removeParameter = (key: string) => {
+    this.parameters.delete(key)
+    return this
+  }
+
   withParameter = (key: string, value: string): UriSupplier => {
+    if(value === undefined || value === null) {
+      throw new MalformedUrlError(`Invalid value provided for URI parameter: ${key}=${value}`)
+    }
     this.parameters.set(key, value)
     return this
   }
@@ -62,9 +74,9 @@ export class UriSupplier {
       uri = uri.replace(`{${key}}`, value)
     });
     if(uri.search('{.*}') != -1) {
-      throw new MalformedUrlError('URI malformed', uri)
+      throw new MalformedUrlError(`URI malformed: ${uri}`, uri)
     }
-    return uri;
+    return uri
   }
 
   private addParameters = (uri: string): string => {

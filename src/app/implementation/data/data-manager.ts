@@ -26,8 +26,6 @@ export interface DataManager<T> {
 
   removeSet: (values: T[]) => Promise<T[]>;
 
-  reset: () => void;
-
   update: (value: T) => Promise<T>;
 
   updateSet: (values: T[]) => Promise<T[]>;

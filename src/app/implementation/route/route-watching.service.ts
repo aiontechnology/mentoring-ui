@@ -19,30 +19,24 @@ import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Mentor} from '../../modules/mentor-manager/models/mentor/mentor';
-import {STUDENT_DATA_SOURCE, STUDENT_URI_SUPPLIER} from '../../providers/global-student-providers-factory';
-import {Personnel} from '../models/personnel/personnel';
-import {ProgramAdmin} from '../models/program-admin/program-admin';
-import {Teacher} from '../models/teacher/teacher';
-import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../providers/global-program-admin-providers-factory';
-import {
-  SCHOOL_SESSION_DATA_SOURCE,
-  SCHOOL_SESSION_URI_SUPPLIER
-} from '../../providers/global-school-session-providers-factory';
-import {
-  INVITATION_DATA_SOURCE,
-  INVITATION_URI_SUPPLIER,
-} from '../../modules/shared/shared.module';
-import {Student} from '../models/student/student';
+import {INVITATION_DATA_SOURCE, INVITATION_URI_SUPPLIER,} from '../../modules/shared/shared.module';
 import {MENTOR_DATA_SOURCE, MENTOR_URI_SUPPLIER} from '../../providers/global-mentor-providers-factory';
 import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../providers/global-personnel-providers-factory';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../providers/global-program-admin-providers-factory';
 import {SCHOOL_BOOK_DATA_SOURCE, SCHOOL_BOOK_URI_SUPPLIER} from '../../providers/global-school-book-providers-factory';
 import {SCHOOL_DATA_SOURCE} from '../../providers/global-school-providers-factory';
+import {SCHOOL_SESSION_DATA_SOURCE, SCHOOL_SESSION_URI_SUPPLIER} from '../../providers/global-school-session-providers-factory';
+import {STUDENT_DATA_SOURCE} from '../../providers/global-student-providers-factory';
 import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../providers/global-teacher-providers-factory';
 import {DataSource} from '../data/data-source';
 import {UriSupplier} from '../data/uri-supplier';
 import {Book} from '../models/book/book';
+import {Personnel} from '../models/personnel/personnel';
+import {ProgramAdmin} from '../models/program-admin/program-admin';
 import {School} from '../models/school/school';
 import {SchoolSession} from '../models/school/schoolsession';
+import {Student} from '../models/student/student';
+import {Teacher} from '../models/teacher/teacher';
 import {UserSessionService} from '../services/user-session.service';
 import {SCHOOL_ID} from './route-constants';
 
@@ -69,7 +63,6 @@ export class RouteWatchingService {
               @Inject(SCHOOL_SESSION_DATA_SOURCE) private schoolSessionDataSource: DataSource<SchoolSession>,
               @Inject(SCHOOL_SESSION_URI_SUPPLIER) private schoolSessionUriSupplier: UriSupplier,
               @Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<Student>,
-              @Inject(STUDENT_URI_SUPPLIER) private studentUriSupplier: UriSupplier,
               @Inject(TEACHER_DATA_SOURCE) private teacherDataSource: DataSource<Teacher>,
               @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: UriSupplier) {
   }
@@ -133,24 +126,14 @@ export class RouteWatchingService {
     this.programAdminUriSupplier.reset();
     this.schoolBookUriSuppler.reset();
     this.schoolSessionUriSupplier.reset();
-    this.studentUriSupplier.reset();
     this.teacherUriSupplier.reset();
     if (schoolId) {
-      this.invitationDataSource.reset();
       this.invitationUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
-      this.mentorDataSource.reset();
       this.mentorUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
-      this.personnelDataSource.reset();
       this.personnelUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
-      this.programAdminDataSource.reset();
       this.programAdminUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
-      this.schoolBookDataSource.reset();
       this.schoolBookUriSuppler.withSubstitution(SCHOOL_ID, schoolId);
-      this.schoolSessionDataSource.reset();
       this.schoolSessionUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
-      this.studentDataSource.reset();
-      this.studentUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
-      this.teacherDataSource.reset();
       this.teacherUriSupplier.withSubstitution(SCHOOL_ID, schoolId);
     }
   }

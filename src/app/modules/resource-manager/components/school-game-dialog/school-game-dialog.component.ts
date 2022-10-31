@@ -21,7 +21,8 @@ import {Game} from 'src/app/implementation/models/game/game';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {GAME_DATA_SOURCE} from '../../../../providers/global-game-providers-factory';
-import {SCHOOL_GAME_DATA_SOURCE, SCHOOL_GAME_TABLE_CACHE} from '../../../../providers/global-school-game-providers-factory';
+import {SCHOOL_GAME_DATA_SOURCE} from '../../../../providers/global-school-game-providers-factory';
+import {SCHOOL_GAME_TABLE_CACHE} from '../../../school-manager/providers/school-game-providers-factory';
 import {DropListData} from '../../../shared/components/school-resource/drop-list-data';
 
 @Component({

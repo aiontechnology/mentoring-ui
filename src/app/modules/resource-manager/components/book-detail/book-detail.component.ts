@@ -20,11 +20,12 @@ import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
 import {Book} from 'src/app/implementation/models/book/book';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
-import {AbstractDetailComponent} from '../../../../implementation/component/abstract-detail-component';
-import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {DetailComponent} from '../../../../implementation/component/detail-component';
+import {SingleItemCacheUpdater} from '../../../../implementation/state-management/single-item-cache-updater';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {BOOK_ID} from '../../../../implementation/route/route-constants';
-import {BOOK_INSTANCE_CACHE} from '../../../../providers/global-book-providers-factory';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {BOOK_INSTANCE_CACHE, BOOK_INSTANCE_CACHE_UPDATER} from '../../../../providers/global-book-providers-factory';
 import {BOOK_DETAIL_MENU} from '../../providers/book-providers-factory';
 
 @Component({
@@ -32,7 +33,7 @@ import {BOOK_DETAIL_MENU} from '../../providers/book-providers-factory';
   templateUrl: './book-detail.component.html',
   styleUrls: ['./book-detail.component.scss']
 })
-export class BookDetailComponent extends AbstractDetailComponent implements OnInit, OnDestroy {
+export class BookDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   constructor(
     // for super
     menuState: MenuStateService,
@@ -40,9 +41,10 @@ export class BookDetailComponent extends AbstractDetailComponent implements OnIn
     route: ActivatedRoute,
     navService: NavigationService,
     // other
-    @Inject(BOOK_INSTANCE_CACHE) public bookCache: SingleItemCache<Book>,
+    @Inject(BOOK_INSTANCE_CACHE) public bookInstanceCache: SingleItemCache<Book>,
+    @Inject(BOOK_INSTANCE_CACHE_UPDATER) private bookInstanceCacheUpdater: SingleItemCacheUpdater<Book>,
   ) {
-    super(menuState, menuCommands, route, undefined, navService)
+    super(menuState, menuCommands, route, navService)
     menuState.clear()
   }
 
@@ -52,24 +54,19 @@ export class BookDetailComponent extends AbstractDetailComponent implements OnIn
 
   ngOnInit(): void {
     this.init()
-      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
     this.destroy()
-      .then(() => console.log('Destruction complete', this))
   }
 
-  protected doHandleBackButton = async (navService: NavigationService): Promise<void> =>
-    new Promise(resolve => {
-      navService.push({routeSpec: ['/resourcemanager'], fragment: 'book'})
-      resolve()
-    })
+  protected doHandleBackButton = (navService: NavigationService): void =>
+    navService.push({routeSpec: ['/resourcemanager'], fragment: 'book'})
 
-  protected override doHandleRoute = async (route: ActivatedRoute): Promise<void> => {
+  protected override handleRoute = async (route: ActivatedRoute): Promise<void> => {
     await route.paramMap
       .subscribe(params => {
-        this.bookCache.fromId(params.get(BOOK_ID));
+        this.bookInstanceCacheUpdater.fromId(params.get(BOOK_ID));
       })
   }
 }

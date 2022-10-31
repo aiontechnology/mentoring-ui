@@ -15,21 +15,29 @@
  */
 
 import {ActivatedRoute} from '@angular/router';
-import {SingleItemCache} from '../data/single-item-cache';
+import {Subscription} from 'rxjs';
+import {SingleItemCacheUpdater} from '../state-management/single-item-cache-updater';
 
 export class RouteElementWatcher<T> {
   constructor(
-    private itemCache: SingleItemCache<T>,
+    private itemCache: SingleItemCacheUpdater<T>,
     private itemKey: string,
   ) {
   }
 
-  watch(route: ActivatedRoute): void {
-    route.paramMap
+  watch(route: ActivatedRoute, label?: string): Subscription {
+    console.warn('Establishing route watch', label, this.itemKey)
+    return route.paramMap
       .subscribe(params => {
         const id = params.get(this.itemKey)
-        this.itemCache.fromId(id)
-          .then(item => console.log('Choose item', item))
+        if (id) {
+          console.log('RouteElementWatcher: updating from id', label, id)
+          this.itemCache.fromId(id)
+            .then(item => console.log('Choose item', item))
+        } else {
+          console.warn('RouteElementWatcher: ignored update attempt', label, this.itemKey)
+        }
       })
   }
+
 }

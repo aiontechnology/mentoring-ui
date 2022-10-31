@@ -14,18 +14,15 @@
  * limitations under the License.
  */
 
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {AfterViewInit, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Command} from '../../../../implementation/command/command';
-import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {SCHOOL_GAME_TABLE_CACHE, SCHOOL_GAME_URI_SUPPLIER} from '../../../../providers/global-school-game-providers-factory';
-import {UserSessionService} from '../../../../implementation/services/user-session.service';
+import {ListComponent} from '../../../../implementation/component/list-component';
+import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {Game} from '../../../../implementation/models/game/game';
+import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {SCHOOL_GAME_TABLE_CACHE} from '../../../school-manager/providers/school-game-providers-factory';
 import {SCHOOL_GAME_LIST_MENU} from '../../resource-manager.module';
 
 @Component({
@@ -33,48 +30,27 @@ import {SCHOOL_GAME_LIST_MENU} from '../../resource-manager.module';
   templateUrl: './school-game-list.component.html',
   styleUrls: ['./school-game-list.component.scss']
 })
-export class SchoolGameListComponent implements OnInit, AfterViewInit {
+export class SchoolGameListComponent extends ListComponent<Game> implements OnInit, OnDestroy {
+  columns = ['name', 'grade1', 'grade2', 'location']
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-
-  constructor(@Inject(SCHOOL_GAME_TABLE_CACHE) public tableCache: TableCache<Game>,
-              private menuState: MenuStateService,
-              private userSessionService: UserSessionService,
-              private route: ActivatedRoute,
-              private breakpointObserver: BreakpointObserver,
-              @Inject(SCHOOL_GAME_URI_SUPPLIER) private schoolGameUriSupplier: UriSupplier,
-              @Inject(SCHOOL_GAME_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
+  constructor(
+    // for super
+    menuState: MenuStateService,
+    @Inject(SCHOOL_GAME_LIST_MENU) menuCommands: CommandArray,
+    @Inject(SCHOOL_GAME_TABLE_CACHE) tableCache: TableCache<Game>,
+  ) {
+    super(menuState, menuCommands, tableCache)
   }
+
+  @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
+
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.menuCommands.forEach(command => {
-      this.menuState.add(command.factory(false))
-    })
-
-    this.route.paramMap
-      .subscribe(params => {
-        const schoolId = this.userSessionService.isSysAdmin
-          ? params.get('id')
-          : this.userSessionService.schoolUUID
-        this.schoolGameUriSupplier.withSubstitution('schoolId', schoolId)
-        this.tableCache.loadData()
-          .then(() => {
-            this.tableCache.clearSelection()
-          });
-      })
+    this.init()
   }
 
-  ngAfterViewInit(): void {
-    this.tableCache.sort = this.sort;
-    this.tableCache.paginator = this.paginator;
-  }
-
-  displayedColumns(): string[] {
-    if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      return ['name'];
-    } else {
-      return ['name', 'grade1', 'grade2', 'location'];
-    }
+  ngOnDestroy(): void {
+    this.destroy()
   }
 }

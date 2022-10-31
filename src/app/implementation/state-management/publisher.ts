@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, Subject} from 'rxjs';
 
 export abstract class Publisher<T> {
-  private subject: BehaviorSubject<T> = new BehaviorSubject<T>(null)
+  private subject1: BehaviorSubject<T> = new BehaviorSubject<T>(null)
+  private subject2: Subject<T> = new Subject<T>()
 
   protected publish(item: T) {
-    this.subject.next(item)
+    this.subject1.next(item)
+    this.subject2.next(item)
   }
 
   get observable(): Observable<T> {
-    return this.subject
+    return this.subject1
+  }
+
+  get newOnly(): Observable<T> {
+    return this.subject2
   }
 }

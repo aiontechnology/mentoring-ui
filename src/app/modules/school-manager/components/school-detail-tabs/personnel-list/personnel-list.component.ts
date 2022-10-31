@@ -19,12 +19,11 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../../implementation/command/command';
-import {AbstractListComponent} from '../../../../../implementation/component/abstract-list-component';
-import {SchoolUriSupplier} from '../../../../../implementation/data/school-uri-supplier';
-import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
+import {ListComponent} from '../../../../../implementation/component/list-component';
 import {Personnel} from '../../../../../implementation/models/personnel/personnel';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
-import {PERSONNEL_INSTANCE_CACHE, PERSONNEL_URI_SUPPLIER} from '../../../../../providers/global-personnel-providers-factory';
+import {PERSONNEL_INSTANCE_CACHE} from '../../../../../providers/global-personnel-providers-factory';
 import {PERSONNEL_TABLE_CACHE} from '../../../providers/personnel-providers-factory';
 import {PERSONNEL_LIST_MENU} from '../../../school-manager.module';
 
@@ -33,7 +32,7 @@ import {PERSONNEL_LIST_MENU} from '../../../school-manager.module';
   templateUrl: './personnel-list.component.html',
   styleUrls: ['./personnel-list.component.scss']
 })
-export class PersonnelListComponent extends AbstractListComponent<Personnel> implements OnInit, OnDestroy {
+export class PersonnelListComponent extends ListComponent<Personnel> implements OnInit, OnDestroy {
   columns = ['select', 'type', 'firstName', 'lastName', 'email', 'cellPhone']
 
   constructor(
@@ -42,8 +41,6 @@ export class PersonnelListComponent extends AbstractListComponent<Personnel> imp
     @Inject(PERSONNEL_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     @Inject(PERSONNEL_TABLE_CACHE) tableCache: TableCache<Personnel>,
     @Inject(PERSONNEL_INSTANCE_CACHE) personnelInstanceCache: SingleItemCache<Personnel>,
-    //other
-    @Inject(PERSONNEL_URI_SUPPLIER) private uriSupplier: SchoolUriSupplier,
   ) {
     super(menuState, menuCommands, tableCache, personnelInstanceCache)
   }
@@ -53,13 +50,14 @@ export class PersonnelListComponent extends AbstractListComponent<Personnel> imp
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.uriSupplier.observable.subscribe(this.loadTableCache)
     this.init()
-      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
     this.destroy()
-      .then(() => console.log('Destruction complete', this))
+  }
+
+  protected override loadTableCache = (): void => {
+    // do nothing
   }
 }

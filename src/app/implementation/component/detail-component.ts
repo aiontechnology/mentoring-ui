@@ -17,18 +17,16 @@
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Observable} from 'rxjs';
 import {Command} from '../command/command';
-import {SchoolUriSupplier} from '../data/school-uri-supplier';
 import {URI} from '../data/uri-supplier';
 import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
-import {AbstractComponent} from './abstract-component';
+import {MenuRegisteringComponent} from './menu-registering-component';
 
-export abstract class AbstractDetailComponent extends AbstractComponent {
+export abstract class DetailComponent extends MenuRegisteringComponent {
   protected constructor(
     menuState: MenuStateService,
     menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
-    private route: ActivatedRoute,
-    private uriSuppler?: SchoolUriSupplier,
+    protected route: ActivatedRoute,
     private navService?: NavigationService,
   ) {
     super(menuState, menuCommands)
@@ -42,14 +40,15 @@ export abstract class AbstractDetailComponent extends AbstractComponent {
     return this.route.paramMap
   }
 
-  protected override doInit = async (): Promise<void> => {
-    this.uriSuppler?.observable?.subscribe(this.onUriChange)
-    await this.doHandleRoute(this.route)
-    await this.handleBackButton(this.navService)
+  protected override init(): void {
+    super.init()
+    this.handleRoute(this.route)
+    this.handleBackButton(this.navService)
   }
 
-  protected async doDestroy(): Promise<void> {
-    return this.navService.clear();
+  protected override destroy(): void {
+    super.destroy()
+    this.navService?.clear();
   }
 
   /**
@@ -57,19 +56,21 @@ export abstract class AbstractDetailComponent extends AbstractComponent {
    * @param route The activate route
    * @protected
    */
-  protected doHandleRoute = async (route: ActivatedRoute): Promise<void> =>
-    Promise.resolve()
+  protected handleRoute(route: ActivatedRoute): void {
+    // do nothing
+  }
 
-  protected doHandleBackButton = async (navService: NavigationService): Promise<void> =>
-    Promise.resolve()
+  protected doHandleBackButton(navService: NavigationService): void {
+    // do nothing
+  }
 
   protected onUriChange = (uri: URI): void => {
     // do nothing
   }
 
-  private handleBackButton = async (navService:NavigationService): Promise<void> => {
-    if(navService) {
-      await this.doHandleBackButton(navService)
+  private handleBackButton(navService: NavigationService): void {
+    if (navService) {
+      this.doHandleBackButton(navService)
     }
   }
 }

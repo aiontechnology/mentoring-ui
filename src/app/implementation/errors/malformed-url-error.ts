@@ -18,9 +18,8 @@ import {URI} from '../data/uri-supplier';
 
 export class MalformedUrlError extends Error {
   constructor(message: string,
-              public uri: URI) {
+              public uri?: URI) {
     super(message);
-
   }
 
 }

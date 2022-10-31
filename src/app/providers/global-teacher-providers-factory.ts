@@ -19,30 +19,26 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
-import {SchoolUriSupplier} from '../implementation/data/school-uri-supplier';
-import {SingleItemCache} from '../implementation/data/single-item-cache';
 import {UriSupplier} from '../implementation/data/uri-supplier';
 import {Teacher} from '../implementation/models/teacher/teacher';
 import {TeacherRepository} from '../implementation/repositories/teacher-repository';
-import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
+import {SingleItemCache} from '../implementation/state-management/single-item-cache';
 
-export const TEACHER_DATA_SOURCE = new InjectionToken<DataSource<Teacher>>('teacher-data-source');
-export const TEACHER_CACHE = new InjectionToken<Cache<Teacher>>('teacher-cache');
 export const TEACHER_URI_SUPPLIER = new InjectionToken<UriSupplier>('teacher-uri-supplier');
+export const TEACHER_CACHE = new InjectionToken<Cache<Teacher>>('teacher-cache');
+export const TEACHER_DATA_SOURCE = new InjectionToken<DataSource<Teacher>>('teacher-data-source');
 export const TEACHER_INSTANCE_CACHE = new InjectionToken<SingleItemCache<Teacher>>('teacher-instance-cache')
 
 export function globalTeacherProvidersFactory() {
   return [
     {
       provide: TEACHER_URI_SUPPLIER,
-      useFactory: (schoolInstanceCache) =>
-        new SchoolUriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/teachers`, schoolInstanceCache),
-      deps: [SCHOOL_INSTANCE_CACHE]
+      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/teachers`)
     },
     TeacherRepository,
     {
       provide: TEACHER_CACHE,
-      useFactory: () => new Cache<Teacher>()
+      useFactory: () => new Cache<Teacher>('TeacherCache')
     },
     {
       provide: TEACHER_DATA_SOURCE,
@@ -51,8 +47,7 @@ export function globalTeacherProvidersFactory() {
     },
     {
       provide: TEACHER_INSTANCE_CACHE,
-      useFactory: (dataSource: DataSource<Teacher>) => new SingleItemCache<Teacher>(dataSource),
-      deps: [TEACHER_DATA_SOURCE]
+      useFactory: () => new SingleItemCache<Teacher>('TeacherInstanceCache')
     },
   ]
 }

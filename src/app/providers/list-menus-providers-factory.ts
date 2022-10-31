@@ -24,17 +24,17 @@ import {DialogCommand} from '../implementation/command/dialog-command';
 import {DialogManager} from '../implementation/command/dialog-manager';
 import {NavigationManager} from '../implementation/command/navigation-manager';
 import {SnackbarManager} from '../implementation/command/snackbar-manager';
+import {titleCase} from '../implementation/shared/title-case';
 import {TableCache} from '../implementation/table-cache/table-cache';
 import {ConfimationDialogComponent} from '../modules/shared/components/confimation-dialog/confimation-dialog.component';
-import {titleCase} from '../implementation/shared/title-case';
 
 export function listProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
   injectionToken: InjectionToken<Command[]>,
   group: string,
   name: string,
   componentType: ComponentType<COMPONENT_TYPE>,
-  serviceToken: InjectionToken<SERVICE_TYPE>) {
-
+  serviceToken: InjectionToken<SERVICE_TYPE>,
+) {
   const NAVIGATION_MANAGER = new InjectionToken<NavigationManager>('navigation-manager');
 
   const LIST_AFTER_CLOSED_DELETE = new InjectionToken<(s: string) => (a: any) => void>('list-after-closed-delete');

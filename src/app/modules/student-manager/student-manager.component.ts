@@ -14,18 +14,31 @@
  * limitations under the License.
  */
 
-import { Component } from '@angular/core';
-import { MenuStateService } from 'src/app/implementation/services/menu-state.service';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
+import {Student} from '../../implementation/models/student/student';
+import {
+  SingleItemCacheSchoolSessionChangeHandler
+} from '../../implementation/state-management/single-item-cache-school-session-change-handler';
+import {STUDENT_SCHOOL_SESSION_CHANGE_HANDLER} from './providers/student-providers-factory';
 
 @Component({
   selector: 'ms-student-manager',
   templateUrl: './student-manager.component.html',
   styleUrls: ['./student-manager.component.scss']
 })
-export class StudentManagerComponent {
+export class StudentManagerComponent implements OnInit, OnDestroy {
+  constructor(
+    private menuState: MenuStateService,
+    @Inject(STUDENT_SCHOOL_SESSION_CHANGE_HANDLER) private studentSchoolSessionChangeHandler: SingleItemCacheSchoolSessionChangeHandler<Student>,
+  ) {}
 
-  constructor(menuState: MenuStateService) {
-    menuState.title = 'Student Manager';
+  ngOnInit(): void {
+    this.menuState.title = 'Student Manager';
+    this.studentSchoolSessionChangeHandler.start()
   }
 
+  ngOnDestroy(): void {
+    this.studentSchoolSessionChangeHandler.stop()
+  }
 }

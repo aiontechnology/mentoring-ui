@@ -20,9 +20,9 @@ import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
-import {CommandArray} from '../../../../implementation/component/abstract-component';
-import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
-import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {CommandArray} from '../../../../implementation/component/menu-registering-component';
+import {ListComponent} from '../../../../implementation/component/list-component';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {Book} from '../../../../implementation/models/book/book';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {BOOK_INSTANCE_CACHE} from '../../../../providers/global-book-providers-factory';
@@ -33,7 +33,7 @@ import {BOOK_LIST_MENU, BOOK_TABLE_CACHE} from '../../providers/book-providers-f
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.scss']
 })
-export class BookListComponent extends AbstractListComponent<Book> implements OnInit, OnDestroy {
+export class BookListComponent extends ListComponent<Book> implements OnInit, OnDestroy {
   columns = ['title', 'author', 'gradeLevel', 'location']
 
   constructor(
@@ -57,12 +57,10 @@ export class BookListComponent extends AbstractListComponent<Book> implements On
 
   ngOnInit(): void {
     this.init()
-      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
     this.destroy()
-      .then(() => console.log('Destruction complete', this))
   }
 
   protected override registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {

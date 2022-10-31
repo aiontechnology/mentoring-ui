@@ -15,28 +15,63 @@
  */
 
 import {InjectionToken} from '@angular/core';
+import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
+import {UriSupplier} from '../../../implementation/data/uri-supplier';
+import {School} from '../../../implementation/models/school/school';
+import {SchoolSession} from '../../../implementation/models/school/schoolsession';
+import {Student} from '../../../implementation/models/student/student';
+import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
+import {
+  SingleItemCacheSchoolSessionChangeHandler
+} from '../../../implementation/state-management/single-item-cache-school-session-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
-import {STUDENT_DATA_SOURCE, STUDENT_INSTANCE_CACHE} from '../../../providers/global-student-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../providers/global-school-session-providers-factory';
+import {
+  STUDENT_CACHE,
+  STUDENT_DATA_SOURCE,
+  STUDENT_INSTANCE_CACHE,
+  STUDENT_INSTANCE_CACHE_UPDATER,
+  STUDENT_URI_SUPPLIER
+} from '../../../providers/global-student-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
 import {StudentDialogComponent} from '../components/student-dialog/student-dialog.component';
-import {Student} from '../../../implementation/models/student/student';
 import {STUDENT_DETAIL_MENU, STUDENT_GROUP, STUDENT_LIST_MENU} from '../student-manager.module';
 
 export const STUDENT_TABLE_CACHE = new InjectionToken<TableCache<Student>>('student-table-cache')
+export const STUDENT_SCHOOL_SESSION_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolSessionChangeHandler<Student>>('student-school-session-change-handler')
 
 export function studentProvidersFactory() {
   return [
     ...listProvidersFactory<Student, StudentDialogComponent, TableCache<Student>>(STUDENT_LIST_MENU, STUDENT_GROUP, 'Student',
       StudentDialogComponent, STUDENT_TABLE_CACHE),
     ...detailProvidersFactory<Student, StudentDialogComponent, TableCache<Student>>(STUDENT_DETAIL_MENU, STUDENT_GROUP, 'Student',
-      ['/studentmanager'], StudentDialogComponent, STUDENT_TABLE_CACHE, STUDENT_INSTANCE_CACHE),
+      ['/studentmanager'], StudentDialogComponent, STUDENT_TABLE_CACHE, STUDENT_INSTANCE_CACHE, STUDENT_INSTANCE_CACHE_UPDATER),
     {
       provide: STUDENT_TABLE_CACHE,
-      useFactory: (dataSource: DataSource<Student>) => new TableCache(dataSource),
+      useFactory: (dataSource: DataSource<Student>) => new TableCache('StudentTableCache', dataSource),
       deps: [STUDENT_DATA_SOURCE]
     },
-
+    {
+      provide: STUDENT_SCHOOL_SESSION_CHANGE_HANDLER,
+      useFactory: (
+        schoolInstanceCache: SingleItemCache<School>,
+        schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
+        uriSupplier: UriSupplier,
+        cache: Cache<Student>,
+        tableCache: TableCache<Student>
+      ) =>
+        new SingleItemCacheSchoolSessionChangeHandler<Student>(
+          'StudentSchoolSessionChangeHandler',
+          schoolInstanceCache,
+          schoolSessionInstanceCache,
+          uriSupplier,
+          cache,
+          tableCache
+        ),
+      deps: [SCHOOL_INSTANCE_CACHE, SCHOOL_SESSION_INSTANCE_CACHE, STUDENT_URI_SUPPLIER, STUDENT_CACHE, STUDENT_TABLE_CACHE]
+    },
   ]
 }

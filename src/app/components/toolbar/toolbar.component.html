@@ -43,7 +43,7 @@
         *ngIf="menu.isVisible"
         mat-menu-item
         (click)="menu.execute()"
-        [disabled]="!menu.isEnabled()">
+        [disabled]="!menu.isEnabled">
           {{ menu.title }}
       </button>
     </ng-container>

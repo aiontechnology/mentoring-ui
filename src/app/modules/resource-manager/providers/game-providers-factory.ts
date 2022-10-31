@@ -17,12 +17,12 @@
 import {InjectionToken} from '@angular/core';
 import {Command} from '../../../implementation/command/command';
 import {DataSource} from '../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../implementation/data/single-item-cache';
 import {Book} from '../../../implementation/models/book/book';
 import {Game} from '../../../implementation/models/game/game';
+import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
-import {GAME_DATA_SOURCE, GAME_INSTANCE_CACHE} from '../../../providers/global-game-providers-factory';
+import {GAME_DATA_SOURCE, GAME_INSTANCE_CACHE, GAME_INSTANCE_CACHE_UPDATER} from '../../../providers/global-game-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
 import {GameDialogComponent} from '../components/game-dialog/game-dialog.component';
 import {GAME_GROUP} from '../resource-manager.module';
@@ -36,10 +36,10 @@ export function gameProvidersFactory() {
     ...listProvidersFactory<Game, GameDialogComponent, TableCache<Game>>(GAME_LIST_MENU, GAME_GROUP, 'game', GameDialogComponent,
       GAME_TABLE_CACHE),
     ...detailProvidersFactory<Game, GameDialogComponent, TableCache<Game>>(GAME_DETAIL_MENU, 'game', 'game',
-      ['/resourcemanager'], GameDialogComponent, GAME_TABLE_CACHE, GAME_INSTANCE_CACHE),
+      ['/resourcemanager'], GameDialogComponent, GAME_TABLE_CACHE, GAME_INSTANCE_CACHE, GAME_INSTANCE_CACHE_UPDATER),
     {
       provide: GAME_TABLE_CACHE,
-      useFactory: (dataSource: DataSource<Game>) => new TableCache(dataSource),
+      useFactory: (dataSource: DataSource<Game>) => new TableCache('GameTableCache', dataSource),
       deps: [GAME_DATA_SOURCE]
     },
   ]

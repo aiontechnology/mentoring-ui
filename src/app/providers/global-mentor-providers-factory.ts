@@ -19,30 +19,31 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
-import {SchoolUriSupplier} from '../implementation/data/school-uri-supplier';
-import {SingleItemCache} from '../implementation/data/single-item-cache';
+import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../implementation/data/uri-supplier';
-import {Mentor} from '../modules/mentor-manager/models/mentor/mentor';
 import {MentorRepository} from '../implementation/repositories/mentor-repository';
-import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
+import {MENTOR_ID} from '../implementation/route/route-constants';
+import {RouteElementWatcher} from '../implementation/route/route-element-watcher.service';
+import {SingleItemCache} from '../implementation/state-management/single-item-cache';
+import {Mentor} from '../modules/mentor-manager/models/mentor/mentor';
 
 export const MENTOR_DATA_SOURCE = new InjectionToken<DataSource<Mentor>>('mentor-data-source');
 export const MENTOR_CACHE = new InjectionToken<Cache<Mentor>>('mentor-cache');
 export const MENTOR_URI_SUPPLIER = new InjectionToken<UriSupplier>('mentor-uri-supplier');
 export const MENTOR_INSTANCE_CACHE = new InjectionToken<SingleItemCache<Mentor>>('mentor-instance-cache')
+export const MENTOR_INSTANCE_CACHE_UPDATER = new InjectionToken<SingleItemCacheUpdater<Mentor>>('mentor-instance-cache-updater')
+export const MENTOR_ROUTE_WATCHER = new InjectionToken<RouteElementWatcher<Mentor>>('mentor-route-watcher')
 
 export function globalMentorProvidersFactory() {
   return [
     {
       provide: MENTOR_URI_SUPPLIER,
-      useFactory: (schoolInstanceCache) =>
-        new SchoolUriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/mentors`, schoolInstanceCache),
-      deps: [SCHOOL_INSTANCE_CACHE]
+      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/mentors`)
     },
     MentorRepository,
     {
       provide: MENTOR_CACHE,
-      useFactory: () => new Cache<Mentor>()
+      useFactory: () => new Cache<Mentor>('MentorCache')
     },
     {
       provide: MENTOR_DATA_SOURCE,
@@ -51,8 +52,19 @@ export function globalMentorProvidersFactory() {
     },
     {
       provide: MENTOR_INSTANCE_CACHE,
-      useFactory: (dataSource: DataSource<Mentor>) => new SingleItemCache<Mentor>(dataSource),
-      deps: [MENTOR_DATA_SOURCE]
+      useFactory: () => new SingleItemCache<Mentor>('MentorInstanceCache')
+    },
+    {
+      provide: MENTOR_INSTANCE_CACHE_UPDATER,
+      useFactory: (singleItemCache: SingleItemCache<Mentor>, dataSource: DataSource<Mentor>) =>
+        new SingleItemCacheUpdater<Mentor>(singleItemCache, dataSource),
+      deps: [MENTOR_INSTANCE_CACHE, MENTOR_DATA_SOURCE]
+    },
+    {
+      provide: MENTOR_ROUTE_WATCHER,
+      useFactory: (mentorInstanceCacheUpdator: SingleItemCacheUpdater<Mentor>) =>
+        new RouteElementWatcher<Mentor>(mentorInstanceCacheUpdator, MENTOR_ID),
+      deps: [MENTOR_INSTANCE_CACHE_UPDATER]
     },
   ]
 }

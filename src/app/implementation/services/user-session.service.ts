@@ -16,8 +16,8 @@
 
 import {Inject, Injectable} from '@angular/core';
 import {JwtHelperService} from '@auth0/angular-jwt';
-import {SCHOOL_INSTANCE_CACHE} from '../../providers/global-school-providers-factory';
-import {SingleItemCache} from '../data/single-item-cache';
+import {SCHOOL_INSTANCE_CACHE, SCHOOL_INSTANCE_CACHE_UPDATER} from '../../providers/global-school-providers-factory';
+import {SingleItemCacheUpdater} from '../state-management/single-item-cache-updater';
 import {School} from '../models/school/school';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class UserSessionService {
   private helper: JwtHelperService;
 
   constructor(
-    @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
+    @Inject(SCHOOL_INSTANCE_CACHE_UPDATER) private schoolInstanceCacheUpdater: SingleItemCacheUpdater<School>,
   ) {
     this.helper = new JwtHelperService();
   }
@@ -74,7 +74,7 @@ export class UserSessionService {
   handleLogin(params: URLSearchParams): void {
     this.addToStorage(UserSessionService.ID_TOKEN, params.get(UserSessionService.ID_TOKEN));
     this.addToStorage(UserSessionService.ACCESS_TOKEN, params.get(UserSessionService.ACCESS_TOKEN));
-    this.schoolInstanceCache.fromId(this.schoolUUID)
+    this.schoolInstanceCacheUpdater.fromId(this.schoolUUID)
       .then(school => console.log('Set school', school))
   }
 

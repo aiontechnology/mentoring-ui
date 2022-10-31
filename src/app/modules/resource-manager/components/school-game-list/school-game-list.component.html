@@ -22,7 +22,8 @@
   <div class="list-container mat-elevation-z2">
     <div class="header">
       <mat-form-field>
-        <input matInput [(ngModel)]="tableCache.filterBinding" (keyup)="tableCache.applyFilter($event.target.value)" placeholder="Filter"/>
+        <input matInput [(ngModel)]="tableCache.filterBinding" (keyup)="tableCache.applyFilter($event.target.value)"
+               placeholder="Filter"/>
         <button mat-button *ngIf="tableCache.filter" matSuffix mat-icon-button (click)="tableCache.clearFilter()">
           <mat-icon>close</mat-icon>
         </button>
@@ -52,10 +53,10 @@
         <td mat-cell *matCellDef="let game">{{ game.displayLocation }}</td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns(); sticky: true"></tr>
+      <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
       <tr
         mat-row
-        *matRowDef="let row; columns: displayedColumns()"
+        *matRowDef="let row; columns: columns"
         (click)="tableCache.selection.toggle(row)"
       ></tr>
 
@@ -63,7 +64,9 @@
 
     <table class="footer mat-elevation-z1">
       <tr>
-        <td><mat-paginator #paginator [pageSize]="tableCache.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
+        <td>
+          <mat-paginator #paginator [pageSize]="tableCache.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
+        </td>
       </tr>
     </table>
   </div>

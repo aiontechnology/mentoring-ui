@@ -17,7 +17,7 @@
 <div class="schoolSelectionContainer" *ngIf="allowStudentSelection()">
   <span class="label">School:</span>
   <mat-form-field appearance="outline">
-    <mat-select placeholder="Select a school" [compareWith]="compareSchools" [(value)]="schoolInstanceCache.item">
+    <mat-select placeholder="Select a school"[(value)]="schoolInstanceCache.item" [compareWith]="compareSchools" >
       <mat-option *ngFor="let school of schoolCollectionCache.items" [value]="school">{{ school.name }}</mat-option>
     </mat-select>
   </mat-form-field>

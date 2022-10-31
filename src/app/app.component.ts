@@ -14,26 +14,39 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
-import {SingleItemCache} from './implementation/data/single-item-cache';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {School} from './implementation/models/school/school';
+import {SchoolSession} from './implementation/models/school/schoolsession';
 import {UserSessionService} from './implementation/services/user-session.service';
-import {SCHOOL_INSTANCE_CACHE} from './providers/global-school-providers-factory';
+import {MultiItemCacheSchoolChangeHandler} from './implementation/state-management/multi-item-cache-school-change-handler';
+import {SingleItemCache} from './implementation/state-management/single-item-cache';
+import {SingleItemCacheUpdater} from './implementation/state-management/single-item-cache-updater';
+import {SCHOOL_INSTANCE_CACHE, SCHOOL_INSTANCE_CACHE_UPDATER} from './providers/global-school-providers-factory';
+import {SCHOOL_SESSION_COLLECTION_CACHE_LOADER} from './providers/global-school-session-providers-factory';
 
 @Component({
   selector: 'ms-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'mentorsuccess-ui';
 
   constructor(
-    userSession: UserSessionService,
-    @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>
-  ) {
-    if (userSession.isProgAdmin && schoolInstanceCache.isEmpty) {
-      schoolInstanceCache.fromId(userSession.schoolUUID)
+    private userSession: UserSessionService,
+    @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
+    @Inject(SCHOOL_INSTANCE_CACHE_UPDATER) private schoolInstanceCacheUpdater: SingleItemCacheUpdater<School>,
+    @Inject(SCHOOL_SESSION_COLLECTION_CACHE_LOADER) private schoolSessionCollectionCacheLoader: MultiItemCacheSchoolChangeHandler,
+  ) {}
+
+  ngOnInit(): void {
+    this.schoolSessionCollectionCacheLoader.start()
+    if (this.userSession.isProgAdmin && this.schoolInstanceCache.isEmpty) {
+      this.schoolInstanceCacheUpdater.fromId(this.userSession.schoolUUID)
     }
+  }
+
+  ngOnDestroy(): void {
+    this.schoolSessionCollectionCacheLoader.stop()
   }
 }

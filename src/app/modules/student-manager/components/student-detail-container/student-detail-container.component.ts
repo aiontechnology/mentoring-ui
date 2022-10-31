@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {SchoolSession} from '../../../../implementation/models/school/schoolsession';
 import {MenuStateService} from '../../../../implementation/services/menu-state.service';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global-school-session-providers-factory';
 
 @Component({
   selector: 'ms-student-detail-container',
@@ -25,17 +28,14 @@ import {MenuStateService} from '../../../../implementation/services/menu-state.s
 })
 export class StudentDetailContainerComponent implements OnInit {
 
-  isHistoric: boolean
-
-  constructor(private route: ActivatedRoute,
-              private menuState: MenuStateService) { }
+  constructor(
+    private route: ActivatedRoute,
+    private menuState: MenuStateService,
+    @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
+  ) { }
 
   ngOnInit(): void {
     this.menuState.clear()
-    this.route.paramMap
-      .subscribe(params => {
-        this.isHistoric = params.get('historic')?.toLowerCase() === 'true'
-      })
   }
 
 }

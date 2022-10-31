@@ -43,7 +43,7 @@ const routes: Routes = [
       {path: `students/:${STUDENT_ID}`, component: StudentDetailComponent},
     ]
   }
-];
+]
 
 // Menus
 export const STUDENT_DETAIL_MENU = new InjectionToken<Command[]>('student-detail-menu')

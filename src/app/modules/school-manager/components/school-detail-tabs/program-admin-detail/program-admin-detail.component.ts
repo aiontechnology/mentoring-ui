@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Command} from '../../../../../implementation/command/command';
+import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
+import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
-import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
-import {SCHOOL_ID} from '../../../../../implementation/route/route-constants';
-import {
-  PROGRAM_ADMIN_DATA_SOURCE,
-  PROGRAM_ADMIN_INSTANCE_CACHE,
-  PROGRAM_ADMIN_URI_SUPPLIER
-} from '../../../../../providers/global-program-admin-providers-factory';
+import {School} from '../../../../../implementation/models/school/school';
+import {SchoolSession} from '../../../../../implementation/models/school/schoolsession';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {ProgramAdmin} from '../../../../../implementation/models/program-admin/program-admin';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_INSTANCE_CACHE} from '../../../../../providers/global-program-admin-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global-school-session-providers-factory';
 import {PROGRAM_ADMIN_MENU} from '../../../school-manager.module';
 
 @Component({
@@ -35,31 +34,33 @@ import {PROGRAM_ADMIN_MENU} from '../../../school-manager.module';
   templateUrl: './program-admin-detail.component.html',
   styleUrls: ['./program-admin-detail.component.scss']
 })
-export class ProgramAdminDetailComponent implements OnInit {
-  constructor(private menuState: MenuStateService,
-              private route: ActivatedRoute,
-              @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
-              @Inject(PROGRAM_ADMIN_INSTANCE_CACHE) private programAdminCache: SingleItemCache<ProgramAdmin>,
-              @Inject(PROGRAM_ADMIN_URI_SUPPLIER) private programAdminUriSupplier: UriSupplier,
-              @Inject(PROGRAM_ADMIN_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
-  }
-
-  get programAdmin() {
-    return this.programAdminCache.item;
+export class ProgramAdminDetailComponent extends SchoolWatchingDetailComponent implements OnInit, OnDestroy {
+  constructor(
+    // for super
+    menuState: MenuStateService,
+    @Inject(PROGRAM_ADMIN_MENU) menuCommands: CommandArray,
+    route: ActivatedRoute,
+    @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
+    @Inject(SCHOOL_SESSION_INSTANCE_CACHE) schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
+    // other
+    @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
+    @Inject(PROGRAM_ADMIN_INSTANCE_CACHE) public programAdminCache: SingleItemCache<ProgramAdmin>,
+  ) {
+    super(menuState, menuCommands, route, schoolInstanceCache, schoolSessionInstanceCache)
   }
 
   ngOnInit(): void {
-    this.menuCommands.forEach(command => {
-      this.menuState.add(command.factory(false))
-    })
+    this.init()
+  }
 
-    this.route.paramMap
-      .subscribe(params => {
-        this.programAdminUriSupplier.withSubstitution('schoolId', params.get(SCHOOL_ID));
-        this.programAdminDataSource.allValues()
-          .then(admin => {
-            this.programAdminCache.item = admin[0];
-          });
+  ngOnDestroy(): void {
+    this.destroy()
+  }
+
+  protected onSchoolChange(school: School) {
+    this.programAdminDataSource.allValues()
+      .then(admin => {
+        this.programAdminCache.item = admin[0];
       });
   }
 }

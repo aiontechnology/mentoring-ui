@@ -74,8 +74,8 @@ export class DialogCommand<T> extends Command {
     return new this.DialogCommandBuilder(title, group, dialogManager, isEnabledFunction)
   }
 
-  override isEnabled(...args: any[]): boolean {
-    return this.isEnabledFunction()
+  override get isEnabled(): boolean {
+    return this.isEnabledFunction() && super.isEnabled
   }
 
 

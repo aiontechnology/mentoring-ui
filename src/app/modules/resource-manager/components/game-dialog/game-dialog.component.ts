@@ -23,7 +23,7 @@ import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
 import {Game} from 'src/app/implementation/models/game/game';
 import {Grade} from 'src/app/implementation/types/grade';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import {AbstractDialogComponent} from '../../../../implementation/component/abstract-dialog-component';
+import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {GAME_DATA_SOURCE} from '../../../../providers/global-game-providers-factory';
 
@@ -32,7 +32,7 @@ import {GAME_DATA_SOURCE} from '../../../../providers/global-game-providers-fact
   templateUrl: './game-dialog.component.html',
   styleUrls: ['./game-dialog.component.scss']
 })
-export class GameDialogComponent extends AbstractDialogComponent<Game, GameDialogComponent> implements OnInit {
+export class GameDialogComponent extends DialogComponent<Game, GameDialogComponent> implements OnInit {
   grades: Grade[] = resourceGrades;
   locations: { [key: string]: string } = resourceLocations;
   activityFocusList$: Observable<string[]>;

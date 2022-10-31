@@ -23,7 +23,7 @@ import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
 import {Book} from 'src/app/implementation/models/book/book';
 import {Grade} from 'src/app/implementation/types/grade';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import {AbstractDialogComponent} from '../../../../implementation/component/abstract-dialog-component';
+import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {BOOK_DATA_SOURCE} from '../../../../providers/global-book-providers-factory';
 
@@ -32,7 +32,7 @@ import {BOOK_DATA_SOURCE} from '../../../../providers/global-book-providers-fact
   templateUrl: './book-dialog.component.html',
   styleUrls: ['./book-dialog.component.scss']
 })
-export class BookDialogComponent extends AbstractDialogComponent<Book, BookDialogComponent> implements OnInit {
+export class BookDialogComponent extends DialogComponent<Book, BookDialogComponent> implements OnInit {
   grades: Grade[] = resourceGrades;
   locations: { [key: string]: string } = resourceLocations;
   interestList$: Observable<string[]>;

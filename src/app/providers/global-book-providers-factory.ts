@@ -19,7 +19,8 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
-import {SingleItemCache} from '../implementation/data/single-item-cache';
+import {SingleItemCache} from '../implementation/state-management/single-item-cache';
+import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../implementation/data/uri-supplier';
 import {Book} from '../implementation/models/book/book';
 import {BookRepository} from '../implementation/repositories/book-repository';
@@ -28,6 +29,7 @@ export const BOOK_DATA_SOURCE = new InjectionToken<DataSource<Book>>('book-data-
 export const BOOK_CACHE = new InjectionToken<Cache<Book>>('book-cache');
 export const BOOK_URI_SUPPLIER = new InjectionToken<UriSupplier>('book-uri-supplier');
 export const BOOK_INSTANCE_CACHE = new InjectionToken<SingleItemCache<Book>>('book-instance-cache')
+export const BOOK_INSTANCE_CACHE_UPDATER = new InjectionToken<SingleItemCacheUpdater<Book>>('book-instance-cache-updater')
 
 export function globalBookProvidersFactory() {
   return [
@@ -38,7 +40,7 @@ export function globalBookProvidersFactory() {
     BookRepository,
     {
       provide: BOOK_CACHE,
-      useFactory: () => new Cache<Book>()
+      useFactory: () => new Cache<Book>('BookCache')
     },
     {
       provide: BOOK_DATA_SOURCE,
@@ -47,8 +49,13 @@ export function globalBookProvidersFactory() {
     },
     {
       provide: BOOK_INSTANCE_CACHE,
-      useFactory: (dataSource: DataSource<Book>) => new SingleItemCache<Book>(dataSource),
-      deps: [BOOK_DATA_SOURCE]
+      useFactory: () => new SingleItemCache<Book>('BookInstanceCache')
+    },
+    {
+      provide: BOOK_INSTANCE_CACHE_UPDATER,
+      useFactory: (singleItemCache: SingleItemCache<Book>, dataSource: DataSource<Book>) =>
+        new SingleItemCacheUpdater<Book>(singleItemCache, dataSource),
+      deps: [BOOK_INSTANCE_CACHE, BOOK_DATA_SOURCE]
     },
   ]
 }

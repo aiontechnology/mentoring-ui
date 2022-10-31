@@ -17,9 +17,9 @@
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {AbstractDialogComponent} from '../../../../../implementation/component/abstract-dialog-component';
+import {DialogComponent} from '../../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
 import {Personnel} from '../../../../../implementation/models/personnel/personnel';
 import {School} from '../../../../../implementation/models/school/school';
@@ -31,7 +31,7 @@ import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-prov
   templateUrl: './personnel-dialog.component.html',
   styleUrls: ['./personnel-dialog.component.scss']
 })
-export class PersonnelDialogComponent extends AbstractDialogComponent<Personnel, PersonnelDialogComponent> {
+export class PersonnelDialogComponent extends DialogComponent<Personnel, PersonnelDialogComponent> {
   titles: any[] = [
     {value: 'SOCIAL_WORKER', valueView: 'Social Worker'},
     {value: 'PRINCIPAL', valueView: 'Principal'},

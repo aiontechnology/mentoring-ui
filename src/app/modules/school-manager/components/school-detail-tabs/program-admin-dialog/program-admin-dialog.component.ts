@@ -17,7 +17,7 @@
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {AbstractDialogComponent} from '../../../../../implementation/component/abstract-dialog-component';
+import {DialogComponent} from '../../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
 import {ProgramAdmin} from '../../../../../implementation/models/program-admin/program-admin';
 import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../../../providers/global-program-admin-providers-factory';
@@ -27,7 +27,7 @@ import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../../../providers/global-program
   templateUrl: './program-admin-dialog.component.html',
   styleUrls: ['./program-admin-dialog.component.scss']
 })
-export class ProgramAdminDialogComponent extends AbstractDialogComponent<ProgramAdmin, ProgramAdminDialogComponent> {
+export class ProgramAdminDialogComponent extends DialogComponent<ProgramAdmin, ProgramAdminDialogComponent> {
   constructor(
     // For super
     @Inject(MAT_DIALOG_DATA) data: any,

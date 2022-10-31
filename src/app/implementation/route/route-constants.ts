@@ -19,3 +19,5 @@ export const GAME_ID = 'gameId'
 export const MENTOR_ID = 'mentorId'
 export const SCHOOL_ID = 'schoolId'
 export const STUDENT_ID = 'studentId'
+
+export const SESSION_PARAM = 'session'

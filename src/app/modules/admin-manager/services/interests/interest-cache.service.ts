@@ -26,7 +26,7 @@ export class InterestCacheService extends AbstractTableCache<InterestInbound> {
   readonly isLoading$: BehaviorSubject<boolean>;
 
   constructor(private metaDataService: MetaDataService) {
-    super();
+    super('InterestCacheService');
     this.isLoading$ = new BehaviorSubject(true);
   }
 

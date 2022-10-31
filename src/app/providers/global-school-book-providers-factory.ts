@@ -36,7 +36,7 @@ export function globalSchoolBookProvidersFactory() {
     SchoolBookRepository,
     {
       provide: SCHOOL_BOOK_CACHE,
-      useFactory: () => new Cache<Book>()
+      useFactory: () => new Cache<Book>('SchoolBookCache')
     },
     {
       provide: SCHOOL_BOOK_DATA_SOURCE,

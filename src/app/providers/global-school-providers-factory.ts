@@ -18,9 +18,10 @@ import {InjectionToken} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
-import {MultiItemCache} from '../implementation/data/multi-item-cache';
+import {MultiItemCache} from '../implementation/state-management/multi-item-cache';
 import {Repository} from '../implementation/data/repository';
-import {SingleItemCache} from '../implementation/data/single-item-cache';
+import {SingleItemCache} from '../implementation/state-management/single-item-cache';
+import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../implementation/data/uri-supplier';
 import {School} from '../implementation/models/school/school';
 import {SchoolRepository} from '../implementation/repositories/school-repository';
@@ -31,6 +32,7 @@ export const SCHOOL_URI_SUPPLIER = new InjectionToken<UriSupplier>('school-uri-s
 export const SCHOOL_CACHE = new InjectionToken<Cache<School>>('school-cache');
 export const SCHOOL_DATA_SOURCE = new InjectionToken<DataSource<School>>('school-data-source');
 export const SCHOOL_INSTANCE_CACHE = new InjectionToken<SingleItemCache<School>>('school-instance-cache')
+export const SCHOOL_INSTANCE_CACHE_UPDATER = new InjectionToken<SingleItemCacheUpdater<School>>('school-instance-cache-updater')
 export const SCHOOL_COLLECTION_CACHE = new InjectionToken<MultiItemCache<School>>('school-collection-cache')
 export const SCHOOL_ROUTE_WATCHER = new InjectionToken<RouteElementWatcher<School>>('school-route-watcher')
 
@@ -43,7 +45,7 @@ export function globalSchoolProvidersFactory() {
     SchoolRepository,
     {
       provide: SCHOOL_CACHE,
-      useFactory: () => new Cache<School>()
+      useFactory: () => new Cache<School>('SchoolCache')
     },
     {
       provide: SCHOOL_DATA_SOURCE,
@@ -52,8 +54,13 @@ export function globalSchoolProvidersFactory() {
     },
     {
       provide: SCHOOL_INSTANCE_CACHE,
-      useFactory: (dataSource: DataSource<School>) => new SingleItemCache<School>(dataSource),
-      deps: [SCHOOL_DATA_SOURCE]
+      useFactory: () => new SingleItemCache<School>('SchoolInstanceCache')
+    },
+    {
+      provide: SCHOOL_INSTANCE_CACHE_UPDATER,
+      useFactory: (singleItemCache: SingleItemCache<School>, dataSource: DataSource<School>) =>
+        new SingleItemCacheUpdater<School>(singleItemCache, dataSource),
+      deps: [SCHOOL_INSTANCE_CACHE, SCHOOL_DATA_SOURCE]
     },
     {
       provide: SCHOOL_COLLECTION_CACHE,
@@ -62,8 +69,9 @@ export function globalSchoolProvidersFactory() {
     },
     {
       provide: SCHOOL_ROUTE_WATCHER,
-      useFactory: (schoolCache: SingleItemCache<School>, schoolKey) => new RouteElementWatcher<School>(schoolCache, SCHOOL_ID),
-      deps: [SCHOOL_INSTANCE_CACHE]
+      useFactory: (schoolInstanceCacheUpdater: SingleItemCacheUpdater<School>) =>
+        new RouteElementWatcher<School>(schoolInstanceCacheUpdater, SCHOOL_ID),
+      deps: [SCHOOL_INSTANCE_CACHE_UPDATER]
     }
   ]
 }

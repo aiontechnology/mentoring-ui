@@ -18,9 +18,9 @@ import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {personLocations} from 'src/app/implementation/constants/locations';
-import {AbstractDialogComponent} from '../../../../implementation/component/abstract-dialog-component';
+import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {School} from '../../../../implementation/models/school/school';
 import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
@@ -32,7 +32,7 @@ import {Mentor} from '../../models/mentor/mentor';
   templateUrl: './mentor-dialog.component.html',
   styleUrls: ['./mentor-dialog.component.scss']
 })
-export class MentorDialogComponent extends AbstractDialogComponent<Mentor, MentorDialogComponent> {
+export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogComponent> {
   schoolId: string;
   locations: { [key: string]: string } = personLocations;
 

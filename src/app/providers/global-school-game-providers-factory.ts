@@ -26,7 +26,6 @@ import {SchoolGameRepository} from '../implementation/repositories/school-game-r
 export const SCHOOL_GAME_DATA_SOURCE = new InjectionToken<DataSource<Game>>('school-game-data-source');
 export const SCHOOL_GAME_CACHE = new InjectionToken<Cache<Game>>('school-game-cache');
 export const SCHOOL_GAME_URI_SUPPLIER = new InjectionToken<UriSupplier>('school-game-uri-supplier');
-export const SCHOOL_GAME_TABLE_CACHE = new InjectionToken<UriSupplier>('school-game-table-cache');
 
 export function globalSchoolGameProvidersFactory() {
   return [
@@ -37,7 +36,7 @@ export function globalSchoolGameProvidersFactory() {
     SchoolGameRepository,
     {
       provide: SCHOOL_GAME_CACHE,
-      useFactory: () => new Cache<Game>()
+      useFactory: () => new Cache<Game>('SchoolGameCache')
     },
     {
       provide: SCHOOL_GAME_DATA_SOURCE,

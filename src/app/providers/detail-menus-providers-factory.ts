@@ -23,10 +23,11 @@ import {Command} from '../implementation/command/command';
 import {DialogCommand} from '../implementation/command/dialog-command';
 import {DialogManager} from '../implementation/command/dialog-manager';
 import {SnackbarManager} from '../implementation/command/snackbar-manager';
-import {SingleItemCache} from '../implementation/data/single-item-cache';
+import {SingleItemCache} from '../implementation/state-management/single-item-cache';
+import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
+import {titleCase} from '../implementation/shared/title-case';
 import {TableCache} from '../implementation/table-cache/table-cache';
 import {ConfimationDialogComponent} from '../modules/shared/components/confimation-dialog/confimation-dialog.component';
-import {titleCase} from '../implementation/shared/title-case';
 
 export function detailProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
   injectionToken: InjectionToken<Command[]>,
@@ -34,8 +35,9 @@ export function detailProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE 
   name: string, routeAfterDelete: string[],
   componentType: ComponentType<COMPONENT_TYPE>,
   serviceToken: InjectionToken<SERVICE_TYPE>,
-  singleItemCacheToken: InjectionToken<SingleItemCache<MODEL_TYPE>>) {
-
+  singleItemCacheToken: InjectionToken<SingleItemCache<MODEL_TYPE>>,
+  singleItemCacheUpdaterToken: InjectionToken<SingleItemCacheUpdater<MODEL_TYPE>>,
+) {
   const DETAIL_AFTER_CLOSED_DELETE = new InjectionToken<(s: string) => (a: any) => void>('detail-after-closed-delete');
   const DETAIL_AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('detail-after-closed-edit');
   const DETAIL_DIALOG_MANAGER_DELETE = new InjectionToken<DialogManager<ConfimationDialogComponent>>('detail-dialog-manager-delete');
@@ -57,11 +59,11 @@ export function detailProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE 
       provide: DETAIL_AFTER_CLOSED_DELETE,
       useFactory: (injector: Injector, snackbarManager: SnackbarManager, router: Router) => {
         const service: SERVICE_TYPE = injector.get(serviceToken)
-        const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
+        const singleItemCacheUpdater: SingleItemCacheUpdater<MODEL_TYPE> = injector.get(singleItemCacheUpdaterToken)
         return (snackbarMessage: string) => result => {
           if (result) {
             snackbarManager.open(snackbarMessage)
-            singleItemCache.remove()
+            singleItemCacheUpdater.remove()
               .then(() => service.loadData())
               .then(() => service.clearSelection())
               .then(() => router.navigate(routeAfterDelete))

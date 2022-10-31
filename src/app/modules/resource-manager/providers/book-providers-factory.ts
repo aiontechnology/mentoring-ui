@@ -21,7 +21,7 @@ import {Book} from '../../../implementation/models/book/book';
 import {School} from '../../../implementation/models/school/school';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
-import {BOOK_DATA_SOURCE, BOOK_INSTANCE_CACHE} from '../../../providers/global-book-providers-factory';
+import {BOOK_DATA_SOURCE, BOOK_INSTANCE_CACHE, BOOK_INSTANCE_CACHE_UPDATER} from '../../../providers/global-book-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
 import {BookDialogComponent} from '../components/book-dialog/book-dialog.component';
 import {BOOK_GROUP} from '../resource-manager.module';
@@ -35,10 +35,10 @@ export function bookProvidersFactory() {
     ...listProvidersFactory<Book, BookDialogComponent, TableCache<Book>>(BOOK_LIST_MENU, BOOK_GROUP, 'book', BookDialogComponent,
       BOOK_TABLE_CACHE),
     ...detailProvidersFactory<Book, BookDialogComponent, TableCache<Book>>(BOOK_DETAIL_MENU, 'book', 'book',
-      ['/resourcemanager'], BookDialogComponent, BOOK_TABLE_CACHE, BOOK_INSTANCE_CACHE),
+      ['/resourcemanager'], BookDialogComponent, BOOK_TABLE_CACHE, BOOK_INSTANCE_CACHE, BOOK_INSTANCE_CACHE_UPDATER),
     {
       provide: BOOK_TABLE_CACHE,
-      useFactory: (dataSource: DataSource<Book>) => new TableCache(dataSource),
+      useFactory: (dataSource: DataSource<Book>) => new TableCache('BookTableCache', dataSource),
       deps: [BOOK_DATA_SOURCE]
     },
   ]

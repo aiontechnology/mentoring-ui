@@ -19,7 +19,7 @@ import {DataSource} from '../../../implementation/data/data-source';
 import {School} from '../../../implementation/models/school/school';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
-import {SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
+import {SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE, SCHOOL_INSTANCE_CACHE_UPDATER} from '../../../providers/global-school-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
 import {SchoolDialogComponent} from '../components/school-dialog/school-dialog.component';
 import {SCHOOL_DETAIL_MENU, SCHOOL_GROUP, SCHOOL_LIST_MENU} from '../school-manager.module';
@@ -31,10 +31,10 @@ export function schoolProvidersFactory() {
     ...listProvidersFactory<School, SchoolDialogComponent, TableCache<School>>(SCHOOL_LIST_MENU, SCHOOL_GROUP, 'School',
       SchoolDialogComponent, SCHOOL_TABLE_CACHE),
     ...detailProvidersFactory<School, SchoolDialogComponent, TableCache<School>>(SCHOOL_DETAIL_MENU, SCHOOL_GROUP, 'School',
-      ['/schoolsmanager'], SchoolDialogComponent, SCHOOL_TABLE_CACHE, SCHOOL_INSTANCE_CACHE),
+      ['/schoolsmanager'], SchoolDialogComponent, SCHOOL_TABLE_CACHE, SCHOOL_INSTANCE_CACHE, SCHOOL_INSTANCE_CACHE_UPDATER),
     {
       provide: SCHOOL_TABLE_CACHE,
-      useFactory: (dataSource: DataSource<School>) => new TableCache(dataSource),
+      useFactory: (dataSource: DataSource<School>) => new TableCache('SchoolTableCache', dataSource),
       deps: [SCHOOL_DATA_SOURCE]
     },
   ]

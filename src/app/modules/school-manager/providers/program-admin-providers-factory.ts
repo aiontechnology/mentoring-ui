@@ -14,15 +14,35 @@
  * limitations under the License.
  */
 
-import {PROGRAM_ADMIN_INSTANCE_CACHE} from '../../../providers/global-program-admin-providers-factory';
-import {ProgramAdminDialogComponent} from '../components/school-detail-tabs/program-admin-dialog/program-admin-dialog.component';
+import {InjectionToken} from '@angular/core';
+import {Cache} from '../../../implementation/data/cache';
+import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {ProgramAdmin} from '../../../implementation/models/program-admin/program-admin';
+import {School} from '../../../implementation/models/school/school';
+import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
+import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
+import {
+  PROGRAM_ADMIN_CACHE,
+  PROGRAM_ADMIN_INSTANCE_CACHE,
+  PROGRAM_ADMIN_INSTANCE_CACHE_UPDATER,
+  PROGRAM_ADMIN_URI_SUPPLIER
+} from '../../../providers/global-program-admin-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
+import {ProgramAdminDialogComponent} from '../components/school-detail-tabs/program-admin-dialog/program-admin-dialog.component';
 import {PROGRAM_ADMIN_GROUP, PROGRAM_ADMIN_MENU} from '../school-manager.module';
 import {programAdminMenuProvidersFactory} from './program-admin-menu-providers-factory';
+
+export const PROGRAM_ADMIN_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<ProgramAdmin>>('program-admin-school-change-handler')
 
 export function programAdminProvidersFactory() {
   return [
     ...programAdminMenuProvidersFactory<ProgramAdmin, ProgramAdminDialogComponent>(PROGRAM_ADMIN_MENU, PROGRAM_ADMIN_GROUP,
-      'Program Admin', [], ProgramAdminDialogComponent, PROGRAM_ADMIN_INSTANCE_CACHE),
+      'Program Admin', [], ProgramAdminDialogComponent, PROGRAM_ADMIN_INSTANCE_CACHE, PROGRAM_ADMIN_INSTANCE_CACHE_UPDATER),
+    {
+      provide: PROGRAM_ADMIN_SCHOOL_CHANGE_HANDLER,
+      useFactory: (instanceCache: SingleItemCache<School>, uriSupplier: UriSupplier, cache: Cache<ProgramAdmin>) =>
+        new SingleItemCacheSchoolChangeHandler<ProgramAdmin>('ProgramAdminSchoolChangeHandler', instanceCache, uriSupplier, cache),
+      deps: [SCHOOL_INSTANCE_CACHE, PROGRAM_ADMIN_URI_SUPPLIER, PROGRAM_ADMIN_CACHE]
+    },
   ]
 }

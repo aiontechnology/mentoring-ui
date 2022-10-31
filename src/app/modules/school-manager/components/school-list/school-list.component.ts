@@ -19,9 +19,9 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
-import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
-import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {ListComponent} from '../../../../implementation/component/list-component';
 import {School} from '../../../../implementation/models/school/school';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 import {SCHOOL_TABLE_CACHE} from '../../providers/school-providers-factory';
@@ -32,7 +32,7 @@ import {SCHOOL_LIST_MENU} from '../../school-manager.module';
   templateUrl: './school-list.component.html',
   styleUrls: ['./school-list.component.scss']
 })
-export class SchoolListComponent extends AbstractListComponent<School> implements OnInit, OnDestroy {
+export class SchoolListComponent extends ListComponent<School> implements OnInit, OnDestroy {
   columns = ['select', 'name', 'city', 'state', 'district', 'phone', 'isPrivate']
 
   constructor(
@@ -51,11 +51,9 @@ export class SchoolListComponent extends AbstractListComponent<School> implement
 
   ngOnInit(): void {
     this.init()
-      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
     this.destroy()
-      .then(() => console.log('Destruction complete', this))
   }
 }

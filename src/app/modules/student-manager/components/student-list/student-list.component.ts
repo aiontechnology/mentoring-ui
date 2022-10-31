@@ -21,15 +21,18 @@ import {grades} from 'src/app/implementation/constants/grades';
 import {SchoolSession} from 'src/app/implementation/models/school/schoolsession';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
-import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
-import {DataSource} from '../../../../implementation/data/data-source';
-import {SchoolUriSupplier} from '../../../../implementation/data/school-uri-supplier';
-import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {ListComponent} from '../../../../implementation/component/list-component';
+import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {Contact} from '../../../../implementation/models/contact/contact';
 import {Student} from '../../../../implementation/models/student/student';
+import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {SCHOOL_SESSION_DATA_SOURCE, SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global-school-session-providers-factory';
-import {STUDENT_INSTANCE_CACHE, STUDENT_URI_SUPPLIER} from '../../../../providers/global-student-providers-factory';
+import {
+  SCHOOL_SESSION_COLLECTION_CACHE,
+  SCHOOL_SESSION_INSTANCE_CACHE
+} from '../../../../providers/global-school-session-providers-factory';
+import {STUDENT_INSTANCE_CACHE} from '../../../../providers/global-student-providers-factory';
 import {STUDENT_TABLE_CACHE} from '../../providers/student-providers-factory';
 import {STUDENT_LIST_MENU} from '../../student-manager.module';
 
@@ -38,10 +41,9 @@ import {STUDENT_LIST_MENU} from '../../student-manager.module';
   templateUrl: './student-list.component.html',
   styleUrls: ['./student-list.component.scss'],
 })
-export class StudentListComponent extends AbstractListComponent<Student> implements OnInit, OnDestroy {
-  columns = ['select', 'firstName', 'lastName', 'studentId', 'grade', 'teacher', 'actualTime', 'contacts']
-
-  schoolSessions$: Promise<SchoolSession[]>;
+export class StudentListComponent extends ListComponent<Student> implements OnInit, OnDestroy {
+  columns = ['select', 'firstName', 'lastName', 'studentId', 'grade', 'teacher', 'preferredTime', 'contacts']
+  compareSessions = SchoolSession.compare
 
   constructor(
     // for super
@@ -50,8 +52,7 @@ export class StudentListComponent extends AbstractListComponent<Student> impleme
     @Inject(STUDENT_TABLE_CACHE) tableCache: TableCache<Student>,
     @Inject(STUDENT_INSTANCE_CACHE) studentInstanceCache: SingleItemCache<Student>,
     // other
-    @Inject(STUDENT_URI_SUPPLIER) private studentUriSupplier: SchoolUriSupplier,
-    @Inject(SCHOOL_SESSION_DATA_SOURCE) private schoolSessionDataSource: DataSource<SchoolSession>,
+    @Inject(SCHOOL_SESSION_COLLECTION_CACHE) public schoolSessionCollectionCache: MultiItemCache<SchoolSession>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
   ) {
     super(menuState, menuCommands, tableCache, studentInstanceCache)
@@ -62,16 +63,11 @@ export class StudentListComponent extends AbstractListComponent<Student> impleme
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.menuState.clear()
-    this.studentUriSupplier.observable.subscribe(this.loadTableCache)
     this.init()
-      .then(() => console.log('Initialization complete', this))
-      .then(this.loadSchoolSessions)
   }
 
   ngOnDestroy(): void {
     this.destroy()
-      .then(() => console.log('Destruction complete', this))
   }
 
   displayContact(contact: Contact): string {
@@ -87,32 +83,18 @@ export class StudentListComponent extends AbstractListComponent<Student> impleme
     return grades[student.grade].valueView;
   }
 
-  updateSession() {
-    this.loadTableCache();
-  }
-
-  protected override preTableCacheLoad = async (): Promise<void> => {
-    const that = this
-    return new Promise(resolve => {
-      if (!that.schoolSessionInstanceCache.isEmpty) {
-        that.studentUriSupplier.withParameter('session', this.schoolSessionInstanceCache.item.id)
-      }
-      resolve()
+  protected override registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
+    menuCommands.forEach(command => {
+      const c: Command = command.factory(false);
+      c.disableFunction = () => !this.schoolSessionInstanceCache.item?.isCurrent || false
+      menuState.add(c)
     })
   }
 
-  private loadSchoolSessions = (): void => {
-    this.schoolSessionDataSource.reset()
-    this.schoolSessions$ = this.schoolSessionDataSource.allValues()
-      .then(schoolSessions => {
-        if (this.schoolSessionInstanceCache.isEmpty) {
-          schoolSessions.forEach(schoolSession => {
-            if (schoolSession.isCurrent) {
-              this.schoolSessionInstanceCache.item = schoolSession;
-            }
-          });
-        }
-        return schoolSessions;
-      });
+  private async resetSessions() {
+    await this.schoolSessionCollectionCache.load()
+    this.schoolSessionCollectionCache.items
+      .filter(item => item.isCurrent)
+      .forEach(schoolSession => this.schoolSessionInstanceCache.item = schoolSession);
   }
 }

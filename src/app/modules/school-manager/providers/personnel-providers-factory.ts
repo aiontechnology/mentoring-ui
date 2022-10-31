@@ -15,16 +15,22 @@
  */
 
 import {InjectionToken} from '@angular/core';
+import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
+import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {Personnel} from '../../../implementation/models/personnel/personnel';
 import {School} from '../../../implementation/models/school/school';
+import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
+import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {PERSONNEL_DATA_SOURCE} from '../../../providers/global-personnel-providers-factory';
+import {PERSONNEL_CACHE, PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../../providers/global-personnel-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
 import {PersonnelDialogComponent} from '../components/school-detail-tabs/personnel-dialog/personnel-dialog.component';
 import {PERSONNEL_GROUP, PERSONNEL_LIST_MENU} from '../school-manager.module';
 
 export const PERSONNEL_TABLE_CACHE = new InjectionToken<TableCache<School>>('personnel-table-cache')
+export const PERSONNEL_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Personnel>>('personnel-school-change-handler')
 
 export function personnelProvidersFactory() {
   return [
@@ -32,8 +38,14 @@ export function personnelProvidersFactory() {
       PersonnelDialogComponent, PERSONNEL_TABLE_CACHE),
     {
       provide: PERSONNEL_TABLE_CACHE,
-      useFactory: (dataSource: DataSource<Personnel>) => new TableCache(dataSource),
+      useFactory: (dataSource: DataSource<Personnel>) => new TableCache('PersonnelTableCache', dataSource),
       deps: [PERSONNEL_DATA_SOURCE]
+    },
+    {
+      provide: PERSONNEL_SCHOOL_CHANGE_HANDLER,
+      useFactory: (instanceCache: SingleItemCache<School>, uriSupplier: UriSupplier, cache: Cache<Personnel>, tableCache: TableCache<Personnel>) =>
+        new SingleItemCacheSchoolChangeHandler<Personnel>('PersonnelSchoolChangeHandler', instanceCache, uriSupplier, cache, tableCache),
+      deps: [SCHOOL_INSTANCE_CACHE, PERSONNEL_URI_SUPPLIER, PERSONNEL_CACHE, PERSONNEL_TABLE_CACHE]
     },
   ]
 }

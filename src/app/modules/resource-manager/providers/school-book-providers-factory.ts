@@ -17,10 +17,10 @@
 import {InjectionToken} from '@angular/core';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
+import {Book} from '../../../implementation/models/book/book';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {SCHOOL_BOOK_DATA_SOURCE} from '../../../providers/global-school-book-providers-factory';
 import {updateProvidersFactory} from '../../../providers/update-menus-providers-factory';
-import {Book} from '../../../implementation/models/book/book';
 import {SchoolBookDialogComponent} from '../components/school-book-dialog/school-book-dialog.component';
 import {SCHOOL_BOOK_GROUP, SCHOOL_BOOK_LIST_MENU} from '../resource-manager.module';
 
@@ -32,7 +32,7 @@ export function schoolBookProvidersFactory() {
       SchoolBookDialogComponent, SCHOOL_BOOK_TABLE_CACHE),
     {
       provide: SCHOOL_BOOK_TABLE_CACHE,
-      useFactory: (dataSource: DataSource<Book>) => new TableCache(dataSource),
+      useFactory: (dataSource: DataSource<Book>) => new TableCache('SchoolBookTableCache', dataSource),
       deps: [SCHOOL_BOOK_DATA_SOURCE]
     },
   ]

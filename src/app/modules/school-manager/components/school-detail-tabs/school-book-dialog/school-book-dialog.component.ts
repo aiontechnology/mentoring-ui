@@ -21,7 +21,7 @@ import {Observable} from 'rxjs';
 import {Book} from 'src/app/implementation/models/book/book';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
 import {BOOK_DATA_SOURCE} from '../../../../../providers/global-book-providers-factory';
 import {SCHOOL_BOOK_DATA_SOURCE} from '../../../../../providers/global-school-book-providers-factory';

@@ -17,19 +17,19 @@
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {Command} from '../command/command';
-import {SingleItemCache} from '../data/single-item-cache';
+import {SingleItemCache} from '../state-management/single-item-cache';
 import {MenuStateService} from '../services/menu-state.service';
 import {TableCache} from '../table-cache/table-cache';
-import {AbstractComponent} from './abstract-component';
+import {MenuRegisteringComponent} from './menu-registering-component';
 
-export abstract class AbstractListComponent<T> extends AbstractComponent {
+export abstract class ListComponent<T> extends MenuRegisteringComponent {
   protected constructor(
     // for super
     menuState: MenuStateService,
     menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     // other
     public tableCache: TableCache<T>,
-    private instanceCache: SingleItemCache<T>,
+    private instanceCache?: SingleItemCache<T>,
   ) {
     super(menuState, menuCommands)
   }
@@ -46,19 +46,16 @@ export abstract class AbstractListComponent<T> extends AbstractComponent {
     }
   }
 
-  protected doInit = async (): Promise<void> => {
-    await this.loadTableCache()
-    if (!this.instanceCache.isEmpty) {
+  protected override init(): void {
+    super.init();
+    this.loadTableCache()
+    if (this.instanceCache && !this.instanceCache.isEmpty) {
       this.tableCache.jumpToItem(this.instanceCache.item)
     }
   }
 
-  protected loadTableCache = async (): Promise<void> => {
-    await this.preTableCacheLoad()
-    await this.tableCache.loadData()
-    await this.tableCache.clearSelection()
+  protected loadTableCache = (): void => {
+    this.tableCache.loadData()
+      .then(() => this.tableCache.clearSelection())
   }
-
-  protected preTableCacheLoad = async (): Promise<void> =>
-    Promise.resolve()
 }

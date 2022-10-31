@@ -15,23 +15,34 @@
  */
 
 import {School} from '../models/school/school';
-import {SCHOOL_ID} from '../route/route-constants';
+import {SchoolSession} from '../models/school/schoolsession';
+import {SCHOOL_ID, SESSION_PARAM} from '../route/route-constants';
 import {SingleItemCache} from '../state-management/single-item-cache';
 import {UriSupplier} from './uri-supplier';
 
-export class SchoolUriSupplier extends UriSupplier {
+export class SchoolSessionUriSupplier extends UriSupplier {
   constructor(
     base: string,
-    schoolInstanceCache: SingleItemCache<School>
+    schoolInstanceCache: SingleItemCache<School>,
+    schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
   ) {
     super(base);
-    schoolInstanceCache.observable.subscribe(school => this.onSchoolChange(school))
+    schoolInstanceCache.observable.subscribe(this.onSchoolChange)
+    schoolSessionInstanceCache.observable.subscribe(this.onSchoolSessionChange)
   }
 
   private onSchoolChange = (school: School): void => {
     this.reset()
     if (school) {
       this.withSubstitution(SCHOOL_ID, school.id)
+    }
+  }
+
+  private onSchoolSessionChange = (schoolSession: SchoolSession): void => {
+    if (schoolSession && !schoolSession.isCurrent) {
+      this.withParameter(SESSION_PARAM, schoolSession.id)
+    } else {
+      this.removeParameter(SESSION_PARAM)
     }
   }
 

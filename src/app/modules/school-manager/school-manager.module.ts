@@ -16,7 +16,6 @@
 
 import {InjectionToken, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {CanActivateSysAdmin} from 'src/app/implementation/services/can-activate-sys-admin';
 import {Command} from '../../implementation/command/command';
 import {SCHOOL_ID} from '../../implementation/route/route-constants';
 import {GradesFormatPipe} from '../shared/pipes/grades-format.pipe';
@@ -48,16 +47,12 @@ import {SchoolManagerComponent} from './school-manager.component';
 
 const routes: Routes = [
   {
-    path: '', component: SchoolManagerComponent,
-    children: [
-      {path: '', component: SchoolListComponent}
+    path: '', component: SchoolManagerComponent, children: [
+      {path: '', component: SchoolListComponent},
+      {path: `schools/:${SCHOOL_ID}`, component: SchoolDetailContainerComponent}
     ],
-    canActivate: [CanActivateSysAdmin]
-  },
-  {
-    path: `schools/:${SCHOOL_ID}`, component: SchoolDetailContainerComponent
   }
-];
+]
 
 // Menus
 export const SCHOOL_BOOK_LIST_MENU = new InjectionToken<Command[]>('school-book-list-menu')

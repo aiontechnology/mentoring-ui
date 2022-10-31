@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
 import {Publisher} from './publisher';
-import {DataSource} from './data-source';
 
-@Injectable()
 export class SingleItemCache<T> extends Publisher<T> {
-  constructor(private dataSource: DataSource<T>) {
+  constructor(
+    private label?: string
+  ) {
     super()
   }
 
@@ -31,8 +30,10 @@ export class SingleItemCache<T> extends Publisher<T> {
   }
 
   set item(item: T) {
-    if(item === null) {
-      throw new Error('Invalid value provided to SingleItemCache')
+    console.log(`${this.label}: Received new item`, item)
+    if (item === this._item) {
+      console.log(`${this.label}: Duplicate value (ignoring)`, item)
+      return
     }
     this._item = item
     this.publish(item)
@@ -42,16 +43,7 @@ export class SingleItemCache<T> extends Publisher<T> {
     return this._item === undefined || this._item === null
   }
 
-  fromId(id: string): Promise<T> {
-    return this.dataSource.oneValue(id)
-      .then(item => {
-        this.item = item
-        return item
-      })
-  }
-
-  remove(): Promise<T> {
-    return this.dataSource.remove(this._item)
-      .then(this.item = undefined)
+  clear() {
+    this._item = undefined
   }
 }

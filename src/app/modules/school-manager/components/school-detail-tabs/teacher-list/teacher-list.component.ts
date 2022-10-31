@@ -19,12 +19,11 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../../implementation/command/command';
-import {AbstractListComponent} from '../../../../../implementation/component/abstract-list-component';
-import {SchoolUriSupplier} from '../../../../../implementation/data/school-uri-supplier';
-import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
+import {ListComponent} from '../../../../../implementation/component/list-component';
 import {Teacher} from '../../../../../implementation/models/teacher/teacher';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
-import {TEACHER_INSTANCE_CACHE, TEACHER_URI_SUPPLIER} from '../../../../../providers/global-teacher-providers-factory';
+import {TEACHER_INSTANCE_CACHE} from '../../../../../providers/global-teacher-providers-factory';
 import {TEACHER_TABLE_CACHE} from '../../../providers/teacher-providers-factory';
 import {TEACHER_LIST_MENU} from '../../../school-manager.module';
 
@@ -33,7 +32,7 @@ import {TEACHER_LIST_MENU} from '../../../school-manager.module';
   templateUrl: './teacher-list.component.html',
   styleUrls: ['./teacher-list.component.scss'],
 })
-export class TeacherListComponent extends AbstractListComponent<Teacher> implements OnInit, OnDestroy {
+export class TeacherListComponent extends ListComponent<Teacher> implements OnInit, OnDestroy {
   columns = ['select', 'firstName', 'lastName', 'email', 'cellPhone', 'grades']
 
   constructor(
@@ -42,8 +41,6 @@ export class TeacherListComponent extends AbstractListComponent<Teacher> impleme
     @Inject(TEACHER_LIST_MENU) menuCommands: { name: string, factory: ((isAdminOnly: boolean) => Command) }[],
     @Inject(TEACHER_TABLE_CACHE) tableCache: TableCache<Teacher>,
     @Inject(TEACHER_INSTANCE_CACHE) teacherInstanceCache: SingleItemCache<Teacher>,
-    // other
-    @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: SchoolUriSupplier,
   ) {
     super(menuState, menuCommands, tableCache, teacherInstanceCache)
   }
@@ -53,13 +50,14 @@ export class TeacherListComponent extends AbstractListComponent<Teacher> impleme
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.teacherUriSupplier.observable.subscribe(this.loadTableCache)
     this.init()
-      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
     this.destroy()
-      .then(() => console.log('Destruction complete', this))
+  }
+
+  protected override loadTableCache = (): void => {
+    // do nothing
   }
 }

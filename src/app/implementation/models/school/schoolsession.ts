@@ -40,4 +40,8 @@ export class SchoolSession {
     label += this.isCurrent ? ' (current)' : '';
     return label;
   }
+
+  static compare(session1: any, session2: any): boolean {
+    return (session1?.id === session2?.id)
+  }
 }

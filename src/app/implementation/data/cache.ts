@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core'
 import {forkJoin} from 'rxjs'
 import {IdService} from '../../modules/shared/services/id-service/id.service'
+import {Resettable} from '../state-management/resettable';
 import {DataManager} from './data-manager'
 
-@Injectable()
-export class Cache<T> implements DataManager<T> {
+export class Cache<T> implements DataManager<T>, Resettable {
   private values: T[]
   private valueMap: Map<string, T>
+
+  constructor(
+    private label: string,
+  ) {}
 
   get isLoaded() {
     return this.values !== undefined
@@ -104,6 +107,7 @@ export class Cache<T> implements DataManager<T> {
   }
 
   reset = (): void => {
+    console.log(`${this.label}: Resetting`)
     this.values = undefined
     this.valueMap = undefined
   }

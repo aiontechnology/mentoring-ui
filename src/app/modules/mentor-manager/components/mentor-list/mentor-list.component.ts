@@ -19,21 +19,20 @@ import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
-import {CommandArray} from '../../../../implementation/component/abstract-component';
-import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
-import {SchoolUriSupplier} from '../../../../implementation/data/school-uri-supplier';
-import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {ListComponent} from '../../../../implementation/component/list-component';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
-import {MENTOR_LIST_MENU, MENTOR_TABLE_CACHE} from '../../mentor-manager.module';
+import {MENTOR_INSTANCE_CACHE} from '../../../../providers/global-mentor-providers-factory';
+import {MENTOR_LIST_MENU} from '../../mentor-manager.module';
 import {Mentor} from '../../models/mentor/mentor';
+import {MENTOR_TABLE_CACHE} from '../../providers/mentor-providers-factory';
 
 @Component({
   selector: 'ms-mentor-list',
   templateUrl: './mentor-list.component.html',
   styleUrls: ['./mentor-list.component.scss'],
 })
-export class MentorListComponent extends AbstractListComponent<Mentor> implements OnInit, OnDestroy {
+export class MentorListComponent extends ListComponent<Mentor> implements OnInit, OnDestroy {
   columns = ['select', 'firstName', 'lastName', 'availability', 'cellPhone', 'email', 'mediaReleaseSigned', 'backgroundCheckCompleted']
 
   constructor(
@@ -42,8 +41,6 @@ export class MentorListComponent extends AbstractListComponent<Mentor> implement
     @Inject(MENTOR_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     @Inject(MENTOR_TABLE_CACHE) tableCache: TableCache<Mentor>,
     @Inject(MENTOR_INSTANCE_CACHE) mentorInstanceCache: SingleItemCache<Mentor>,
-    // other
-    @Inject(MENTOR_URI_SUPPLIER) private schoolUriSupplier: SchoolUriSupplier,
   ) {
     super(menuState, menuCommands, tableCache, mentorInstanceCache)
   }
@@ -53,13 +50,10 @@ export class MentorListComponent extends AbstractListComponent<Mentor> implement
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   ngOnInit(): void {
-    this.schoolUriSupplier.observable.subscribe(this.loadTableCache)
     this.init()
-      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
     this.destroy()
-      .then(() => console.log('Destruction complete', this))
   }
 }

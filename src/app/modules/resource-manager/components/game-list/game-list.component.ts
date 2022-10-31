@@ -21,9 +21,9 @@ import {Game} from 'src/app/implementation/models/game/game';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {Command} from '../../../../implementation/command/command';
-import {CommandArray} from '../../../../implementation/component/abstract-component';
-import {AbstractListComponent} from '../../../../implementation/component/abstract-list-component';
-import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {CommandArray} from '../../../../implementation/component/menu-registering-component';
+import {ListComponent} from '../../../../implementation/component/list-component';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {GAME_INSTANCE_CACHE} from '../../../../providers/global-game-providers-factory';
 import {GAME_LIST_MENU, GAME_TABLE_CACHE} from '../../providers/game-providers-factory';
@@ -33,7 +33,7 @@ import {GAME_LIST_MENU, GAME_TABLE_CACHE} from '../../providers/game-providers-f
   templateUrl: './game-list.component.html',
   styleUrls: ['./game-list.component.scss']
 })
-export class GameListComponent extends AbstractListComponent<Game> implements OnInit, OnDestroy {
+export class GameListComponent extends ListComponent<Game> implements OnInit, OnDestroy {
   public columns = ['name', 'grade1', 'grade2', 'location']
 
   constructor(
@@ -57,12 +57,10 @@ export class GameListComponent extends AbstractListComponent<Game> implements On
 
   ngOnInit(): void {
     this.init()
-      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
     this.destroy()
-      .then(() => console.log('Destruction complete', this))
   }
 
   protected override registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {

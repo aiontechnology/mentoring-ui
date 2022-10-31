@@ -31,12 +31,12 @@ export class TableDataSource<T> extends MatTableDataSource<T> {
   }
 
   connect(): BehaviorSubject<T[]> {
-    // this.subscription$ = this.data$.subscribe(t => this.data = t);
+    this.subscription$ = this.data$.subscribe(t => this.data = t);
     return super.connect();
   }
 
   disconnect() {
-    // this.subscription$.unsubscribe();
+    this.subscription$.unsubscribe();
     super.disconnect();
   }
 }

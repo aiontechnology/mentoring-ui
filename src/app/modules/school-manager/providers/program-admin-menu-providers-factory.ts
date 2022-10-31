@@ -23,13 +23,20 @@ import {Command} from '../../../implementation/command/command';
 import {DialogCommand} from '../../../implementation/command/dialog-command';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {SnackbarManager} from '../../../implementation/command/snackbar-manager';
-import {SingleItemCache} from '../../../implementation/data/single-item-cache';
+import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
+import {SingleItemCacheUpdater} from '../../../implementation/state-management/single-item-cache-updater';
 import {titleCase} from '../../../implementation/shared/title-case';
 import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 
 export function programAdminMenuProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
-  injectionToken: InjectionToken<Command[]>, group: string, name: string, routeAfterDelete: string[],
-  componentType: ComponentType<COMPONENT_TYPE>, singleItemCacheToken: InjectionToken<SingleItemCache<MODEL_TYPE>>) {
+  injectionToken: InjectionToken<Command[]>,
+  group: string,
+  name: string,
+  routeAfterDelete: string[],
+  componentType: ComponentType<COMPONENT_TYPE>,
+  singleItemCacheToken: InjectionToken<SingleItemCache<MODEL_TYPE>>,
+  singleItemCacheUpdaterToken: InjectionToken<SingleItemCacheUpdater<MODEL_TYPE>>,
+) {
 
   const AFTER_CLOSED_DELETE = new InjectionToken<(s: string) => (a: any) => void>('after-closed-delete');
   const AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('after-closed-edit');
@@ -53,11 +60,11 @@ export function programAdminMenuProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
     {
       provide: AFTER_CLOSED_DELETE,
       useFactory: (injector: Injector, snackbarManager: SnackbarManager, router: Router) => {
-        const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
+        const singleItemCacheUpdater: SingleItemCacheUpdater<MODEL_TYPE> = injector.get(singleItemCacheUpdaterToken)
         return (snackbarMessage: string) => result => {
           if (result) {
             snackbarManager.open(snackbarMessage)
-            singleItemCache.remove()
+            singleItemCacheUpdater.remove()
               .then(() => router.navigate(routeAfterDelete))
           }
         }

@@ -19,17 +19,18 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
-import {SingleItemCache} from '../implementation/data/single-item-cache';
+import {SingleItemCache} from '../implementation/state-management/single-item-cache';
+import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../implementation/data/uri-supplier';
 import {Game} from '../implementation/models/game/game';
-import {School} from '../implementation/models/school/school';
 import {GameRepository} from '../implementation/repositories/game-repository';
 import {TableCache} from '../implementation/table-cache/table-cache';
 
 export const GAME_DATA_SOURCE = new InjectionToken<DataSource<Game>>('game-data-source');
 export const GAME_CACHE = new InjectionToken<Cache<Game>>('game-cache');
 export const GAME_URI_SUPPLIER = new InjectionToken<UriSupplier>('game-uri-supplier');
-export const GAME_INSTANCE_CACHE = new InjectionToken<TableCache<School>>('game-instance-cache')
+export const GAME_INSTANCE_CACHE = new InjectionToken<TableCache<Game>>('game-instance-cache')
+export const GAME_INSTANCE_CACHE_UPDATER = new InjectionToken<SingleItemCacheUpdater<Game>>('game-instance-cache-updater')
 
 export function globalGameProvidersFactory() {
   return [
@@ -40,7 +41,7 @@ export function globalGameProvidersFactory() {
     GameRepository,
     {
       provide: GAME_CACHE,
-      useFactory: () => new Cache<Game>()
+      useFactory: () => new Cache<Game>('GameCache')
     },
     {
       provide: GAME_DATA_SOURCE,
@@ -49,8 +50,13 @@ export function globalGameProvidersFactory() {
     },
     {
       provide: GAME_INSTANCE_CACHE,
-      useFactory: (dataSource: DataSource<Game>) => new SingleItemCache<Game>(dataSource),
-      deps: [GAME_DATA_SOURCE]
+      useFactory: () => new SingleItemCache<Game>('GameInstanceCache')
+    },
+    {
+      provide: GAME_INSTANCE_CACHE_UPDATER,
+      useFactory: (singleItemCache: SingleItemCache<Game>, dataSource: DataSource<Game>) =>
+        new SingleItemCacheUpdater<Game>(singleItemCache, dataSource),
+      deps: [GAME_INSTANCE_CACHE, GAME_DATA_SOURCE]
     },
   ]
 }

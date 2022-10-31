@@ -19,12 +19,10 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
-import {SchoolUriSupplier} from '../implementation/data/school-uri-supplier';
-import {SingleItemCache} from '../implementation/data/single-item-cache';
 import {UriSupplier} from '../implementation/data/uri-supplier';
 import {Personnel} from '../implementation/models/personnel/personnel';
 import {PersonnelRepository} from '../implementation/repositories/personnel-repository';
-import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
+import {SingleItemCache} from '../implementation/state-management/single-item-cache';
 
 export const PERSONNEL_DATA_SOURCE = new InjectionToken<DataSource<Personnel>>('personnel-data-source');
 export const PERSONNEL_CACHE = new InjectionToken<Cache<Personnel>>('personnel-cache');
@@ -35,14 +33,12 @@ export function globalPersonnelProvidersFactory() {
   return [
     {
       provide: PERSONNEL_URI_SUPPLIER,
-      useFactory: (schoolInstanceCache) =>
-        new SchoolUriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/personnel`, schoolInstanceCache),
-      deps: [SCHOOL_INSTANCE_CACHE]
+      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/personnel`)
     },
     PersonnelRepository,
     {
       provide: PERSONNEL_CACHE,
-      useFactory: () => new Cache<Personnel>()
+      useFactory: () => new Cache<Personnel>('PersonnelCache')
     },
     {
       provide: PERSONNEL_DATA_SOURCE,
@@ -51,8 +47,7 @@ export function globalPersonnelProvidersFactory() {
     },
     {
       provide: PERSONNEL_INSTANCE_CACHE,
-      useFactory: (dataSource: DataSource<Personnel>) => new SingleItemCache<Personnel>(dataSource),
-      deps: [PERSONNEL_DATA_SOURCE]
+      useFactory: () => new SingleItemCache<Personnel>('PersonnelInstanceCache')
     },
   ]
 }

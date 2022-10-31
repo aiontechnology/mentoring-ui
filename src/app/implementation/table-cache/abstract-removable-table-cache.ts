@@ -23,16 +23,15 @@ import {AbstractTableCache} from './abstract-table-cache';
  * datasource-manager class.
  */
 export abstract class AbstractRemovableTableCache<T> extends AbstractTableCache<T> {
-
-  /**
-   * Get the current list of items.
-   */
-  protected get data(): T[] {
-    return this.tableDataSource.data;
+  protected constructor(
+    label: string,
+  ) {
+    super(label);
   }
 
+
   removeSelected(): Promise<T[]> {
-    const selected = this.data.filter(item => this.selection.isSelected(item));
+    const selected = this.tableDataSource.data.filter(item => this.selection.isSelected(item));
     return this.doRemoveItem(selected)
       .then(this.loadData);
   }

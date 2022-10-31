@@ -16,8 +16,8 @@
 
 import {Component, Inject, OnInit} from '@angular/core';
 import {DataSource} from '../../implementation/data/data-source';
-import {MultiItemCache} from '../../implementation/data/multi-item-cache';
-import {SingleItemCache} from '../../implementation/data/single-item-cache';
+import {MultiItemCache} from '../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
 import {School} from '../../implementation/models/school/school';
 import {UserSessionService} from '../../implementation/services/user-session.service';
 import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../providers/global-school-providers-factory';
@@ -28,7 +28,6 @@ import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from
   styleUrls: ['./school-selector.component.scss']
 })
 export class SchoolSelectorComponent implements OnInit {
-
   compareSchools = School.compare
 
   constructor(

@@ -19,30 +19,31 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
-import {SchoolUriSupplier} from '../implementation/data/school-uri-supplier';
-import {SingleItemCache} from '../implementation/data/single-item-cache';
+import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../implementation/data/uri-supplier';
-import {StudentRepository} from '../implementation/repositories/student-repository';
 import {Student} from '../implementation/models/student/student';
-import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
+import {StudentRepository} from '../implementation/repositories/student-repository';
+import {STUDENT_ID} from '../implementation/route/route-constants';
+import {RouteElementWatcher} from '../implementation/route/route-element-watcher.service';
+import {SingleItemCache} from '../implementation/state-management/single-item-cache';
 
-export const STUDENT_DATA_SOURCE = new InjectionToken<DataSource<Student>>('student-data-source');
-export const STUDENT_CACHE = new InjectionToken<Cache<Student>>('student-cache');
 export const STUDENT_URI_SUPPLIER = new InjectionToken<UriSupplier>('student-uri-supplier');
+export const STUDENT_CACHE = new InjectionToken<Cache<Student>>('student-cache');
+export const STUDENT_DATA_SOURCE = new InjectionToken<DataSource<Student>>('student-data-source');
 export const STUDENT_INSTANCE_CACHE = new InjectionToken<SingleItemCache<Student>>('student-instance-cache')
+export const STUDENT_INSTANCE_CACHE_UPDATER = new InjectionToken<SingleItemCacheUpdater<Student>>('student-instance-cache-updater')
+export const STUDENT_ROUTE_WATCHER = new InjectionToken<RouteElementWatcher<Student>>('student-route-watcher')
 
 export function globalStudentProvidersFactory() {
   return [
     {
       provide: STUDENT_URI_SUPPLIER,
-      useFactory: (schoolInstanceCache) =>
-        new SchoolUriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/students`, schoolInstanceCache),
-      deps: [SCHOOL_INSTANCE_CACHE]
+      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/students`)
     },
     StudentRepository,
     {
       provide: STUDENT_CACHE,
-      useFactory: () => new Cache<Student>()
+      useFactory: () => new Cache<Student>('StudentCache')
     },
     {
       provide: STUDENT_DATA_SOURCE,
@@ -51,8 +52,19 @@ export function globalStudentProvidersFactory() {
     },
     {
       provide: STUDENT_INSTANCE_CACHE,
-      useFactory: (dataSource: DataSource<Student>) => new SingleItemCache<Student>(dataSource),
-      deps: [STUDENT_DATA_SOURCE]
+      useFactory: () => new SingleItemCache<Student>('StudentInstanceCache')
+    },
+    {
+      provide: STUDENT_INSTANCE_CACHE_UPDATER,
+      useFactory: (singleItemCache: SingleItemCache<Student>, dataSource: DataSource<Student>) =>
+        new SingleItemCacheUpdater<Student>(singleItemCache, dataSource),
+      deps: [STUDENT_INSTANCE_CACHE, STUDENT_DATA_SOURCE]
+    },
+    {
+      provide: STUDENT_ROUTE_WATCHER,
+      useFactory: (instanceCacheUpdater: SingleItemCacheUpdater<Student>) =>
+        new RouteElementWatcher<Student>(instanceCacheUpdater, STUDENT_ID),
+      deps: [STUDENT_INSTANCE_CACHE_UPDATER]
     },
   ]
 }

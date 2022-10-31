@@ -18,13 +18,12 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../../implementation/command/command';
-import {CommandArray} from '../../../../../implementation/component/abstract-component';
-import {AbstractDetailComponent} from '../../../../../implementation/component/abstract-detail-component';
-import {SchoolUriSupplier} from '../../../../../implementation/data/school-uri-supplier';
-import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
+import {DetailComponent} from '../../../../../implementation/component/detail-component';
+import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
 import {School} from '../../../../../implementation/models/school/school';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
-import {SCHOOL_INSTANCE_CACHE, SCHOOL_URI_SUPPLIER} from '../../../../../providers/global-school-providers-factory';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
 import {SCHOOL_DETAIL_MENU} from '../../../school-manager.module';
 
 @Component({
@@ -32,46 +31,33 @@ import {SCHOOL_DETAIL_MENU} from '../../../school-manager.module';
   templateUrl: './school-detail.component.html',
   styleUrls: ['./school-detail.component.scss']
 })
-export class SchoolDetailComponent extends AbstractDetailComponent implements OnInit, OnDestroy {
+export class SchoolDetailComponent extends DetailComponent implements OnInit, OnDestroy {
   constructor(
     // for super
     menuState: MenuStateService,
     @Inject(SCHOOL_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     route: ActivatedRoute,
-    @Inject(SCHOOL_URI_SUPPLIER) uriSupplier: SchoolUriSupplier,
     navService: NavigationService,
     // other
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
   ) {
-    super(menuState, menuCommands, route, uriSupplier, navService)
+    super(menuState, menuCommands, route, navService)
   }
 
   ngOnInit(): void {
     this.init()
-      .then(() => console.log('Initialization complete', this))
   }
 
   ngOnDestroy(): void {
     this.destroy()
-      .then(() => console.log('Destruction complete', this))
   }
 
-  protected doHandleBackButton = async (navService: NavigationService): Promise<void> =>
-    new Promise(resolve => {
-      navService.push({routeSpec: ['/schoolsmanager'], fragment: undefined})
-      resolve()
-    })
+  protected doHandleBackButton = (navService: NavigationService): void =>
+    navService.push({routeSpec: ['/schoolsmanager'], fragment: undefined})
 
   protected override registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
     menuCommands.forEach(command => {
-      switch (command.name) {
-        case 'delete':
-          menuState.add(command.factory(true))
-          break
-        default:
-          menuState.add(command.factory(false))
-          break;
-      }
+      menuState.add(command.factory(true))
     })
   }
 

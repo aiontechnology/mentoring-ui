@@ -15,7 +15,7 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {School} from '../../../../../implementation/models/school/school';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
 import {STUDENT_INSTANCE_CACHE} from '../../../../../providers/global-student-providers-factory';

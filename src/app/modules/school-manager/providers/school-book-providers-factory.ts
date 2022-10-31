@@ -15,16 +15,27 @@
  */
 
 import {InjectionToken} from '@angular/core';
+import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {SCHOOL_BOOK_DATA_SOURCE} from '../../../providers/global-school-book-providers-factory';
-import {updateProvidersFactory} from '../../../providers/update-menus-providers-factory';
 import {Book} from '../../../implementation/models/book/book';
+import {School} from '../../../implementation/models/school/school';
+import {Teacher} from '../../../implementation/models/teacher/teacher';
+import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
+import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
+import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {
+  SCHOOL_BOOK_CACHE,
+  SCHOOL_BOOK_DATA_SOURCE,
+  SCHOOL_BOOK_URI_SUPPLIER
+} from '../../../providers/global-school-book-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
+import {updateProvidersFactory} from '../../../providers/update-menus-providers-factory';
 import {SchoolBookDialogComponent} from '../components/school-detail-tabs/school-book-dialog/school-book-dialog.component';
 import {SCHOOL_BOOK_GROUP, SCHOOL_BOOK_LIST_MENU} from '../school-manager.module';
 
 export const SCHOOL_BOOK_TABLE_CACHE = new InjectionToken<UriSupplier>('school-book-table-cache');
+export const SCHOOL_BOOK_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Book>>('school-book-school-change-handler')
 
 export function schoolBookProvidersFactory() {
   return [
@@ -32,8 +43,14 @@ export function schoolBookProvidersFactory() {
       SchoolBookDialogComponent, SCHOOL_BOOK_TABLE_CACHE),
     {
       provide: SCHOOL_BOOK_TABLE_CACHE,
-      useFactory: (dataSource: DataSource<Book>) => new TableCache(dataSource),
+      useFactory: (dataSource: DataSource<Book>) => new TableCache('SchoolBookTableCache', dataSource),
       deps: [SCHOOL_BOOK_DATA_SOURCE]
+    },
+    {
+      provide: SCHOOL_BOOK_SCHOOL_CHANGE_HANDLER,
+      useFactory: (instanceCache: SingleItemCache<School>, uriSupplier: UriSupplier, cache: Cache<Book>, tableCache: TableCache<Book>) =>
+        new SingleItemCacheSchoolChangeHandler<Book>('SchoolBookSchoolChangeHandler', instanceCache, uriSupplier, cache, tableCache),
+      deps: [SCHOOL_INSTANCE_CACHE, SCHOOL_BOOK_URI_SUPPLIER, SCHOOL_BOOK_CACHE, SCHOOL_BOOK_TABLE_CACHE]
     },
   ]
 }

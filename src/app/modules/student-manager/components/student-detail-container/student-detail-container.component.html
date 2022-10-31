@@ -16,7 +16,7 @@
 
 <mat-tab-group class="wrapper">
   <mat-tab label="Student Details">
-    <ms-student-detail [historic]="isHistoric"></ms-student-detail>
+    <ms-student-detail></ms-student-detail>
   </mat-tab>
   <mat-tab label="Teacher Input">
     <ms-student-teacher-input></ms-student-teacher-input>
@@ -24,7 +24,7 @@
   <mat-tab label="Contacts">
     <ms-student-contacts></ms-student-contacts>
   </mat-tab>
-  <mat-tab label="LPG" *ngIf="!isHistoric">
+  <mat-tab label="LPG" [disabled]="!schoolSessionInstanceCache.item.isCurrent">
     <ms-student-lpg></ms-student-lpg>
   </mat-tab>
 </mat-tab-group>

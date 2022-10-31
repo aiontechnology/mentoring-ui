@@ -19,32 +19,24 @@ import {MenuStateService} from '../services/menu-state.service';
 
 export type CommandArray = { name: string, factory: (isAdminOnly: boolean) => Command }[]
 
-export abstract class AbstractComponent {
+export abstract class MenuRegisteringComponent {
   protected constructor(
     protected menuState: MenuStateService,
     private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
-  ) {}
+  ) {
+  }
 
   /**
    * Run the component set up.
    */
-  protected async init(): Promise<void> {
-    await this.doInit()
+  protected init(): void {
     this.registerMenus(this.menuState, this.menuCommands)
-  }
-
-  protected async doInit(): Promise<void> {
-    // do nothing
   }
 
   /**
    * Run the component teardown.
    */
-  protected async destroy(): Promise<void> {
-    await this.doDestroy()
-  }
-
-  protected async doDestroy(): Promise<void> {
+  protected destroy(): void {
     // do nothing
   }
 

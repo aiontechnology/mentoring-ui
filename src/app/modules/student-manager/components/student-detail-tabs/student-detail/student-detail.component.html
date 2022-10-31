@@ -17,7 +17,7 @@
 <mat-card>
   <mat-card-header>
     <mat-card-title>{{ studentInstanceCache.item?.firstName + ' ' + studentInstanceCache.item?.lastName }}</mat-card-title>
-    <div class="notification mat-h5" *ngIf="isHistoric">
+    <div class="notification mat-h5" *ngIf="!schoolSessionInstanceCache.item.isCurrent">
       Historic Data (Read Only)
     </div>
   </mat-card-header>

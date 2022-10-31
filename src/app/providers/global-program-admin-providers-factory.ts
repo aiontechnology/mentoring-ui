@@ -19,16 +19,18 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
-import {SingleItemCache} from '../implementation/data/single-item-cache';
+import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../implementation/data/uri-supplier';
-import {ProgramAdminRepository} from '../implementation/repositories/program-admin-repository';
 import {Personnel} from '../implementation/models/personnel/personnel';
 import {ProgramAdmin} from '../implementation/models/program-admin/program-admin';
+import {ProgramAdminRepository} from '../implementation/repositories/program-admin-repository';
+import {SingleItemCache} from '../implementation/state-management/single-item-cache';
 
-export const PROGRAM_ADMIN_DATA_SOURCE = new InjectionToken<DataSource<ProgramAdmin>>('program-admin-detail-data-source');
+export const PROGRAM_ADMIN_DATA_SOURCE = new InjectionToken<DataSource<ProgramAdmin>>('program-admin-data-source');
 export const PROGRAM_ADMIN_CACHE = new InjectionToken<Cache<Personnel>>('program-admin-detail-cache');
 export const PROGRAM_ADMIN_URI_SUPPLIER = new InjectionToken<UriSupplier>('program-admin-detail-uri-supplier');
 export const PROGRAM_ADMIN_INSTANCE_CACHE = new InjectionToken<SingleItemCache<ProgramAdmin>>('program-admin-instance-cache')
+export const PROGRAM_ADMIN_INSTANCE_CACHE_UPDATER = new InjectionToken<SingleItemCacheUpdater<ProgramAdmin>>('program-admin-instance-cache-updater')
 
 export function globalProgramAdminProvidersFactory() {
   return [
@@ -39,7 +41,7 @@ export function globalProgramAdminProvidersFactory() {
     ProgramAdminRepository,
     {
       provide: PROGRAM_ADMIN_CACHE,
-      useFactory: () => new Cache<ProgramAdmin>()
+      useFactory: () => new Cache<ProgramAdmin>('ProgramAdminCache')
     },
     {
       provide: PROGRAM_ADMIN_DATA_SOURCE,
@@ -48,8 +50,13 @@ export function globalProgramAdminProvidersFactory() {
     },
     {
       provide: PROGRAM_ADMIN_INSTANCE_CACHE,
-      useFactory: (dataSource: DataSource<ProgramAdmin>) => new SingleItemCache<ProgramAdmin>(dataSource),
-      deps: [PROGRAM_ADMIN_DATA_SOURCE]
+      useFactory: () => new SingleItemCache<ProgramAdmin>('ProgramAdminInstanceCache')
+    },
+    {
+      provide: PROGRAM_ADMIN_INSTANCE_CACHE_UPDATER,
+      useFactory: (singleItemCache: SingleItemCache<ProgramAdmin>, dataSource: DataSource<ProgramAdmin>) =>
+        new SingleItemCacheUpdater<ProgramAdmin>(singleItemCache, dataSource),
+      deps: [PROGRAM_ADMIN_INSTANCE_CACHE, PROGRAM_ADMIN_DATA_SOURCE]
     },
   ]
 }

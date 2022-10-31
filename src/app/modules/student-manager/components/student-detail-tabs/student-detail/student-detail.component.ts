@@ -14,23 +14,29 @@
  * limitations under the License.
  */
 
-import {Component, Inject, Input, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../../implementation/command/command';
-import {AbstractDetailComponent} from '../../../../../implementation/component/abstract-detail-component';
+import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
+import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
 import {grades} from '../../../../../implementation/constants/grades';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {SchoolUriSupplier} from '../../../../../implementation/data/school-uri-supplier';
-import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
-import {URI} from '../../../../../implementation/data/uri-supplier';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {School} from '../../../../../implementation/models/school/school';
+import {SchoolSession} from '../../../../../implementation/models/school/schoolsession';
 import {StudentInbound, StudentMentorInbound} from '../../../../../implementation/models/student-inbound/student-inbound';
+import {Student} from '../../../../../implementation/models/student/student';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
-import {STUDENT_ID} from '../../../../../implementation/route/route-constants';
+import {RouteElementWatcher} from '../../../../../implementation/route/route-element-watcher.service';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
-import {STUDENT_DATA_SOURCE, STUDENT_INSTANCE_CACHE, STUDENT_URI_SUPPLIER} from '../../../../../providers/global-student-providers-factory';
-import {LpgRepositoryService} from '../../../services/lpg/lpg-repository.service';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global-school-session-providers-factory';
+import {
+  STUDENT_DATA_SOURCE,
+  STUDENT_INSTANCE_CACHE,
+  STUDENT_ROUTE_WATCHER
+} from '../../../../../providers/global-student-providers-factory';
 import {STUDENT_DETAIL_MENU} from '../../../student-manager.module';
 
 @Component({
@@ -38,28 +44,26 @@ import {STUDENT_DETAIL_MENU} from '../../../student-manager.module';
   templateUrl: './student-detail.component.html',
   styleUrls: ['./student-detail.component.scss'],
 })
-export class StudentDetailComponent extends AbstractDetailComponent implements OnInit, OnDestroy {
-
-  isHistoric: boolean;
+export class StudentDetailComponent extends SchoolWatchingDetailComponent implements OnInit, OnDestroy {
   studentMentor: StudentMentorInbound;
+  private subscriptions: Subscription[] = []
 
   constructor(
     // for super
     menuState: MenuStateService,
     @Inject(STUDENT_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
     route: ActivatedRoute,
-    @Inject(STUDENT_URI_SUPPLIER) studentUriSupplier: SchoolUriSupplier,
     navService: NavigationService,
+    @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
+    @Inject(SCHOOL_SESSION_INSTANCE_CACHE) schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     // other
     @Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<StudentInbound>,
     @Inject(STUDENT_INSTANCE_CACHE) public studentInstanceCache: SingleItemCache<StudentInbound>,
-    @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
-    public lpgService: LpgRepositoryService,
+    @Inject(STUDENT_ROUTE_WATCHER) private studentRouteWatcher: RouteElementWatcher<Student>,
+    private router: Router,
   ) {
-    super(menuState, menuCommands, route, studentUriSupplier, navService)
+    super(menuState, menuCommands, route, schoolInstanceCache, schoolSessionInstanceCache, navService)
   }
-
-  @Input() set historic(isHistoric: boolean) { this.isHistoric = isHistoric }
 
   get mentorFullName(): string {
     return this.studentMentor ? this.studentMentor?.mentor?.firstName + ' ' + this.studentMentor?.mentor?.lastName : '';
@@ -71,28 +75,26 @@ export class StudentDetailComponent extends AbstractDetailComponent implements O
 
   ngOnInit(): void {
     this.init()
-      .then(() => console.log('Initialization complete', this))
+    this.subscriptions.push(this.studentRouteWatcher.watch(this.route))
   }
 
   ngOnDestroy(): void {
     this.destroy()
-      .then(() => console.log('Destruction complete', this))
+    this.subscriptions.forEach(subscription => subscription.unsubscribe())
   }
 
-  protected doHandleBackButton = async (navService: NavigationService): Promise<void> =>
-    new Promise(resolve => {
-      navService.push({routeSpec: ['/studentmanager', 'schools', this.schoolInstanceCache.item.id], fragment: undefined})
-      resolve()
+  protected registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
+    menuCommands.forEach(command => {
+      const c: Command = command.factory(false);
+      c.disableFunction = () => !this.schoolSessionInstanceCache.item?.isCurrent || false
+      menuState.add(c)
     })
+  }
 
-  protected onUriChange = (uri: URI) => {
-    this.routeParams
-      .subscribe(params => {
-        const studentId = params.get(STUDENT_ID)
-        this.studentDataSource.oneValue(studentId)
-          .then(student => {
-            this.studentInstanceCache.item = student
-          })
-      })
+  protected doHandleBackButton = (navService: NavigationService): void =>
+    navService.push({routeSpec: ['/studentmanager', 'schools', this.schoolInstanceCache.item.id], fragment: undefined})
+
+  protected onSchoolChange(school: School) {
+    this.router.navigate(['studentmanager', 'schools', school.id])
   }
 }

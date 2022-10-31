@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,27 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {UserSessionService} from 'src/app/implementation/services/user-session.service';
+import {DataSource} from '../data/data-source';
+import {Publisher} from './publisher';
 
-@Component({
-  selector: 'ms-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
-})
-export class HomeComponent {
-
-  constructor(
-    public userSession: UserSessionService,
-    private menuState: MenuStateService,
-  ) {
-    this.menuState.title = '';
+export class MultiItemCache<T> extends Publisher<T[]> {
+  constructor(private dataSource: DataSource<T>) {
+    super();
   }
 
+  private _items: T[] = []
+
+  get items(): T[] {
+    return this._items
+  }
+
+  set items(items: T[]) {
+    this._items = items;
+    this.publish(this._items)
+  }
+
+  load = async (): Promise<void> => {
+    const items = await this.dataSource.allValues()
+    this._items = items
+  }
 }

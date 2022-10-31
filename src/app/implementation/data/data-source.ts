@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
 import {Cache} from './cache';
 import {DataManager} from './data-manager';
 import {Repository} from './repository';
@@ -23,7 +22,6 @@ import {Repository} from './repository';
  * Acts as a datasource for objects of the given type. Data can be fetched from the cache if it is available or from the backend via REST
  * calls.
  */
-@Injectable()
 export class DataSource<T> implements DataManager<T> {
 
   constructor(private repository: Repository<T>,
@@ -62,9 +60,6 @@ export class DataSource<T> implements DataManager<T> {
     this.loadCache()
       .then(() => this.repository.removeSet(values)
         .then(this.cache.removeSet))
-
-  reset = (): void =>
-    this.cache?.reset()
 
   update = (value: T): Promise<T> => {
     if (this.cache) {

@@ -33,8 +33,8 @@
       <div class="spacer"></div>
       <mat-form-field>
         <mat-label>Session</mat-label>
-        <mat-select [(value)]="schoolSessionInstanceCache.item" (selectionChange)="updateSession()">
-          <mat-option *ngFor="let session of (schoolSessions$ | async)" [value]="session">
+        <mat-select [(value)]="schoolSessionInstanceCache.item" [compareWith]="compareSessions">
+          <mat-option *ngFor="let session of schoolSessionCollectionCache.items" [value]="session">
             {{ session.labelWithCurrent }}
           </mat-option>
         </mat-select>
@@ -49,9 +49,9 @@
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox *ngIf="schoolSessionInstanceCache.item?.isCurrent"
-              (change)="$event ? tableCache.masterToggle() : null"
-              [checked]="tableCache.selection.hasValue() && tableCache.isAllSelected()"
-              [indeterminate]="tableCache.selection.hasValue() && !tableCache.isAllSelected()"
+                          (change)="$event ? tableCache.masterToggle() : null"
+                          [checked]="tableCache.selection.hasValue() && tableCache.isAllSelected()"
+                          [indeterminate]="tableCache.selection.hasValue() && !tableCache.isAllSelected()"
             >
             </mat-checkbox>
           </th>
@@ -68,8 +68,7 @@
         <ng-container matColumnDef="firstName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
           <td mat-cell *matCellDef="let student">
-            <a [routerLink]="['students', student.id]"
-               [queryParams]="{session: schoolSessionInstanceCache.item?.id, historic: !schoolSessionInstanceCache.item?.isCurrent}">
+            <a [routerLink]="['students', student.id]">
               {{ student.firstName }}
             </a>
           </td>
@@ -98,7 +97,7 @@
         </ng-container>
 
         <ng-container matColumnDef="actualTime">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Actual Time</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Meeting Time</th>
           <td mat-cell *matCellDef="let student">{{ student.actualTime }}</td>
         </ng-container>
 

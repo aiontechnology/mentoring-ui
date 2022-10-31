@@ -18,11 +18,11 @@ import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {School} from 'src/app/implementation/models/school/school';
-import {AbstractDialogComponent} from '../../../../implementation/component/abstract-dialog-component';
+import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {states as globalStates} from '../../../../implementation/constants/states';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {MultiItemCache} from '../../../../implementation/data/multi-item-cache';
-import {SingleItemCache} from '../../../../implementation/data/single-item-cache';
+import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 
 @Component({
@@ -30,7 +30,7 @@ import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from
   templateUrl: './school-dialog.component.html',
   styleUrls: ['./school-dialog.component.scss']
 })
-export class SchoolDialogComponent extends AbstractDialogComponent<School, SchoolDialogComponent> {
+export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogComponent> {
   states = globalStates
 
   constructor(

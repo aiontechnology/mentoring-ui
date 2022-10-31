@@ -19,9 +19,9 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {grades} from 'src/app/implementation/constants/grades';
 import {Grade} from 'src/app/implementation/types/grade';
-import {AbstractDialogComponent} from '../../../../../implementation/component/abstract-dialog-component';
+import {DialogComponent} from '../../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../../../implementation/data/single-item-cache';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
 import {School} from '../../../../../implementation/models/school/school';
 import {Teacher} from '../../../../../implementation/models/teacher/teacher';
@@ -33,7 +33,7 @@ import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../../../provider
   templateUrl: './teacher-dialog.component.html',
   styleUrls: ['./teacher-dialog.component.scss'],
 })
-export class TeacherDialogComponent extends AbstractDialogComponent<Teacher, TeacherDialogComponent> {
+export class TeacherDialogComponent extends DialogComponent<Teacher, TeacherDialogComponent> {
   grades: Grade[] = grades;
 
   constructor(

@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-import {DataSource} from './data-source';
-import {Publisher} from './publisher';
+import {DataSource} from '../data/data-source';
+import {SingleItemCache} from './single-item-cache';
 
-export class MultiItemCache<T> extends Publisher<T[]> {
-  constructor(private dataSource: DataSource<T>) {
-    super();
+export class SingleItemCacheUpdater<T> {
+  constructor(
+    private singleItemCache: SingleItemCache<T>,
+    private dataSource: DataSource<T>,
+  ) {}
+
+  async fromId(id: string): Promise<T> {
+    const item = await this.dataSource.oneValue(id)
+    this.singleItemCache.item = item
+    return item
   }
 
-  private _items: T[]
-
-  get items(): T[] {
-    return this._items
-  }
-
-  set items(items: T[]) {
-    this._items = items;
-    this.publish(this._items)
-  }
-
-  load() {
-    this.dataSource.allValues()
-      .then(items => this._items = items)
+  async remove(): Promise<T> {
+    const item = await this.dataSource.remove(this.singleItemCache.item)
+    this.singleItemCache.clear()
+    return item
   }
 }

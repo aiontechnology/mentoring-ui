@@ -20,6 +20,7 @@ import {MatSnackBar, MatSnackBarRef, SimpleSnackBar} from '@angular/material/sna
 export abstract class Command {
 
   isVisible = true;
+  private _disableFunction = () => false;
 
   protected constructor(public title: string,
                         public group: string,
@@ -32,7 +33,13 @@ export abstract class Command {
     this.doPostExecute(dialog);
   }
 
-  abstract isEnabled(...args: any[]): boolean;
+  set disableFunction(disableFunction: () => boolean) {
+    this._disableFunction = disableFunction
+  }
+
+  get isEnabled(): boolean {
+    return !this._disableFunction()
+  }
 
   protected doPreExecute(): void {
   }
@@ -41,12 +48,5 @@ export abstract class Command {
 
   protected doPostExecute(dialog: MatDialogRef<any>): void {
   }
-
-  protected openSnackBar(snackBar: MatSnackBar, message: string, action: string): MatSnackBarRef<SimpleSnackBar> {
-    return snackBar.open(message, action, {
-      duration: 5000,
-    });
-  }
-
 }
 

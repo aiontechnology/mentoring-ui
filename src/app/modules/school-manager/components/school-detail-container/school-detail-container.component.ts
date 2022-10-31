@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import {AfterViewInit, Component, Inject, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs';
 import {School} from '../../../../implementation/models/school/school';
 import {RouteElementWatcher} from '../../../../implementation/route/route-element-watcher.service';
 import {MenuStateService} from '../../../../implementation/services/menu-state.service';
 import {UserSessionService} from '../../../../implementation/services/user-session.service';
 import {SCHOOL_ROUTE_WATCHER} from '../../../../providers/global-school-providers-factory';
-import {BOOK_GROUP, GAME_GROUP} from '../../../resource-manager/resource-manager.module';
 import {
   PERSONNEL_GROUP,
   PROGRAM_ADMIN_GROUP,
@@ -37,19 +37,25 @@ import {setState} from './menu-state-manager';
   templateUrl: './school-detail-container.component.html',
   styleUrls: ['./school-detail-container.component.scss']
 })
-export class SchoolDetailContainerComponent implements OnInit, AfterViewInit {
+export class SchoolDetailContainerComponent implements OnInit, OnDestroy, AfterViewInit {
+  private subscriptions: Subscription[] = []
+
   constructor(
     public userSession: UserSessionService,
     private menuState: MenuStateService,
     @Inject(SCHOOL_ROUTE_WATCHER) private schoolRouteWatcher: RouteElementWatcher<School>,
-    route: ActivatedRoute,
+    private route: ActivatedRoute,
   ) {
-    this.schoolRouteWatcher.watch(route)
   }
 
   ngOnInit(): void {
+    this.subscriptions.push(this.schoolRouteWatcher.watch(this.route, 'SchoolDetailContainerComponent'))
     this.menuState.clear()
     this.menuState.groupNames = [PERSONNEL_GROUP, PROGRAM_ADMIN_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP, SCHOOL_GROUP, TEACHER_GROUP]
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe())
   }
 
   ngAfterViewInit(): void {

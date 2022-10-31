@@ -49,9 +49,6 @@ export const MENTOR_LIST_MENU = new InjectionToken<Command[]>('mentor-list-menu'
 // Groups
 export const MENTOR_GROUP = 'mentor'
 
-// Services
-export const MENTOR_TABLE_CACHE = new InjectionToken<TableCache<School>>('mentor-table-cache')
-
 @NgModule({
   declarations: [
     MentorDetailComponent,

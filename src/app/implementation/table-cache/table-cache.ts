@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {DataSource} from '../data/data-source';
 import {AbstractRemovableTableCache} from './abstract-removable-table-cache';
 
-@Injectable()
 export class TableCache<T> extends AbstractRemovableTableCache<T> {
   readonly isLoading$: BehaviorSubject<boolean> = new BehaviorSubject(true);
 
-  constructor(private dataSource: DataSource<T>) {
-    super();
+  constructor(
+    label: string,
+    private dataSource: DataSource<T>,
+  ) {
+    super(label);
   }
 
   override loadData = (): Promise<T[]> => {

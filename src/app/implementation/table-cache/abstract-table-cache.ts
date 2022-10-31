@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import {SelectionManager} from './selection-manager';
-import {TableDataSource} from './table-data-source';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {SelectionManager} from './selection-manager';
 
 export abstract class AbstractTableCache<T> extends SelectionManager<T> {
 
   /** Datasource that is used by the table in the main-content component */
-  tableDataSource: TableDataSource<T>;
+  tableDataSource: MatTableDataSource<T> = new MatTableDataSource<T>();
 
   /** Binds to the filter input control. Used to clear the control when requested. */
   filterBinding: string;
@@ -33,9 +33,10 @@ export abstract class AbstractTableCache<T> extends SelectionManager<T> {
   /** The page that currently being displayed. */
   private currentPage: number;
 
-  constructor() {
+  protected constructor(
+    private label: string,
+  ) {
     super();
-    this.tableDataSource = new TableDataSource<T>();
     this.pageSize = 10;
     this.currentPage = 0;
   }
@@ -66,11 +67,6 @@ export abstract class AbstractTableCache<T> extends SelectionManager<T> {
     this.tableDataSource.sort = sort;
   }
 
-  loadData(): Promise<T[]> {
-    return Promise.resolve([])
-  }
-
-
   protected get dataSize(): number {
     return this.filteredData.length;
   }
@@ -83,6 +79,10 @@ export abstract class AbstractTableCache<T> extends SelectionManager<T> {
 
   private get sortedData(): T[] {
     return this.tableDataSource.sortData(this.tableDataSource.filteredData, this.tableDataSource.sort);
+  }
+
+  loadData(): Promise<T[]> {
+    return Promise.resolve([])
   }
 
   /**
