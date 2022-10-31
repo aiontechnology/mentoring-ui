@@ -47,7 +47,7 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.menuState.clear()
+    this.menuState.reset()
     this.menuState.groupNames = [BOOK_GROUP, GAME_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP]
   }
 
@@ -56,7 +56,7 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.menuState.clear();
+    this.menuState.reset();
   }
 
   onTabChange(index: number): void {

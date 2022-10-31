@@ -45,7 +45,7 @@ export class GameDetailComponent extends DetailComponent implements OnInit, OnDe
     @Inject(GAME_INSTANCE_CACHE_UPDATER) private gameInstanceCacheUpdater: SingleItemCacheUpdater<Game>,
   ) {
     super(menuState, menuCommands, route, navService)
-    menuState.clear()
+    menuState.reset()
   }
 
   get gradeRangeDisplay(): string {

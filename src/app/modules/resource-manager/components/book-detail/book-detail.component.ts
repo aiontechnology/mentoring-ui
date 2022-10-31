@@ -45,7 +45,7 @@ export class BookDetailComponent extends DetailComponent implements OnInit, OnDe
     @Inject(BOOK_INSTANCE_CACHE_UPDATER) private bookInstanceCacheUpdater: SingleItemCacheUpdater<Book>,
   ) {
     super(menuState, menuCommands, route, navService)
-    menuState.clear()
+    menuState.reset()
   }
 
   get resourceGrades() {

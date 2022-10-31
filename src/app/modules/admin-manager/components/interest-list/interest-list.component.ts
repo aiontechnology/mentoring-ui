@@ -54,12 +54,13 @@ export class InterestListComponent implements OnInit, OnDestroy {
     this.interestCacheService.loadInterests();
     this.interestCacheService.clearSelection();
 
+    this.menuState.reset()
     this.menuCommands.forEach(command => {
       this.menuState.add(command.factory(false))
     })
   }
 
   ngOnDestroy(): void {
-    this.menuState.clear();
+    this.menuState.reset();
   }
 }

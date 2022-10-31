@@ -16,6 +16,7 @@
 
 import {Injectable} from '@angular/core';
 import {Command} from '../command/command';
+import {Resettable} from '../state-management/resettable';
 import {UserSessionService} from './user-session.service';
 
 class Group {
@@ -25,10 +26,8 @@ class Group {
   }
 }
 
-@Injectable({
-  providedIn: 'root'
-})
-export class MenuStateService {
+@Injectable()
+export class MenuStateService implements Resettable{
   groups = new Map<string, Group>();
   title: string;
 
@@ -60,7 +59,7 @@ export class MenuStateService {
     return this;
   }
 
-  clear(): MenuStateService {
+  reset(): MenuStateService {
     this.groups = new Map<string, Group>();
     return this;
   }

@@ -50,7 +50,7 @@ export class SchoolDetailContainerComponent implements OnInit, OnDestroy, AfterV
 
   ngOnInit(): void {
     this.subscriptions.push(this.schoolRouteWatcher.watch(this.route, 'SchoolDetailContainerComponent'))
-    this.menuState.clear()
+    this.menuState.reset()
     this.menuState.groupNames = [PERSONNEL_GROUP, PROGRAM_ADMIN_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP, SCHOOL_GROUP, TEACHER_GROUP]
   }
 

@@ -35,7 +35,7 @@ export class StudentDetailContainerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.menuState.clear()
+    this.menuState.reset()
   }
 
 }

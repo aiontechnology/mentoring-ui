@@ -38,6 +38,7 @@ import {NavigationService} from './implementation/route/navigation.service';
 import {CanActivateApp} from './implementation/services/can-activate-app';
 import {CanActivateSysAdmin} from './implementation/services/can-activate-sys-admin';
 import {HttpErrorInterceptorService} from './implementation/services/http-error-interceptor.service';
+import {MenuStateService} from './implementation/services/menu-state.service';
 import {TokenInterceptorService} from './implementation/services/token-interceptor.service';
 import {UserSessionService} from './implementation/services/user-session.service';
 import {MaterialModule} from './implementation/shared/material.module';
@@ -133,6 +134,7 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
     RouterOutlet,
   ],
   providers: [
+    MenuStateService,
     NavigationService,
     UserSessionService,
     {
