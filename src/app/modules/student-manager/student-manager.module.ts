@@ -16,8 +16,6 @@
 
 import {InjectionToken, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {CanActivateProgAdmin} from 'src/app/implementation/services/can-activate-prog-admin';
-import {CanActivateSysAdmin} from 'src/app/implementation/services/can-activate-sys-admin';
 import {Command} from '../../implementation/command/command';
 import {SCHOOL_ID, STUDENT_ID} from '../../implementation/route/route-constants';
 import {TeacherGradeFilterPipe} from '../shared/pipes/teacher-grade-filter.pipe';
@@ -54,16 +52,16 @@ export const STUDENT_GROUP = 'student'
 
 @NgModule({
   declarations: [
-    StudentManagerComponent,
-    StudentListComponent,
-    StudentDialogComponent,
-    TeacherGradeFilterPipe,
-    StudentDetailComponent,
     ScrollToDirective,
-    StudentDetailContainerComponent,
-    StudentTeacherInputComponent,
     StudentContactsComponent,
+    StudentDetailContainerComponent,
+    StudentDetailComponent,
+    StudentListComponent,
     StudentLpgComponent,
+    StudentManagerComponent,
+    StudentTeacherInputComponent,
+    TeacherGradeFilterPipe,
+    StudentDialogComponent,
   ],
   imports: [
     RouterModule.forChild(routes),

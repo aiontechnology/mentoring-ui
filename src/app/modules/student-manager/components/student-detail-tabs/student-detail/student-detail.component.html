@@ -31,7 +31,7 @@
         </tr>
         <tr>
           <td>Grade</td>
-          <td>{{ studentGrade }}</td>
+          <td>{{ studentInstanceCache.item?.grade }}</td>
         </tr>
         <tr>
           <td>Interests</td>
@@ -55,7 +55,7 @@
         </tr>
         <tr>
           <td>Mentor</td>
-          <td>{{ mentorFullName }}</td>
+          <td>{{ studentInstanceCache.item.mentor?.mentor?.firstName }} {{ studentInstanceCache.item.mentor?.mentor?.lastName }}</td>
         </tr>
         <tr>
           <td>Location</td>

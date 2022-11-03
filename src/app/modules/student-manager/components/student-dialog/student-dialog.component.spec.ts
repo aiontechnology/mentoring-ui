@@ -18,7 +18,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { StudentDialogComponent } from './student-dialog.component';
 
-xdescribe('StudentDialogComponent', () => {
+describe('StudentDialogComponent', () => {
   let component: StudentDialogComponent;
   let fixture: ComponentFixture<StudentDialogComponent>;
 
@@ -27,15 +27,13 @@ xdescribe('StudentDialogComponent', () => {
       declarations: [ StudentDialogComponent ]
     })
     .compileComponents();
-  });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(StudentDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

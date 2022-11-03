@@ -15,23 +15,29 @@
  */
 
 import {Subscription} from 'rxjs';
+import {Cache} from '../data/cache';
 import {UriSupplier} from '../data/uri-supplier';
 import {School} from '../models/school/school';
+import {SchoolSession} from '../models/school/schoolsession';
 import {SCHOOL_ID} from '../route/route-constants';
+import {MultiItemCache} from './multi-item-cache';
 import {SingleItemCache} from './single-item-cache';
 
-export abstract class MultiItemCacheSchoolChangeHandler {
+export class SchoolSessionsSchoolChangeHandler {
   private subscriptions: Subscription[] = []
 
-  protected constructor(
-    protected label: string,
+  constructor(
+    private label: string,
     private schoolInstanceCache: SingleItemCache<School>,
+    private schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     private uriSupplier: UriSupplier,
+    private dataCache: Cache<SchoolSession>,
+    private collectionCache: MultiItemCache<SchoolSession>,
   ) {}
 
   start(): void {
     console.log(`${this.label}: Start`)
-    this.subscriptions.push(this.schoolInstanceCache.observable.subscribe(this.onSchoolChange.bind(this)))
+    this.subscriptions.push(this.schoolInstanceCache.observable.subscribe(this.onSchoolChange))
   }
 
   stop(): void {
@@ -39,13 +45,22 @@ export abstract class MultiItemCacheSchoolChangeHandler {
     console.log(`${this.label}: Stop`)
   }
 
-  protected abstract handleSchoolChange(school: School): void
-
-  private onSchoolChange(school: School): void {
+  private onSchoolChange = (school: School): void => {
     if (school) {
       this.uriSupplier.reset()
-        .withSubstitution(SCHOOL_ID, school.id)
-      this.handleSchoolChange(school)
+      this.uriSupplier.withSubstitution(SCHOOL_ID, school.id)
+      this.reload(school)
     }
+  }
+
+  private reload = (school: School) => {
+    this.dataCache.reset()
+    this.collectionCache.load()
+      .then(() => {
+        this.collectionCache.items
+          .filter(session => session.isCurrent)
+          .forEach(session => this.schoolSessionInstanceCache.item = session)
+      })
+      .then(() => console.log(`${this.label}: Cache load complete`))
   }
 }

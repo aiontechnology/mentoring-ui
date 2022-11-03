@@ -19,6 +19,9 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
+import {School} from '../implementation/models/school/school';
+import {MultiItemCache} from '../implementation/state-management/multi-item-cache';
+import {MultiItemCacheSchoolChangeLoader} from '../implementation/state-management/multi-item-cache-school-change-loader';
 import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../implementation/data/uri-supplier';
 import {MentorRepository} from '../implementation/repositories/mentor-repository';
@@ -26,12 +29,15 @@ import {MENTOR_ID} from '../implementation/route/route-constants';
 import {RouteElementWatcher} from '../implementation/route/route-element-watcher.service';
 import {SingleItemCache} from '../implementation/state-management/single-item-cache';
 import {Mentor} from '../modules/mentor-manager/models/mentor/mentor';
+import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
 export const MENTOR_DATA_SOURCE = new InjectionToken<DataSource<Mentor>>('mentor-data-source');
 export const MENTOR_CACHE = new InjectionToken<Cache<Mentor>>('mentor-cache');
 export const MENTOR_URI_SUPPLIER = new InjectionToken<UriSupplier>('mentor-uri-supplier');
 export const MENTOR_INSTANCE_CACHE = new InjectionToken<SingleItemCache<Mentor>>('mentor-instance-cache')
 export const MENTOR_INSTANCE_CACHE_UPDATER = new InjectionToken<SingleItemCacheUpdater<Mentor>>('mentor-instance-cache-updater')
+export const MENTOR_COLLECTION_CACHE = new InjectionToken<MultiItemCache<Mentor>>('mentor-collection-cache')
+export const MENTOR_COLLECTION_CACHE_LOADER = new InjectionToken<MultiItemCacheSchoolChangeLoader<Mentor>>('mentor-collection-cache-loader')
 export const MENTOR_ROUTE_WATCHER = new InjectionToken<RouteElementWatcher<Mentor>>('mentor-route-watcher')
 
 export function globalMentorProvidersFactory() {
@@ -59,6 +65,17 @@ export function globalMentorProvidersFactory() {
       useFactory: (singleItemCache: SingleItemCache<Mentor>, dataSource: DataSource<Mentor>) =>
         new SingleItemCacheUpdater<Mentor>(singleItemCache, dataSource),
       deps: [MENTOR_INSTANCE_CACHE, MENTOR_DATA_SOURCE]
+    },
+    {
+      provide: MENTOR_COLLECTION_CACHE,
+      useFactory: (dataSource: DataSource<Mentor>) => new MultiItemCache<Mentor>(dataSource),
+      deps: [MENTOR_DATA_SOURCE]
+    },
+    {
+      provide: MENTOR_COLLECTION_CACHE_LOADER,
+      useFactory: (schoolInstanceCache: SingleItemCache<School>, mentorCollectionCache: MultiItemCache<Mentor>, uriSupplier: UriSupplier) =>
+        new MultiItemCacheSchoolChangeLoader<Mentor>('MentorCollectionCacheLoader', schoolInstanceCache, uriSupplier, mentorCollectionCache),
+      deps: [SCHOOL_INSTANCE_CACHE, MENTOR_COLLECTION_CACHE, MENTOR_URI_SUPPLIER]
     },
     {
       provide: MENTOR_ROUTE_WATCHER,

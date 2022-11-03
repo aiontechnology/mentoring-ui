@@ -14,32 +14,34 @@
  * limitations under the License.
  */
 
-import {DataSource} from '../data/data-source';
-import {Publisher} from './publisher';
-import {Resettable} from './resettable';
+import {FormBuilder, FormGroup} from '@angular/forms';
 
-export class MultiItemCache<T> extends Publisher<T[]> implements Resettable {
-  constructor(private dataSource: DataSource<T>) {
-    super();
+export abstract class FormGroupHolder<T> {
+  formGroup: FormGroup
+
+  protected constructor(
+    private item: T,
+    protected formBuilder: FormBuilder,
+  ) {}
+
+  get value() {
+    return this.formGroup.value
   }
 
-  private _items: T[] = []
-
-  get items(): T[] {
-    return this._items
+  init() {
+    this.generate(this.item)
+    return this;
   }
 
-  set items(items: T[]) {
-    this._items = items;
-    this.publish(this._items)
+  protected abstract generateFormGroup(item: T): FormGroup
+
+  protected abstract updateFormGroup(item: T): void
+
+  private generate(item: T): void {
+    this.formGroup = this.generateFormGroup(item)
+    if (item) {
+      this.updateFormGroup(item)
+    }
   }
 
-  load = async (): Promise<void> => {
-    const items = await this.dataSource.allValues()
-    this._items = items
-  }
-
-  reset = (): void => {
-    this._items = []
-  }
 }

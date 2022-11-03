@@ -21,15 +21,14 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {Command} from '../../../../../implementation/command/command';
 import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
 import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
-import {grades} from '../../../../../implementation/constants/grades';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {School} from '../../../../../implementation/models/school/school';
 import {SchoolSession} from '../../../../../implementation/models/school/schoolsession';
-import {StudentInbound, StudentMentorInbound} from '../../../../../implementation/models/student-inbound/student-inbound';
+import {StudentInbound} from '../../../../../implementation/models/student-inbound/student-inbound';
 import {Student} from '../../../../../implementation/models/student/student';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {RouteElementWatcher} from '../../../../../implementation/route/route-element-watcher.service';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
 import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global-school-session-providers-factory';
 import {
@@ -45,7 +44,6 @@ import {STUDENT_DETAIL_MENU} from '../../../student-manager.module';
   styleUrls: ['./student-detail.component.scss'],
 })
 export class StudentDetailComponent extends SchoolWatchingDetailComponent implements OnInit, OnDestroy {
-  studentMentor: StudentMentorInbound;
   private subscriptions: Subscription[] = []
 
   constructor(
@@ -63,14 +61,6 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
     private router: Router,
   ) {
     super(menuState, menuCommands, route, schoolInstanceCache, schoolSessionInstanceCache, navService)
-  }
-
-  get mentorFullName(): string {
-    return this.studentMentor ? this.studentMentor?.mentor?.firstName + ' ' + this.studentMentor?.mentor?.lastName : '';
-  }
-
-  get studentGrade(): string {
-    return grades.find(grade => grade.value === this.studentInstanceCache.item?.grade.toString())?.valueView
   }
 
   ngOnInit(): void {

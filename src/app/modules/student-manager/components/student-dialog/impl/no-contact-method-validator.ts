@@ -14,32 +14,19 @@
  * limitations under the License.
  */
 
-import {DataSource} from '../data/data-source';
-import {Publisher} from './publisher';
-import {Resettable} from './resettable';
+import {FormGroup, ValidatorFn} from '@angular/forms';
 
-export class MultiItemCache<T> extends Publisher<T[]> implements Resettable {
-  constructor(private dataSource: DataSource<T>) {
-    super();
-  }
+export function noContactMethodValidator(): ValidatorFn {
+  return (contact: FormGroup): { [key: string]: any } | null => {
+    const errorMsg = 'You must provide at least one contact method.';
 
-  private _items: T[] = []
+    const phone = contact.get('phone');
+    const email = contact.get('email');
 
-  get items(): T[] {
-    return this._items
-  }
+    if (!phone.value && !email.value) {
+      return {noContacts: {msg: errorMsg}};
+    }
 
-  set items(items: T[]) {
-    this._items = items;
-    this.publish(this._items)
-  }
-
-  load = async (): Promise<void> => {
-    const items = await this.dataSource.allValues()
-    this._items = items
-  }
-
-  reset = (): void => {
-    this._items = []
+    return null;
   }
 }

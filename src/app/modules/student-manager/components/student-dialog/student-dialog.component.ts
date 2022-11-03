@@ -16,25 +16,21 @@
 
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, UntypedFormArray, UntypedFormGroup, ValidatorFn, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {Observable} from 'rxjs';
-import {grades} from 'src/app/implementation/constants/grades';
-import {personLocations} from 'src/app/implementation/constants/locations';
-import {Teacher} from 'src/app/implementation/models/teacher/teacher';
-import {Grade} from 'src/app/implementation/types/grade';
-import {Mentor} from 'src/app/modules/mentor-manager/models/mentor/mentor';
-import {LinkService} from 'src/app/modules/shared/services/link-service/link.service';
-import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
+import {FormBuilder} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {StudentInbound} from '../../../../implementation/models/student-inbound/student-inbound';
 import {StudentOutbound} from '../../../../implementation/models/student-outbound/student-outbound';
 import {Student} from '../../../../implementation/models/student/student';
-import {MENTOR_DATA_SOURCE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
+import {Teacher} from '../../../../implementation/models/teacher/teacher';
+import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
+import {MENTOR_COLLECTION_CACHE} from '../../../../providers/global-mentor-providers-factory';
 import {STUDENT_DATA_SOURCE} from '../../../../providers/global-student-providers-factory';
-import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../../providers/global-teacher-providers-factory';
+import {TEACHER_COLLECTION_CACHE} from '../../../../providers/global-teacher-providers-factory';
+import {Mentor} from '../../../mentor-manager/models/mentor/mentor';
+import {MetaDataService} from '../../../shared/services/meta-data/meta-data.service';
+import {ContactsStep} from './impl/contacts-step';
+import {StudentDetailStep} from './impl/student-detail-step';
+import {TeacherInputStep} from './impl/teacher-input-step';
 
 @Component({
   selector: 'ms-student-dialog',
@@ -45,393 +41,60 @@ import {TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../../providers/g
   ]
 })
 export class StudentDialogComponent implements OnInit {
+  contactsStep: ContactsStep
+  studentDetailsStep: StudentDetailStep
+  teacherInputStep: TeacherInputStep
 
-  model: FormGroup;
-  studentDetails: FormGroup;
-  teacherInput: FormGroup;
-  contacts: FormGroup;
+  constructor(
+    @Inject(MAT_DIALOG_DATA) private data: { model: Student },
+    private formBuilder: FormBuilder,
+    private metaDataService: MetaDataService,
+    private dialogRef: MatDialogRef<StudentDialogComponent>,
+    @Inject(MENTOR_COLLECTION_CACHE) public mentorCollectionCache: MultiItemCache<Mentor>,
+    @Inject(TEACHER_COLLECTION_CACHE) public teacherCollectionCache: MultiItemCache<Teacher>,
+    @Inject(STUDENT_DATA_SOURCE) private dataSource: DataSource<Student>,
+  ) {}
 
-  isUpdate = false;
-
-  schoolId: string;
-  selectedGrade: string;
-
-  teachers$: Promise<Teacher[]>;
-  mentors$: Promise<Mentor[]>;
-  grades: Grade[] = grades;
-  contactMethods: string[] = ['Phone', 'Email', 'Either'];
-  locations: { [key: string]: string };
-
-  interestList$: Observable<string[]>;
-  leadershipTraitList$: Observable<string[]>;
-  leadershipSkillList$: Observable<string[]>;
-  behaviorList$: Observable<string[]>;
-
-  months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-  // newTeacherCommand: NewDialogCommandOld<Teacher, TeacherDialogComponent>;
-  // newMentorCommand: NewDialogCommandOld<Mentor, MentorDialogComponent>;
-
-  constructor(@Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<Student>,
-              @Inject(TEACHER_DATA_SOURCE) private teacherDataSource: DataSource<Teacher>,
-              @Inject(TEACHER_URI_SUPPLIER) private teacherUriSupplier: UriSupplier,
-              @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
-              @Inject(MENTOR_URI_SUPPLIER) private mentorUriSupplier: UriSupplier,
-              private dialogRef: MatDialogRef<StudentDialogComponent>,
-              private formBuilder: FormBuilder,
-              private metaDataService: MetaDataService,
-              private dialog: MatDialog,
-              private snackBar: MatSnackBar,
-              @Inject(MAT_DIALOG_DATA) private data: any) {
-
-    this.isUpdate = this.determineUpdate(data);
-
-    this.model = this.createModel(formBuilder, data?.model);
-    this.studentDetails = this.model.get('studentDetails') as UntypedFormGroup;
-    this.teacherInput = this.model.get('teacherInput') as UntypedFormGroup;
-    this.contacts = this.model.get('contacts') as UntypedFormGroup;
-
-    this.schoolId = data?.schoolId;
-    this.locations = personLocations;
-
-    /**
-     * Opens teacher creation dialog with a fixed grade.
-     */
-    // this.newTeacherCommand = new NewDialogCommandOld(
-    //   'Add Teacher',
-    //   'teacher',
-    //   TeacherDialogComponent,
-    //   'Teacher added',
-    //   null,
-    //   {schoolId: this.schoolId, selectedGrade: () => this.selectedGrade},
-    //   null,
-    //   this.dialog,
-    //   this.snackBar,
-    //   (t: Teacher) => this.addNewTeacher(t),
-    //   () => true);
-    //
-    // this.newMentorCommand = new NewDialogCommandOld(
-    //   'Add Mentor',
-    //   'mentor',
-    //   MentorDialogComponent,
-    //   'Mentor added',
-    //   null,
-    //   {schoolId: this.schoolId},
-    //   null,
-    //   this.dialog,
-    //   this.snackBar,
-    //   (m: Mentor) => this.addNewMentor(m),
-    //   () => true);
+  private get isUpdate(): boolean {
+    return this.data?.model !== undefined && this.data?.model !== null
   }
 
-  get parents() {
-    return this.contacts.get('parents') as UntypedFormArray;
-  }
-
-  get emergencyContact() {
-    return this.contacts.get('emergencyContact') as UntypedFormGroup;
-  }
-
-  /* Get teacher data; to be displayed in a selection menu */
   ngOnInit(): void {
-    this.metaDataService.loadInterests();
-    this.interestList$ = this.metaDataService.interests;
-
-    this.metaDataService.loadLeadershipTraits();
-    this.leadershipTraitList$ = this.metaDataService.leadershipTraits;
-
-    this.metaDataService.loadLeadershipSkills();
-    this.leadershipSkillList$ = this.metaDataService.leadershipSkills;
-
-    this.metaDataService.loadBehaviors();
-    this.behaviorList$ = this.metaDataService.behaviors;
-
-    this.loadAllTeachers();
-
-    this.loadAllMentors();
+    this.contactsStep = new ContactsStep(this.data?.model, this.formBuilder).init()
+    this.studentDetailsStep = new StudentDetailStep(this.data?.model, this.formBuilder, this.metaDataService).init()
+    this.teacherInputStep = new TeacherInputStep(this.data?.model, this.formBuilder).init()
   }
 
   save(): void {
-    // Create outbound student.
-    const studentProperties = Object.assign(this.studentDetails.value, {teacher: this.teacherInput.value.teacher}, this.contacts.value);
-    this.addContactsProperty(studentProperties);
-    this.clearMentorIfNotProvided(studentProperties);
-    this.reformatDate(studentProperties);
-
-    const newStudent = new StudentOutbound(studentProperties);
-    let value: Promise<StudentInbound>;
-
-    if (this.isUpdate) {
-      value = this.studentDataSource.update(newStudent);
-    } else {
-      value = this.studentDataSource.add(newStudent);
-    }
-
-    value.then((s: Student) => {
-      this.dialogRef.close(s);
-    });
+    const item: Student = this.toModel()
+    const value: Promise<Student> = this.isUpdate
+      ? this.dataSource.update(item)
+      : this.dataSource.add(item)
+    value
+      .then(result => {
+        this.dialogRef.close(result)
+        return result
+      })
+    // .then(result => this.postDialogClose(result))
   }
 
   dismiss(): void {
-    this.dialogRef.close(null);
+    this.dialogRef.close(null)
   }
 
-  // Used for the keyvalue pipe, to keep location properties in their default order.
-  unsorted(): number {
-    return 0;
+  allModelsAreValid(): boolean {
+    return this.studentDetailsStep.formGroup.valid
+      && this.contactsStep.formGroup.valid
+      && this.teacherInputStep.formGroup.valid
   }
 
-  enableTeacher(): void {
-    if (this.selectedGrade) {
-      this.teacherInput.get('teacher.uri').enable();
-    }
+  private toModel(): Student {
+    const joinedValues = Object.assign(
+      this.studentDetailsStep.value,
+      this.teacherInputStep.value,
+      this.contactsStep.value,
+    )
+    const student: Student = new StudentOutbound(joinedValues)
+    return student;
   }
-
-  contactsIsEmpty(): boolean {
-    return !this.parents.length && !this.emergencyContact;
-  }
-
-  contactsIsFull(): boolean {
-    return this.parents.controls.length >= 2 && this.emergencyContact != null;
-  }
-
-  parentsIsFull(): boolean {
-    return this.parents.length >= 2;
-  }
-
-  addParent(): void {
-    this.parents.push(this.createContactForm(false));
-  }
-
-  addEmergencyContact(): void {
-    this.contacts.addControl('emergencyContact', this.createContactForm(true));
-  }
-
-  removeParent(i: number): void {
-    this.parents.removeAt(i);
-  }
-
-  removeEmergencyContact(): void {
-    this.contacts.removeControl('emergencyContact');
-  }
-
-  /**
-   * Reset #teacher form value when grade is changed.
-   */
-  onGradeSelected(): void {
-    const teacher = this.teacherInput.get('teacher') as UntypedFormGroup;
-    teacher.patchValue({uri: ''});
-  }
-
-  stepperAtStart(index: number): boolean {
-    return index === 0;
-  }
-
-  stepperAtFinish(index: number): boolean {
-    return index === 2;
-  }
-
-  /*
-   * Combine form's contact properties for backend model.
-   */
-  private addContactsProperty(modelValue: any): void {
-    const e = modelValue.emergencyContact ? modelValue.emergencyContact : [];
-    modelValue.contacts = modelValue.parents.concat(e);
-  }
-
-  private clearMentorIfNotProvided(modelValue: any): void {
-    const mentor = modelValue.mentor;
-    modelValue.mentor = (mentor.uri == null || mentor.uri === '') ? null : mentor;
-  }
-
-  private determineUpdate(formData: any): boolean {
-    return formData !== undefined && formData !== null;
-  }
-
-  private createModel(formBuilder: FormBuilder, student: StudentInbound): FormGroup {
-
-    const formGroup: FormGroup = formBuilder.group({
-      studentDetails: formBuilder.group({
-        student,
-        firstName: ['', [Validators.required, Validators.maxLength(50)]],
-        lastName: ['', [Validators.required, Validators.maxLength(50)]],
-        studentId: ['', Validators.maxLength(20)],
-        grade: ['', Validators.required],
-        preBehavioralAssessment: ['', [Validators.min(0), Validators.max(45)]],
-        postBehavioralAssessment: ['', [Validators.min(0), Validators.max(45)]],
-        mediaReleaseSigned: false,
-        month: [''],
-        year: ['', Validators.min(1900)],
-        preferredTime: ['', Validators.maxLength(30)],
-        actualTime: ['', Validators.maxLength(30)],
-        mentor: formBuilder.group({
-          uri: ['']
-        }),
-        interests: [],
-        leadershipSkills: [],
-        leadershipTraits: [],
-        behaviors: [],
-        location: ['OFFLINE', Validators.required],
-        links: null
-      }),
-      teacherInput: formBuilder.group({
-        teacher: formBuilder.group({
-          uri: ['', Validators.required],
-          comment: ['', Validators.maxLength(500)]
-        }),
-      }),
-      contacts: formBuilder.group({
-        parents: formBuilder.array([])
-      }),
-    });
-
-    if (this.isUpdate) {
-
-      this.selectedGrade = student?.grade?.toString();
-      formGroup.patchValue({
-        studentDetails: {
-          student,
-          firstName: student?.firstName,
-          lastName: student?.lastName,
-          studentId: student?.studentId,
-          grade: student?.grade?.toString(),
-          preBehavioralAssessment: student?.preBehavioralAssessment,
-          postBehavioralAssessment: student?.postBehavioralAssessment,
-          mediaReleaseSigned: student?.mediaReleaseSigned,
-          month: this.getMonth(student?.startDate),
-          year: this.getYear(student?.startDate),
-          preferredTime: student?.preferredTime,
-          actualTime: student?.actualTime,
-          mentor: {
-            uri: LinkService.selfLink(student?.mentor?.mentor)
-          },
-          interests: student?.interests,
-          leadershipSkills: student?.leadershipSkills,
-          leadershipTraits: student?.leadershipTraits,
-          behaviors: student?.behaviors,
-          location: student?.location?.toString(),
-          links: student.links
-        },
-        teacherInput: {
-          teacher: {
-            uri: LinkService.selfLink(student?.teacher?.teacher),
-            comment: student?.teacher?.comment
-          },
-        },
-      });
-
-      // Enable teacher, since its value has been set.
-      formGroup.get('teacherInput.teacher.uri').enable();
-
-      const parents = student?.contacts?.filter(contact => {
-        return !contact?.isEmergencyContact;
-      });
-      const emergencyContact = student?.contacts?.filter(contact => {
-        return contact?.isEmergencyContact;
-      });
-
-      if (emergencyContact.length) {
-        const contacts = formGroup.get('contacts') as UntypedFormGroup;
-        contacts.addControl('emergencyContact', this.createContactForm(true));
-        (formGroup.get('contacts.emergencyContact') as UntypedFormGroup).setValue(emergencyContact[0]);
-      }
-
-      // Instantiate parent/guardian and emergencyContact in form.
-      const parentsFormArray = formGroup.get('contacts.parents') as UntypedFormArray;
-      parents.forEach((contact, index) => {
-        parentsFormArray.push(this.createContactForm(false));
-        (parentsFormArray.at(index) as UntypedFormGroup).setValue(contact);
-      });
-
-    }
-
-    return formGroup;
-  }
-
-  private createContactForm(isEmergencyContact?: boolean): UntypedFormGroup {
-
-    return this.formBuilder.group({
-      firstName: ['', [Validators.required, Validators.maxLength(50)]],
-      lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      label: [null, [Validators.maxLength(50)]],
-      phone: null,
-      email: [null, [Validators.email, Validators.maxLength(50)]],
-      preferredContactMethod: null,
-      isEmergencyContact,
-      comment: ['']
-    }, {
-      validators: this.noContactMethodValidator()
-    });
-
-  }
-
-  private noContactMethodValidator = (): ValidatorFn => {
-    return (contact: UntypedFormGroup): { [key: string]: any } | null => {
-
-      const errorMsg = 'You must provide at least one contact method.';
-
-      const phone = contact.get('phone');
-      const email = contact.get('email');
-
-      if (!phone.value && !email.value) {
-        return {noContacts: {msg: errorMsg}};
-      }
-
-      return null;
-
-    };
-  }
-
-  /**
-   * Parses a date string and returns the month's name.
-   */
-  private getMonth(str: string): string {
-    const date = new Date(str);
-    return str ? this.months[date.getUTCMonth()] : null;
-  }
-
-  /**
-   * Parses a date string and returns the year.
-   */
-  private getYear(str: string): string {
-    const date = new Date(str);
-    return str ? date.getUTCFullYear().toString() : null;
-  }
-
-  /**
-   * Converts the start date into a valid API date object.
-   */
-  private reformatDate(student: any): void {
-    if (student.month === null || !student.year) {
-      student.startDate = null;
-      return;
-    }
-    const m = this.months.indexOf(student?.month);
-    student.startDate = new Date(student?.year, m);
-  }
-
-  private loadAllTeachers(): void {
-    this.teachers$ = this.teacherDataSource.allValues();
-  }
-
-  private addNewTeacher(t: Teacher): void {
-    this.loadAllTeachers();
-
-    const teacher = new Teacher(t);
-    const teacherInput = this.teacherInput.get('teacher') as UntypedFormGroup;
-    teacherInput.patchValue({uri: LinkService.selfLink(teacher)});
-  }
-
-  private loadAllMentors(): void {
-    this.mentors$ = this.mentorDataSource.allValues();
-  }
-
-  private addNewMentor(m: Mentor): void {
-    this.loadAllMentors();
-
-    const mentor = new Mentor(m);
-    const mentorInput = this.studentDetails.get('mentor') as UntypedFormGroup;
-    mentorInput.patchValue({uri: mentor.getSelfLink()});
-  }
-
 }

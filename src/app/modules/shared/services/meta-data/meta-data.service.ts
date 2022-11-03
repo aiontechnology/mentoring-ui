@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
-import {environment} from 'src/environments/environment';
 import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {Observable, ReplaySubject, Subject} from 'rxjs';
-import {InterestOutbound} from '../../../../implementation/models/meta-data/interests/interest-outbound';
 import {map} from 'rxjs/operators';
+import {environment} from 'src/environments/environment';
+import {InterestOutbound} from '../../../../implementation/models/meta-data/interests/interest-outbound';
 
 @Injectable()
 export class MetaDataService {
@@ -92,20 +92,26 @@ export class MetaDataService {
       });
   }
 
-  loadLeadershipTraits(): void {
-    this.http.get<any>(this.leadershipTraitsUri)
-      .subscribe(data => {
-        const leadershipTraits = data?.content ?? [];
-        this._leadershipTraits.next(leadershipTraits);
-      });
+  loadLeadershipTraits(): Promise<string[]> {
+    return this.http.get<any>(this.leadershipTraitsUri)
+      .pipe(
+        map(data => {
+          const leadershipTraits = data?.content ?? [];
+          this._leadershipTraits.next(leadershipTraits);
+          return leadershipTraits
+        }))
+      .toPromise()
   }
 
-  loadLeadershipSkills(): void {
-    this.http.get<any>(this.leadershipSkillsUri)
-      .subscribe(data => {
-        const leadershipSkills = data?.content ?? [];
-        this._leadershipSkills.next(leadershipSkills);
-      });
+  loadLeadershipSkills(): Promise<string[]> {
+    return this.http.get<any>(this.leadershipSkillsUri)
+      .pipe(
+        map(data => {
+          const leadershipSkills = data?.content ?? [];
+          this._leadershipSkills.next(leadershipSkills);
+          return leadershipSkills
+        }))
+      .toPromise()
   }
 
   loadPhonograms(): void {
@@ -116,12 +122,15 @@ export class MetaDataService {
       });
   }
 
-  loadBehaviors(): void {
-    this.http.get<any>(this.behaviorUri)
-      .subscribe(data => {
-        const behaviors = data?.content ?? [];
-        this._behaviors.next(behaviors);
-      });
+  loadBehaviors(): Promise<string[]> {
+    return this.http.get<any>(this.behaviorUri)
+      .pipe(
+        map(data => {
+          const behaviors = data?.content ?? [];
+          this._behaviors.next(behaviors);
+          return behaviors
+        }))
+      .toPromise()
   }
 
   loadTags(): void {

@@ -57,13 +57,13 @@ export abstract class Student {
     this.mediaReleaseSigned = json?.mediaReleaseSigned;
     this.preBehavioralAssessment = json?.preBehavioralAssessment;
     this.postBehavioralAssessment = json?.postBehavioralAssessment;
-    this.behaviors = json?.behaviors;
-    this.interests = json?.interests;
-    this.leadershipSkills = json?.leadershipSkills;
-    this.leadershipTraits = json?.leadershipTraits;
+    this.behaviors = json?.behaviors || [];
+    this.interests = json?.interests || [];
+    this.leadershipSkills = json?.leadershipSkills || [];
+    this.leadershipTraits = json?.leadershipTraits || [];
 
     this.contacts = [];
-    json?.contacts.forEach(contact => {
+    json?.contacts?.forEach(contact => {
       this.contacts.push(new Contact(contact));
     });
 

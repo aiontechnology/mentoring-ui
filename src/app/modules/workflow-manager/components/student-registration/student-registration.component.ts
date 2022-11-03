@@ -23,7 +23,6 @@ import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {Teacher} from '../../../../implementation/models/teacher/teacher';
 import {StudentRegistration} from '../../../../implementation/models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../../../../implementation/models/workflow/student-registration-lookup';
-import {RouteWatchingService} from '../../../../implementation/route/route-watching.service';
 import {Grade} from '../../../../implementation/types/grade';
 import {LinkService} from '../../../shared/services/link-service/link.service';
 import {REGISTRATION_DATA_SOURCE, REGISTRATION_LOOKUP_DATA_SOURCE, REGISTRATION_URI_SUPPLIER} from '../../../shared/shared.module';
@@ -33,7 +32,6 @@ import {REGISTRATION_DATA_SOURCE, REGISTRATION_LOOKUP_DATA_SOURCE, REGISTRATION_
   templateUrl: './student-registration.component.html',
   styleUrls: ['./student-registration.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  providers: [RouteWatchingService]
 })
 export class StudentRegistrationComponent implements OnInit {
 
@@ -47,9 +45,7 @@ export class StudentRegistrationComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private routeWatcher: RouteWatchingService,
-  ) {
-  }
+  ) {}
 
   get today(): string {
     return new Date().toDateString();
@@ -114,7 +110,7 @@ export class StudentRegistrationComponent implements OnInit {
 
   ngOnInit(): void {
     this.model = this.createModel(this.formBuilder);
-    this.routeWatcher.open(this.route)
+    this.route.paramMap
       .subscribe(params => {
         const registrationId = params.get('registrationId');
         this.registrationUriSuppler.withSubstitution('schoolId', params.get('schoolId'));
@@ -123,7 +119,7 @@ export class StudentRegistrationComponent implements OnInit {
             this.registration = registration;
             this.updateModel(registration);
           });
-      });
+      })
   }
 
   private updateModel(registration: StudentRegistrationLookup) {

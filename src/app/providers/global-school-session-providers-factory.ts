@@ -24,7 +24,7 @@ import {School} from '../implementation/models/school/school';
 import {SchoolSession} from '../implementation/models/school/schoolsession';
 import {SchoolSessionRepository} from '../implementation/repositories/school-session-repository';
 import {MultiItemCache} from '../implementation/state-management/multi-item-cache';
-import {MultiItemCacheSchoolChangeHandler} from '../implementation/state-management/multi-item-cache-school-change-handler';
+import {SchoolSessionsSchoolChangeHandler} from '../implementation/state-management/school-sessions-school-change-handler';
 import {SingleItemCache} from '../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
@@ -33,7 +33,7 @@ export const SCHOOL_SESSION_CACHE = new InjectionToken<Cache<SchoolSession>>('sc
 export const SCHOOL_SESSION_URI_SUPPLIER = new InjectionToken<UriSupplier>('school-session-uri-supplier');
 export const SCHOOL_SESSION_INSTANCE_CACHE = new InjectionToken<SingleItemCache<SchoolSession>>('school-session-instance-cache')
 export const SCHOOL_SESSION_COLLECTION_CACHE = new InjectionToken<MultiItemCache<SchoolSession>>('school-session-collection-cache')
-export const SCHOOL_SESSION_COLLECTION_CACHE_LOADER = new InjectionToken<MultiItemCacheSchoolChangeHandler>('school-session-collection-cache-loader')
+export const SCHOOL_SESSION_COLLECTION_CACHE_LOADER = new InjectionToken<SchoolSessionsSchoolChangeHandler>('school-session-collection-cache-loader')
 
 export function globalSchoolSessionProvidersFactory() {
   return [
@@ -68,7 +68,7 @@ export function globalSchoolSessionProvidersFactory() {
                    dataCache: Cache<SchoolSession>,
                    schoolSessionCollectionCache
       ) =>
-        new MultiItemCacheSchoolChangeHandler(
+        new SchoolSessionsSchoolChangeHandler(
           'SchoolSessionCollectionCacheLoader',
           schoolInstanceCache,
           schoolSessionInstanceCache,
