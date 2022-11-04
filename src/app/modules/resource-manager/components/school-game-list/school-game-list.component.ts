@@ -22,8 +22,7 @@ import {ListComponent} from '../../../../implementation/component/list-component
 import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {Game} from '../../../../implementation/models/game/game';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {SCHOOL_GAME_TABLE_CACHE} from '../../../school-manager/providers/school-game-providers-factory';
-import {SCHOOL_GAME_LIST_MENU} from '../../resource-manager.module';
+import {SCHOOL_GAME_LIST_MENU, SCHOOL_GAME_TABLE_CACHE} from '../../providers/school-game-providers-factory';
 
 @Component({
   selector: 'ms-school-game-list',

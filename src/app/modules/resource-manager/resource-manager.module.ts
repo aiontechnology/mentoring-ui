@@ -14,15 +14,9 @@
  * limitations under the License.
  */
 
-import {InjectionToken, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {Command} from '../../implementation/command/command';
 import {BOOK_ID, GAME_ID} from '../../implementation/route/route-constants';
-import {globalBookProvidersFactory} from '../../providers/global-book-providers-factory';
-import {globalGameProvidersFactory} from '../../providers/global-game-providers-factory';
-import {globalSchoolBookProvidersFactory} from '../../providers/global-school-book-providers-factory';
-import {globalSchoolGameProvidersFactory} from '../../providers/global-school-game-providers-factory';
-import {globalSchoolProvidersFactory} from '../../providers/global-school-providers-factory';
 import {SharedModule} from '../shared/shared.module';
 import {BookDetailComponent} from './components/book-detail/book-detail.component';
 import {BookDialogComponent} from './components/book-dialog/book-dialog.component';
@@ -40,10 +34,6 @@ import {gameProvidersFactory} from './providers/game-providers-factory';
 import {schoolBookProvidersFactory} from './providers/school-book-providers-factory';
 import {schoolGameProvidersFactory} from './providers/school-game-providers-factory';
 import {ResourceManagerComponent} from './resource-manager.component';
-
-// Menus
-export const SCHOOL_BOOK_LIST_MENU = new InjectionToken<Command[]>('school-book-list-menu')
-export const SCHOOL_GAME_LIST_MENU = new InjectionToken<Command[]>('school-game-list-menu')
 
 // Groups
 export const BOOK_GROUP = 'book'

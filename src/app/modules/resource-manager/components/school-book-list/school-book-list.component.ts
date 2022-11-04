@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {BreakpointObserver, Breakpoints} from '@angular/cdk/layout';
-import {AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {BreakpointObserver} from '@angular/cdk/layout';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {ActivatedRoute} from '@angular/router';
@@ -27,8 +27,7 @@ import {Book} from '../../../../implementation/models/book/book';
 import {UserSessionService} from '../../../../implementation/services/user-session.service';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../../providers/global-school-book-providers-factory';
-import {SCHOOL_BOOK_TABLE_CACHE} from '../../providers/school-book-providers-factory';
-import {SCHOOL_BOOK_LIST_MENU} from '../../resource-manager.module';
+import {SCHOOL_BOOK_LIST_MENU, SCHOOL_BOOK_TABLE_CACHE} from '../../providers/school-book-providers-factory';
 
 @Component({
   selector: 'ms-school-book-list',
