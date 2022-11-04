@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../../../../implementation/component/dialog-component';
@@ -31,7 +31,7 @@ import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-prov
   templateUrl: './personnel-dialog.component.html',
   styleUrls: ['./personnel-dialog.component.scss']
 })
-export class PersonnelDialogComponent extends DialogComponent<Personnel, PersonnelDialogComponent> {
+export class PersonnelDialogComponent extends DialogComponent<Personnel, PersonnelDialogComponent> implements OnInit {
   titles: any[] = [
     {value: 'SOCIAL_WORKER', valueView: 'Social Worker'},
     {value: 'PRINCIPAL', valueView: 'Principal'},
@@ -50,6 +50,10 @@ export class PersonnelDialogComponent extends DialogComponent<Personnel, Personn
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
   ) {
     super(data?.model as Personnel, formBuilder, dialogRef, personnelDataSource)
+  }
+
+  ngOnInit(): void {
+    this.init()
   }
 
   protected toModel(formValue: any): Personnel {

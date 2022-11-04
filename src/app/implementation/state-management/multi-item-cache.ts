@@ -34,9 +34,10 @@ export class MultiItemCache<T> extends Publisher<T[]> implements Resettable {
     this.publish(this._items)
   }
 
-  load = async (): Promise<void> => {
+  load = async (): Promise<T[]> => {
     const items = await this.dataSource.allValues()
-    this._items = items
+    this.items = items
+    return items
   }
 
   reset = (): void => {

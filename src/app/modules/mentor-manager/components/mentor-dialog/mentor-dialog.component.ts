@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {personLocations} from 'src/app/implementation/constants/locations';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {School} from '../../../../implementation/models/school/school';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 import {Mentor} from '../../models/mentor/mentor';
@@ -32,7 +32,7 @@ import {Mentor} from '../../models/mentor/mentor';
   templateUrl: './mentor-dialog.component.html',
   styleUrls: ['./mentor-dialog.component.scss']
 })
-export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogComponent> {
+export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogComponent> implements OnInit {
   schoolId: string;
   locations: { [key: string]: string } = personLocations;
 
@@ -48,6 +48,10 @@ export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogC
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
   ) {
     super(data?.model as Mentor, formBuilder, dialogRef, mentorDataSource)
+  }
+
+  ngOnInit(): void {
+    this.init()
   }
 
   // Used for the keyvalue pipe, to keep location properties in their default order.

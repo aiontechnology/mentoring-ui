@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../../../../implementation/component/dialog-component';
@@ -27,7 +27,7 @@ import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../../../providers/global-program
   templateUrl: './program-admin-dialog.component.html',
   styleUrls: ['./program-admin-dialog.component.scss']
 })
-export class ProgramAdminDialogComponent extends DialogComponent<ProgramAdmin, ProgramAdminDialogComponent> {
+export class ProgramAdminDialogComponent extends DialogComponent<ProgramAdmin, ProgramAdminDialogComponent> implements OnInit {
   constructor(
     // For super
     @Inject(MAT_DIALOG_DATA) data: any,
@@ -36,6 +36,10 @@ export class ProgramAdminDialogComponent extends DialogComponent<ProgramAdmin, P
     @Inject(PROGRAM_ADMIN_DATA_SOURCE) programAdminDataSource: DataSource<ProgramAdmin>,
   ) {
     super(data?.model as ProgramAdmin, formBuilder, dialogRef, programAdminDataSource)
+  }
+
+  ngOnInit(): void {
+    this.init()
   }
 
   protected toModel(formValue: any): ProgramAdmin {

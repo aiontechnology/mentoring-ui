@@ -61,6 +61,8 @@ export class GameDialogComponent extends DialogComponent<Game, GameDialogCompone
   }
 
   ngOnInit(): void {
+    this.init()
+
     this.metaDataService.loadActivityFocuses();
     this.activityFocusList$ = this.metaDataService.activityFocuses;
 

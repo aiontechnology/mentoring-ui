@@ -57,7 +57,7 @@ export class DialogManager<T> {
     return new this.DialogManagerBuilder(dialog, componentType)
   }
 
-  open(snackbarMessage: string, dataSupplier?: () => void) {
+  open(snackbarMessage: string, dataSupplier?: () => object) {
     this.config['data'] = dataSupplier?.call(undefined)
     this.dialog.open(this.componentType, this.config)
       .afterClosed()

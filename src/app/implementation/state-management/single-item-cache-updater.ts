@@ -31,7 +31,7 @@ export class SingleItemCacheUpdater<T> {
 
   async remove(): Promise<T> {
     const item = await this.dataSource.remove(this.singleItemCache.item)
-    this.singleItemCache.clear()
+    this.singleItemCache.reset()
     return item
   }
 }

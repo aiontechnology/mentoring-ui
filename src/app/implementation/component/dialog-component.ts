@@ -26,9 +26,7 @@ export abstract class DialogComponent<T extends { links: any }, COMPONENT> {
     private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<COMPONENT>,
     private dataSource: DataSource<T>
-  ) {
-    this.modelFormGroup = this.createFormGroup(formBuilder, model)
-  }
+  ) {}
 
   protected get isUpdate(): boolean {
     return this.model !== undefined && this.model !== null
@@ -49,6 +47,10 @@ export abstract class DialogComponent<T extends { links: any }, COMPONENT> {
         return result
       })
       .then(result => this.postDialogClose(result))
+  }
+
+  protected init() {
+    this.modelFormGroup = this.createFormGroup(this.formBuilder, this.model)
   }
 
   protected postDialogClose(item: T) {

@@ -49,11 +49,9 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
       .then(leadershipTraits => this.leadershipTraits = leadershipTraits)
   }
 
-  get value(): any {
+  override get value(): any {
     const v = super.value;
-    if (v.mentor?.uri === null) {
-      v.mentor = null
-    }
+    v.mentor = v.mentor?.uri || null
     v.startDate = (v.month && v.year)
       ? new Date(v.year, this.months.indexOf(v.month))
       : null

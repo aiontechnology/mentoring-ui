@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,30 +14,19 @@
  * limitations under the License.
  */
 
-export class SchoolSession {
-  id: string;
-  startDate: Date;
-  endDate: Date;
-  label: string;
-  isCurrent: boolean;
-  links: {
-    self: [
-      { href: string; }
-    ]
-  };
+p.legend {
+  color: red;
+  margin-bottom: 10px;
+}
 
-  constructor(json?: any) {
-    this.id = json?.id;
-    this.startDate = json?.startDate;
-    this.endDate = json?.endDate;
-    this.label = json?.label;
-    this.isCurrent = json?.isCurrent;
-    this.links = json?.links;
-  }
+.dialog-container {
+  display: flex;
+}
 
-  get labelWithCurrent(): string {
-    let label = this.label;
-    label += this.isCurrent ? ' (current)' : '';
-    return label;
-  }
+.dialog-container > * {
+  width: 100%;
+}
+
+.dialog-container > .mat-form-field + .mat-form-field {
+  margin-left: 16px;
 }

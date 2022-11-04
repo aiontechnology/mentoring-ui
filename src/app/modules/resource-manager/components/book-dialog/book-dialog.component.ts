@@ -55,6 +55,8 @@ export class BookDialogComponent extends DialogComponent<Book, BookDialogCompone
   }
 
   ngOnInit(): void {
+    this.init()
+
     this.metaDataService.loadInterests();
     this.interestList$ = this.metaDataService.interests;
 

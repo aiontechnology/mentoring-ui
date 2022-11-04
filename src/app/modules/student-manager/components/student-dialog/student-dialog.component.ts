@@ -18,16 +18,19 @@ import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {DialogCommand} from '../../../../implementation/command/dialog-command';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {StudentOutbound} from '../../../../implementation/models/student-outbound/student-outbound';
 import {Student} from '../../../../implementation/models/student/student';
 import {Teacher} from '../../../../implementation/models/teacher/teacher';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {MENTOR_COLLECTION_CACHE} from '../../../../providers/global-mentor-providers-factory';
 import {STUDENT_DATA_SOURCE} from '../../../../providers/global-student-providers-factory';
-import {TEACHER_COLLECTION_CACHE} from '../../../../providers/global-teacher-providers-factory';
+import {TEACHER_COLLECTION_CACHE, TEACHER_INSTANCE_CACHE} from '../../../../providers/global-teacher-providers-factory';
 import {Mentor} from '../../../mentor-manager/models/mentor/mentor';
 import {MetaDataService} from '../../../shared/services/meta-data/meta-data.service';
+import {STUDENT_ADD_TEACHER} from '../../providers/student-providers-factory';
 import {ContactsStep} from './impl/contacts-step';
 import {StudentDetailStep} from './impl/student-detail-step';
 import {TeacherInputStep} from './impl/teacher-input-step';
@@ -51,9 +54,18 @@ export class StudentDialogComponent implements OnInit {
     private metaDataService: MetaDataService,
     private dialogRef: MatDialogRef<StudentDialogComponent>,
     @Inject(MENTOR_COLLECTION_CACHE) public mentorCollectionCache: MultiItemCache<Mentor>,
+    @Inject(TEACHER_INSTANCE_CACHE) public teacherInstanceCache: SingleItemCache<Teacher>,
     @Inject(TEACHER_COLLECTION_CACHE) public teacherCollectionCache: MultiItemCache<Teacher>,
     @Inject(STUDENT_DATA_SOURCE) private dataSource: DataSource<Student>,
+    @Inject(STUDENT_ADD_TEACHER) private teacherDialogFactory: (dataSupplier) => DialogCommand<Teacher>,
   ) {}
+
+  get teacherDialog(): DialogCommand<Teacher> {
+    const command = this.teacherDialogFactory(() => {
+      return {grade: this.studentDetailsStep.formGroup.get('grade').value}
+    })
+    return command
+  }
 
   private get isUpdate(): boolean {
     return this.data?.model !== undefined && this.data?.model !== null
@@ -62,7 +74,8 @@ export class StudentDialogComponent implements OnInit {
   ngOnInit(): void {
     this.contactsStep = new ContactsStep(this.data?.model, this.formBuilder).init()
     this.studentDetailsStep = new StudentDetailStep(this.data?.model, this.formBuilder, this.metaDataService).init()
-    this.teacherInputStep = new TeacherInputStep(this.data?.model, this.formBuilder).init()
+    this.teacherInputStep =
+      new TeacherInputStep(this.data?.model, this.formBuilder, this.teacherInstanceCache, this.teacherCollectionCache).init()
   }
 
   save(): void {
@@ -75,7 +88,6 @@ export class StudentDialogComponent implements OnInit {
         this.dialogRef.close(result)
         return result
       })
-    // .then(result => this.postDialogClose(result))
   }
 
   dismiss(): void {

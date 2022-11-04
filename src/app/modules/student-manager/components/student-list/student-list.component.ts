@@ -23,6 +23,7 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {Command} from '../../../../implementation/command/command';
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {CommandArray} from '../../../../implementation/component/menu-registering-component';
+import {equalsById} from '../../../../implementation/functions/comparison';
 import {Contact} from '../../../../implementation/models/contact/contact';
 import {Student} from '../../../../implementation/models/student/student';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
@@ -43,7 +44,7 @@ import {STUDENT_LIST_MENU} from '../../student-manager.module';
 })
 export class StudentListComponent extends ListComponent<Student> implements OnInit, OnDestroy {
   columns = ['select', 'firstName', 'lastName', 'studentId', 'grade', 'teacher', 'actualTime', 'contacts']
-  compareSessions = SchoolSession.compare
+  compareSessions = equalsById
 
   constructor(
     // for super

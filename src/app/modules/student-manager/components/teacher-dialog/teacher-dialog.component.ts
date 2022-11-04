@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,37 +17,54 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {grades} from 'src/app/implementation/constants/grades';
-import {Grade} from 'src/app/implementation/types/grade';
-import {DialogComponent} from '../../../../../implementation/component/dialog-component';
-import {DataSource} from '../../../../../implementation/data/data-source';
-import {Teacher} from '../../../../../implementation/models/teacher/teacher';
-import {TEACHER_DATA_SOURCE} from '../../../../../providers/global-teacher-providers-factory';
+import {DialogComponent} from '../../../../implementation/component/dialog-component';
+import {grades} from '../../../../implementation/constants/grades';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {Teacher} from '../../../../implementation/models/teacher/teacher';
+import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {Grade} from '../../../../implementation/types/grade';
+import {
+  TEACHER_COLLECTION_CACHE,
+  TEACHER_DATA_SOURCE,
+  TEACHER_INSTANCE_CACHE
+} from '../../../../providers/global-teacher-providers-factory';
 
 @Component({
   selector: 'ms-teacher-dialog',
   templateUrl: './teacher-dialog.component.html',
-  styleUrls: ['./teacher-dialog.component.scss'],
+  styleUrls: ['./teacher-dialog.component.scss']
 })
 export class TeacherDialogComponent extends DialogComponent<Teacher, TeacherDialogComponent> implements OnInit {
   grades: Grade[] = grades;
 
   constructor(
     // for super
-    @Inject(MAT_DIALOG_DATA) data: any,
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<TeacherDialogComponent>,
     @Inject(TEACHER_DATA_SOURCE) teacherDataSource: DataSource<Teacher>,
+    // other
+    @Inject(MAT_DIALOG_DATA) private data: any,
+    @Inject(TEACHER_INSTANCE_CACHE) private teacherInstanceCache: SingleItemCache<Teacher>,
+    @Inject(TEACHER_COLLECTION_CACHE) private teacherCollectionCache: MultiItemCache<Teacher>,
   ) {
-    super(data?.model as Teacher, formBuilder, dialogRef, teacherDataSource)
+    super(undefined, formBuilder, dialogRef, teacherDataSource)
   }
 
   ngOnInit(): void {
     this.init()
   }
 
+  protected postDialogClose(teacher: Teacher) {
+    this.teacherCollectionCache.load()
+      .then((teachers) => {
+        this.teacherInstanceCache.item = teacher
+      })
+  }
+
   protected toModel(formValue: any): Teacher {
     const teacher: Teacher = new Teacher(formValue);
+    teacher.grade1 = this.data?.grade
     if (this.isUpdate) {
       teacher.links = formValue.teacher.links
     }
@@ -61,7 +78,7 @@ export class TeacherDialogComponent extends DialogComponent<Teacher, TeacherDial
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       cellPhone: null,
       email: [null, [Validators.email, Validators.maxLength(50)]],
-      grade1: [null, [Validators.required]],
+      grade1: [{value: this.data?.grade, disabled: true}, [Validators.required]],
       grade2: null
     });
   }

@@ -47,9 +47,11 @@ export class ContactsStep extends FormGroupHolder<Student> {
     return this.parents.length === 0 && !this.hasEmergencyContact;
   }
 
-  get value(): any {
-    const contacts: any[] = this.parents.value
-    contacts.push(this.emergencyContact.value)
+  override get value(): any {
+    const contacts: any[] = this.parents.value || []
+    if(this.emergencyContact) {
+      contacts.push(this.emergencyContact.value)
+    }
     return {
       contacts: contacts,
     }

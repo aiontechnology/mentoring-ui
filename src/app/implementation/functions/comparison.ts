@@ -14,30 +14,16 @@
  * limitations under the License.
  */
 
-export class SchoolSession {
-  id: string;
-  startDate: Date;
-  endDate: Date;
-  label: string;
-  isCurrent: boolean;
-  links: {
-    self: [
-      { href: string; }
-    ]
-  };
-
-  constructor(json?: any) {
-    this.id = json?.id;
-    this.startDate = json?.startDate;
-    this.endDate = json?.endDate;
-    this.label = json?.label;
-    this.isCurrent = json?.isCurrent;
-    this.links = json?.links;
+export function equalsById<T extends { id: string }>(obj1: T, obj2: T) {
+  if (!obj1?.id || !obj2?.id) {
+    return false
   }
+  return obj1.id === obj2.id
+}
 
-  get labelWithCurrent(): string {
-    let label = this.label;
-    label += this.isCurrent ? ' (current)' : '';
-    return label;
+export function equalsBySelfLink<T extends { selfLink: () => string }>(obj1: T, obj2: T) {
+  if (!obj1?.selfLink || !obj2?.selfLink) {
+    return false
   }
+  return obj1?.selfLink === obj2?.selfLink
 }

@@ -15,29 +15,59 @@
  */
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {equalsBySelfLink} from '../../../../../implementation/functions/comparison';
 import {Student} from '../../../../../implementation/models/student/student';
+import {Teacher} from '../../../../../implementation/models/teacher/teacher';
+import {MultiItemCache} from '../../../../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {LinkService} from '../../../../shared/services/link-service/link.service';
 import {FormGroupHolder} from './form-group-holder';
 
 export class TeacherInputStep extends FormGroupHolder<Student> {
+  compareTeachers = equalsBySelfLink
+
   constructor(
+    // for super
     student: Student,
     formBuilder: FormBuilder,
+    // other
+    private teacherInstanceCache: SingleItemCache<Teacher>,
+    private teacherCollectionCache: MultiItemCache<Teacher>,
   ) {
     super(student, formBuilder)
   }
 
+  override get value(): any {
+    const v = {
+      teacher: {
+        uri: LinkService.selfLink(this.formGroup.get('teacher').value),
+        comment: this.formGroup.get('comment').value
+      }
+    }
+    return v
+  }
+
+  init() {
+    super.init();
+    this.teacherInstanceCache.reset()
+    return this
+  }
+
+  teachersForGrade(grade: string): Teacher[] {
+    const g:number = +grade
+    return this.teacherCollectionCache.items
+      .filter(teacher => teacher.grade1 === g)
+  }
+
   protected generateFormGroup(item: Student): FormGroup {
     return this.formBuilder.group({
-      teacher: this.formBuilder.group({
-        uri: ['', Validators.required],
-        comment: ['', Validators.maxLength(500)]
-      }),
+      teacher: [null, Validators.required],
+      comment: ['', Validators.maxLength(500)]
     })
   }
 
   protected updateFormGroup(student: Student): void {
-    this.formGroup.setValue({
+    this.formGroup.patchValue({
       teacher: {
         uri: LinkService.selfLink(student?.teacher?.teacher),
         comment: student?.teacher?.comment

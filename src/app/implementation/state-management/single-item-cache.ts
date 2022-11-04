@@ -15,8 +15,9 @@
  */
 
 import {Publisher} from './publisher';
+import {Resettable} from './resettable';
 
-export class SingleItemCache<T> extends Publisher<T> {
+export class SingleItemCache<T> extends Publisher<T> implements Resettable{
   constructor(
     private label?: string
   ) {
@@ -43,7 +44,7 @@ export class SingleItemCache<T> extends Publisher<T> {
     return this._item === undefined || this._item === null
   }
 
-  clear() {
+  reset() {
     this._item = undefined
   }
 }

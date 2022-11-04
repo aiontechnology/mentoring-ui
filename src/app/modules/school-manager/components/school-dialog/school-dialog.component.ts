@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {School} from 'src/app/implementation/models/school/school';
@@ -30,7 +30,7 @@ import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from
   templateUrl: './school-dialog.component.html',
   styleUrls: ['./school-dialog.component.scss']
 })
-export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogComponent> {
+export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogComponent> implements OnInit {
   states = globalStates
 
   constructor(
@@ -44,6 +44,10 @@ export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogC
     @Inject(SCHOOL_COLLECTION_CACHE) private schoolCollectionCache: MultiItemCache<School>,
   ) {
     super(data?.model as School, formBuilder, dialogRef, schoolDataSource)
+  }
+
+  ngOnInit(): void {
+    this.init()
   }
 
   protected postDialogClose(school: School) {
