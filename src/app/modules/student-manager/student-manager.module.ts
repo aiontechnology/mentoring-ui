@@ -33,6 +33,7 @@ import {studentProvidersFactory} from './providers/student-providers-factory';
 import {LpgRepositoryService} from './services/lpg/lpg-repository.service';
 import {StudentManagerComponent} from './student-manager.component';
 import { TeacherDialogComponent } from './components/teacher-dialog/teacher-dialog.component';
+import { MentorDialogComponent } from './components/mentor-dialog/mentor-dialog.component';
 
 const routes: Routes = [
   {
@@ -54,6 +55,7 @@ export const STUDENT_GROUP = 'student'
 
 @NgModule({
   declarations: [
+    MentorDialogComponent,
     ScrollToDirective,
     StudentContactsComponent,
     StudentDetailContainerComponent,
@@ -62,9 +64,9 @@ export const STUDENT_GROUP = 'student'
     StudentLpgComponent,
     StudentManagerComponent,
     StudentTeacherInputComponent,
+    TeacherDialogComponent,
     TeacherGradeFilterPipe,
     StudentDialogComponent,
-    TeacherDialogComponent,
   ],
   imports: [
     RouterModule.forChild(routes),

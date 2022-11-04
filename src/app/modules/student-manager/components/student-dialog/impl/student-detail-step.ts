@@ -17,6 +17,8 @@
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {grades} from '../../../../../implementation/constants/grades';
 import {personLocations} from '../../../../../implementation/constants/locations';
+import {equalsBySelfLink} from '../../../../../implementation/functions/comparison';
+import {Mentor} from '../../../../../implementation/models/mentor/mentor';
 import {Student} from '../../../../../implementation/models/student/student';
 import {getMonth, getYear, months} from '../../../../../implementation/shared/date.utils';
 import {Grade} from '../../../../../implementation/types/grade';
@@ -25,6 +27,8 @@ import {MetaDataService} from '../../../../shared/services/meta-data/meta-data.s
 import {FormGroupHolder} from './form-group-holder';
 
 export class StudentDetailStep extends FormGroupHolder<Student> {
+  compareMentors = equalsBySelfLink
+
   behaviors: string[]
   interests: string[]
   leadershipSkills: string[]
@@ -51,7 +55,10 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
 
   override get value(): any {
     const v = super.value;
-    v.mentor = v.mentor?.uri || null
+    const mentor = v.mentor as Mentor
+    v.mentor = mentor?.selfLink
+      ? { uri: mentor.selfLink }
+      : null
     v.startDate = (v.month && v.year)
       ? new Date(v.year, this.months.indexOf(v.month))
       : null
@@ -72,9 +79,7 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
       year: ['', Validators.min(1900)],
       preferredTime: ['', Validators.maxLength(30)],
       actualTime: ['', Validators.maxLength(30)],
-      mentor: this.formBuilder.group({
-        uri: ['']
-      }),
+      mentor: null,
       interests: [],
       leadershipSkills: [],
       leadershipTraits: [],

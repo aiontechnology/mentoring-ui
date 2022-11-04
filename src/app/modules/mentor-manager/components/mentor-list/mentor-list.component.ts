@@ -24,7 +24,7 @@ import {SingleItemCache} from '../../../../implementation/state-management/singl
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {MENTOR_INSTANCE_CACHE} from '../../../../providers/global-mentor-providers-factory';
 import {MENTOR_LIST_MENU} from '../../mentor-manager.module';
-import {Mentor} from '../../models/mentor/mentor';
+import {Mentor} from '../../../../implementation/models/mentor/mentor';
 import {MENTOR_TABLE_CACHE} from '../../providers/mentor-providers-factory';
 
 @Component({

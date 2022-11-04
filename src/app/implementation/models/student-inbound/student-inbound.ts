@@ -16,7 +16,7 @@
 
 import { Student } from '../student/student';
 import { Teacher } from 'src/app/implementation/models/teacher/teacher';
-import { Mentor } from 'src/app/modules/mentor-manager/models/mentor/mentor';
+import { Mentor } from 'src/app/implementation/models/mentor/mentor';
 
 interface StudentTeacherInbound {
   teacher: Teacher;

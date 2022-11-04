@@ -127,23 +127,22 @@
         </div>
 
         <!-- Mentor -->
-        <div formGroupName="mentor">
           <div class="dialog-container">
             <mat-form-field>
               <mat-label>Mentor</mat-label>
-              <mat-select formControlName="uri">
-                <mat-option class="action">
+              <mat-select formControlName="mentor" [(value)]="mentorInstanceCache.item"
+                          [compareWith]="studentDetailsStep.compareMentors">
+                <mat-option class="action" (click)="mentorDialog.execute()">
                   Create new mentor
                   <mat-icon>open_in_new</mat-icon>
                 </mat-option>
                 <mat-option [value]="null">- None -</mat-option>
-                <mat-option *ngFor="let mentor of mentorCollectionCache.items" [value]="mentor.getSelfLink()">
+                <mat-option *ngFor="let mentor of mentorCollectionCache.items" [value]="mentor">
                   {{ mentor.firstName + ' ' + mentor.lastName }}
                 </mat-option>
               </mat-select>
             </mat-form-field>
           </div>
-        </div>
 
         <!-- Location -->
         <div class="dialog-container">

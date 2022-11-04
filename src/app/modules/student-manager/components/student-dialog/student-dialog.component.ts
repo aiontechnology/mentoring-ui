@@ -25,12 +25,12 @@ import {Student} from '../../../../implementation/models/student/student';
 import {Teacher} from '../../../../implementation/models/teacher/teacher';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {MENTOR_COLLECTION_CACHE} from '../../../../providers/global-mentor-providers-factory';
+import {MENTOR_COLLECTION_CACHE, MENTOR_INSTANCE_CACHE} from '../../../../providers/global-mentor-providers-factory';
 import {STUDENT_DATA_SOURCE} from '../../../../providers/global-student-providers-factory';
 import {TEACHER_COLLECTION_CACHE, TEACHER_INSTANCE_CACHE} from '../../../../providers/global-teacher-providers-factory';
-import {Mentor} from '../../../mentor-manager/models/mentor/mentor';
+import {Mentor} from '../../../../implementation/models/mentor/mentor';
 import {MetaDataService} from '../../../shared/services/meta-data/meta-data.service';
-import {STUDENT_ADD_TEACHER} from '../../providers/student-providers-factory';
+import {STUDENT_ADD_MENTOR, STUDENT_ADD_TEACHER} from '../../providers/student-providers-factory';
 import {ContactsStep} from './impl/contacts-step';
 import {StudentDetailStep} from './impl/student-detail-step';
 import {TeacherInputStep} from './impl/teacher-input-step';
@@ -54,11 +54,20 @@ export class StudentDialogComponent implements OnInit {
     private metaDataService: MetaDataService,
     private dialogRef: MatDialogRef<StudentDialogComponent>,
     @Inject(MENTOR_COLLECTION_CACHE) public mentorCollectionCache: MultiItemCache<Mentor>,
+    @Inject(MENTOR_INSTANCE_CACHE) public mentorInstanceCache: SingleItemCache<Mentor>,
     @Inject(TEACHER_INSTANCE_CACHE) public teacherInstanceCache: SingleItemCache<Teacher>,
     @Inject(TEACHER_COLLECTION_CACHE) public teacherCollectionCache: MultiItemCache<Teacher>,
     @Inject(STUDENT_DATA_SOURCE) private dataSource: DataSource<Student>,
     @Inject(STUDENT_ADD_TEACHER) private teacherDialogFactory: (dataSupplier) => DialogCommand<Teacher>,
+    @Inject(STUDENT_ADD_MENTOR) private mentorDialogFactory: (dataSupplier) => DialogCommand<Mentor>,
   ) {}
+
+  get mentorDialog(): DialogCommand<Mentor> {
+    const command = this.mentorDialogFactory(() => {
+      return {}
+    })
+    return command
+  }
 
   get teacherDialog(): DialogCommand<Teacher> {
     const command = this.teacherDialogFactory(() => {

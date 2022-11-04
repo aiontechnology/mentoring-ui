@@ -19,7 +19,7 @@ import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../data/uri-supplier';
 import {MENTOR_URI_SUPPLIER} from '../../providers/global-mentor-providers-factory';
-import {Mentor} from '../../modules/mentor-manager/models/mentor/mentor';
+import {Mentor} from '../models/mentor/mentor';
 
 @Injectable()
 export class MentorRepository extends Repository<Mentor> {

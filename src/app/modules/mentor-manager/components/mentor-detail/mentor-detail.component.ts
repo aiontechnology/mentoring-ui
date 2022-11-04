@@ -30,7 +30,7 @@ import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_ROUTE_WATCHER} from '.
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global-school-session-providers-factory';
 import {MENTOR_DETAIL_MENU} from '../../mentor-manager.module';
-import {Mentor} from '../../models/mentor/mentor';
+import {Mentor} from '../../../../implementation/models/mentor/mentor';
 
 @Component({
   selector: 'ms-mentor-detail',

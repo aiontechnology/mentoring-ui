@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,14 +14,30 @@
  * limitations under the License.
  */
 
-export function equalsById<T extends { id: string }>(obj1: T, obj2: T) {
-  return (!obj1?.id || !obj2?.id)
-    ? false
-    : obj1?.id === obj2?.id
+p.legend {
+  color: red;
+  margin-bottom: 10px;
 }
 
-export function equalsBySelfLink<T extends { selfLink: () => string }>(obj1: T, obj2: T) {
-  return (!obj1?.selfLink || !obj2?.selfLink)
-    ? false
-    : obj1?.selfLink === obj2?.selfLink
+.dialog-container {
+  display: flex;
+}
+
+.dialog-container > * {
+  width: 100%;
+}
+
+.dialog-container > .mat-form-field + .mat-form-field {
+  margin-left: 16px;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.mat-checkbox {
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

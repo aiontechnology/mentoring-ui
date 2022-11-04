@@ -23,7 +23,7 @@ import {MultiItemCacheSchoolChangeLoader} from './implementation/state-managemen
 import {SchoolSessionsSchoolChangeHandler} from './implementation/state-management/school-sessions-school-change-handler';
 import {SingleItemCache} from './implementation/state-management/single-item-cache';
 import {SingleItemCacheUpdater} from './implementation/state-management/single-item-cache-updater';
-import {Mentor} from './modules/mentor-manager/models/mentor/mentor';
+import {Mentor} from './implementation/models/mentor/mentor';
 import {MENTOR_COLLECTION_CACHE_LOADER} from './providers/global-mentor-providers-factory';
 import {SCHOOL_INSTANCE_CACHE, SCHOOL_INSTANCE_CACHE_UPDATER} from './providers/global-school-providers-factory';
 import {SCHOOL_SESSION_COLLECTION_CACHE_LOADER} from './providers/global-school-session-providers-factory';

@@ -28,7 +28,7 @@ import {MentorRepository} from '../implementation/repositories/mentor-repository
 import {MENTOR_ID} from '../implementation/route/route-constants';
 import {RouteElementWatcher} from '../implementation/route/route-element-watcher.service';
 import {SingleItemCache} from '../implementation/state-management/single-item-cache';
-import {Mentor} from '../modules/mentor-manager/models/mentor/mentor';
+import {Mentor} from '../implementation/models/mentor/mentor';
 import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
 export const MENTOR_DATA_SOURCE = new InjectionToken<DataSource<Mentor>>('mentor-data-source');

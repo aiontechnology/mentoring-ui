@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { personLocations } from 'src/app/implementation/constants/locations';
-import { LinkService } from 'src/app/modules/shared/services/link-service/link.service';
+import {personLocations} from 'src/app/implementation/constants/locations';
+import {LinkService} from 'src/app/modules/shared/services/link-service/link.service';
 
 export class Mentor {
 
@@ -47,17 +47,11 @@ export class Mentor {
     this.links = json?.links;
   }
 
-  clearLinks(): Mentor {
-    this.links = undefined;
-    return this;
-  }
-
-  getSelfLink(): string {
+  get selfLink(): string {
     return LinkService.selfLink(this);
   }
 
   get displayLocation(): string {
     return personLocations[this.location] ?? '';
   }
-
 }

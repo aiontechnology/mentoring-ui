@@ -34,7 +34,7 @@ import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
 import {MentorDialogComponent} from '../components/mentor-dialog/mentor-dialog.component';
 import {MENTOR_DETAIL_MENU, MENTOR_GROUP, MENTOR_LIST_MENU} from '../mentor-manager.module';
-import {Mentor} from '../models/mentor/mentor';
+import {Mentor} from '../../../implementation/models/mentor/mentor';
 
 export const MENTOR_TABLE_CACHE = new InjectionToken<TableCache<School>>('mentor-table-cache')
 export const MENTOR_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Mentor>>('mentor-school-change-handler')

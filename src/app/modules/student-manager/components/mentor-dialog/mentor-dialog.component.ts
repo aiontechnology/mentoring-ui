@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,21 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {personLocations} from 'src/app/implementation/constants/locations';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
+import {personLocations} from '../../../../implementation/constants/locations';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {School} from '../../../../implementation/models/school/school';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 import {Mentor} from '../../../../implementation/models/mentor/mentor';
+import {School} from '../../../../implementation/models/school/school';
+import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {
+  MENTOR_COLLECTION_CACHE,
+  MENTOR_DATA_SOURCE,
+  MENTOR_INSTANCE_CACHE,
+  MENTOR_URI_SUPPLIER
+} from '../../../../providers/global-mentor-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
 
 @Component({
   selector: 'ms-mentor-dialog',
@@ -43,7 +49,8 @@ export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogC
     dialogRef: MatDialogRef<MentorDialogComponent>,
     @Inject(MENTOR_DATA_SOURCE) mentorDataSource: DataSource<Mentor>,
     // other
-    @Inject(MENTOR_INSTANCE_CACHE) private mentorCache: SingleItemCache<Mentor>,
+    @Inject(MENTOR_INSTANCE_CACHE) private mentorInstanceCache: SingleItemCache<Mentor>,
+    @Inject(MENTOR_COLLECTION_CACHE) private mentorCollectionCache: MultiItemCache<Mentor>,
     @Inject(MENTOR_URI_SUPPLIER) private mentorUriSupplier: UriSupplier,
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
   ) {
@@ -54,9 +61,16 @@ export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogC
     this.init()
   }
 
-  // Used for the keyvalue pipe, to keep location properties in their default order.
+// Used for the keyvalue pipe, to keep location properties in their default order.
   unsorted(): number {
     return 0;
+  }
+
+  protected postDialogClose(mentor: Mentor) {
+    this.mentorCollectionCache.load()
+      .then((mentors) => {
+        this.mentorInstanceCache.item = mentor
+      })
   }
 
   protected toModel(formValue: any): Mentor {
