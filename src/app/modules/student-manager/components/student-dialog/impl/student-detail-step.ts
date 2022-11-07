@@ -103,9 +103,7 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
       year: getYear(student?.startDate),
       preferredTime: student?.preferredTime,
       actualTime: student?.actualTime,
-      mentor: {
-        uri: LinkService.selfLink(student?.mentor?.mentor)
-      },
+      mentor: student?.mentor?.mentor,
       interests: student?.interests,
       leadershipSkills: student?.leadershipSkills,
       leadershipTraits: student?.leadershipTraits,

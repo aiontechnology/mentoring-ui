@@ -47,12 +47,6 @@ export class TeacherInputStep extends FormGroupHolder<Student> {
     return v
   }
 
-  init() {
-    super.init();
-    this.teacherInstanceCache.reset()
-    return this
-  }
-
   teachersForGrade(grade: string): Teacher[] {
     const g:number = +grade
     return this.teacherCollectionCache.items
@@ -67,11 +61,9 @@ export class TeacherInputStep extends FormGroupHolder<Student> {
   }
 
   protected updateFormGroup(student: Student): void {
-    this.formGroup.patchValue({
-      teacher: {
-        uri: LinkService.selfLink(student?.teacher?.teacher),
-        comment: student?.teacher?.comment
-      },
+    this.formGroup.setValue({
+      teacher: student?.teacher?.teacher,
+      comment: student?.teacher?.comment
     })
   }
 

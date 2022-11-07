@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-export function equalsById(obj1: any, obj2: any) {
+import {LinkService} from '../../modules/shared/services/link-service/link.service';
+
+export function equalsById(obj1: any, obj2: any): boolean {
   const result = (!obj1?.id || !obj2?.id)
     ? false
     : obj1.id === obj2.id
   return result
 }
 
-export function equalsBySelfLink(obj1: any, obj2: any) {
-  return (!obj1?.selfLink || !obj2?.selfLink)
+export function equalsBySelfLink(obj1: any, obj2: any): boolean {
+  const selfLink1 = LinkService.selfLink(obj1)
+  const selfLink2 = LinkService.selfLink(obj2)
+  const result = (!selfLink1 || !selfLink2)
     ? false
-    : obj1.selfLink === obj2.selfLink
+    : selfLink1 === selfLink2
+  return result
 }
