@@ -15,7 +15,6 @@
   -->
 
 <div class="schoolSelectionContainer" *ngIf="userSession.isSysAdmin">
-  <span class="label">School:</span>
   <mat-form-field appearance="outline">
     <mat-select placeholder="Select a school" [(value)]="schoolInstanceCache.item" [compareWith]="compareSchools">
       <mat-option *ngFor="let school of schoolCollectionCache.items" [value]="school">
