@@ -61,7 +61,7 @@ export class TeacherInputStep extends FormGroupHolder<Student> {
   }
 
   protected updateFormGroup(student: Student): void {
-    this.formGroup.setValue({
+    this.formGroup.patchValue({
       teacher: student?.teacher?.teacher,
       comment: student?.teacher?.comment
     })

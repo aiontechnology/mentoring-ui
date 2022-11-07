@@ -90,7 +90,7 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
   }
 
   protected updateFormGroup(student: Student) {
-    this.formGroup.setValue({
+    this.formGroup.patchValue({
       student,
       firstName: student?.firstName,
       lastName: student?.lastName,
