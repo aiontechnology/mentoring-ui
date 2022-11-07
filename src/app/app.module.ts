@@ -42,6 +42,7 @@ import {MenuStateService} from './implementation/services/menu-state.service';
 import {TokenInterceptorService} from './implementation/services/token-interceptor.service';
 import {UserSessionService} from './implementation/services/user-session.service';
 import {MaterialModule} from './implementation/shared/material.module';
+import {SchoolLocalStorageLoader} from './implementation/state-management/school-local-storage-loader';
 import {globalBookProvidersFactory} from './providers/global-book-providers-factory';
 import {globalGameProvidersFactory} from './providers/global-game-providers-factory';
 import {globalMentorProvidersFactory} from './providers/global-mentor-providers-factory';
@@ -136,6 +137,7 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
   providers: [
     MenuStateService,
     NavigationService,
+    SchoolLocalStorageLoader,
     UserSessionService,
     {
       provide: LOGIN_PROVIDER,

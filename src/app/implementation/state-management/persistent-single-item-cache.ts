@@ -14,25 +14,19 @@
  * limitations under the License.
  */
 
-import {School} from '../models/school/school';
-import {SCHOOL_ID} from '../route/route-constants';
-import {SingleItemCache} from '../state-management/single-item-cache';
-import {UriSupplier} from './uri-supplier';
+import {SingleItemCache} from './single-item-cache';
 
-export class SchoolUriSupplier extends UriSupplier {
-  constructor(
-    base: string,
-    schoolInstanceCache: SingleItemCache<School>
-  ) {
-    super(base);
-    schoolInstanceCache.observable.subscribe(school => this.onSchoolChange(school))
+export class PersistentSingleItemCache<T extends { id: string }> extends SingleItemCache<T> {
+  constructor(label: string) {
+    super(label)
   }
 
-  private onSchoolChange = (school: School): void => {
-    this.reset()
-    if (school) {
-      this.withSubstitution(SCHOOL_ID, school.id)
-    }
+  get item(): T {
+    return super.item;
   }
 
+  set item(item: T) {
+    localStorage.setItem(this.label, JSON.stringify(item))
+    super.item = item;
+  }
 }

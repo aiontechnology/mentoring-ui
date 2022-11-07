@@ -21,13 +21,17 @@ import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
 import {UriSupplier} from '../implementation/data/uri-supplier';
 import {Personnel} from '../implementation/models/personnel/personnel';
+import {School} from '../implementation/models/school/school';
 import {PersonnelRepository} from '../implementation/repositories/personnel-repository';
+import {SchoolChangeDataSourceResetter} from '../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCache} from '../implementation/state-management/single-item-cache';
+import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
 export const PERSONNEL_DATA_SOURCE = new InjectionToken<DataSource<Personnel>>('personnel-data-source');
 export const PERSONNEL_CACHE = new InjectionToken<Cache<Personnel>>('personnel-cache');
 export const PERSONNEL_URI_SUPPLIER = new InjectionToken<UriSupplier>('personnel-uri-supplier');
 export const PERSONNEL_INSTANCE_CACHE = new InjectionToken<SingleItemCache<Personnel>>('personnel-instance-cache')
+export const PERSONNEL_SCHOOL_CHANGE_RESETTER = new InjectionToken<SchoolChangeDataSourceResetter<Personnel>>('personnel-school-change-resetter')
 
 export function globalPersonnelProvidersFactory() {
   return [
@@ -48,6 +52,12 @@ export function globalPersonnelProvidersFactory() {
     {
       provide: PERSONNEL_INSTANCE_CACHE,
       useFactory: () => new SingleItemCache<Personnel>('PersonnelInstanceCache')
+    },
+    {
+      provide: PERSONNEL_SCHOOL_CHANGE_RESETTER,
+      useFactory: (schoolInstanceCache: SingleItemCache<School>, cache: Cache<Personnel>) =>
+        new SchoolChangeDataSourceResetter('PersonnelSchoolChangeResetter', schoolInstanceCache, cache),
+      deps: [SCHOOL_INSTANCE_CACHE, PERSONNEL_CACHE]
     },
   ]
 }

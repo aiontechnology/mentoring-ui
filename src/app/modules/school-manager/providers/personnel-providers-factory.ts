@@ -20,11 +20,15 @@ import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {Personnel} from '../../../implementation/models/personnel/personnel';
 import {School} from '../../../implementation/models/school/school';
-import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
+import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {PERSONNEL_CACHE, PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../../providers/global-personnel-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
+import {
+  PERSONNEL_CACHE,
+  PERSONNEL_DATA_SOURCE,
+  PERSONNEL_SCHOOL_CHANGE_RESETTER,
+  PERSONNEL_URI_SUPPLIER
+} from '../../../providers/global-personnel-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
 import {PersonnelDialogComponent} from '../components/school-detail-tabs/personnel-dialog/personnel-dialog.component';
 import {PERSONNEL_GROUP, PERSONNEL_LIST_MENU} from '../school-manager.module';
@@ -43,9 +47,9 @@ export function personnelProvidersFactory() {
     },
     {
       provide: PERSONNEL_SCHOOL_CHANGE_HANDLER,
-      useFactory: (instanceCache: SingleItemCache<School>, uriSupplier: UriSupplier, cache: Cache<Personnel>, tableCache: TableCache<Personnel>) =>
-        new SingleItemCacheSchoolChangeHandler<Personnel>('PersonnelSchoolChangeHandler', instanceCache, uriSupplier, cache, tableCache),
-      deps: [SCHOOL_INSTANCE_CACHE, PERSONNEL_URI_SUPPLIER, PERSONNEL_CACHE, PERSONNEL_TABLE_CACHE]
+      useFactory: (schoolChangeResetter: SchoolChangeDataSourceResetter<Personnel>, uriSupplier: UriSupplier, cache: Cache<Personnel>, tableCache: TableCache<Personnel>) =>
+        new SingleItemCacheSchoolChangeHandler<Personnel>('PersonnelSchoolChangeHandler', schoolChangeResetter, uriSupplier, cache, tableCache),
+      deps: [PERSONNEL_SCHOOL_CHANGE_RESETTER, PERSONNEL_URI_SUPPLIER, PERSONNEL_CACHE, PERSONNEL_TABLE_CACHE]
     },
   ]
 }

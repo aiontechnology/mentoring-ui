@@ -14,39 +14,25 @@
  * limitations under the License.
  */
 
-import {Component, Inject, OnInit} from '@angular/core';
-import {DataSource} from '../../implementation/data/data-source';
+import {Component, Inject} from '@angular/core';
 import {equalsById} from '../../implementation/functions/comparison';
-import {MultiItemCache} from '../../implementation/state-management/multi-item-cache';
-import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
 import {School} from '../../implementation/models/school/school';
 import {UserSessionService} from '../../implementation/services/user-session.service';
-import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../providers/global-school-providers-factory';
+import {MultiItemCache} from '../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
+import {SCHOOL_COLLECTION_CACHE, SCHOOL_INSTANCE_CACHE} from '../../providers/global-school-providers-factory';
 
 @Component({
   selector: 'ms-school-selector',
   templateUrl: './school-selector.component.html',
   styleUrls: ['./school-selector.component.scss']
 })
-export class SchoolSelectorComponent implements OnInit {
+export class SchoolSelectorComponent {
   compareSchools = equalsById
 
   constructor(
-    private userSession: UserSessionService,
-    @Inject(SCHOOL_DATA_SOURCE) public schoolDataSource: DataSource<School>,
+    public userSession: UserSessionService,
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_COLLECTION_CACHE) public schoolCollectionCache: MultiItemCache<School>,
-  ) {
-  }
-
-  ngOnInit(): void {
-    if (this.allowStudentSelection()) {
-      this.schoolCollectionCache.load()
-    }
-  }
-
-  allowStudentSelection(): boolean {
-    return this.userSession.isLoggedIn() && this.userSession.isSysAdmin
-  }
-
+  ) {}
 }

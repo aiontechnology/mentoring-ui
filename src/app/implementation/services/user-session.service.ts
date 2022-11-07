@@ -23,52 +23,53 @@ import {SingleItemCacheUpdater} from '../state-management/single-item-cache-upda
 @Injectable()
 export class UserSessionService {
 
-  private static ID_TOKEN = 'id_token';
-  private static ACCESS_TOKEN = 'access_token';
+  private static ID_TOKEN = 'id_token'
+  private static ACCESS_TOKEN = 'access_token'
+  static SCHOOL_KEY = 'SchoolInstanceCache'
 
-  private helper: JwtHelperService;
+  private helper: JwtHelperService
 
   constructor(
     @Inject(SCHOOL_INSTANCE_CACHE_UPDATER) private schoolInstanceCacheUpdater: SingleItemCacheUpdater<School>,
   ) {
-    this.helper = new JwtHelperService();
+    this.helper = new JwtHelperService()
   }
 
   get idToken(): any {
     if (this.isLoggedIn()) {
-      return localStorage.getItem(UserSessionService.ID_TOKEN);
+      return localStorage.getItem(UserSessionService.ID_TOKEN)
     }
-    return null;
+    return null
   }
 
   get accessToken(): any {
     if (this.isLoggedIn()) {
-      return localStorage.getItem(UserSessionService.ACCESS_TOKEN);
+      return localStorage.getItem(UserSessionService.ACCESS_TOKEN)
     }
-    return null;
+    return null
   }
 
   get givenName(): string {
-    const decoded = this.decodeToken(this.idToken);
-    return decoded?.given_name;
+    const decoded = this.decodeToken(this.idToken)
+    return decoded?.given_name
   }
 
   get schoolUUID(): string {
-    const decoded = this.decodeToken(this.idToken);
-    return decoded?.['custom:school_uuid'];
+    const decoded = this.decodeToken(this.idToken)
+    return decoded?.['custom:school_uuid']
   }
 
   get isSysAdmin(): boolean {
-    return this.group === 'SYSTEM_ADMIN';
+    return this.group === 'SYSTEM_ADMIN'
   }
 
   get isProgAdmin(): boolean {
-    return this.group === 'PROGRAM_ADMIN';
+    return this.group === 'PROGRAM_ADMIN'
   }
 
   private get group(): string {
-    const decoded = this.decodeToken(this.accessToken);
-    return decoded?.['cognito:groups'][0];
+    const decoded = this.decodeToken(this.accessToken)
+    return decoded?.['cognito:groups'][0]
   }
 
   handleLogin(params: URLSearchParams): void {
@@ -81,22 +82,22 @@ export class UserSessionService {
   }
 
   handleLogout(): void {
-    localStorage.removeItem(UserSessionService.ID_TOKEN);
-    localStorage.removeItem(UserSessionService.ACCESS_TOKEN);
+    localStorage.removeItem(UserSessionService.ID_TOKEN)
+    localStorage.removeItem(UserSessionService.ACCESS_TOKEN)
+    localStorage.removeItem(UserSessionService.SCHOOL_KEY)
   }
 
   isLoggedIn(): boolean {
-    const idToken = localStorage.getItem(UserSessionService.ID_TOKEN);
-    const loggedIn = idToken !== undefined && idToken !== 'null' && idToken !== null;
-    return loggedIn;
+    const idToken = localStorage.getItem(UserSessionService.ID_TOKEN)
+    const loggedIn = idToken !== undefined && idToken !== 'null' && idToken !== null
+    return loggedIn
   }
 
   private decodeToken(token: any): any {
-    return this.helper.decodeToken(token);
+    return this.helper.decodeToken(token)
   }
 
   private addToStorage(key: string, value: any): void {
-    localStorage.setItem(key, value);
+    localStorage.setItem(key, value)
   }
-
 }

@@ -18,18 +18,19 @@ import {UriSupplier} from '../data/uri-supplier';
 import {School} from '../models/school/school';
 import {MultiItemCache} from './multi-item-cache';
 import {MultiItemCacheSchoolChangeHandler} from './multi-item-cache-school-change-handler';
+import {SchoolChangeDataSourceResetter} from './school-change-data-source-resetter';
 import {SingleItemCache} from './single-item-cache';
 
-export class MultiItemCacheSchoolChangeLoader<T> extends MultiItemCacheSchoolChangeHandler {
+export class MultiItemCacheSchoolChangeLoader<T> extends MultiItemCacheSchoolChangeHandler<T> {
   constructor(
     // for super
     label: string,
-    schoolInstanceCache: SingleItemCache<School>,
+    schoolChangeDataSourceResetter: SchoolChangeDataSourceResetter<T>,
     uriSupplier: UriSupplier,
     // other
     private multiItemCache: MultiItemCache<T>,
   ) {
-    super(label, schoolInstanceCache, uriSupplier)
+    super(label, schoolChangeDataSourceResetter, uriSupplier)
   }
 
   protected handleSchoolChange = (school: School): void => {
@@ -37,5 +38,4 @@ export class MultiItemCacheSchoolChangeLoader<T> extends MultiItemCacheSchoolCha
     this.multiItemCache.load()
       .then(() => console.log(`${this.label}: Loaded for school`, school))
   }
-
 }

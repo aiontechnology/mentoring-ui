@@ -18,13 +18,20 @@ import {InjectionToken} from '@angular/core';
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
+import {Mentor} from '../../../implementation/models/mentor/mentor';
 import {School} from '../../../implementation/models/school/school';
 import {Teacher} from '../../../implementation/models/teacher/teacher';
+import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
-import {TEACHER_CACHE, TEACHER_DATA_SOURCE, TEACHER_URI_SUPPLIER} from '../../../providers/global-teacher-providers-factory';
+import {
+  TEACHER_CACHE,
+  TEACHER_DATA_SOURCE,
+  TEACHER_SCHOOL_CHANGE_RESETTER,
+  TEACHER_URI_SUPPLIER
+} from '../../../providers/global-teacher-providers-factory';
 import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
 import {TeacherDialogComponent} from '../components/school-detail-tabs/teacher-dialog/teacher-dialog.component';
 import {TEACHER_GROUP, TEACHER_LIST_MENU} from '../school-manager.module';
@@ -43,9 +50,9 @@ export function teacherProvidersFactory() {
     },
     {
       provide: TEACHER_SCHOOL_CHANGE_HANDLER,
-      useFactory: (instanceCache: SingleItemCache<School>, uriSupplier: UriSupplier, cache: Cache<Teacher>, tableCache: TableCache<Teacher>) =>
-        new SingleItemCacheSchoolChangeHandler<Teacher>('TeacherSchoolChangeHandler', instanceCache, uriSupplier, cache, tableCache),
-      deps: [SCHOOL_INSTANCE_CACHE, TEACHER_URI_SUPPLIER, TEACHER_CACHE, TEACHER_TABLE_CACHE]
+      useFactory: (schoolChangeResetter: SchoolChangeDataSourceResetter<Teacher>, uriSupplier: UriSupplier, cache: Cache<Teacher>, tableCache: TableCache<Teacher>) =>
+        new SingleItemCacheSchoolChangeHandler<Teacher>('TeacherSchoolChangeHandler', schoolChangeResetter, uriSupplier, cache, tableCache),
+      deps: [TEACHER_SCHOOL_CHANGE_RESETTER, TEACHER_URI_SUPPLIER, TEACHER_CACHE, TEACHER_TABLE_CACHE]
     },
   ]
 }

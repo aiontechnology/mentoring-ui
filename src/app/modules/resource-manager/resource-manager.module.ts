@@ -43,8 +43,7 @@ export const SCHOOL_GAME_GROUP = 'school-game'
 
 const routes: Routes = [
   {
-    path: '', component: ResourceManagerComponent,
-    children: [
+    path: '', component: ResourceManagerComponent, children: [
       {path: '', component: ResourceListComponent},
       {path: `books/:${BOOK_ID}`, component: BookDetailComponent},
       {path: `games/:${GAME_ID}`, component: GameDetailComponent},

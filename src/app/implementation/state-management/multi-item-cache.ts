@@ -19,7 +19,10 @@ import {Publisher} from './publisher';
 import {Resettable} from './resettable';
 
 export class MultiItemCache<T> extends Publisher<T[]> implements Resettable {
-  constructor(private dataSource: DataSource<T>) {
+  constructor(
+    private label: string,
+    private dataSource: DataSource<T>
+  ) {
     super();
   }
 
@@ -30,8 +33,13 @@ export class MultiItemCache<T> extends Publisher<T[]> implements Resettable {
   }
 
   set items(items: T[]) {
+    console.log(`${this.label}: Received new item collection`, items)
     this._items = items;
     this.publish(this._items)
+  }
+
+  get isEmpty() {
+    return this._items.length === 0
   }
 
   load = async (): Promise<T[]> => {

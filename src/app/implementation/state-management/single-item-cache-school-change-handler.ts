@@ -20,6 +20,7 @@ import {UriSupplier} from '../data/uri-supplier';
 import {School} from '../models/school/school';
 import {SCHOOL_ID} from '../route/route-constants';
 import {TableCache} from '../table-cache/table-cache';
+import {SchoolChangeDataSourceResetter} from './school-change-data-source-resetter';
 import {SingleItemCache} from './single-item-cache';
 
 export class SingleItemCacheSchoolChangeHandler<T> {
@@ -27,7 +28,7 @@ export class SingleItemCacheSchoolChangeHandler<T> {
 
   constructor(
     private label: string,
-    private schoolInstanceCache: SingleItemCache<School>,
+    private schoolChangeDataSourceResetter: SchoolChangeDataSourceResetter<T>,
     private uriSupplier: UriSupplier,
     private dataCache: Cache<T>,
     private tableCache?: TableCache<T>
@@ -35,7 +36,7 @@ export class SingleItemCacheSchoolChangeHandler<T> {
 
   start(): void {
     console.log(`${this.label}: Start`)
-    this.subscriptions.push(this.schoolInstanceCache.observable.subscribe(this.onSchoolChange))
+    this.subscriptions.push(this.schoolChangeDataSourceResetter.observable.subscribe(this.onSchoolChange))
   }
 
   stop(): void {
@@ -55,7 +56,6 @@ export class SingleItemCacheSchoolChangeHandler<T> {
   }
 
   private reload = (school: School): void => {
-    this.dataCache.reset()
     if (this.tableCache) {
       this.tableCache.loadData()
         .then(() => console.log(`${this.label}: School change completed`, school))

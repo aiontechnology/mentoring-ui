@@ -38,9 +38,10 @@ export class DataSource<T> implements DataManager<T> {
     }
   }
 
-  allValues = (): Promise<T[]> =>
-    this.loadCache()
-      .then(() => this.cache.allValues())
+  allValues = async (): Promise<T[]> => {
+    await this.loadCache()
+    return this.cache.allValues()
+  }
 
   oneValue = (id: string): Promise<T> => {
     if (this.cache) {
@@ -75,17 +76,10 @@ export class DataSource<T> implements DataManager<T> {
     this.cache.updateSet(values)
       .then(() => this.repository.updateSet(values))
 
-  private loadCache = (): Promise<void> =>
-    new Promise(resolve => {
-      if (!this.cache || this.cache.isLoaded) {
-        resolve()
-      } else {
-        this.repository.allValues()
-          .then(values => {
-            this.cache.put(values)
-            resolve()
-          });
-      }
-    })
-
+  private loadCache = async (): Promise<void> => {
+    if(this.cache && !this.cache.isLoaded) {
+      const values = await this.repository.allValues()
+      this.cache.put(values)
+    }
+  }
 }

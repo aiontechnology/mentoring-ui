@@ -19,7 +19,7 @@ import {Resettable} from './resettable';
 
 export class SingleItemCache<T> extends Publisher<T> implements Resettable{
   constructor(
-    private label?: string
+    protected label: string
   ) {
     super()
   }

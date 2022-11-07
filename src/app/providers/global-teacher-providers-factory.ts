@@ -20,11 +20,13 @@ import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
 import {UriSupplier} from '../implementation/data/uri-supplier';
+import {Mentor} from '../implementation/models/mentor/mentor';
 import {School} from '../implementation/models/school/school';
 import {Teacher} from '../implementation/models/teacher/teacher';
 import {TeacherRepository} from '../implementation/repositories/teacher-repository';
 import {MultiItemCache} from '../implementation/state-management/multi-item-cache';
 import {MultiItemCacheSchoolChangeLoader} from '../implementation/state-management/multi-item-cache-school-change-loader';
+import {SchoolChangeDataSourceResetter} from '../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCache} from '../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
@@ -34,6 +36,7 @@ export const TEACHER_DATA_SOURCE = new InjectionToken<DataSource<Teacher>>('teac
 export const TEACHER_INSTANCE_CACHE = new InjectionToken<SingleItemCache<Teacher>>('teacher-instance-cache')
 export const TEACHER_COLLECTION_CACHE = new InjectionToken<MultiItemCache<Teacher>>('teacher-collection-cache')
 export const TEACHER_COLLECTION_CACHE_LOADER = new InjectionToken<MultiItemCacheSchoolChangeLoader<Teacher>>('teacher-collection-cache-loader')
+export const TEACHER_SCHOOL_CHANGE_RESETTER = new InjectionToken<SchoolChangeDataSourceResetter<Teacher>>('teacher-school-change-resetter')
 
 export function globalTeacherProvidersFactory() {
   return [
@@ -57,14 +60,20 @@ export function globalTeacherProvidersFactory() {
     },
     {
       provide: TEACHER_COLLECTION_CACHE,
-      useFactory: (dataSource: DataSource<Teacher>) => new MultiItemCache<Teacher>(dataSource),
+      useFactory: (dataSource: DataSource<Teacher>) => new MultiItemCache<Teacher>('TeacherCollectionCache', dataSource),
       deps: [TEACHER_DATA_SOURCE]
     },
     {
+      provide: TEACHER_SCHOOL_CHANGE_RESETTER,
+      useFactory: (schoolInstanceCache: SingleItemCache<School>, cache: Cache<Teacher>) =>
+        new SchoolChangeDataSourceResetter('TeacherSchoolChangeResetter', schoolInstanceCache, cache),
+      deps: [SCHOOL_INSTANCE_CACHE, TEACHER_CACHE]
+    },
+    {
       provide: TEACHER_COLLECTION_CACHE_LOADER,
-      useFactory: (schoolInstanceCache: SingleItemCache<School>, teacherCollectionCache: MultiItemCache<Teacher>, uriSupplier: UriSupplier) =>
-        new MultiItemCacheSchoolChangeLoader<Teacher>('TeacherCollectionCacheLoader', schoolInstanceCache, uriSupplier, teacherCollectionCache),
-      deps: [SCHOOL_INSTANCE_CACHE, TEACHER_COLLECTION_CACHE, TEACHER_URI_SUPPLIER]
+      useFactory: (schoolChangeResetter: SchoolChangeDataSourceResetter<Teacher>, teacherCollectionCache: MultiItemCache<Teacher>, uriSupplier: UriSupplier) =>
+        new MultiItemCacheSchoolChangeLoader<Teacher>('TeacherCollectionCacheLoader', schoolChangeResetter, uriSupplier, teacherCollectionCache),
+      deps: [TEACHER_SCHOOL_CHANGE_RESETTER, TEACHER_COLLECTION_CACHE, TEACHER_URI_SUPPLIER]
     },
   ]
 }

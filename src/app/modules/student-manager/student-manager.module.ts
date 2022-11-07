@@ -18,9 +18,9 @@ import {InjectionToken, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {Command} from '../../implementation/command/command';
 import {SCHOOL_ID, STUDENT_ID} from '../../implementation/route/route-constants';
-import {addDialogProvidersFactory} from '../../providers/add-dialog-providers-factory';
 import {TeacherGradeFilterPipe} from '../shared/pipes/teacher-grade-filter.pipe';
 import {SharedModule} from '../shared/shared.module';
+import {MentorDialogComponent} from './components/mentor-dialog/mentor-dialog.component';
 import {StudentDetailContainerComponent} from './components/student-detail-container/student-detail-container.component';
 import {StudentContactsComponent} from './components/student-detail-tabs/student-contacts/student-contacts.component';
 import {StudentDetailComponent} from './components/student-detail-tabs/student-detail/student-detail.component';
@@ -28,12 +28,11 @@ import {StudentLpgComponent} from './components/student-detail-tabs/student-lpg/
 import {StudentTeacherInputComponent} from './components/student-detail-tabs/student-teacher-input/student-teacher-input.component';
 import {StudentDialogComponent} from './components/student-dialog/student-dialog.component';
 import {StudentListComponent} from './components/student-list/student-list.component';
+import {TeacherDialogComponent} from './components/teacher-dialog/teacher-dialog.component';
 import {ScrollToDirective} from './directives/scroll-to.directive';
 import {studentProvidersFactory} from './providers/student-providers-factory';
 import {LpgRepositoryService} from './services/lpg/lpg-repository.service';
 import {StudentManagerComponent} from './student-manager.component';
-import { TeacherDialogComponent } from './components/teacher-dialog/teacher-dialog.component';
-import { MentorDialogComponent } from './components/mentor-dialog/mentor-dialog.component';
 
 const routes: Routes = [
   {

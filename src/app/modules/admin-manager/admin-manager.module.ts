@@ -25,9 +25,7 @@ import {InterestCacheService} from './services/interests/interest-cache.service'
 
 const routes: Routes = [
   {
-    path: '',
-    component: AdminManagerComponent,
-    children: [
+    path: '', component: AdminManagerComponent, children: [
       {path: '', component: InterestListComponent},
     ]
   }

@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-export function equalsById<T extends { id: string }>(obj1: T, obj2: T) {
-  return (!obj1?.id || !obj2?.id)
+export function equalsById(obj1: any, obj2: any) {
+  const result = (!obj1?.id || !obj2?.id)
     ? false
-    : obj1?.id === obj2?.id
+    : obj1.id === obj2.id
+  return result
 }
 
-export function equalsBySelfLink<T extends { selfLink: () => string }>(obj1: T, obj2: T) {
+export function equalsBySelfLink(obj1: any, obj2: any) {
   return (!obj1?.selfLink || !obj2?.selfLink)
     ? false
-    : obj1?.selfLink === obj2?.selfLink
+    : obj1.selfLink === obj2.selfLink
 }

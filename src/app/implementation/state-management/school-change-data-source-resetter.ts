@@ -15,38 +15,38 @@
  */
 
 import {Subscription} from 'rxjs';
-import {UriSupplier} from '../data/uri-supplier';
+import {Cache} from '../data/cache';
 import {School} from '../models/school/school';
-import {SCHOOL_ID} from '../route/route-constants';
-import {SchoolChangeDataSourceResetter} from './school-change-data-source-resetter';
+import {Publisher} from './publisher';
 import {SingleItemCache} from './single-item-cache';
 
-export abstract class MultiItemCacheSchoolChangeHandler<T> {
+export class SchoolChangeDataSourceResetter<T> extends Publisher<School> {
   private subscriptions: Subscription[] = []
 
-  protected constructor(
-    protected label: string,
-    private schoolChangeDataSourceResetter: SchoolChangeDataSourceResetter<T>,
-    private uriSupplier: UriSupplier,
-  ) {}
+  constructor(
+    private label: string,
+    private schoolInstanceCache: SingleItemCache<School>,
+    private cache: Cache<T>,
+  ) {
+    super()
+  }
 
   start(): void {
-    console.log(`${this.label}: Start`)
-    this.subscriptions.push(this.schoolChangeDataSourceResetter.observable.subscribe(this.onSchoolChange.bind(this)))
+    this.subscriptions.push(this.schoolInstanceCache.observable.subscribe(this.onSchoolChange))
   }
 
   stop(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe())
-    console.log(`${this.label}: Stop`)
+    this.subscriptions = []
   }
 
-  protected abstract handleSchoolChange(school: School): void
-
-  private onSchoolChange(school: School): void {
+  private onSchoolChange = (school: School) => {
     if (school) {
-      this.uriSupplier.reset()
-        .withSubstitution(SCHOOL_ID, school.id)
-      this.handleSchoolChange(school)
+      console.log(`${this.label}: Resetting cache`)
+      this.cache.reset()
+      this.publish(school)
+    } else {
+      console.log(`${this.label}: School changed to null (ignoring)`)
     }
   }
 }

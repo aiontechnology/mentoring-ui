@@ -33,7 +33,7 @@ export class UriSupplier implements Resettable {
     uri = this.substitute(uri);
     uri = resourceId ? uri + `/${resourceId}` : uri
     uri = this.addParameters(uri)
-    console.log('Constructed URI', uri)
+    // console.log('Constructed URI', uri)
     return uri
   }
 

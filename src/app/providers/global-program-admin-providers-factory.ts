@@ -19,18 +19,24 @@ import {environment} from '../../environments/environment';
 import {Cache} from '../implementation/data/cache';
 import {DataSource} from '../implementation/data/data-source';
 import {Repository} from '../implementation/data/repository';
+import {Mentor} from '../implementation/models/mentor/mentor';
+import {School} from '../implementation/models/school/school';
+import {SchoolChangeDataSourceResetter} from '../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../implementation/data/uri-supplier';
 import {Personnel} from '../implementation/models/personnel/personnel';
 import {ProgramAdmin} from '../implementation/models/program-admin/program-admin';
 import {ProgramAdminRepository} from '../implementation/repositories/program-admin-repository';
 import {SingleItemCache} from '../implementation/state-management/single-item-cache';
+import {MENTOR_CACHE, MENTOR_SCHOOL_CHANGE_RESETTER} from './global-mentor-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
 export const PROGRAM_ADMIN_DATA_SOURCE = new InjectionToken<DataSource<ProgramAdmin>>('program-admin-data-source');
 export const PROGRAM_ADMIN_CACHE = new InjectionToken<Cache<Personnel>>('program-admin-detail-cache');
 export const PROGRAM_ADMIN_URI_SUPPLIER = new InjectionToken<UriSupplier>('program-admin-detail-uri-supplier');
 export const PROGRAM_ADMIN_INSTANCE_CACHE = new InjectionToken<SingleItemCache<ProgramAdmin>>('program-admin-instance-cache')
 export const PROGRAM_ADMIN_INSTANCE_CACHE_UPDATER = new InjectionToken<SingleItemCacheUpdater<ProgramAdmin>>('program-admin-instance-cache-updater')
+export const PROGRAM_ADMIN_SCHOOL_CHANGE_RESETTER = new InjectionToken<SchoolChangeDataSourceResetter<ProgramAdmin>>('program-admin-school-change-resetter')
 
 export function globalProgramAdminProvidersFactory() {
   return [
@@ -57,6 +63,12 @@ export function globalProgramAdminProvidersFactory() {
       useFactory: (singleItemCache: SingleItemCache<ProgramAdmin>, dataSource: DataSource<ProgramAdmin>) =>
         new SingleItemCacheUpdater<ProgramAdmin>(singleItemCache, dataSource),
       deps: [PROGRAM_ADMIN_INSTANCE_CACHE, PROGRAM_ADMIN_DATA_SOURCE]
+    },
+    {
+      provide: PROGRAM_ADMIN_SCHOOL_CHANGE_RESETTER,
+      useFactory: (schoolInstanceCache: SingleItemCache<School>, cache: Cache<ProgramAdmin>) =>
+        new SchoolChangeDataSourceResetter('ProgramAdminSchoolChangeResetter', schoolInstanceCache, cache),
+      deps: [SCHOOL_INSTANCE_CACHE, PROGRAM_ADMIN_CACHE]
     },
   ]
 }

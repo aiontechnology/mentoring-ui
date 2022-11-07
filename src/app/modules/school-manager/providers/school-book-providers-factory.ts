@@ -19,14 +19,16 @@ import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {Book} from '../../../implementation/models/book/book';
+import {Mentor} from '../../../implementation/models/mentor/mentor';
 import {School} from '../../../implementation/models/school/school';
 import {Teacher} from '../../../implementation/models/teacher/teacher';
+import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {
   SCHOOL_BOOK_CACHE,
-  SCHOOL_BOOK_DATA_SOURCE,
+  SCHOOL_BOOK_DATA_SOURCE, SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER,
   SCHOOL_BOOK_URI_SUPPLIER
 } from '../../../providers/global-school-book-providers-factory';
 import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
@@ -48,9 +50,9 @@ export function schoolBookProvidersFactory() {
     },
     {
       provide: SCHOOL_BOOK_SCHOOL_CHANGE_HANDLER,
-      useFactory: (instanceCache: SingleItemCache<School>, uriSupplier: UriSupplier, cache: Cache<Book>, tableCache: TableCache<Book>) =>
-        new SingleItemCacheSchoolChangeHandler<Book>('SchoolBookSchoolChangeHandler', instanceCache, uriSupplier, cache, tableCache),
-      deps: [SCHOOL_INSTANCE_CACHE, SCHOOL_BOOK_URI_SUPPLIER, SCHOOL_BOOK_CACHE, SCHOOL_BOOK_TABLE_CACHE]
+      useFactory: (schoolChangeResetter: SchoolChangeDataSourceResetter<Book>, uriSupplier: UriSupplier, cache: Cache<Book>, tableCache: TableCache<Book>) =>
+        new SingleItemCacheSchoolChangeHandler<Book>('SchoolBookSchoolChangeHandler', schoolChangeResetter, uriSupplier, cache, tableCache),
+      deps: [SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER, SCHOOL_BOOK_URI_SUPPLIER, SCHOOL_BOOK_CACHE, SCHOOL_BOOK_TABLE_CACHE]
     },
   ]
 }

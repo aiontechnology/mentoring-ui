@@ -19,16 +19,15 @@ import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {Game} from '../../../implementation/models/game/game';
-import {School} from '../../../implementation/models/school/school';
-import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
+import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {
   SCHOOL_GAME_CACHE,
   SCHOOL_GAME_DATA_SOURCE,
+  SCHOOL_GAME_SCHOOL_CHANGE_RESETTER,
   SCHOOL_GAME_URI_SUPPLIER
 } from '../../../providers/global-school-game-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
 import {updateProvidersFactory} from '../../../providers/update-menus-providers-factory';
 import {SchoolGameDialogComponent} from '../components/school-detail-tabs/school-game-dialog/school-game-dialog.component';
 import {SCHOOL_GAME_GROUP, SCHOOL_GAME_LIST_MENU} from '../school-manager.module';
@@ -47,9 +46,9 @@ export function schoolGameProvidersFactory() {
     },
     {
       provide: SCHOOL_GAME_SCHOOL_CHANGE_HANDLER,
-      useFactory: (instanceCache: SingleItemCache<School>, uriSupplier: UriSupplier, cache: Cache<Game>, tableCache: TableCache<Game>) =>
-        new SingleItemCacheSchoolChangeHandler<Game>('SchoolGameSchoolChangeHandler', instanceCache, uriSupplier, cache, tableCache),
-      deps: [SCHOOL_INSTANCE_CACHE, SCHOOL_GAME_URI_SUPPLIER, SCHOOL_GAME_CACHE, SCHOOL_GAME_TABLE_CACHE]
+      useFactory: (schoolChangeResetter: SchoolChangeDataSourceResetter<Game>, uriSupplier: UriSupplier, cache: Cache<Game>, tableCache: TableCache<Game>) =>
+        new SingleItemCacheSchoolChangeHandler<Game>('SchoolGameSchoolChangeHandler', schoolChangeResetter, uriSupplier, cache, tableCache),
+      deps: [SCHOOL_GAME_SCHOOL_CHANGE_RESETTER, SCHOOL_GAME_URI_SUPPLIER, SCHOOL_GAME_CACHE, SCHOOL_GAME_TABLE_CACHE]
     },
   ]
 }

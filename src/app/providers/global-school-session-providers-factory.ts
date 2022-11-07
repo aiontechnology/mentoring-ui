@@ -57,7 +57,8 @@ export function globalSchoolSessionProvidersFactory() {
     },
     {
       provide: SCHOOL_SESSION_COLLECTION_CACHE,
-      useFactory: (dataSource: DataSource<SchoolSession>) => new MultiItemCache<SchoolSession>(dataSource),
+      useFactory: (dataSource: DataSource<SchoolSession>) =>
+        new MultiItemCache<SchoolSession>('SchoolSessionCollectionCache',dataSource),
       deps: [SCHOOL_SESSION_DATA_SOURCE]
     },
     {
