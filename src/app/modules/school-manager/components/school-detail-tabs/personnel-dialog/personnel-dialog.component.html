@@ -59,6 +59,9 @@
     <div class="dialog-container">
       <mat-form-field>
         <input matInput msPhoneFormat placeholder="Phone Number" formControlName="cellPhone" />
+        <mat-error *ngIf="modelFormGroup.hasError('phoneNumberFormat', 'cellPhone')">
+          Invalid phone number format
+        </mat-error>
       </mat-form-field>
     </div>
 

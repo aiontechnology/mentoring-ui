@@ -17,10 +17,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {PhoneNumberMatcher} from 'libphonenumber-js';
 import {personLocations} from 'src/app/implementation/constants/locations';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {phoneValidator} from '../../../../implementation/form-validator/phone-validator';
 import {School} from '../../../../implementation/models/school/school';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
@@ -73,7 +75,7 @@ export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogC
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       email: [null, [Validators.email, Validators.maxLength(50)]],
-      cellPhone: null,
+      cellPhone: [null, phoneValidator()],
       availability: ['', Validators.maxLength(100)],
       mediaReleaseSigned: false,
       backgroundCheckCompleted: false,

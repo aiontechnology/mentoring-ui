@@ -21,6 +21,7 @@ import {DialogComponent} from '../../../../implementation/component/dialog-compo
 import {personLocations} from '../../../../implementation/constants/locations';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {phoneValidator} from '../../../../implementation/form-validator/phone-validator';
 import {Mentor} from '../../../../implementation/models/mentor/mentor';
 import {School} from '../../../../implementation/models/school/school';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
@@ -87,7 +88,7 @@ export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogC
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       email: [null, [Validators.email, Validators.maxLength(50)]],
-      cellPhone: null,
+      cellPhone: [null, phoneValidator()],
       availability: ['', Validators.maxLength(100)],
       mediaReleaseSigned: false,
       backgroundCheckCompleted: false,

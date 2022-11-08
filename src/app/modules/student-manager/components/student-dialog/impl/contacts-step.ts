@@ -15,6 +15,7 @@
  */
 
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {phoneValidator} from '../../../../../implementation/form-validator/phone-validator';
 import {Student} from '../../../../../implementation/models/student/student';
 import {FormGroupHolder} from './form-group-holder';
 import {noContactMethodValidator} from './no-contact-method-validator';
@@ -106,7 +107,7 @@ export class ContactsStep extends FormGroupHolder<Student> {
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       label: [null, [Validators.maxLength(50)]],
-      phone: null,
+      phone: [null, phoneValidator()],
       email: [null, [Validators.email, Validators.maxLength(50)]],
       preferredContactMethod: null,
       isEmergencyContact,

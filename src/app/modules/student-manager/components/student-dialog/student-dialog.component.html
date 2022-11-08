@@ -194,6 +194,9 @@
               <div class="dialog-container">
                 <mat-form-field>
                   <input formControlName="phone" matInput msPhoneFormat placeholder="Phone Number"/>
+                  <mat-error *ngIf="contactsStep.formGroup.hasError('phoneNumberFormat', ['parents', i, 'phone'])">
+                    Invalid phone number format
+                  </mat-error>
                 </mat-form-field>
               </div>
 
@@ -288,6 +291,9 @@
           <div class="dialog-container">
             <mat-form-field>
               <input formControlName="phone" matInput msPhoneFormat placeholder="Phone Number"/>
+              <mat-error *ngIf="contactsStep.formGroup.hasError('phoneNumberFormat', ['emergencyContact', 'phone'])">
+                Invalid phone number format
+              </mat-error>
             </mat-form-field>
           </div>
 

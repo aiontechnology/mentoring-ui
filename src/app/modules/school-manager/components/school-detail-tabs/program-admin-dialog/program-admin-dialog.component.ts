@@ -19,6 +19,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
+import {phoneValidator} from '../../../../../implementation/form-validator/phone-validator';
 import {ProgramAdmin} from '../../../../../implementation/models/program-admin/program-admin';
 import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../../../providers/global-program-admin-providers-factory';
 
@@ -55,7 +56,7 @@ export class ProgramAdminDialogComponent extends DialogComponent<ProgramAdmin, P
       programAdmin,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      cellPhone: null,
+      cellPhone: [null, phoneValidator()],
       email: [null, [Validators.required, Validators.email, Validators.maxLength(50)]]
     })
   }

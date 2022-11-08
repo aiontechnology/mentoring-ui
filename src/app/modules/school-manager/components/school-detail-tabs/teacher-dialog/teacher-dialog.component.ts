@@ -21,6 +21,7 @@ import {grades} from 'src/app/implementation/constants/grades';
 import {Grade} from 'src/app/implementation/types/grade';
 import {DialogComponent} from '../../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
+import {phoneValidator} from '../../../../../implementation/form-validator/phone-validator';
 import {Teacher} from '../../../../../implementation/models/teacher/teacher';
 import {TEACHER_DATA_SOURCE} from '../../../../../providers/global-teacher-providers-factory';
 
@@ -59,7 +60,7 @@ export class TeacherDialogComponent extends DialogComponent<Teacher, TeacherDial
       teacher,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
-      cellPhone: null,
+      cellPhone: [null, phoneValidator()],
       email: [null, [Validators.email, Validators.maxLength(50)]],
       grade1: [null, [Validators.required]],
       grade2: null
