@@ -21,7 +21,7 @@ import {School} from 'src/app/implementation/models/school/school';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {states as globalStates} from '../../../../implementation/constants/states';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {phoneValidator} from '../../../../implementation/form-validator/phone-validator';
+import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';

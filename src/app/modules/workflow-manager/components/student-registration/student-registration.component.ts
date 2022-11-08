@@ -20,6 +20,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {grades} from '../../../../implementation/constants/grades';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
 import {Teacher} from '../../../../implementation/models/teacher/teacher';
 import {StudentRegistration} from '../../../../implementation/models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../../../../implementation/models/workflow/student-registration-lookup';
@@ -142,12 +143,12 @@ export class StudentRegistrationComponent implements OnInit {
       parent1FirstName: ['', [Validators.required, Validators.maxLength(50)]],
       parent1LastName: ['', [Validators.required, Validators.maxLength(50)]],
       parent1PhoneNumber: [''],
-      parent1EmailAddress: ['', [Validators.maxLength(50)]],
+      parent1EmailAddress: ['', [emailAddressValidator(), Validators.maxLength(50)]],
       parent1PreferredContactMethod: ['', [Validators.required]],
       parent2FirstName: ['', [Validators.maxLength(50)]],
       parent2LastName: ['', [Validators.maxLength(50)]],
       parent2PhoneNumber: [''],
-      parent2EmailAddress: ['', [Validators.maxLength(50)]],
+      parent2EmailAddress: ['', [emailAddressValidator(), Validators.maxLength(50)]],
       parent2PreferredContactMethod: [''],
       teacher: [''],
       preferredSession: [''],

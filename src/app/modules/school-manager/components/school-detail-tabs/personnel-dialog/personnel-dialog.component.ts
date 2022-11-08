@@ -19,7 +19,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {phoneValidator} from '../../../../../implementation/form-validator/phone-validator';
+import {emailAddressValidator} from '../../../../../implementation/form-validation/email-address-validator';
+import {phoneValidator} from '../../../../../implementation/form-validation/phone-validator';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
 import {Personnel} from '../../../../../implementation/models/personnel/personnel';
@@ -72,7 +73,7 @@ export class PersonnelDialogComponent extends DialogComponent<Personnel, Personn
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       cellPhone: [null, phoneValidator()],
-      email: [null, [Validators.email, Validators.maxLength(50)]]
+      email: [null, [emailAddressValidator(), Validators.maxLength(50)]]
     });
   }
 

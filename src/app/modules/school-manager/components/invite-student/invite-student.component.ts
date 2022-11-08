@@ -18,6 +18,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DataSource} from '../../../../implementation/data/data-source';
+import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
 import {INVITATION_DATA_SOURCE} from '../../../shared/shared.module';
 import {Invitation} from '../../../../implementation/models/workflow/invitation';
 
@@ -54,7 +55,7 @@ export class InviteStudentComponent implements OnInit {
     return formBuilder.group({
       parent1FirstName: [invitation?.parent1FirstName, [Validators.required, Validators.maxLength(50)]],
       parent1LastName: [invitation?.parent1LastName, [Validators.required, Validators.maxLength(50)]],
-      parent1EmailAddress: [invitation?.parent1EmailAddress, [Validators.required, Validators.maxLength(50)]],
+      parent1EmailAddress: [invitation?.parent1EmailAddress, [emailAddressValidator(), Validators.required, Validators.maxLength(50)]],
       studentFirstName: [invitation?.studentFirstName, [Validators.required, Validators.maxLength(50)]],
       studentLastName: [invitation?.studentLastName, [Validators.required, Validators.maxLength(50)]],
     });

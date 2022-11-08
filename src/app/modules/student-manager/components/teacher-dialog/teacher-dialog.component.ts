@@ -20,7 +20,8 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {grades} from '../../../../implementation/constants/grades';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {phoneValidator} from '../../../../implementation/form-validator/phone-validator';
+import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
+import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
 import {Teacher} from '../../../../implementation/models/teacher/teacher';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
@@ -78,7 +79,7 @@ export class TeacherDialogComponent extends DialogComponent<Teacher, TeacherDial
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       cellPhone: [null, phoneValidator()],
-      email: [null, [Validators.email, Validators.maxLength(50)]],
+      email: [null, [emailAddressValidator(), Validators.maxLength(50)]],
       grade1: [{value: this.data?.grade, disabled: true}, [Validators.required]],
       grade2: null
     });
