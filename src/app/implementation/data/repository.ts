@@ -24,9 +24,10 @@ import {UriSupplier} from './uri-supplier';
 export abstract class Repository<T> implements DataManager<T> {
   protected abstract toModel: (value: any) => T;
 
-  protected constructor(private http: HttpClient,
-                        private uriSupplier: UriSupplier) {
-  }
+  protected constructor(
+    private http: HttpClient,
+    private uriSupplier: UriSupplier
+  ) {}
 
   add = (value: T): Promise<T> =>
     firstValueFrom(this.http.post<T>(this.uriSupplier.apply(), value)
