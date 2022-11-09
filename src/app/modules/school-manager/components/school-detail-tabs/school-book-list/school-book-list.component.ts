@@ -54,7 +54,7 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
     this.destroy()
   }
 
-  protected override loadTableCache = (): void => {
+  protected override loadTableCache = async (): Promise<void> => {
     // do nothing
   }
 }

@@ -17,12 +17,13 @@
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {Resettable} from '../state-management/resettable';
 import {SelectionManager} from './selection-manager';
 
-export abstract class AbstractTableCache<T> extends SelectionManager<T> {
+export abstract class AbstractTableCache<T> extends SelectionManager<T> implements Resettable {
 
   /** Datasource that is used by the table in the main-content component */
-  tableDataSource: MatTableDataSource<T> = new MatTableDataSource<T>();
+  tableDataSource: MatTableDataSource<T> = new MatTableDataSource<T>()
 
   /** Binds to the filter input control. Used to clear the control when requested. */
   filterBinding: string;
@@ -117,6 +118,10 @@ export abstract class AbstractTableCache<T> extends SelectionManager<T> {
     }
     const page = Math.floor(index / this.pageSize);
     this.jumpToPage(page);
+  }
+
+  reset(): void {
+    this.tableDataSource = new MatTableDataSource<T>()
   }
 
   /**

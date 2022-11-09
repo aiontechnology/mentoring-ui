@@ -17,8 +17,8 @@
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {Command} from '../command/command';
-import {SingleItemCache} from '../state-management/single-item-cache';
 import {MenuStateService} from '../services/menu-state.service';
+import {SingleItemCache} from '../state-management/single-item-cache';
 import {TableCache} from '../table-cache/table-cache';
 import {MenuRegisteringComponent} from './menu-registering-component';
 
@@ -49,13 +49,16 @@ export abstract class ListComponent<T> extends MenuRegisteringComponent {
   protected override init(): void {
     super.init();
     this.loadTableCache()
-    if (this.instanceCache && !this.instanceCache.isEmpty) {
-      this.tableCache.jumpToItem(this.instanceCache.item)
-    }
+      .then(() => {
+        if (!this.instanceCache.isEmpty) {
+          this.tableCache.jumpToItem(this.instanceCache.item)
+        }
+      })
   }
 
-  protected loadTableCache = (): void => {
-    this.tableCache.loadData()
-      .then(() => this.tableCache.clearSelection())
+  protected loadTableCache = async (): Promise<void> => {
+    this.tableCache.reset()
+    await this.tableCache.loadData()
+    this.tableCache.clearSelection()
   }
 }
