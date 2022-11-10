@@ -16,7 +16,7 @@
 
 <h2 mat-dialog-title>Invite Student</h2>
 <mat-dialog-content>
-  <form [formGroup]="model">
+  <form [formGroup]="modelFormGroup">
     <p class="legend mat-small">* denotes a required field</p>
 
     <div class="dialog-container">
@@ -45,7 +45,7 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button color="primary" (click)="save()" [disabled]="!model.valid">
+  <button mat-button color="primary" (click)="save()" [disabled]="!modelFormGroup.valid">
     <mat-icon>email</mat-icon> Send
   </button>
   <button mat-button color="primary" (click)="dismiss()">

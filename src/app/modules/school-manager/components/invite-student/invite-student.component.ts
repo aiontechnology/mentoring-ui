@@ -14,44 +14,41 @@
  * limitations under the License.
  */
 
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
-import {INVITATION_DATA_SOURCE} from '../../../shared/shared.module';
 import {Invitation} from '../../../../implementation/models/workflow/invitation';
+import {INVITATION_DATA_SOURCE} from '../../../../providers/global-invitation-providers-factory';
 
 @Component({
   selector: 'ms-invite-student',
   templateUrl: './invite-student.component.html',
   styleUrls: ['./invite-student.component.scss']
 })
-export class InviteStudentComponent implements OnInit {
+export class InviteStudentComponent extends DialogComponent<Invitation, InviteStudentComponent> implements OnInit {
 
-  model: FormGroup;
-
-  constructor(@Inject(INVITATION_DATA_SOURCE) private invitationDataSource: DataSource<Invitation>,
-              private dialogRef: MatDialogRef<InviteStudentComponent>,
-              private formBuilder: FormBuilder,
-              @Inject(MAT_DIALOG_DATA) private data: any) {
+  constructor(
+    // for super
+    @Inject(MAT_DIALOG_DATA) data: any,
+    formBuilder: FormBuilder,
+    dialogRef: MatDialogRef<InviteStudentComponent>,
+    @Inject(INVITATION_DATA_SOURCE) private invitationDataSource: DataSource<Invitation>,
+  ) {
+    super(data?.model, formBuilder, dialogRef, invitationDataSource)
   }
 
   ngOnInit(): void {
-    this.model = this.createModel(this.formBuilder, this.data?.model);
+    this.init()
   }
 
-  save(): void {
-    const invitation: Invitation = Invitation.of(this.model.value);
-    this.invitationDataSource.add(invitation)
-      .then(i => this.dialogRef.close(i));
+  protected toModel(formValue: any): Invitation {
+    return Invitation.of(formValue)
   }
 
-  dismiss(): void {
-    this.dialogRef.close();
-  }
-
-  private createModel(formBuilder: FormBuilder, invitation: Invitation): FormGroup {
+  protected doCreateFormGroup(formBuilder: FormBuilder, invitation: Invitation): FormGroup {
     return formBuilder.group({
       parent1FirstName: [invitation?.parent1FirstName, [Validators.required, Validators.maxLength(50)]],
       parent1LastName: [invitation?.parent1LastName, [Validators.required, Validators.maxLength(50)]],
@@ -61,4 +58,7 @@ export class InviteStudentComponent implements OnInit {
     });
   }
 
+  protected doUpdateFormGroup(formGroup: FormGroup, invitation: Invitation): void {
+    // do nothing
+  }
 }

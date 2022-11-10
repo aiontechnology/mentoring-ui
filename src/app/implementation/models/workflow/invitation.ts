@@ -17,13 +17,15 @@
 import {environment} from '../../../../environments/environment';
 
 export class Invitation {
-  constructor(public studentRegistrationUri: string,
-              public parent1FirstName: string,
-              public parent1LastName: string,
-              public parent1EmailAddress: string,
-              public studentFirstName: string,
-              public studentLastName: string) {
-  }
+  constructor(
+    public studentRegistrationUri: string,
+    public parent1FirstName: string,
+    public parent1LastName: string,
+    public parent1EmailAddress: string,
+    public studentFirstName: string,
+    public studentLastName: string,
+    public links: any,
+  ) {}
 
   static of(value: any): Invitation {
     const registrationUri = environment.baseUri + '/workflowmanager';
@@ -33,6 +35,7 @@ export class Invitation {
       value.parent1LastName,
       value.parent1EmailAddress,
       value.studentFirstName,
-      value.studentLastName);
+      value.studentLastName,
+      value?.links);
   }
 }

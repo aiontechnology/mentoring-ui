@@ -24,10 +24,8 @@ import {environment} from '../../../environments/environment';
 import {DataSource} from '../../implementation/data/data-source';
 import {Repository} from '../../implementation/data/repository';
 import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {Invitation} from '../../implementation/models/workflow/invitation';
 import {StudentRegistration} from '../../implementation/models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../../implementation/models/workflow/student-registration-lookup';
-import {InvitationRepository} from '../../implementation/repositories/invitation-repository';
 import {StudentRegistrationLookupRepository} from '../school-manager/repositories/student-registration-lookup-repository';
 import {StudentRegistrationRepository} from '../school-manager/repositories/student-registration-repository';
 import {ConfimationDialogComponent} from './components/confimation-dialog/confimation-dialog.component';
@@ -35,9 +33,6 @@ import {SelectionCountDisplayComponent} from './components/selection-count-displ
 import {OnlyNumberDirective} from './directives/only-number.directive';
 import {PhoneFormatDirective} from './directives/phone-format.directive';
 import {MetaDataService} from './services/meta-data/meta-data.service';
-
-export const INVITATION_DATA_SOURCE = new InjectionToken<DataSource<Invitation>>('invitation-data-source');
-export const INVITATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('invitation-uri-supplier');
 
 export const REGISTRATION_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistrationLookup>>('registration-lookup-data-source');
 export const REGISTRATION_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistration>>('registration-data-source');
@@ -81,18 +76,6 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
-        /* Invitation resources */
-        {
-          provide: INVITATION_URI_SUPPLIER,
-          useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/invitations`)
-        },
-        InvitationRepository,
-        {
-          provide: INVITATION_DATA_SOURCE,
-          useFactory: (repository: Repository<Invitation>) => new DataSource<Invitation>(repository),
-          deps: [InvitationRepository]
-        },
-
         /* Registration resources */
         {
           provide: REGISTRATION_URI_SUPPLIER,

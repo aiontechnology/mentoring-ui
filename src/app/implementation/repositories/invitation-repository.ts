@@ -15,11 +15,11 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
+import {INVITATION_URI_SUPPLIER} from '../../providers/global-invitation-providers-factory';
 import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../data/uri-supplier';
 import {Invitation} from '../models/workflow/invitation';
-import {INVITATION_URI_SUPPLIER} from '../../modules/shared/shared.module';
 
 @Injectable()
 export class InvitationRepository extends Repository<Invitation> {

@@ -56,7 +56,7 @@ export function addDialogProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
       useFactory: (dialogManager: DialogManager<COMPONENT_TYPE>) =>
         (dataSupplier: () => object) => {
           return DialogCommand<MODEL_TYPE>
-            .builder(`Add ${titleCase(name)}`, group, dialogManager, () => true)
+            .builder(`${titleCase(name)}`, group, dialogManager, () => true)
             .withDataSupplier(dataSupplier)
             .withSnackbarMessage(`${titleCase(name)} Added`)
             .build()

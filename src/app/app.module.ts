@@ -45,6 +45,7 @@ import {MaterialModule} from './implementation/shared/material.module';
 import {SchoolLocalStorageLoader} from './implementation/state-management/school-local-storage-loader';
 import {globalBookProvidersFactory} from './providers/global-book-providers-factory';
 import {globalGameProvidersFactory} from './providers/global-game-providers-factory';
+import {globalInvitationProvidersFactory} from './providers/global-invitation-providers-factory';
 import {globalMentorProvidersFactory} from './providers/global-mentor-providers-factory';
 import {globalPersonnelProvidersFactory} from './providers/global-personnel-providers-factory';
 import {globalProgramAdminProvidersFactory} from './providers/global-program-admin-providers-factory';
@@ -176,6 +177,7 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
     ...globalSchoolBookProvidersFactory(),
     ...globalSchoolGameProvidersFactory(),
     ...globalSchoolSessionProvidersFactory(),
+    ...globalInvitationProvidersFactory(),
     {
       provide: SNACKBAR_MANAGER,
       useFactory: (snackbar: MatSnackBar) => new SnackbarManager(snackbar),

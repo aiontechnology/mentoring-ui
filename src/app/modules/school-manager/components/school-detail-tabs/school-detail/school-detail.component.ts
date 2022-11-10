@@ -24,6 +24,7 @@ import {School} from '../../../../../implementation/models/school/school';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
+import {SCHOOL_INVITE_STUDENT} from '../../../providers/school-providers-factory';
 import {SCHOOL_DETAIL_MENU} from '../../../school-manager.module';
 
 @Component({
@@ -40,6 +41,7 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
     navService: NavigationService,
     // other
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
+    @Inject(SCHOOL_INVITE_STUDENT) private inviteStudent: (dataSupplier) => Command
   ) {
     super(menuState, menuCommands, route, navService)
   }
@@ -59,6 +61,7 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
     menuCommands.forEach(command => {
       menuState.add(command.factory(true))
     })
+    menuState.add(this.inviteStudent(() => undefined))
   }
 
 }

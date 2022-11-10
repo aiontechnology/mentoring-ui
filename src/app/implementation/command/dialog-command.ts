@@ -78,7 +78,6 @@ export class DialogCommand<T> extends Command {
     return this.isEnabledFunction() && super.isEnabled
   }
 
-
   protected override doExecute(): MatDialogRef<any> {
     this.dialogManager.open(this.snackbarMessage, this.dataSupplier)
     return null;
