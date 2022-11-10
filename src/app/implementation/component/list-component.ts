@@ -20,13 +20,13 @@ import {Command} from '../command/command';
 import {MenuStateService} from '../services/menu-state.service';
 import {SingleItemCache} from '../state-management/single-item-cache';
 import {TableCache} from '../table-cache/table-cache';
-import {MenuRegisteringComponent} from './menu-registering-component';
+import {CommandArray, MenuRegisteringComponent} from './menu-registering-component';
 
 export abstract class ListComponent<T> extends MenuRegisteringComponent {
   protected constructor(
     // for super
     menuState: MenuStateService,
-    menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    menuCommands: CommandArray,
     // other
     public tableCache: TableCache<T>,
     private instanceCache?: SingleItemCache<T>,

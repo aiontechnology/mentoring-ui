@@ -17,15 +17,17 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Command} from '../../../../../implementation/command/command';
+import {MenuDialogCommandFactory, MenuDialogManagerConfiguration} from '../../../../../implementation/command/dialog-command-factory';
 import {DetailComponent} from '../../../../../implementation/component/detail-component';
 import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
 import {School} from '../../../../../implementation/models/school/school';
+import {Student} from '../../../../../implementation/models/student/student';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
 import {SCHOOL_INVITE_STUDENT} from '../../../providers/school-providers-factory';
-import {SCHOOL_DETAIL_MENU} from '../../../school-manager.module';
+import {SCHOOL_DETAIL_MENU, SCHOOL_GROUP} from '../../../school-manager.module';
+import {InviteStudentComponent} from '../../invite-student/invite-student.component';
 
 @Component({
   selector: 'ms-school-detail',
@@ -36,12 +38,12 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(SCHOOL_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(SCHOOL_DETAIL_MENU) menuCommands: CommandArray,
     route: ActivatedRoute,
     navService: NavigationService,
     // other
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
-    @Inject(SCHOOL_INVITE_STUDENT) private inviteStudent: (dataSupplier) => Command
+    @Inject(SCHOOL_INVITE_STUDENT) private inviteStudentDialogFactory: MenuDialogCommandFactory<Student, InviteStudentComponent>
   ) {
     super(menuState, menuCommands, route, navService)
   }
@@ -61,7 +63,14 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
     menuCommands.forEach(command => {
       menuState.add(command.factory(true))
     })
-    menuState.add(this.inviteStudent(() => undefined))
+    menuState.add(this.inviteStudentDialogFactory(
+      new MenuDialogManagerConfiguration<Student>(
+        () => { return {panelTitle: 'Invite New Student'}},
+        false,
+        'Student Invited',
+        'Invite New Student',
+        SCHOOL_GROUP,
+      )))
   }
 
 }

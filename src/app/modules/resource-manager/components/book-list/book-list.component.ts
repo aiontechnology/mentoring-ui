@@ -39,7 +39,7 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(BOOK_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(BOOK_LIST_MENU) menuCommands: CommandArray,
     @Inject(BOOK_TABLE_CACHE) tableCache: TableCache<Book>,
     @Inject(BOOK_INSTANCE_CACHE) bookInstanceCache: SingleItemCache<Book>,
     // other

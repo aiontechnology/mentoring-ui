@@ -23,13 +23,14 @@ import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
 import {SingleItemCache} from '../state-management/single-item-cache';
 import {DetailComponent} from './detail-component';
+import {CommandArray} from './menu-registering-component';
 
 export abstract class SchoolWatchingDetailComponent extends DetailComponent {
   private schoolWatchingDetailComponentSubscriptions: Subscription[] = []
 
   protected constructor(
     menuState: MenuStateService,
-    menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    menuCommands: CommandArray,
     route: ActivatedRoute,
     // other
     protected schoolInstanceCache: SingleItemCache<School>,

@@ -20,6 +20,7 @@ import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {ListComponent} from '../../../../implementation/component/list-component';
+import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {MENTOR_INSTANCE_CACHE} from '../../../../providers/global-mentor-providers-factory';
@@ -38,7 +39,7 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(MENTOR_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(MENTOR_LIST_MENU) menuCommands: CommandArray,
     @Inject(MENTOR_TABLE_CACHE) tableCache: TableCache<Mentor>,
     @Inject(MENTOR_INSTANCE_CACHE) mentorInstanceCache: SingleItemCache<Mentor>,
   ) {

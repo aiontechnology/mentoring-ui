@@ -16,63 +16,72 @@
 image: amazon/aws-cli
 
 pipelines:
-    branches:
-        '{MS-*,feature/*,bugfix/*}':
-            - step:
-                name: Build, test and deploy test environment
-                deployment: Test
-                size: 2x
-                services:
-                    - docker
-                script:
-                    - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
-                    - BRANCH=$(echo $BITBUCKET_BRANCH | sed "s/[^a-zA-Z0-9]/_/g")
-                    - TAG="$BRANCH-build.$BITBUCKET_BUILD_NUMBER"
-                    - aws ecr get-login-password | docker login --username AWS --password-stdin 661143960593.dkr.ecr.us-west-2.amazonaws.com
-                    - docker build -t ui:$TAG .
-                    - docker tag ui:$TAG $IMAGE:latest
-                    - docker tag ui:$TAG $IMAGE:$TAG
-                    - docker push $IMAGE:latest
-                    - docker push $IMAGE:$TAG
-        develop:
-            - step:
-                name: Build, test and deploy test environment
-                deployment: Test
-                size: 2x
-                services:
-                    - docker
-                script:
-                    - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
-                    - BRANCH=$(echo $BITBUCKET_BRANCH | sed "s/[^a-zA-Z0-9]/_/g")
-                    - TAG="$BRANCH-build.$BITBUCKET_BUILD_NUMBER"
-                    - aws ecr get-login-password | docker login --username AWS --password-stdin 661143960593.dkr.ecr.us-west-2.amazonaws.com
-                    - docker build -t ui:$TAG .
-                    - docker tag ui:$TAG $IMAGE:latest
-                    - docker tag ui:$TAG $IMAGE:test
-                    - docker tag ui:$TAG $IMAGE:$TAG
-                    - docker push $IMAGE:latest
-                    - docker push $IMAGE:test
-                    - docker push $IMAGE:$TAG
-        master:
-            - step:
-                name: Build, test and deploy prod environment
-                deployment: Production
-                size: 2x
-                services:
-                    - docker
-                script:
-                    - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
-                    - BRANCH=$(echo $BITBUCKET_BRANCH | sed "s/[^a-zA-Z0-9]/_/g")
-                    - TAG="$BRANCH-build.$BITBUCKET_BUILD_NUMBER"
-                    - aws ecr get-login-password | docker login --username AWS --password-stdin 661143960593.dkr.ecr.us-west-2.amazonaws.com
-                    - docker build -t ui:$TAG .
-                    - docker tag ui:$TAG $IMAGE:latest
-                    - docker tag ui:$TAG $IMAGE:prod
-                    - docker tag ui:$TAG $IMAGE:$TAG
-                    - docker push $IMAGE:latest
-                    - docker push $IMAGE:prod
-                    - docker push $IMAGE:$TAG
+  branches:
+    '{MS-*,feature/*,bugfix/*}':
+#      - step:
+#            name: Run Tests
+#            image:
+#              name: zenika/alpine-chrome:with-node
+#              parameters: --no-sandbox
+#            script:
+#              - npm install @angular/cli@14.1.3
+#              - npm install
+#              - npm run test-headless
+      - step:
+          name: Package Branch Environment Image
+          deployment: Test
+          size: 2x
+          services:
+            - docker
+          script:
+            - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
+            - BRANCH=$(echo $BITBUCKET_BRANCH | sed "s/[^a-zA-Z0-9]/_/g")
+            - TAG="$BRANCH-build.$BITBUCKET_BUILD_NUMBER"
+            - aws ecr get-login-password | docker login --username AWS --password-stdin 661143960593.dkr.ecr.us-west-2.amazonaws.com
+            - docker build -t ui:$TAG .
+            - docker tag ui:$TAG $IMAGE:latest
+            - docker tag ui:$TAG $IMAGE:$TAG
+            - docker push $IMAGE:latest
+            - docker push $IMAGE:$TAG
+    develop:
+      - step:
+          name: Package Test Environment Image
+          deployment: Test
+          size: 2x
+          services:
+            - docker
+          script:
+            - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
+            - BRANCH=$(echo $BITBUCKET_BRANCH | sed "s/[^a-zA-Z0-9]/_/g")
+            - TAG="$BRANCH-build.$BITBUCKET_BUILD_NUMBER"
+            - aws ecr get-login-password | docker login --username AWS --password-stdin 661143960593.dkr.ecr.us-west-2.amazonaws.com
+            - docker build -t ui:$TAG .
+            - docker tag ui:$TAG $IMAGE:latest
+            - docker tag ui:$TAG $IMAGE:test
+            - docker tag ui:$TAG $IMAGE:$TAG
+            - docker push $IMAGE:latest
+            - docker push $IMAGE:test
+            - docker push $IMAGE:$TAG
+    master:
+      - step:
+          name: Package Production Environment Image
+          deployment: Production
+          size: 2x
+          services:
+            - docker
+          script:
+            - IMAGE="661143960593.dkr.ecr.us-west-2.amazonaws.com/mentorsuccess-ui"
+            - BRANCH=$(echo $BITBUCKET_BRANCH | sed "s/[^a-zA-Z0-9]/_/g")
+            - TAG="$BRANCH-build.$BITBUCKET_BUILD_NUMBER"
+            - aws ecr get-login-password | docker login --username AWS --password-stdin 661143960593.dkr.ecr.us-west-2.amazonaws.com
+            - docker build -t ui:$TAG .
+            - docker tag ui:$TAG $IMAGE:latest
+            - docker tag ui:$TAG $IMAGE:prod
+            - docker tag ui:$TAG $IMAGE:$TAG
+            - docker push $IMAGE:latest
+            - docker push $IMAGE:prod
+            - docker push $IMAGE:$TAG
 definitions:
-    services:
-        docker:
-            memory: 4096
+  services:
+    docker:
+      memory: 4096

@@ -20,7 +20,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {SNACKBAR_MANAGER} from '../app.module';
 import {Command} from '../implementation/command/command';
-import {DialogCommand} from '../implementation/command/dialog-command';
+import {MenuDialogCommand} from '../implementation/command/menu-dialog-command';
 import {DialogManager} from '../implementation/command/dialog-manager';
 import {NavigationManager} from '../implementation/command/navigation-manager';
 import {SnackbarManager} from '../implementation/command/snackbar-manager';
@@ -41,10 +41,10 @@ export function listProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE ex
   const LIST_AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('list-after-closed-edit');
   const LIST_DIALOG_MANAGER_DELETE = new InjectionToken<DialogManager<ConfimationDialogComponent>>('list-dialog-manager-delete');
   const LIST_DIALOG_MANAGER_EDIT = new InjectionToken<DialogManager<COMPONENT_TYPE>>('list-dialog-manager-edit');
-  const LIST_MENU_ADD = new InjectionToken<DialogCommand<MODEL_TYPE>>('list-menu-add');
-  const LIST_MENU_EDIT = new InjectionToken<DialogCommand<MODEL_TYPE>>('list-menu-edit');
-  const LIST_MENU_DELETE = new InjectionToken<DialogCommand<MODEL_TYPE>>('list-menu-delete');
-  const LIST_POST_ACTION = new InjectionToken<DialogCommand<MODEL_TYPE>>('list-post-action');
+  const LIST_MENU_ADD = new InjectionToken<MenuDialogCommand<MODEL_TYPE>>('list-menu-add');
+  const LIST_MENU_EDIT = new InjectionToken<MenuDialogCommand<MODEL_TYPE>>('list-menu-edit');
+  const LIST_MENU_DELETE = new InjectionToken<MenuDialogCommand<MODEL_TYPE>>('list-menu-delete');
+  const LIST_POST_ACTION = new InjectionToken<MenuDialogCommand<MODEL_TYPE>>('list-post-action');
 
   return [
     // Navigation
@@ -111,8 +111,8 @@ export function listProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE ex
       provide: LIST_MENU_ADD,
       useFactory: (dialogManager: DialogManager<COMPONENT_TYPE>) =>
         (isAdminOnly: boolean) =>
-          DialogCommand<MODEL_TYPE>
-            .builder(`Add ${titleCase(name)}`, group, dialogManager, () => true)
+          MenuDialogCommand<MODEL_TYPE>
+            .builder(`Add ${titleCase(name)}`, group, dialogManager)
             .withAdminOnly(isAdminOnly)
             .withSnackbarMessage(`${titleCase(name)} Added`)
             .build(),
@@ -123,12 +123,14 @@ export function listProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE ex
       useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) =>
         (isAdminOnly: boolean) => {
           const service: SERVICE_TYPE = injector.get(serviceToken)
-          return DialogCommand<MODEL_TYPE>
-            .builder(`Edit ${titleCase(name)}`, group, dialogManager, () => service.selection.selected.length === 1)
+          const dialogCommand = MenuDialogCommand<MODEL_TYPE>
+            .builder(`Edit ${titleCase(name)}`, group, dialogManager)
             .withAdminOnly(isAdminOnly)
             .withDataSupplier(() => ({model: service.getFirstSelection()}))
             .withSnackbarMessage(`${titleCase(name)} Edited`)
             .build()
+          dialogCommand.enableIf(() => service.selection.selected.length === 1)
+          return dialogCommand
         },
       deps: [INJECTOR, LIST_DIALOG_MANAGER_EDIT]
     },
@@ -137,8 +139,8 @@ export function listProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE ex
       useFactory: (injector: Injector, dialogManager: DialogManager<ConfimationDialogComponent>) =>
         (isAdminOnly: boolean) => {
           const service: SERVICE_TYPE = injector.get(serviceToken)
-          return DialogCommand<MODEL_TYPE>
-            .builder(`Remove ${titleCase(name)}(s)`, group, dialogManager, () => service.selection.selected.length > 0)
+          const dialogCommand = MenuDialogCommand<MODEL_TYPE>
+            .builder(`Remove ${titleCase(name)}(s)`, group, dialogManager)
             .withAdminOnly(isAdminOnly)
             .withDataSupplier(() => {
               return {
@@ -149,6 +151,8 @@ export function listProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE ex
             })
             .withSnackbarMessage(`${titleCase(name)}(s) Removed`)
             .build()
+          dialogCommand.enableIf(() => service.selection.selected.length > 0)
+          return dialogCommand;
         },
       deps: [INJECTOR, LIST_DIALOG_MANAGER_DELETE]
     },

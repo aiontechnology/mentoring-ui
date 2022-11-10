@@ -18,7 +18,7 @@ import {ComponentType} from '@angular/cdk/portal';
 import {InjectionToken, Injector, INJECTOR} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Command} from '../implementation/command/command';
-import {DialogCommand} from '../implementation/command/dialog-command';
+import {MenuDialogCommand} from '../implementation/command/menu-dialog-command';
 import {DialogManager} from '../implementation/command/dialog-manager';
 import {AbstractTableCache} from '../implementation/table-cache/abstract-table-cache';
 import {titleCase} from '../implementation/shared/title-case';
@@ -30,8 +30,8 @@ export function updateProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE 
   componentType: ComponentType<COMPONENT_TYPE>,
   serviceToken: InjectionToken<SERVICE_TYPE>) {
 
-  const UPDATE_MENU = new InjectionToken<DialogCommand<MODEL_TYPE>>('update-menu');
-  const UPDATE_DIALOG_MANAGER = new InjectionToken<DialogCommand<MODEL_TYPE>>('update-dialog-manager');
+  const UPDATE_MENU = new InjectionToken<MenuDialogCommand<MODEL_TYPE>>('update-menu');
+  const UPDATE_DIALOG_MANAGER = new InjectionToken<MenuDialogCommand<MODEL_TYPE>>('update-dialog-manager');
 
   return [
     {
@@ -47,8 +47,8 @@ export function updateProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE 
       useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) =>
         (isAdminOnly: boolean) => {
           const service: SERVICE_TYPE = injector.get(serviceToken)
-          return DialogCommand<MODEL_TYPE>
-            .builder(`Update ${titleCase(name)}s`, group, dialogManager, () => true)
+          return MenuDialogCommand<MODEL_TYPE>
+            .builder(`Update ${titleCase(name)}s`, group, dialogManager)
             .withSnackbarMessage(`${titleCase(name)}s Updated`)
             .withDataSupplier(() => {
               return {localItems: () => service.tableDataSource.data}

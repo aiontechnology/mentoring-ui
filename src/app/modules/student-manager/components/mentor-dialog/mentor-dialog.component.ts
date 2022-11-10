@@ -46,7 +46,7 @@ export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogC
 
   constructor(
     // for super
-    @Inject(MAT_DIALOG_DATA) private data: any,
+    @Inject(MAT_DIALOG_DATA) public data: {model: Mentor, panelTitle: string},
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<MentorDialogComponent>,
     @Inject(MENTOR_DATA_SOURCE) mentorDataSource: DataSource<Mentor>,
@@ -56,7 +56,7 @@ export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogC
     @Inject(MENTOR_URI_SUPPLIER) private mentorUriSupplier: UriSupplier,
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
   ) {
-    super(data?.model as Mentor, formBuilder, dialogRef, mentorDataSource)
+    super(data?.model, formBuilder, dialogRef, mentorDataSource)
   }
 
   ngOnInit(): void {

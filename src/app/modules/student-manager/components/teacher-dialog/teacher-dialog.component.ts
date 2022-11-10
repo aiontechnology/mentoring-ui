@@ -22,6 +22,7 @@ import {grades} from '../../../../implementation/constants/grades';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
 import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
+import {Mentor} from '../../../../implementation/models/mentor/mentor';
 import {Teacher} from '../../../../implementation/models/teacher/teacher';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
@@ -42,15 +43,15 @@ export class TeacherDialogComponent extends DialogComponent<Teacher, TeacherDial
 
   constructor(
     // for super
+    @Inject(MAT_DIALOG_DATA) public data: {model: Teacher, panelTitle: string, grade: number},
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<TeacherDialogComponent>,
     @Inject(TEACHER_DATA_SOURCE) teacherDataSource: DataSource<Teacher>,
     // other
-    @Inject(MAT_DIALOG_DATA) private data: any,
     @Inject(TEACHER_INSTANCE_CACHE) private teacherInstanceCache: SingleItemCache<Teacher>,
     @Inject(TEACHER_COLLECTION_CACHE) private teacherCollectionCache: MultiItemCache<Teacher>,
   ) {
-    super(undefined, formBuilder, dialogRef, teacherDataSource)
+    super(data?.model, formBuilder, dialogRef, teacherDataSource)
   }
 
   ngOnInit(): void {

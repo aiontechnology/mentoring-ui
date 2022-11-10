@@ -19,6 +19,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../../implementation/command/command';
+import {EnableableCommand} from '../../../../../implementation/command/enableable-command';
+import {MenuCommand} from '../../../../../implementation/command/menu-command';
 import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
 import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
@@ -49,7 +51,7 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(STUDENT_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(STUDENT_DETAIL_MENU) menuCommands: CommandArray,
     route: ActivatedRoute,
     navService: NavigationService,
     @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
@@ -75,8 +77,8 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
 
   protected registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
     menuCommands.forEach(command => {
-      const c: Command = command.factory(false);
-      c.disableFunction = () => !this.schoolSessionInstanceCache.item?.isCurrent || false
+      const c: MenuCommand = command.factory(false);
+      c.enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent)
       menuState.add(c)
     })
   }

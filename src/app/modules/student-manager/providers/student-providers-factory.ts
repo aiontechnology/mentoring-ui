@@ -15,7 +15,7 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {DialogCommand} from '../../../implementation/command/dialog-command';
+import {MenuDialogCommand} from '../../../implementation/command/menu-dialog-command';
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
@@ -48,8 +48,8 @@ import {STUDENT_DETAIL_MENU, STUDENT_GROUP, STUDENT_LIST_MENU} from '../student-
 
 export const STUDENT_TABLE_CACHE = new InjectionToken<TableCache<Student>>('student-table-cache')
 export const STUDENT_SCHOOL_SESSION_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolSessionChangeHandler<Student>>('student-school-session-change-handler')
-export const STUDENT_ADD_TEACHER = new InjectionToken<(dataSupplier) => DialogCommand<Teacher>>('student-add-teacher')
-export const STUDENT_ADD_MENTOR = new InjectionToken<(dataSupplier) => DialogCommand<Mentor>>('student-add-mentor')
+export const STUDENT_ADD_TEACHER = new InjectionToken<(dataSupplier) => MenuDialogCommand<Teacher>>('student-add-teacher')
+export const STUDENT_ADD_MENTOR = new InjectionToken<(dataSupplier) => MenuDialogCommand<Mentor>>('student-add-mentor')
 
 export function studentProvidersFactory() {
   return [
@@ -57,8 +57,8 @@ export function studentProvidersFactory() {
       StudentDialogComponent, STUDENT_TABLE_CACHE),
     ...detailProvidersFactory<Student, StudentDialogComponent, TableCache<Student>>(STUDENT_DETAIL_MENU, STUDENT_GROUP, 'Student',
       ['/studentmanager'], StudentDialogComponent, STUDENT_TABLE_CACHE, STUDENT_INSTANCE_CACHE, STUDENT_INSTANCE_CACHE_UPDATER),
-    ...addDialogProvidersFactory<Teacher, TeacherDialogComponent>(STUDENT_ADD_TEACHER, 'Add Teacher', undefined, TeacherDialogComponent),
-    ...addDialogProvidersFactory<Mentor, MentorDialogComponent>(STUDENT_ADD_MENTOR, 'Add Mentor', undefined, MentorDialogComponent),
+    ...addDialogProvidersFactory<Teacher, TeacherDialogComponent>(STUDENT_ADD_TEACHER, TeacherDialogComponent),
+    ...addDialogProvidersFactory<Mentor, MentorDialogComponent>(STUDENT_ADD_MENTOR, MentorDialogComponent),
     {
       provide: STUDENT_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Student>) => new TableCache('StudentTableCache', dataSource),

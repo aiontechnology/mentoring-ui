@@ -21,6 +21,7 @@ import {Game} from 'src/app/implementation/models/game/game';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {DetailComponent} from '../../../../implementation/component/detail-component';
+import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {SingleItemCacheUpdater} from '../../../../implementation/state-management/single-item-cache-updater';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
@@ -37,7 +38,7 @@ export class GameDetailComponent extends DetailComponent implements OnInit, OnDe
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(GAME_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(GAME_DETAIL_MENU) menuCommands: CommandArray,
     route: ActivatedRoute,
     navService: NavigationService,
     // other

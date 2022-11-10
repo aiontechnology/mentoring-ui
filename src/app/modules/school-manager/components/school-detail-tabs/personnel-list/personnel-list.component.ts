@@ -20,6 +20,7 @@ import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../../implementation/command/command';
 import {ListComponent} from '../../../../../implementation/component/list-component';
+import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
 import {Personnel} from '../../../../../implementation/models/personnel/personnel';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
@@ -38,7 +39,7 @@ export class PersonnelListComponent extends ListComponent<Personnel> implements 
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(PERSONNEL_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(PERSONNEL_LIST_MENU) menuCommands: CommandArray,
     @Inject(PERSONNEL_TABLE_CACHE) tableCache: TableCache<Personnel>,
     @Inject(PERSONNEL_INSTANCE_CACHE) personnelInstanceCache: SingleItemCache<Personnel>,
   ) {

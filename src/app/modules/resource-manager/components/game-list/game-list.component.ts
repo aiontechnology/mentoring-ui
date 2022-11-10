@@ -39,7 +39,7 @@ export class GameListComponent extends ListComponent<Game> implements OnInit, On
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(GAME_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(GAME_LIST_MENU) menuCommands: CommandArray,
     @Inject(GAME_TABLE_CACHE) tableCache: TableCache<Game>,
     @Inject(GAME_INSTANCE_CACHE) gameInstanceCache: SingleItemCache<Game>,
     // other

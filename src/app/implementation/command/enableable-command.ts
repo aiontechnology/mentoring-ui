@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-import { TestBed } from '@angular/core/testing';
+import {BooleanSupplier} from '../types/types';
+import {Command} from './command';
 
-import { LinkService } from './link.service';
+/**
+ * An abstract
+ */
+export abstract class EnableableCommand extends Command {
+  private enableFunctions: BooleanSupplier[] = []
 
-xdescribe('LinkServiceService', () => {
-  let service: LinkService;
+  get isEnabled(): boolean {
+    return this.enableFunctions
+      .map(enabledFunction => enabledFunction())
+      .reduce((a, b) => a && b, true)
+  }
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(LinkService);
-  });
-
-  xit('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+  enableIf(enableFunction: BooleanSupplier) {
+    this.enableFunctions.push(enableFunction)
+  }
+}

@@ -14,39 +14,24 @@
  * limitations under the License.
  */
 
-import {MatDialogRef} from '@angular/material/dialog';
-import {MatSnackBar, MatSnackBarRef, SimpleSnackBar} from '@angular/material/snack-bar';
+import {Executable} from './executable';
 
-export abstract class Command {
-
-  isVisible = true;
-  private _disableFunction = () => false;
-
-  protected constructor(public title: string,
-                        public group: string,
-                        public isAdminOnly) {
-  }
-
+/**
+ * An abstract base class for executable 'command' objects.
+ */
+export abstract class Command implements Executable {
   execute(): void {
     this.doPreExecute();
-    const dialog = this.doExecute();
-    this.doPostExecute(dialog);
-  }
-
-  set disableFunction(disableFunction: () => boolean) {
-    this._disableFunction = disableFunction
-  }
-
-  get isEnabled(): boolean {
-    return !this._disableFunction()
+    this.doExecute();
+    this.doPostExecute();
   }
 
   protected doPreExecute(): void {
   }
 
-  protected abstract doExecute(): MatDialogRef<any>;
+  protected abstract doExecute(): void
 
-  protected doPostExecute(dialog: MatDialogRef<any>): void {
+  protected doPostExecute(): void {
   }
 }
 

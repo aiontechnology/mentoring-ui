@@ -19,6 +19,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
+import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {SchoolWatchingDetailComponent} from '../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
@@ -43,7 +44,7 @@ export class MentorDetailComponent extends SchoolWatchingDetailComponent impleme
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(MENTOR_DETAIL_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(MENTOR_DETAIL_MENU) menuCommands: CommandArray,
     route: ActivatedRoute,
     navService: NavigationService,
     @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,

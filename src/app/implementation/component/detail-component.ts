@@ -20,12 +20,12 @@ import {Command} from '../command/command';
 import {URI} from '../data/uri-supplier';
 import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
-import {MenuRegisteringComponent} from './menu-registering-component';
+import {CommandArray, MenuRegisteringComponent} from './menu-registering-component';
 
 export abstract class DetailComponent extends MenuRegisteringComponent {
   protected constructor(
     menuState: MenuStateService,
-    menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    menuCommands: CommandArray,
     protected route: ActivatedRoute,
     private navService?: NavigationService,
   ) {

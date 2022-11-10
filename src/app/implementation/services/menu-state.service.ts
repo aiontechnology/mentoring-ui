@@ -15,26 +15,27 @@
  */
 
 import {Injectable} from '@angular/core';
-import {Command} from '../command/command';
+import {EnableableCommand} from '../command/enableable-command';
+import {MenuCommand} from '../command/menu-command';
 import {Resettable} from '../state-management/resettable';
 import {UserSessionService} from './user-session.service';
 
 class Group {
-  menus = new Array<Command>();
+  menus = new Array<MenuCommand>();
 
   constructor(public isVisible: boolean) {
   }
 }
 
 @Injectable()
-export class MenuStateService implements Resettable{
+export class MenuStateService implements Resettable {
   groups = new Map<string, Group>();
   title: string;
 
   constructor(private userSessionService: UserSessionService) {}
 
-  get activeMenus(): Array<Command> {
-    const activeMenus = new Array<Command>();
+  get activeMenus(): Array<EnableableCommand> {
+    const activeMenus = new Array<EnableableCommand>();
     for (let group of this.groups.values()) {
       if (group.isVisible) {
         const validMenus = group.menus.filter(menu => this.userSessionService.isSysAdmin || !menu.isAdminOnly)
@@ -50,7 +51,7 @@ export class MenuStateService implements Resettable{
     })
   }
 
-  add(command: Command | Command[]): MenuStateService {
+  add(command: MenuCommand | MenuCommand[]): MenuStateService {
     if (Array.isArray(command)) {
       command.forEach(c => this.group(c.group).menus.push(c));
     } else {

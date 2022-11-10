@@ -16,23 +16,34 @@
 
 import {MatDialogRef} from '@angular/material/dialog';
 import {ObjectSupplier} from '../types/types';
-import {Command} from './command';
 import {DialogManager} from './dialog-manager';
+import {MenuCommand} from './menu-command';
 
-export class DialogCommand<T> extends Command {
-  static DialogCommandBuilder = class<T> {
+export class MenuDialogCommand<T> extends MenuCommand {
+  static DialogMenuCommandBuilder = class<T> {
+    private isAdminOnly: boolean
     private dataSupplier: ObjectSupplier
     private snackbarMessage: string
 
     constructor(
+      private title: string,
+      private group: string,
       private dialogManager: DialogManager<T>,
     ) {}
 
-    build(): DialogCommand<T> {
-      return new DialogCommand<T>(
+    build(): MenuDialogCommand<T> {
+      return new MenuDialogCommand<T>(
+        this.title,
+        this.group,
+        this.isAdminOnly,
         this.dataSupplier,
         this.dialogManager,
         this.snackbarMessage)
+    }
+
+    withAdminOnly(isAdminOnly: boolean) {
+      this.isAdminOnly = isAdminOnly
+      return this;
     }
 
     withDataSupplier(dataSupplier: ObjectSupplier) {
@@ -47,17 +58,22 @@ export class DialogCommand<T> extends Command {
   }
 
   private constructor(
+    title: string,
+    group: string,
+    isAdminOnly: boolean,
     private readonly dataSupplier: ObjectSupplier,
     private readonly dialogManager: DialogManager<T>,
     private readonly snackbarMessage: string,
   ) {
-    super();
+    super(title, group, isAdminOnly);
   }
 
   static builder<T>(
+    title: string,
+    group: string,
     dialogManager: DialogManager<T>,
   ) {
-    return new this.DialogCommandBuilder(dialogManager)
+    return new this.DialogMenuCommandBuilder(title, group, dialogManager)
   }
 
   protected override doExecute(): MatDialogRef<any> {
@@ -65,3 +81,4 @@ export class DialogCommand<T> extends Command {
     return null;
   }
 }
+

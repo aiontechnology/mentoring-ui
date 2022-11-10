@@ -15,7 +15,7 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {DialogCommand} from '../../../implementation/command/dialog-command';
+import {MenuDialogCommand} from '../../../implementation/command/menu-dialog-command';
 import {DataSource} from '../../../implementation/data/data-source';
 import {Mentor} from '../../../implementation/models/mentor/mentor';
 import {School} from '../../../implementation/models/school/school';
@@ -30,7 +30,7 @@ import {SchoolDialogComponent} from '../components/school-dialog/school-dialog.c
 import {SCHOOL_DETAIL_MENU, SCHOOL_GROUP, SCHOOL_LIST_MENU} from '../school-manager.module';
 
 export const SCHOOL_TABLE_CACHE = new InjectionToken<TableCache<School>>('school-table-cache')
-export const SCHOOL_INVITE_STUDENT = new InjectionToken<(dataSupplier) => DialogCommand<Mentor>>('school-invite-student')
+export const SCHOOL_INVITE_STUDENT = new InjectionToken<(dataSupplier) => MenuDialogCommand<Mentor>>('school-invite-student')
 
 export function schoolProvidersFactory() {
   return [
@@ -38,7 +38,7 @@ export function schoolProvidersFactory() {
       SchoolDialogComponent, SCHOOL_TABLE_CACHE),
     ...detailProvidersFactory<School, SchoolDialogComponent, TableCache<School>>(SCHOOL_DETAIL_MENU, SCHOOL_GROUP, 'School',
       ['/schoolsmanager'], SchoolDialogComponent, SCHOOL_TABLE_CACHE, SCHOOL_INSTANCE_CACHE, SCHOOL_INSTANCE_CACHE_UPDATER),
-    ...addDialogProvidersFactory<Student, InviteStudentComponent>(SCHOOL_INVITE_STUDENT, 'Invite New Student', SCHOOL_GROUP, InviteStudentComponent),
+    ...addDialogProvidersFactory<Student, InviteStudentComponent>(SCHOOL_INVITE_STUDENT, InviteStudentComponent),
     {
       provide: SCHOOL_TABLE_CACHE,
       useFactory: (dataSource: DataSource<School>) => new TableCache('SchoolTableCache', dataSource),

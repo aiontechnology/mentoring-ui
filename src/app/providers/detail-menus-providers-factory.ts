@@ -20,7 +20,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {SNACKBAR_MANAGER} from '../app.module';
 import {Command} from '../implementation/command/command';
-import {DialogCommand} from '../implementation/command/dialog-command';
+import {MenuDialogCommand} from '../implementation/command/menu-dialog-command';
 import {DialogManager} from '../implementation/command/dialog-manager';
 import {SnackbarManager} from '../implementation/command/snackbar-manager';
 import {SingleItemCache} from '../implementation/state-management/single-item-cache';
@@ -42,8 +42,8 @@ export function detailProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE 
   const DETAIL_AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('detail-after-closed-edit');
   const DETAIL_DIALOG_MANAGER_DELETE = new InjectionToken<DialogManager<ConfimationDialogComponent>>('detail-dialog-manager-delete');
   const DETAIL_DIALOG_MANAGER_EDIT = new InjectionToken<DialogManager<COMPONENT_TYPE>>('detail-dialog-manager-edit');
-  const DETAIL_MENU_DELETE = new InjectionToken<DialogCommand<MODEL_TYPE>>('detail-menu-delete');
-  const DETAIL_MENU_EDIT = new InjectionToken<DialogCommand<MODEL_TYPE>>('detail-menu-edit');
+  const DETAIL_MENU_DELETE = new InjectionToken<MenuDialogCommand<MODEL_TYPE>>('detail-menu-delete');
+  const DETAIL_MENU_EDIT = new InjectionToken<MenuDialogCommand<MODEL_TYPE>>('detail-menu-edit');
 
   return [
     // Detail delete manager
@@ -102,8 +102,8 @@ export function detailProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE 
       useFactory: (injector: Injector, dialogManager: DialogManager<ConfimationDialogComponent>) =>
         (isAdminOnly: boolean) => {
           const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
-          return DialogCommand<MODEL_TYPE>
-            .builder(`Remove ${titleCase(name)}`, group, dialogManager, () => true)
+          return MenuDialogCommand<MODEL_TYPE>
+            .builder(`Remove ${titleCase(name)}`, group, dialogManager)
             .withAdminOnly(isAdminOnly)
             .withSnackbarMessage(`${titleCase(name)} Removed`)
             .withDataSupplier(() => ({
@@ -121,8 +121,8 @@ export function detailProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE 
       useFactory: (injector: Injector, dialogManager: DialogManager<COMPONENT_TYPE>) =>
         (isAdminOnly: boolean) => {
           const singleItemCache: SingleItemCache<MODEL_TYPE> = injector.get(singleItemCacheToken)
-          return DialogCommand<MODEL_TYPE>
-            .builder(`Edit ${titleCase(name)}`, group, dialogManager, () => true)
+          return MenuDialogCommand<MODEL_TYPE>
+            .builder(`Edit ${titleCase(name)}`, group, dialogManager)
             .withAdminOnly(isAdminOnly)
             .withSnackbarMessage(`${titleCase(name)} Edited`)
             .withDataSupplier(() => ({model: singleItemCache.item}))

@@ -21,6 +21,8 @@ import {grades} from 'src/app/implementation/constants/grades';
 import {SchoolSession} from 'src/app/implementation/models/school/schoolsession';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
+import {EnableableCommand} from '../../../../implementation/command/enableable-command';
+import {MenuCommand} from '../../../../implementation/command/menu-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {equalsById} from '../../../../implementation/functions/comparison';
@@ -49,7 +51,7 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(STUDENT_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(STUDENT_LIST_MENU) menuCommands: CommandArray,
     @Inject(STUDENT_TABLE_CACHE) tableCache: TableCache<Student>,
     @Inject(STUDENT_INSTANCE_CACHE) studentInstanceCache: SingleItemCache<Student>,
     // other
@@ -87,8 +89,8 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
 
   protected override registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
     menuCommands.forEach(command => {
-      const c: Command = command.factory(false);
-      c.disableFunction = () => !this.schoolSessionInstanceCache.item?.isCurrent || false
+      const c: MenuCommand = command.factory(false);
+      c.enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent)
       menuState.add(c)
     })
   }

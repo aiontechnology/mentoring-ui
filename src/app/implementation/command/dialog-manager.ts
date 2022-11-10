@@ -15,16 +15,17 @@
  */
 
 import {ComponentType} from '@angular/cdk/portal';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 
 export class DialogManager<T> {
   static DialogManagerBuilder = class<T> {
     private afterCloseFunction: (string) => (any) => void;
     private config: object;
 
-    constructor(private dialog: MatDialog,
-                private componentType: ComponentType<T>) {
-    }
+    constructor(
+      private dialog: MatDialog,
+      private componentType: ComponentType<T>,
+    ) {}
 
     build(): DialogManager<T> {
       return new DialogManager(
@@ -46,14 +47,17 @@ export class DialogManager<T> {
     }
   }
 
-  private constructor(private dialog: MatDialog,
-                      private readonly componentType: ComponentType<T>,
-                      private readonly afterCloseFunction: (string) => (any) => void,
-                      private readonly config: object = {width: '700px', disableClose: true}) {
-  }
+  private constructor(
+    private dialog: MatDialog,
+    private readonly componentType: ComponentType<T>,
+    private readonly afterCloseFunction: (string) => (any) => void,
+    private readonly config: object = {width: '700px', disableClose: true},
+  ) {}
 
-  static builder<T>(dialog: MatDialog,
-                    componentType: ComponentType<T>) {
+  static builder<T>(
+    dialog: MatDialog,
+    componentType: ComponentType<T>,
+  ) {
     return new this.DialogManagerBuilder(dialog, componentType)
   }
 

@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-import {Command} from '../command/command';
+import {EnableableCommand} from '../command/enableable-command';
+import {MenuCommand} from '../command/menu-command';
 import {MenuStateService} from '../services/menu-state.service';
 
-export type CommandArray = { name: string, factory: (isAdminOnly: boolean) => Command }[]
+export type CommandArray = { name: string, factory: (isAdminOnly: boolean) => MenuCommand }[]
 
 export abstract class MenuRegisteringComponent {
   protected constructor(
     protected menuState: MenuStateService,
-    private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    private menuCommands: CommandArray,
   ) {
   }
 

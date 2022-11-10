@@ -18,15 +18,13 @@ import {ComponentType} from '@angular/cdk/portal';
 import {InjectionToken} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {SNACKBAR_MANAGER} from '../app.module';
-import {DialogCommand} from '../implementation/command/dialog-command';
+import {MenuDialogCommand} from '../implementation/command/menu-dialog-command';
 import {DialogManager} from '../implementation/command/dialog-manager';
+import {createMenuDialogCommandFactory} from '../implementation/command/dialog-command-factory';
 import {SnackbarManager} from '../implementation/command/snackbar-manager';
-import {titleCase} from '../implementation/shared/title-case';
 
 export function addDialogProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
-  injectionToken: InjectionToken<DialogCommand<MODEL_TYPE>>,
-  name: string,
-  group: string,
+  injectionToken: InjectionToken<MenuDialogCommand<MODEL_TYPE>>,
   componentType: ComponentType<COMPONENT_TYPE>,
 ) {
   const AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('list-after-closed-edit');
@@ -53,14 +51,7 @@ export function addDialogProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
     },
     {
       provide: injectionToken,
-      useFactory: (dialogManager: DialogManager<COMPONENT_TYPE>) =>
-        (dataSupplier: () => object) => {
-          return DialogCommand<MODEL_TYPE>
-            .builder(`${titleCase(name)}`, group, dialogManager, () => true)
-            .withDataSupplier(dataSupplier)
-            .withSnackbarMessage(`${titleCase(name)} Added`)
-            .build()
-        },
+      useFactory: (dialogManager: DialogManager<COMPONENT_TYPE>) => createMenuDialogCommandFactory(dialogManager),
       deps: [DIALOG_MANAGER_EDIT]
     },
   ]

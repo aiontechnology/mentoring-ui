@@ -18,7 +18,7 @@ import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Command} from '../../../../implementation/command/command';
+import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {ADMIN_LIST_MENU} from '../../providers/interest-list-menus';
 import {InterestCacheService} from '../../services/interests/interest-cache.service';
 
@@ -31,10 +31,11 @@ export class InterestListComponent implements OnInit, OnDestroy {
 
   displayedColumns: string[];
 
-  constructor(public interestCacheService: InterestCacheService,
-              private menuState: MenuStateService,
-              @Inject(ADMIN_LIST_MENU) private menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[]) {
-  }
+  constructor(
+    public interestCacheService: InterestCacheService,
+    private menuState: MenuStateService,
+    @Inject(ADMIN_LIST_MENU) private menuCommands: CommandArray,
+  ) {}
 
   @ViewChild(MatSort) set sort(sort: MatSort) {
     if (sort !== undefined) {

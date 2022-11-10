@@ -18,20 +18,20 @@ import {InjectionToken} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {SNACKBAR_MANAGER} from '../../../app.module';
 import {Command} from '../../../implementation/command/command';
-import {DialogCommand} from '../../../implementation/command/dialog-command';
+import {MenuDialogCommand} from '../../../implementation/command/menu-dialog-command';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {SnackbarManager} from '../../../implementation/command/snackbar-manager';
-import {BookDialogComponent} from '../../resource-manager/components/book-dialog/book-dialog.component';
 import {Book} from '../../../implementation/models/book/book';
+import {BookDialogComponent} from '../../resource-manager/components/book-dialog/book-dialog.component';
 import {InterestDialogComponent} from '../components/interest-dialog/interest-dialog.component';
 import {InterestInbound} from '../models/interest/interest-inbound';
 import {InterestCacheService} from '../services/interests/interest-cache.service';
 
 const ADMIN_LIST_AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('admin-list-after-closed-edit');
 const ADMIN_LIST_DIALOG_MANAGER_EDIT = new InjectionToken<DialogManager<BookDialogComponent>>('admin-list-dialog-manager-edit');
-const ADMIN_LIST_MENU_ADD = new InjectionToken<DialogCommand<Book>>('admin-list-menu-add');
-const ADMIN_LIST_MENU_EDIT = new InjectionToken<DialogCommand<Book>>('admin-list-menu-edit');
-const ADMIN_LIST_POST_ACTION = new InjectionToken<DialogCommand<Book>>('admin-list-post-action');
+const ADMIN_LIST_MENU_ADD = new InjectionToken<MenuDialogCommand<Book>>('admin-list-menu-add');
+const ADMIN_LIST_MENU_EDIT = new InjectionToken<MenuDialogCommand<Book>>('admin-list-menu-edit');
+const ADMIN_LIST_POST_ACTION = new InjectionToken<MenuDialogCommand<Book>>('admin-list-post-action');
 
 export const ADMIN_LIST_MENU = new InjectionToken<Command[]>('admin-list-menu');
 
@@ -62,8 +62,8 @@ export const interestListProviders = [
   {
     provide: ADMIN_LIST_MENU_ADD,
     useFactory: (dialogManager: DialogManager<InterestDialogComponent>) =>
-      (isAdminOnly: boolean) => DialogCommand<InterestInbound>
-        .builder('Add Interest', 'interest', dialogManager, () => true)
+      (isAdminOnly: boolean) => MenuDialogCommand<InterestInbound>
+        .builder('Add Interest', 'interest', dialogManager)
         .withAdminOnly(isAdminOnly)
         .withSnackbarMessage('Interest added')
         .build(),
@@ -72,12 +72,16 @@ export const interestListProviders = [
   {
     provide: ADMIN_LIST_MENU_EDIT,
     useFactory: (interestCacheComponent: InterestCacheService, dialogManager: DialogManager<InterestDialogComponent>) =>
-      (isAdminOnly: boolean) => DialogCommand<InterestInbound>
-        .builder('Edit Interest', 'interest', dialogManager, () => interestCacheComponent.selection.selected.length === 1)
-        .withAdminOnly(isAdminOnly)
-        .withDataSupplier(() => ({model: interestCacheComponent.getFirstSelection()}))
-        .withSnackbarMessage('Interest edited')
-        .build(),
+      (isAdminOnly: boolean) => {
+        const dialogCommand = MenuDialogCommand<InterestInbound>
+          .builder('Edit Interest', 'interest', dialogManager)
+          .withAdminOnly(isAdminOnly)
+          .withDataSupplier(() => ({model: interestCacheComponent.getFirstSelection()}))
+          .withSnackbarMessage('Interest edited')
+          .build()
+        dialogCommand.enableIf(() => interestCacheComponent.selection.selected.length === 1)
+        return dialogCommand
+      },
     deps: [InterestCacheService, ADMIN_LIST_DIALOG_MANAGER_EDIT]
   },
   {

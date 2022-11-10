@@ -20,6 +20,7 @@ import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {Command} from '../../../../implementation/command/command';
 import {ListComponent} from '../../../../implementation/component/list-component';
+import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {School} from '../../../../implementation/models/school/school';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
@@ -38,7 +39,7 @@ export class SchoolListComponent extends ListComponent<School> implements OnInit
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(SCHOOL_LIST_MENU) menuCommands: { name: string, factory: (isAdminOnly: boolean) => Command }[],
+    @Inject(SCHOOL_LIST_MENU) menuCommands: CommandArray,
     @Inject(SCHOOL_TABLE_CACHE) tableCache: TableCache<School>,
     @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
   ) {

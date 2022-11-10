@@ -39,12 +39,8 @@
   </button>
   <mat-menu #menu="matMenu">
     <ng-container *ngFor="let menu of menuState.activeMenus">
-      <button
-        *ngIf="menu.isVisible"
-        mat-menu-item
-        (click)="menu.execute()"
-        [disabled]="!menu.isEnabled">
-          {{ menu.title }}
+      <button mat-menu-item (click)="menu.execute()" [disabled]="!menu.isEnabled">
+        {{ menu.title }}
       </button>
     </ng-container>
   </mat-menu>
