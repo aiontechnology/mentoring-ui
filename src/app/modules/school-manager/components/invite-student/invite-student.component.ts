@@ -21,7 +21,7 @@ import {DialogComponent} from '../../../../implementation/component/dialog-compo
 import {DataSource} from '../../../../implementation/data/data-source';
 import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
 import {Invitation} from '../../../../implementation/models/workflow/invitation';
-import {INVITATION_DATA_SOURCE} from '../../../../providers/global-invitation-providers-factory';
+import {INVITATION_DATA_SOURCE} from '../../../../providers/global/global-invitation-providers-factory';
 
 @Component({
   selector: 'ms-invite-student',

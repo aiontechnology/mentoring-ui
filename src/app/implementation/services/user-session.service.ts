@@ -16,7 +16,7 @@
 
 import {Inject, Injectable} from '@angular/core';
 import {JwtHelperService} from '@auth0/angular-jwt';
-import {SCHOOL_INSTANCE_CACHE_UPDATER} from '../../providers/global-school-providers-factory';
+import {SCHOOL_INSTANCE_CACHE_UPDATER} from '../../providers/global/global-school-providers-factory';
 import {School} from '../models/school/school';
 import {SingleItemCacheUpdater} from '../state-management/single-item-cache-updater';
 

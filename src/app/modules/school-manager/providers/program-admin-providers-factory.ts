@@ -25,8 +25,8 @@ import {
   PROGRAM_ADMIN_INSTANCE_CACHE,
   PROGRAM_ADMIN_INSTANCE_CACHE_UPDATER, PROGRAM_ADMIN_SCHOOL_CHANGE_RESETTER,
   PROGRAM_ADMIN_URI_SUPPLIER
-} from '../../../providers/global-program-admin-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
+} from '../../../providers/global/global-program-admin-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global/global-school-providers-factory';
 import {ProgramAdminDialogComponent} from '../components/school-detail-tabs/program-admin-dialog/program-admin-dialog.component';
 import {PROGRAM_ADMIN_GROUP, PROGRAM_ADMIN_MENU} from '../school-manager.module';
 import {programAdminMenuProvidersFactory} from './program-admin-menu-providers-factory';

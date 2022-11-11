@@ -32,8 +32,8 @@ import {
   MENTOR_DATA_SOURCE,
   MENTOR_INSTANCE_CACHE,
   MENTOR_URI_SUPPLIER
-} from '../../../../providers/global-mentor-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
+} from '../../../../providers/global/global-mentor-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 
 @Component({
   selector: 'ms-mentor-dialog',

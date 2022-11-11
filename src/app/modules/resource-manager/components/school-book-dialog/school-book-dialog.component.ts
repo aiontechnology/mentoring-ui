@@ -22,8 +22,8 @@ import {Book} from 'src/app/implementation/models/book/book';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {BOOK_DATA_SOURCE} from '../../../../providers/global-book-providers-factory';
-import {SCHOOL_BOOK_DATA_SOURCE} from '../../../../providers/global-school-book-providers-factory';
+import {BOOK_DATA_SOURCE} from '../../../../providers/global/global-book-providers-factory';
+import {SCHOOL_BOOK_DATA_SOURCE} from '../../../../providers/global/global-school-book-providers-factory';
 import {DropListBooks} from '../../../shared/components/school-resource/drop-list-books';
 import {SCHOOL_BOOK_TABLE_CACHE} from '../../providers/school-book-providers-factory';
 

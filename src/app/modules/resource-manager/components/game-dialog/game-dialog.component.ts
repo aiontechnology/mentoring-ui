@@ -25,7 +25,7 @@ import {Grade} from 'src/app/implementation/types/grade';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {GAME_DATA_SOURCE} from '../../../../providers/global-game-providers-factory';
+import {GAME_DATA_SOURCE} from '../../../../providers/global/global-game-providers-factory';
 
 @Component({
   selector: 'ms-game-dialog',

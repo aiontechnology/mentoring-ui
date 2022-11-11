@@ -25,7 +25,7 @@ import {CommandArray} from '../../../../implementation/component/menu-registerin
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {GAME_INSTANCE_CACHE} from '../../../../providers/global-game-providers-factory';
+import {GAME_INSTANCE_CACHE} from '../../../../providers/global/global-game-providers-factory';
 import {GAME_LIST_MENU, GAME_TABLE_CACHE} from '../../providers/game-providers-factory';
 
 @Component({

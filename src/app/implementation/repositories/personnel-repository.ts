@@ -18,7 +18,7 @@ import {Inject, Injectable} from '@angular/core';
 import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../data/uri-supplier';
-import {PERSONNEL_URI_SUPPLIER} from '../../providers/global-personnel-providers-factory';
+import {PERSONNEL_URI_SUPPLIER} from '../../providers/global/global-personnel-providers-factory';
 import {Personnel} from '../models/personnel/personnel';
 
 @Injectable()

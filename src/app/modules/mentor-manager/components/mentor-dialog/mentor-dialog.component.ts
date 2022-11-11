@@ -26,8 +26,8 @@ import {emailAddressValidator} from '../../../../implementation/form-validation/
 import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
 import {School} from '../../../../implementation/models/school/school';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global-mentor-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
+import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global/global-mentor-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 import {Mentor} from '../../../../implementation/models/mentor/mentor';
 
 @Component({

@@ -15,19 +15,19 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {environment} from '../../environments/environment';
-import {Cache} from '../implementation/data/cache';
-import {DataSource} from '../implementation/data/data-source';
-import {Repository} from '../implementation/data/repository';
-import {Mentor} from '../implementation/models/mentor/mentor';
-import {School} from '../implementation/models/school/school';
-import {SchoolChangeDataSourceResetter} from '../implementation/state-management/school-change-data-source-resetter';
-import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
-import {UriSupplier} from '../implementation/data/uri-supplier';
-import {Personnel} from '../implementation/models/personnel/personnel';
-import {ProgramAdmin} from '../implementation/models/program-admin/program-admin';
-import {ProgramAdminRepository} from '../implementation/repositories/program-admin-repository';
-import {SingleItemCache} from '../implementation/state-management/single-item-cache';
+import {environment} from '../../../environments/environment';
+import {Cache} from '../../implementation/data/cache';
+import {DataSource} from '../../implementation/data/data-source';
+import {Repository} from '../../implementation/data/repository';
+import {Mentor} from '../../implementation/models/mentor/mentor';
+import {School} from '../../implementation/models/school/school';
+import {SchoolChangeDataSourceResetter} from '../../implementation/state-management/school-change-data-source-resetter';
+import {SingleItemCacheUpdater} from '../../implementation/state-management/single-item-cache-updater';
+import {UriSupplier} from '../../implementation/data/uri-supplier';
+import {Personnel} from '../../implementation/models/personnel/personnel';
+import {ProgramAdmin} from '../../implementation/models/program-admin/program-admin';
+import {ProgramAdminRepository} from '../../implementation/repositories/program-admin-repository';
+import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
 import {MENTOR_CACHE, MENTOR_SCHOOL_CHANGE_RESETTER} from './global-mentor-providers-factory';
 import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 

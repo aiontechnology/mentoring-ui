@@ -24,7 +24,7 @@ import {DataSource} from '../../../../../implementation/data/data-source';
 import {emailAddressValidator} from '../../../../../implementation/form-validation/email-address-validator';
 import {phoneValidator} from '../../../../../implementation/form-validation/phone-validator';
 import {Teacher} from '../../../../../implementation/models/teacher/teacher';
-import {TEACHER_DATA_SOURCE} from '../../../../../providers/global-teacher-providers-factory';
+import {TEACHER_DATA_SOURCE} from '../../../../../providers/global/global-teacher-providers-factory';
 
 @Component({
   selector: 'ms-teacher-dialog',
@@ -36,12 +36,12 @@ export class TeacherDialogComponent extends DialogComponent<Teacher, TeacherDial
 
   constructor(
     // for super
-    @Inject(MAT_DIALOG_DATA) data: any,
+    @Inject(MAT_DIALOG_DATA) public data: { model: Teacher, panelTitle: string },
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<TeacherDialogComponent>,
     @Inject(TEACHER_DATA_SOURCE) teacherDataSource: DataSource<Teacher>,
   ) {
-    super(data?.model as Teacher, formBuilder, dialogRef, teacherDataSource)
+    super(data?.model, formBuilder, dialogRef, teacherDataSource)
   }
 
   ngOnInit(): void {

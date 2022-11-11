@@ -19,7 +19,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SchoolSession} from 'src/app/implementation/models/school/schoolsession';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {SCHOOL_SESSION_DATA_SOURCE} from '../../../../../providers/global-school-session-providers-factory';
+import {SCHOOL_SESSION_DATA_SOURCE} from '../../../../../providers/global/global-school-session-providers-factory';
 
 @Component({
   selector: 'ms-school-session-dialog',

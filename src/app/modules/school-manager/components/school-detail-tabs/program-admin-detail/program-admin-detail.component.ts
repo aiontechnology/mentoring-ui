@@ -24,9 +24,9 @@ import {School} from '../../../../../implementation/models/school/school';
 import {SchoolSession} from '../../../../../implementation/models/school/schoolsession';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {ProgramAdmin} from '../../../../../implementation/models/program-admin/program-admin';
-import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_INSTANCE_CACHE} from '../../../../../providers/global-program-admin-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
-import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global-school-session-providers-factory';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_INSTANCE_CACHE} from '../../../../../providers/global/global-program-admin-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global/global-school-session-providers-factory';
 import {PROGRAM_ADMIN_MENU} from '../../../school-manager.module';
 
 @Component({

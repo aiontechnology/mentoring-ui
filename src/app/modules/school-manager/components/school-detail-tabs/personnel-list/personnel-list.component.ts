@@ -24,7 +24,7 @@ import {CommandArray} from '../../../../../implementation/component/menu-registe
 import {Personnel} from '../../../../../implementation/models/personnel/personnel';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
-import {PERSONNEL_INSTANCE_CACHE} from '../../../../../providers/global-personnel-providers-factory';
+import {PERSONNEL_INSTANCE_CACHE} from '../../../../../providers/global/global-personnel-providers-factory';
 import {PERSONNEL_TABLE_CACHE} from '../../../providers/personnel-providers-factory';
 import {PERSONNEL_LIST_MENU} from '../../../school-manager.module';
 

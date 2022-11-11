@@ -15,15 +15,15 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {environment} from '../../environments/environment';
-import {Cache} from '../implementation/data/cache';
-import {DataSource} from '../implementation/data/data-source';
-import {Repository} from '../implementation/data/repository';
-import {SingleItemCache} from '../implementation/state-management/single-item-cache';
-import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
-import {UriSupplier} from '../implementation/data/uri-supplier';
-import {Book} from '../implementation/models/book/book';
-import {BookRepository} from '../implementation/repositories/book-repository';
+import {environment} from '../../../environments/environment';
+import {Cache} from '../../implementation/data/cache';
+import {DataSource} from '../../implementation/data/data-source';
+import {Repository} from '../../implementation/data/repository';
+import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
+import {SingleItemCacheUpdater} from '../../implementation/state-management/single-item-cache-updater';
+import {UriSupplier} from '../../implementation/data/uri-supplier';
+import {Book} from '../../implementation/models/book/book';
+import {BookRepository} from '../../implementation/repositories/book-repository';
 
 export const BOOK_DATA_SOURCE = new InjectionToken<DataSource<Book>>('book-data-source');
 export const BOOK_CACHE = new InjectionToken<Cache<Book>>('book-cache');

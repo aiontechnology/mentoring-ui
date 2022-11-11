@@ -31,7 +31,7 @@ import {
   TEACHER_COLLECTION_CACHE,
   TEACHER_DATA_SOURCE,
   TEACHER_INSTANCE_CACHE
-} from '../../../../providers/global-teacher-providers-factory';
+} from '../../../../providers/global/global-teacher-providers-factory';
 
 @Component({
   selector: 'ms-teacher-dialog',
@@ -43,7 +43,7 @@ export class TeacherDialogComponent extends DialogComponent<Teacher, TeacherDial
 
   constructor(
     // for super
-    @Inject(MAT_DIALOG_DATA) public data: {model: Teacher, panelTitle: string, grade: number},
+    @Inject(MAT_DIALOG_DATA) public data: { model: Teacher, panelTitle: string, grade: number },
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<TeacherDialogComponent>,
     @Inject(TEACHER_DATA_SOURCE) teacherDataSource: DataSource<Teacher>,

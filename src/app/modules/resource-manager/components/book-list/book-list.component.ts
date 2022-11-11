@@ -25,7 +25,7 @@ import {ListComponent} from '../../../../implementation/component/list-component
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {Book} from '../../../../implementation/models/book/book';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {BOOK_INSTANCE_CACHE} from '../../../../providers/global-book-providers-factory';
+import {BOOK_INSTANCE_CACHE} from '../../../../providers/global/global-book-providers-factory';
 import {BOOK_LIST_MENU, BOOK_TABLE_CACHE} from '../../providers/book-providers-factory';
 
 @Component({

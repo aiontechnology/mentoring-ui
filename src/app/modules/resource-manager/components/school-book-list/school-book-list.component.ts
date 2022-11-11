@@ -26,7 +26,7 @@ import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {Book} from '../../../../implementation/models/book/book';
 import {UserSessionService} from '../../../../implementation/services/user-session.service';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../../providers/global-school-book-providers-factory';
+import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../../providers/global/global-school-book-providers-factory';
 import {SCHOOL_BOOK_LIST_MENU, SCHOOL_BOOK_TABLE_CACHE} from '../../providers/school-book-providers-factory';
 
 @Component({

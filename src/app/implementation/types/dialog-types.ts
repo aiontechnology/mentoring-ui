@@ -14,23 +14,7 @@
  * limitations under the License.
  */
 
-import {BooleanSupplier} from '../types/types';
-import {Command} from './command';
-
 /**
- * An abstract
+ * Factory type that returns a result handler when given a snackbar message.
  */
-export abstract class EnableableCommand extends Command {
-  private enableFunctions: BooleanSupplier[] = []
-
-  get isEnabled(): boolean {
-    return this.enableFunctions
-      .map(enabledFunction => enabledFunction())
-      .reduce((a, b) => a && b, true)
-  }
-
-  enableIf(enableFunction: BooleanSupplier) {
-    this.enableFunctions.push(enableFunction)
-    return this
-  }
-}
+export type ClosedResultType = (snackbarMessage: string) => (result: any) => void

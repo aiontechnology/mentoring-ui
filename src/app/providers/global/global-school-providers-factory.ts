@@ -15,21 +15,21 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {environment} from '../../environments/environment';
-import {Cache} from '../implementation/data/cache';
-import {DataSource} from '../implementation/data/data-source';
-import {Mentor} from '../implementation/models/mentor/mentor';
-import {MultiItemCache} from '../implementation/state-management/multi-item-cache';
-import {Repository} from '../implementation/data/repository';
-import {PersistentSingleItemCache} from '../implementation/state-management/persistent-single-item-cache';
-import {SchoolChangeDataSourceResetter} from '../implementation/state-management/school-change-data-source-resetter';
-import {SingleItemCache} from '../implementation/state-management/single-item-cache';
-import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
-import {UriSupplier} from '../implementation/data/uri-supplier';
-import {School} from '../implementation/models/school/school';
-import {SchoolRepository} from '../implementation/repositories/school-repository';
-import {SCHOOL_ID} from '../implementation/route/route-constants';
-import {RouteElementWatcher} from '../implementation/route/route-element-watcher.service';
+import {environment} from '../../../environments/environment';
+import {Cache} from '../../implementation/data/cache';
+import {DataSource} from '../../implementation/data/data-source';
+import {Mentor} from '../../implementation/models/mentor/mentor';
+import {MultiItemCache} from '../../implementation/state-management/multi-item-cache';
+import {Repository} from '../../implementation/data/repository';
+import {PersistentSingleItemCache} from '../../implementation/state-management/persistent-single-item-cache';
+import {SchoolChangeDataSourceResetter} from '../../implementation/state-management/school-change-data-source-resetter';
+import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
+import {SingleItemCacheUpdater} from '../../implementation/state-management/single-item-cache-updater';
+import {UriSupplier} from '../../implementation/data/uri-supplier';
+import {School} from '../../implementation/models/school/school';
+import {SchoolRepository} from '../../implementation/repositories/school-repository';
+import {SCHOOL_ID} from '../../implementation/route/route-constants';
+import {RouteElementWatcher} from '../../implementation/route/route-element-watcher.service';
 import {MENTOR_CACHE, MENTOR_SCHOOL_CHANGE_RESETTER} from './global-mentor-providers-factory';
 
 export const SCHOOL_URI_SUPPLIER = new InjectionToken<UriSupplier>('school-uri-supplier');

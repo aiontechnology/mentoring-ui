@@ -26,7 +26,7 @@ import {SingleItemCache} from '../../../../implementation/state-management/singl
 import {SingleItemCacheUpdater} from '../../../../implementation/state-management/single-item-cache-updater';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {GAME_ID} from '../../../../implementation/route/route-constants';
-import {GAME_INSTANCE_CACHE, GAME_INSTANCE_CACHE_UPDATER} from '../../../../providers/global-game-providers-factory';
+import {GAME_INSTANCE_CACHE, GAME_INSTANCE_CACHE_UPDATER} from '../../../../providers/global/global-game-providers-factory';
 import {GAME_DETAIL_MENU} from '../../providers/game-providers-factory';
 
 @Component({

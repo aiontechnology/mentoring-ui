@@ -24,7 +24,7 @@ import {CommandArray} from '../../../../implementation/component/menu-registerin
 import {School} from '../../../../implementation/models/school/school';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 import {SCHOOL_TABLE_CACHE} from '../../providers/school-providers-factory';
 import {SCHOOL_LIST_MENU} from '../../school-manager.module';
 

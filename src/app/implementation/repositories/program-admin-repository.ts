@@ -17,7 +17,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
 import {ProgramAdmin} from '../models/program-admin/program-admin';
-import {PROGRAM_ADMIN_URI_SUPPLIER} from '../../providers/global-program-admin-providers-factory';
+import {PROGRAM_ADMIN_URI_SUPPLIER} from '../../providers/global/global-program-admin-providers-factory';
 import {Repository} from '../data/repository';
 import {UriSupplier} from '../data/uri-supplier';
 

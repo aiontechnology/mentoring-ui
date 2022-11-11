@@ -20,9 +20,9 @@ import {DataSource} from '../../../implementation/data/data-source';
 import {Book} from '../../../implementation/models/book/book';
 import {School} from '../../../implementation/models/school/school';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
-import {BOOK_DATA_SOURCE, BOOK_INSTANCE_CACHE, BOOK_INSTANCE_CACHE_UPDATER} from '../../../providers/global-book-providers-factory';
-import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
+import {detailProvidersFactory} from '../../../providers/legacy/detail-menus-providers-factory';
+import {BOOK_DATA_SOURCE, BOOK_INSTANCE_CACHE, BOOK_INSTANCE_CACHE_UPDATER} from '../../../providers/global/global-book-providers-factory';
+import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
 import {BookDialogComponent} from '../components/book-dialog/book-dialog.component';
 import {BOOK_GROUP} from '../resource-manager.module';
 

@@ -25,8 +25,8 @@ import {SingleItemCache} from '../../../../../implementation/state-management/si
 import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
 import {Personnel} from '../../../../../implementation/models/personnel/personnel';
 import {School} from '../../../../../implementation/models/school/school';
-import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../../../../providers/global-personnel-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
+import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../../../../providers/global/global-personnel-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 
 @Component({
   selector: 'ms-personnel-dialog',

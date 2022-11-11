@@ -17,11 +17,11 @@
 import {ComponentType} from '@angular/cdk/portal';
 import {InjectionToken} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {SNACKBAR_MANAGER} from '../app.module';
-import {MenuDialogCommand} from '../implementation/command/menu-dialog-command';
-import {DialogManager} from '../implementation/command/dialog-manager';
-import {createMenuDialogCommandFactory} from '../implementation/command/dialog-command-factory';
-import {SnackbarManager} from '../implementation/command/snackbar-manager';
+import {MenuDialogCommand} from '../../implementation/command/menu-dialog-command';
+import {DialogManager} from '../../implementation/command/dialog-manager';
+import {createDialogCommandFactory, createMenuDialogCommandFactory} from '../../implementation/command/dialog-command-factory';
+import {SnackbarManager} from '../../implementation/managers/snackbar-manager';
+import {SNACKBAR_MANAGER} from '../global/global-snackbar-providers';
 
 export function addDialogProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
   injectionToken: InjectionToken<MenuDialogCommand<MODEL_TYPE>>,
@@ -51,7 +51,7 @@ export function addDialogProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
     },
     {
       provide: injectionToken,
-      useFactory: (dialogManager: DialogManager<COMPONENT_TYPE>) => createMenuDialogCommandFactory(dialogManager),
+      useFactory: (dialogManager: DialogManager<COMPONENT_TYPE>) => createDialogCommandFactory(dialogManager),
       deps: [DIALOG_MANAGER_EDIT]
     },
   ]

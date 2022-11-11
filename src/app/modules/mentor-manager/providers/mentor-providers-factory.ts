@@ -23,7 +23,7 @@ import {School} from '../../../implementation/models/school/school';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
+import {detailProvidersFactory} from '../../../providers/legacy/detail-menus-providers-factory';
 import {
   MENTOR_CACHE,
   MENTOR_DATA_SOURCE,
@@ -31,8 +31,8 @@ import {
   MENTOR_INSTANCE_CACHE_UPDATER,
   MENTOR_SCHOOL_CHANGE_RESETTER,
   MENTOR_URI_SUPPLIER
-} from '../../../providers/global-mentor-providers-factory';
-import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
+} from '../../../providers/global/global-mentor-providers-factory';
+import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
 import {MentorDialogComponent} from '../components/mentor-dialog/mentor-dialog.component';
 import {MENTOR_DETAIL_MENU, MENTOR_GROUP, MENTOR_LIST_MENU} from '../mentor-manager.module';
 

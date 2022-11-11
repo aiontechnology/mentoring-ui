@@ -18,15 +18,15 @@ import {ComponentType} from '@angular/cdk/portal';
 import {InjectionToken, INJECTOR, Injector} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
-import {SNACKBAR_MANAGER} from '../app.module';
-import {Command} from '../implementation/command/command';
-import {MenuDialogCommand} from '../implementation/command/menu-dialog-command';
-import {DialogManager} from '../implementation/command/dialog-manager';
-import {NavigationManager} from '../implementation/command/navigation-manager';
-import {SnackbarManager} from '../implementation/command/snackbar-manager';
-import {titleCase} from '../implementation/shared/title-case';
-import {TableCache} from '../implementation/table-cache/table-cache';
-import {ConfimationDialogComponent} from '../modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {Command} from '../../implementation/command/command';
+import {MenuDialogCommand} from '../../implementation/command/menu-dialog-command';
+import {DialogManager} from '../../implementation/command/dialog-manager';
+import {NavigationManager} from '../../implementation/command/navigation-manager';
+import {SnackbarManager} from '../../implementation/managers/snackbar-manager';
+import {titleCase} from '../../implementation/shared/title-case';
+import {TableCache} from '../../implementation/table-cache/table-cache';
+import {ConfimationDialogComponent} from '../../modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {SNACKBAR_MANAGER} from '../global/global-snackbar-providers';
 
 export function listProvidersFactory<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
   injectionToken: InjectionToken<Command[]>,

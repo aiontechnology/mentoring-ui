@@ -30,9 +30,9 @@ import {
   SCHOOL_BOOK_CACHE,
   SCHOOL_BOOK_DATA_SOURCE, SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER,
   SCHOOL_BOOK_URI_SUPPLIER
-} from '../../../providers/global-school-book-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
-import {updateProvidersFactory} from '../../../providers/update-menus-providers-factory';
+} from '../../../providers/global/global-school-book-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global/global-school-providers-factory';
+import {updateProvidersFactory} from '../../../providers/legacy/update-menus-providers-factory';
 import {SchoolBookDialogComponent} from '../components/school-detail-tabs/school-book-dialog/school-book-dialog.component';
 import {SCHOOL_BOOK_GROUP, SCHOOL_BOOK_LIST_MENU} from '../school-manager.module';
 

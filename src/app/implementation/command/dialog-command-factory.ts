@@ -18,11 +18,17 @@ import {DialogCommand} from './dialog-command';
 import {MenuDialogCommand} from './menu-dialog-command';
 import {DialogManager} from './dialog-manager';
 
+/**
+ * Class that represents the dataSupplier property of the MenuDialogManagerConfiguration
+ */
 export class DataSupplier<MODEL_TYPE> {
   model?: MODEL_TYPE
   panelTitle: string
 }
 
+/**
+ * Class that represents configuration parameters that can be provided in order to create a MenuDialogCommand
+ */
 export class MenuDialogManagerConfiguration<MODEL_TYPE> {
   constructor(
     public dataSupplier: () => DataSupplier<MODEL_TYPE>,
@@ -33,9 +39,16 @@ export class MenuDialogManagerConfiguration<MODEL_TYPE> {
   ) {}
 }
 
+/**
+ * Type that represents a function that takes a MenuDialogConfiguration and returns a MenuDialogCommand
+ */
 export type MenuDialogCommandFactory<MODEL_TYPE, COMPONENT_TYPE> =
   (config: MenuDialogManagerConfiguration<MODEL_TYPE>) => MenuDialogCommand<COMPONENT_TYPE>
 
+/**
+ * Function that accepts a DialogManager and returns a function that takes a MenuDialogManagerConfiguration and returns a MenuDialogCommand.
+ * @param dialogManager
+ */
 export function createMenuDialogCommandFactory<MODEL_TYPE, COMPONENT_TYPE>(dialogManager: DialogManager<COMPONENT_TYPE>):
   MenuDialogCommandFactory<MODEL_TYPE, COMPONENT_TYPE> {
   return (config: MenuDialogManagerConfiguration<MODEL_TYPE>) =>

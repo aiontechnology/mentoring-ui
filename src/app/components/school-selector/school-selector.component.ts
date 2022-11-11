@@ -20,7 +20,7 @@ import {School} from '../../implementation/models/school/school';
 import {UserSessionService} from '../../implementation/services/user-session.service';
 import {MultiItemCache} from '../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
-import {SCHOOL_COLLECTION_CACHE, SCHOOL_INSTANCE_CACHE} from '../../providers/global-school-providers-factory';
+import {SCHOOL_COLLECTION_CACHE, SCHOOL_INSTANCE_CACHE} from '../../providers/global/global-school-providers-factory';
 
 @Component({
   selector: 'ms-school-selector',

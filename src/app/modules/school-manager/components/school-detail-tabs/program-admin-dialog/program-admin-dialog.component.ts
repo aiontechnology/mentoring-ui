@@ -22,7 +22,7 @@ import {DataSource} from '../../../../../implementation/data/data-source';
 import {emailAddressValidator} from '../../../../../implementation/form-validation/email-address-validator';
 import {phoneValidator} from '../../../../../implementation/form-validation/phone-validator';
 import {ProgramAdmin} from '../../../../../implementation/models/program-admin/program-admin';
-import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../../../providers/global-program-admin-providers-factory';
+import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../../../providers/global/global-program-admin-providers-factory';
 
 @Component({
   selector: 'ms-program-admin-detail-dialog',

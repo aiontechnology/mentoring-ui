@@ -15,17 +15,17 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {environment} from '../../environments/environment';
-import {Cache} from '../implementation/data/cache';
-import {DataSource} from '../implementation/data/data-source';
-import {Repository} from '../implementation/data/repository';
-import {UriSupplier} from '../implementation/data/uri-supplier';
-import {Book} from '../implementation/models/book/book';
-import {Mentor} from '../implementation/models/mentor/mentor';
-import {School} from '../implementation/models/school/school';
-import {SchoolBookRepository} from '../implementation/repositories/school-book-repository';
-import {SchoolChangeDataSourceResetter} from '../implementation/state-management/school-change-data-source-resetter';
-import {SingleItemCache} from '../implementation/state-management/single-item-cache';
+import {environment} from '../../../environments/environment';
+import {Cache} from '../../implementation/data/cache';
+import {DataSource} from '../../implementation/data/data-source';
+import {Repository} from '../../implementation/data/repository';
+import {UriSupplier} from '../../implementation/data/uri-supplier';
+import {Book} from '../../implementation/models/book/book';
+import {Mentor} from '../../implementation/models/mentor/mentor';
+import {School} from '../../implementation/models/school/school';
+import {SchoolBookRepository} from '../../implementation/repositories/school-book-repository';
+import {SchoolChangeDataSourceResetter} from '../../implementation/state-management/school-change-data-source-resetter';
+import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
 export const SCHOOL_BOOK_DATA_SOURCE = new InjectionToken<DataSource<Book>>('school-book-data-source');

@@ -19,7 +19,7 @@ import {Inject, Injectable} from '@angular/core';
 import {Repository} from '../data/repository';
 import {UriSupplier} from '../data/uri-supplier';
 import {Game} from '../models/game/game';
-import {SCHOOL_GAME_URI_SUPPLIER} from '../../providers/global-school-game-providers-factory';
+import {SCHOOL_GAME_URI_SUPPLIER} from '../../providers/global/global-school-game-providers-factory';
 
 @Injectable()
 export class SchoolGameRepository extends Repository<Game> {

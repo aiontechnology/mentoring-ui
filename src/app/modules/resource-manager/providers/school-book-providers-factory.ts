@@ -20,8 +20,8 @@ import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {Book} from '../../../implementation/models/book/book';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {SCHOOL_BOOK_DATA_SOURCE} from '../../../providers/global-school-book-providers-factory';
-import {updateProvidersFactory} from '../../../providers/update-menus-providers-factory';
+import {SCHOOL_BOOK_DATA_SOURCE} from '../../../providers/global/global-school-book-providers-factory';
+import {updateProvidersFactory} from '../../../providers/legacy/update-menus-providers-factory';
 import {SchoolBookDialogComponent} from '../components/school-book-dialog/school-book-dialog.component';
 import {SCHOOL_BOOK_GROUP} from '../resource-manager.module';
 

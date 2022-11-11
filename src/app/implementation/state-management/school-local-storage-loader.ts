@@ -15,7 +15,7 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {SCHOOL_INSTANCE_CACHE} from '../../providers/global-school-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../providers/global/global-school-providers-factory';
 import {School} from '../models/school/school';
 import {UserSessionService} from '../services/user-session.service';
 import {SingleItemCache} from './single-item-cache';

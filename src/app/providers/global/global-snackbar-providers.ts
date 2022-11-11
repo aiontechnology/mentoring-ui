@@ -14,23 +14,18 @@
  * limitations under the License.
  */
 
-import {BooleanSupplier} from '../types/types';
-import {Command} from './command';
+import {InjectionToken} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {SnackbarManager} from '../../implementation/managers/snackbar-manager';
 
-/**
- * An abstract
- */
-export abstract class EnableableCommand extends Command {
-  private enableFunctions: BooleanSupplier[] = []
+export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-manager');
 
-  get isEnabled(): boolean {
-    return this.enableFunctions
-      .map(enabledFunction => enabledFunction())
-      .reduce((a, b) => a && b, true)
-  }
-
-  enableIf(enableFunction: BooleanSupplier) {
-    this.enableFunctions.push(enableFunction)
-    return this
-  }
+export function globalSnackbarProviders() {
+  return [
+    {
+      provide: SNACKBAR_MANAGER,
+      useFactory: (snackbar: MatSnackBar) => new SnackbarManager(snackbar),
+      deps: [MatSnackBar]
+    },
+  ]
 }

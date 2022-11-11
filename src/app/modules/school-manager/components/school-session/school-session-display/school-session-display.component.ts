@@ -19,8 +19,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {School} from '../../../../../implementation/models/school/school';
 import {SchoolSession} from '../../../../../implementation/models/school/schoolsession';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
-import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global-school-session-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global/global-school-session-providers-factory';
 import {SchoolSessionDialogComponent} from '../school-session-dialog/school-session-dialog.component';
 
 @Component({

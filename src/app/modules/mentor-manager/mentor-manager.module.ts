@@ -21,8 +21,8 @@ import {CanActivateSysAdmin} from 'src/app/implementation/services/can-activate-
 import {Command} from '../../implementation/command/command';
 import {SCHOOL_ID} from '../../implementation/route/route-constants';
 import {TableCache} from '../../implementation/table-cache/table-cache';
-import {globalMentorProvidersFactory} from '../../providers/global-mentor-providers-factory';
-import {globalSchoolProvidersFactory} from '../../providers/global-school-providers-factory';
+import {globalMentorProvidersFactory} from '../../providers/global/global-mentor-providers-factory';
+import {globalSchoolProvidersFactory} from '../../providers/global/global-school-providers-factory';
 import {School} from '../../implementation/models/school/school';
 import {SharedModule} from '../shared/shared.module';
 import {MentorDetailComponent} from './components/mentor-detail/mentor-detail.component';

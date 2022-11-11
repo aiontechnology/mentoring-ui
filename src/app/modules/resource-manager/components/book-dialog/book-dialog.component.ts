@@ -25,7 +25,7 @@ import {Grade} from 'src/app/implementation/types/grade';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {BOOK_DATA_SOURCE} from '../../../../providers/global-book-providers-factory';
+import {BOOK_DATA_SOURCE} from '../../../../providers/global/global-book-providers-factory';
 
 @Component({
   selector: 'ms-book-dialog',

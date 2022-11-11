@@ -24,7 +24,7 @@ import {DataSource} from '../../../../implementation/data/data-source';
 import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
+import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 
 @Component({
   selector: 'ms-new-school-dialog',

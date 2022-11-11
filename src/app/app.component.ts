@@ -30,15 +30,15 @@ import {SchoolChangeUriSupplierHandler} from './implementation/state-management/
 import {SchoolLocalStorageLoader} from './implementation/state-management/school-local-storage-loader';
 import {SchoolSessionsSchoolChangeHandler} from './implementation/state-management/school-sessions-school-change-handler';
 import {SingleItemCache} from './implementation/state-management/single-item-cache';
-import {INVITATION_URI_SUPPLIER_UPDATER} from './providers/global-invitation-providers-factory';
-import {MENTOR_COLLECTION_CACHE_LOADER, MENTOR_SCHOOL_CHANGE_RESETTER} from './providers/global-mentor-providers-factory';
-import {PERSONNEL_SCHOOL_CHANGE_RESETTER} from './providers/global-personnel-providers-factory';
-import {PROGRAM_ADMIN_SCHOOL_CHANGE_RESETTER} from './providers/global-program-admin-providers-factory';
-import {SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER} from './providers/global-school-book-providers-factory';
-import {SCHOOL_GAME_SCHOOL_CHANGE_RESETTER} from './providers/global-school-game-providers-factory';
-import {SCHOOL_COLLECTION_CACHE, SCHOOL_INSTANCE_CACHE} from './providers/global-school-providers-factory';
-import {SCHOOL_SESSION_COLLECTION_CACHE_LOADER} from './providers/global-school-session-providers-factory';
-import {TEACHER_COLLECTION_CACHE_LOADER, TEACHER_SCHOOL_CHANGE_RESETTER} from './providers/global-teacher-providers-factory';
+import {INVITATION_URI_SUPPLIER_UPDATER} from './providers/global/global-invitation-providers-factory';
+import {MENTOR_COLLECTION_CACHE_LOADER, MENTOR_SCHOOL_CHANGE_RESETTER} from './providers/global/global-mentor-providers-factory';
+import {PERSONNEL_SCHOOL_CHANGE_RESETTER} from './providers/global/global-personnel-providers-factory';
+import {PROGRAM_ADMIN_SCHOOL_CHANGE_RESETTER} from './providers/global/global-program-admin-providers-factory';
+import {SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER} from './providers/global/global-school-book-providers-factory';
+import {SCHOOL_GAME_SCHOOL_CHANGE_RESETTER} from './providers/global/global-school-game-providers-factory';
+import {SCHOOL_COLLECTION_CACHE, SCHOOL_INSTANCE_CACHE} from './providers/global/global-school-providers-factory';
+import {SCHOOL_SESSION_COLLECTION_CACHE_LOADER} from './providers/global/global-school-session-providers-factory';
+import {TEACHER_COLLECTION_CACHE_LOADER, TEACHER_SCHOOL_CHANGE_RESETTER} from './providers/global/global-teacher-providers-factory';
 
 @Component({
   selector: 'ms-root',

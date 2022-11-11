@@ -32,7 +32,7 @@ import {ReceiveTokenComponent} from './components/receive-token/receive-token.co
 import {SchoolSelectorComponent} from './components/school-selector/school-selector.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {ToolbarComponent} from './components/toolbar/toolbar.component';
-import {SnackbarManager} from './implementation/command/snackbar-manager';
+import {SnackbarManager} from './implementation/managers/snackbar-manager';
 import {GlobalErrorHandler} from './implementation/errors/global-error-handler';
 import {NavigationService} from './implementation/route/navigation.service';
 import {CanActivateApp} from './implementation/services/can-activate-app';
@@ -43,18 +43,19 @@ import {TokenInterceptorService} from './implementation/services/token-intercept
 import {UserSessionService} from './implementation/services/user-session.service';
 import {MaterialModule} from './implementation/shared/material.module';
 import {SchoolLocalStorageLoader} from './implementation/state-management/school-local-storage-loader';
-import {globalBookProvidersFactory} from './providers/global-book-providers-factory';
-import {globalGameProvidersFactory} from './providers/global-game-providers-factory';
-import {globalInvitationProvidersFactory} from './providers/global-invitation-providers-factory';
-import {globalMentorProvidersFactory} from './providers/global-mentor-providers-factory';
-import {globalPersonnelProvidersFactory} from './providers/global-personnel-providers-factory';
-import {globalProgramAdminProvidersFactory} from './providers/global-program-admin-providers-factory';
-import {globalSchoolBookProvidersFactory} from './providers/global-school-book-providers-factory';
-import {globalSchoolGameProvidersFactory} from './providers/global-school-game-providers-factory';
-import {globalSchoolProvidersFactory} from './providers/global-school-providers-factory';
-import {globalSchoolSessionProvidersFactory} from './providers/global-school-session-providers-factory';
-import {globalStudentProvidersFactory} from './providers/global-student-providers-factory';
-import {globalTeacherProvidersFactory} from './providers/global-teacher-providers-factory';
+import {globalBookProvidersFactory} from './providers/global/global-book-providers-factory';
+import {globalGameProvidersFactory} from './providers/global/global-game-providers-factory';
+import {globalInvitationProvidersFactory} from './providers/global/global-invitation-providers-factory';
+import {globalMentorProvidersFactory} from './providers/global/global-mentor-providers-factory';
+import {globalPersonnelProvidersFactory} from './providers/global/global-personnel-providers-factory';
+import {globalProgramAdminProvidersFactory} from './providers/global/global-program-admin-providers-factory';
+import {globalSchoolBookProvidersFactory} from './providers/global/global-school-book-providers-factory';
+import {globalSchoolGameProvidersFactory} from './providers/global/global-school-game-providers-factory';
+import {globalSchoolProvidersFactory} from './providers/global/global-school-providers-factory';
+import {globalSchoolSessionProvidersFactory} from './providers/global/global-school-session-providers-factory';
+import {globalSnackbarProviders} from './providers/global/global-snackbar-providers';
+import {globalStudentProvidersFactory} from './providers/global/global-student-providers-factory';
+import {globalTeacherProvidersFactory} from './providers/global/global-teacher-providers-factory';
 
 const LOGIN_PROVIDER = new InjectionToken('loginRedirectResolver');
 const LOGOUT_PROVIDER = new InjectionToken('logoutRedirectResolver');
@@ -109,8 +110,6 @@ const routes: Routes = [
     ]
   }
 ];
-
-export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-manager');
 
 @NgModule({
   declarations: [
@@ -178,11 +177,7 @@ export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-ma
     ...globalSchoolGameProvidersFactory(),
     ...globalSchoolSessionProvidersFactory(),
     ...globalInvitationProvidersFactory(),
-    {
-      provide: SNACKBAR_MANAGER,
-      useFactory: (snackbar: MatSnackBar) => new SnackbarManager(snackbar),
-      deps: [MatSnackBar]
-    },
+    ...globalSnackbarProviders(),
   ],
   bootstrap: [AppComponent]
 })

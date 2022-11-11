@@ -24,7 +24,7 @@ import {School} from '../../../../../implementation/models/school/school';
 import {Student} from '../../../../../implementation/models/student/student';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global-school-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 import {SCHOOL_INVITE_STUDENT} from '../../../providers/school-providers-factory';
 import {SCHOOL_DETAIL_MENU, SCHOOL_GROUP} from '../../../school-manager.module';
 import {InviteStudentComponent} from '../../invite-student/invite-student.component';

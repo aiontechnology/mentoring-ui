@@ -17,9 +17,10 @@
 import {Router} from '@angular/router';
 
 export class NavigationManager {
-  constructor(private router: Router,
-              private navigationBase?: string[]) {
-  }
+  constructor(
+    private router: Router,
+    private navigationBase?: string[]
+  ) {}
 
   navigate(navigationExtention: string): Promise<boolean> {
     return this.router.navigate([...this.navigationBase, navigationExtention]);

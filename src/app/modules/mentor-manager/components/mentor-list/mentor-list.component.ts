@@ -23,7 +23,7 @@ import {ListComponent} from '../../../../implementation/component/list-component
 import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {MENTOR_INSTANCE_CACHE} from '../../../../providers/global-mentor-providers-factory';
+import {MENTOR_INSTANCE_CACHE} from '../../../../providers/global/global-mentor-providers-factory';
 import {MENTOR_LIST_MENU} from '../../mentor-manager.module';
 import {Mentor} from '../../../../implementation/models/mentor/mentor';
 import {MENTOR_TABLE_CACHE} from '../../providers/mentor-providers-factory';

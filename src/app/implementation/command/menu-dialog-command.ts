@@ -21,7 +21,7 @@ import {MenuCommand} from './menu-command';
 
 export class MenuDialogCommand<T> extends MenuCommand {
   static DialogMenuCommandBuilder = class<T> {
-    private isAdminOnly: boolean
+    private isAdminOnly: boolean = false
     private dataSupplier: ObjectSupplier
     private snackbarMessage: string
 

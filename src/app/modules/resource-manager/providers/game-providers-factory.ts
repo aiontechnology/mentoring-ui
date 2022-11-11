@@ -21,9 +21,9 @@ import {Book} from '../../../implementation/models/book/book';
 import {Game} from '../../../implementation/models/game/game';
 import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
-import {GAME_DATA_SOURCE, GAME_INSTANCE_CACHE, GAME_INSTANCE_CACHE_UPDATER} from '../../../providers/global-game-providers-factory';
-import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
+import {detailProvidersFactory} from '../../../providers/legacy/detail-menus-providers-factory';
+import {GAME_DATA_SOURCE, GAME_INSTANCE_CACHE, GAME_INSTANCE_CACHE_UPDATER} from '../../../providers/global/global-game-providers-factory';
+import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
 import {GameDialogComponent} from '../components/game-dialog/game-dialog.component';
 import {GAME_GROUP} from '../resource-manager.module';
 

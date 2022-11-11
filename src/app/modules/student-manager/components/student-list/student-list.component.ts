@@ -34,8 +34,8 @@ import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {
   SCHOOL_SESSION_COLLECTION_CACHE,
   SCHOOL_SESSION_INSTANCE_CACHE
-} from '../../../../providers/global-school-session-providers-factory';
-import {STUDENT_INSTANCE_CACHE} from '../../../../providers/global-student-providers-factory';
+} from '../../../../providers/global/global-school-session-providers-factory';
+import {STUDENT_INSTANCE_CACHE} from '../../../../providers/global/global-student-providers-factory';
 import {STUDENT_TABLE_CACHE} from '../../providers/student-providers-factory';
 import {STUDENT_LIST_MENU} from '../../student-manager.module';
 

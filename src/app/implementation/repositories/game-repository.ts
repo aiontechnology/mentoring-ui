@@ -19,7 +19,7 @@ import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {Game} from '../models/game/game';
 import {UriSupplier} from '../data/uri-supplier';
-import {GAME_URI_SUPPLIER} from '../../providers/global-game-providers-factory';
+import {GAME_URI_SUPPLIER} from '../../providers/global/global-game-providers-factory';
 
 @Injectable()
 export class GameRepository extends Repository<Game> {

@@ -27,8 +27,8 @@ import {
   SCHOOL_GAME_DATA_SOURCE,
   SCHOOL_GAME_SCHOOL_CHANGE_RESETTER,
   SCHOOL_GAME_URI_SUPPLIER
-} from '../../../providers/global-school-game-providers-factory';
-import {updateProvidersFactory} from '../../../providers/update-menus-providers-factory';
+} from '../../../providers/global/global-school-game-providers-factory';
+import {updateProvidersFactory} from '../../../providers/legacy/update-menus-providers-factory';
 import {SchoolGameDialogComponent} from '../components/school-detail-tabs/school-game-dialog/school-game-dialog.component';
 import {SCHOOL_GAME_GROUP, SCHOOL_GAME_LIST_MENU} from '../school-manager.module';
 

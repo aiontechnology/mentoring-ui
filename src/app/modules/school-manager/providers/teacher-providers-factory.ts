@@ -15,32 +15,35 @@
  */
 
 import {InjectionToken} from '@angular/core';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Mentor} from '../../../implementation/models/mentor/mentor';
 import {School} from '../../../implementation/models/school/school';
 import {Teacher} from '../../../implementation/models/teacher/teacher';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
-import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
+import {dialogManagerProviders} from '../../../providers/dialog-manager-providers';
 import {
   TEACHER_CACHE,
   TEACHER_DATA_SOURCE,
   TEACHER_SCHOOL_CHANGE_RESETTER,
   TEACHER_URI_SUPPLIER
-} from '../../../providers/global-teacher-providers-factory';
-import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
+} from '../../../providers/global/global-teacher-providers-factory';
+import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
+import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 import {TeacherDialogComponent} from '../components/school-detail-tabs/teacher-dialog/teacher-dialog.component';
 import {TEACHER_GROUP, TEACHER_LIST_MENU} from '../school-manager.module';
 
 export const TEACHER_TABLE_CACHE = new InjectionToken<TableCache<School>>('teacher-table-cache')
 export const TEACHER_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Teacher>>('teacher-school-change-handler')
+export const TEACHER_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<TeacherDialogComponent>>('teacher_edit-dialog-manager')
+export const TEACHER_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('teacher_delete-dialog-manager')
 
 export function teacherProvidersFactory() {
   return [
+    ...dialogManagerProviders<Teacher, TeacherDialogComponent, TableCache<Teacher>>(TEACHER_EDIT_DIALOG_MANAGER, TEACHER_DELETE_DIALOG_MANAGER, TeacherDialogComponent, TEACHER_TABLE_CACHE),
     ...listProvidersFactory<Teacher, TeacherDialogComponent, TableCache<Teacher>>(TEACHER_LIST_MENU, TEACHER_GROUP, 'Teacher',
       TeacherDialogComponent, TEACHER_TABLE_CACHE),
     {

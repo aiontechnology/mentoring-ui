@@ -20,8 +20,8 @@ import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {Game} from '../../../implementation/models/game/game';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {SCHOOL_GAME_DATA_SOURCE} from '../../../providers/global-school-game-providers-factory';
-import {updateProvidersFactory} from '../../../providers/update-menus-providers-factory';
+import {SCHOOL_GAME_DATA_SOURCE} from '../../../providers/global/global-school-game-providers-factory';
+import {updateProvidersFactory} from '../../../providers/legacy/update-menus-providers-factory';
 import {SchoolGameDialogComponent} from '../components/school-game-dialog/school-game-dialog.component';
 import {SCHOOL_GAME_GROUP} from '../resource-manager.module';
 

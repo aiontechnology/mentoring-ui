@@ -26,7 +26,7 @@ import {SingleItemCacheUpdater} from '../../../../implementation/state-managemen
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {BOOK_ID} from '../../../../implementation/route/route-constants';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {BOOK_INSTANCE_CACHE, BOOK_INSTANCE_CACHE_UPDATER} from '../../../../providers/global-book-providers-factory';
+import {BOOK_INSTANCE_CACHE, BOOK_INSTANCE_CACHE_UPDATER} from '../../../../providers/global/global-book-providers-factory';
 import {BOOK_DETAIL_MENU} from '../../providers/book-providers-factory';
 
 @Component({

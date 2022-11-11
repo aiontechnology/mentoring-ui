@@ -18,14 +18,14 @@ import {ComponentType} from '@angular/cdk/portal';
 import {InjectionToken, INJECTOR, Injector} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Router} from '@angular/router';
-import {SNACKBAR_MANAGER} from '../../../app.module';
 import {Command} from '../../../implementation/command/command';
 import {MenuDialogCommand} from '../../../implementation/command/menu-dialog-command';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
-import {SnackbarManager} from '../../../implementation/command/snackbar-manager';
+import {SnackbarManager} from '../../../implementation/managers/snackbar-manager';
 import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
 import {SingleItemCacheUpdater} from '../../../implementation/state-management/single-item-cache-updater';
 import {titleCase} from '../../../implementation/shared/title-case';
+import {SNACKBAR_MANAGER} from '../../../providers/global/global-snackbar-providers';
 import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 
 export function programAdminMenuProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(

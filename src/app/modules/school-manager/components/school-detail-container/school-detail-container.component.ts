@@ -21,7 +21,7 @@ import {School} from '../../../../implementation/models/school/school';
 import {RouteElementWatcher} from '../../../../implementation/route/route-element-watcher.service';
 import {MenuStateService} from '../../../../implementation/services/menu-state.service';
 import {UserSessionService} from '../../../../implementation/services/user-session.service';
-import {SCHOOL_ROUTE_WATCHER} from '../../../../providers/global-school-providers-factory';
+import {SCHOOL_ROUTE_WATCHER} from '../../../../providers/global/global-school-providers-factory';
 import {
   PERSONNEL_GROUP,
   PROGRAM_ADMIN_GROUP,

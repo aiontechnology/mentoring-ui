@@ -28,8 +28,8 @@ import {
   PERSONNEL_DATA_SOURCE,
   PERSONNEL_SCHOOL_CHANGE_RESETTER,
   PERSONNEL_URI_SUPPLIER
-} from '../../../providers/global-personnel-providers-factory';
-import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
+} from '../../../providers/global/global-personnel-providers-factory';
+import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
 import {PersonnelDialogComponent} from '../components/school-detail-tabs/personnel-dialog/personnel-dialog.component';
 import {PERSONNEL_GROUP, PERSONNEL_LIST_MENU} from '../school-manager.module';
 

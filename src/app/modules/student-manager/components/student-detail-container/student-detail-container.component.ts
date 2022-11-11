@@ -19,7 +19,7 @@ import {ActivatedRoute} from '@angular/router';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {SchoolSession} from '../../../../implementation/models/school/schoolsession';
 import {MenuStateService} from '../../../../implementation/services/menu-state.service';
-import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global-school-session-providers-factory';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global/global-school-session-providers-factory';
 
 @Component({
   selector: 'ms-student-detail-container',

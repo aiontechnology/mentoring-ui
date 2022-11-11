@@ -24,7 +24,7 @@ import {School} from '../../implementation/models/school/school';
 import {Teacher} from '../../implementation/models/teacher/teacher';
 import {RouteElementWatcher} from '../../implementation/route/route-element-watcher.service';
 import {SingleItemCacheSchoolChangeHandler} from '../../implementation/state-management/single-item-cache-school-change-handler';
-import {SCHOOL_ROUTE_WATCHER} from '../../providers/global-school-providers-factory';
+import {SCHOOL_ROUTE_WATCHER} from '../../providers/global/global-school-providers-factory';
 import {PERSONNEL_SCHOOL_CHANGE_HANDLER} from './providers/personnel-providers-factory';
 import {PROGRAM_ADMIN_SCHOOL_CHANGE_HANDLER} from './providers/program-admin-providers-factory';
 import {SCHOOL_BOOK_SCHOOL_CHANGE_HANDLER} from './providers/school-book-providers-factory';

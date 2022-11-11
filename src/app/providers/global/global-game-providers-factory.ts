@@ -15,16 +15,16 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {environment} from '../../environments/environment';
-import {Cache} from '../implementation/data/cache';
-import {DataSource} from '../implementation/data/data-source';
-import {Repository} from '../implementation/data/repository';
-import {SingleItemCache} from '../implementation/state-management/single-item-cache';
-import {SingleItemCacheUpdater} from '../implementation/state-management/single-item-cache-updater';
-import {UriSupplier} from '../implementation/data/uri-supplier';
-import {Game} from '../implementation/models/game/game';
-import {GameRepository} from '../implementation/repositories/game-repository';
-import {TableCache} from '../implementation/table-cache/table-cache';
+import {environment} from '../../../environments/environment';
+import {Cache} from '../../implementation/data/cache';
+import {DataSource} from '../../implementation/data/data-source';
+import {Repository} from '../../implementation/data/repository';
+import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
+import {SingleItemCacheUpdater} from '../../implementation/state-management/single-item-cache-updater';
+import {UriSupplier} from '../../implementation/data/uri-supplier';
+import {Game} from '../../implementation/models/game/game';
+import {GameRepository} from '../../implementation/repositories/game-repository';
+import {TableCache} from '../../implementation/table-cache/table-cache';
 
 export const GAME_DATA_SOURCE = new InjectionToken<DataSource<Game>>('game-data-source');
 export const GAME_CACHE = new InjectionToken<Cache<Game>>('game-cache');

@@ -27,9 +27,9 @@ import {School} from '../../../../implementation/models/school/school';
 import {SchoolSession} from '../../../../implementation/models/school/schoolsession';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {RouteElementWatcher} from '../../../../implementation/route/route-element-watcher.service';
-import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_ROUTE_WATCHER} from '../../../../providers/global-mentor-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global-school-providers-factory';
-import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global-school-session-providers-factory';
+import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_ROUTE_WATCHER} from '../../../../providers/global/global-mentor-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global/global-school-session-providers-factory';
 import {MENTOR_DETAIL_MENU} from '../../mentor-manager.module';
 import {Mentor} from '../../../../implementation/models/mentor/mentor';
 

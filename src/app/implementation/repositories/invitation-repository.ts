@@ -15,7 +15,7 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {INVITATION_URI_SUPPLIER} from '../../providers/global-invitation-providers-factory';
+import {INVITATION_URI_SUPPLIER} from '../../providers/global/global-invitation-providers-factory';
 import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../data/uri-supplier';

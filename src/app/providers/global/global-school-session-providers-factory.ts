@@ -15,17 +15,17 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {environment} from '../../environments/environment';
-import {Cache} from '../implementation/data/cache';
-import {DataSource} from '../implementation/data/data-source';
-import {Repository} from '../implementation/data/repository';
-import {UriSupplier} from '../implementation/data/uri-supplier';
-import {School} from '../implementation/models/school/school';
-import {SchoolSession} from '../implementation/models/school/schoolsession';
-import {SchoolSessionRepository} from '../implementation/repositories/school-session-repository';
-import {MultiItemCache} from '../implementation/state-management/multi-item-cache';
-import {SchoolSessionsSchoolChangeHandler} from '../implementation/state-management/school-sessions-school-change-handler';
-import {SingleItemCache} from '../implementation/state-management/single-item-cache';
+import {environment} from '../../../environments/environment';
+import {Cache} from '../../implementation/data/cache';
+import {DataSource} from '../../implementation/data/data-source';
+import {Repository} from '../../implementation/data/repository';
+import {UriSupplier} from '../../implementation/data/uri-supplier';
+import {School} from '../../implementation/models/school/school';
+import {SchoolSession} from '../../implementation/models/school/schoolsession';
+import {SchoolSessionRepository} from '../../implementation/repositories/school-session-repository';
+import {MultiItemCache} from '../../implementation/state-management/multi-item-cache';
+import {SchoolSessionsSchoolChangeHandler} from '../../implementation/state-management/school-sessions-school-change-handler';
+import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
 export const SCHOOL_SESSION_DATA_SOURCE = new InjectionToken<DataSource<SchoolSession>>('school-session-data-source');

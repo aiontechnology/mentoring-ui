@@ -28,18 +28,18 @@ import {
   SingleItemCacheSchoolSessionChangeHandler
 } from '../../../implementation/state-management/single-item-cache-school-session-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {addDialogProvidersFactory} from '../../../providers/add-dialog-providers-factory';
-import {detailProvidersFactory} from '../../../providers/detail-menus-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global-school-providers-factory';
-import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../providers/global-school-session-providers-factory';
+import {addDialogProvidersFactory} from '../../../providers/legacy/add-dialog-providers-factory';
+import {detailProvidersFactory} from '../../../providers/legacy/detail-menus-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global/global-school-providers-factory';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../providers/global/global-school-session-providers-factory';
 import {
   STUDENT_CACHE,
   STUDENT_DATA_SOURCE,
   STUDENT_INSTANCE_CACHE,
   STUDENT_INSTANCE_CACHE_UPDATER,
   STUDENT_URI_SUPPLIER
-} from '../../../providers/global-student-providers-factory';
-import {listProvidersFactory} from '../../../providers/list-menus-providers-factory';
+} from '../../../providers/global/global-student-providers-factory';
+import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
 import {Mentor} from '../../../implementation/models/mentor/mentor';
 import {MentorDialogComponent} from '../components/mentor-dialog/mentor-dialog.component';
 import {StudentDialogComponent} from '../components/student-dialog/student-dialog.component';
