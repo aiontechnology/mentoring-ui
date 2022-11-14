@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SchoolSession} from 'src/app/implementation/models/school/schoolsession';
+import {DialogComponent} from '../../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
 import {SCHOOL_SESSION_DATA_SOURCE} from '../../../../../providers/global/global-school-session-providers-factory';
 
@@ -26,51 +27,35 @@ import {SCHOOL_SESSION_DATA_SOURCE} from '../../../../../providers/global/global
   templateUrl: './school-session-dialog.component.html',
   styleUrls: ['./school-session-dialog.component.scss']
 })
-export class SchoolSessionDialogComponent {
-  model: FormGroup;
-  isUpdate = false;
-
+export class SchoolSessionDialogComponent extends DialogComponent<SchoolSession, SchoolSessionDialogComponent> implements OnInit{
   constructor(
-    @Inject(SCHOOL_SESSION_DATA_SOURCE) private schoolSessionDataSource: DataSource<SchoolSession>,
-    private dialogRef: MatDialogRef<SchoolSessionDialogComponent>,
-    private formBuilder: FormBuilder,
-    @Inject(MAT_DIALOG_DATA) private data: any,
+    // for super
+    @Inject(MAT_DIALOG_DATA) private data: { model: SchoolSession },
+    formBuilder: FormBuilder,
+    dialogRef: MatDialogRef<SchoolSessionDialogComponent>,
+    @Inject(SCHOOL_SESSION_DATA_SOURCE) schoolSessionDataSource: DataSource<SchoolSession>,
+    // other
   ) {
-    this.model = this.createModel(formBuilder);
+    super(data?.model, formBuilder, dialogRef, schoolSessionDataSource)
   }
 
-  /**
-   * Save the form. Handles both new and updated schools.
-   */
-  save(): void {
-    const newSession = new SchoolSession(this.model.value);
-    let value: Promise<SchoolSession>;
-
-    if (this.isUpdate) {
-      newSession.links = this.model.value.school.links;
-      value = this.schoolSessionDataSource.update(newSession);
-    } else {
-      value = this.schoolSessionDataSource.add(newSession);
-    }
-
-    value.then((ss: SchoolSession) => {
-      this.dialogRef.close(ss);
-    });
+  ngOnInit(): void {
+    this.init()
   }
 
-  /**
-   * Dismiss the dialog without saving.
-   */
-  dismiss(): void {
-    this.dialogRef.close(null);
+  protected toModel(formValue: any): SchoolSession {
+    return new SchoolSession(formValue);
   }
 
-  private createModel(formBuilder: FormBuilder): FormGroup {
-    const formGroup: FormGroup = formBuilder.group({
+  protected doCreateFormGroup(formBuilder: FormBuilder, schoolSession: SchoolSession): FormGroup {
+    return formBuilder.group({
       label: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       endDate: ['', Validators.required]
     });
-    return formGroup;
+  }
+
+  protected doUpdateFormGroup(formGroup: FormGroup, model: SchoolSession): void {
+    // do nothing
   }
 }

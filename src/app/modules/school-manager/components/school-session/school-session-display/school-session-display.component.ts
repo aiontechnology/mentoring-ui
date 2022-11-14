@@ -16,11 +16,17 @@
 
 import {Component, Inject} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
+import {Cache} from '../../../../../implementation/data/cache';
 import {School} from '../../../../../implementation/models/school/school';
 import {SchoolSession} from '../../../../../implementation/models/school/schoolsession';
+import {MultiItemCache} from '../../../../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
-import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global/global-school-session-providers-factory';
+import {
+  SCHOOL_SESSION_CACHE,
+  SCHOOL_SESSION_COLLECTION_CACHE,
+  SCHOOL_SESSION_INSTANCE_CACHE
+} from '../../../../../providers/global/global-school-session-providers-factory';
 import {SchoolSessionDialogComponent} from '../school-session-dialog/school-session-dialog.component';
 
 @Component({
@@ -33,8 +39,10 @@ export class SchoolSessionDisplayComponent {
   constructor(
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) private schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
+    @Inject(SCHOOL_SESSION_CACHE) private schoolSessionCache: Cache<SchoolSession>,
+    @Inject(SCHOOL_SESSION_COLLECTION_CACHE) private schoolSessionCollectionCache: MultiItemCache<SchoolSession>,
     private dialog: MatDialog,
-  ) { }
+  ) {}
 
   createNewSession = (): void => {
     this.dialog.open(SchoolSessionDialogComponent, {
@@ -45,6 +53,8 @@ export class SchoolSessionDisplayComponent {
       if (schoolSession) {
         this.schoolSessionInstanceCache.item = schoolSession
         this.schoolInstanceCache.item.currentSession = schoolSession
+        this.schoolSessionCache.reset()
+        this.schoolSessionCollectionCache.load()
       }
     });
   }

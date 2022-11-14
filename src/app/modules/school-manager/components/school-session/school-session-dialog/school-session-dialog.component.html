@@ -14,9 +14,9 @@
   ~ limitations under the License.
   -->
 
-<h2 mat-dialog-title>Add new session</h2>
+<h2 mat-dialog-title>Add New Session</h2>
 <mat-dialog-content>
-  <form [formGroup]="model">
+  <form [formGroup]="modelFormGroup">
     <div class="dialog-container">
       <table>
         <td>
@@ -47,7 +47,7 @@
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button color="primary" (click)="save()" [disabled]="!model.valid">
+  <button mat-button color="primary" (click)="save()" [disabled]="!modelFormGroup.valid">
     <mat-icon>save</mat-icon> Save
   </button>
   <button mat-button color="primary" (click)="dismiss()">
