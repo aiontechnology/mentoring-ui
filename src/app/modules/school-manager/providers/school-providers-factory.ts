@@ -16,9 +16,7 @@
 
 import {InjectionToken} from '@angular/core';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../implementation/command/menu-dialog-command';
 import {DataSource} from '../../../implementation/data/data-source';
-import {Mentor} from '../../../implementation/models/mentor/mentor';
 import {School} from '../../../implementation/models/school/school';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {detailDialogManagerProviders} from '../../../providers/dialog/detail-dialog-manager-providers';
@@ -32,7 +30,6 @@ import {ConfimationDialogComponent} from '../../shared/components/confimation-di
 import {SchoolDialogComponent} from '../components/school-dialog/school-dialog.component';
 
 export const SCHOOL_TABLE_CACHE = new InjectionToken<TableCache<School>>('school-table-cache')
-export const SCHOOL_INVITE_STUDENT = new InjectionToken<(dataSupplier) => MenuDialogCommand<Mentor>>('school-invite-student')
 export const SCHOOL_DETAIL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<SchoolDialogComponent>>('school-detail-edit-dialog-manager')
 export const SCHOOL_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('school-detail-delete-dialog-manager')
 export const SCHOOL_LIST_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<SchoolDialogComponent>>('school-list-edit-dialog-manager')
@@ -41,6 +38,7 @@ export const SCHOOL_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManage
 export function schoolProvidersFactory() {
   return [
     ...detailDialogManagerProviders(
+      'school',
       SCHOOL_DETAIL_EDIT_DIALOG_MANAGER,
       SCHOOL_DETAIL_DELETE_DIALOG_MANAGER,
       SchoolDialogComponent,
@@ -50,6 +48,7 @@ export function schoolProvidersFactory() {
       SCHOOL_INSTANCE_CACHE_UPDATER
     ),
     ...listDialogManagerProviders<School, SchoolDialogComponent, TableCache<School>>(
+      'school',
       SCHOOL_LIST_EDIT_DIALOG_MANAGER,
       SCHOOL_LIST_DELETE_DIALOG_MANAGER,
       SchoolDialogComponent,

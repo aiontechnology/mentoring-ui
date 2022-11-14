@@ -19,7 +19,6 @@ import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {School} from '../../../implementation/models/school/school';
 import {Teacher} from '../../../implementation/models/teacher/teacher';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
@@ -34,14 +33,20 @@ import {
 import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 import {TeacherDialogComponent} from '../components/school-detail-tabs/teacher-dialog/teacher-dialog.component';
 
-export const TEACHER_TABLE_CACHE = new InjectionToken<TableCache<School>>('teacher-table-cache')
+export const TEACHER_TABLE_CACHE = new InjectionToken<TableCache<Teacher>>('teacher-table-cache')
 export const TEACHER_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Teacher>>('teacher-school-change-handler')
 export const TEACHER_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<TeacherDialogComponent>>('teacher-edit-dialog-manager')
 export const TEACHER_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('teacher-delete-dialog-manager')
 
 export function teacherProvidersFactory() {
   return [
-    ...listDialogManagerProviders<Teacher, TeacherDialogComponent, TableCache<Teacher>>(TEACHER_EDIT_DIALOG_MANAGER, TEACHER_DELETE_DIALOG_MANAGER, TeacherDialogComponent, TEACHER_TABLE_CACHE),
+    ...listDialogManagerProviders<Teacher, TeacherDialogComponent, TableCache<Teacher>>(
+      'teacher',
+      TEACHER_EDIT_DIALOG_MANAGER,
+      TEACHER_DELETE_DIALOG_MANAGER,
+      TeacherDialogComponent,
+      TEACHER_TABLE_CACHE
+    ),
     {
       provide: TEACHER_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Teacher>) => new TableCache('TeacherTableCache', dataSource),

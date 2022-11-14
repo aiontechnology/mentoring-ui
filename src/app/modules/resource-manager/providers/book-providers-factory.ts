@@ -35,6 +35,7 @@ export const BOOK_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<
 export function bookProvidersFactory() {
   return [
     ...detailDialogManagerProviders(
+      'book',
       BOOK_DETAIL_EDIT_DIALOG_MANAGER,
       BOOK_DETAIL_DELETE_DIALOG_MANAGER,
       BookDialogComponent,
@@ -44,6 +45,7 @@ export function bookProvidersFactory() {
       BOOK_INSTANCE_CACHE_UPDATER
     ),
     ...listDialogManagerProviders<Book, BookDialogComponent, TableCache<Book>>(
+      'book',
       BOOK_LIST_EDIT_DIALOG_MANAGER,
       BOOK_LIST_DELETE_DIALOG_MANAGER,
       BookDialogComponent,

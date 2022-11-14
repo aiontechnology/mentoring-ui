@@ -29,18 +29,19 @@ import {listDialogManagerDeleteProviders} from './list/list-dialog-manager-delet
 import {listDialogManagerEditProviders} from './list/list-dialog-manager-edit-providers';
 import {listPostActionProviders} from './list/list-post-action-providers';
 
-const LIST_AFTER_CLOSED_DELETE = new InjectionToken<ClosedResultType>('list-after-closed-delete');
-const LIST_AFTER_CLOSED_EDIT = new InjectionToken<ClosedResultType>('list-after-closed-edit');
-const LIST_POST_ACTION = new InjectionToken<AnyConsumer>('list-post-action');
-
-const NULL_NAVIGATION_MANAGER = new InjectionToken<NavigationManager>('null-navigation-manager');
-
 export function listDialogManagerProviders<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
+  prefix: string,
   editName: InjectionToken<DialogManager<COMPONENT_TYPE>>,
   deleteName: InjectionToken<DialogManager<ConfimationDialogComponent>>,
   componentType: ComponentType<COMPONENT_TYPE>,
   serviceToken: InjectionToken<SERVICE_TYPE>,
 ) {
+  const LIST_AFTER_CLOSED_DELETE = new InjectionToken<ClosedResultType>(`${prefix}-list-after-closed-delete`);
+  const LIST_AFTER_CLOSED_EDIT = new InjectionToken<ClosedResultType>(`${prefix}-list-after-closed-edit`);
+  const LIST_POST_ACTION = new InjectionToken<AnyConsumer>(`${prefix}-list-post-action`);
+
+  const NULL_NAVIGATION_MANAGER = new InjectionToken<NavigationManager>(`${prefix}-null-navigation-manager`);
+
   return [
     ...listAfterClosedDeleteProviders<MODEL_TYPE, SERVICE_TYPE>(LIST_AFTER_CLOSED_DELETE, serviceToken),
     ...listAfterClosedEditProviders<MODEL_TYPE>(LIST_AFTER_CLOSED_EDIT, LIST_POST_ACTION, NULL_NAVIGATION_MANAGER),

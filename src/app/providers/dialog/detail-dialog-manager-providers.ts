@@ -27,10 +27,8 @@ import {detailAfterClosedEditProviders} from './detail/detail-after-closed-edit-
 import {detailDialogManagerDeleteProviders} from './detail/detail-dialog-manager-delete-providers';
 import {detailDialogManagerEditProviders} from './detail/detail-dialog-manager-edit-providers';
 
-const DETAIL_AFTER_CLOSED_DELETE = new InjectionToken<ClosedResultType>('detail-after-closed-delete');
-const DETAIL_AFTER_CLOSED_EDIT = new InjectionToken<ClosedResultType>('detail-after-closed-edit');
-
 export function detailDialogManagerProviders<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
+  prefix: string,
   editName: InjectionToken<DialogManager<COMPONENT_TYPE>>,
   deleteName: InjectionToken<DialogManager<ConfimationDialogComponent>>,
   componentType: ComponentType<COMPONENT_TYPE>,
@@ -39,6 +37,9 @@ export function detailDialogManagerProviders<MODEL_TYPE, COMPONENT_TYPE, SERVICE
   singleItemCacheToken: InjectionToken<SingleItemCache<MODEL_TYPE>>,
   singleItemCacheUpdaterToken: InjectionToken<SingleItemCacheUpdater<MODEL_TYPE>>,
 ): any[] {
+  const DETAIL_AFTER_CLOSED_DELETE = new InjectionToken<ClosedResultType>(`${prefix}-detail-after-closed-delete`);
+  const DETAIL_AFTER_CLOSED_EDIT = new InjectionToken<ClosedResultType>(`${prefix}-detail-after-closed-edit`);
+
   return [
     ...detailAfterClosedDeleteProviders<MODEL_TYPE, SERVICE_TYPE>(DETAIL_AFTER_CLOSED_DELETE, serviceToken, routeAfterDelete, singleItemCacheUpdaterToken),
     ...detailAfterClosedEditProviders<MODEL_TYPE>(DETAIL_AFTER_CLOSED_EDIT, singleItemCacheToken),

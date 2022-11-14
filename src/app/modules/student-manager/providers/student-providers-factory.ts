@@ -59,6 +59,7 @@ export const STUDENT_ADD_MENTOR = new InjectionToken<(dataSupplier) => MenuDialo
 export function studentProvidersFactory() {
   return [
     ...detailDialogManagerProviders(
+      'student',
       STUDENT_DETAIL_EDIT_DIALOG_MANAGER,
       STUDENT_DETAIL_DELETE_DIALOG_MANAGER,
       StudentDialogComponent,
@@ -68,6 +69,7 @@ export function studentProvidersFactory() {
       STUDENT_INSTANCE_CACHE_UPDATER
     ),
     ...listDialogManagerProviders<Student, StudentDialogComponent, TableCache<Student>>(
+      'student',
       STUDENT_LIST_EDIT_DIALOG_MANAGER,
       STUDENT_LIST_DELETE_DIALOG_MANAGER,
       StudentDialogComponent,

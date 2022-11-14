@@ -36,12 +36,18 @@ import {PersonnelDialogComponent} from '../components/school-detail-tabs/personn
 
 export const PERSONNEL_TABLE_CACHE = new InjectionToken<TableCache<School>>('personnel-table-cache')
 export const PERSONNEL_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Personnel>>('personnel-school-change-handler')
-export const PERSONNEL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<PersonnelDialogComponent>>('personnel_edit-dialog-manager')
-export const PERSONNEL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('personnel_delete-dialog-manager')
+export const PERSONNEL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<PersonnelDialogComponent>>('personnel-edit-dialog-manager')
+export const PERSONNEL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('personnel-delete-dialog-manager')
 
 export function personnelProvidersFactory() {
   return [
-    ...listDialogManagerProviders<Personnel, PersonnelDialogComponent, TableCache<Personnel>>(PERSONNEL_EDIT_DIALOG_MANAGER, PERSONNEL_DELETE_DIALOG_MANAGER, PersonnelDialogComponent, PERSONNEL_TABLE_CACHE),
+    ...listDialogManagerProviders<Personnel, PersonnelDialogComponent, TableCache<Personnel>>(
+      'personnel',
+      PERSONNEL_EDIT_DIALOG_MANAGER,
+      PERSONNEL_DELETE_DIALOG_MANAGER,
+      PersonnelDialogComponent,
+      PERSONNEL_TABLE_CACHE
+    ),
     {
       provide: PERSONNEL_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Personnel>) => new TableCache('PersonnelTableCache', dataSource),

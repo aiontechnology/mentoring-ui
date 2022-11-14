@@ -39,6 +39,7 @@ export const GAME_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<
 export function gameProvidersFactory() {
   return [
     ...detailDialogManagerProviders(
+      'game',
       GAME_DETAIL_EDIT_DIALOG_MANAGER,
       GAME_DETAIL_DELETE_DIALOG_MANAGER,
       GameDialogComponent,
@@ -48,6 +49,7 @@ export function gameProvidersFactory() {
       GAME_INSTANCE_CACHE_UPDATER
     ),
     ...listDialogManagerProviders<Game, GameDialogComponent, TableCache<Game>>(
+      'game',
       GAME_LIST_EDIT_DIALOG_MANAGER,
       GAME_LIST_DELETE_DIALOG_MANAGER,
       GameDialogComponent,

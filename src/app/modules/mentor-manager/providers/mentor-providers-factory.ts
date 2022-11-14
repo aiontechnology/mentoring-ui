@@ -47,6 +47,7 @@ export const MENTOR_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManage
 export function mentorProvidersFactory() {
   return [
     ...detailDialogManagerProviders(
+      'mentor',
       MENTOR_DETAIL_EDIT_DIALOG_MANAGER,
       MENTOR_DETAIL_DELETE_DIALOG_MANAGER,
       MentorDialogComponent,
@@ -56,6 +57,7 @@ export function mentorProvidersFactory() {
       MENTOR_INSTANCE_CACHE_UPDATER
     ),
     ...listDialogManagerProviders<Mentor, MentorDialogComponent, TableCache<Mentor>>(
+      'mentor',
       MENTOR_LIST_EDIT_DIALOG_MANAGER,
       MENTOR_LIST_DELETE_DIALOG_MANAGER,
       MentorDialogComponent,
