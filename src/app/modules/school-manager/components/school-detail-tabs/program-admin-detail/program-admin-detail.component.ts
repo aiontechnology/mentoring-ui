@@ -17,17 +17,39 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
+import {DialogManager} from '../../../../../implementation/command/dialog-manager';
+import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
+import {ProgramAdmin} from '../../../../../implementation/models/program-admin/program-admin';
 import {School} from '../../../../../implementation/models/school/school';
 import {SchoolSession} from '../../../../../implementation/models/school/schoolsession';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
-import {ProgramAdmin} from '../../../../../implementation/models/program-admin/program-admin';
-import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_INSTANCE_CACHE} from '../../../../../providers/global/global-program-admin-providers-factory';
+import {
+  PROGRAM_ADMIN_DATA_SOURCE,
+  PROGRAM_ADMIN_INSTANCE_CACHE
+} from '../../../../../providers/global/global-program-admin-providers-factory';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global/global-school-session-providers-factory';
-import {PROGRAM_ADMIN_MENU} from '../../../school-manager.module';
+import {ConfimationDialogComponent} from '../../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {
+  ADD_PROGRAM_ADMIN_MENU_TITLE,
+  ADD_PROGRAM_ADMIN_PANEL_TITLE,
+  ADD_PROGRAM_ADMIN_SNACKBAR_MESSAGE,
+  EDIT_PROGRAM_ADMIN_MENU_TITLE,
+  EDIT_PROGRAM_ADMIN_PANEL_TITLE,
+  EDIT_PROGRAM_ADMIN_SNACKBAR_MESSAGE,
+  PLURAL_PROGRAM_ADMIN,
+  REMOVE_PROGRAM_ADMIN_MENU_TITLE,
+  REMOVE_PROGRAM_ADMIN_SNACKBAR_MESSAGE,
+  SINGULAR_PROGRAM_ADMIN
+} from '../../../other/school-constants';
+import {
+  PROGRAM_ADMIN_DETAIL_DELETE_DIALOG_MANAGER,
+  PROGRAM_ADMIN_DETAIL_EDIT_DIALOG_MANAGER
+} from '../../../providers/program-admin-providers-factory';
+import {PROGRAM_ADMIN_GROUP} from '../../../school-manager.module';
+import {ProgramAdminDialogComponent} from '../program-admin-dialog/program-admin-dialog.component';
 
 @Component({
   selector: 'ms-program-admin-detail',
@@ -38,15 +60,45 @@ export class ProgramAdminDetailComponent extends SchoolWatchingDetailComponent i
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(PROGRAM_ADMIN_MENU) menuCommands: CommandArray,
     route: ActivatedRoute,
     @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     // other
+    @Inject(PROGRAM_ADMIN_DETAIL_EDIT_DIALOG_MANAGER) private programAdminEditDialogManager: DialogManager<ProgramAdminDialogComponent>,
+    @Inject(PROGRAM_ADMIN_DETAIL_DELETE_DIALOG_MANAGER) private programAdminDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
     @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
-    @Inject(PROGRAM_ADMIN_INSTANCE_CACHE) public programAdminCache: SingleItemCache<ProgramAdmin>,
+    @Inject(PROGRAM_ADMIN_INSTANCE_CACHE) public programAdminInstanceCache: SingleItemCache<ProgramAdmin>,
   ) {
-    super(menuState, menuCommands, route, schoolInstanceCache, schoolSessionInstanceCache)
+    super(menuState, route, schoolInstanceCache, schoolSessionInstanceCache)
+  }
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand<ProgramAdminDialogComponent>.builder(ADD_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminEditDialogManager)
+        .withSnackbarMessage(ADD_PROGRAM_ADMIN_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          panelTitle: ADD_PROGRAM_ADMIN_PANEL_TITLE
+        }))
+        .build()
+        .enableIf(() => this.programAdminInstanceCache.item === undefined),
+      MenuDialogCommand<ProgramAdminDialogComponent>.builder(EDIT_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminEditDialogManager)
+        .withSnackbarMessage(EDIT_PROGRAM_ADMIN_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          model: this.programAdminInstanceCache.item,
+          panelTitle: EDIT_PROGRAM_ADMIN_PANEL_TITLE
+        }))
+        .build()
+        .enableIf(() => this.programAdminInstanceCache.item !== undefined),
+      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminDeleteDialogManager)
+        .withSnackbarMessage(REMOVE_PROGRAM_ADMIN_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          model: this.programAdminInstanceCache.item,
+          singularName: SINGULAR_PROGRAM_ADMIN,
+          pluralName: PLURAL_PROGRAM_ADMIN,
+          countSupplier: () => 1
+        }))
+        .build()
+        .enableIf(() => this.programAdminInstanceCache.item !== undefined)    ]
   }
 
   ngOnInit(): void {
@@ -60,7 +112,7 @@ export class ProgramAdminDetailComponent extends SchoolWatchingDetailComponent i
   protected onSchoolChange(school: School) {
     this.programAdminDataSource.allValues()
       .then(admin => {
-        this.programAdminCache.item = admin[0];
+        this.programAdminInstanceCache.item = admin[0];
       });
   }
 }

@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
+import {ComponentType} from '@angular/cdk/portal';
 import {InjectionToken} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {DialogManager} from '../../implementation/command/dialog-manager';
-import {ClosedResultType} from '../../implementation/types/dialog-types';
-import {ConfimationDialogComponent} from '../../modules/shared/components/confimation-dialog/confimation-dialog.component';
-import {LIST_AFTER_CLOSED_DELETE} from '../dialog-manager-providers';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
+import {ClosedResultType} from '../../../implementation/types/dialog-types';
 
-export function listDialogManagerDeleteProviders(
-  name: InjectionToken<DialogManager<ConfimationDialogComponent>>
+export function standAloneDialogManagerEditProviders<COMPONENT_TYPE>(
+  name: InjectionToken<DialogManager<COMPONENT_TYPE>>,
+  afterClosedToken: InjectionToken<ClosedResultType>,
+  componentType: ComponentType<COMPONENT_TYPE>,
 ): any[] {
   return [
     {
       provide: name,
-      useFactory: (dialog: MatDialog, afterCloseFunction: ClosedResultType) =>
-        DialogManager<ConfimationDialogComponent>.builder(dialog, ConfimationDialogComponent)
+      useFactory: (dialog: MatDialog, afterCloseFunction: (s: string) => (a: any) => void) =>
+        DialogManager<COMPONENT_TYPE>.builder(dialog, componentType)
           .withAfterCloseFunction(afterCloseFunction)
-          .withConfig({width: '500px', disableClose: true})
           .build(),
-      deps: [MatDialog, LIST_AFTER_CLOSED_DELETE]
+      deps: [MatDialog, afterClosedToken]
     },
   ]
 }

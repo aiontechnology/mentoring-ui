@@ -18,10 +18,8 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Command} from '../../../../../implementation/command/command';
-import {EnableableCommand} from '../../../../../implementation/command/enableable-command';
-import {MenuCommand} from '../../../../../implementation/command/menu-command';
-import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
+import {DialogManager} from '../../../../../implementation/command/dialog-manager';
+import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
 import {School} from '../../../../../implementation/models/school/school';
@@ -38,7 +36,19 @@ import {
   STUDENT_INSTANCE_CACHE,
   STUDENT_ROUTE_WATCHER
 } from '../../../../../providers/global/global-student-providers-factory';
-import {STUDENT_DETAIL_MENU} from '../../../student-manager.module';
+import {ConfimationDialogComponent} from '../../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {
+  EDIT_STUDENT_MENU_TITLE,
+  EDIT_STUDENT_PANEL_TITLE,
+  EDIT_STUDENT_SNACKBAR_MESSAGE,
+  PLURAL_STUDENT,
+  REMOVE_STUDENT_MENU_TITLE,
+  REMOVE_STUDENT_SNACKBAR_MESSAGE,
+  SINGULAR_STUDENT
+} from '../../../other/student-constants';
+import {STUDENT_DETAIL_DELETE_DIALOG_MANAGER, STUDENT_DETAIL_EDIT_DIALOG_MANAGER} from '../../../providers/student-providers-factory';
+import {STUDENT_GROUP} from '../../../student-manager.module';
+import {StudentDialogComponent} from '../../student-dialog/student-dialog.component';
 
 @Component({
   selector: 'ms-student-detail',
@@ -51,18 +61,42 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(STUDENT_DETAIL_MENU) menuCommands: CommandArray,
     route: ActivatedRoute,
     navService: NavigationService,
     @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     // other
+    @Inject(STUDENT_DETAIL_EDIT_DIALOG_MANAGER) private studentEditDialogManager: DialogManager<StudentDialogComponent>,
+    @Inject(STUDENT_DETAIL_DELETE_DIALOG_MANAGER) private studentDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
     @Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<StudentInbound>,
     @Inject(STUDENT_INSTANCE_CACHE) public studentInstanceCache: SingleItemCache<StudentInbound>,
     @Inject(STUDENT_ROUTE_WATCHER) private studentRouteWatcher: RouteElementWatcher<Student>,
     private router: Router,
   ) {
-    super(menuState, menuCommands, route, schoolInstanceCache, schoolSessionInstanceCache, navService)
+    super(menuState, route, schoolInstanceCache, schoolSessionInstanceCache, navService)
+  }
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand<StudentDialogComponent>.builder(EDIT_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentEditDialogManager)
+        .withSnackbarMessage(EDIT_STUDENT_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          model: this.studentInstanceCache.item,
+          panelTitle: EDIT_STUDENT_PANEL_TITLE
+        }))
+        .build()
+        .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
+      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentDeleteDialogManager)
+        .withSnackbarMessage(REMOVE_STUDENT_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          model: this.studentInstanceCache.item,
+          singularName: SINGULAR_STUDENT,
+          pluralName: PLURAL_STUDENT,
+          countSupplier: () => 1,
+        }))
+        .build()
+        .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent)
+    ]
   }
 
   ngOnInit(): void {
@@ -73,14 +107,6 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
   ngOnDestroy(): void {
     this.destroy()
     this.subscriptions.forEach(subscription => subscription.unsubscribe())
-  }
-
-  protected registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
-    menuCommands.forEach(command => {
-      const c: MenuCommand = command.factory(false);
-      c.enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent)
-      menuState.add(c)
-    })
   }
 
   protected doHandleBackButton = (navService: NavigationService): void =>

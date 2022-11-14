@@ -16,22 +16,23 @@
 
 import {InjectionToken} from '@angular/core';
 import {Command} from '../../../implementation/command/command';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {Game} from '../../../implementation/models/game/game';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {updateDialogManagerProviders} from '../../../providers/dialog/update-dialog-manager-providers';
 import {SCHOOL_GAME_DATA_SOURCE} from '../../../providers/global/global-school-game-providers-factory';
-import {updateProvidersFactory} from '../../../providers/legacy/update-menus-providers-factory';
+import {GameDialogComponent} from '../components/game-dialog/game-dialog.component';
 import {SchoolGameDialogComponent} from '../components/school-game-dialog/school-game-dialog.component';
-import {SCHOOL_GAME_GROUP} from '../resource-manager.module';
 
 export const SCHOOL_GAME_TABLE_CACHE = new InjectionToken<UriSupplier>('school-book-table-cache');
 export const SCHOOL_GAME_LIST_MENU = new InjectionToken<Command[]>('school-game-list-menu')
+export const GAME_UPDATE_DIALOG_MANAGER = new InjectionToken<DialogManager<GameDialogComponent>>('game-update-dialog-manager')
 
 export function schoolGameProvidersFactory() {
   return [
-    ...updateProvidersFactory<Game, SchoolGameDialogComponent, TableCache<Game>>(SCHOOL_GAME_LIST_MENU, SCHOOL_GAME_GROUP, 'Game',
-      SchoolGameDialogComponent, SCHOOL_GAME_TABLE_CACHE),
+    ...updateDialogManagerProviders<SchoolGameDialogComponent>(GAME_UPDATE_DIALOG_MANAGER, SchoolGameDialogComponent),
     {
       provide: SCHOOL_GAME_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Game>) => new TableCache('SchoolGameTableCache', dataSource),

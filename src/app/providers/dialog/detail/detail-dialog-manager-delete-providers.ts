@@ -14,25 +14,24 @@
  * limitations under the License.
  */
 
-import {ComponentType} from '@angular/cdk/portal';
 import {InjectionToken} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {DialogManager} from '../../implementation/command/dialog-manager';
-import {ClosedResultType} from '../../implementation/types/dialog-types';
-import {LIST_AFTER_CLOSED_EDIT} from '../dialog-manager-providers';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
+import {ClosedResultType} from '../../../implementation/types/dialog-types';
+import {ConfimationDialogComponent} from '../../../modules/shared/components/confimation-dialog/confimation-dialog.component';
 
-export function listDialogManagerEditProviders<COMPONENT_TYPE>(
-  name: InjectionToken<DialogManager<COMPONENT_TYPE>>,
-  componentType: ComponentType<COMPONENT_TYPE>,
+export function detailDialogManagerDeleteProviders(
+  name: InjectionToken<DialogManager<ConfimationDialogComponent>>,
+  afterClosedToken: InjectionToken<ClosedResultType>,
 ): any[] {
   return [
     {
       provide: name,
       useFactory: (dialog: MatDialog, afterCloseFunction: ClosedResultType) =>
-        DialogManager<COMPONENT_TYPE>.builder(dialog, componentType)
+        DialogManager<ConfimationDialogComponent>.builder(dialog, ConfimationDialogComponent)
           .withAfterCloseFunction(afterCloseFunction)
           .build(),
-      deps: [MatDialog, LIST_AFTER_CLOSED_EDIT]
+      deps: [MatDialog, afterClosedToken]
     },
   ]
 }

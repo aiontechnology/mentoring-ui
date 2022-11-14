@@ -15,6 +15,7 @@
  */
 
 import {InjectionToken} from '@angular/core';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
@@ -23,23 +24,24 @@ import {School} from '../../../implementation/models/school/school';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {listDialogManagerProviders} from '../../../providers/dialog/list-dialog-manager-providers';
 import {
   PERSONNEL_CACHE,
   PERSONNEL_DATA_SOURCE,
   PERSONNEL_SCHOOL_CHANGE_RESETTER,
   PERSONNEL_URI_SUPPLIER
 } from '../../../providers/global/global-personnel-providers-factory';
-import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
+import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 import {PersonnelDialogComponent} from '../components/school-detail-tabs/personnel-dialog/personnel-dialog.component';
-import {PERSONNEL_GROUP, PERSONNEL_LIST_MENU} from '../school-manager.module';
 
 export const PERSONNEL_TABLE_CACHE = new InjectionToken<TableCache<School>>('personnel-table-cache')
 export const PERSONNEL_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Personnel>>('personnel-school-change-handler')
+export const PERSONNEL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<PersonnelDialogComponent>>('personnel_edit-dialog-manager')
+export const PERSONNEL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('personnel_delete-dialog-manager')
 
 export function personnelProvidersFactory() {
   return [
-    ...listProvidersFactory<Personnel, PersonnelDialogComponent, TableCache<Personnel>>(PERSONNEL_LIST_MENU, PERSONNEL_GROUP, 'Personnel',
-      PersonnelDialogComponent, PERSONNEL_TABLE_CACHE),
+    ...listDialogManagerProviders<Personnel, PersonnelDialogComponent, TableCache<Personnel>>(PERSONNEL_EDIT_DIALOG_MANAGER, PERSONNEL_DELETE_DIALOG_MANAGER, PersonnelDialogComponent, PERSONNEL_TABLE_CACHE),
     {
       provide: PERSONNEL_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Personnel>) => new TableCache('PersonnelTableCache', dataSource),

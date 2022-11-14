@@ -41,14 +41,14 @@ export class GameDialogComponent extends DialogComponent<Game, GameDialogCompone
 
   constructor(
     // For super
-    @Inject(MAT_DIALOG_DATA) data: any,
+    @Inject(MAT_DIALOG_DATA) public data: { model: Game, panelTitle: string },
     formBuilder: UntypedFormBuilder,
     dialogRef: MatDialogRef<GameDialogComponent>,
     @Inject(GAME_DATA_SOURCE) gameDataSource: DataSource<Game>,
     // Other
     private metaDataService: MetaDataService,
   ) {
-    super(data?.model as Game, formBuilder, dialogRef, gameDataSource)
+    super(data?.model, formBuilder, dialogRef, gameDataSource)
   }
 
   gradeRangeValidator = (control: AbstractControl): { [key: string]: boolean } => {

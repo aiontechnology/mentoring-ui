@@ -15,14 +15,15 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {NavigationManager} from '../../implementation/command/navigation-manager';
-import {SnackbarManager} from '../../implementation/managers/snackbar-manager';
-import {ClosedResultType} from '../../implementation/types/dialog-types';
-import {LIST_POST_ACTION} from '../dialog-manager-providers';
-import {SNACKBAR_MANAGER} from '../global/global-snackbar-providers';
+import {NavigationManager} from '../../../implementation/command/navigation-manager';
+import {SnackbarManager} from '../../../implementation/managers/snackbar-manager';
+import {ClosedResultType} from '../../../implementation/types/dialog-types';
+import {AnyConsumer} from '../../../implementation/types/types';
+import {SNACKBAR_MANAGER} from '../../global/global-snackbar-providers';
 
 export function listAfterClosedEditProviders<MODEL_TYPE>(
   name: InjectionToken<ClosedResultType>,
+  postActionToken: InjectionToken<AnyConsumer>,
   navigationManagerToken: InjectionToken<NavigationManager>,
 ): any[] {
   return [
@@ -44,7 +45,7 @@ export function listAfterClosedEditProviders<MODEL_TYPE>(
             listPostAction(result)
           }
         },
-      deps: [navigationManagerToken, SNACKBAR_MANAGER, LIST_POST_ACTION]
+      deps: [navigationManagerToken, SNACKBAR_MANAGER, postActionToken]
     },
   ]
 }

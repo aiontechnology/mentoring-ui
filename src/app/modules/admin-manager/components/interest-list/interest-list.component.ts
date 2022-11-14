@@ -18,7 +18,7 @@ import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {CommandArray} from '../../../../implementation/component/menu-registering-component';
+import {CommandArray} from '../../../../implementation/types/types';
 import {ADMIN_LIST_MENU} from '../../providers/interest-list-menus';
 import {InterestCacheService} from '../../services/interests/interest-cache.service';
 

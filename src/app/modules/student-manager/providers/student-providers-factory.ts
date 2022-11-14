@@ -15,10 +15,12 @@
  */
 
 import {InjectionToken} from '@angular/core';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../implementation/command/menu-dialog-command';
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
+import {Mentor} from '../../../implementation/models/mentor/mentor';
 import {School} from '../../../implementation/models/school/school';
 import {SchoolSession} from '../../../implementation/models/school/schoolsession';
 import {Student} from '../../../implementation/models/student/student';
@@ -28,8 +30,9 @@ import {
   SingleItemCacheSchoolSessionChangeHandler
 } from '../../../implementation/state-management/single-item-cache-school-session-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {addDialogProvidersFactory} from '../../../providers/legacy/add-dialog-providers-factory';
-import {detailProvidersFactory} from '../../../providers/legacy/detail-menus-providers-factory';
+import {addDialogProvidersFactory} from '../../../providers/dialog/add-dialog-providers-factory';
+import {detailDialogManagerProviders} from '../../../providers/dialog/detail-dialog-manager-providers';
+import {listDialogManagerProviders} from '../../../providers/dialog/list-dialog-manager-providers';
 import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global/global-school-providers-factory';
 import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../providers/global/global-school-session-providers-factory';
 import {
@@ -39,24 +42,37 @@ import {
   STUDENT_INSTANCE_CACHE_UPDATER,
   STUDENT_URI_SUPPLIER
 } from '../../../providers/global/global-student-providers-factory';
-import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
-import {Mentor} from '../../../implementation/models/mentor/mentor';
+import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 import {MentorDialogComponent} from '../components/mentor-dialog/mentor-dialog.component';
 import {StudentDialogComponent} from '../components/student-dialog/student-dialog.component';
 import {TeacherDialogComponent} from '../components/teacher-dialog/teacher-dialog.component';
-import {STUDENT_DETAIL_MENU, STUDENT_GROUP, STUDENT_LIST_MENU} from '../student-manager.module';
 
 export const STUDENT_TABLE_CACHE = new InjectionToken<TableCache<Student>>('student-table-cache')
 export const STUDENT_SCHOOL_SESSION_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolSessionChangeHandler<Student>>('student-school-session-change-handler')
+export const STUDENT_DETAIL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<StudentDialogComponent>>('student-detail-edit-dialog-manager')
+export const STUDENT_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('student-detail-delete-dialog-manager')
+export const STUDENT_LIST_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<StudentDialogComponent>>('student-list-edit-dialog-manager')
+export const STUDENT_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('student-list-delete-dialog-manager')
 export const STUDENT_ADD_TEACHER = new InjectionToken<(dataSupplier) => MenuDialogCommand<Teacher>>('student-add-teacher')
 export const STUDENT_ADD_MENTOR = new InjectionToken<(dataSupplier) => MenuDialogCommand<Mentor>>('student-add-mentor')
 
 export function studentProvidersFactory() {
   return [
-    ...listProvidersFactory<Student, StudentDialogComponent, TableCache<Student>>(STUDENT_LIST_MENU, STUDENT_GROUP, 'Student',
-      StudentDialogComponent, STUDENT_TABLE_CACHE),
-    ...detailProvidersFactory<Student, StudentDialogComponent, TableCache<Student>>(STUDENT_DETAIL_MENU, STUDENT_GROUP, 'Student',
-      ['/studentmanager'], StudentDialogComponent, STUDENT_TABLE_CACHE, STUDENT_INSTANCE_CACHE, STUDENT_INSTANCE_CACHE_UPDATER),
+    ...detailDialogManagerProviders(
+      STUDENT_DETAIL_EDIT_DIALOG_MANAGER,
+      STUDENT_DETAIL_DELETE_DIALOG_MANAGER,
+      StudentDialogComponent,
+      STUDENT_TABLE_CACHE,
+      ['/studentmanager'],
+      STUDENT_INSTANCE_CACHE,
+      STUDENT_INSTANCE_CACHE_UPDATER
+    ),
+    ...listDialogManagerProviders<Student, StudentDialogComponent, TableCache<Student>>(
+      STUDENT_LIST_EDIT_DIALOG_MANAGER,
+      STUDENT_LIST_DELETE_DIALOG_MANAGER,
+      StudentDialogComponent,
+      STUDENT_TABLE_CACHE
+    ),
     ...addDialogProvidersFactory<Teacher, TeacherDialogComponent>(STUDENT_ADD_TEACHER, TeacherDialogComponent),
     ...addDialogProvidersFactory<Mentor, MentorDialogComponent>(STUDENT_ADD_MENTOR, MentorDialogComponent),
     {

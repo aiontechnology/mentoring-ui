@@ -15,6 +15,7 @@
  */
 
 import {InjectionToken} from '@angular/core';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
@@ -23,7 +24,8 @@ import {School} from '../../../implementation/models/school/school';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {detailProvidersFactory} from '../../../providers/legacy/detail-menus-providers-factory';
+import {detailDialogManagerProviders} from '../../../providers/dialog/detail-dialog-manager-providers';
+import {listDialogManagerProviders} from '../../../providers/dialog/list-dialog-manager-providers';
 import {
   MENTOR_CACHE,
   MENTOR_DATA_SOURCE,
@@ -32,19 +34,33 @@ import {
   MENTOR_SCHOOL_CHANGE_RESETTER,
   MENTOR_URI_SUPPLIER
 } from '../../../providers/global/global-mentor-providers-factory';
-import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
+import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 import {MentorDialogComponent} from '../components/mentor-dialog/mentor-dialog.component';
-import {MENTOR_DETAIL_MENU, MENTOR_GROUP, MENTOR_LIST_MENU} from '../mentor-manager.module';
 
 export const MENTOR_TABLE_CACHE = new InjectionToken<TableCache<School>>('mentor-table-cache')
 export const MENTOR_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Mentor>>('mentor-school-change-handler')
+export const MENTOR_DETAIL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<MentorDialogComponent>>('mentor-detail-edit-dialog-manager')
+export const MENTOR_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('mentor-detail-delete-dialog-manager')
+export const MENTOR_LIST_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<MentorDialogComponent>>('mentor-list-edit-dialog-manager')
+export const MENTOR_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('mentor-list-delete-dialog-manager')
 
 export function mentorProvidersFactory() {
   return [
-    ...listProvidersFactory<Mentor, MentorDialogComponent, TableCache<Mentor>>(MENTOR_LIST_MENU, MENTOR_GROUP, 'Mentor',
-      MentorDialogComponent, MENTOR_TABLE_CACHE),
-    ...detailProvidersFactory<Mentor, MentorDialogComponent, TableCache<Mentor>>(MENTOR_DETAIL_MENU, MENTOR_GROUP, 'Mentor',
-      ['/mentormanager'], MentorDialogComponent, MENTOR_TABLE_CACHE, MENTOR_INSTANCE_CACHE, MENTOR_INSTANCE_CACHE_UPDATER),
+    ...detailDialogManagerProviders(
+      MENTOR_DETAIL_EDIT_DIALOG_MANAGER,
+      MENTOR_DETAIL_DELETE_DIALOG_MANAGER,
+      MentorDialogComponent,
+      MENTOR_TABLE_CACHE,
+      ['/mentormanager'],
+      MENTOR_INSTANCE_CACHE,
+      MENTOR_INSTANCE_CACHE_UPDATER
+    ),
+    ...listDialogManagerProviders<Mentor, MentorDialogComponent, TableCache<Mentor>>(
+      MENTOR_LIST_EDIT_DIALOG_MANAGER,
+      MENTOR_LIST_DELETE_DIALOG_MANAGER,
+      MentorDialogComponent,
+      MENTOR_TABLE_CACHE
+    ),
     {
       provide: MENTOR_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Mentor>) => new TableCache('MentorTableCache', dataSource),

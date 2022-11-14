@@ -19,20 +19,20 @@
     <mat-card-title>Program Admin Details</mat-card-title>
   </mat-card-header>
   <mat-card-content class="mat-elevation-z8">
-    <ng-container *ngIf="programAdminCache.item">
-      <h1>{{ programAdminCache.item?.firstName + ' ' + programAdminCache.item?.lastName }}</h1>
+    <ng-container *ngIf="programAdminInstanceCache.item">
+      <h1>{{ programAdminInstanceCache.item?.firstName + ' ' + programAdminInstanceCache.item?.lastName }}</h1>
       <table>
         <tr>
           <td>Email</td>
-          <td>{{ programAdminCache.item?.email }}</td>
+          <td>{{ programAdminInstanceCache.item?.email }}</td>
         </tr>
         <tr>
           <td>Phone</td>
-          <td>{{ programAdminCache.item?.cellPhone }}</td>
+          <td>{{ programAdminInstanceCache.item?.cellPhone }}</td>
         </tr>
       </table>
     </ng-container>
-    <ng-container *ngIf="!programAdminCache.item">
+    <ng-container *ngIf="!programAdminInstanceCache.item">
       No Program Admin available
     </ng-container>
   </mat-card-content>

@@ -15,10 +15,10 @@
  */
 
 import {InjectionToken, INJECTOR, Injector} from '@angular/core';
-import {SnackbarManager} from '../../implementation/managers/snackbar-manager';
-import {TableCache} from '../../implementation/table-cache/table-cache';
-import {ClosedResultType} from '../../implementation/types/dialog-types';
-import {SNACKBAR_MANAGER} from '../global/global-snackbar-providers';
+import {SnackbarManager} from '../../../implementation/managers/snackbar-manager';
+import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {ClosedResultType} from '../../../implementation/types/dialog-types';
+import {SNACKBAR_MANAGER} from '../../global/global-snackbar-providers';
 
 export function listAfterClosedDeleteProviders<MODEL_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
   name: InjectionToken<ClosedResultType>,

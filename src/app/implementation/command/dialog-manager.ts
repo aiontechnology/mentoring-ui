@@ -15,7 +15,8 @@
  */
 
 import {ComponentType} from '@angular/cdk/portal';
-import {MatDialog, MatDialogRef} from '@angular/material/dialog';
+import {MatDialog} from '@angular/material/dialog';
+import {ClosedResultType} from '../types/dialog-types';
 
 export class DialogManager<T> {
   static DialogManagerBuilder = class<T> {
@@ -36,7 +37,7 @@ export class DialogManager<T> {
       )
     }
 
-    withAfterCloseFunction(afterCloseFunction: (s: string) => (a: any) => void) {
+    withAfterCloseFunction(afterCloseFunction: ClosedResultType) {
       this.afterCloseFunction = afterCloseFunction
       return this
     }
@@ -51,7 +52,7 @@ export class DialogManager<T> {
     private dialog: MatDialog,
     private readonly componentType: ComponentType<T>,
     private readonly afterCloseFunction: (string) => (any) => void,
-    private readonly config: object = {width: '700px', disableClose: true},
+    private readonly config: object = {width: '700px'},
   ) {}
 
   static builder<T>(

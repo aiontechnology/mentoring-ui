@@ -15,27 +15,40 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {Command} from '../../../implementation/command/command';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {DataSource} from '../../../implementation/data/data-source';
 import {Book} from '../../../implementation/models/book/book';
 import {School} from '../../../implementation/models/school/school';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {detailProvidersFactory} from '../../../providers/legacy/detail-menus-providers-factory';
+import {detailDialogManagerProviders} from '../../../providers/dialog/detail-dialog-manager-providers';
+import {listDialogManagerProviders} from '../../../providers/dialog/list-dialog-manager-providers';
 import {BOOK_DATA_SOURCE, BOOK_INSTANCE_CACHE, BOOK_INSTANCE_CACHE_UPDATER} from '../../../providers/global/global-book-providers-factory';
-import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
+import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 import {BookDialogComponent} from '../components/book-dialog/book-dialog.component';
-import {BOOK_GROUP} from '../resource-manager.module';
 
-export const BOOK_DETAIL_MENU = new InjectionToken<Command[]>('book-detail-menu');
-export const BOOK_LIST_MENU = new InjectionToken<Command[]>('book-list-menu');
 export const BOOK_TABLE_CACHE = new InjectionToken<TableCache<School>>('book-table-cache')
+export const BOOK_DETAIL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<BookDialogComponent>>('book-detail-edit-dialog-manager')
+export const BOOK_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('book-detail-delete-dialog-manager')
+export const BOOK_LIST_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<BookDialogComponent>>('book-list-edit-dialog-manager')
+export const BOOK_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('book-list-delete-dialog-manager')
 
 export function bookProvidersFactory() {
   return [
-    ...listProvidersFactory<Book, BookDialogComponent, TableCache<Book>>(BOOK_LIST_MENU, BOOK_GROUP, 'book', BookDialogComponent,
-      BOOK_TABLE_CACHE),
-    ...detailProvidersFactory<Book, BookDialogComponent, TableCache<Book>>(BOOK_DETAIL_MENU, 'book', 'book',
-      ['/resourcemanager'], BookDialogComponent, BOOK_TABLE_CACHE, BOOK_INSTANCE_CACHE, BOOK_INSTANCE_CACHE_UPDATER),
+    ...detailDialogManagerProviders(
+      BOOK_DETAIL_EDIT_DIALOG_MANAGER,
+      BOOK_DETAIL_DELETE_DIALOG_MANAGER,
+      BookDialogComponent,
+      BOOK_TABLE_CACHE,
+      ['/resourcemanager'],
+      BOOK_INSTANCE_CACHE,
+      BOOK_INSTANCE_CACHE_UPDATER
+    ),
+    ...listDialogManagerProviders<Book, BookDialogComponent, TableCache<Book>>(
+      BOOK_LIST_EDIT_DIALOG_MANAGER,
+      BOOK_LIST_DELETE_DIALOG_MANAGER,
+      BookDialogComponent,
+      BOOK_TABLE_CACHE
+    ),
     {
       provide: BOOK_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Book>) => new TableCache('BookTableCache', dataSource),

@@ -36,7 +36,7 @@ export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogC
 
   constructor(
     // for super
-    @Inject(MAT_DIALOG_DATA) data: any,
+    @Inject(MAT_DIALOG_DATA) public data: { model: School, panelTitle: string },
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<SchoolDialogComponent>,
     @Inject(SCHOOL_DATA_SOURCE) schoolDataSource: DataSource<School>,
@@ -44,7 +44,7 @@ export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogC
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_COLLECTION_CACHE) private schoolCollectionCache: MultiItemCache<School>,
   ) {
-    super(data?.model as School, formBuilder, dialogRef, schoolDataSource)
+    super(data?.model, formBuilder, dialogRef, schoolDataSource)
   }
 
   ngOnInit(): void {

@@ -32,12 +32,12 @@ import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../../../providers/global/global-
 export class ProgramAdminDialogComponent extends DialogComponent<ProgramAdmin, ProgramAdminDialogComponent> implements OnInit {
   constructor(
     // For super
-    @Inject(MAT_DIALOG_DATA) data: any,
+    @Inject(MAT_DIALOG_DATA) public data: { model: ProgramAdmin, panelTitle: string },
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<ProgramAdminDialogComponent>,
     @Inject(PROGRAM_ADMIN_DATA_SOURCE) programAdminDataSource: DataSource<ProgramAdmin>,
   ) {
-    super(data?.model as ProgramAdmin, formBuilder, dialogRef, programAdminDataSource)
+    super(data?.model, formBuilder, dialogRef, programAdminDataSource)
   }
 
   ngOnInit(): void {

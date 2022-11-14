@@ -16,21 +16,18 @@
 
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {Command} from '../command/command';
 import {School} from '../models/school/school';
 import {SchoolSession} from '../models/school/schoolsession';
 import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
 import {SingleItemCache} from '../state-management/single-item-cache';
 import {DetailComponent} from './detail-component';
-import {CommandArray} from './menu-registering-component';
 
 export abstract class SchoolWatchingDetailComponent extends DetailComponent {
   private schoolWatchingDetailComponentSubscriptions: Subscription[] = []
 
   protected constructor(
     menuState: MenuStateService,
-    menuCommands: CommandArray,
     route: ActivatedRoute,
     // other
     protected schoolInstanceCache: SingleItemCache<School>,
@@ -38,7 +35,7 @@ export abstract class SchoolWatchingDetailComponent extends DetailComponent {
     // optional
     navService?: NavigationService,
   ) {
-    super(menuState, menuCommands, route, navService);
+    super(menuState, route, navService);
   }
 
   protected init() {

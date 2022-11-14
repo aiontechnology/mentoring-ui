@@ -17,7 +17,9 @@
 import {InjectionToken, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {Command} from '../../implementation/command/command';
+import {DialogManager} from '../../implementation/command/dialog-manager';
 import {SCHOOL_ID} from '../../implementation/route/route-constants';
+import {standAloneDialogManagerProviders} from '../../providers/dialog/stand-alone-dialog-manager-providers';
 import {GradesFormatPipe} from '../shared/pipes/grades-format.pipe';
 import {SharedModule} from '../shared/shared.module';
 import {InviteStudentComponent} from './components/invite-student/invite-student.component';
@@ -57,11 +59,8 @@ const routes: Routes = [
 // Menus
 export const SCHOOL_BOOK_LIST_MENU = new InjectionToken<Command[]>('school-book-list-menu')
 export const SCHOOL_GAME_LIST_MENU = new InjectionToken<Command[]>('school-game-list-menu')
-export const SCHOOL_DETAIL_MENU = new InjectionToken<Command[]>('school-detail-menu')
 export const SCHOOL_LIST_MENU = new InjectionToken<Command[]>('school-list-menu')
 export const PERSONNEL_LIST_MENU = new InjectionToken<Command[]>('personnel-list-menu')
-export const PROGRAM_ADMIN_MENU = new InjectionToken<Command[]>('program-admin-menu')
-export const TEACHER_LIST_MENU = new InjectionToken<Command[]>('teacher-list-menu')
 
 // Groups
 export const PERSONNEL_GROUP = 'personnel'
@@ -71,7 +70,8 @@ export const SCHOOL_GAME_GROUP = 'school-game'
 export const SCHOOL_GROUP = 'school'
 export const TEACHER_GROUP = 'teacher'
 
-// Caches
+// Tokens
+export const INVITATION_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<InviteStudentComponent>>('invitation-edit-dialog-manager');
 
 @NgModule({
   declarations: [
@@ -100,12 +100,13 @@ export const TEACHER_GROUP = 'teacher'
     SharedModule.forRoot()
   ],
   providers: [
-    ...schoolProvidersFactory(),
-    ...programAdminProvidersFactory(),
-    ...teacherProvidersFactory(),
     ...personnelProvidersFactory(),
+    ...programAdminProvidersFactory(),
     ...schoolBookProvidersFactory(),
     ...schoolGameProvidersFactory(),
+    ...schoolProvidersFactory(),
+    ...teacherProvidersFactory(),
+    ...standAloneDialogManagerProviders<InviteStudentComponent>(INVITATION_EDIT_DIALOG_MANAGER, InviteStudentComponent),
   ]
 })
 export class SchoolManagerModule {

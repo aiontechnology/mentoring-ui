@@ -18,3 +18,4 @@
  * Factory type that returns a result handler when given a snackbar message.
  */
 export type ClosedResultType = (snackbarMessage: string) => (result: any) => void
+

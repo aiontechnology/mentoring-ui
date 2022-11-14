@@ -18,12 +18,15 @@ import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
+import {DialogManager} from '../../../../../implementation/command/dialog-manager';
+import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../../implementation/component/list-component';
-import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
 import {Game} from '../../../../../implementation/models/game/game';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
-import {SCHOOL_GAME_TABLE_CACHE} from '../../../providers/school-game-providers-factory';
-import {SCHOOL_GAME_LIST_MENU} from '../../../school-manager.module';
+import {UPDATE_GAME_MENU_TITLE, UPDATE_GAME_SNACKBAR_MESSAGE} from '../../../other/school-constants';
+import {GAME_UPDATE_DIALOG_MANAGER, SCHOOL_GAME_TABLE_CACHE} from '../../../providers/school-game-providers-factory';
+import {SCHOOL_GAME_GROUP} from '../../../school-manager.module';
+import {SchoolGameDialogComponent} from '../school-game-dialog/school-game-dialog.component';
 
 @Component({
   selector: 'ms-school-game-list',
@@ -36,15 +39,27 @@ export class SchoolGameListComponent extends ListComponent<Game> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(SCHOOL_GAME_LIST_MENU) menuCommands: CommandArray,
     @Inject(SCHOOL_GAME_TABLE_CACHE) tableCache: TableCache<Game>,
+    //other
+    @Inject(GAME_UPDATE_DIALOG_MANAGER) private gameUpdateDialogManager: DialogManager<SchoolGameDialogComponent>,
   ) {
-    super(menuState, menuCommands, tableCache)
+    super(menuState, tableCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
 
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand<Game>.builder(UPDATE_GAME_MENU_TITLE, SCHOOL_GAME_GROUP, this.gameUpdateDialogManager)
+        .withSnackbarMessage(UPDATE_GAME_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          localItems: () => this.tableCache.tableDataSource.data
+        }))
+        .build()
+    ];
+  }
 
   ngOnInit(): void {
     this.init()

@@ -15,30 +15,46 @@
  */
 
 import {InjectionToken} from '@angular/core';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../implementation/command/menu-dialog-command';
 import {DataSource} from '../../../implementation/data/data-source';
 import {Mentor} from '../../../implementation/models/mentor/mentor';
 import {School} from '../../../implementation/models/school/school';
-import {Student} from '../../../implementation/models/student/student';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {addDialogProvidersFactory} from '../../../providers/legacy/add-dialog-providers-factory';
-import {detailProvidersFactory} from '../../../providers/legacy/detail-menus-providers-factory';
-import {SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE, SCHOOL_INSTANCE_CACHE_UPDATER} from '../../../providers/global/global-school-providers-factory';
-import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
-import {InviteStudentComponent} from '../components/invite-student/invite-student.component';
+import {detailDialogManagerProviders} from '../../../providers/dialog/detail-dialog-manager-providers';
+import {listDialogManagerProviders} from '../../../providers/dialog/list-dialog-manager-providers';
+import {
+  SCHOOL_DATA_SOURCE,
+  SCHOOL_INSTANCE_CACHE,
+  SCHOOL_INSTANCE_CACHE_UPDATER
+} from '../../../providers/global/global-school-providers-factory';
+import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 import {SchoolDialogComponent} from '../components/school-dialog/school-dialog.component';
-import {SCHOOL_DETAIL_MENU, SCHOOL_GROUP, SCHOOL_LIST_MENU} from '../school-manager.module';
 
 export const SCHOOL_TABLE_CACHE = new InjectionToken<TableCache<School>>('school-table-cache')
 export const SCHOOL_INVITE_STUDENT = new InjectionToken<(dataSupplier) => MenuDialogCommand<Mentor>>('school-invite-student')
+export const SCHOOL_DETAIL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<SchoolDialogComponent>>('school-detail-edit-dialog-manager')
+export const SCHOOL_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('school-detail-delete-dialog-manager')
+export const SCHOOL_LIST_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<SchoolDialogComponent>>('school-list-edit-dialog-manager')
+export const SCHOOL_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('school-list-delete-dialog-manager')
 
 export function schoolProvidersFactory() {
   return [
-    ...listProvidersFactory<School, SchoolDialogComponent, TableCache<School>>(SCHOOL_LIST_MENU, SCHOOL_GROUP, 'School',
-      SchoolDialogComponent, SCHOOL_TABLE_CACHE),
-    ...detailProvidersFactory<School, SchoolDialogComponent, TableCache<School>>(SCHOOL_DETAIL_MENU, SCHOOL_GROUP, 'School',
-      ['/schoolsmanager'], SchoolDialogComponent, SCHOOL_TABLE_CACHE, SCHOOL_INSTANCE_CACHE, SCHOOL_INSTANCE_CACHE_UPDATER),
-    ...addDialogProvidersFactory<Student, InviteStudentComponent>(SCHOOL_INVITE_STUDENT, InviteStudentComponent),
+    ...detailDialogManagerProviders(
+      SCHOOL_DETAIL_EDIT_DIALOG_MANAGER,
+      SCHOOL_DETAIL_DELETE_DIALOG_MANAGER,
+      SchoolDialogComponent,
+      SCHOOL_TABLE_CACHE,
+      ['/schoolsmanager'],
+      SCHOOL_INSTANCE_CACHE,
+      SCHOOL_INSTANCE_CACHE_UPDATER
+    ),
+    ...listDialogManagerProviders<School, SchoolDialogComponent, TableCache<School>>(
+      SCHOOL_LIST_EDIT_DIALOG_MANAGER,
+      SCHOOL_LIST_DELETE_DIALOG_MANAGER,
+      SchoolDialogComponent,
+      SCHOOL_TABLE_CACHE
+    ),
     {
       provide: SCHOOL_TABLE_CACHE,
       useFactory: (dataSource: DataSource<School>) => new TableCache('SchoolTableCache', dataSource),

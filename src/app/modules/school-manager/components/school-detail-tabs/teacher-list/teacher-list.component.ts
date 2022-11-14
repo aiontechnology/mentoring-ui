@@ -21,17 +21,30 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {DialogManager} from '../../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../../implementation/component/list-component';
-import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
 import {Teacher} from '../../../../../implementation/models/teacher/teacher';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
 import {TEACHER_INSTANCE_CACHE} from '../../../../../providers/global/global-teacher-providers-factory';
+import {ConfimationDialogComponent} from '../../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {
+  ADD_TEACHER_MENU_TITLE,
+  ADD_TEACHER_PANEL_TITLE,
+  ADD_TEACHER_SNACKBAR_MESSAGE,
+  EDIT_TEACHER_MENU_TITLE,
+  EDIT_TEACHER_PANEL_TITLE,
+  EDIT_TEACHER_SNACKBAR_MESSAGE,
+  PLURAL_TEACHER,
+  REMOVE_TEACHER_MENU_TITLE,
+  REMOVE_TEACHER_SNACKBAR_MESSAGE,
+  SINGULAR_TEACHER
+} from '../../../other/school-constants';
 import {
   TEACHER_DELETE_DIALOG_MANAGER,
   TEACHER_EDIT_DIALOG_MANAGER,
   TEACHER_TABLE_CACHE
 } from '../../../providers/teacher-providers-factory';
-import {TEACHER_GROUP, TEACHER_LIST_MENU} from '../../../school-manager.module';
+import {TEACHER_GROUP} from '../../../school-manager.module';
+import {TeacherDialogComponent} from '../teacher-dialog/teacher-dialog.component';
 
 @Component({
   selector: 'ms-teacher-list',
@@ -44,19 +57,46 @@ export class TeacherListComponent extends ListComponent<Teacher> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(TEACHER_LIST_MENU) menuCommands: CommandArray,
     @Inject(TEACHER_TABLE_CACHE) tableCache: TableCache<Teacher>,
     @Inject(TEACHER_INSTANCE_CACHE) teacherInstanceCache: SingleItemCache<Teacher>,
     // other
-    @Inject(TEACHER_EDIT_DIALOG_MANAGER) private teacherEditDialogManager: DialogManager<Teacher>,
-    @Inject(TEACHER_DELETE_DIALOG_MANAGER) private teacherDeleteDialogManager: DialogManager<Teacher>,
+    @Inject(TEACHER_EDIT_DIALOG_MANAGER) private teacherEditDialogManager: DialogManager<TeacherDialogComponent>,
+    @Inject(TEACHER_DELETE_DIALOG_MANAGER) private teacherDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
   ) {
-    super(menuState, menuCommands, tableCache, teacherInstanceCache)
+    super(menuState, tableCache, teacherInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
 
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand<TeacherDialogComponent>.builder(ADD_TEACHER_MENU_TITLE, TEACHER_GROUP, this.teacherEditDialogManager)
+        .withDataSupplier(() => ({
+          panelTitle: ADD_TEACHER_PANEL_TITLE
+        }))
+        .withSnackbarMessage(ADD_TEACHER_SNACKBAR_MESSAGE)
+        .build(),
+      MenuDialogCommand<TeacherDialogComponent>.builder(EDIT_TEACHER_MENU_TITLE, TEACHER_GROUP, this.teacherEditDialogManager)
+        .withDataSupplier(() => ({
+          model: this.tableCache.getFirstSelection(),
+          panelTitle: EDIT_TEACHER_PANEL_TITLE
+        }))
+        .withSnackbarMessage(EDIT_TEACHER_SNACKBAR_MESSAGE)
+        .build()
+        .enableIf(() => this.tableCache.selection.selected.length === 1),
+      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_TEACHER_MENU_TITLE, TEACHER_GROUP, this.teacherDeleteDialogManager)
+        .withDataSupplier(() => ({
+          singularName: SINGULAR_TEACHER,
+          pluralName: PLURAL_TEACHER,
+          countSupplier: () => this.tableCache.selectionCount
+        }))
+        .withSnackbarMessage(REMOVE_TEACHER_SNACKBAR_MESSAGE)
+        .build()
+        .enableIf(() => this.tableCache.selection.selected.length > 0)
+    ]
+  }
 
   ngOnInit(): void {
     this.init()
@@ -64,38 +104,6 @@ export class TeacherListComponent extends ListComponent<Teacher> implements OnIn
 
   ngOnDestroy(): void {
     this.destroy()
-  }
-
-  protected registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
-    menuState.add(
-      MenuDialogCommand.builder('Add Teacher', TEACHER_GROUP, this.teacherEditDialogManager)
-        .withDataSupplier(() => ({
-          panelTitle: 'Add New Teacher'
-        }))
-        .withSnackbarMessage('Teacher Added')
-        .build()
-    )
-    menuState.add(
-      MenuDialogCommand.builder('Edit Teacher', TEACHER_GROUP, this.teacherEditDialogManager)
-        .withDataSupplier(() => ({
-          model: this.tableCache.getFirstSelection(),
-          panelTitle: 'Edit Teacher'
-        }))
-        .withSnackbarMessage('Teacher Edited')
-        .build()
-        .enableIf(() => this.tableCache.selection.selected.length === 1)
-    )
-    menuState.add(
-      MenuDialogCommand.builder('Remove Teacher(s)', TEACHER_GROUP, this.teacherDeleteDialogManager)
-        .withDataSupplier(() => ({
-          singularName: 'teacher',
-          pluralName: `teachers`,
-          countSupplier: () => this.tableCache.selectionCount
-        }))
-        .withSnackbarMessage('Teacher(s) Removed')
-        .build()
-        .enableIf(() => this.tableCache.selection.selected.length > 0)
-    )
   }
 
   protected override loadTableCache = async (): Promise<void> => {

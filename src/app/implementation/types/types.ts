@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
+import {MenuCommand} from '../command/menu-command';
+
 export type BooleanSupplier = () => boolean
 
 export const TRUTHY_SUPPLIER: BooleanSupplier = () => true
 export const FALSY_SUPPLIER: BooleanSupplier = () => false
 
 export type ObjectSupplier = () => object
+
+export type AnyConsumer = (a: any) => void
+
+export type CommandArray = { name: string, factory: (isAdminOnly: boolean) => MenuCommand }[]

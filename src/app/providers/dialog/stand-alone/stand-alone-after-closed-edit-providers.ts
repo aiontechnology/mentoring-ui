@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-import {InjectionToken, INJECTOR, Injector} from '@angular/core';
-import {TableCache} from '../../implementation/table-cache/table-cache';
+import {InjectionToken} from '@angular/core';
+import {SnackbarManager} from '../../../implementation/managers/snackbar-manager';
+import {ClosedResultType} from '../../../implementation/types/dialog-types';
+import {SNACKBAR_MANAGER} from '../../global/global-snackbar-providers';
 
-export function listPostActionProviders<MODEL_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
-  name: InjectionToken<(any) => void>,
-  serviceToken: InjectionToken<SERVICE_TYPE>
+export function standAloneAfterClosedEditProviders(
+  name: InjectionToken<ClosedResultType>
 ): any[] {
   return [
     {
       provide: name,
-      useFactory: (injector: Injector) => {
-        const service: SERVICE_TYPE = injector.get(serviceToken)
-        return (item) => service.loadData()
-          .then(() => {
-            service.clearSelection();
-            if (item) {
-              service.jumpToItem(item);
-            }
-          })
-      },
-      deps: [INJECTOR]
+      useFactory: (snackbarManager: SnackbarManager) =>
+        (snackbarMessage: string) => result => {
+          if (result) {
+            snackbarManager.open(snackbarMessage)
+          }
+        },
+      deps: [SNACKBAR_MANAGER]
     },
   ]
 }

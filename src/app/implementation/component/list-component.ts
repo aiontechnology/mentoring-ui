@@ -16,22 +16,20 @@
 
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {Command} from '../command/command';
 import {MenuStateService} from '../services/menu-state.service';
 import {SingleItemCache} from '../state-management/single-item-cache';
 import {TableCache} from '../table-cache/table-cache';
-import {CommandArray, MenuRegisteringComponent} from './menu-registering-component';
+import {MenuRegisteringComponent} from './menu-registering-component';
 
 export abstract class ListComponent<T> extends MenuRegisteringComponent {
   protected constructor(
     // for super
     menuState: MenuStateService,
-    menuCommands: CommandArray,
     // other
     public tableCache: TableCache<T>,
     private instanceCache?: SingleItemCache<T>,
   ) {
-    super(menuState, menuCommands)
+    super(menuState)
   }
 
   protected set sort(sort: MatSort) {
@@ -50,7 +48,7 @@ export abstract class ListComponent<T> extends MenuRegisteringComponent {
     super.init();
     this.loadTableCache()
       .then(() => {
-        if (!this.instanceCache.isEmpty) {
+        if (this.instanceCache && !this.instanceCache.isEmpty) {
           this.tableCache.jumpToItem(this.instanceCache.item)
         }
       })

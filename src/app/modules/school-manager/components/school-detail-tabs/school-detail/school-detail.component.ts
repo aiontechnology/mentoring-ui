@@ -17,17 +17,30 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {MenuDialogCommandFactory, MenuDialogManagerConfiguration} from '../../../../../implementation/command/dialog-command-factory';
+import {DialogManager} from '../../../../../implementation/command/dialog-manager';
+import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {DetailComponent} from '../../../../../implementation/component/detail-component';
-import {CommandArray} from '../../../../../implementation/component/menu-registering-component';
 import {School} from '../../../../../implementation/models/school/school';
-import {Student} from '../../../../../implementation/models/student/student';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
-import {SCHOOL_INVITE_STUDENT} from '../../../providers/school-providers-factory';
-import {SCHOOL_DETAIL_MENU, SCHOOL_GROUP} from '../../../school-manager.module';
+import {ConfimationDialogComponent} from '../../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {
+  EDIT_SCHOOL_MENU_TITLE,
+  EDIT_SCHOOL_PANEL_TITLE,
+  EDIT_SCHOOL_SNACKBAR_MESSAGE,
+  INVITE_STUDENT_MENU_TITLE,
+  INVITE_STUDENT_PANEL_TITLE,
+  INVITE_STUDENT_SNACKBAR_MESSAGE,
+  PLURAL_SCHOOL,
+  REMOVE_SCHOOL_MENU_TITLE,
+  REMOVE_SCHOOL_SNACKBAR_MESSAGE,
+  SINGULAR_SCHOOL
+} from '../../../other/school-constants';
+import {SCHOOL_DETAIL_DELETE_DIALOG_MANAGER, SCHOOL_DETAIL_EDIT_DIALOG_MANAGER} from '../../../providers/school-providers-factory';
+import {INVITATION_EDIT_DIALOG_MANAGER, SCHOOL_GROUP} from '../../../school-manager.module';
 import {InviteStudentComponent} from '../../invite-student/invite-student.component';
+import {SchoolDialogComponent} from '../../school-dialog/school-dialog.component';
 
 @Component({
   selector: 'ms-school-detail',
@@ -38,14 +51,44 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(SCHOOL_DETAIL_MENU) menuCommands: CommandArray,
     route: ActivatedRoute,
     navService: NavigationService,
     // other
+    @Inject(SCHOOL_DETAIL_EDIT_DIALOG_MANAGER) private schoolEditDialogManager: DialogManager<SchoolDialogComponent>,
+    @Inject(SCHOOL_DETAIL_DELETE_DIALOG_MANAGER) private schoolDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
+    @Inject(INVITATION_EDIT_DIALOG_MANAGER) private invitationEditDialogManager: DialogManager<InviteStudentComponent>,
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
-    @Inject(SCHOOL_INVITE_STUDENT) private inviteStudentDialogFactory: MenuDialogCommandFactory<Student, InviteStudentComponent>
   ) {
-    super(menuState, menuCommands, route, navService)
+    super(menuState, route, navService)
+  }
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand.builder(EDIT_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolEditDialogManager)
+        .withSnackbarMessage(EDIT_SCHOOL_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          model: this.schoolInstanceCache.item,
+          panelTitle: EDIT_SCHOOL_PANEL_TITLE
+        }))
+        .withAdminOnly(true)
+        .build(),
+      MenuDialogCommand.builder(REMOVE_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolDeleteDialogManager)
+        .withSnackbarMessage(REMOVE_SCHOOL_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          model: this.schoolInstanceCache.item,
+          singularName: SINGULAR_SCHOOL,
+          pluralName: PLURAL_SCHOOL,
+          countSupplier: () => 1,
+        }))
+        .withAdminOnly(true)
+        .build(),
+      MenuDialogCommand.builder(INVITE_STUDENT_MENU_TITLE, SCHOOL_GROUP, this.invitationEditDialogManager)
+        .withSnackbarMessage(INVITE_STUDENT_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          panelTitle: INVITE_STUDENT_PANEL_TITLE
+        }))
+        .build()
+    ]
   }
 
   ngOnInit(): void {
@@ -58,20 +101,5 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
 
   protected doHandleBackButton = (navService: NavigationService): void =>
     navService.push({routeSpec: ['/schoolsmanager'], fragment: undefined})
-
-  protected override registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
-    menuCommands.forEach(command => {
-      menuState.add(command.factory(true))
-    })
-    menuState.add(this.inviteStudentDialogFactory(
-      new MenuDialogManagerConfiguration<Student>(
-        () => { return {panelTitle: 'Invite New Student'}},
-        false,
-        'Student Invited',
-        'Invite New Student',
-        SCHOOL_GROUP,
-      )))
-  }
-
 }
 

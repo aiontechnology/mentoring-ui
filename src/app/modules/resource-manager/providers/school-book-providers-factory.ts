@@ -16,22 +16,23 @@
 
 import {InjectionToken} from '@angular/core';
 import {Command} from '../../../implementation/command/command';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {Book} from '../../../implementation/models/book/book';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {updateDialogManagerProviders} from '../../../providers/dialog/update-dialog-manager-providers';
 import {SCHOOL_BOOK_DATA_SOURCE} from '../../../providers/global/global-school-book-providers-factory';
-import {updateProvidersFactory} from '../../../providers/legacy/update-menus-providers-factory';
+import {BookDialogComponent} from '../components/book-dialog/book-dialog.component';
 import {SchoolBookDialogComponent} from '../components/school-book-dialog/school-book-dialog.component';
-import {SCHOOL_BOOK_GROUP} from '../resource-manager.module';
 
 export const SCHOOL_BOOK_TABLE_CACHE = new InjectionToken<UriSupplier>('school-book-table-cache');
 export const SCHOOL_BOOK_LIST_MENU = new InjectionToken<Command[]>('school-book-list-menu')
+export const BOOK_UPDATE_DIALOG_MANAGER = new InjectionToken<DialogManager<BookDialogComponent>>('book-update-dialog-manager')
 
 export function schoolBookProvidersFactory() {
   return [
-    ...updateProvidersFactory<Book, SchoolBookDialogComponent, TableCache<Book>>(SCHOOL_BOOK_LIST_MENU, SCHOOL_BOOK_GROUP, 'Book',
-      SchoolBookDialogComponent, SCHOOL_BOOK_TABLE_CACHE),
+    ...updateDialogManagerProviders<SchoolBookDialogComponent>(BOOK_UPDATE_DIALOG_MANAGER, SchoolBookDialogComponent),
     {
       provide: SCHOOL_BOOK_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Book>) => new TableCache('SchoolBookTableCache', dataSource),

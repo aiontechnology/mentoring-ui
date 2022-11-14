@@ -15,34 +15,31 @@
  */
 
 import {InjectionToken} from '@angular/core';
+import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {Book} from '../../../implementation/models/book/book';
-import {Mentor} from '../../../implementation/models/mentor/mentor';
-import {School} from '../../../implementation/models/school/school';
-import {Teacher} from '../../../implementation/models/teacher/teacher';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
-import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {updateDialogManagerProviders} from '../../../providers/dialog/update-dialog-manager-providers';
 import {
   SCHOOL_BOOK_CACHE,
-  SCHOOL_BOOK_DATA_SOURCE, SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER,
+  SCHOOL_BOOK_DATA_SOURCE,
+  SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER,
   SCHOOL_BOOK_URI_SUPPLIER
 } from '../../../providers/global/global-school-book-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../providers/global/global-school-providers-factory';
-import {updateProvidersFactory} from '../../../providers/legacy/update-menus-providers-factory';
+import {BookDialogComponent} from '../../resource-manager/components/book-dialog/book-dialog.component';
 import {SchoolBookDialogComponent} from '../components/school-detail-tabs/school-book-dialog/school-book-dialog.component';
-import {SCHOOL_BOOK_GROUP, SCHOOL_BOOK_LIST_MENU} from '../school-manager.module';
 
 export const SCHOOL_BOOK_TABLE_CACHE = new InjectionToken<UriSupplier>('school-book-table-cache');
 export const SCHOOL_BOOK_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Book>>('school-book-school-change-handler')
+export const BOOK_UPDATE_DIALOG_MANAGER = new InjectionToken<DialogManager<BookDialogComponent>>('book-update-dialog-manager')
 
 export function schoolBookProvidersFactory() {
   return [
-    ...updateProvidersFactory<Book, SchoolBookDialogComponent, TableCache<Book>>(SCHOOL_BOOK_LIST_MENU, SCHOOL_BOOK_GROUP, 'Book',
-      SchoolBookDialogComponent, SCHOOL_BOOK_TABLE_CACHE),
+    ...updateDialogManagerProviders<SchoolBookDialogComponent>(BOOK_UPDATE_DIALOG_MANAGER, SchoolBookDialogComponent),
     {
       provide: SCHOOL_BOOK_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Book>) => new TableCache('SchoolBookTableCache', dataSource),

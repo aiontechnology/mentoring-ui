@@ -18,15 +18,33 @@ import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Command} from '../../../../implementation/command/command';
+import {DialogManager} from '../../../../implementation/command/dialog-manager';
+import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
-import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {School} from '../../../../implementation/models/school/school';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
-import {SCHOOL_TABLE_CACHE} from '../../providers/school-providers-factory';
-import {SCHOOL_LIST_MENU} from '../../school-manager.module';
+import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {
+  ADD_SCHOOL_MENU_TITLE,
+  ADD_SCHOOL_PANEL_TITLE,
+  ADD_SCHOOL_SNACKBAR_MESSAGE,
+  EDIT_SCHOOL_MENU_TITLE,
+  EDIT_SCHOOL_PANEL_TITLE,
+  EDIT_SCHOOL_SNACKBAR_MESSAGE,
+  PLURAL_SCHOOL,
+  REMOVE_SCHOOL_MENU_TITLE,
+  REMOVE_SCHOOL_SNACKBAR_MESSAGE,
+  SINGULAR_SCHOOL
+} from '../../other/school-constants';
+import {
+  SCHOOL_LIST_DELETE_DIALOG_MANAGER,
+  SCHOOL_LIST_EDIT_DIALOG_MANAGER,
+  SCHOOL_TABLE_CACHE
+} from '../../providers/school-providers-factory';
+import {SCHOOL_GROUP} from '../../school-manager.module';
+import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
 
 @Component({
   selector: 'ms-school-list',
@@ -39,16 +57,46 @@ export class SchoolListComponent extends ListComponent<School> implements OnInit
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(SCHOOL_LIST_MENU) menuCommands: CommandArray,
     @Inject(SCHOOL_TABLE_CACHE) tableCache: TableCache<School>,
     @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
+    // other
+    @Inject(SCHOOL_LIST_EDIT_DIALOG_MANAGER) private schoolEditDialogManager: DialogManager<SchoolDialogComponent>,
+    @Inject(SCHOOL_LIST_DELETE_DIALOG_MANAGER) private schoolDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
   ) {
-    super(menuState, menuCommands, tableCache, schoolInstanceCache)
+    super(menuState, tableCache, schoolInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
 
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand<SchoolDialogComponent>.builder(ADD_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolEditDialogManager)
+        .withDataSupplier(() => ({
+          panelTitle: ADD_SCHOOL_PANEL_TITLE
+        }))
+        .withSnackbarMessage(ADD_SCHOOL_SNACKBAR_MESSAGE)
+        .build(),
+      MenuDialogCommand<SchoolDialogComponent>.builder(EDIT_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolEditDialogManager)
+        .withDataSupplier(() => ({
+          model: this.tableCache.getFirstSelection(),
+          panelTitle: EDIT_SCHOOL_PANEL_TITLE
+        }))
+        .withSnackbarMessage(EDIT_SCHOOL_SNACKBAR_MESSAGE)
+        .build()
+        .enableIf(() => this.tableCache.selection.selected.length === 1),
+      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolDeleteDialogManager)
+        .withDataSupplier(() => ({
+          singularName: SINGULAR_SCHOOL,
+          pluralName: PLURAL_SCHOOL,
+          countSupplier: () => this.tableCache.selectionCount
+        }))
+        .withSnackbarMessage(REMOVE_SCHOOL_SNACKBAR_MESSAGE)
+        .build()
+        .enableIf(() => this.tableCache.selection.selected.length > 0)
+    ]
+  }
 
   ngOnInit(): void {
     this.menuState.reset()

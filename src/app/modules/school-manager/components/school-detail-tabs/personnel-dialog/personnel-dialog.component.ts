@@ -43,7 +43,7 @@ export class PersonnelDialogComponent extends DialogComponent<Personnel, Personn
 
   constructor(
     // for super
-    @Inject(MAT_DIALOG_DATA) data: any,
+    @Inject(MAT_DIALOG_DATA) public data: { model: Personnel, panelTitle: string },
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<PersonnelDialogComponent>,
     @Inject(PERSONNEL_DATA_SOURCE) personnelDataSource: DataSource<Personnel>,
@@ -51,7 +51,7 @@ export class PersonnelDialogComponent extends DialogComponent<Personnel, Personn
     @Inject(PERSONNEL_URI_SUPPLIER) private personnelUriSupplier: UriSupplier,
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
   ) {
-    super(data?.model as Personnel, formBuilder, dialogRef, personnelDataSource)
+    super(data?.model, formBuilder, dialogRef, personnelDataSource)
   }
 
   ngOnInit(): void {

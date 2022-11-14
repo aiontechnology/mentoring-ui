@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import {InjectionToken, NgModule} from '@angular/core';
+import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {Command} from '../../implementation/command/command';
 import {SCHOOL_ID, STUDENT_ID} from '../../implementation/route/route-constants';
 import {TeacherGradeFilterPipe} from '../shared/pipes/teacher-grade-filter.pipe';
 import {SharedModule} from '../shared/shared.module';
@@ -44,10 +43,6 @@ const routes: Routes = [
     ]
   }
 ]
-
-// Menus
-export const STUDENT_DETAIL_MENU = new InjectionToken<Command[]>('student-detail-menu')
-export const STUDENT_LIST_MENU = new InjectionToken<Command[]>('student-list-menu')
 
 // Groups
 export const STUDENT_GROUP = 'student'

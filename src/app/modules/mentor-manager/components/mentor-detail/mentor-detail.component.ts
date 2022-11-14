@@ -18,20 +18,36 @@ import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Command} from '../../../../implementation/command/command';
-import {CommandArray} from '../../../../implementation/component/menu-registering-component';
+import {DialogManager} from '../../../../implementation/command/dialog-manager';
+import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {SchoolWatchingDetailComponent} from '../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {Mentor} from '../../../../implementation/models/mentor/mentor';
 import {School} from '../../../../implementation/models/school/school';
 import {SchoolSession} from '../../../../implementation/models/school/schoolsession';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {RouteElementWatcher} from '../../../../implementation/route/route-element-watcher.service';
-import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_ROUTE_WATCHER} from '../../../../providers/global/global-mentor-providers-factory';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {
+  MENTOR_DATA_SOURCE,
+  MENTOR_INSTANCE_CACHE,
+  MENTOR_ROUTE_WATCHER
+} from '../../../../providers/global/global-mentor-providers-factory';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global/global-school-session-providers-factory';
-import {MENTOR_DETAIL_MENU} from '../../mentor-manager.module';
-import {Mentor} from '../../../../implementation/models/mentor/mentor';
+import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {MENTOR_GROUP} from '../../mentor-manager.module';
+import {
+  EDIT_MENU_TITLE,
+  EDIT_PANEL_TITLE,
+  EDIT_SNACKBAR_MESSAGE,
+  PLURAL,
+  REMOVE_MENU_TITLE,
+  REMOVE_SNACKBAR_MESSAGE,
+  SINGULAR
+} from '../../other/mentor-constants';
+import {MENTOR_DETAIL_DELETE_DIALOG_MANAGER, MENTOR_DETAIL_EDIT_DIALOG_MANAGER} from '../../providers/mentor-providers-factory';
+import {MentorDialogComponent} from '../mentor-dialog/mentor-dialog.component';
 
 @Component({
   selector: 'ms-mentor-detail',
@@ -44,18 +60,40 @@ export class MentorDetailComponent extends SchoolWatchingDetailComponent impleme
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(MENTOR_DETAIL_MENU) menuCommands: CommandArray,
     route: ActivatedRoute,
     navService: NavigationService,
     @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     // other
+    @Inject(MENTOR_DETAIL_EDIT_DIALOG_MANAGER) private mentorEditDialogManager: DialogManager<MentorDialogComponent>,
+    @Inject(MENTOR_DETAIL_DELETE_DIALOG_MANAGER) private mentorDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
     @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
     @Inject(MENTOR_INSTANCE_CACHE) public mentorInstanceCache: SingleItemCache<Mentor>,
     @Inject(MENTOR_ROUTE_WATCHER) private mentorRouteWatcher: RouteElementWatcher<Mentor>,
     private router: Router,
   ) {
-    super(menuState, menuCommands, route, schoolInstanceCache, schoolSessionInstanceCache, navService)
+    super(menuState, route, schoolInstanceCache, schoolSessionInstanceCache, navService)
+  }
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand<MentorDialogComponent>.builder(EDIT_MENU_TITLE, MENTOR_GROUP, this.mentorEditDialogManager)
+        .withSnackbarMessage(EDIT_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          model: this.mentorInstanceCache.item,
+          panelTitle: EDIT_PANEL_TITLE
+        }))
+        .build(),
+      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_MENU_TITLE, MENTOR_GROUP, this.mentorDeleteDialogManager)
+        .withSnackbarMessage(REMOVE_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          model: this.mentorInstanceCache.item,
+          singularName: SINGULAR,
+          pluralName: PLURAL,
+          countSupplier: () => 1,
+        }))
+        .build()
+    ]
   }
 
   ngOnInit() {

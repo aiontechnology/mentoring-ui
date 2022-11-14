@@ -24,28 +24,24 @@ import {Teacher} from '../../../implementation/models/teacher/teacher';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {dialogManagerProviders} from '../../../providers/dialog-manager-providers';
+import {listDialogManagerProviders} from '../../../providers/dialog/list-dialog-manager-providers';
 import {
   TEACHER_CACHE,
   TEACHER_DATA_SOURCE,
   TEACHER_SCHOOL_CHANGE_RESETTER,
   TEACHER_URI_SUPPLIER
 } from '../../../providers/global/global-teacher-providers-factory';
-import {listProvidersFactory} from '../../../providers/legacy/list-menus-providers-factory';
 import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 import {TeacherDialogComponent} from '../components/school-detail-tabs/teacher-dialog/teacher-dialog.component';
-import {TEACHER_GROUP, TEACHER_LIST_MENU} from '../school-manager.module';
 
 export const TEACHER_TABLE_CACHE = new InjectionToken<TableCache<School>>('teacher-table-cache')
 export const TEACHER_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Teacher>>('teacher-school-change-handler')
-export const TEACHER_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<TeacherDialogComponent>>('teacher_edit-dialog-manager')
-export const TEACHER_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('teacher_delete-dialog-manager')
+export const TEACHER_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<TeacherDialogComponent>>('teacher-edit-dialog-manager')
+export const TEACHER_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('teacher-delete-dialog-manager')
 
 export function teacherProvidersFactory() {
   return [
-    ...dialogManagerProviders<Teacher, TeacherDialogComponent, TableCache<Teacher>>(TEACHER_EDIT_DIALOG_MANAGER, TEACHER_DELETE_DIALOG_MANAGER, TeacherDialogComponent, TEACHER_TABLE_CACHE),
-    ...listProvidersFactory<Teacher, TeacherDialogComponent, TableCache<Teacher>>(TEACHER_LIST_MENU, TEACHER_GROUP, 'Teacher',
-      TeacherDialogComponent, TEACHER_TABLE_CACHE),
+    ...listDialogManagerProviders<Teacher, TeacherDialogComponent, TableCache<Teacher>>(TEACHER_EDIT_DIALOG_MANAGER, TEACHER_DELETE_DIALOG_MANAGER, TeacherDialogComponent, TEACHER_TABLE_CACHE),
     {
       provide: TEACHER_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Teacher>) => new TableCache('TeacherTableCache', dataSource),

@@ -16,20 +16,18 @@
 
 import {ActivatedRoute, ParamMap} from '@angular/router';
 import {Observable} from 'rxjs';
-import {Command} from '../command/command';
 import {URI} from '../data/uri-supplier';
 import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
-import {CommandArray, MenuRegisteringComponent} from './menu-registering-component';
+import {MenuRegisteringComponent} from './menu-registering-component';
 
 export abstract class DetailComponent extends MenuRegisteringComponent {
   protected constructor(
     menuState: MenuStateService,
-    menuCommands: CommandArray,
     protected route: ActivatedRoute,
     private navService?: NavigationService,
   ) {
-    super(menuState, menuCommands)
+    super(menuState)
   }
 
   /**

@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-import {BreakpointObserver} from '@angular/cdk/layout';
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
+import {DialogManager} from '../../../../implementation/command/dialog-manager';
+import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
-import {CommandArray} from '../../../../implementation/component/menu-registering-component';
-import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {Book} from '../../../../implementation/models/book/book';
-import {UserSessionService} from '../../../../implementation/services/user-session.service';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {SCHOOL_BOOK_URI_SUPPLIER} from '../../../../providers/global/global-school-book-providers-factory';
-import {SCHOOL_BOOK_LIST_MENU, SCHOOL_BOOK_TABLE_CACHE} from '../../providers/school-book-providers-factory';
+import {UPDATE_BOOK_MENU_TITLE, UPDATE_BOOK_SNACKBAR_MESSAGE} from '../../other/resource-constants';
+import {BOOK_UPDATE_DIALOG_MANAGER, SCHOOL_BOOK_TABLE_CACHE} from '../../providers/school-book-providers-factory';
+import {SCHOOL_BOOK_GROUP} from '../../resource-manager.module';
+import {SchoolBookDialogComponent} from '../school-book-dialog/school-book-dialog.component';
 
 @Component({
   selector: 'ms-school-book-list',
@@ -40,20 +39,27 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(SCHOOL_BOOK_LIST_MENU) menuCommands: CommandArray,
     @Inject(SCHOOL_BOOK_TABLE_CACHE) tableCache: TableCache<Book>,
     //other
-    private userSessionService: UserSessionService,
-    private route: ActivatedRoute,
-    private breakpointObserver: BreakpointObserver,
-    @Inject(SCHOOL_BOOK_URI_SUPPLIER) private schoolBookUriSupplier: UriSupplier,
+    @Inject(BOOK_UPDATE_DIALOG_MANAGER) private bookUpdateDialogManager: DialogManager<SchoolBookDialogComponent>,
   ) {
-    super(menuState, menuCommands, tableCache)
+    super(menuState, tableCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
 
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand<Book>.builder(UPDATE_BOOK_MENU_TITLE, SCHOOL_BOOK_GROUP, this.bookUpdateDialogManager)
+        .withSnackbarMessage(UPDATE_BOOK_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          localItems: () => this.tableCache.tableDataSource.data
+        }))
+        .build()
+    ];
+  }
 
   ngOnInit(): void {
     this.init()

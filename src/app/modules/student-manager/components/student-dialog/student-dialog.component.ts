@@ -52,7 +52,7 @@ export class StudentDialogComponent implements OnInit {
   teacherInputStep: TeacherInputStep
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: { model: Student },
+    @Inject(MAT_DIALOG_DATA) public data: { model: Student, panelTitle: string },
     private formBuilder: FormBuilder,
     private metaDataService: MetaDataService,
     private dialogRef: MatDialogRef<StudentDialogComponent>,

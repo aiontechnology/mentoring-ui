@@ -20,11 +20,9 @@ import {MatSort} from '@angular/material/sort';
 import {grades} from 'src/app/implementation/constants/grades';
 import {SchoolSession} from 'src/app/implementation/models/school/schoolsession';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Command} from '../../../../implementation/command/command';
-import {EnableableCommand} from '../../../../implementation/command/enableable-command';
-import {MenuCommand} from '../../../../implementation/command/menu-command';
+import {DialogManager} from '../../../../implementation/command/dialog-manager';
+import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
-import {CommandArray} from '../../../../implementation/component/menu-registering-component';
 import {equalsById} from '../../../../implementation/functions/comparison';
 import {Contact} from '../../../../implementation/models/contact/contact';
 import {Student} from '../../../../implementation/models/student/student';
@@ -36,8 +34,26 @@ import {
   SCHOOL_SESSION_INSTANCE_CACHE
 } from '../../../../providers/global/global-school-session-providers-factory';
 import {STUDENT_INSTANCE_CACHE} from '../../../../providers/global/global-student-providers-factory';
-import {STUDENT_TABLE_CACHE} from '../../providers/student-providers-factory';
-import {STUDENT_LIST_MENU} from '../../student-manager.module';
+import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {
+  ADD_STUDENT_MENU_TITLE,
+  ADD_STUDENT_PANEL_TITLE,
+  ADD_STUDENT_SNACKBAR_MESSAGE,
+  EDIT_STUDENT_MENU_TITLE,
+  EDIT_STUDENT_PANEL_TITLE,
+  EDIT_STUDENT_SNACKBAR_MESSAGE,
+  PLURAL_STUDENT,
+  REMOVE_STUDENT_MENU_TITLE,
+  REMOVE_STUDENT_SNACKBAR_MESSAGE,
+  SINGULAR_STUDENT
+} from '../../other/student-constants';
+import {
+  STUDENT_LIST_DELETE_DIALOG_MANAGER,
+  STUDENT_LIST_EDIT_DIALOG_MANAGER,
+  STUDENT_TABLE_CACHE
+} from '../../providers/student-providers-factory';
+import {STUDENT_GROUP} from '../../student-manager.module';
+import {StudentDialogComponent} from '../student-dialog/student-dialog.component';
 
 @Component({
   selector: 'ms-student-list',
@@ -51,19 +67,51 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(STUDENT_LIST_MENU) menuCommands: CommandArray,
     @Inject(STUDENT_TABLE_CACHE) tableCache: TableCache<Student>,
     @Inject(STUDENT_INSTANCE_CACHE) studentInstanceCache: SingleItemCache<Student>,
     // other
+    @Inject(STUDENT_LIST_EDIT_DIALOG_MANAGER) private studentEditDialogManager: DialogManager<StudentDialogComponent>,
+    @Inject(STUDENT_LIST_DELETE_DIALOG_MANAGER) private studentDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
     @Inject(SCHOOL_SESSION_COLLECTION_CACHE) public schoolSessionCollectionCache: MultiItemCache<SchoolSession>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
   ) {
-    super(menuState, menuCommands, tableCache, studentInstanceCache)
+    super(menuState, tableCache, studentInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
 
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand<StudentDialogComponent>.builder(ADD_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentEditDialogManager)
+        .withDataSupplier(() => ({
+          panelTitle: ADD_STUDENT_PANEL_TITLE
+        }))
+        .withSnackbarMessage(ADD_STUDENT_SNACKBAR_MESSAGE)
+        .build()
+        .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
+      MenuDialogCommand<StudentDialogComponent>.builder(EDIT_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentEditDialogManager)
+        .withDataSupplier(() => ({
+          model: this.tableCache.getFirstSelection(),
+          panelTitle: EDIT_STUDENT_PANEL_TITLE
+        }))
+        .withSnackbarMessage(EDIT_STUDENT_SNACKBAR_MESSAGE)
+        .build()
+        .enableIf(() => this.tableCache.selection.selected.length === 1)
+        .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
+      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentDeleteDialogManager)
+        .withDataSupplier(() => ({
+          singularName: SINGULAR_STUDENT,
+          pluralName: PLURAL_STUDENT,
+          countSupplier: () => this.tableCache.selectionCount
+        }))
+        .withSnackbarMessage(REMOVE_STUDENT_SNACKBAR_MESSAGE)
+        .build()
+        .enableIf(() => this.tableCache.selection.selected.length > 0)
+        .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent)
+    ]
+  }
 
   ngOnInit(): void {
     this.menuState.reset()
@@ -85,13 +133,5 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
 
   studentGrade(student: Student): string {
     return grades[student.grade].valueView;
-  }
-
-  protected override registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
-    menuCommands.forEach(command => {
-      const c: MenuCommand = command.factory(false);
-      c.enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent)
-      menuState.add(c)
-    })
   }
 }

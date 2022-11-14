@@ -19,15 +19,27 @@ import {ActivatedRoute} from '@angular/router';
 import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
 import {Game} from 'src/app/implementation/models/game/game';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Command} from '../../../../implementation/command/command';
+import {DialogManager} from '../../../../implementation/command/dialog-manager';
+import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {DetailComponent} from '../../../../implementation/component/detail-component';
-import {CommandArray} from '../../../../implementation/component/menu-registering-component';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {SingleItemCacheUpdater} from '../../../../implementation/state-management/single-item-cache-updater';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {GAME_ID} from '../../../../implementation/route/route-constants';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {SingleItemCacheUpdater} from '../../../../implementation/state-management/single-item-cache-updater';
 import {GAME_INSTANCE_CACHE, GAME_INSTANCE_CACHE_UPDATER} from '../../../../providers/global/global-game-providers-factory';
-import {GAME_DETAIL_MENU} from '../../providers/game-providers-factory';
+import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {
+  EDIT_GAME_MENU_TITLE,
+  EDIT_GAME_PANEL_TITLE,
+  EDIT_GAME_SNACKBAR_MESSAGE,
+  PLURAL_GAME,
+  REMOVE_GAME_MENU_TITLE,
+  REMOVE_GAME_SNACKBAR_MESSAGE,
+  SINGULAR_GAME
+} from '../../other/resource-constants';
+import {GAME_DETAIL_DELETE_DIALOG_MANAGER, GAME_DETAIL_EDIT_DIALOG_MANAGER} from '../../providers/game-providers-factory';
+import {GAME_GROUP} from '../../resource-manager.module';
+import {GameDialogComponent} from '../game-dialog/game-dialog.component';
 
 @Component({
   selector: 'ms-game-detail',
@@ -38,14 +50,15 @@ export class GameDetailComponent extends DetailComponent implements OnInit, OnDe
   constructor(
     // for super
     menuState: MenuStateService,
-    @Inject(GAME_DETAIL_MENU) menuCommands: CommandArray,
     route: ActivatedRoute,
     navService: NavigationService,
     // other
+    @Inject(GAME_DETAIL_EDIT_DIALOG_MANAGER) private gameEditDialogManager: DialogManager<GameDialogComponent>,
+    @Inject(GAME_DETAIL_DELETE_DIALOG_MANAGER) private gameDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
     @Inject(GAME_INSTANCE_CACHE) public gameInstanceCache: SingleItemCache<Game>,
     @Inject(GAME_INSTANCE_CACHE_UPDATER) private gameInstanceCacheUpdater: SingleItemCacheUpdater<Game>,
   ) {
-    super(menuState, menuCommands, route, navService)
+    super(menuState, route, navService)
     menuState.reset()
   }
 
@@ -55,6 +68,27 @@ export class GameDetailComponent extends DetailComponent implements OnInit, OnDe
       grades += ` - ${resourceGrades[this.gameInstanceCache.item?.grade2 - 1]?.valueView}`;
     }
     return grades;
+  }
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand<GameDialogComponent>.builder(EDIT_GAME_MENU_TITLE, GAME_GROUP, this.gameEditDialogManager)
+        .withSnackbarMessage(EDIT_GAME_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          model: this.gameInstanceCache.item,
+          panelTitle: EDIT_GAME_PANEL_TITLE
+        }))
+        .build(),
+      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_GAME_MENU_TITLE, GAME_GROUP, this.gameDeleteDialogManager)
+        .withSnackbarMessage(REMOVE_GAME_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          model: this.gameInstanceCache.item,
+          singularName: SINGULAR_GAME,
+          pluralName: PLURAL_GAME,
+          countSupplier: () => 1,
+        }))
+        .build()
+    ]
   }
 
   ngOnInit(): void {

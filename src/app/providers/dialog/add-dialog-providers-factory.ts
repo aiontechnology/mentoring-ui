@@ -17,23 +17,24 @@
 import {ComponentType} from '@angular/cdk/portal';
 import {InjectionToken} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {MenuDialogCommand} from '../../implementation/command/menu-dialog-command';
+import {createDialogCommandFactory} from '../../implementation/command/dialog-command-factory';
 import {DialogManager} from '../../implementation/command/dialog-manager';
-import {createDialogCommandFactory, createMenuDialogCommandFactory} from '../../implementation/command/dialog-command-factory';
+import {MenuDialogCommand} from '../../implementation/command/menu-dialog-command';
 import {SnackbarManager} from '../../implementation/managers/snackbar-manager';
+import {ClosedResultType} from '../../implementation/types/dialog-types';
 import {SNACKBAR_MANAGER} from '../global/global-snackbar-providers';
 
 export function addDialogProvidersFactory<MODEL_TYPE, COMPONENT_TYPE>(
   injectionToken: InjectionToken<MenuDialogCommand<MODEL_TYPE>>,
   componentType: ComponentType<COMPONENT_TYPE>,
 ) {
-  const AFTER_CLOSED_EDIT = new InjectionToken<(s: string) => (a: any) => void>('list-after-closed-edit');
+  const AFTER_CLOSED_EDIT = new InjectionToken<ClosedResultType>('list-after-closed-edit');
   const DIALOG_MANAGER_EDIT = new InjectionToken<DialogManager<COMPONENT_TYPE>>('dialog-manager-edit');
 
   return [
     {
       provide: DIALOG_MANAGER_EDIT,
-      useFactory: (dialog: MatDialog, afterCloseFunction: (s: string) => (a: any) => void) =>
+      useFactory: (dialog: MatDialog, afterCloseFunction: ClosedResultType) =>
         DialogManager<COMPONENT_TYPE>.builder(dialog, componentType)
           .withAfterCloseFunction(afterCloseFunction)
           .build(),

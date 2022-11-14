@@ -14,24 +14,23 @@
  * limitations under the License.
  */
 
-import {EnableableCommand} from '../command/enableable-command';
-import {MenuCommand} from '../command/menu-command';
+import {MenuDialogCommand} from '../command/menu-dialog-command';
 import {MenuStateService} from '../services/menu-state.service';
-
-export type CommandArray = { name: string, factory: (isAdminOnly: boolean) => MenuCommand }[]
 
 export abstract class MenuRegisteringComponent {
   protected constructor(
     protected menuState: MenuStateService,
-    private menuCommands: CommandArray,
-  ) {
+  ) {}
+
+  protected get menus(): MenuDialogCommand<any>[] {
+    return []
   }
 
   /**
    * Run the component set up.
    */
   protected init(): void {
-    this.registerMenus(this.menuState, this.menuCommands)
+    this.registerMenus(this.menuState)
   }
 
   /**
@@ -44,12 +43,11 @@ export abstract class MenuRegisteringComponent {
   /**
    * Register the set of menus for the component.
    * @param menuState The component that maintains the menu state.
-   * @param menuCommands The array of menu commands.
    * @protected
    */
-  protected registerMenus(menuState: MenuStateService, menuCommands: CommandArray) {
-    menuCommands.forEach(command => {
-      menuState.add(command.factory(false))
+  private registerMenus(menuState: MenuStateService) {
+    this.menus.forEach(menu => {
+      this.menuState.add(menu)
     })
   }
 

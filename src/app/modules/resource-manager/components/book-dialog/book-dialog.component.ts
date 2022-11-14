@@ -44,14 +44,14 @@ export class BookDialogComponent extends DialogComponent<Book, BookDialogCompone
 
   constructor(
     // for super
-    @Inject(MAT_DIALOG_DATA) data: any,
+    @Inject(MAT_DIALOG_DATA) public data: { model: Book, panelTitle: string },
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<BookDialogComponent>,
     @Inject(BOOK_DATA_SOURCE) bookDataSource: DataSource<Book>,
     // other
     private metaDataService: MetaDataService,
   ) {
-    super(data?.model as Book, formBuilder, dialogRef, bookDataSource)
+    super(data?.model, formBuilder, dialogRef, bookDataSource)
   }
 
   ngOnInit(): void {
