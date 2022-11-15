@@ -50,8 +50,6 @@ export class SchoolSessionDialogComponent extends DialogComponent<SchoolSession,
   protected doCreateFormGroup(formBuilder: FormBuilder, schoolSession: SchoolSession): FormGroup {
     return formBuilder.group({
       label: ['', [Validators.required]],
-      startDate: ['', [Validators.required]],
-      endDate: ['', Validators.required]
     });
   }
 

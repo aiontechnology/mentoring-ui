@@ -16,8 +16,6 @@
 
 export class SchoolSession {
   id: string;
-  startDate: Date;
-  endDate: Date;
   label: string;
   isCurrent: boolean;
   links: {
@@ -28,8 +26,6 @@ export class SchoolSession {
 
   constructor(json?: any) {
     this.id = json?.id;
-    this.startDate = json?.startDate;
-    this.endDate = json?.endDate;
     this.label = json?.label;
     this.isCurrent = json?.isCurrent;
     this.links = json?.links;

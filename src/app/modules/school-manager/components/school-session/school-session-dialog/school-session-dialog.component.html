@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022-2022 Aion Technology LLC
+  ~ Copyright 2022 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,39 +18,19 @@
 <mat-dialog-content>
   <form [formGroup]="modelFormGroup">
     <div class="dialog-container">
-      <table>
-        <td>
-          <mat-form-field>
-            <input matInput placeholder="label" formControlName="label" required />
-          </mat-form-field>
-        </td>
-        <td>
-          <mat-form-field>
-            <mat-label>Start Date</mat-label>
-            <input matInput [matDatepicker]="startDate" formControlName="startDate" required>
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-            <mat-datepicker #startDate></mat-datepicker>
-          </mat-form-field>
-        </td>
-        <td>
-          <mat-form-field>
-            <mat-label>End Date</mat-label>
-            <input matInput [matDatepicker]="endDate" formControlName="endDate" required>
-            <mat-hint>MM/DD/YYYY</mat-hint>
-            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-            <mat-datepicker #endDate></mat-datepicker>
-          </mat-form-field>
-        </td>
-      </table>
+      <mat-form-field>
+        <input matInput placeholder="label" formControlName="label" required/>
+      </mat-form-field>
     </div>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button color="primary" (click)="save()" [disabled]="!modelFormGroup.valid">
-    <mat-icon>save</mat-icon> Save
+    <mat-icon>save</mat-icon>
+    Save
   </button>
   <button mat-button color="primary" (click)="dismiss()">
-    <mat-icon>cancel</mat-icon> Cancel
+    <mat-icon>cancel</mat-icon>
+    Cancel
   </button>
 </mat-dialog-actions>

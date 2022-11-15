@@ -15,5 +15,14 @@
  */
 
 td {
-    padding-right: 1em;
+  padding-right: 1em;
+  width: 100%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+input {
+  width: 100%;
 }
