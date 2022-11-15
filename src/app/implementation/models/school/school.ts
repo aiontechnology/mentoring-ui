@@ -18,27 +18,29 @@ import {Address} from '../address/address';
 import {SchoolSession} from './schoolsession';
 
 export class School {
-  id: string;
-  name: string;
-  address: Address;
-  phone: string;
-  district: string;
-  isPrivate: boolean;
-  currentSession: SchoolSession;
+  id: string
+  initialSessionLabel: string
+  name: string
+  address: Address
+  phone: string
+  district: string
+  isPrivate: boolean
+  currentSession: SchoolSession
   links: {
     self: [
-      { href: string; }
+      { href: string }
     ]
   };
 
   constructor(json?: any) {
-    this.id = json?.id;
-    this.name = json?.name;
-    this.address = new Address(json?.address);
-    this.phone = json?.phone;
-    this.district = json?.district;
-    this.isPrivate = json?.isPrivate;
+    this.id = json?.id
+    this.initialSessionLabel = json?.initialSessionLabel
+    this.name = json?.name
+    this.address = new Address(json?.address)
+    this.phone = json?.phone
+    this.district = json?.district
+    this.isPrivate = json?.isPrivate
     this.currentSession = new SchoolSession(json?.currentSession)
-    this.links = json?.links;
+    this.links = json?.links
   }
 }

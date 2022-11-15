@@ -28,7 +28,7 @@ export abstract class DialogComponent<T extends { links: any }, COMPONENT> {
     private dataSource: DataSource<T>
   ) {}
 
-  protected get isUpdate(): boolean {
+  get isUpdate(): boolean {
     return this.model !== undefined && this.model !== null
   }
 

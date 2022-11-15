@@ -15,7 +15,7 @@
  */
 
 import {Component, Inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {School} from 'src/app/implementation/models/school/school';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
@@ -24,7 +24,11 @@ import {DataSource} from '../../../../implementation/data/data-source';
 import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
+import {
+  SCHOOL_COLLECTION_CACHE,
+  SCHOOL_DATA_SOURCE,
+  SCHOOL_INSTANCE_CACHE
+} from '../../../../providers/global/global-school-providers-factory';
 
 @Component({
   selector: 'ms-new-school-dialog',
@@ -65,7 +69,7 @@ export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogC
   }
 
   protected doCreateFormGroup(formBuilder: FormBuilder, school: School): FormGroup {
-    return formBuilder.group({
+    const group: FormGroup = formBuilder.group({
       school,
       name: ['', [Validators.required, Validators.maxLength(100)]],
       address: formBuilder.group({
@@ -78,7 +82,12 @@ export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogC
       phone: [null, phoneValidator()],
       district: [null, Validators.maxLength(50)],
       isPrivate: false
-    });
+    })
+    if (!this.isUpdate) {
+      const control = new FormControl('', [Validators.required, Validators.maxLength(30)])
+      group.addControl('initialSessionLabel', control)
+    }
+    return group
   }
 
   protected doUpdateFormGroup(formGroup: FormGroup, school: School): void {
