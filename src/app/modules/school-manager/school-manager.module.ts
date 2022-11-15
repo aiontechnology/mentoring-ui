@@ -20,7 +20,6 @@ import {Command} from '../../implementation/command/command';
 import {DialogManager} from '../../implementation/command/dialog-manager';
 import {SCHOOL_ID} from '../../implementation/route/route-constants';
 import {standAloneDialogManagerProviders} from '../../providers/dialog/stand-alone-dialog-manager-providers';
-import {GradesFormatPipe} from '../shared/pipes/grades-format.pipe';
 import {SharedModule} from '../shared/shared.module';
 import {InviteStudentComponent} from './components/invite-student/invite-student.component';
 import {SchoolDetailContainerComponent} from './components/school-detail-container/school-detail-container.component';
@@ -75,7 +74,6 @@ export const INVITATION_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<I
 
 @NgModule({
   declarations: [
-    GradesFormatPipe,
     InviteStudentComponent,
     PersonnelListComponent,
     ProgramAdminDialogComponent,

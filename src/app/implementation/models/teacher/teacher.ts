@@ -15,6 +15,7 @@
  */
 
 import {LinkService} from '../../../modules/shared/services/link-service/link.service';
+import {grades} from '../../constants/grades';
 
 /**
  * Model class the represents a teacher.
@@ -41,6 +42,12 @@ export class Teacher {
     this.grade1 = Number(json?.grade1);
     this.grade2 = Number(json?.grade2);
     this.links = json?.links;
+  }
+
+  get grades(): string {
+    const part1 = grades[this.grade1]?.valueView;
+    const part2 = this.grade2 ? ', ' + grades[this.grade2].valueView : '';
+    return part1 + part2;
   }
 
   get selfLink(): string {
