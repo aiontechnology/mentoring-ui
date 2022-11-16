@@ -39,14 +39,14 @@ export class Teacher {
     this.lastName = json?.lastName;
     this.email = (json?.email === '') ? null : json?.email;
     this.cellPhone = json?.cellPhone;
-    this.grade1 = Number(json?.grade1);
-    this.grade2 = Number(json?.grade2);
+    this.grade1 = json?.grade1 !== null ? Number(json?.grade1) : null;
+    this.grade2 = json?.grade2 !== null ? Number(json?.grade2) : null;
     this.links = json?.links;
   }
 
   get grades(): string {
     const part1 = grades[this.grade1]?.valueView;
-    const part2 = this.grade2 ? ', ' + grades[this.grade2].valueView : '';
+    const part2 = this.grade2 !== null ? ', ' + grades[this.grade2].valueView : '';
     return part1 + part2;
   }
 
