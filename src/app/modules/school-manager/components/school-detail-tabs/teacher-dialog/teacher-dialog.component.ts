@@ -24,7 +24,13 @@ import {DataSource} from '../../../../../implementation/data/data-source';
 import {emailAddressValidator} from '../../../../../implementation/form-validation/email-address-validator';
 import {phoneValidator} from '../../../../../implementation/form-validation/phone-validator';
 import {Teacher} from '../../../../../implementation/models/teacher/teacher';
-import {TEACHER_DATA_SOURCE} from '../../../../../providers/global/global-teacher-providers-factory';
+import {MultiItemCache} from '../../../../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
+import {
+  TEACHER_COLLECTION_CACHE,
+  TEACHER_DATA_SOURCE,
+  TEACHER_INSTANCE_CACHE
+} from '../../../../../providers/global/global-teacher-providers-factory';
 
 @Component({
   selector: 'ms-teacher-dialog',
@@ -40,12 +46,20 @@ export class TeacherDialogComponent extends DialogComponent<Teacher, TeacherDial
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<TeacherDialogComponent>,
     @Inject(TEACHER_DATA_SOURCE) teacherDataSource: DataSource<Teacher>,
+    // other
+    @Inject(TEACHER_INSTANCE_CACHE) private teacherInstanceCache: SingleItemCache<Teacher>,
+    @Inject(TEACHER_COLLECTION_CACHE) private teacherCollectionCache: MultiItemCache<Teacher>,
   ) {
     super(data?.model, formBuilder, dialogRef, teacherDataSource)
   }
 
   ngOnInit(): void {
     this.init()
+  }
+
+  protected postDialogClose(teacher: Teacher) {
+    this.teacherCollectionCache.load()
+      .then(() => this.teacherInstanceCache.item = teacher)
   }
 
   protected toModel(formValue: any): Teacher {
