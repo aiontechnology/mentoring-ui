@@ -24,7 +24,6 @@ import {Invitation} from '../../implementation/models/workflow/invitation';
 import {InvitationRepository} from '../../implementation/repositories/invitation-repository';
 import {SchoolChangeUriSupplierHandler} from '../../implementation/state-management/school-change-uri-supplier-handler';
 import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
-import {SingleItemCacheSchoolChangeHandler} from '../../implementation/state-management/single-item-cache-school-change-handler';
 import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
 export const INVITATION_DATA_SOURCE = new InjectionToken<DataSource<Invitation>>('invitation-data-source');

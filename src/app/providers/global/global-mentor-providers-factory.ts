@@ -76,7 +76,7 @@ export function globalMentorProvidersFactory() {
     {
       provide: MENTOR_SCHOOL_CHANGE_RESETTER,
       useFactory: (schoolInstanceCache: SingleItemCache<School>, cache: Cache<Mentor>) =>
-        new SchoolChangeDataSourceResetter('MentorSchoolChangeResetter', schoolInstanceCache, cache),
+        new SchoolChangeDataSourceResetter<Mentor>('MentorSchoolChangeResetter', schoolInstanceCache, cache),
       deps: [SCHOOL_INSTANCE_CACHE, MENTOR_CACHE]
     },
     {

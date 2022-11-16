@@ -19,16 +19,14 @@ import {environment} from '../../../environments/environment';
 import {Cache} from '../../implementation/data/cache';
 import {DataSource} from '../../implementation/data/data-source';
 import {Repository} from '../../implementation/data/repository';
-import {Mentor} from '../../implementation/models/mentor/mentor';
-import {School} from '../../implementation/models/school/school';
-import {SchoolChangeDataSourceResetter} from '../../implementation/state-management/school-change-data-source-resetter';
-import {SingleItemCacheUpdater} from '../../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../../implementation/data/uri-supplier';
 import {Personnel} from '../../implementation/models/personnel/personnel';
 import {ProgramAdmin} from '../../implementation/models/program-admin/program-admin';
+import {School} from '../../implementation/models/school/school';
 import {ProgramAdminRepository} from '../../implementation/repositories/program-admin-repository';
+import {SchoolChangeDataSourceResetter} from '../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
-import {MENTOR_CACHE, MENTOR_SCHOOL_CHANGE_RESETTER} from './global-mentor-providers-factory';
+import {SingleItemCacheUpdater} from '../../implementation/state-management/single-item-cache-updater';
 import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 
 export const PROGRAM_ADMIN_DATA_SOURCE = new InjectionToken<DataSource<ProgramAdmin>>('program-admin-data-source');
@@ -67,7 +65,7 @@ export function globalProgramAdminProvidersFactory() {
     {
       provide: PROGRAM_ADMIN_SCHOOL_CHANGE_RESETTER,
       useFactory: (schoolInstanceCache: SingleItemCache<School>, cache: Cache<ProgramAdmin>) =>
-        new SchoolChangeDataSourceResetter('ProgramAdminSchoolChangeResetter', schoolInstanceCache, cache),
+        new SchoolChangeDataSourceResetter<ProgramAdmin>('ProgramAdminSchoolChangeResetter', schoolInstanceCache, cache),
       deps: [SCHOOL_INSTANCE_CACHE, PROGRAM_ADMIN_CACHE]
     },
   ]

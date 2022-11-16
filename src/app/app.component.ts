@@ -51,17 +51,22 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private userSession: UserSessionService,
     private schoolLocalStorageLoader: SchoolLocalStorageLoader,
+
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_COLLECTION_CACHE) public schoolCollectionCache: MultiItemCache<School>,
+
     @Inject(SCHOOL_SESSION_COLLECTION_CACHE_LOADER) private schoolSessionCollectionCacheLoader: SchoolSessionsSchoolChangeHandler,
+
     @Inject(MENTOR_SCHOOL_CHANGE_RESETTER) private mentorSchoolChangeResetter: SchoolChangeDataSourceResetter<Mentor>,
     @Inject(PERSONNEL_SCHOOL_CHANGE_RESETTER) private personnelSchoolChangeResetter: SchoolChangeDataSourceResetter<Personnel>,
     @Inject(PROGRAM_ADMIN_SCHOOL_CHANGE_RESETTER) private programAdminSchoolChangeResetter: SchoolChangeDataSourceResetter<ProgramAdmin>,
     @Inject(SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER) private schoolBookAdminSchoolChangeResetter: SchoolChangeDataSourceResetter<Book>,
     @Inject(SCHOOL_GAME_SCHOOL_CHANGE_RESETTER) private schoolGameAdminSchoolChangeResetter: SchoolChangeDataSourceResetter<Game>,
     @Inject(TEACHER_SCHOOL_CHANGE_RESETTER) private teacherAdminSchoolChangeResetter: SchoolChangeDataSourceResetter<Teacher>,
+
     @Inject(MENTOR_COLLECTION_CACHE_LOADER) private mentorCollectionCacheLoader: MultiItemCacheSchoolChangeLoader<Mentor>,
     @Inject(TEACHER_COLLECTION_CACHE_LOADER) private teacherCollectionCacheLoader: MultiItemCacheSchoolChangeLoader<Teacher>,
+
     @Inject(INVITATION_URI_SUPPLIER_UPDATER) private invitationUriSupplierUpdater: SchoolChangeUriSupplierHandler,
   ) {}
 

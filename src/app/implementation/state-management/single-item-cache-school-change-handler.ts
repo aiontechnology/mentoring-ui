@@ -21,8 +21,14 @@ import {School} from '../models/school/school';
 import {SCHOOL_ID} from '../route/route-constants';
 import {TableCache} from '../table-cache/table-cache';
 import {SchoolChangeDataSourceResetter} from './school-change-data-source-resetter';
-import {SingleItemCache} from './single-item-cache';
 
+/**
+ * Subscribes to a SchoolChangeDataSourceResetter. When an event is received from that object, the following is done:
+ *
+ * 1. Reset the provided UriSupplier
+ * 2. Set the school id of the UriSupplier
+ * 3. Reload the TableCache
+ */
 export class SingleItemCacheSchoolChangeHandler<T> {
   private subscriptions: Subscription[] = []
 

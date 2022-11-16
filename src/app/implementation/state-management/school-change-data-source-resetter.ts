@@ -20,6 +20,10 @@ import {School} from '../models/school/school';
 import {Publisher} from './publisher';
 import {SingleItemCache} from './single-item-cache';
 
+/**
+ * Subscribes to a provided SingleItemCache<School> to respond to school changes. When a school change is detected,
+ * the provided Cache is reset and the event is published to observers.
+ */
 export class SchoolChangeDataSourceResetter<T> extends Publisher<School> {
   private subscriptions: Subscription[] = []
 

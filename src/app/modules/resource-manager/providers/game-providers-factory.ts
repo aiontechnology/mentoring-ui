@@ -17,19 +17,29 @@
 import {InjectionToken} from '@angular/core';
 import {Command} from '../../../implementation/command/command';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
+import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
+import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {Book} from '../../../implementation/models/book/book';
 import {Game} from '../../../implementation/models/game/game';
+import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
+import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {detailDialogManagerProviders} from '../../../providers/dialog/detail-dialog-manager-providers';
 import {listDialogManagerProviders} from '../../../providers/dialog/list-dialog-manager-providers';
 import {GAME_DATA_SOURCE, GAME_INSTANCE_CACHE, GAME_INSTANCE_CACHE_UPDATER} from '../../../providers/global/global-game-providers-factory';
+import {
+  SCHOOL_GAME_CACHE,
+  SCHOOL_GAME_SCHOOL_CHANGE_RESETTER,
+  SCHOOL_GAME_URI_SUPPLIER
+} from '../../../providers/global/global-school-game-providers-factory';
 import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
 import {GameDialogComponent} from '../components/game-dialog/game-dialog.component';
 
 export const GAME_DETAIL_MENU = new InjectionToken<Command[]>('game-detail-menu');
 export const GAME_LIST_MENU = new InjectionToken<Command[]>('game-list-menu');
+export const GAME_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Game>>('game-school-change-handler')
 export const GAME_TABLE_CACHE = new InjectionToken<SingleItemCache<Book>>('game-table-cache')
 export const GAME_DETAIL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<GameDialogComponent>>('game-detail-edit-dialog-manager')
 export const GAME_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('game-detail-delete-dialog-manager')
@@ -59,6 +69,12 @@ export function gameProvidersFactory() {
       provide: GAME_TABLE_CACHE,
       useFactory: (dataSource: DataSource<Game>) => new TableCache('GameTableCache', dataSource),
       deps: [GAME_DATA_SOURCE]
+    },
+    {
+      provide: GAME_SCHOOL_CHANGE_HANDLER,
+      useFactory: (schoolChangeResetter: SchoolChangeDataSourceResetter<Game>, uriSupplier: UriSupplier, cache: Cache<Game>, tableCache: TableCache<Game>) =>
+        new SingleItemCacheSchoolChangeHandler<Game>('GameSchoolChangeHandler', schoolChangeResetter, uriSupplier, cache, tableCache),
+      deps: [SCHOOL_GAME_SCHOOL_CHANGE_RESETTER, SCHOOL_GAME_URI_SUPPLIER, SCHOOL_GAME_CACHE, GAME_TABLE_CACHE]
     },
   ]
 }

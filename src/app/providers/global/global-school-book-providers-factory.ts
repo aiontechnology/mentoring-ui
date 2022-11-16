@@ -21,7 +21,6 @@ import {DataSource} from '../../implementation/data/data-source';
 import {Repository} from '../../implementation/data/repository';
 import {UriSupplier} from '../../implementation/data/uri-supplier';
 import {Book} from '../../implementation/models/book/book';
-import {Mentor} from '../../implementation/models/mentor/mentor';
 import {School} from '../../implementation/models/school/school';
 import {SchoolBookRepository} from '../../implementation/repositories/school-book-repository';
 import {SchoolChangeDataSourceResetter} from '../../implementation/state-management/school-change-data-source-resetter';
@@ -31,7 +30,7 @@ import {SCHOOL_INSTANCE_CACHE} from './global-school-providers-factory';
 export const SCHOOL_BOOK_DATA_SOURCE = new InjectionToken<DataSource<Book>>('school-book-data-source');
 export const SCHOOL_BOOK_CACHE = new InjectionToken<Cache<Book>>('school-book-cache');
 export const SCHOOL_BOOK_URI_SUPPLIER = new InjectionToken<UriSupplier>('school-book-uri-supplier');
-export const SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER = new InjectionToken<SchoolChangeDataSourceResetter<Mentor>>('school-book-school-change-resetter')
+export const SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER = new InjectionToken<SchoolChangeDataSourceResetter<Book>>('school-book-school-change-resetter')
 
 export function globalSchoolBookProvidersFactory() {
   return [
@@ -52,7 +51,7 @@ export function globalSchoolBookProvidersFactory() {
     {
       provide: SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER,
       useFactory: (schoolInstanceCache: SingleItemCache<School>, cache: Cache<Book>) =>
-        new SchoolChangeDataSourceResetter('SchoolBookSchoolChangeResetter', schoolInstanceCache, cache),
+        new SchoolChangeDataSourceResetter<Book>('SchoolBookSchoolChangeResetter', schoolInstanceCache, cache),
       deps: [SCHOOL_INSTANCE_CACHE, SCHOOL_BOOK_CACHE]
     },
   ]

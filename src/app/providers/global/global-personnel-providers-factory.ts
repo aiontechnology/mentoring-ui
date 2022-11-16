@@ -56,7 +56,7 @@ export function globalPersonnelProvidersFactory() {
     {
       provide: PERSONNEL_SCHOOL_CHANGE_RESETTER,
       useFactory: (schoolInstanceCache: SingleItemCache<School>, cache: Cache<Personnel>) =>
-        new SchoolChangeDataSourceResetter('PersonnelSchoolChangeResetter', schoolInstanceCache, cache),
+        new SchoolChangeDataSourceResetter<Personnel>('PersonnelSchoolChangeResetter', schoolInstanceCache, cache),
       deps: [SCHOOL_INSTANCE_CACHE, PERSONNEL_CACHE]
     },
   ]

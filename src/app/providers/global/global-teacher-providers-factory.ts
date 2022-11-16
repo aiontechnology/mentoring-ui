@@ -20,7 +20,6 @@ import {Cache} from '../../implementation/data/cache';
 import {DataSource} from '../../implementation/data/data-source';
 import {Repository} from '../../implementation/data/repository';
 import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {Mentor} from '../../implementation/models/mentor/mentor';
 import {School} from '../../implementation/models/school/school';
 import {Teacher} from '../../implementation/models/teacher/teacher';
 import {TeacherRepository} from '../../implementation/repositories/teacher-repository';
@@ -66,7 +65,7 @@ export function globalTeacherProvidersFactory() {
     {
       provide: TEACHER_SCHOOL_CHANGE_RESETTER,
       useFactory: (schoolInstanceCache: SingleItemCache<School>, cache: Cache<Teacher>) =>
-        new SchoolChangeDataSourceResetter('TeacherSchoolChangeResetter', schoolInstanceCache, cache),
+        new SchoolChangeDataSourceResetter<Teacher>('TeacherSchoolChangeResetter', schoolInstanceCache, cache),
       deps: [SCHOOL_INSTANCE_CACHE, TEACHER_CACHE]
     },
     {
