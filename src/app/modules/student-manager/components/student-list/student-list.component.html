@@ -68,7 +68,7 @@
         <ng-container matColumnDef="firstName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
           <td mat-cell *matCellDef="let student">
-            <a [routerLink]="['students', student.id]">
+            <a (click)="routeWithBackButton(['/studentmanager/schools', schoolInstanceCache.item.id, 'students', student.id])">
               {{ student.firstName }}
             </a>
           </td>

@@ -15,13 +15,26 @@
  */
 
 import {Injectable} from '@angular/core';
+import {Router} from '@angular/router';
 
 type RouteSpec = string[]
-type FullSpec = { routeSpec: RouteSpec, fragment: string }
+export type FullSpec = { routeSpec: RouteSpec, fragment: string }
 
 @Injectable()
 export class NavigationService {
+  constructor(
+    private router: Router,
+  ) {}
+
   private routeSpecStack: FullSpec[] = []
+
+  pop(): FullSpec {
+    return this.routeSpecStack.pop()
+  }
+
+  push(spec: FullSpec) {
+    this.routeSpecStack.push(spec)
+  }
 
   get isEmpty() {
     return this.routeSpecStack.length === 0
@@ -31,17 +44,7 @@ export class NavigationService {
     this.routeSpecStack = []
   }
 
-  push(spec: FullSpec): void {
-    this.routeSpecStack.push(spec)
-  }
-
-  pop(): FullSpec {
-    return this.routeSpecStack.pop()
-  }
-
-  peek(): FullSpec | null {
-    return this.isEmpty
-      ? null
-      : this.routeSpecStack[this.routeSpecStack.length - 1]
+  routeTo = (path: string[]) => {
+    this.router.navigate(path)
   }
 }

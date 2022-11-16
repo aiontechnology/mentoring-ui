@@ -22,6 +22,7 @@ import {DialogManager} from '../../../../../implementation/command/dialog-manage
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../../implementation/component/list-component';
 import {Teacher} from '../../../../../implementation/models/teacher/teacher';
+import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
 import {TEACHER_INSTANCE_CACHE} from '../../../../../providers/global/global-teacher-providers-factory';
@@ -57,13 +58,14 @@ export class TeacherListComponent extends ListComponent<Teacher> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(TEACHER_TABLE_CACHE) tableCache: TableCache<Teacher>,
     @Inject(TEACHER_INSTANCE_CACHE) teacherInstanceCache: SingleItemCache<Teacher>,
     // other
     @Inject(TEACHER_EDIT_DIALOG_MANAGER) private teacherEditDialogManager: DialogManager<TeacherDialogComponent>,
     @Inject(TEACHER_DELETE_DIALOG_MANAGER) private teacherDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
   ) {
-    super(menuState, tableCache, teacherInstanceCache)
+    super(menuState, navService, tableCache, teacherInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }

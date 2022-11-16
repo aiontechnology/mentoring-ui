@@ -22,6 +22,7 @@ import {DialogManager} from '../../../../../implementation/command/dialog-manage
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../../implementation/component/list-component';
 import {Personnel} from '../../../../../implementation/models/personnel/personnel';
+import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
 import {PERSONNEL_INSTANCE_CACHE} from '../../../../../providers/global/global-personnel-providers-factory';
@@ -57,13 +58,14 @@ export class PersonnelListComponent extends ListComponent<Personnel> implements 
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(PERSONNEL_TABLE_CACHE) tableCache: TableCache<Personnel>,
     @Inject(PERSONNEL_INSTANCE_CACHE) personnelInstanceCache: SingleItemCache<Personnel>,
     // other
     @Inject(PERSONNEL_EDIT_DIALOG_MANAGER) private personnelEditDialogManager: DialogManager<PersonnelDialogComponent>,
     @Inject(PERSONNEL_DELETE_DIALOG_MANAGER) private personnelDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
   ) {
-    super(menuState, tableCache, personnelInstanceCache)
+    super(menuState, navService, tableCache, personnelInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }

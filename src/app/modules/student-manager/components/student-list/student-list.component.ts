@@ -25,10 +25,13 @@ import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {equalsById} from '../../../../implementation/functions/comparison';
 import {Contact} from '../../../../implementation/models/contact/contact';
+import {School} from '../../../../implementation/models/school/school';
 import {Student} from '../../../../implementation/models/student/student';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 import {
   SCHOOL_SESSION_COLLECTION_CACHE,
   SCHOOL_SESSION_INSTANCE_CACHE
@@ -67,15 +70,17 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(STUDENT_TABLE_CACHE) tableCache: TableCache<Student>,
     @Inject(STUDENT_INSTANCE_CACHE) studentInstanceCache: SingleItemCache<Student>,
     // other
+    @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
     @Inject(STUDENT_LIST_EDIT_DIALOG_MANAGER) private studentEditDialogManager: DialogManager<StudentDialogComponent>,
     @Inject(STUDENT_LIST_DELETE_DIALOG_MANAGER) private studentDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
     @Inject(SCHOOL_SESSION_COLLECTION_CACHE) public schoolSessionCollectionCache: MultiItemCache<SchoolSession>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
   ) {
-    super(menuState, tableCache, studentInstanceCache)
+    super(menuState, navService, tableCache, studentInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -121,6 +126,9 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
   ngOnDestroy(): void {
     this.destroy()
   }
+
+  protected doHandleBackButton = (navService: NavigationService) =>
+    navService.push({routeSpec: ['/studentmanager/schools', this.schoolInstanceCache.item.id], fragment: undefined})
 
   displayContact(contact: Contact): string {
     const name = contact.firstName + ' ' + contact.lastName;

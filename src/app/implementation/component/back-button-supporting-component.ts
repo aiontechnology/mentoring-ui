@@ -14,29 +14,33 @@
  * limitations under the License.
  */
 
-import {Component} from '@angular/core';
-import {Router} from '@angular/router';
-import {NavigationService} from '../../implementation/route/navigation.service';
+import {NavigationService} from '../route/navigation.service';
 
-@Component({
-  selector: 'ms-back-arrow',
-  templateUrl: './back-arrow.component.html',
-  styleUrls: ['./back-arrow.component.scss']
-})
-export class BackArrowComponent {
-  constructor(
+export abstract class BackButtonSupportingComponent {
+  protected constructor(
     private navService: NavigationService,
-    private router: Router,
   ) {}
 
-  get hasPreviousRoute(): boolean {
-    return !this.navService.isEmpty
+  protected init() {
+    // Do nothing
   }
 
-  returnToPreviousRoute = (): void => {
-    const previousRoute = this.navService.pop()
-    if (previousRoute) {
-      this.router.navigate(previousRoute.routeSpec, {fragment: previousRoute.fragment})
+  protected destroy() {
+    // Do nothing
+  }
+
+  routeWithBackButton(path: string[]) {
+    this.handleBackButton(this.navService)
+    this.navService.routeTo(path)
+  }
+
+  protected doHandleBackButton(navService: NavigationService): void {
+    // Do nothing
+  }
+
+  private handleBackButton(navService: NavigationService): void {
+    if (navService) {
+      this.doHandleBackButton(navService)
     }
   }
 }

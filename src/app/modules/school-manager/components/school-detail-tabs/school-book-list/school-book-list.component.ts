@@ -22,7 +22,11 @@ import {DialogManager} from '../../../../../implementation/command/dialog-manage
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../../implementation/component/list-component';
 import {Book} from '../../../../../implementation/models/book/book';
+import {School} from '../../../../../implementation/models/school/school';
+import {NavigationService} from '../../../../../implementation/route/navigation.service';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 import {UPDATE_BOOK_MENU_TITLE, UPDATE_BOOK_SNACKBAR_MESSAGE} from '../../../other/school-constants';
 import {BOOK_UPDATE_DIALOG_MANAGER, SCHOOL_BOOK_TABLE_CACHE} from '../../../providers/school-book-providers-factory';
 import {SCHOOL_BOOK_GROUP} from '../../../school-manager.module';
@@ -39,12 +43,18 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(SCHOOL_BOOK_TABLE_CACHE) tableCache: TableCache<Book>,
     //other
+    @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
     @Inject(BOOK_UPDATE_DIALOG_MANAGER) private bookUpdateDialogManager: DialogManager<SchoolBookDialogComponent>,
   ) {
-    super(menuState, tableCache)
+    super(menuState, navService, tableCache)
   }
+
+  @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
+
+  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
@@ -57,10 +67,6 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
     ];
   }
 
-  @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
-
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
-
   ngOnInit(): void {
     this.init()
   }
@@ -68,6 +74,9 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
   ngOnDestroy(): void {
     this.destroy()
   }
+
+  protected doHandleBackButton = (navService: NavigationService) =>
+    navService.push({routeSpec: ['/schoolsmanager/schools', this.schoolInstanceCache.item.id], fragment: 'book'})
 
   protected override loadTableCache = async (): Promise<void> => {
     // do nothing

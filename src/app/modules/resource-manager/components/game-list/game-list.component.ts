@@ -23,6 +23,7 @@ import {UserSessionService} from 'src/app/implementation/services/user-session.s
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {GAME_INSTANCE_CACHE} from '../../../../providers/global/global-game-providers-factory';
@@ -54,6 +55,7 @@ export class GameListComponent extends ListComponent<Game> implements OnInit, On
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(GAME_TABLE_CACHE) tableCache: TableCache<Game>,
     @Inject(GAME_INSTANCE_CACHE) gameInstanceCache: SingleItemCache<Game>,
     // other
@@ -61,7 +63,7 @@ export class GameListComponent extends ListComponent<Game> implements OnInit, On
     @Inject(GAME_LIST_DELETE_DIALOG_MANAGER) private gameDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
     public userSession: UserSessionService,
   ) {
-    super(menuState, tableCache, gameInstanceCache)
+    super(menuState, navService, tableCache, gameInstanceCache)
     if (userSession.isSysAdmin) {
       this.columns = ['select'].concat(this.columns)
     }
@@ -109,4 +111,7 @@ export class GameListComponent extends ListComponent<Game> implements OnInit, On
   ngOnDestroy(): void {
     this.destroy()
   }
+
+  protected doHandleBackButton = (navService: NavigationService) =>
+    navService.push({routeSpec: ['/resourcemanager'], fragment: 'game'})
 }

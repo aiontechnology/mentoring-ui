@@ -25,9 +25,9 @@ export abstract class DetailComponent extends MenuRegisteringComponent {
   protected constructor(
     menuState: MenuStateService,
     protected route: ActivatedRoute,
-    private navService?: NavigationService,
+    navService?: NavigationService,
   ) {
-    super(menuState)
+    super(menuState, navService)
   }
 
   /**
@@ -41,12 +41,10 @@ export abstract class DetailComponent extends MenuRegisteringComponent {
   protected override init(): void {
     super.init()
     this.handleRoute(this.route)
-    this.handleBackButton(this.navService)
   }
 
   protected override destroy(): void {
     super.destroy()
-    this.navService?.clear();
   }
 
   /**
@@ -58,17 +56,7 @@ export abstract class DetailComponent extends MenuRegisteringComponent {
     // do nothing
   }
 
-  protected doHandleBackButton(navService: NavigationService): void {
-    // do nothing
-  }
-
   protected onUriChange = (uri: URI): void => {
     // do nothing
-  }
-
-  private handleBackButton(navService: NavigationService): void {
-    if (navService) {
-      this.doHandleBackButton(navService)
-    }
   }
 }

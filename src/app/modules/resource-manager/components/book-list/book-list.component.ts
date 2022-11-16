@@ -23,6 +23,7 @@ import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {Book} from '../../../../implementation/models/book/book';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {BOOK_INSTANCE_CACHE} from '../../../../providers/global/global-book-providers-factory';
@@ -54,6 +55,7 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(BOOK_TABLE_CACHE) tableCache: TableCache<Book>,
     @Inject(BOOK_INSTANCE_CACHE) bookInstanceCache: SingleItemCache<Book>,
     // other
@@ -61,7 +63,7 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
     @Inject(BOOK_LIST_DELETE_DIALOG_MANAGER) private bookDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
     public userSession: UserSessionService,
   ) {
-    super(menuState, tableCache, bookInstanceCache)
+    super(menuState, navService, tableCache, bookInstanceCache)
     if (userSession.isSysAdmin) {
       this.columns = ['select'].concat(this.columns)
     }
@@ -109,4 +111,7 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
   ngOnDestroy(): void {
     this.destroy()
   }
+
+  protected doHandleBackButton = (navService: NavigationService) =>
+    navService.push({routeSpec: ['/resourcemanager'], fragment: 'book'})
 }

@@ -22,9 +22,12 @@ import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {Mentor} from '../../../../implementation/models/mentor/mentor';
+import {School} from '../../../../implementation/models/school/school';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {MENTOR_INSTANCE_CACHE} from '../../../../providers/global/global-mentor-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
 import {MENTOR_GROUP} from '../../mentor-manager.module';
 import {
@@ -57,13 +60,15 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(MENTOR_TABLE_CACHE) tableCache: TableCache<Mentor>,
     @Inject(MENTOR_INSTANCE_CACHE) mentorInstanceCache: SingleItemCache<Mentor>,
     // other
+    @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
     @Inject(MENTOR_LIST_EDIT_DIALOG_MANAGER) private mentorEditDialogManager: DialogManager<MentorDialogComponent>,
     @Inject(MENTOR_LIST_DELETE_DIALOG_MANAGER) private mentorDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
   ) {
-    super(menuState, tableCache, mentorInstanceCache)
+    super(menuState, navService, tableCache, mentorInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -106,4 +111,7 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
   ngOnDestroy(): void {
     this.destroy()
   }
+
+  protected doHandleBackButton = (navService: NavigationService) =>
+    navService.push({routeSpec: ['/mentormanager/schools', this.schoolInstanceCache.item.id], fragment: undefined})
 }

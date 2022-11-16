@@ -22,6 +22,7 @@ import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {School} from '../../../../implementation/models/school/school';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
@@ -57,13 +58,14 @@ export class SchoolListComponent extends ListComponent<School> implements OnInit
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(SCHOOL_TABLE_CACHE) tableCache: TableCache<School>,
     @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
     // other
     @Inject(SCHOOL_LIST_EDIT_DIALOG_MANAGER) private schoolEditDialogManager: DialogManager<SchoolDialogComponent>,
     @Inject(SCHOOL_LIST_DELETE_DIALOG_MANAGER) private schoolDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
   ) {
-    super(menuState, tableCache, schoolInstanceCache)
+    super(menuState, navService, tableCache, schoolInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -106,4 +108,7 @@ export class SchoolListComponent extends ListComponent<School> implements OnInit
   ngOnDestroy(): void {
     this.destroy()
   }
+
+  protected doHandleBackButton = (navService: NavigationService) =>
+    navService.push({routeSpec: ['/schoolsmanager'], fragment: undefined})
 }

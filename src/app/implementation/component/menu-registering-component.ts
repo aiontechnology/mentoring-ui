@@ -15,12 +15,17 @@
  */
 
 import {MenuDialogCommand} from '../command/menu-dialog-command';
+import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
+import {BackButtonSupportingComponent} from './back-button-supporting-component';
 
-export abstract class MenuRegisteringComponent {
+export abstract class MenuRegisteringComponent extends BackButtonSupportingComponent {
   protected constructor(
     protected menuState: MenuStateService,
-  ) {}
+    navService: NavigationService,
+  ) {
+    super(navService)
+  }
 
   protected get menus(): MenuDialogCommand<any>[] {
     return []
@@ -30,6 +35,7 @@ export abstract class MenuRegisteringComponent {
    * Run the component set up.
    */
   protected init(): void {
+    super.init()
     this.registerMenus(this.menuState)
   }
 
@@ -37,7 +43,7 @@ export abstract class MenuRegisteringComponent {
    * Run the component teardown.
    */
   protected destroy(): void {
-    // do nothing
+    super.destroy()
   }
 
   /**

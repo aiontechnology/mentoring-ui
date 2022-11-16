@@ -22,6 +22,7 @@ import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {Book} from '../../../../implementation/models/book/book';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {UPDATE_BOOK_MENU_TITLE, UPDATE_BOOK_SNACKBAR_MESSAGE} from '../../other/resource-constants';
 import {BOOK_UPDATE_DIALOG_MANAGER, SCHOOL_BOOK_TABLE_CACHE} from '../../providers/school-book-providers-factory';
@@ -39,11 +40,12 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(SCHOOL_BOOK_TABLE_CACHE) tableCache: TableCache<Book>,
     //other
     @Inject(BOOK_UPDATE_DIALOG_MANAGER) private bookUpdateDialogManager: DialogManager<SchoolBookDialogComponent>,
   ) {
-    super(menuState, tableCache)
+    super(menuState, navService, tableCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -68,4 +70,7 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
   ngOnDestroy(): void {
     this.destroy()
   }
+
+  protected doHandleBackButton = (navService: NavigationService) =>
+    navService.push({routeSpec: ['/resourcemanager'], fragment: 'schoolbook'})
 }

@@ -95,9 +95,6 @@ export class BookDetailComponent extends DetailComponent implements OnInit, OnDe
     this.destroy()
   }
 
-  protected doHandleBackButton = (navService: NavigationService): void =>
-    navService.push({routeSpec: ['/resourcemanager'], fragment: 'book'})
-
   protected override handleRoute = async (route: ActivatedRoute): Promise<void> => {
     await route.paramMap
       .subscribe(params => {

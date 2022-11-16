@@ -23,6 +23,7 @@ import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {Book} from '../../../../implementation/models/book/book';
 import {Game} from '../../../../implementation/models/game/game';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {UPDATE_GAME_MENU_TITLE, UPDATE_GAME_SNACKBAR_MESSAGE} from '../../other/resource-constants';
 import {GAME_UPDATE_DIALOG_MANAGER, SCHOOL_GAME_TABLE_CACHE} from '../../providers/school-game-providers-factory';
@@ -40,11 +41,12 @@ export class SchoolGameListComponent extends ListComponent<Game> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(SCHOOL_GAME_TABLE_CACHE) tableCache: TableCache<Game>,
     //other
     @Inject(GAME_UPDATE_DIALOG_MANAGER) private gameUpdateDialogManager: DialogManager<SchoolGameDialogComponent>,
   ) {
-    super(menuState, tableCache)
+    super(menuState, navService, tableCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -69,4 +71,7 @@ export class SchoolGameListComponent extends ListComponent<Game> implements OnIn
   ngOnDestroy(): void {
     this.destroy()
   }
+
+  protected doHandleBackButton = (navService: NavigationService) =>
+    navService.push({routeSpec: ['/resourcemanager'], fragment: 'schoolgame'})
 }

@@ -22,7 +22,11 @@ import {DialogManager} from '../../../../../implementation/command/dialog-manage
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../../implementation/component/list-component';
 import {Game} from '../../../../../implementation/models/game/game';
+import {School} from '../../../../../implementation/models/school/school';
+import {NavigationService} from '../../../../../implementation/route/navigation.service';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 import {UPDATE_GAME_MENU_TITLE, UPDATE_GAME_SNACKBAR_MESSAGE} from '../../../other/school-constants';
 import {GAME_UPDATE_DIALOG_MANAGER, SCHOOL_GAME_TABLE_CACHE} from '../../../providers/school-game-providers-factory';
 import {SCHOOL_GAME_GROUP} from '../../../school-manager.module';
@@ -39,11 +43,13 @@ export class SchoolGameListComponent extends ListComponent<Game> implements OnIn
   constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     @Inject(SCHOOL_GAME_TABLE_CACHE) tableCache: TableCache<Game>,
     //other
+    @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
     @Inject(GAME_UPDATE_DIALOG_MANAGER) private gameUpdateDialogManager: DialogManager<SchoolGameDialogComponent>,
   ) {
-    super(menuState, tableCache)
+    super(menuState, navService, tableCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -68,6 +74,9 @@ export class SchoolGameListComponent extends ListComponent<Game> implements OnIn
   ngOnDestroy(): void {
     this.destroy()
   }
+
+  protected doHandleBackButton = (navService: NavigationService) =>
+    navService.push({routeSpec: ['/schoolsmanager/schools', this.schoolInstanceCache.item.id], fragment: 'game'})
 
   protected override loadTableCache = async (): Promise<void> => {
     // do nothing

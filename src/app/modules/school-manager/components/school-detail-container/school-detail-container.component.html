@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<mat-tab-group class="wrapper" (selectedIndexChange)="onTabChange($event)">
+<mat-tab-group class="wrapper" [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
   <mat-tab label="Details">
     <ms-school-detail class="tab-content"></ms-school-detail>
   </mat-tab>

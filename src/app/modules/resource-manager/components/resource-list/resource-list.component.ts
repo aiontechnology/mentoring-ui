@@ -35,13 +35,30 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
     private route: ActivatedRoute,
   ) {
     route.fragment.subscribe(fragment => {
-      switch (fragment) {
-        case 'book':
-          this.tabIndex = 0
-          break
-        case 'game':
-          this.tabIndex = 1
-          break
+      if(userSession.isSysAdmin) {
+        switch (fragment) {
+          case 'book':
+            this.tabIndex = 0
+            break
+          case 'game':
+            this.tabIndex = 1
+            break
+        }
+      } else {
+        switch (fragment) {
+          case 'schoolbook':
+            this.tabIndex = 0
+            break
+          case 'schoolgame':
+            this.tabIndex = 1
+            break
+          case 'book':
+            this.tabIndex = 2
+            break
+          case 'game':
+            this.tabIndex = 3
+            break
+        }
       }
     })
   }

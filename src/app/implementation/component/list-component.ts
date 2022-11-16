@@ -16,6 +16,7 @@
 
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
+import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
 import {SingleItemCache} from '../state-management/single-item-cache';
 import {TableCache} from '../table-cache/table-cache';
@@ -25,11 +26,12 @@ export abstract class ListComponent<T> extends MenuRegisteringComponent {
   protected constructor(
     // for super
     menuState: MenuStateService,
+    navService: NavigationService,
     // other
     public tableCache: TableCache<T>,
     private instanceCache?: SingleItemCache<T>,
   ) {
-    super(menuState)
+    super(menuState, navService)
   }
 
   protected set sort(sort: MatSort) {

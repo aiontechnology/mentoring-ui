@@ -99,9 +99,6 @@ export class GameDetailComponent extends DetailComponent implements OnInit, OnDe
     this.destroy()
   }
 
-  protected doHandleBackButton = (navService: NavigationService): void =>
-    navService.push({routeSpec: ['/resourcemanager'], fragment: 'game'})
-
   protected override handleRoute = async (route: ActivatedRoute): Promise<void> => {
     await route.paramMap
       .subscribe(params => {

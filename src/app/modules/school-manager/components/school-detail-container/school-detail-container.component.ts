@@ -38,6 +38,7 @@ import {setState} from './menu-state-manager';
   styleUrls: ['./school-detail-container.component.scss']
 })
 export class SchoolDetailContainerComponent implements OnInit, OnDestroy, AfterViewInit {
+  tabIndex: number = 0
   private subscriptions: Subscription[] = []
 
   constructor(
@@ -52,6 +53,16 @@ export class SchoolDetailContainerComponent implements OnInit, OnDestroy, AfterV
     this.subscriptions.push(this.schoolRouteWatcher.watch(this.route, 'SchoolDetailContainerComponent'))
     this.menuState.reset()
     this.menuState.groupNames = [PERSONNEL_GROUP, PROGRAM_ADMIN_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP, SCHOOL_GROUP, TEACHER_GROUP]
+    this.route.fragment.subscribe(fragment => {
+      switch (fragment) {
+        case 'book':
+          this.tabIndex = 4
+          break
+        case 'game':
+          this.tabIndex = 5
+          break
+      }
+    })
   }
 
   ngOnDestroy(): void {
@@ -59,7 +70,7 @@ export class SchoolDetailContainerComponent implements OnInit, OnDestroy, AfterV
   }
 
   ngAfterViewInit(): void {
-    this.onTabChange(0);
+    this.onTabChange(this.tabIndex)
   }
 
   onTabChange(index: number) {
