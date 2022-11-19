@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-import {Subscription} from 'rxjs';
 import {Cache} from '../data/cache';
 import {UriSupplier} from '../data/uri-supplier';
 import {School} from '../models/school/school';
 import {SchoolSession} from '../models/school/schoolsession';
+import {SubscriptionManager} from '../reactive/subscription-manager';
 import {SCHOOL_ID} from '../route/route-constants';
 import {MultiItemCache} from './multi-item-cache';
 import {SingleItemCache} from './single-item-cache';
 
-export class SchoolSessionsSchoolChangeHandler {
-  private subscriptions: Subscription[] = []
-
+export class SchoolSessionsSchoolChangeHandler extends SubscriptionManager {
   constructor(
     private label: string,
     private schoolInstanceCache: SingleItemCache<School>,
@@ -33,15 +31,17 @@ export class SchoolSessionsSchoolChangeHandler {
     private uriSupplier: UriSupplier,
     private dataCache: Cache<SchoolSession>,
     private collectionCache: MultiItemCache<SchoolSession>,
-  ) {}
+  ) {
+    super()
+  }
 
   start(): void {
     console.log(`${this.label}: Start`)
-    this.subscriptions.push(this.schoolInstanceCache.observable.subscribe(this.onSchoolChange))
+    this.addSubscription(this.schoolInstanceCache.observable.subscribe(this.onSchoolChange))
   }
 
   stop(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe())
+    this.unsubscribeFromAll()
     console.log(`${this.label}: Stop`)
   }
 

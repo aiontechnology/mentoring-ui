@@ -67,6 +67,7 @@ export class SchoolDetailContainerComponent implements OnInit, OnDestroy, AfterV
 
   ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe())
+    this.subscriptions = []
   }
 
   ngAfterViewInit(): void {

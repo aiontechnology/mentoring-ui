@@ -74,27 +74,32 @@ export class StudentRegistrationComponent implements OnInit {
     return LinkService.selfLink;
   }
 
+  private valueOrNull(key: string) {
+    const value = this.model.get(key)?.value
+    return value !== '' ? value : null
+  }
+
   submitForm(): void {
     const studentRegistration = new StudentRegistration(
-      this.model.get('studentFirstName').value,
-      this.model.get('studentLastName').value,
-      this.model.get('grade').value,
-      this.model.get('parent1FirstName').value,
-      this.model.get('parent1LastName').value,
-      this.model.get('parent1PhoneNumber')?.value,
-      this.model.get('parent1EmailAddress')?.value,
-      this.model.get('parent1PreferredContactMethod')?.value,
-      this.model.get('parent2FirstName')?.value,
-      this.model.get('parent2LastName')?.value,
-      this.model.get('parent2PhoneNumber')?.value,
-      this.model.get('parent2EmailAddress')?.value,
-      this.model.get('parent2PreferredContactMethod')?.value,
-      this.model.get('teacher')?.value,
-      this.model.get('preferredSession')?.value,
-      this.model.get('emergencyContactFirstName')?.value,
-      this.model.get('emergencyContactLastName')?.value,
-      this.model.get('emergencyContactPhone')?.value,
-      this.model.get('parentSignature').value,
+      this.valueOrNull('studentFirstName'),
+      this.valueOrNull('studentLastName'),
+      this.valueOrNull('grade'),
+      this.valueOrNull('parent1FirstName'),
+      this.valueOrNull('parent1LastName'),
+      this.valueOrNull('parent1PhoneNumber'),
+      this.valueOrNull('parent1EmailAddress'),
+      this.valueOrNull('parent1PreferredContactMethod'),
+      this.valueOrNull('parent2FirstName'),
+      this.valueOrNull('parent2LastName'),
+      this.valueOrNull('parent2PhoneNumber'),
+      this.valueOrNull('parent2EmailAddress'),
+      this.valueOrNull('parent2PreferredContactMethod'),
+      this.valueOrNull('teacher'),
+      this.valueOrNull('preferredSession'),
+      this.valueOrNull('emergencyContactFirstName'),
+      this.valueOrNull('emergencyContactLastName'),
+      this.valueOrNull('emergencyContactPhone'),
+      this.valueOrNull('parentSignature'),
       this.registration.links,
     );
     const that = this;

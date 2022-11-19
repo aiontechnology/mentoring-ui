@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {Subscription} from 'rxjs';
 import {Cache} from '../data/cache';
 import {UriSupplier} from '../data/uri-supplier';
 import {School} from '../models/school/school';
+import {SubscriptionManager} from '../reactive/subscription-manager';
 import {SCHOOL_ID} from '../route/route-constants';
 import {TableCache} from '../table-cache/table-cache';
 import {SchoolChangeDataSourceResetter} from './school-change-data-source-resetter';
@@ -29,24 +29,24 @@ import {SchoolChangeDataSourceResetter} from './school-change-data-source-resett
  * 2. Set the school id of the UriSupplier
  * 3. Reload the TableCache
  */
-export class SingleItemCacheSchoolChangeHandler<T> {
-  private subscriptions: Subscription[] = []
-
+export class SingleItemCacheSchoolChangeHandler<T> extends SubscriptionManager {
   constructor(
     private label: string,
     private schoolChangeDataSourceResetter: SchoolChangeDataSourceResetter<T>,
     private uriSupplier: UriSupplier,
     private dataCache: Cache<T>,
     private tableCache?: TableCache<T>
-  ) {}
+  ) {
+    super()
+  }
 
   start(): void {
     console.log(`${this.label}: Start`)
-    this.subscriptions.push(this.schoolChangeDataSourceResetter.observable.subscribe(this.onSchoolChange))
+    this.addSubscription(this.schoolChangeDataSourceResetter.observable.subscribe(this.onSchoolChange))
   }
 
   stop(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe())
+    this.unsubscribeFromAll()
     console.log(`${this.label}: Stop`)
   }
 

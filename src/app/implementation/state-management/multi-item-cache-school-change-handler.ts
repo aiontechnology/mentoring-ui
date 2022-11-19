@@ -14,29 +14,28 @@
  * limitations under the License.
  */
 
-import {Subscription} from 'rxjs';
 import {UriSupplier} from '../data/uri-supplier';
 import {School} from '../models/school/school';
+import {SubscriptionManager} from '../reactive/subscription-manager';
 import {SCHOOL_ID} from '../route/route-constants';
 import {SchoolChangeDataSourceResetter} from './school-change-data-source-resetter';
-import {SingleItemCache} from './single-item-cache';
 
-export abstract class MultiItemCacheSchoolChangeHandler<T> {
-  private subscriptions: Subscription[] = []
-
+export abstract class MultiItemCacheSchoolChangeHandler<T> extends SubscriptionManager {
   protected constructor(
     protected label: string,
     private schoolChangeDataSourceResetter: SchoolChangeDataSourceResetter<T>,
     private uriSupplier: UriSupplier,
-  ) {}
+  ) {
+    super()
+  }
 
   start(): void {
     console.log(`${this.label}: Start`)
-    this.subscriptions.push(this.schoolChangeDataSourceResetter.observable.subscribe(this.onSchoolChange.bind(this)))
+    this.addSubscription(this.schoolChangeDataSourceResetter.observable.subscribe(this.onSchoolChange.bind(this)))
   }
 
   stop(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe())
+    this.unsubscribeFromAll()
     console.log(`${this.label}: Stop`)
   }
 

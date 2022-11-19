@@ -14,27 +14,26 @@
  * limitations under the License.
  */
 
-import {Subscription} from 'rxjs';
 import {UriSupplier} from '../data/uri-supplier';
 import {School} from '../models/school/school';
+import {SubscriptionManager} from '../reactive/subscription-manager';
 import {SCHOOL_ID} from '../route/route-constants';
 import {SingleItemCache} from './single-item-cache';
 
-export class SchoolChangeUriSupplierHandler {
-  private subscriptions: Subscription[] = []
-
+export class SchoolChangeUriSupplierHandler extends SubscriptionManager {
   constructor(
     private schoolInstanceCache: SingleItemCache<School>,
     private uriSupplier: UriSupplier,
-  ) {}
+  ) {
+    super()
+  }
 
   start(): void {
-    this.subscriptions.push(this.schoolInstanceCache.observable.subscribe(this.onSchoolChange))
+    this.addSubscription(this.schoolInstanceCache.observable.subscribe(this.onSchoolChange))
   }
 
   stop(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe())
-    this.subscriptions = []
+    this.unsubscribeFromAll()
   }
 
   private onSchoolChange = (school: School): void => {

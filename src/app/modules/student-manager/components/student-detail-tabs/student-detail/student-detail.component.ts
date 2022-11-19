@@ -107,6 +107,7 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
   ngOnDestroy(): void {
     this.destroy()
     this.subscriptions.forEach(subscription => subscription.unsubscribe())
+    this.subscriptions = []
   }
 
   protected doHandleBackButton = (navService: NavigationService): void =>

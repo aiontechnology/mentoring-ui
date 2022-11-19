@@ -29,9 +29,6 @@ import {
   EDIT_SCHOOL_MENU_TITLE,
   EDIT_SCHOOL_PANEL_TITLE,
   EDIT_SCHOOL_SNACKBAR_MESSAGE,
-  INVITE_STUDENT_MENU_TITLE,
-  INVITE_STUDENT_PANEL_TITLE,
-  INVITE_STUDENT_SNACKBAR_MESSAGE,
   PLURAL_SCHOOL,
   REMOVE_SCHOOL_MENU_TITLE,
   REMOVE_SCHOOL_SNACKBAR_MESSAGE,
@@ -82,12 +79,14 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
         }))
         .withAdminOnly(true)
         .build(),
+      /* Feature is turned off in production
       MenuDialogCommand.builder(INVITE_STUDENT_MENU_TITLE, SCHOOL_GROUP, this.invitationEditDialogManager)
         .withSnackbarMessage(INVITE_STUDENT_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           panelTitle: INVITE_STUDENT_PANEL_TITLE
         }))
         .build()
+      */
     ]
   }
 

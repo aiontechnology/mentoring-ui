@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-import {ErrorHandler, Injectable} from '@angular/core';
-import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
 
-@Injectable()
-export class GlobalErrorHandler implements ErrorHandler {
-  constructor(private router: Router) {
+export class SubscriptionManager {
+  private subscriptions: Subscription[] = []
+
+  protected addSubscription(subscription: Subscription) {
+    this.subscriptions.push(subscription)
   }
 
-  handleError(error: any): void {
-    if (error?.rejection?.message === 'URI malformed') {
-      // this.router.navigate(['/'])
-      console.info('Malformed URL', error)
-    } else {
-      console.error('Other error', error)
-    }
+  protected unsubscribeFromAll() {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe())
+    this.subscriptions = []
   }
 }

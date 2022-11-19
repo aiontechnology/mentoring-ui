@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-import {Subscription} from 'rxjs';
 import {Cache} from '../data/cache';
 import {UriSupplier} from '../data/uri-supplier';
 import {School} from '../models/school/school';
 import {SchoolSession} from '../models/school/schoolsession';
+import {SubscriptionManager} from '../reactive/subscription-manager';
 import {SCHOOL_ID, SESSION_PARAM} from '../route/route-constants';
 import {TableCache} from '../table-cache/table-cache';
 import {SingleItemCache} from './single-item-cache';
 
-export class SingleItemCacheSchoolSessionChangeHandler<T> {
-  private subscriptions: Subscription[] = []
-
+export class SingleItemCacheSchoolSessionChangeHandler<T> extends SubscriptionManager {
   constructor(
     private label: string,
     private schoolInstanceCache: SingleItemCache<School>,
@@ -33,16 +31,18 @@ export class SingleItemCacheSchoolSessionChangeHandler<T> {
     private uriSupplier: UriSupplier,
     private dataCache: Cache<T>,
     private tableCache?: TableCache<T>,
-  ) {}
+  ) {
+    super()
+  }
 
   start(): void {
     console.log(`${this.label}: Start`)
-    this.subscriptions.push(this.schoolInstanceCache.observable.subscribe(this.onSchoolChange))
-    this.subscriptions.push(this.schoolSessionInstanceCache.observable.subscribe(this.onSchoolSessionChange))
+    this.addSubscription(this.schoolInstanceCache.observable.subscribe(this.onSchoolChange))
+    this.addSubscription(this.schoolSessionInstanceCache.observable.subscribe(this.onSchoolSessionChange))
   }
 
   stop(): void {
-    this.subscriptions.forEach(subscription => subscription.unsubscribe())
+    this.unsubscribeFromAll()
     console.log(`${this.label}: Stop`)
   }
 
