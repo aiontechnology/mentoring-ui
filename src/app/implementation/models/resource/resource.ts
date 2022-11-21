@@ -15,13 +15,14 @@
  */
 
 import {resourceLocations} from '../../constants/locations';
+import {convertEmptyStringToNull} from '../../functions/value-or-null';
 
 export abstract class Resource {
 
-  id: string;
-  location: string;
-  leadershipSkills: string[];
-  leadershipTraits: string[];
+  id: string
+  location: string
+  leadershipSkills: string[]
+  leadershipTraits: string[]
   links: {
     self: [
       { href: string }
@@ -29,11 +30,11 @@ export abstract class Resource {
   };
 
   // The name / title of the resource being referenced for drop list data.
-  displayName: string;
+  displayName: string
 
   protected constructor(json?: any) {
-    this.id = json?.id;
-    this.location = json?.location;
+    this.id = convertEmptyStringToNull(json?.id)
+    this.location = convertEmptyStringToNull(json?.location)
     this.leadershipSkills = json?.leadershipSkills;
     this.leadershipTraits = json?.leadershipTraits;
     this.links = json?.links;

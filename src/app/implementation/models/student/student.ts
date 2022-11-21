@@ -14,76 +14,77 @@
  * limitations under the License.
  */
 
-import {Contact} from '../contact/contact';
 import {personLocations} from 'src/app/implementation/constants/locations';
+import {convertEmptyStringToNull} from '../../functions/value-or-null';
+import {Contact} from '../contact/contact';
 
 export abstract class Student {
-  id: string;
-  firstName: string;
-  lastName: string;
-  studentId: string;
-  grade: string;
-  preferredTime: string;
-  actualTime: string;
-  startDate: string;
-  location: string;
-  mediaReleaseSigned: boolean;
-  preBehavioralAssessment: number;
-  postBehavioralAssessment: number;
-  behaviors: string[];
-  interests: string[];
-  leadershipSkills: string[];
-  leadershipTraits: string[];
-  contacts: Contact[];
+  id: string
+  firstName: string
+  lastName: string
+  studentId: string
+  grade: string
+  preferredTime: string
+  actualTime: string
+  startDate: string
+  location: string
+  mediaReleaseSigned: boolean
+  preBehavioralAssessment: number
+  postBehavioralAssessment: number
+  behaviors: string[]
+  interests: string[]
+  leadershipSkills: string[]
+  leadershipTraits: string[]
+  contacts: Contact[]
   links: {
     self: [
-      { href: string; }
+      { href: string }
     ]
   };
 
-  abstract teacher: any;
-  abstract mentor: any;
+  abstract teacher: any
+  abstract mentor: any
 
   protected constructor(json?: any) {
-    this.id = json?.id;
-    this.firstName = json?.firstName;
-    this.lastName = json?.lastName;
-    this.studentId = json?.studentId;
-    this.grade = json?.grade;
-    this.preferredTime = json?.preferredTime;
-    this.actualTime = json?.actualTime;
-    this.startDate = json?.startDate;
-    this.location = json?.location;
-    this.mediaReleaseSigned = json?.mediaReleaseSigned;
-    this.preBehavioralAssessment = json?.preBehavioralAssessment;
-    this.postBehavioralAssessment = json?.postBehavioralAssessment;
-    this.behaviors = json?.behaviors || [];
-    this.interests = json?.interests || [];
-    this.leadershipSkills = json?.leadershipSkills || [];
-    this.leadershipTraits = json?.leadershipTraits || [];
+    this.id = convertEmptyStringToNull(json?.id)
+    this.firstName = convertEmptyStringToNull(json?.firstName)
+    this.lastName = convertEmptyStringToNull(json?.lastName)
+    this.studentId = convertEmptyStringToNull(json?.studentId)
+    this.grade = convertEmptyStringToNull(json?.grade)
+    this.preferredTime = convertEmptyStringToNull(json?.preferredTime)
+    this.actualTime = convertEmptyStringToNull(json?.actualTime)
+    this.startDate = convertEmptyStringToNull(json?.startDate)
+    this.location = convertEmptyStringToNull(json?.location)
+    this.mediaReleaseSigned = json?.mediaReleaseSigned
+    this.preBehavioralAssessment = json?.preBehavioralAssessment
+    this.postBehavioralAssessment = json?.postBehavioralAssessment
+    this.behaviors = json?.behaviors || []
+    this.interests = json?.interests || []
+    this.leadershipSkills = json?.leadershipSkills || []
+    this.leadershipTraits = json?.leadershipTraits || []
 
-    this.contacts = [];
+    this.contacts = []
     json?.contacts?.forEach(contact => {
-      this.contacts.push(new Contact(contact));
+      this.contacts.push(new Contact(contact))
     });
 
-    this.links = json?.links;
+    this.links = json?.links
   }
 
   get displayLocation(): string {
-    return personLocations[this.location] ?? '';
+    return personLocations[this.location] ?? ''
   }
 
   /**
    * Calculate the teacher's name.
    */
   get teacherName(): string {
-    const firstName = this.teacher?.teacher?.firstName ?? '';
-    const lastName = this.teacher?.teacher?.lastName ?? '';
-    let fullName = '';
-    fullName += firstName ?? '';
-    fullName += (firstName && lastName) ? ' ' : '';
-    fullName += lastName ?? '';
-    return fullName;
+    const firstName = this.teacher?.teacher?.firstName ?? ''
+    const lastName = this.teacher?.teacher?.lastName ?? ''
+    let fullName = ''
+    fullName += firstName ?? ''
+    fullName += (firstName && lastName) ? ' ' : ''
+    fullName += lastName ?? ''
+    return fullName
   }
 }

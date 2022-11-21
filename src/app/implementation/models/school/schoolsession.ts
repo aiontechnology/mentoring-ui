@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
+import {convertEmptyStringToNull} from '../../functions/value-or-null';
+
 export class SchoolSession {
-  id: string;
-  label: string;
-  isCurrent: boolean;
+  id: string
+  label: string
+  isCurrent: boolean
   links: {
     self: [
-      { href: string; }
+      { href: string }
     ]
   };
 
   constructor(json?: any) {
-    this.id = json?.id;
-    this.label = json?.label;
+    this.id = convertEmptyStringToNull(json?.id)
+    this.label = convertEmptyStringToNull(json?.label)
     this.isCurrent = json?.isCurrent;
     this.links = json?.links;
   }

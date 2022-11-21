@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,12 @@
  * limitations under the License.
  */
 
-import {Student} from '../student/student';
+import {FormGroup} from '@angular/forms';
 
-interface StudentTeacherOutbound {
-  uri: string
-  comment: string
+export function valueOrNull(formGroup: FormGroup, key: string) {
+  return convertEmptyStringToNull(formGroup.get(key)?.value)
 }
 
-interface StudentMentorOutbound {
-  uri: string
-}
-
-export class StudentOutbound extends Student {
-
-  teacher: StudentTeacherOutbound
-  mentor: StudentMentorOutbound
-
-  constructor(json?: any) {
-    super(json)
-    this.teacher = json?.teacher
-    this.mentor = json?.mentor
-  }
-
+export function convertEmptyStringToNull(value: any) {
+  return value !== '' ? value : null
 }

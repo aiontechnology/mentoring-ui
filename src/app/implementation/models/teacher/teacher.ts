@@ -16,41 +16,42 @@
 
 import {LinkService} from '../../../modules/shared/services/link-service/link.service';
 import {grades} from '../../constants/grades';
+import {convertEmptyStringToNull} from '../../functions/value-or-null';
 
 /**
  * Model class the represents a teacher.
  * @author Whitney Hunter
  */
 export class Teacher {
-  firstName: string;
-  lastName: string;
-  email: string;
-  cellPhone: string;
-  grade1: number;
-  grade2: number;
+  firstName: string
+  lastName: string
+  email: string
+  cellPhone: string
+  grade1: number
+  grade2: number
   links: {
     self: [
-      { href: string; }
+      { href: string }
     ]
   };
 
   constructor(json?: any) {
-    this.firstName = json?.firstName;
-    this.lastName = json?.lastName;
-    this.email = (json?.email === '') ? null : json?.email;
-    this.cellPhone = json?.cellPhone;
-    this.grade1 = json?.grade1 !== null ? Number(json?.grade1) : null;
-    this.grade2 = json?.grade2 !== null ? Number(json?.grade2) : null;
-    this.links = json?.links;
+    this.firstName = convertEmptyStringToNull(json?.firstName)
+    this.lastName = convertEmptyStringToNull(json?.lastName)
+    this.email = convertEmptyStringToNull(json?.email)
+    this.cellPhone = convertEmptyStringToNull(json?.cellPhone)
+    this.grade1 = json?.grade1 !== null ? Number(json?.grade1) : null
+    this.grade2 = json?.grade2 !== null ? Number(json?.grade2) : null
+    this.links = json?.links
   }
 
   get grades(): string {
-    const part1 = grades[this.grade1]?.valueView;
-    const part2 = this.grade2 !== null ? ', ' + grades[this.grade2].valueView : '';
-    return part1 + part2;
+    const part1 = grades[this.grade1]?.valueView
+    const part2 = this.grade2 !== null ? ', ' + grades[this.grade2].valueView : ''
+    return part1 + part2
   }
 
   get selfLink(): string {
-    return LinkService.selfLink(this);
+    return LinkService.selfLink(this)
   }
 }

@@ -14,26 +14,28 @@
  * limitations under the License.
  */
 
+import {convertEmptyStringToNull} from '../../functions/value-or-null';
+
 export class Contact {
 
-  label: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  preferredContactMethod: 'EITHER' | 'EMAIL' | 'PHONE';
-  isEmergencyContact: boolean;
-  comment: string;
+  label: string
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  preferredContactMethod: 'EITHER' | 'EMAIL' | 'PHONE'
+  isEmergencyContact: boolean
+  comment: string
 
   constructor(json?: any) {
-    this.label = json?.label;
-    this.firstName = json?.firstName;
-    this.lastName = json?.lastName;
-    this.email = (json?.email === '') ? null : json?.email;
-    this.phone = json?.phone;
-    this.preferredContactMethod = json?.preferredContactMethod;
-    this.isEmergencyContact = json?.isEmergencyContact;
-    this.comment = json?.comment;
+    this.label = convertEmptyStringToNull(json?.label)
+    this.firstName = convertEmptyStringToNull(json?.firstName)
+    this.lastName = convertEmptyStringToNull(json?.lastName)
+    this.email = convertEmptyStringToNull(json?.email)
+    this.phone = convertEmptyStringToNull(json?.phone)
+    this.preferredContactMethod = json?.preferredContactMethod
+    this.isEmergencyContact = json?.isEmergencyContact
+    this.comment = convertEmptyStringToNull(json?.comment)
   }
 
 }

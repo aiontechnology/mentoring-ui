@@ -14,22 +14,24 @@
  * limitations under the License.
  */
 
+import {convertEmptyStringToNull} from '../../functions/value-or-null';
+
 export class ProgramAdmin {
-  firstName: string;
-  lastName: string;
-  email: string;
-  cellPhone: string;
+  firstName: string
+  lastName: string
+  email: string
+  cellPhone: string
   links: {
     self: [
-      { href: string; }
+      { href: string }
     ]
   };
 
   constructor(json?: any) {
-    this.firstName = json?.firstName;
-    this.lastName = json?.lastName;
-    this.email = (json?.email === '') ? null : json?.email;
-    this.cellPhone = json?.cellPhone;
-    this.links = json?.links;
+    this.firstName = convertEmptyStringToNull(json?.firstName)
+    this.lastName = convertEmptyStringToNull(json?.lastName)
+    this.email = convertEmptyStringToNull(json?.email)
+    this.cellPhone = convertEmptyStringToNull(json?.cellPhone)
+    this.links = json?.links
   }
 }

@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-import { Resource } from '../resource/resource';
+import {convertEmptyStringToNull} from '../../functions/value-or-null';
+import {Resource} from '../resource/resource';
 
 export class Game extends Resource {
 
-  name: string;
-  description: string;
-  grade1: number;
-  grade2: number;
-  activityFocuses: string[];
+  name: string
+  description: string
+  grade1: number
+  grade2: number
+  activityFocuses: string[]
 
   constructor(json?: any) {
     super(json);
-    this.displayName = json?.name;
-    this.name = json?.name;
-    this.description = json?.description;
+    this.displayName = convertEmptyStringToNull(json?.name)
+    this.name = convertEmptyStringToNull(json?.name)
+    this.description = convertEmptyStringToNull(json?.description)
     if (json?.gradeRange) {
-      this.grade1 = json?.gradeRange?.grade1;
-      this.grade2 = json?.gradeRange?.grade2;
+      this.grade1 = json?.gradeRange?.grade1
+      this.grade2 = json?.gradeRange?.grade2
     } else {
-      this.grade1 = json?.grade1;
-      this.grade2 = json?.grade2;
+      this.grade1 = json?.grade1
+      this.grade2 = json?.grade2
     }
-    this.activityFocuses = json?.activityFocuses;
+    this.activityFocuses = json?.activityFocuses
   }
 
 }

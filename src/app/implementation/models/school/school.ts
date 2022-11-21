@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import {convertEmptyStringToNull} from '../../functions/value-or-null';
 import {Address} from '../address/address';
 import {SchoolSession} from './schoolsession';
 
@@ -33,12 +34,12 @@ export class School {
   };
 
   constructor(json?: any) {
-    this.id = json?.id
-    this.initialSessionLabel = json?.initialSessionLabel
-    this.name = json?.name
+    this.id = convertEmptyStringToNull(json?.id)
+    this.initialSessionLabel = convertEmptyStringToNull(json?.initialSessionLabel)
+    this.name = convertEmptyStringToNull(json?.name)
     this.address = new Address(json?.address)
-    this.phone = json?.phone
-    this.district = json?.district
+    this.phone = convertEmptyStringToNull(json?.phone)
+    this.district = convertEmptyStringToNull(json?.district)
     this.isPrivate = json?.isPrivate
     this.currentSession = new SchoolSession(json?.currentSession)
     this.links = json?.links

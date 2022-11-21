@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-import { Student } from '../student/student';
-import { Teacher } from 'src/app/implementation/models/teacher/teacher';
-import { Mentor } from 'src/app/implementation/models/mentor/mentor';
+import {Mentor} from 'src/app/implementation/models/mentor/mentor';
+import {Teacher} from 'src/app/implementation/models/teacher/teacher';
+import {Student} from '../student/student';
 
 interface StudentTeacherInbound {
-  teacher: Teacher;
-  comment: string;
+  teacher: Teacher
+  comment: string
 }
 
 export interface StudentMentorInbound {
-  mentor: Mentor;
-  uri: string;
+  mentor: Mentor
+  uri: string
 }
 
 export class StudentInbound extends Student {
 
-  teacher: StudentTeacherInbound;
-  mentor: StudentMentorInbound;
+  teacher: StudentTeacherInbound
+  mentor: StudentMentorInbound
 
   constructor(json?: any) {
-    super(json);
-    this.teacher = json?.teacher;
-    this.mentor = json?.mentor;
+    super(json)
+    this.teacher = json?.teacher
+    this.mentor = json?.mentor
   }
 
 }

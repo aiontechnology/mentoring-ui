@@ -21,6 +21,7 @@ import {grades} from '../../../../implementation/constants/grades';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
+import {valueOrNull} from '../../../../implementation/functions/value-or-null';
 import {Teacher} from '../../../../implementation/models/teacher/teacher';
 import {StudentRegistration} from '../../../../implementation/models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../../../../implementation/models/workflow/student-registration-lookup';
@@ -74,32 +75,27 @@ export class StudentRegistrationComponent implements OnInit {
     return LinkService.selfLink;
   }
 
-  private valueOrNull(key: string) {
-    const value = this.model.get(key)?.value
-    return value !== '' ? value : null
-  }
-
   submitForm(): void {
     const studentRegistration = new StudentRegistration(
-      this.valueOrNull('studentFirstName'),
-      this.valueOrNull('studentLastName'),
-      this.valueOrNull('grade'),
-      this.valueOrNull('parent1FirstName'),
-      this.valueOrNull('parent1LastName'),
-      this.valueOrNull('parent1PhoneNumber'),
-      this.valueOrNull('parent1EmailAddress'),
-      this.valueOrNull('parent1PreferredContactMethod'),
-      this.valueOrNull('parent2FirstName'),
-      this.valueOrNull('parent2LastName'),
-      this.valueOrNull('parent2PhoneNumber'),
-      this.valueOrNull('parent2EmailAddress'),
-      this.valueOrNull('parent2PreferredContactMethod'),
-      this.valueOrNull('teacher'),
-      this.valueOrNull('preferredSession'),
-      this.valueOrNull('emergencyContactFirstName'),
-      this.valueOrNull('emergencyContactLastName'),
-      this.valueOrNull('emergencyContactPhone'),
-      this.valueOrNull('parentSignature'),
+      valueOrNull(this.model, 'studentFirstName'),
+      valueOrNull(this.model, 'studentLastName'),
+      valueOrNull(this.model, 'grade'),
+      valueOrNull(this.model, 'parent1FirstName'),
+      valueOrNull(this.model, 'parent1LastName'),
+      valueOrNull(this.model, 'parent1PhoneNumber'),
+      valueOrNull(this.model, 'parent1EmailAddress'),
+      valueOrNull(this.model, 'parent1PreferredContactMethod'),
+      valueOrNull(this.model, 'parent2FirstName'),
+      valueOrNull(this.model, 'parent2LastName'),
+      valueOrNull(this.model, 'parent2PhoneNumber'),
+      valueOrNull(this.model, 'parent2EmailAddress'),
+      valueOrNull(this.model, 'parent2PreferredContactMethod'),
+      valueOrNull(this.model, 'teacher'),
+      valueOrNull(this.model, 'preferredSession'),
+      valueOrNull(this.model, 'emergencyContactFirstName'),
+      valueOrNull(this.model, 'emergencyContactLastName'),
+      valueOrNull(this.model, 'emergencyContactPhone'),
+      valueOrNull(this.model, 'parentSignature'),
       this.registration.links,
     );
     const that = this;

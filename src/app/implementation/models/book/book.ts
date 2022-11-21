@@ -14,46 +14,47 @@
  * limitations under the License.
  */
 
+import {convertEmptyStringToNull} from '../../functions/value-or-null';
 import {Resource} from '../resource/resource';
 
 export interface BookInterface {
-  id: string;
-  location: string;
-  leadershipSkills: string[];
-  leadershipTraits: string[];
+  id: string
+  location: string
+  leadershipSkills: string[]
+  leadershipTraits: string[]
   links: {
     self: [
       { href: string }
     ]
   };
-  title: string;
-  description: string;
-  author: string;
-  gradeLevel: number;
-  interests: string[];
-  phonograms: string[];
-  behaviors: string[];
-  tags: string[];
+  title: string
+  description: string
+  author: string
+  gradeLevel: number
+  interests: string[]
+  phonograms: string[]
+  behaviors: string[]
+  tags: string[]
 }
 
 export class Book extends Resource {
 
-  title: string;
-  description: string;
-  author: string;
-  gradeLevel: number;
-  interests: string[];
-  leadershipTraits: string[];
-  phonograms: string[];
-  behaviors: string[];
-  tags: string[];
+  title: string
+  description: string
+  author: string
+  gradeLevel: number
+  interests: string[]
+  leadershipTraits: string[]
+  phonograms: string[]
+  behaviors: string[]
+  tags: string[]
 
   constructor(json?: any) {
     super(json);
-    this.displayName = json?.title;
-    this.title = json?.title;
-    this.description = json?.description;
-    this.author = json?.author;
+    this.displayName = convertEmptyStringToNull(json?.title)
+    this.title = convertEmptyStringToNull(json?.title)
+    this.description = convertEmptyStringToNull(json?.description)
+    this.author = convertEmptyStringToNull(json?.author)
     this.gradeLevel = json?.gradeLevel;
     this.interests = json?.interests;
     this.leadershipTraits = json?.leadershipTraits;
