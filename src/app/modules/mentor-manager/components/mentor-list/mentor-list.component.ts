@@ -21,8 +21,8 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
-import {Mentor} from '../../../../implementation/models/mentor/mentor';
-import {School} from '../../../../implementation/models/school/school';
+import {Mentor} from '../../../../models/mentor/mentor';
+import {School} from '../../../../models/school/school';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';

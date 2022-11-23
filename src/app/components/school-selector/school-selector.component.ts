@@ -16,7 +16,7 @@
 
 import {Component, Inject} from '@angular/core';
 import {equalsById} from '../../implementation/functions/comparison';
-import {School} from '../../implementation/models/school/school';
+import {School} from '../../models/school/school';
 import {UserSessionService} from '../../implementation/services/user-session.service';
 import {MultiItemCache} from '../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../implementation/state-management/single-item-cache';

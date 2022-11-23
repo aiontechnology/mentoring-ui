@@ -23,7 +23,7 @@ import {DialogComponent} from '../../../../../implementation/component/dialog-co
 import {DataSource} from '../../../../../implementation/data/data-source';
 import {emailAddressValidator} from '../../../../../implementation/form-validation/email-address-validator';
 import {phoneValidator} from '../../../../../implementation/form-validation/phone-validator';
-import {Teacher} from '../../../../../implementation/models/teacher/teacher';
+import {Teacher} from '../../../../../models/teacher/teacher';
 import {MultiItemCache} from '../../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {

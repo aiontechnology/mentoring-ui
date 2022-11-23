@@ -18,7 +18,7 @@ import {Inject, Injectable} from '@angular/core';
 import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {SCHOOL_URI_SUPPLIER} from '../../providers/global/global-school-providers-factory';
-import {School} from '../models/school/school';
+import {School} from '../../models/school/school';
 import {UriSupplier} from '../data/uri-supplier';
 
 @Injectable()

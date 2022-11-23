@@ -18,7 +18,7 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
-import {Book} from 'src/app/implementation/models/book/book';
+import {Book} from 'src/app/models/book/book';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';

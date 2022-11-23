@@ -17,7 +17,7 @@
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
-import {Game} from 'src/app/implementation/models/game/game';
+import {Game} from 'src/app/models/game/game';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {DialogManager} from '../../../../implementation/command/dialog-manager';

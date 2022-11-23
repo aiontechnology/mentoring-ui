@@ -15,7 +15,7 @@
  */
 
 import { Pipe, PipeTransform } from '@angular/core';
-import { Teacher } from 'src/app/implementation/models/teacher/teacher';
+import { Teacher } from 'src/app/models/teacher/teacher';
 
 @Pipe({
   name: 'teacherGradeFilter'

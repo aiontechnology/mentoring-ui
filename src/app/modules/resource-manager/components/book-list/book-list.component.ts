@@ -22,7 +22,7 @@ import {UserSessionService} from 'src/app/implementation/services/user-session.s
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
-import {Book} from '../../../../implementation/models/book/book';
+import {Book} from '../../../../models/book/book';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';

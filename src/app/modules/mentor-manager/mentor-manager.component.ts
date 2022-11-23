@@ -17,7 +17,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {SingleItemCacheSchoolChangeHandler} from '../../implementation/state-management/single-item-cache-school-change-handler';
-import {Mentor} from '../../implementation/models/mentor/mentor';
+import {Mentor} from '../../models/mentor/mentor';
 import {MENTOR_SCHOOL_CHANGE_HANDLER} from './providers/mentor-providers-factory';
 
 @Component({

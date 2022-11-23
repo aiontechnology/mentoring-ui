@@ -17,7 +17,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
-import {Game} from 'src/app/implementation/models/game/game';
+import {Game} from 'src/app/models/game/game';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';

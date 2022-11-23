@@ -19,7 +19,7 @@ import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../data/uri-supplier';
 import {TEACHER_URI_SUPPLIER} from '../../providers/global/global-teacher-providers-factory';
-import {Teacher} from '../models/teacher/teacher';
+import {Teacher} from '../../models/teacher/teacher';
 
 @Injectable()
 export class TeacherRepository extends Repository<Teacher> {

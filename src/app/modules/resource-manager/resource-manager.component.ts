@@ -16,8 +16,8 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Book} from '../../implementation/models/book/book';
-import {Game} from '../../implementation/models/game/game';
+import {Book} from '../../models/book/book';
+import {Game} from '../../models/game/game';
 import {SingleItemCacheSchoolChangeHandler} from '../../implementation/state-management/single-item-cache-school-change-handler';
 import {BOOK_SCHOOL_CHANGE_HANDLER} from './providers/book-providers-factory';
 import {GAME_SCHOOL_CHANGE_HANDLER} from './providers/game-providers-factory';

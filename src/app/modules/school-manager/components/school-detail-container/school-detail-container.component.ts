@@ -17,7 +17,7 @@
 import {AfterViewInit, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {School} from '../../../../implementation/models/school/school';
+import {School} from '../../../../models/school/school';
 import {RouteElementWatcher} from '../../../../implementation/route/route-element-watcher.service';
 import {MenuStateService} from '../../../../implementation/services/menu-state.service';
 import {UserSessionService} from '../../../../implementation/services/user-session.service';

@@ -21,7 +21,7 @@ import {DataSource} from '../../implementation/data/data-source';
 import {Repository} from '../../implementation/data/repository';
 import {SingleItemCacheUpdater} from '../../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {Student} from '../../implementation/models/student/student';
+import {Student} from '../../models/student/student';
 import {StudentRepository} from '../../implementation/repositories/student-repository';
 import {STUDENT_ID} from '../../implementation/route/route-constants';
 import {RouteElementWatcher} from '../../implementation/route/route-element-watcher.service';

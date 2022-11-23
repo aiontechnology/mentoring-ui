@@ -17,7 +17,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {School} from 'src/app/implementation/models/school/school';
+import {School} from 'src/app/models/school/school';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {states as globalStates} from '../../../../implementation/constants/states';
 import {DataSource} from '../../../../implementation/data/data-source';

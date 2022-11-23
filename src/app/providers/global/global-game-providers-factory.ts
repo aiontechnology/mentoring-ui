@@ -22,7 +22,7 @@ import {Repository} from '../../implementation/data/repository';
 import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
 import {SingleItemCacheUpdater} from '../../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {Game} from '../../implementation/models/game/game';
+import {Game} from '../../models/game/game';
 import {GameRepository} from '../../implementation/repositories/game-repository';
 import {TableCache} from '../../implementation/table-cache/table-cache';
 

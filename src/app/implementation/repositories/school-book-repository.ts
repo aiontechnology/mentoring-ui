@@ -18,7 +18,7 @@ import {Inject, Injectable} from '@angular/core';
 import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../data/uri-supplier';
-import {Book} from '../models/book/book';
+import {Book} from '../../models/book/book';
 import {SCHOOL_BOOK_URI_SUPPLIER} from '../../providers/global/global-school-book-providers-factory';
 
 @Injectable()

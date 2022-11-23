@@ -20,7 +20,7 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {DialogManager} from '../../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {DetailComponent} from '../../../../../implementation/component/detail-component';
-import {School} from '../../../../../implementation/models/school/school';
+import {School} from '../../../../../models/school/school';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';

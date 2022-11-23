@@ -16,8 +16,8 @@
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {equalsBySelfLink} from '../../../../../implementation/functions/comparison';
-import {Student} from '../../../../../implementation/models/student/student';
-import {Teacher} from '../../../../../implementation/models/teacher/teacher';
+import {Student} from '../../../../../models/student/student';
+import {Teacher} from '../../../../../models/teacher/teacher';
 import {MultiItemCache} from '../../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {LinkService} from '../../../../shared/services/link-service/link.service';

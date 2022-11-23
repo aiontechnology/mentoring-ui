@@ -16,8 +16,8 @@
 
 import {Cache} from '../data/cache';
 import {UriSupplier} from '../data/uri-supplier';
-import {School} from '../models/school/school';
-import {SchoolSession} from '../models/school/schoolsession';
+import {School} from '../../models/school/school';
+import {SchoolSession} from '../../models/school/schoolsession';
 import {SubscriptionManager} from '../reactive/subscription-manager';
 import {SCHOOL_ID, SESSION_PARAM} from '../route/route-constants';
 import {TableCache} from '../table-cache/table-cache';

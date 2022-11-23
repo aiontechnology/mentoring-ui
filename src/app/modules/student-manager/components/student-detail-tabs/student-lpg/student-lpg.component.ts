@@ -16,10 +16,10 @@
 
 import {Component, Inject} from '@angular/core';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
-import {School} from '../../../../../implementation/models/school/school';
+import {School} from '../../../../../models/school/school';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 import {STUDENT_INSTANCE_CACHE} from '../../../../../providers/global/global-student-providers-factory';
-import {Student} from '../../../../../implementation/models/student/student';
+import {Student} from '../../../../../models/student/student';
 import {LpgRepositoryService} from '../../../services/lpg/lpg-repository.service';
 
 @Component({

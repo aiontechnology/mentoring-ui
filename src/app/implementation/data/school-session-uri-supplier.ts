@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {School} from '../models/school/school';
-import {SchoolSession} from '../models/school/schoolsession';
+import {School} from '../../models/school/school';
+import {SchoolSession} from '../../models/school/schoolsession';
 import {SCHOOL_ID, SESSION_PARAM} from '../route/route-constants';
 import {SingleItemCache} from '../state-management/single-item-cache';
 import {UriSupplier} from './uri-supplier';

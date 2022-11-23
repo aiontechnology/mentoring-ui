@@ -19,7 +19,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {map, shareReplay} from 'rxjs/operators';
 import {UserSessionService} from 'src/app/implementation/services/user-session.service';
-import {School} from '../../implementation/models/school/school';
+import {School} from '../../models/school/school';
 import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../providers/global/global-school-providers-factory';
 

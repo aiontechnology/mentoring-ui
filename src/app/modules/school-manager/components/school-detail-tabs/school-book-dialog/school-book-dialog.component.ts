@@ -18,7 +18,7 @@ import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
-import {Book} from 'src/app/implementation/models/book/book';
+import {Book} from 'src/app/models/book/book';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DataSource} from '../../../../../implementation/data/data-source';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
@@ -27,7 +27,7 @@ import {BOOK_DATA_SOURCE} from '../../../../../providers/global/global-book-prov
 import {SCHOOL_BOOK_DATA_SOURCE} from '../../../../../providers/global/global-school-book-providers-factory';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 import {DropListBooks} from '../../../../shared/components/school-resource/drop-list-books';
-import {School} from '../../../../../implementation/models/school/school';
+import {School} from '../../../../../models/school/school';
 import {SCHOOL_BOOK_TABLE_CACHE} from '../../../providers/school-book-providers-factory';
 
 @Component({

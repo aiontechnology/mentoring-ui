@@ -20,7 +20,7 @@ import {Cache} from '../../implementation/data/cache';
 import {DataSource} from '../../implementation/data/data-source';
 import {Repository} from '../../implementation/data/repository';
 import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {School} from '../../implementation/models/school/school';
+import {School} from '../../models/school/school';
 import {SchoolRepository} from '../../implementation/repositories/school-repository';
 import {SCHOOL_ID} from '../../implementation/route/route-constants';
 import {RouteElementWatcher} from '../../implementation/route/route-element-watcher.service';

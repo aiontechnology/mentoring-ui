@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2021-2022 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,34 @@
  * limitations under the License.
  */
 
-import {convertEmptyStringToNull} from '../../functions/value-or-null';
+import {resourceLocations} from '../../implementation/constants/locations';
+import {convertEmptyStringToNull} from '../../implementation/functions/value-or-null';
 
-export class SchoolSession {
+export abstract class Resource {
+
   id: string
-  label: string
-  isCurrent: boolean
+  location: string
+  leadershipSkills: string[]
+  leadershipTraits: string[]
   links: {
     self: [
       { href: string }
     ]
   };
 
-  constructor(json?: any) {
+  // The name / title of the resource being referenced for drop list data.
+  displayName: string
+
+  protected constructor(json?: any) {
     this.id = convertEmptyStringToNull(json?.id)
-    this.label = convertEmptyStringToNull(json?.label)
-    this.isCurrent = json?.isCurrent;
+    this.location = convertEmptyStringToNull(json?.location)
+    this.leadershipSkills = json?.leadershipSkills;
+    this.leadershipTraits = json?.leadershipTraits;
     this.links = json?.links;
   }
 
-  get labelWithCurrent(): string {
-    let label = this.label;
-    label += this.isCurrent ? ' (current)' : '';
-    return label;
+  get displayLocation(): string {
+    return resourceLocations[this.location] ?? '';
   }
+
 }

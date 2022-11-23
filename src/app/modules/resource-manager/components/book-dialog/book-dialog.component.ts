@@ -20,7 +20,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {resourceLocations} from 'src/app/implementation/constants/locations';
 import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
-import {Book} from 'src/app/implementation/models/book/book';
+import {Book} from 'src/app/models/book/book';
 import {Grade} from 'src/app/implementation/types/grade';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';

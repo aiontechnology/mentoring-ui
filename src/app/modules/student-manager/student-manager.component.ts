@@ -16,7 +16,7 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Student} from '../../implementation/models/student/student';
+import {Student} from '../../models/student/student';
 import {
   SingleItemCacheSchoolSessionChangeHandler
 } from '../../implementation/state-management/single-item-cache-school-session-change-handler';

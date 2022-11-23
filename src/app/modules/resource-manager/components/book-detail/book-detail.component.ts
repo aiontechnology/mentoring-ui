@@ -17,7 +17,7 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
-import {Book} from 'src/app/implementation/models/book/book';
+import {Book} from 'src/app/models/book/book';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';

@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import {personLocations} from 'src/app/implementation/constants/locations';
-import {LinkService} from 'src/app/modules/shared/services/link-service/link.service';
-import {convertEmptyStringToNull} from '../../functions/value-or-null';
+import {LinkService} from '../../modules/shared/services/link-service/link.service';
+import {grades} from '../../implementation/constants/grades';
+import {convertEmptyStringToNull} from '../../implementation/functions/value-or-null';
 
-export class Mentor {
-
-  id: string
+/**
+ * Model class the represents a teacher.
+ * @author Whitney Hunter
+ */
+export class Teacher {
   firstName: string
   lastName: string
   email: string
   cellPhone: string
-  availability: string
-  mediaReleaseSigned: boolean
-  backgroundCheckCompleted: boolean
-  location: string
+  grade1: number
+  grade2: number
   links: {
     self: [
       { href: string }
@@ -36,23 +36,22 @@ export class Mentor {
   };
 
   constructor(json?: any) {
-    this.id = convertEmptyStringToNull(json?.id)
     this.firstName = convertEmptyStringToNull(json?.firstName)
     this.lastName = convertEmptyStringToNull(json?.lastName)
     this.email = convertEmptyStringToNull(json?.email)
     this.cellPhone = convertEmptyStringToNull(json?.cellPhone)
-    this.availability = convertEmptyStringToNull(json?.availability)
-    this.mediaReleaseSigned = json?.mediaReleaseSigned
-    this.backgroundCheckCompleted = json?.backgroundCheckCompleted
-    this.location = convertEmptyStringToNull(json?.location)
+    this.grade1 = json?.grade1 !== null ? Number(json?.grade1) : null
+    this.grade2 = json?.grade2 !== null ? Number(json?.grade2) : null
     this.links = json?.links
+  }
+
+  get grades(): string {
+    const part1 = grades[this.grade1]?.valueView
+    const part2 = this.grade2 !== null ? ', ' + grades[this.grade2].valueView : ''
+    return part1 + part2
   }
 
   get selfLink(): string {
     return LinkService.selfLink(this)
-  }
-
-  get displayLocation(): string {
-    return personLocations[this.location] ?? ''
   }
 }

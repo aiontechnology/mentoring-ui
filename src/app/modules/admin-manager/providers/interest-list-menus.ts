@@ -20,7 +20,7 @@ import {Command} from '../../../implementation/command/command';
 import {MenuDialogCommand} from '../../../implementation/command/menu-dialog-command';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {SnackbarManager} from '../../../implementation/managers/snackbar-manager';
-import {Book} from '../../../implementation/models/book/book';
+import {Book} from '../../../models/book/book';
 import {SNACKBAR_MANAGER} from '../../../providers/global/global-snackbar-providers';
 import {BookDialogComponent} from '../../resource-manager/components/book-dialog/book-dialog.component';
 import {InterestDialogComponent} from '../components/interest-dialog/interest-dialog.component';

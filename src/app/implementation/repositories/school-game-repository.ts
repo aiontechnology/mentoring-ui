@@ -18,7 +18,7 @@ import {HttpClient} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
 import {Repository} from '../data/repository';
 import {UriSupplier} from '../data/uri-supplier';
-import {Game} from '../models/game/game';
+import {Game} from '../../models/game/game';
 import {SCHOOL_GAME_URI_SUPPLIER} from '../../providers/global/global-school-game-providers-factory';
 
 @Injectable()

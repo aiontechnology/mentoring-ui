@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {environment} from '../../../../environments/environment';
+import {environment} from '../../../environments/environment';
 
 export class Invitation {
   constructor(

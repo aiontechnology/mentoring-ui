@@ -20,11 +20,11 @@ import {MenuDialogCommand} from '../../../implementation/command/menu-dialog-com
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Mentor} from '../../../implementation/models/mentor/mentor';
-import {School} from '../../../implementation/models/school/school';
-import {SchoolSession} from '../../../implementation/models/school/schoolsession';
-import {Student} from '../../../implementation/models/student/student';
-import {Teacher} from '../../../implementation/models/teacher/teacher';
+import {Mentor} from '../../../models/mentor/mentor';
+import {School} from '../../../models/school/school';
+import {SchoolSession} from '../../../models/school/schoolsession';
+import {Student} from '../../../models/student/student';
+import {Teacher} from '../../../models/teacher/teacher';
 import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
 import {
   SingleItemCacheSchoolSessionChangeHandler

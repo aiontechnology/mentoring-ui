@@ -22,10 +22,10 @@ import {DialogManager} from '../../../../../implementation/command/dialog-manage
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {School} from '../../../../../implementation/models/school/school';
-import {SchoolSession} from '../../../../../implementation/models/school/schoolsession';
-import {StudentInbound} from '../../../../../implementation/models/student-inbound/student-inbound';
-import {Student} from '../../../../../implementation/models/student/student';
+import {School} from '../../../../../models/school/school';
+import {SchoolSession} from '../../../../../models/school/schoolsession';
+import {StudentInbound} from '../../../../../models/student-inbound/student-inbound';
+import {Student} from '../../../../../models/student/student';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {RouteElementWatcher} from '../../../../../implementation/route/route-element-watcher.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';

@@ -21,7 +21,7 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
-import {Book} from '../../../../implementation/models/book/book';
+import {Book} from '../../../../models/book/book';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
 import {UPDATE_BOOK_MENU_TITLE, UPDATE_BOOK_SNACKBAR_MESSAGE} from '../../other/resource-constants';

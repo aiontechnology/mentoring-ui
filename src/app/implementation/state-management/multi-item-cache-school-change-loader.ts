@@ -15,7 +15,7 @@
  */
 
 import {UriSupplier} from '../data/uri-supplier';
-import {School} from '../models/school/school';
+import {School} from '../../models/school/school';
 import {MultiItemCache} from './multi-item-cache';
 import {MultiItemCacheSchoolChangeHandler} from './multi-item-cache-school-change-handler';
 import {SchoolChangeDataSourceResetter} from './school-change-data-source-resetter';

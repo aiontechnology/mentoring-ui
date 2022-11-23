@@ -18,7 +18,7 @@ import {Inject, Injectable} from '@angular/core';
 import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {SCHOOL_SESSION_URI_SUPPLIER} from '../../providers/global/global-school-session-providers-factory';
-import {SchoolSession} from '../models/school/schoolsession';
+import {SchoolSession} from '../../models/school/schoolsession';
 import {UriSupplier} from '../data/uri-supplier';
 
 @Injectable()

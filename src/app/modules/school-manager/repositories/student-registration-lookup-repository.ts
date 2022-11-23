@@ -18,7 +18,7 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
 import {REGISTRATION_URI_SUPPLIER} from '../../shared/shared.module';
-import {StudentRegistrationLookup} from '../../../implementation/models/workflow/student-registration-lookup';
+import {StudentRegistrationLookup} from '../../../models/workflow/student-registration-lookup';
 import {Repository} from '../../../implementation/data/repository';
 
 @Injectable()

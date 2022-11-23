@@ -19,7 +19,7 @@ import {Command} from '../../../implementation/command/command';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Book} from '../../../implementation/models/book/book';
+import {Book} from '../../../models/book/book';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {updateDialogManagerProviders} from '../../../providers/dialog/update-dialog-manager-providers';
 import {SCHOOL_BOOK_DATA_SOURCE} from '../../../providers/global/global-school-book-providers-factory';

@@ -19,7 +19,7 @@ import {INVITATION_URI_SUPPLIER} from '../../providers/global/global-invitation-
 import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../data/uri-supplier';
-import {Invitation} from '../models/workflow/invitation';
+import {Invitation} from '../../models/workflow/invitation';
 
 @Injectable()
 export class InvitationRepository extends Repository<Invitation> {

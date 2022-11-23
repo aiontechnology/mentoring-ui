@@ -17,7 +17,7 @@
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {Game} from 'src/app/implementation/models/game/game';
+import {Game} from 'src/app/models/game/game';
 import {DataSource} from '../../../../../implementation/data/data-source';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
 import {GAME_DATA_SOURCE} from '../../../../../providers/global/global-game-providers-factory';

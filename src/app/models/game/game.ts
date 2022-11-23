@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {convertEmptyStringToNull} from '../../functions/value-or-null';
+import {convertEmptyStringToNull} from '../../implementation/functions/value-or-null';
 import {Resource} from '../resource/resource';
 
 export class Game extends Resource {

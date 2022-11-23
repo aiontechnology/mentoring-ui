@@ -15,7 +15,7 @@
  */
 
 import { DropListData } from './drop-list-data';
-import { Book } from 'src/app/implementation/models/book/book';
+import { Book } from 'src/app/models/book/book';
 
 /**
  * DropListBook manages the stored book data.

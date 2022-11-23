@@ -19,8 +19,8 @@ import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
 import {UriSupplier} from '../data/uri-supplier';
 import {STUDENT_URI_SUPPLIER} from '../../providers/global/global-student-providers-factory';
-import {Student} from '../models/student/student';
-import {StudentOutbound} from '../models/student-outbound/student-outbound';
+import {Student} from '../../models/student/student';
+import {StudentOutbound} from '../../models/student-outbound/student-outbound';
 
 @Injectable()
 export class StudentRepository extends Repository<Student> {

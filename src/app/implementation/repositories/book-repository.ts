@@ -15,7 +15,7 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {Book} from '../models/book/book';
+import {Book} from '../../models/book/book';
 import {HttpClient} from '@angular/common/http';
 import {Repository} from '../data/repository';
 import {UriSupplier} from '../data/uri-supplier';

@@ -15,7 +15,7 @@
  */
 
 import {personLocations} from 'src/app/implementation/constants/locations';
-import {convertEmptyStringToNull} from '../../functions/value-or-null';
+import {convertEmptyStringToNull} from '../../implementation/functions/value-or-null';
 import {Contact} from '../contact/contact';
 
 export abstract class Student {

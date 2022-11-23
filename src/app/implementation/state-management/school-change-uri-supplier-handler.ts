@@ -15,7 +15,7 @@
  */
 
 import {UriSupplier} from '../data/uri-supplier';
-import {School} from '../models/school/school';
+import {School} from '../../models/school/school';
 import {SubscriptionManager} from '../reactive/subscription-manager';
 import {SCHOOL_ID} from '../route/route-constants';
 import {SingleItemCache} from './single-item-cache';

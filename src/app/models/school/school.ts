@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {convertEmptyStringToNull} from '../../functions/value-or-null';
+import {convertEmptyStringToNull} from '../../implementation/functions/value-or-null';
 import {Address} from '../address/address';
 import {SchoolSession} from './schoolsession';
 

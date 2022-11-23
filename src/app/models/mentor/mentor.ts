@@ -14,13 +14,21 @@
  * limitations under the License.
  */
 
-import {convertEmptyStringToNull} from '../../functions/value-or-null';
+import {personLocations} from 'src/app/implementation/constants/locations';
+import {LinkService} from 'src/app/modules/shared/services/link-service/link.service';
+import {convertEmptyStringToNull} from '../../implementation/functions/value-or-null';
 
-export class ProgramAdmin {
+export class Mentor {
+
+  id: string
   firstName: string
   lastName: string
   email: string
   cellPhone: string
+  availability: string
+  mediaReleaseSigned: boolean
+  backgroundCheckCompleted: boolean
+  location: string
   links: {
     self: [
       { href: string }
@@ -28,10 +36,23 @@ export class ProgramAdmin {
   };
 
   constructor(json?: any) {
+    this.id = convertEmptyStringToNull(json?.id)
     this.firstName = convertEmptyStringToNull(json?.firstName)
     this.lastName = convertEmptyStringToNull(json?.lastName)
     this.email = convertEmptyStringToNull(json?.email)
     this.cellPhone = convertEmptyStringToNull(json?.cellPhone)
+    this.availability = convertEmptyStringToNull(json?.availability)
+    this.mediaReleaseSigned = json?.mediaReleaseSigned
+    this.backgroundCheckCompleted = json?.backgroundCheckCompleted
+    this.location = convertEmptyStringToNull(json?.location)
     this.links = json?.links
+  }
+
+  get selfLink(): string {
+    return LinkService.selfLink(this)
+  }
+
+  get displayLocation(): string {
+    return personLocations[this.location] ?? ''
   }
 }

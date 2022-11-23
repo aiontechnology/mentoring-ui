@@ -15,13 +15,13 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {Book} from './implementation/models/book/book';
-import {Game} from './implementation/models/game/game';
-import {Mentor} from './implementation/models/mentor/mentor';
-import {Personnel} from './implementation/models/personnel/personnel';
-import {ProgramAdmin} from './implementation/models/program-admin/program-admin';
-import {School} from './implementation/models/school/school';
-import {Teacher} from './implementation/models/teacher/teacher';
+import {Book} from './models/book/book';
+import {Game} from './models/game/game';
+import {Mentor} from './models/mentor/mentor';
+import {Personnel} from './models/personnel/personnel';
+import {ProgramAdmin} from './models/program-admin/program-admin';
+import {School} from './models/school/school';
+import {Teacher} from './models/teacher/teacher';
 import {UserSessionService} from './implementation/services/user-session.service';
 import {MultiItemCache} from './implementation/state-management/multi-item-cache';
 import {MultiItemCacheSchoolChangeLoader} from './implementation/state-management/multi-item-cache-school-change-loader';

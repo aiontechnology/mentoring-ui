@@ -18,7 +18,7 @@ import {InjectionToken} from '@angular/core';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {Cache} from '../../../implementation/data/cache';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {ProgramAdmin} from '../../../implementation/models/program-admin/program-admin';
+import {ProgramAdmin} from '../../../models/program-admin/program-admin';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {

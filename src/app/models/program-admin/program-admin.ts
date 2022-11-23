@@ -14,29 +14,24 @@
  * limitations under the License.
  */
 
-import {Mentor} from 'src/app/implementation/models/mentor/mentor';
-import {Teacher} from 'src/app/implementation/models/teacher/teacher';
-import {Student} from '../student/student';
+import {convertEmptyStringToNull} from '../../implementation/functions/value-or-null';
 
-interface StudentTeacherInbound {
-  teacher: Teacher
-  comment: string
-}
-
-export interface StudentMentorInbound {
-  mentor: Mentor
-  uri: string
-}
-
-export class StudentInbound extends Student {
-
-  teacher: StudentTeacherInbound
-  mentor: StudentMentorInbound
+export class ProgramAdmin {
+  firstName: string
+  lastName: string
+  email: string
+  cellPhone: string
+  links: {
+    self: [
+      { href: string }
+    ]
+  };
 
   constructor(json?: any) {
-    super(json)
-    this.teacher = json?.teacher
-    this.mentor = json?.mentor
+    this.firstName = convertEmptyStringToNull(json?.firstName)
+    this.lastName = convertEmptyStringToNull(json?.lastName)
+    this.email = convertEmptyStringToNull(json?.email)
+    this.cellPhone = convertEmptyStringToNull(json?.cellPhone)
+    this.links = json?.links
   }
-
 }

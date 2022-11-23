@@ -17,8 +17,8 @@
 import {Component, Inject} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {Cache} from '../../../../../implementation/data/cache';
-import {School} from '../../../../../implementation/models/school/school';
-import {SchoolSession} from '../../../../../implementation/models/school/schoolsession';
+import {School} from '../../../../../models/school/school';
+import {SchoolSession} from '../../../../../models/school/schoolsession';
 import {MultiItemCache} from '../../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';

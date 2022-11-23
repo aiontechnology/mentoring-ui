@@ -16,7 +16,7 @@
 
 import {Subscription} from 'rxjs';
 import {Cache} from '../data/cache';
-import {School} from '../models/school/school';
+import {School} from '../../models/school/school';
 import {Publisher} from './publisher';
 import {SingleItemCache} from './single-item-cache';
 

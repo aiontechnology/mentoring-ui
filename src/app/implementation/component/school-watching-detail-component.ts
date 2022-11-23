@@ -16,8 +16,8 @@
 
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {School} from '../models/school/school';
-import {SchoolSession} from '../models/school/schoolsession';
+import {School} from '../../models/school/school';
+import {SchoolSession} from '../../models/school/schoolsession';
 import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
 import {SingleItemCache} from '../state-management/single-item-cache';

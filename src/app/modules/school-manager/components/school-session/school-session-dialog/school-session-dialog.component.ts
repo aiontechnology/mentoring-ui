@@ -17,7 +17,7 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {SchoolSession} from 'src/app/implementation/models/school/schoolsession';
+import {SchoolSession} from 'src/app/models/school/schoolsession';
 import {DialogComponent} from '../../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
 import {SCHOOL_SESSION_DATA_SOURCE} from '../../../../../providers/global/global-school-session-providers-factory';

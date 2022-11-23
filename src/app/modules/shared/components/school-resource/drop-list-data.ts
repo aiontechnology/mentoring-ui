@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Resource } from 'src/app/implementation/models/resource/resource';
+import { Resource } from 'src/app/models/resource/resource';
 
 /**
  * DropListData manages the stored (actual) data, and the visible, filtered data

@@ -23,8 +23,8 @@ import {emailAddressValidator} from '../../../../../implementation/form-validati
 import {phoneValidator} from '../../../../../implementation/form-validation/phone-validator';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
-import {Personnel} from '../../../../../implementation/models/personnel/personnel';
-import {School} from '../../../../../implementation/models/school/school';
+import {Personnel} from '../../../../../models/personnel/personnel';
+import {School} from '../../../../../models/school/school';
 import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../../../../providers/global/global-personnel-providers-factory';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 

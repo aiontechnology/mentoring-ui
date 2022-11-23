@@ -16,12 +16,12 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Book} from '../../implementation/models/book/book';
-import {Game} from '../../implementation/models/game/game';
-import {Personnel} from '../../implementation/models/personnel/personnel';
-import {ProgramAdmin} from '../../implementation/models/program-admin/program-admin';
-import {School} from '../../implementation/models/school/school';
-import {Teacher} from '../../implementation/models/teacher/teacher';
+import {Book} from '../../models/book/book';
+import {Game} from '../../models/game/game';
+import {Personnel} from '../../models/personnel/personnel';
+import {ProgramAdmin} from '../../models/program-admin/program-admin';
+import {School} from '../../models/school/school';
+import {Teacher} from '../../models/teacher/teacher';
 import {RouteElementWatcher} from '../../implementation/route/route-element-watcher.service';
 import {SingleItemCacheSchoolChangeHandler} from '../../implementation/state-management/single-item-cache-school-change-handler';
 import {SCHOOL_ROUTE_WATCHER} from '../../providers/global/global-school-providers-factory';

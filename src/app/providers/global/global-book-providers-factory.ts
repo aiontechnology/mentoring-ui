@@ -22,7 +22,7 @@ import {Repository} from '../../implementation/data/repository';
 import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
 import {SingleItemCacheUpdater} from '../../implementation/state-management/single-item-cache-updater';
 import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {Book} from '../../implementation/models/book/book';
+import {Book} from '../../models/book/book';
 import {BookRepository} from '../../implementation/repositories/book-repository';
 
 export const BOOK_DATA_SOURCE = new InjectionToken<DataSource<Book>>('book-data-source');

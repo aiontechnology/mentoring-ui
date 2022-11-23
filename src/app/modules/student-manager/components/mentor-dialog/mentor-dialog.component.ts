@@ -23,8 +23,8 @@ import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
 import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
-import {Mentor} from '../../../../implementation/models/mentor/mentor';
-import {School} from '../../../../implementation/models/school/school';
+import {Mentor} from '../../../../models/mentor/mentor';
+import {School} from '../../../../models/school/school';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {

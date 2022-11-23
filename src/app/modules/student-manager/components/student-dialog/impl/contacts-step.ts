@@ -17,7 +17,7 @@
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {emailAddressValidator} from '../../../../../implementation/form-validation/email-address-validator';
 import {phoneValidator} from '../../../../../implementation/form-validation/phone-validator';
-import {Student} from '../../../../../implementation/models/student/student';
+import {Student} from '../../../../../models/student/student';
 import {FormGroupHolder} from './form-group-holder';
 import {noContactMethodValidator} from './no-contact-method-validator';
 

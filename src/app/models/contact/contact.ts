@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {convertEmptyStringToNull} from '../../functions/value-or-null';
+import {convertEmptyStringToNull} from '../../implementation/functions/value-or-null';
 
 export class Contact {
 
@@ -33,8 +33,8 @@ export class Contact {
     this.lastName = convertEmptyStringToNull(json?.lastName)
     this.email = convertEmptyStringToNull(json?.email)
     this.phone = convertEmptyStringToNull(json?.phone)
-    this.preferredContactMethod = json?.preferredContactMethod
-    this.isEmergencyContact = json?.isEmergencyContact
+    this.preferredContactMethod = json?.preferredContactMethod || 'EITHER'
+    this.isEmergencyContact = json?.isEmergencyContact || false
     this.comment = convertEmptyStringToNull(json?.comment)
   }
 

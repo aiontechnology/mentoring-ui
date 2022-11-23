@@ -19,7 +19,7 @@ import {Injectable} from '@angular/core';
 import {Observable, ReplaySubject, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from 'src/environments/environment';
-import {InterestOutbound} from '../../../../implementation/models/meta-data/interests/interest-outbound';
+import {InterestOutbound} from '../../../../models/meta-data/interests/interest-outbound';
 
 @Injectable()
 export class MetaDataService {

@@ -21,9 +21,9 @@ import {DialogManager} from '../../../../../implementation/command/dialog-manage
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {ProgramAdmin} from '../../../../../implementation/models/program-admin/program-admin';
-import {School} from '../../../../../implementation/models/school/school';
-import {SchoolSession} from '../../../../../implementation/models/school/schoolsession';
+import {ProgramAdmin} from '../../../../../models/program-admin/program-admin';
+import {School} from '../../../../../models/school/school';
+import {SchoolSession} from '../../../../../models/school/schoolsession';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {
   PROGRAM_ADMIN_DATA_SOURCE,

@@ -14,31 +14,29 @@
  * limitations under the License.
  */
 
-import {convertEmptyStringToNull} from '../../functions/value-or-null';
+import {Mentor} from 'src/app/models/mentor/mentor';
+import {Teacher} from 'src/app/models/teacher/teacher';
+import {Student} from '../student/student';
 
-/**
- * Model class the represents a teacher.
- * @author Whitney Hunter
- */
-export class Personnel {
-  type: string
-  firstName: string
-  lastName: string
-  email: string
-  cellPhone: string
-  links: {
-    self: [
-      { href: string }
-    ]
-  };
+interface StudentTeacherInbound {
+  teacher: Teacher
+  comment: string
+}
+
+export interface StudentMentorInbound {
+  mentor: Mentor
+  uri: string
+}
+
+export class StudentInbound extends Student {
+
+  teacher: StudentTeacherInbound
+  mentor: StudentMentorInbound
 
   constructor(json?: any) {
-    this.type = convertEmptyStringToNull(json?.type)
-    this.firstName = convertEmptyStringToNull(json?.firstName)
-    this.lastName = convertEmptyStringToNull(json?.lastName)
-    this.email = convertEmptyStringToNull(json?.email)
-    this.cellPhone = convertEmptyStringToNull(json?.cellPhone)
-    this.links = json?.links;
+    super(json)
+    this.teacher = json?.teacher
+    this.mentor = json?.mentor
   }
 
 }

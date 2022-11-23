@@ -19,7 +19,7 @@ import {Command} from '../../../implementation/command/command';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Game} from '../../../implementation/models/game/game';
+import {Game} from '../../../models/game/game';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
 import {updateDialogManagerProviders} from '../../../providers/dialog/update-dialog-manager-providers';
 import {SCHOOL_GAME_DATA_SOURCE} from '../../../providers/global/global-school-game-providers-factory';
