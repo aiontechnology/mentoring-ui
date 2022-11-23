@@ -20,7 +20,6 @@ import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Book} from '../../../implementation/models/book/book';
 import {Game} from '../../../implementation/models/game/game';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
@@ -40,7 +39,7 @@ import {GameDialogComponent} from '../components/game-dialog/game-dialog.compone
 export const GAME_DETAIL_MENU = new InjectionToken<Command[]>('game-detail-menu');
 export const GAME_LIST_MENU = new InjectionToken<Command[]>('game-list-menu');
 export const GAME_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Game>>('game-school-change-handler')
-export const GAME_TABLE_CACHE = new InjectionToken<SingleItemCache<Book>>('game-table-cache')
+export const GAME_TABLE_CACHE = new InjectionToken<SingleItemCache<Game>>('game-table-cache')
 export const GAME_DETAIL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<GameDialogComponent>>('game-detail-edit-dialog-manager')
 export const GAME_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('game-detail-delete-dialog-manager')
 export const GAME_LIST_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<GameDialogComponent>>('game-list-edit-dialog-manager')

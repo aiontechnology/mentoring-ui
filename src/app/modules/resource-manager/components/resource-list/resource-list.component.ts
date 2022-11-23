@@ -33,43 +33,18 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
     public userSession: UserSessionService,
     private menuState: MenuStateService,
     private route: ActivatedRoute,
-  ) {
-    route.fragment.subscribe(fragment => {
-      if(userSession.isSysAdmin) {
-        switch (fragment) {
-          case 'book':
-            this.tabIndex = 0
-            break
-          case 'game':
-            this.tabIndex = 1
-            break
-        }
-      } else {
-        switch (fragment) {
-          case 'schoolbook':
-            this.tabIndex = 0
-            break
-          case 'schoolgame':
-            this.tabIndex = 1
-            break
-          case 'book':
-            this.tabIndex = 2
-            break
-          case 'game':
-            this.tabIndex = 3
-            break
-        }
-      }
-    })
-  }
+  ) {}
 
   ngOnInit(): void {
     this.menuState.reset()
     this.menuState.groupNames = [BOOK_GROUP, GAME_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP]
+    this.registerFragmentHandler()
   }
 
   ngAfterViewInit(): void {
-    this.onTabChange(0);
+    if (this.tabIndex === undefined) {
+      this.onTabChange(0);
+    }
   }
 
   ngOnDestroy(): void {
@@ -78,6 +53,42 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onTabChange(index: number): void {
     setState(index, this.menuState, this.userSession);
+  }
+
+  private registerFragmentHandler() {
+    this.route.fragment.subscribe(fragment => {
+      if (this.userSession.isSysAdmin) {
+        switch (fragment) {
+          case 'book':
+            this.tabIndex = 0
+            this.onTabChange(0)
+            break
+          case 'game':
+            this.tabIndex = 1
+            this.onTabChange(1)
+            break
+        }
+      } else {
+        switch (fragment) {
+          case 'schoolbook':
+            this.tabIndex = 0
+            this.onTabChange(0)
+            break
+          case 'schoolgame':
+            this.tabIndex = 1
+            this.onTabChange(1)
+            break
+          case 'book':
+            this.tabIndex = 2
+            this.onTabChange(2)
+            break
+          case 'game':
+            this.tabIndex = 3
+            this.onTabChange(3)
+            break
+        }
+      }
+    })
   }
 
 }
