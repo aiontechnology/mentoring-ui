@@ -29,7 +29,7 @@
       Generate next month
     </button>
   </div>
-  <div>
+  <div *ngIf="userService.isSysAdmin">
     <mat-checkbox [(ngModel)]="isDebug">Generate Debug Information</mat-checkbox>
   </div>
 </div>

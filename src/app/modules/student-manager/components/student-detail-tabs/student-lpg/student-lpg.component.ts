@@ -15,6 +15,7 @@
  */
 
 import {Component, Inject} from '@angular/core';
+import {UserSessionService} from '../../../../../implementation/services/user-session.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {School} from '../../../../../models/school/school';
 import {Student} from '../../../../../models/student/student';
@@ -34,6 +35,7 @@ export class StudentLpgComponent {
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
     @Inject(STUDENT_INSTANCE_CACHE) private studentInstanceCache: SingleItemCache<Student>,
     public lpgService: LpgRepositoryService,
+    public userService: UserSessionService,
   ) { }
 
   generateCurrentMonth(): void {
