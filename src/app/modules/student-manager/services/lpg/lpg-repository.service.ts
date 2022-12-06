@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import {log} from 'src/app/implementation/shared/logging-decorator';
@@ -41,10 +41,10 @@ export class LpgRepositoryService {
   }
 
   @log
-  getLpg(schoolId: string, studentId: string, month: string, year: string): Observable<Blob> {
+  getLpg(schoolId: string, studentId: string, month: string, year: string, isDebug?: boolean): Observable<Blob> {
 
-    this.isLoading$.next(true);
-    const url = this.buildUri(schoolId, studentId, month, year);
+    this.isLoading$.next(true)
+    const url = this.buildUri(schoolId, studentId, month, year, isDebug)
 
     const options = {
       headers: new HttpHeaders().set('Accept', 'application/pdf'),
@@ -56,17 +56,21 @@ export class LpgRepositoryService {
       .pipe(
         tap(
           () => {
-            this.isLoading$.next(false);
+            this.isLoading$.next(false)
           })
       );
 
   }
 
-  private buildUri(schoolId: string, studentId: string, month: string, year: string): string {
-    let url = this.uriBase.replace('{schoolId}', schoolId);
-    url = url.replace('{studentId}', studentId);
-    url = url.replace('{month}', month);
-    return url.replace('{year}', year);
+  private buildUri(schoolId: string, studentId: string, month: string, year: string, isDebug?: boolean): string {
+    let url = this.uriBase.replace('{schoolId}', schoolId)
+    url = url.replace('{studentId}', studentId)
+    url = url.replace('{month}', month)
+    url = url.replace('{year}', year)
+    if(isDebug) {
+      url += '&debug=true'
+    }
+    return url
   }
 
 }
