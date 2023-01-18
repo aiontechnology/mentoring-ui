@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,12 @@ import {DialogComponent} from '../../../../implementation/component/dialog-compo
 import {personLocations} from '../../../../implementation/constants/locations';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
-import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
-import {Mentor} from '../../../../models/mentor/mentor';
-import {School} from '../../../../models/school/school';
+import {emailAddressValidator} from '../../../../implementation/forms/email-address-validator';
+import {phoneValidator} from '../../../../implementation/forms/phone-validator';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {Mentor} from '../../../../models/mentor/mentor';
+import {School} from '../../../../models/school/school';
 import {
   MENTOR_COLLECTION_CACHE,
   MENTOR_DATA_SOURCE,

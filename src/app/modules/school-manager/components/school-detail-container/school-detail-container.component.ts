@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,12 @@
 import {AfterViewInit, Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {School} from '../../../../models/school/school';
 import {RouteElementWatcher} from '../../../../implementation/route/route-element-watcher.service';
+import {UserLoginService} from '../../../../implementation/security/user-login.service';
 import {MenuStateService} from '../../../../implementation/services/menu-state.service';
-import {UserSessionService} from '../../../../implementation/services/user-session.service';
-import {SCHOOL_ROUTE_WATCHER} from '../../../../providers/global/global-school-providers-factory';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {School} from '../../../../models/school/school';
+import {SCHOOL_INSTANCE_CACHE, SCHOOL_ROUTE_WATCHER} from '../../../../providers/global/global-school-providers-factory';
 import {
   PERSONNEL_GROUP,
   PROGRAM_ADMIN_GROUP,
@@ -42,12 +43,12 @@ export class SchoolDetailContainerComponent implements OnInit, OnDestroy, AfterV
   private subscriptions: Subscription[] = []
 
   constructor(
-    public userSession: UserSessionService,
+    public userLoginService: UserLoginService,
     private menuState: MenuStateService,
     @Inject(SCHOOL_ROUTE_WATCHER) private schoolRouteWatcher: RouteElementWatcher<School>,
     private route: ActivatedRoute,
-  ) {
-  }
+    @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstance: SingleItemCache<School>,
+  ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(this.schoolRouteWatcher.watch(this.route, 'SchoolDetailContainerComponent'))
@@ -75,6 +76,6 @@ export class SchoolDetailContainerComponent implements OnInit, OnDestroy, AfterV
   }
 
   onTabChange(index: number) {
-    setState(index, this.menuState, this.userSession);
+    setState(index, this.menuState, this.userLoginService);
   }
 }

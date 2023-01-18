@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,19 @@ import {InjectionToken} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {ClosedResultType} from '../../../implementation/types/dialog-types';
-import {ConfimationDialogComponent} from '../../../modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../modules/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 export function listDialogManagerDeleteProviders(
-  name: InjectionToken<DialogManager<ConfimationDialogComponent>>,
+  name: InjectionToken<DialogManager<ConfirmationDialogComponent>>,
   afterClosedToken: InjectionToken<ClosedResultType>,
 ): any[] {
   return [
     {
       provide: name,
       useFactory: (dialog: MatDialog, afterCloseFunction: ClosedResultType) =>
-        DialogManager<ConfimationDialogComponent>.builder(dialog, ConfimationDialogComponent)
+        DialogManager<ConfirmationDialogComponent>.builder(dialog, ConfirmationDialogComponent)
           .withAfterCloseFunction(afterCloseFunction)
-          .withConfig({width: '500px'})
+          .withConfig(({width: '649px'}))
           .build(),
       deps: [MatDialog, afterClosedToken]
     },

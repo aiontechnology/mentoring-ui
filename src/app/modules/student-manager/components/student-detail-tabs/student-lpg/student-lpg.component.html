@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022 Aion Technology LLC
+  ~ Copyright 2022-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,22 +14,32 @@
   ~ limitations under the License.
   -->
 
-<div class="spinner-container" *ngIf="lpgService.isLoading | async">
-  <mat-progress-spinner color="primary" mode="indeterminate" [diameter]="100" [strokeWidth]="10"></mat-progress-spinner>
-</div>
-<div class="lpg-container">
-  <div class="lpg-title">
-    <h1>Learning Pathway Generator</h1>
-  </div>
-  <div class="lpg-buttons">
-    <button mat-raised-button color="primary" (click)="generateCurrentMonth()">
-      Generate current month
-    </button>
-    <button mat-raised-button color="primary" (click)="generateNextMonth()">
-      Generate next month
-    </button>
-  </div>
-  <div *ngIf="userService.isSysAdmin">
-    <mat-checkbox [(ngModel)]="isDebug">Generate Debug Information</mat-checkbox>
-  </div>
-</div>
+
+<table class="detail-view-container">
+  <thead class="mat-body-2">
+  <tr>
+    <td colspan="2">Learning Pathway Generator</td>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>
+      <button mat-raised-button (click)="generateCurrentMonth()">
+        <p class="mat-display-1">Generate Current Month</p>
+      </button>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <button mat-raised-button (click)="generateNextMonth()">
+        <p class="mat-display-1">Generate Next Month</p>
+      </button>
+    </td>
+  </tr>
+  <tr *ngIf="userLoginService.isSystemAdmin">
+    <td>
+      <mat-checkbox [(ngModel)]="isDebug">Generate Debug Information</mat-checkbox>
+    </td>
+  </tr>
+  </tbody>
+</table>

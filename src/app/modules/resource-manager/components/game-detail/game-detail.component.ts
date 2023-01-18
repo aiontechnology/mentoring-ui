@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
-import {Game} from 'src/app/models/game/game';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
+import {Game} from 'src/app/models/game/game';
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {DetailComponent} from '../../../../implementation/component/detail-component';
@@ -27,7 +27,7 @@ import {GAME_ID} from '../../../../implementation/route/route-constants';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {SingleItemCacheUpdater} from '../../../../implementation/state-management/single-item-cache-updater';
 import {GAME_INSTANCE_CACHE, GAME_INSTANCE_CACHE_UPDATER} from '../../../../providers/global/global-game-providers-factory';
-import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {
   EDIT_GAME_MENU_TITLE,
   EDIT_GAME_PANEL_TITLE,
@@ -54,7 +54,7 @@ export class GameDetailComponent extends DetailComponent implements OnInit, OnDe
     navService: NavigationService,
     // other
     @Inject(GAME_DETAIL_EDIT_DIALOG_MANAGER) private gameEditDialogManager: DialogManager<GameDialogComponent>,
-    @Inject(GAME_DETAIL_DELETE_DIALOG_MANAGER) private gameDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
+    @Inject(GAME_DETAIL_DELETE_DIALOG_MANAGER) private gameDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     @Inject(GAME_INSTANCE_CACHE) public gameInstanceCache: SingleItemCache<Game>,
     @Inject(GAME_INSTANCE_CACHE_UPDATER) private gameInstanceCacheUpdater: SingleItemCacheUpdater<Game>,
   ) {
@@ -79,13 +79,13 @@ export class GameDetailComponent extends DetailComponent implements OnInit, OnDe
           panelTitle: EDIT_GAME_PANEL_TITLE
         }))
         .build(),
-      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_GAME_MENU_TITLE, GAME_GROUP, this.gameDeleteDialogManager)
+      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_GAME_MENU_TITLE, GAME_GROUP, this.gameDeleteDialogManager)
         .withSnackbarMessage(REMOVE_GAME_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.gameInstanceCache.item,
           singularName: SINGULAR_GAME,
           pluralName: PLURAL_GAME,
-          countSupplier: () => 1,
+          nameSupplier: () => [this.gameInstanceCache.item.name],
         }))
         .build()
     ]

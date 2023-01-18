@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,19 +15,18 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {UserSessionService} from 'src/app/implementation/services/user-session.service';
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
-import {Book} from '../../../../models/book/book';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
+import {UserLoginService} from '../../../../implementation/security/user-login.service';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {Book} from '../../../../models/book/book';
 import {BOOK_INSTANCE_CACHE} from '../../../../providers/global/global-book-providers-factory';
-import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {
   ADD_BOOK_MENU_TITLE,
   ADD_BOOK_PANEL_TITLE,
@@ -60,18 +59,16 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
     @Inject(BOOK_INSTANCE_CACHE) bookInstanceCache: SingleItemCache<Book>,
     // other
     @Inject(BOOK_LIST_EDIT_DIALOG_MANAGER) private bookEditDialogManager: DialogManager<BookDialogComponent>,
-    @Inject(BOOK_LIST_DELETE_DIALOG_MANAGER) private bookDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
-    public userSession: UserSessionService,
+    @Inject(BOOK_LIST_DELETE_DIALOG_MANAGER) private bookDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
+    public userLoginService: UserLoginService,
   ) {
     super(menuState, navService, tableCache, bookInstanceCache)
-    if (userSession.isSysAdmin) {
+    if (userLoginService.isSystemAdmin) {
       this.columns = ['select'].concat(this.columns)
     }
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
-
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
@@ -91,11 +88,11 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
         .withAdminOnly(true)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1),
-      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_BOOK_MENU_TITLE, BOOK_GROUP, this.bookDeleteDialogManager)
+      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_BOOK_MENU_TITLE, BOOK_GROUP, this.bookDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR_BOOK,
           pluralName: PLURAL_BOOK,
-          countSupplier: () => this.tableCache.selectionCount
+          nameSupplier: () => this.tableCache.selection.selected.map(selection => selection.title)
         }))
         .withSnackbarMessage(REMOVE_BOOK_SNACKBAR_MESSAGE)
         .withAdminOnly(true)

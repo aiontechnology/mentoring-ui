@@ -14,53 +14,98 @@
   ~ limitations under the License.
   -->
 
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Book Details</mat-card-title>
-  </mat-card-header>
-  <mat-card-content class="mat-elevation-z8">
-    <h1>{{ bookInstanceCache.item?.title }}</h1>
-    <table>
-      <tr>
-        <td>Description</td>
-        <td>{{ bookInstanceCache.item?.description }}</td>
-      </tr>
-      <tr>
-        <td>Author</td>
-        <td>{{ bookInstanceCache.item?.author }}</td>
-      </tr>
-      <tr>
-        <td>Reading Level</td>
-        <td>{{ resourceGrades[bookInstanceCache.item?.gradeLevel - 1]?.valueView }}</td>
-      </tr>
-      <tr>
-        <td>Interests</td>
-        <td>{{ bookInstanceCache.item?.interests.join(', ') }}</td>
-      </tr>
-      <tr>
-        <td>Leadership Traits</td>
-        <td>{{ bookInstanceCache.item?.leadershipTraits.join(', ') }}</td>
-      </tr>
-      <tr>
-        <td>Leadership Success Skills</td>
-        <td>{{ bookInstanceCache.item?.leadershipSkills.join(', ') }}</td>
-      </tr>
-      <tr>
-        <td>Phonograms</td>
-        <td>{{ bookInstanceCache.item?.phonograms.join(', ') }}</td>
-      </tr>
-      <tr>
-        <td>Behaviors</td>
-        <td>{{ bookInstanceCache.item?.behaviors.join(', ') }}</td>
-      </tr>
-      <tr>
-        <td>Tag</td>
-        <td>{{ bookInstanceCache.item?.tag | titlecase }}</td>
-      </tr>
-      <tr>
-        <td>Location</td>
-        <td>{{ bookInstanceCache.item?.displayLocation }}</td>
-      </tr>
-    </table>
-  </mat-card-content>
-</mat-card>
+<ms-tabbed-container tabLabel="RESOURCE MANAGER">
+  <mat-tab-group class="wrapper" animationDuration="0ms" dynamicHeight>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Book Details</span>
+      </ng-template>
+      <ms-menu></ms-menu>
+      <table class="detail-view-container">
+        <thead class="mat-body-2">
+        <tr>
+          <td colspan="2">
+            {{ bookInstanceCache.item?.title }}
+          </td>
+        </tr>
+        </thead>
+        <tbody class="mat-body-1">
+        <tr>
+          <td>Author:</td>
+          <td>
+            <p>{{ bookInstanceCache.item?.author }}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>Reading Level:</td>
+          <td>
+            <p><ms-grade-level gradeLevel="{{bookInstanceCache.item?.gradeLevel}}"></ms-grade-level></p>
+          </td>
+        </tr>
+        <tr>
+          <td>Description:</td>
+          <td>
+            <p>{{ bookInstanceCache.item?.description }}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>Interests:</td>
+          <td>
+            <mat-chip-list>
+              <mat-chip class="chip" *ngFor="let interest of bookInstanceCache.item?.interests">
+                {{interest}}
+              </mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
+        <tr>
+          <td>Leadership Traits:</td>
+          <td>
+            <mat-chip-list>
+              <mat-chip class="chip" *ngFor="let leadershipTrait of bookInstanceCache.item?.leadershipTraits">{{leadershipTrait}}</mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
+        <tr>
+          <td>Leadership Success Skills:</td>
+          <td>
+            <mat-chip-list>
+              <mat-chip class="chip" *ngFor="let leadershipSkill of bookInstanceCache.item?.leadershipSkills">{{leadershipSkill}}</mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
+        <tr>
+          <td>Phonograms:</td>
+          <td>
+            <mat-chip-list>
+              <mat-chip class="chip" *ngFor="let phonogram of bookInstanceCache.item?.phonograms">{{phonogram}}</mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
+        <tr>
+          <td>Behaviors:</td>
+          <td>
+            <mat-chip-list>
+              <mat-chip class="chip" *ngFor="let behavior of bookInstanceCache.item?.behaviors">{{behavior}}</mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
+        <tr>
+          <td>Tag:</td>
+          <td>
+            <mat-chip-list *ngIf="bookInstanceCache.item?.tag">
+              <mat-chip class="chip">{{bookInstanceCache.item?.tag}}</mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
+        <tr>
+          <td>Location:</td>
+          <td>
+            <p>{{ bookInstanceCache.item?.displayLocation }}</p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+</ms-tabbed-container>

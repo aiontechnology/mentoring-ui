@@ -1,42 +1,35 @@
 <!--
-Copyright 2021-2022 Aion Technology LLC
+  ~ Copyright 2021-2023 Aion Technology LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-     https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
-<h2 mat-dialog-title>{{ dialogTitle }}</h2>
-<mat-dialog-content>
-  <form [formGroup]="model">
-    <div class="dialog-container">
-      <mat-form-field>
+<ms-dialog-container [panelTitle]="data.panelTitle" [component]="this" [isValid]="modelFormGroup.valid">
+  <form [formGroup]="modelFormGroup">
+    <div class="row-container">
+      <mat-form-field appearance="outline">
         <mat-label>Interest</mat-label>
-        <input matInput formControlName="name" required>
+        <input #name matInput formControlName="name" required>
         <mat-error
-          *ngIf="model.hasError('duplicateInterest', 'name')">
-          {{ model.getError('duplicateInterest', 'name').msg }}
+          *ngIf="modelFormGroup.hasError('duplicateInterest', 'name')">
+          {{ modelFormGroup.getError('duplicateInterest', 'name').msg }}
         </mat-error>
-        <mat-error *ngIf="model.hasError('required', 'name')">
+        <mat-error *ngIf="modelFormGroup.hasError('required', 'name')">
           You must enter an interest
         </mat-error>
       </mat-form-field>
     </div>
+
+    <input type="hidden" formControlName="interest">
   </form>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button color="primary" (click)="save()" [disabled]="!model.valid">
-    <mat-icon>save</mat-icon> Save
-  </button>
-  <button mat-button color="primary" (click)="dismiss()">
-    <mat-icon>cancel</mat-icon> Cancel
-  </button>
-</mat-dialog-actions>
+</ms-dialog-container>

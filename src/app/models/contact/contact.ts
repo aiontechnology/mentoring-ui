@@ -38,4 +38,8 @@ export class Contact {
     this.comment = convertEmptyStringToNull(json?.comment)
   }
 
+  get formattedPreferredContactMethod() {
+    return this.preferredContactMethod.substring(0,1).toUpperCase() + this.preferredContactMethod.substring(1).toLowerCase()
+  }
+
 }

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020-2022 Aion Technology LLC
+  ~ Copyright 2020-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,23 +14,50 @@
   ~ limitations under the License.
   -->
 
-<mat-tab-group class="wrapper" [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
-  <mat-tab label="Details">
-    <ms-school-detail class="tab-content"></ms-school-detail>
-  </mat-tab>
-  <mat-tab label="Program Administrator" *ngIf="userSession.isSysAdmin">
-    <ms-program-admin-detail class="tab-content"></ms-program-admin-detail>
-  </mat-tab>
-  <mat-tab label="Teachers">
-    <ms-teacher-list class="tab-content"></ms-teacher-list>
-  </mat-tab>
-  <mat-tab label="Other Personnel">
-    <ms-personnel-list class="tab-content"></ms-personnel-list>
-  </mat-tab>
-  <mat-tab label="Books" *ngIf="userSession.isSysAdmin">
-    <ms-school-book-list class="tab-content"></ms-school-book-list>
-  </mat-tab>
-  <mat-tab label="Games" *ngIf="userSession.isSysAdmin">
-    <ms-school-game-list class="tab-content"></ms-school-game-list>
-  </mat-tab>
-</mat-tab-group>
+<ms-tabbed-container tabLabel="SCHOOL MANAGER | {{schoolInstance.item.name}}">
+  <mat-tab-group class="wrapper" animationDuration="0ms" dynamicHeight
+                 [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Details</span>
+      </ng-template>
+      <ms-school-detail class="tab-content"></ms-school-detail>
+      <ms-menu></ms-menu>
+    </mat-tab>
+    <mat-tab *ngIf="userLoginService.isSystemAdmin">
+      <ng-template mat-tab-label>
+        <span class="tab-label">Program Administrator</span>
+      </ng-template>
+      <ms-program-admin-detail class="tab-content"></ms-program-admin-detail>
+      <ms-menu></ms-menu>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Teachers</span>
+      </ng-template>
+      <ms-teacher-list class="tab-content"></ms-teacher-list>
+      <ms-menu></ms-menu>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Other Personnel</span>
+      </ng-template>
+      <ms-personnel-list class="tab-content"></ms-personnel-list>
+      <ms-menu></ms-menu>
+    </mat-tab>
+    <mat-tab *ngIf="userLoginService.isSystemAdmin">
+      <ng-template mat-tab-label>
+        <span class="tab-label">Books</span>
+      </ng-template>
+      <ms-school-book-list class="tab-content"></ms-school-book-list>
+      <ms-menu></ms-menu>
+    </mat-tab>
+    <mat-tab *ngIf="userLoginService.isSystemAdmin">
+      <ng-template mat-tab-label>
+        <span class="tab-label">Games</span>
+      </ng-template>
+      <ms-school-game-list class="tab-content"></ms-school-game-list>
+      <ms-menu></ms-menu>
+    </mat-tab>
+  </mat-tab-group>
+</ms-tabbed-container>

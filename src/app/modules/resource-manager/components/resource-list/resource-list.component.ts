@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {UserSessionService} from 'src/app/implementation/services/user-session.service';
+import {UserLoginService} from '../../../../implementation/security/user-login.service';
 import {BOOK_GROUP, GAME_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP} from '../../resource-manager.module';
 import {setState} from './menu-state-manager';
 
@@ -30,7 +30,7 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
   tabIndex: number
 
   constructor(
-    public userSession: UserSessionService,
+    public userLoginService: UserLoginService,
     private menuState: MenuStateService,
     private route: ActivatedRoute,
   ) {}
@@ -52,12 +52,12 @@ export class ResourceListComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onTabChange(index: number): void {
-    setState(index, this.menuState, this.userSession);
+    setState(index, this.menuState, this.userLoginService);
   }
 
   private registerFragmentHandler() {
     this.route.fragment.subscribe(fragment => {
-      if (this.userSession.isSysAdmin) {
+      if (this.userLoginService.isSystemAdmin) {
         switch (fragment) {
           case 'book':
             this.tabIndex = 0

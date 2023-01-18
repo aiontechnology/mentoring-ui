@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,12 @@ import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {SchoolWatchingDetailComponent} from '../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {Mentor} from '../../../../models/mentor/mentor';
-import {School} from '../../../../models/school/school';
-import {SchoolSession} from '../../../../models/school/schoolsession';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {RouteElementWatcher} from '../../../../implementation/route/route-element-watcher.service';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {Mentor} from '../../../../models/mentor/mentor';
+import {School} from '../../../../models/school/school';
+import {SchoolSession} from '../../../../models/school/schoolsession';
 import {
   MENTOR_DATA_SOURCE,
   MENTOR_INSTANCE_CACHE,
@@ -35,7 +35,7 @@ import {
 } from '../../../../providers/global/global-mentor-providers-factory';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global/global-school-session-providers-factory';
-import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MENTOR_GROUP} from '../../mentor-manager.module';
 import {
   EDIT_MENU_TITLE,
@@ -66,7 +66,7 @@ export class MentorDetailComponent extends SchoolWatchingDetailComponent impleme
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     // other
     @Inject(MENTOR_DETAIL_EDIT_DIALOG_MANAGER) private mentorEditDialogManager: DialogManager<MentorDialogComponent>,
-    @Inject(MENTOR_DETAIL_DELETE_DIALOG_MANAGER) private mentorDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
+    @Inject(MENTOR_DETAIL_DELETE_DIALOG_MANAGER) private mentorDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     @Inject(MENTOR_DATA_SOURCE) private mentorDataSource: DataSource<Mentor>,
     @Inject(MENTOR_INSTANCE_CACHE) public mentorInstanceCache: SingleItemCache<Mentor>,
     @Inject(MENTOR_ROUTE_WATCHER) private mentorRouteWatcher: RouteElementWatcher<Mentor>,
@@ -84,13 +84,13 @@ export class MentorDetailComponent extends SchoolWatchingDetailComponent impleme
           panelTitle: EDIT_PANEL_TITLE
         }))
         .build(),
-      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_MENU_TITLE, MENTOR_GROUP, this.mentorDeleteDialogManager)
+      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_MENU_TITLE, MENTOR_GROUP, this.mentorDeleteDialogManager)
         .withSnackbarMessage(REMOVE_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.mentorInstanceCache.item,
           singularName: SINGULAR,
           pluralName: PLURAL,
-          countSupplier: () => 1,
+          nameSupplier: () => [this.mentorInstanceCache.item.fullName],
         }))
         .build()
     ]

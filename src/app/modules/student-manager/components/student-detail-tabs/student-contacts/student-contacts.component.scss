@@ -14,79 +14,30 @@
  * limitations under the License.
  */
 
-@import "../../../../../../style/variables";
+@import 'src/style/_variables';
 
-::ng-deep .mat-tab-body-wrapper {
-  height: 100%;
-}
+.mat-expansion-panel {
+  margin-top: 24px;
 
-.wrapper {
-  height: 100%;
-}
+  .mat-expansion-panel-header {
+    background-color: $primary;
 
-.spinner-container {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    mat-icon, .mat-display-3 {
+      color: white;
+      margin: 0;
+    }
+  }
 
-  height: 90%;
-  width: 100%;
+  .mat-expansion-panel-header:hover {
+    mat-icon, .mat-display-3 {
+      color: black;
+    }
+  }
 
-  backdrop-filter: blur(5px);
-  z-index: 500;
-}
-
-h1 {
-  font-size: 1.25em;
-  margin-bottom: .5em;
-}
-
-mat-card-content div {
-  padding: 25px 40px 0px 40px;
-}
-
-mat-card-content div:last-of-type {
-  padding-bottom: 40px;
-}
-
-table {
-  width: 100%;
-}
-
-tr {
-  width: 100%;
-}
-
-td {
-  border: 1px solid black;
-  padding: 10px 0px 10px 10px;
-  vertical-align: middle;
-}
-
-tr td:first-child {
-  background-color: $accent;
-  color: white;
-  width: 150px;
-}
-
-.mat-raised-button {
-  font-size: 1.15em;
-  padding: 15px 25px;
-  margin: 15px 10px;
-}
-
-.lpg-title {
-  margin: 25px;
-}
-
-.lpg-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.notification {
-  margin-left: auto;
-  margin-top: auto;
+  tr td {
+    padding-left: 50px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    line-height: 1.5em;
+  }
 }

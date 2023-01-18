@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,9 @@ export function updateDialogManager<COMPONENT_TYPE>(
       provide: name,
       useFactory: (dialog: MatDialog) =>
         DialogManager<COMPONENT_TYPE>.builder(dialog, componentType)
+          .withConfig(({
+            width: '1166px'
+          }))
           .withAfterCloseFunction(() => null)
           .build(),
       deps: [MatDialog]

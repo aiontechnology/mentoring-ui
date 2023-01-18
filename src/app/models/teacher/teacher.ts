@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {LinkService} from '../../modules/shared/services/link-service/link.service';
 import {grades} from '../../implementation/constants/grades';
 import {convertEmptyStringToNull} from '../../implementation/functions/value-or-null';
+import {LinkService} from '../../modules/shared/services/link-service/link.service';
 
 /**
  * Model class the represents a teacher.
@@ -53,5 +53,9 @@ export class Teacher {
 
   get selfLink(): string {
     return LinkService.selfLink(this)
+  }
+
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`
   }
 }

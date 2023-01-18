@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ export const REMOVE_STUDENT_MENU_TITLE = 'Remove Student(s)'
 export const ADD_STUDENT_PANEL_TITLE = 'Add New Student'
 export const EDIT_STUDENT_PANEL_TITLE = 'Edit Student'
 
-export const ADD_STUDENT_SNACKBAR_MESSAGE = 'Student Added'
-export const EDIT_STUDENT_SNACKBAR_MESSAGE = 'Student Updated'
-export const REMOVE_STUDENT_SNACKBAR_MESSAGE = 'Student(s) Removed'
+export const ADD_STUDENT_SNACKBAR_MESSAGE = 'Student Successfully Added \u2713'
+export const EDIT_STUDENT_SNACKBAR_MESSAGE = 'Student Successfully Updated \u2713'
+export const REMOVE_STUDENT_SNACKBAR_MESSAGE = 'Student(s) Successfully Removed \u2713'
 
 export const SINGULAR_STUDENT = 'student'
 export const PLURAL_STUDENT = 'students'

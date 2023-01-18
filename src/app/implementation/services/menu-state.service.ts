@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 import {Injectable} from '@angular/core';
 import {EnableableCommand} from '../command/enableable-command';
 import {MenuCommand} from '../command/menu-command';
+import {UserLoginService} from '../security/user-login.service';
 import {Resettable} from '../state-management/resettable';
-import {UserSessionService} from './user-session.service';
 
 class Group {
   menus = new Array<MenuCommand>();
@@ -32,13 +32,15 @@ export class MenuStateService implements Resettable {
   groups = new Map<string, Group>();
   title: string;
 
-  constructor(private userSessionService: UserSessionService) {}
+  constructor(
+    private userLoginService: UserLoginService,
+  ) {}
 
   get activeMenus(): Array<EnableableCommand> {
     const activeMenus = new Array<EnableableCommand>();
     for (let group of this.groups.values()) {
       if (group.isVisible) {
-        const validMenus = group.menus.filter(menu => this.userSessionService.isSysAdmin || !menu.isAdminOnly)
+        const validMenus = group.menus.filter(menu => this.userLoginService.isSystemAdmin || !menu.isAdminOnly)
         activeMenus.push(...validMenus);
       }
     }

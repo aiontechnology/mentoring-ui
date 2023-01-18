@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,29 +15,28 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {grades} from 'src/app/implementation/constants/grades';
-import {SchoolSession} from 'src/app/models/school/schoolsession';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
+import {SchoolSession} from 'src/app/models/school/schoolsession';
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {equalsById} from '../../../../implementation/functions/comparison';
-import {Contact} from '../../../../models/contact/contact';
-import {School} from '../../../../models/school/school';
-import {Student} from '../../../../models/student/student';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {Contact} from '../../../../models/contact/contact';
+import {School} from '../../../../models/school/school';
+import {Student} from '../../../../models/student/student';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 import {
   SCHOOL_SESSION_COLLECTION_CACHE,
   SCHOOL_SESSION_INSTANCE_CACHE
 } from '../../../../providers/global/global-school-session-providers-factory';
 import {STUDENT_INSTANCE_CACHE} from '../../../../providers/global/global-student-providers-factory';
-import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {
   ADD_STUDENT_MENU_TITLE,
   ADD_STUDENT_PANEL_TITLE,
@@ -76,7 +75,7 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
     // other
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
     @Inject(STUDENT_LIST_EDIT_DIALOG_MANAGER) private studentEditDialogManager: DialogManager<StudentDialogComponent>,
-    @Inject(STUDENT_LIST_DELETE_DIALOG_MANAGER) private studentDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
+    @Inject(STUDENT_LIST_DELETE_DIALOG_MANAGER) private studentDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     @Inject(SCHOOL_SESSION_COLLECTION_CACHE) public schoolSessionCollectionCache: MultiItemCache<SchoolSession>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
   ) {
@@ -84,8 +83,6 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
-
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
@@ -105,11 +102,11 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1)
         .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
-      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentDeleteDialogManager)
+      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR_STUDENT,
           pluralName: PLURAL_STUDENT,
-          countSupplier: () => this.tableCache.selectionCount
+          nameSupplier: () => this.tableCache.selection.selected.map(selection => selection.fullName)
         }))
         .withSnackbarMessage(REMOVE_STUDENT_SNACKBAR_MESSAGE)
         .build()

@@ -14,16 +14,15 @@
   ~ limitations under the License.
   -->
 
-<h2 mat-dialog-title>{{data.panelTitle}}</h2>
-<mat-dialog-content>
+<ms-dialog-container class="school-dialog" [panelTitle]="data.panelTitle" [component]="this"
+                     [isValid]="modelFormGroup.valid">
   <form [formGroup]="modelFormGroup">
     <input type="hidden" formControlName="school">
 
-    <p class="legend mat-small">* Denotes a required field</p>
-
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput placeholder="Name" formControlName="name" required/>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required/>
         <mat-error *ngIf="modelFormGroup.hasError('required', 'name')">
           You must enter a name
         </mat-error>
@@ -33,9 +32,10 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container" *ngIf="!isUpdate">
-      <mat-form-field>
-        <input matInput placeholder="Initial Session Label" formControlName="initialSessionLabel" required/>
+    <div class="row-container" *ngIf="!isUpdate">
+      <mat-form-field appearance="outline">
+        <mat-label>Initial Session Label</mat-label>
+        <input matInput formControlName="initialSessionLabel" required/>
         <mat-error *ngIf="modelFormGroup.hasError('required', 'initialSessionLabel')">
           You must enter a initial session label
         </mat-error>
@@ -46,80 +46,75 @@
     </div>
 
     <div formGroupName="address">
-      <div class="dialog-container">
-        <mat-form-field>
-          <input matInput placeholder="Street 1" formControlName="street1"/>
+      <div class="row-container">
+        <mat-form-field appearance="outline">
+          <mat-label>Street 1</mat-label>
+          <input matInput formControlName="street1"/>
           <mat-error *ngIf="modelFormGroup.hasError('maxlength', 'address.street1')">
             An address can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
       </div>
 
-      <div class="dialog-container">
-        <mat-form-field>
-          <input matInput placeholder="Street 2" formControlName="street2"/>
+      <div class="row-container">
+        <mat-form-field appearance="outline">
+          <mat-label>Street 2</mat-label>
+          <input matInput formControlName="street2"/>
           <mat-error *ngIf="modelFormGroup.hasError('maxlength', 'address.street2')">
             An address can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
       </div>
 
-      <div class="dialog-container">
-        <mat-form-field>
-          <input matInput placeholder="City" formControlName="city"/>
+      <div class="row-container">
+        <mat-form-field appearance="outline">
+          <mat-label>City</mat-label>
+          <input matInput formControlName="city"/>
           <mat-error *ngIf="modelFormGroup.hasError('maxlength', 'address.city')">
             A city can be a maximum of 50 characters in length
           </mat-error>
         </mat-form-field>
       </div>
 
-      <div class="dialog-container">
-        <mat-form-field>
-          <mat-select placeholder="State" formControlName="state">
+      <div class="row-container">
+        <mat-form-field appearance="outline">
+          <mat-label>State</mat-label>
+          <mat-select formControlName="state">
             <mat-option *ngFor="let state of states" [value]="state.abbreviation">
               {{ state.name }}
             </mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
 
-      <div class="dialog-container">
-        <mat-form-field>
-          <input matInput msOnlyNumber maxlength="10" placeholder="Zip" formControlName="zip"/>
+        <mat-form-field appearance="outline">
+          <mat-label>Zip</mat-label>
+          <input matInput msOnlyNumber maxlength="10" formControlName="zip"/>
         </mat-form-field>
       </div>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput msPhoneFormat placeholder="Phone Number" formControlName="phone"/>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <input matInput msPhoneFormat formControlName="phone"/>
         <mat-error *ngIf="modelFormGroup.hasError('phoneNumberFormat', 'phone')">
           Invalid phone number format
         </mat-error>
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput placeholder="District" formControlName="district"/>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>District</mat-label>
+        <input matInput formControlName="district"/>
         <mat-error *ngIf="modelFormGroup.hasError('maxlength', 'district')">
           A district can be a maximum of 50 characters in length
         </mat-error>
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-checkbox formControlName="isPrivate">Private School?</mat-checkbox>
+    <div class="row-container">
+      <mat-checkbox formControlName="isPrivate">Private?</mat-checkbox>
     </div>
   </form>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button color="primary" (click)="save()" [disabled]="!modelFormGroup.valid">
-    <mat-icon>save</mat-icon>
-    Save
-  </button>
-  <button mat-button color="primary" (click)="dismiss()">
-    <mat-icon>cancel</mat-icon>
-    Cancel
-  </button>
-</mat-dialog-actions>
+</ms-dialog-container>

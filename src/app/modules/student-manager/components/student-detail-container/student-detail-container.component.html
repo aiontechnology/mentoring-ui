@@ -14,17 +14,46 @@
   ~ limitations under the License.
   -->
 
-<mat-tab-group class="wrapper">
-  <mat-tab label="Student Details">
-    <ms-student-detail></ms-student-detail>
-  </mat-tab>
-  <mat-tab label="Teacher Input">
-    <ms-student-teacher-input></ms-student-teacher-input>
-  </mat-tab>
-  <mat-tab label="Contacts">
-    <ms-student-contacts></ms-student-contacts>
-  </mat-tab>
-  <mat-tab label="LPG" [disabled]="!schoolSessionInstanceCache.item.isCurrent">
-    <ms-student-lpg></ms-student-lpg>
-  </mat-tab>
-</mat-tab-group>
+<ms-tabbed-container tabLabel="STUDENT MANAGER | {{schoolInstanceCache.item.name}}">
+  <div class="mat-display-1 student-name">
+    {{ studentInstanceCache.item?.firstName + ' ' + studentInstanceCache.item?.lastName | uppercase}}
+  </div>
+  <mat-tab-group class="wrapper" animationDuration="0ms" dynamicHeight>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Student Details</span>
+      </ng-template>
+      <ms-student-detail></ms-student-detail>
+      <ms-menu></ms-menu>
+      <div class="notification mat-body-2" *ngIf="!schoolSessionInstanceCache.item?.isCurrent">
+        Historic Data (Read Only)
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Teacher Input</span>
+      </ng-template>
+      <ms-student-teacher-input></ms-student-teacher-input>
+      <ms-menu></ms-menu>
+      <div class="notification mat-body-2" *ngIf="!schoolSessionInstanceCache.item?.isCurrent">
+        Historic Data (Read Only)
+      </div>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Contacts</span>
+      </ng-template>
+      <ms-student-contacts></ms-student-contacts>
+      <ms-menu></ms-menu>
+      <div class="notification mat-body-2" *ngIf="!schoolSessionInstanceCache.item?.isCurrent">
+        Historic Data (Read Only)
+      </div>
+    </mat-tab>
+    <mat-tab [disabled]="!schoolSessionInstanceCache.item.isCurrent">
+      <ng-template mat-tab-label>
+        <span class="tab-label">LPG</span>
+      </ng-template>
+      <ms-student-lpg></ms-student-lpg>
+    </mat-tab>
+  </mat-tab-group>
+</ms-tabbed-container>

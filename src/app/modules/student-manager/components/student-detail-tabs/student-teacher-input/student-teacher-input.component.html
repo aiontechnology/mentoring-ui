@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022 Aion Technology LLC
+  ~ Copyright 2022-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,42 +14,50 @@
   ~ limitations under the License.
   -->
 
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Teacher: {{ studentCache.item?.teacherName || "&lt;Not Set&gt;" }}</mat-card-title>
-    <div class="notification mat-h5" *ngIf="isHistoric">
-      Historic Data (Read Only)
-    </div>
-  </mat-card-header>
-  <mat-card-content class="mat-elevation-z8">
-    <div class="teacher-input">
-      <h1>Teacher's Input</h1>
-      <table>
-        <tr>
-          <td>Comments</td>
-          <td>{{ studentCache.item?.teacher?.comment ? studentCache.item.teacher.comment : '' }}</td>
-        </tr>
-        <tr>
-          <td>Pre-behavioral assessment</td>
-          <td>{{ studentCache.item?.preBehavioralAssessment }}</td>
-        </tr>
-        <tr>
-          <td>Post-behavioral assessment</td>
-          <td>{{ studentCache.item?.postBehavioralAssessment }}</td>
-        </tr>
-        <tr>
-          <td>Leadership traits</td>
-          <td>{{ studentCache.item?.leadershipTraits.join(', ') }}</td>
-        </tr>
-        <tr>
-          <td>Leadership success skills</td>
-          <td>{{ studentCache.item?.leadershipSkills.join(', ') }}</td>
-        </tr>
-        <tr>
-          <td>Behaviors</td>
-          <td>{{ studentCache.item?.behaviors.join(', ') }}</td>
-        </tr>
-      </table>
-    </div>
-  </mat-card-content>
-</mat-card>
+<table class="detail-view-container">
+  <thead class="mat-body-2">
+  <tr>
+    <td colspan="2">
+      Teacher- {{ studentCache.item?.teacherName || "&lt;Not Set&gt;" }}
+    </td>
+  </tr>
+  </thead>
+  <tbody class="mat-body-1">
+  <tr>
+    <td>Comments:</td>
+    <td>{{ studentCache.item?.teacher?.comment ? studentCache.item.teacher.comment : '' }}</td>
+  </tr>
+  <tr>
+    <td>Pre-Behavioral Assessment:</td>
+    <td>{{ studentCache.item?.preBehavioralAssessment }}</td>
+  </tr>
+  <tr>
+    <td>Post-Behavioral Assessment:</td>
+    <td>{{ studentCache.item?.postBehavioralAssessment }}</td>
+  </tr>
+  <tr>
+    <td>Leadership Success Skills:</td>
+    <td>
+      <mat-chip-list>
+        <mat-chip class="chip" *ngFor="let leadershipSkill of studentCache.item?.leadershipSkills">{{leadershipSkill}}</mat-chip>
+      </mat-chip-list>
+    </td>
+  </tr>
+  <tr>
+    <td>Leadership Traits:</td>
+    <td>
+      <mat-chip-list>
+        <mat-chip class="chip" *ngFor="let leadershipTrait of studentCache.item?.leadershipTraits">{{leadershipTrait}}</mat-chip>
+      </mat-chip-list>
+    </td>
+  </tr>
+  <tr>
+    <td>Behaviors:</td>
+    <td>
+      <mat-chip-list>
+        <mat-chip class="chip" *ngFor="let behavior of studentCache.item?.behaviors">{{behavior}}</mat-chip>
+      </mat-chip-list>
+    </td>
+  </tr>
+  </tbody>
+</table>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@ export const REMOVE_MENU_TITLE = 'Remove Mentor(s)'
 export const ADD_PANEL_TITLE = 'Add New Mentor'
 export const EDIT_PANEL_TITLE = 'Edit Mentor'
 
-export const ADD_SNACKBAR_MESSAGE = 'Mentor Added'
-export const EDIT_SNACKBAR_MESSAGE = 'Mentor Updated'
-export const REMOVE_SNACKBAR_MESSAGE = 'Mentor(s) Removed'
+export const ADD_SNACKBAR_MESSAGE = 'Mentor Successfully Added \u2713'
+export const EDIT_SNACKBAR_MESSAGE = 'Mentor Successfully Updated \u2713'
+export const REMOVE_SNACKBAR_MESSAGE = 'Mentor(s) Successfully Removed \u2713'
 
 export const SINGULAR = 'mentor'
 export const PLURAL = 'mentors'

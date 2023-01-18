@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2021-2022 Aion Technology LLC
+  ~ Copyright 2021-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,37 +14,48 @@
   ~ limitations under the License.
   -->
 
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Mentor Details</mat-card-title>
-  </mat-card-header>
-  <mat-card-content class="mat-elevation-z8">
-    <h1>{{ mentorInstanceCache.item?.firstName + ' ' + mentorInstanceCache.item?.lastName }}</h1>
-    <table>
-      <tr>
-        <td>Phone number</td>
-        <td>{{ mentorInstanceCache.item?.cellPhone }}</td>
-      </tr>
-      <tr>
-        <td>Email address</td>
-        <td>{{ mentorInstanceCache.item?.email }}</td>
-      </tr>
-      <tr>
-        <td>Availability</td>
-        <td>{{ mentorInstanceCache.item?.availability }}</td>
-      </tr>
-      <tr>
-        <td>Media release signed</td>
-        <td>{{ mentorInstanceCache.item?.mediaReleaseSigned ? 'yes' : 'no' }}</td>
-      </tr>
-      <tr>
-        <td>Background check completed</td>
-        <td>{{ mentorInstanceCache.item?.backgroundCheckCompleted ? 'yes' : 'no' }}</td>
-      </tr>
-      <tr>
-        <td>Location</td>
-        <td>{{ mentorInstanceCache.item?.displayLocation }}</td>
-      </tr>
-    </table>
-  </mat-card-content>
-</mat-card>
+<ms-tabbed-container tabLabel="MENTOR MANAGER | {{schoolInstanceCache.item.name}}">
+  <mat-tab-group class="wrapper" animationDuration="0ms" dynamicHeight>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Mentor Details</span>
+      </ng-template>
+      <ms-menu></ms-menu>
+      <table class="detail-view-container">
+        <thead class="mat-body-2">
+        <tr>
+          <td colspan="2">
+            {{ mentorInstanceCache.item?.firstName + ' ' + mentorInstanceCache.item?.lastName }}
+          </td>
+        </tr>
+        </thead>
+        <tbody class="mat-body-1">
+        <tr>
+          <td>Phone Number:</td>
+          <td>{{ mentorInstanceCache.item?.cellPhone }}</td>
+        </tr>
+        <tr>
+          <td>Email Address:</td>
+          <td>{{ mentorInstanceCache.item?.email }}</td>
+        </tr>
+        <tr>
+          <td>Availability:</td>
+          <td>{{ mentorInstanceCache.item?.availability }}</td>
+        </tr>
+        <tr>
+          <td>Media Release Signed:</td>
+          <td>{{ mentorInstanceCache.item?.mediaReleaseSigned ? 'yes' : 'no' }}</td>
+        </tr>
+        <tr>
+          <td>Background Check Completed:</td>
+          <td>{{ mentorInstanceCache.item?.backgroundCheckCompleted ? 'yes' : 'no' }}</td>
+        </tr>
+        <tr>
+          <td>Location:</td>
+          <td>{{ mentorInstanceCache.item?.displayLocation }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+</ms-tabbed-container>

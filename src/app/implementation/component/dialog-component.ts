@@ -17,8 +17,9 @@
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {DataSource} from '../data/data-source';
+import {DialogActions} from './dialog-actions';
 
-export abstract class DialogComponent<T extends { links: any }, COMPONENT> {
+export abstract class DialogComponent<T extends { links: any }, COMPONENT> implements DialogActions{
   modelFormGroup: FormGroup
 
   protected constructor(

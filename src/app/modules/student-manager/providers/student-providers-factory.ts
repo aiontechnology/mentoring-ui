@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,16 @@ import {MenuDialogCommand} from '../../../implementation/command/menu-dialog-com
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Mentor} from '../../../models/mentor/mentor';
-import {School} from '../../../models/school/school';
-import {SchoolSession} from '../../../models/school/schoolsession';
-import {Student} from '../../../models/student/student';
-import {Teacher} from '../../../models/teacher/teacher';
 import {SingleItemCache} from '../../../implementation/state-management/single-item-cache';
 import {
   SingleItemCacheSchoolSessionChangeHandler
 } from '../../../implementation/state-management/single-item-cache-school-session-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {Mentor} from '../../../models/mentor/mentor';
+import {School} from '../../../models/school/school';
+import {SchoolSession} from '../../../models/school/schoolsession';
+import {Student} from '../../../models/student/student';
+import {Teacher} from '../../../models/teacher/teacher';
 import {addDialogProvidersFactory} from '../../../providers/dialog/add-dialog-providers-factory';
 import {detailDialogManagerProviders} from '../../../providers/dialog/detail-dialog-manager-providers';
 import {listDialogManagerProviders} from '../../../providers/dialog/list-dialog-manager-providers';
@@ -42,7 +42,7 @@ import {
   STUDENT_INSTANCE_CACHE_UPDATER,
   STUDENT_URI_SUPPLIER
 } from '../../../providers/global/global-student-providers-factory';
-import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MentorDialogComponent} from '../components/mentor-dialog/mentor-dialog.component';
 import {StudentDialogComponent} from '../components/student-dialog/student-dialog.component';
 import {TeacherDialogComponent} from '../components/teacher-dialog/teacher-dialog.component';
@@ -50,9 +50,9 @@ import {TeacherDialogComponent} from '../components/teacher-dialog/teacher-dialo
 export const STUDENT_TABLE_CACHE = new InjectionToken<TableCache<Student>>('student-table-cache')
 export const STUDENT_SCHOOL_SESSION_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolSessionChangeHandler<Student>>('student-school-session-change-handler')
 export const STUDENT_DETAIL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<StudentDialogComponent>>('student-detail-edit-dialog-manager')
-export const STUDENT_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('student-detail-delete-dialog-manager')
+export const STUDENT_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfirmationDialogComponent>>('student-detail-delete-dialog-manager')
 export const STUDENT_LIST_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<StudentDialogComponent>>('student-list-edit-dialog-manager')
-export const STUDENT_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('student-list-delete-dialog-manager')
+export const STUDENT_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfirmationDialogComponent>>('student-list-delete-dialog-manager')
 export const STUDENT_ADD_TEACHER = new InjectionToken<(dataSupplier) => MenuDialogCommand<Teacher>>('student-add-teacher')
 export const STUDENT_ADD_MENTOR = new InjectionToken<(dataSupplier) => MenuDialogCommand<Mentor>>('student-add-mentor')
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 import {InjectionToken} from '@angular/core';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {DataSource} from '../../../implementation/data/data-source';
-import {School} from '../../../models/school/school';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {School} from '../../../models/school/school';
 import {detailDialogManagerProviders} from '../../../providers/dialog/detail-dialog-manager-providers';
 import {listDialogManagerProviders} from '../../../providers/dialog/list-dialog-manager-providers';
 import {
@@ -26,14 +26,16 @@ import {
   SCHOOL_INSTANCE_CACHE,
   SCHOOL_INSTANCE_CACHE_UPDATER
 } from '../../../providers/global/global-school-providers-factory';
-import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {SchoolDialogComponent} from '../components/school-dialog/school-dialog.component';
+import {SchoolSessionDialogComponent} from '../components/school-session/school-session-dialog/school-session-dialog.component';
 
 export const SCHOOL_TABLE_CACHE = new InjectionToken<TableCache<School>>('school-table-cache')
 export const SCHOOL_DETAIL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<SchoolDialogComponent>>('school-detail-edit-dialog-manager')
-export const SCHOOL_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('school-detail-delete-dialog-manager')
+export const SCHOOL_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfirmationDialogComponent>>('school-detail-delete-dialog-manager')
+export const SCHOOL_SESSION_ADD_DIALOG_MANAGER = new InjectionToken<DialogManager<SchoolSessionDialogComponent>>('school-session-add-dialog-manager')
 export const SCHOOL_LIST_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<SchoolDialogComponent>>('school-list-edit-dialog-manager')
-export const SCHOOL_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('school-list-delete-dialog-manager')
+export const SCHOOL_LIST_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfirmationDialogComponent>>('school-list-delete-dialog-manager')
 
 export function schoolProvidersFactory() {
   return [

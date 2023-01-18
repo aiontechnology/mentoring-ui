@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,13 @@ import {DialogManager} from '../../../../../implementation/command/dialog-manage
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
+import {NavigationService} from '../../../../../implementation/route/navigation.service';
+import {RouteElementWatcher} from '../../../../../implementation/route/route-element-watcher.service';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {School} from '../../../../../models/school/school';
 import {SchoolSession} from '../../../../../models/school/schoolsession';
 import {StudentInbound} from '../../../../../models/student-inbound/student-inbound';
 import {Student} from '../../../../../models/student/student';
-import {NavigationService} from '../../../../../implementation/route/navigation.service';
-import {RouteElementWatcher} from '../../../../../implementation/route/route-element-watcher.service';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global/global-school-session-providers-factory';
 import {
@@ -36,7 +36,7 @@ import {
   STUDENT_INSTANCE_CACHE,
   STUDENT_ROUTE_WATCHER
 } from '../../../../../providers/global/global-student-providers-factory';
-import {ConfimationDialogComponent} from '../../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {
   EDIT_STUDENT_MENU_TITLE,
   EDIT_STUDENT_PANEL_TITLE,
@@ -67,7 +67,7 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     // other
     @Inject(STUDENT_DETAIL_EDIT_DIALOG_MANAGER) private studentEditDialogManager: DialogManager<StudentDialogComponent>,
-    @Inject(STUDENT_DETAIL_DELETE_DIALOG_MANAGER) private studentDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
+    @Inject(STUDENT_DETAIL_DELETE_DIALOG_MANAGER) private studentDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     @Inject(STUDENT_DATA_SOURCE) private studentDataSource: DataSource<StudentInbound>,
     @Inject(STUDENT_INSTANCE_CACHE) public studentInstanceCache: SingleItemCache<StudentInbound>,
     @Inject(STUDENT_ROUTE_WATCHER) private studentRouteWatcher: RouteElementWatcher<Student>,
@@ -86,13 +86,13 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
         }))
         .build()
         .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
-      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentDeleteDialogManager)
+      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentDeleteDialogManager)
         .withSnackbarMessage(REMOVE_STUDENT_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.studentInstanceCache.item,
           singularName: SINGULAR_STUDENT,
           pluralName: PLURAL_STUDENT,
-          countSupplier: () => 1,
+          nameSupplier: () => [this.studentInstanceCache.item.fullName],
         }))
         .build()
         .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import {NavigationManager} from '../../implementation/command/navigation-manager
 import {TableCache} from '../../implementation/table-cache/table-cache';
 import {ClosedResultType} from '../../implementation/types/dialog-types';
 import {AnyConsumer} from '../../implementation/types/types';
-import {ConfimationDialogComponent} from '../../modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../modules/shared/components/confirmation-dialog/confirmation-dialog.component';
 import {navigationManagerProviders} from '../general/navigation-manager-providers';
 import {listAfterClosedDeleteProviders} from './list/list-after-closed-delete-providers';
 import {listAfterClosedEditProviders} from './list/list-after-closed-edit-providers';
@@ -32,7 +32,7 @@ import {listPostActionProviders} from './list/list-post-action-providers';
 export function listDialogManagerProviders<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
   prefix: string,
   editName: InjectionToken<DialogManager<COMPONENT_TYPE>>,
-  deleteName: InjectionToken<DialogManager<ConfimationDialogComponent>>,
+  deleteName: InjectionToken<DialogManager<ConfirmationDialogComponent>>,
   componentType: ComponentType<COMPONENT_TYPE>,
   serviceToken: InjectionToken<SERVICE_TYPE>,
 ) {

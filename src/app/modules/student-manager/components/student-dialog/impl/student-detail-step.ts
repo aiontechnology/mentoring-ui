@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,13 @@
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {grades} from '../../../../../implementation/constants/grades';
 import {personLocations} from '../../../../../implementation/constants/locations';
+import {DataSource} from '../../../../../implementation/data/data-source';
 import {equalsBySelfLink} from '../../../../../implementation/functions/comparison';
-import {Mentor} from '../../../../../models/mentor/mentor';
-import {Student} from '../../../../../models/student/student';
 import {getMonth, getYear, months} from '../../../../../implementation/shared/date.utils';
 import {Grade} from '../../../../../implementation/types/grade';
-import {LinkService} from '../../../../shared/services/link-service/link.service';
+import {Interest} from '../../../../../models/interest';
+import {Mentor} from '../../../../../models/mentor/mentor';
+import {Student} from '../../../../../models/student/student';
 import {MetaDataService} from '../../../../shared/services/meta-data/meta-data.service';
 import {FormGroupHolder} from './form-group-holder';
 
@@ -40,13 +41,15 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
   constructor(
     student: Student,
     formBuilder: FormBuilder,
+    interestDataSource: DataSource<Interest>,
     metaDataService: MetaDataService,
   ) {
     super(student, formBuilder)
+    interestDataSource.allValues()
+      .then(iterests => this.interests = iterests.map(i => i.name))
+
     metaDataService.loadBehaviors()
       .then(behaviors => this.behaviors = behaviors)
-    metaDataService.loadInterests()
-      .then(interests => this.interests = interests)
     metaDataService.loadLeadershipSkills()
       .then(leadershipSkills => this.leadershipSkills = leadershipSkills)
     metaDataService.loadLeadershipTraits()

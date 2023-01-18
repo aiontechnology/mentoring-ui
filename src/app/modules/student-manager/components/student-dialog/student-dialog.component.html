@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020-2022 Aion Technology LLC
+  ~ Copyright 2020-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,89 +14,102 @@
   ~ limitations under the License.
   -->
 
-<h2 mat-dialog-title>{{data.panelTitle}}</h2>
+<div class="title-container">
+  <div class="mat-title title" mat-dialog-title>
+    {{data.panelTitle}}
+  </div>
+  <button mat-button color="primary" (click)="dismiss()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
 <mat-dialog-content>
   <mat-horizontal-stepper #stepper>
+
     <!-- Student Details Step -->
     <mat-step [stepControl]="studentDetailsStep.formGroup" errorMessage="Incomplete" label="Student Details">
       <form [formGroup]="studentDetailsStep.formGroup">
-        <p class="legend mat-small">* Denotes a required field</p>
+        <p class="legend mat-body-1">* Denotes a required field</p>
 
-        <!-- Student First and Last Names -->
-        <div class="dialog-container">
-          <mat-form-field>
-            <input formControlName="firstName" matInput placeholder="First name" required/>
-            <mat-error *ngIf="studentDetailsStep.formGroup.hasError('required', 'firstName')">
-              You must enter a first name
+        <!-- Student first and last names -->
+        <div class="row-container">
+          <mat-form-field appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input formControlName="firstName" matInput required/>
+            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('required', 'firstName')">
+              First name required
             </mat-error>
-            <mat-error *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'firstName')">
+            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'firstName')">
               A first name can be a maximum of 50 characters in length
             </mat-error>
           </mat-form-field>
-          <mat-form-field>
-            <input formControlName="lastName" matInput placeholder="Last name" required/>
-            <mat-error *ngIf="studentDetailsStep.formGroup.hasError('required', 'lastName')">
-              You must enter a last name
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input formControlName="lastName" matInput required/>
+            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('required', 'lastName')">
+              Last name required
             </mat-error>
-            <mat-error *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'lastName')">
+            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'lastName')">
               A last name can be a maximum of 30 characters in length
             </mat-error>
           </mat-form-field>
         </div>
 
         <!-- Student ID and Grade -->
-        <div class="dialog-container">
-          <mat-form-field>
-            <input formControlName="studentId" matInput placeholder="Student ID"/>
-            <mat-error *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'studentId')">
+        <div class="row-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Student ID</mat-label>
+            <input formControlName="studentId" matInput/>
+            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'studentId')">
               The student ID can be a maximum of 20 characters in length
             </mat-error>
           </mat-form-field>
-          <mat-form-field>
+
+          <mat-form-field appearance="outline">
             <mat-label>Grade</mat-label>
             <mat-select formControlName="grade" required>
               <mat-option *ngFor="let grade of studentDetailsStep.grades" [value]="grade.value">
                 {{ grade.valueView }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="studentDetailsStep.formGroup.hasError('required', 'grade')">
-              You must select a grade level
+            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('required', 'grade')">
+              Grade level required
             </mat-error>
           </mat-form-field>
         </div>
 
-        <!-- Month and Year -->
-        <div class="dialog-container">
-          <div class="month-wrapper">
-            <h2 class="mat-header-2 start">Start date:</h2>
-            <mat-form-field class="month">
-              <mat-label>Month</mat-label>
-              <mat-select formControlName="month">
-                <mat-option [value]="null">- None -</mat-option>
-                <mat-option *ngFor="let month of studentDetailsStep.months" [value]="month">
-                  {{ month }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-          <mat-form-field class="year">
-            <input formControlName="year" matInput maxlength="4" msOnlyNumber placeholder="Year"/>
-            <mat-error *ngIf="studentDetailsStep.formGroup.hasError('min', 'year')">
+        <!-- Start Date -->
+        <div class="row-container">Start Date:</div>
+        <div class="row-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Month</mat-label>
+            <mat-select formControlName="month">
+              <mat-option [value]="null">- None -</mat-option>
+              <mat-option *ngFor="let month of studentDetailsStep.months" [value]="month">
+                {{ month }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Year</mat-label>
+            <input formControlName="year" matInput maxlength="4" msOnlyNumber/>
+            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('min', 'year')">
               Invalid year
             </mat-error>
           </mat-form-field>
         </div>
 
         <!-- Media Release -->
-        <div class="dialog-container">
+        <div class="row-container">
           <mat-checkbox formControlName="mediaReleaseSigned" labelPosition="before">
-            Media release signed?
+            <span class="mat-body-1">Media release signed?</span>
           </mat-checkbox>
         </div>
 
         <!-- Interests -->
-        <div class="dialog-container">
-          <mat-form-field>
+        <div class="row-container">
+          <mat-form-field appearance="outline">
             <mat-label>Interests</mat-label>
             <mat-select formControlName="interests" multiple>
               <mat-option *ngFor="let interest of studentDetailsStep.interests" [value]="interest">
@@ -107,28 +120,30 @@
         </div>
 
         <!-- Preferred Meeting Time -->
-        <div class="dialog-container">
-          <mat-form-field>
-            <input formControlName="preferredTime" matInput placeholder="Preferred meeting time"/>
-            <mat-error *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'preferredTime')">
+        <div class="row-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Preferred meeting time</mat-label>
+            <input formControlName="preferredTime" matInput/>
+            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'preferredTime')">
               Preferred time can be a maximum of 30 characters in length
             </mat-error>
           </mat-form-field>
         </div>
 
         <!-- Actual Meeting Time -->
-        <div class="dialog-container">
-          <mat-form-field>
-            <input formControlName="actualTime" matInput placeholder="Actual meeting time"/>
-            <mat-error *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'actualTime')">
+        <div class="row-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Actual meeting time</mat-label>
+            <input formControlName="actualTime" matInput/>
+            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'actualTime')">
               Actual meeting time can be a maximum of 30 characters in length
             </mat-error>
           </mat-form-field>
         </div>
 
         <!-- Mentor -->
-        <div class="dialog-container">
-          <mat-form-field>
+        <div class="row-container">
+          <mat-form-field appearance="outline">
             <mat-label>Mentor</mat-label>
             <mat-select formControlName="mentor" [(value)]="mentorInstanceCache.item"
                         [compareWith]="studentDetailsStep.compareMentors">
@@ -145,7 +160,7 @@
         </div>
 
         <!-- Location -->
-        <div class="dialog-container">
+        <div class="row-container">
           <mat-radio-group formControlName="location">
             <mat-radio-button *ngFor="let location of (studentDetailsStep.locations | keyvalue)" [value]="location.key">
               {{ location.value }}
@@ -157,55 +172,62 @@
 
     <!-- Contacts Step -->
     <mat-step [stepControl]="contactsStep.formGroup" errorMessage="Incomplete" label="Contacts">
-      <div *ngIf="contactsStep.contactsIsEmpty" class="dialog-container contacts">
-        <button [matMenuTriggerFor]="addMenu" color="primary" mat-stroked-button>
-          Add contact
-        </button>
-      </div>
       <form [formGroup]="contactsStep.formGroup">
+        <p class="legend mat-body-1">* Denotes a required field</p>
+
         <div formArrayName="parents">
           <div *ngFor="let parent of contactsStep.formGroup.get('parents')['controls']; let i=index" scrollTo>
             <div [formGroupName]="i" class="contacts">
-              <h3>Parent / Guardian {{ i + 1 }}</h3>
+
+              <h3>Parent / Guardian {{ i + 1 }}
+                <button mat-button color="primary" (click)="contactsStep.removeParent(i)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </h3>
 
               <!-- Parent First and Last Names -->
-              <div class="dialog-container">
-                <mat-form-field>
-                  <input formControlName="firstName" matInput placeholder="First name" required/>
+              <div class="row-container">
+                <mat-form-field appearance="outline">
+                  <mat-label>First Name</mat-label>
+                  <input formControlName="firstName" matInput required/>
                   <mat-error *ngIf="contactsStep.formGroup.hasError('required', ['parents', i, 'firstName'])">
-                    You must enter a first name
+                    First name required
                   </mat-error>
                   <mat-error *ngIf="contactsStep.formGroup.hasError('maxlength', ['parents', i, 'firstName'])">
-                    A first name can be a maximum of 50 characters in length
+                    50 characters maximum
                   </mat-error>
                 </mat-form-field>
-                <mat-form-field>
-                  <input formControlName="lastName" matInput placeholder="Last name" required/>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Last Name</mat-label>
+                  <input formControlName="lastName" matInput required/>
                   <mat-error *ngIf="contactsStep.formGroup.hasError('required', ['parents', i, 'lastName'])">
-                    You must enter a last name
+                    Last name required
                   </mat-error>
                   <mat-error *ngIf="contactsStep.formGroup.hasError('maxlength', ['parents', i, 'lastName'])">
-                    A last name can be a maximum of 50 characters in length
+                    50 characters maximum
                   </mat-error>
                 </mat-form-field>
               </div>
 
               <!-- Parent Phone Number -->
-              <div class="dialog-container">
-                <mat-form-field>
-                  <input formControlName="phone" matInput msPhoneFormat placeholder="Phone Number"/>
+              <div class="row-container">
+                <mat-form-field appearance="outline">
+                  <mat-label>Phone Number</mat-label>
+                  <input formControlName="phone" matInput msPhoneFormat/>
                   <mat-error *ngIf="contactsStep.formGroup.hasError('phoneNumberFormat', ['parents', i, 'phone'])">
-                    Invalid phone number format
+                    Invalid phone number
                   </mat-error>
                 </mat-form-field>
               </div>
 
               <!-- Parent Email Address -->
-              <div class="dialog-container">
-                <mat-form-field>
-                  <input formControlName="email" matInput placeholder="Email Address"/>
+              <div class="row-container">
+                <mat-form-field appearance="outline">
+                  <mat-label>Email Address</mat-label>
+                  <input formControlName="email" matInput/>
                   <mat-error *ngIf="contactsStep.formGroup.hasError('email', ['parents', i, 'email'])">
-                    Invalid email address format
+                    Invalid email address
                   </mat-error>
                   <mat-error *ngIf="contactsStep.formGroup.hasError('maxlength', ['parents', i, 'email'])">
                     An email address name can be a maximum of 50 characters in length
@@ -213,18 +235,18 @@
                 </mat-form-field>
               </div>
 
-              <!-- Ensure One Parent Contact -->
-              <div class="dialog-error">
-                <mat-error
-                  *ngIf="contactsStep.formGroup.hasError('noContacts', ['parents', i])">
+              <!-- Ensure One Parent Contact Method -->
+              <div class="row-container">
+                <mat-error class="legend mat-body-1"
+                           *ngIf="contactsStep.formGroup.hasError('noContacts', ['parents', i])">
                   {{ contactsStep.formGroup.getError('noContacts', ['parents', i]).msg }}
                 </mat-error>
               </div>
 
               <!-- Parent Preferred Contact Method -->
-              <div class="dialog-container-column">
-                <label>Preferred contact method:</label>
+              <div class="row-container">
                 <mat-radio-group formControlName="preferredContactMethod">
+                  <mat-label>Preferred:</mat-label>
                   <mat-radio-button *ngFor="let contactMethod of contactsStep.contactMethods"
                                     [value]="contactMethod | uppercase">
                     {{ contactMethod }}
@@ -233,32 +255,29 @@
               </div>
 
               <!-- Parent Comments -->
-              <div class="dialog-container">
-                <mat-form-field>
+              <div class="row-container">
+                <mat-form-field appearance="outline">
                   <mat-label>Comments</mat-label>
                   <textarea formControlName="comment" matInput></textarea>
                 </mat-form-field>
               </div>
-
-              <button [disabled]="contactsStep.contactsIsFull" [matMenuTriggerFor]="addMenu" class="form"
-                      color="primary" mat-mini-fab
-                      matTooltip="Add contact">
-                <mat-icon>add</mat-icon>
-              </button>
-              <button (click)="contactsStep.removeParent(i)" class="form" color="primary" mat-mini-fab
-                      matTooltip="Remove contact">
-                <mat-icon>remove</mat-icon>
-              </button>
             </div>
           </div>
         </div>
-        <div *ngIf="contactsStep.hasEmergencyContact" class="contacts" formGroupName="emergencyContact" scrollTo>
-          <h3>Emergency Contact</h3>
+
+        <div *ngIf="contactsStep.hasEmergencyContact" formGroupName="emergencyContact" scrollTo>
+          <h3>
+            Emergency Contact
+            <button mat-button color="primary" (click)="contactsStep.removeEmergencyContact()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </h3>
 
           <!-- Emergency Contact First and Last Names -->
-          <div class="dialog-container">
-            <mat-form-field>
-              <input formControlName="firstName" matInput placeholder="First name" required/>
+          <div class="row-container">
+            <mat-form-field appearance="outline">
+              <mat-label>First name</mat-label>
+              <input formControlName="firstName" matInput required/>
               <mat-error *ngIf="contactsStep.formGroup.hasError('required', ['emergencyContact', 'firstName'])">
                 You must enter a first name
               </mat-error>
@@ -266,8 +285,10 @@
                 A first name can be a maximum of 50 characters in length
               </mat-error>
             </mat-form-field>
-            <mat-form-field>
-              <input formControlName="lastName" matInput placeholder="Last name" required/>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Last name</mat-label>
+              <input formControlName="lastName" matInput required/>
               <mat-error *ngIf="contactsStep.formGroup.hasError('required', ['emergencyContact', 'lastName'])">
                 You must enter a last name
               </mat-error>
@@ -278,9 +299,10 @@
           </div>
 
           <!-- Emergency Contact Relationship -->
-          <div class="dialog-container">
-            <mat-form-field>
-              <input formControlName="label" matInput placeholder="Relation"/>
+          <div class="row-container">
+            <mat-form-field appearance="outline">
+              <mat-label>Relation</mat-label>
+              <input formControlName="label" matInput/>
               <mat-error *ngIf="contactsStep.formGroup.hasError('maxlength', ['emergencyContact', 'label'])">
                 A relation can be a maximum of 50 characters in length
               </mat-error>
@@ -288,9 +310,10 @@
           </div>
 
           <!-- Emergency Contact Phone Number -->
-          <div class="dialog-container">
-            <mat-form-field>
-              <input formControlName="phone" matInput msPhoneFormat placeholder="Phone Number"/>
+          <div class="row-container">
+            <mat-form-field appearance="outline">
+              <mat-label>Phone Number</mat-label>
+              <input formControlName="phone" matInput msPhoneFormat/>
               <mat-error *ngIf="contactsStep.formGroup.hasError('phoneNumberFormat', ['emergencyContact', 'phone'])">
                 Invalid phone number format
               </mat-error>
@@ -298,9 +321,10 @@
           </div>
 
           <!-- Emergency Contact Email Address -->
-          <div class="dialog-container">
-            <mat-form-field>
-              <input formControlName="email" matInput placeholder="Email Address"/>
+          <div class="row-container">
+            <mat-form-field appearance="outline">
+              <mat-label>Email Address</mat-label>
+              <input formControlName="email" matInput/>
               <mat-error *ngIf="contactsStep.formGroup.hasError('email', ['emergencyContact', 'email'])">
                 Invalid email address format
               </mat-error>
@@ -311,17 +335,17 @@
           </div>
 
           <!-- Ensure One Emergency Contact Contact -->
-          <div class="dialog-error">
-            <mat-error
-              *ngIf="contactsStep.formGroup.hasError('noContacts', ['emergencyContact'])">
+          <div class="row-container">
+            <mat-error class="legend mat-body-1"
+                       *ngIf="contactsStep.formGroup.hasError('noContacts', ['emergencyContact'])">
               {{ contactsStep.formGroup.getError('noContacts', ['emergencyContact']).msg }}
             </mat-error>
           </div>
 
           <!-- Emergency Contact Contact Method -->
-          <div class="dialog-container-column">
-            <label>Preferred contact method:</label>
+          <div class="row-container">
             <mat-radio-group formControlName="preferredContactMethod">
+              <mat-label>Preferred:</mat-label>
               <mat-radio-button *ngFor="let contactMethod of contactsStep.contactMethods"
                                 [value]="contactMethod | uppercase">
                 {{ contactMethod }}
@@ -330,43 +354,35 @@
           </div>
 
           <!-- Emergency Contact Comments -->
-          <div class="dialog-container">
-            <mat-form-field>
+          <div class="row-container">
+            <mat-form-field appearance="outline">
               <mat-label>Comments</mat-label>
               <textarea formControlName="comment" matInput></textarea>
             </mat-form-field>
           </div>
-
-          <button [disabled]="contactsStep.contactsIsFull" [matMenuTriggerFor]="addMenu" class="form" color="primary"
-                  mat-mini-fab
-                  matTooltip="Add contact">
-            <mat-icon>add</mat-icon>
-          </button>
-          <button (click)="contactsStep.removeEmergencyContact()" class="form" color="primary" mat-mini-fab
-                  matTooltip="Remove contact">
-            <mat-icon>remove</mat-icon>
-          </button>
         </div>
       </form>
 
-      <mat-menu #addMenu="matMenu">
-        <button (click)="contactsStep.addParent()" [disabled]="contactsStep.parentsIsFull" mat-menu-item>
-          Parent / Guardian
+      <div class="contact-action-container">
+        <button mat-button color="primary" (click)="contactsStep.addParent()"
+                [disabled]="contactsStep.parentsIsFull">
+          <mat-icon>add</mat-icon>
+          Add Parent/Guardian
         </button>
-        <button (click)="contactsStep.addEmergencyContact()" [disabled]="contactsStep.hasEmergencyContact"
-                mat-menu-item>
-          Emergency Contact
+        <button mat-button color="primary" (click)="contactsStep.addEmergencyContact()"
+                [disabled]="contactsStep.hasEmergencyContact">
+          <mat-icon>add</mat-icon>
+          <span>Add Emergency Contact</span>
         </button>
-      </mat-menu>
-
+      </div>
     </mat-step>
 
-    <!-- Teacher Input Step -->
     <mat-step [stepControl]="teacherInputStep.formGroup" errorMessage="Incomplete" label="Teacher Input">
       <form [formGroup]="teacherInputStep.formGroup">
-        <!-- Teacher -->
-        <div class="dialog-container">
-          <mat-form-field>
+        <p class="legend mat-body-1">* Denotes a required field</p>
+
+        <div class="row-container">
+          <mat-form-field appearance="outline">
 
             <mat-label *ngIf="studentDetailsStep.formGroup.get('grade').value">Teacher</mat-label>
             <mat-label *ngIf="!studentDetailsStep.formGroup.get('grade').value">Teacher * (select grade first)
@@ -386,20 +402,19 @@
               </mat-option>
             </mat-select>
 
-            <mat-error
-              *ngIf="!(teacherCollectionCache.items | teacherGradeFilter: studentDetailsStep.formGroup.get('grade').value)?.length">
+            <mat-error class="mat-body-1"
+                       *ngIf="!(teacherCollectionCache.items | teacherGradeFilter: studentDetailsStep.formGroup.get('grade').value)?.length">
               No teachers in selected grade
             </mat-error>
 
-            <mat-error *ngIf="teacherInputStep.formGroup.hasError('required', ['teacher', 'uri'])">
+            <mat-error class="mat-body-1" *ngIf="teacherInputStep.formGroup.hasError('required', ['teacher', 'uri'])">
               You must select a teacher
             </mat-error>
           </mat-form-field>
         </div>
 
-        <!-- Teacher Comment -->
-        <div class="dialog-container">
-          <mat-form-field>
+        <div class="row-container">
+          <mat-form-field appearance="outline">
             <mat-label>Comments</mat-label>
             <textarea formControlName="comment" matInput></textarea>
             <mat-error *ngIf="teacherInputStep.formGroup.hasError('maxlength', ['teacher', 'comment'])">
@@ -408,12 +423,14 @@
           </mat-form-field>
         </div>
       </form>
+
       <form [formGroup]="studentDetailsStep.formGroup">
 
         <!-- Behavioral assessment -->
-        <div class="dialog-container">
-          <mat-form-field>
-            <mat-label>Pre-behavioral assessment</mat-label>
+        <div class="row-container row-label">Behavioral Assessment (1-45)</div>
+        <div class="row-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Before</mat-label>
             <input formControlName="preBehavioralAssessment" matInput max="45" min="0" type="number">
             <mat-error *ngIf="studentDetailsStep.formGroup.hasError('min', 'preBehavioralAssessment')">
               Value must be greater than zero
@@ -422,8 +439,9 @@
               Value must be less than 45
             </mat-error>
           </mat-form-field>
-          <mat-form-field>
-            <mat-label>Post-behavioral assessment</mat-label>
+
+          <mat-form-field appearance="outline">
+            <mat-label>After</mat-label>
             <input formControlName="postBehavioralAssessment" matInput max="45" min="0" type="number">
             <mat-error *ngIf="studentDetailsStep.formGroup.hasError('min', 'postBehavioralAssessment')">
               Value must be greater than zero
@@ -435,9 +453,9 @@
         </div>
 
         <!-- Leadership Skills -->
-        <div class="dialog-container">
-          <mat-form-field>
-            <mat-label>Leadership success skills</mat-label>
+        <div class="row-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Leadership Success Skills</mat-label>
             <mat-select formControlName="leadershipSkills" multiple>
               <mat-option *ngFor="let leadershipSkill of studentDetailsStep.leadershipSkills" [value]="leadershipSkill">
                 {{ leadershipSkill }}
@@ -447,9 +465,9 @@
         </div>
 
         <!-- Leadership Traits -->
-        <div class="dialog-container">
-          <mat-form-field>
-            <mat-label>Leadership traits</mat-label>
+        <div class="row-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Leadership Traits</mat-label>
             <mat-select formControlName="leadershipTraits" multiple>
               <mat-option *ngFor="let leadershipTrait of studentDetailsStep.leadershipTraits" [value]="leadershipTrait">
                 {{ leadershipTrait }}
@@ -458,9 +476,8 @@
           </mat-form-field>
         </div>
 
-        <!-- Behaviors -->
-        <div class="dialog-container">
-          <mat-form-field>
+        <div class="row-container">
+          <mat-form-field appearance="outline">
             <mat-label>Behaviors</mat-label>
             <mat-select formControlName="behaviors" multiple>
               <mat-option *ngFor="let behavior of studentDetailsStep.behaviors" [value]="behavior">
@@ -473,26 +490,18 @@
     </mat-step>
   </mat-horizontal-stepper>
 </mat-dialog-content>
-
-<mat-dialog-actions>
-  <div>
-    <button (click)="save()" [disabled]="!allModelsAreValid()" color="primary" mat-button>
-      <mat-icon>save</mat-icon>
-      Save
-    </button>
-    <button (click)="dismiss()" color="primary" mat-button>
-      <mat-icon>cancel</mat-icon>
-      Cancel
-    </button>
-  </div>
-  <div>
-    <button (click)="stepper.previous()" [disabled]="stepper.selectedIndex === 0" color="primary" mat-button>
-      <mat-icon>arrow_back_ios</mat-icon>
-      Back
-    </button>
-    <button (click)="stepper.next()" [disabled]="stepper.selectedIndex === 2" color="primary" mat-button>
-      Next
-      <mat-icon>arrow_forward_ios</mat-icon>
-    </button>
-  </div>
+<mat-dialog-actions class="action-container">
+  <button class="mat-display-1" *ngIf="stepper.selectedIndex !== 0" (click)="stepper.previous()" color="primary"
+          mat-button>
+    <mat-icon>arrow_back_ios</mat-icon>
+    Back
+  </button>
+  <button class="mat-display-1" *ngIf="stepper.selectedIndex !== 2" (click)="stepper.next()" color="primary" mat-button>
+    Next
+    <mat-icon>arrow_forward_ios</mat-icon>
+  </button>
+  <button class="mat-display-1 action-done" *ngIf="stepper.selectedIndex === 2" (click)="save()" color="primary"
+          mat-button>
+    Done
+  </button>
 </mat-dialog-actions>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {UserSessionService} from '../../../../../implementation/services/user-session.service';
+import {UserLoginService} from '../../../../../implementation/security/user-login.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {School} from '../../../../../models/school/school';
 import {Student} from '../../../../../models/student/student';
@@ -35,7 +35,7 @@ export class StudentLpgComponent {
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
     @Inject(STUDENT_INSTANCE_CACHE) private studentInstanceCache: SingleItemCache<Student>,
     public lpgService: LpgRepositoryService,
-    public userService: UserSessionService,
+    public userLoginService: UserLoginService,
   ) { }
 
   generateCurrentMonth(): void {

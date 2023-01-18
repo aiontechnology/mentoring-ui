@@ -1,0 +1,67 @@
+<!--
+  ~ Copyright 2022-2023 Aion Technology LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<mat-toolbar *ngIf="userLoginService.isAuthenticated">
+  <a class="home-link" [routerLink]="['home']">
+    <img src="assets/ms-logo-white.png">
+  </a>
+
+  <div class="divider"></div>
+
+  <mat-nav-list *ngIf="userLoginService.isAuthenticated">
+    <a mat-list-item *ngIf="userLoginService.isSystemAdmin" [routerLink]="['adminmanager']" routerLinkActive="active-menu-item"
+       (click)="navService.clear()">
+      <span class="mat-h2">ADMIN</span>
+    </a>
+    <a mat-list-item *ngIf="userLoginService.isSystemAdmin" [routerLink]="['schoolsmanager']"
+       routerLinkActive="active-menu-item" (click)="navService.clear()">
+      <span class="mat-h2">SCHOOLS</span>
+    </a>
+    <a mat-list-item *ngIf="userLoginService.isProgramAdmin" [routerLink]="['schoolsmanager/schools', userLoginService.schoolUUID]"
+       routerLinkActive="active-menu-item" (click)="navService.clear()">
+      <span class="mat-h2">SCHOOL</span>
+    </a>
+    <a mat-list-item [routerLink]="['resourcemanager']" routerLinkActive="active-menu-item"
+       [disabled]="!userLoginService.isAuthenticated" (click)="navService.clear()">
+      <span class="mat-h2">RESOURCES</span>
+    </a>
+    <a mat-list-item
+       [routerLink]="['studentmanager', 'schools', schoolInstanceCache.item?.id]" routerLinkActive="active-menu-item"
+       [disabled]="!userLoginService.isAuthenticated || schoolInstanceCache.isEmpty" (click)="navService.clear()">
+      <span class="mat-h2">STUDENTS</span>
+    </a>
+    <a mat-list-item
+       [routerLink]="['mentormanager', 'schools', schoolInstanceCache.item?.id]" routerLinkActive="active-menu-item"
+       [disabled]="!userLoginService.isAuthenticated || schoolInstanceCache.isEmpty" (click)="navService.clear()">
+      <span class="mat-h2">MENTORS</span>
+    </a>
+  </mat-nav-list>
+
+  <div class="school-selector">
+    <ms-school-selector></ms-school-selector>
+  </div>
+
+  <div class="user-state">
+    <a mat-button [routerLink]="['/login']" *ngIf="!userLoginService.isAuthenticated">
+      <span class="mat-display-4">LOG IN</span>
+      <mat-icon>account_circle</mat-icon>
+    </a>
+    <a mat-button [routerLink]="['/logout']" *ngIf="userLoginService.isAuthenticated">
+      <span class="mat-display-4">LOG OUT</span>
+      <mat-icon>account_circle</mat-icon>
+    </a>
+  </div>
+</mat-toolbar>

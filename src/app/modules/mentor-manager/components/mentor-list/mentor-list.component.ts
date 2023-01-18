@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,19 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
-import {Mentor} from '../../../../models/mentor/mentor';
-import {School} from '../../../../models/school/school';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {Mentor} from '../../../../models/mentor/mentor';
+import {School} from '../../../../models/school/school';
 import {MENTOR_INSTANCE_CACHE} from '../../../../providers/global/global-mentor-providers-factory';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
-import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MENTOR_GROUP} from '../../mentor-manager.module';
 import {
   ADD_MENU_TITLE,
@@ -66,16 +65,14 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
     // other
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
     @Inject(MENTOR_LIST_EDIT_DIALOG_MANAGER) private mentorEditDialogManager: DialogManager<MentorDialogComponent>,
-    @Inject(MENTOR_LIST_DELETE_DIALOG_MANAGER) private mentorDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
+    @Inject(MENTOR_LIST_DELETE_DIALOG_MANAGER) private mentorDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
   ) {
     super(menuState, navService, tableCache, mentorInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
 
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
-
-  protected get menus(): MenuDialogCommand<any>[] {
+  protected override get menus(): MenuDialogCommand<any>[] {
     return [
       MenuDialogCommand<MentorDialogComponent>.builder(ADD_MENU_TITLE, MENTOR_GROUP, this.mentorEditDialogManager)
         .withDataSupplier(() => ({
@@ -91,11 +88,11 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
         .withSnackbarMessage(EDIT_SNACKBAR_MESSAGE)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1),
-      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_MENU_TITLE, MENTOR_GROUP, this.mentorDeleteDialogManager)
+      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_MENU_TITLE, MENTOR_GROUP, this.mentorDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR,
           pluralName: PLURAL,
-          countSupplier: () => this.tableCache.selectionCount
+          nameSupplier: () => this.tableCache.selection.selected.map(selection => selection.fullName),
         }))
         .withSnackbarMessage(REMOVE_SNACKBAR_MESSAGE)
         .build()

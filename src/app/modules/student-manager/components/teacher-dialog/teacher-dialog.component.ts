@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,12 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {grades} from '../../../../implementation/constants/grades';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
-import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
-import {Mentor} from '../../../../models/mentor/mentor';
-import {Teacher} from '../../../../models/teacher/teacher';
+import {emailAddressValidator} from '../../../../implementation/forms/email-address-validator';
+import {phoneValidator} from '../../../../implementation/forms/phone-validator';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {Grade} from '../../../../implementation/types/grade';
+import {Teacher} from '../../../../models/teacher/teacher';
 import {
   TEACHER_COLLECTION_CACHE,
   TEACHER_DATA_SOURCE,

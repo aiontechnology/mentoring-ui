@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ import {InjectionToken} from '@angular/core';
 import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {Cache} from '../../../implementation/data/cache';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {ProgramAdmin} from '../../../models/program-admin/program-admin';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
+import {ProgramAdmin} from '../../../models/program-admin/program-admin';
 import {
   PROGRAM_ADMIN_CACHE,
   PROGRAM_ADMIN_INSTANCE_CACHE,
@@ -28,13 +28,13 @@ import {
   PROGRAM_ADMIN_SCHOOL_CHANGE_RESETTER,
   PROGRAM_ADMIN_URI_SUPPLIER
 } from '../../../providers/global/global-program-admin-providers-factory';
-import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ProgramAdminDialogComponent} from '../components/school-detail-tabs/program-admin-dialog/program-admin-dialog.component';
 import {detailDialogManagerProviders} from './program-admin-dialog/detail-dialog-manager-providers';
 
 export const PROGRAM_ADMIN_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<ProgramAdmin>>('program-admin-school-change-handler')
 export const PROGRAM_ADMIN_DETAIL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<ProgramAdminDialogComponent>>('program-admin-detail-edit-dialog-manager')
-export const PROGRAM_ADMIN_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('program-admin-detail-delete-dialog-manager')
+export const PROGRAM_ADMIN_DETAIL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfirmationDialogComponent>>('program-admin-detail-delete-dialog-manager')
 
 export function programAdminProvidersFactory() {
   return [

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,11 @@ import {DialogManager} from '../../../implementation/command/dialog-manager';
 import {Cache} from '../../../implementation/data/cache';
 import {DataSource} from '../../../implementation/data/data-source';
 import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Personnel} from '../../../models/personnel/personnel';
-import {School} from '../../../models/school/school';
 import {SchoolChangeDataSourceResetter} from '../../../implementation/state-management/school-change-data-source-resetter';
 import {SingleItemCacheSchoolChangeHandler} from '../../../implementation/state-management/single-item-cache-school-change-handler';
 import {TableCache} from '../../../implementation/table-cache/table-cache';
+import {Personnel} from '../../../models/personnel/personnel';
+import {School} from '../../../models/school/school';
 import {listDialogManagerProviders} from '../../../providers/dialog/list-dialog-manager-providers';
 import {
   PERSONNEL_CACHE,
@@ -31,13 +31,13 @@ import {
   PERSONNEL_SCHOOL_CHANGE_RESETTER,
   PERSONNEL_URI_SUPPLIER
 } from '../../../providers/global/global-personnel-providers-factory';
-import {ConfimationDialogComponent} from '../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {PersonnelDialogComponent} from '../components/school-detail-tabs/personnel-dialog/personnel-dialog.component';
 
 export const PERSONNEL_TABLE_CACHE = new InjectionToken<TableCache<School>>('personnel-table-cache')
 export const PERSONNEL_SCHOOL_CHANGE_HANDLER = new InjectionToken<SingleItemCacheSchoolChangeHandler<Personnel>>('personnel-school-change-handler')
 export const PERSONNEL_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<PersonnelDialogComponent>>('personnel-edit-dialog-manager')
-export const PERSONNEL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfimationDialogComponent>>('personnel-delete-dialog-manager')
+export const PERSONNEL_DELETE_DIALOG_MANAGER = new InjectionToken<DialogManager<ConfirmationDialogComponent>>('personnel-delete-dialog-manager')
 
 export function personnelProvidersFactory() {
   return [

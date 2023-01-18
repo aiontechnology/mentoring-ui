@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +21,17 @@ import {DialogManager} from '../../../../../implementation/command/dialog-manage
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {ProgramAdmin} from '../../../../../models/program-admin/program-admin';
 import {School} from '../../../../../models/school/school';
 import {SchoolSession} from '../../../../../models/school/schoolsession';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {
   PROGRAM_ADMIN_DATA_SOURCE,
   PROGRAM_ADMIN_INSTANCE_CACHE
 } from '../../../../../providers/global/global-program-admin-providers-factory';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global/global-school-session-providers-factory';
-import {ConfimationDialogComponent} from '../../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {
   ADD_PROGRAM_ADMIN_MENU_TITLE,
   ADD_PROGRAM_ADMIN_PANEL_TITLE,
@@ -65,7 +65,7 @@ export class ProgramAdminDetailComponent extends SchoolWatchingDetailComponent i
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     // other
     @Inject(PROGRAM_ADMIN_DETAIL_EDIT_DIALOG_MANAGER) private programAdminEditDialogManager: DialogManager<ProgramAdminDialogComponent>,
-    @Inject(PROGRAM_ADMIN_DETAIL_DELETE_DIALOG_MANAGER) private programAdminDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
+    @Inject(PROGRAM_ADMIN_DETAIL_DELETE_DIALOG_MANAGER) private programAdminDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
     @Inject(PROGRAM_ADMIN_INSTANCE_CACHE) public programAdminInstanceCache: SingleItemCache<ProgramAdmin>,
   ) {
@@ -89,13 +89,13 @@ export class ProgramAdminDetailComponent extends SchoolWatchingDetailComponent i
         }))
         .build()
         .enableIf(() => this.programAdminInstanceCache.item !== undefined),
-      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminDeleteDialogManager)
+      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminDeleteDialogManager)
         .withSnackbarMessage(REMOVE_PROGRAM_ADMIN_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.programAdminInstanceCache.item,
           singularName: SINGULAR_PROGRAM_ADMIN,
           pluralName: PLURAL_PROGRAM_ADMIN,
-          countSupplier: () => 1
+          nameSupplier: () => [this.programAdminInstanceCache.item.fullName],
         }))
         .build()
         .enableIf(() => this.programAdminInstanceCache.item !== undefined)    ]

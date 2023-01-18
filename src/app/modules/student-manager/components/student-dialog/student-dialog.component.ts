@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,14 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogCommand} from '../../../../implementation/command/dialog-command';
 import {DialogCommandFactory, DialogManagerConfiguration} from '../../../../implementation/command/dialog-command-factory';
 import {DataSource} from '../../../../implementation/data/data-source';
+import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {Interest} from '../../../../models/interest';
 import {Mentor} from '../../../../models/mentor/mentor';
 import {StudentOutbound} from '../../../../models/student-outbound/student-outbound';
 import {Student} from '../../../../models/student/student';
 import {Teacher} from '../../../../models/teacher/teacher';
-import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {INTEREST_DATA_SOURCE} from '../../../../providers/global/global-interest-providers-factory';
 import {MENTOR_COLLECTION_CACHE, MENTOR_INSTANCE_CACHE} from '../../../../providers/global/global-mentor-providers-factory';
 import {STUDENT_DATA_SOURCE} from '../../../../providers/global/global-student-providers-factory';
 import {TEACHER_COLLECTION_CACHE, TEACHER_INSTANCE_CACHE} from '../../../../providers/global/global-teacher-providers-factory';
@@ -56,6 +58,7 @@ export class StudentDialogComponent implements OnInit {
     private formBuilder: FormBuilder,
     private metaDataService: MetaDataService,
     private dialogRef: MatDialogRef<StudentDialogComponent>,
+    @Inject(INTEREST_DATA_SOURCE) private interestDataSource: DataSource<Interest>,
     @Inject(MENTOR_COLLECTION_CACHE) public mentorCollectionCache: MultiItemCache<Mentor>,
     @Inject(MENTOR_INSTANCE_CACHE) public mentorInstanceCache: SingleItemCache<Mentor>,
     @Inject(TEACHER_INSTANCE_CACHE) public teacherInstanceCache: SingleItemCache<Teacher>,
@@ -90,7 +93,7 @@ export class StudentDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.contactsStep = new ContactsStep(this.data?.model, this.formBuilder).init()
-    this.studentDetailsStep = new StudentDetailStep(this.data?.model, this.formBuilder, this.metaDataService).init()
+    this.studentDetailsStep = new StudentDetailStep(this.data?.model, this.formBuilder, this.interestDataSource, this.metaDataService).init()
     this.teacherInputStep =
       new TeacherInputStep(this.data?.model, this.formBuilder, this.teacherInstanceCache, this.teacherCollectionCache).init()
   }

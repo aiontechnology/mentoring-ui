@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2021-2022 Aion Technology LLC
+  ~ Copyright 2021-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,62 +14,43 @@
   ~ limitations under the License.
   -->
 
-<div class="spinner-container" *ngIf="interestCacheService.isLoading | async">
-  <mat-progress-spinner color="primary" mode="indeterminate" [diameter]="100" [strokeWidth]="10"></mat-progress-spinner>
-</div>
+<ms-tabbed-container tabLabel="ADMIN MANAGER">
 
-<div class="bg">
-  <div class="list-container mat-elevation-z2">
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Interests</span>
+      </ng-template>
 
-    <div class="header">
-      <mat-form-field>
-        <input matInput
-               [(ngModel)]="interestCacheService.filterBinding"
-               (keyup)="interestCacheService.applyFilter($event.target.value)"
-               placeholder="Filter"/>
-        <button mat-button *ngIf="interestCacheService.filter" matSuffix mat-icon-button (click)="interestCacheService.clearFilter()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
+      <ms-list-data-container [tableCache]="tableCache" [staticPageSize]="30">
+        <div class="column-container list-header">
+          <div class="col-header">Interests</div>
+          <div class="col-header"></div>
+          <div class="col-header"></div>
+        </div>
+        <div class="column-container list-columns">
+          <table mat-table class="list" [dataSource]="tableCache.tableDataSource" matSort>
+            <ng-container matColumnDef="select">
+              <mat-cell *matCellDef="let row">
+                <mat-checkbox
+                  (click)="$event.stopPropagation()"
+                  (change)="$event ? tableCache.selection.toggle(row) : null"
+                  [checked]="tableCache.selection.isSelected(row)">
+                </mat-checkbox>
+              </mat-cell>
+            </ng-container>
 
-    <table mat-table class="list" [dataSource]="interestCacheService.tableDataSource" matSort>
+            <ng-container matColumnDef="name">
+              <td mat-cell *matCellDef="let interest">{{ interest.name }}</td>
+            </ng-container>
 
-      <ng-container matColumnDef="select">
-        <th mat-header-cell *matHeaderCellDef>
-          <mat-checkbox
-            (change)="$event ? interestCacheService.masterToggle() : null"
-            [checked]="interestCacheService.selection.hasValue() && interestCacheService.isAllSelected()"
-            [indeterminate]="interestCacheService.selection.hasValue() && !interestCacheService.isAllSelected()">
-          </mat-checkbox>
-        </th>
-        <td mat-cell *matCellDef="let row">
-          <mat-checkbox
-            (click)="$event.stopPropagation()"
-            (change)="$event ? interestCacheService.selection.toggle(row) : null"
-            [checked]="interestCacheService.selection.isSelected(row)">
-          </mat-checkbox>
-        </td>
-      </ng-container>
+            <mat-row
+              *matRowDef="let row; columns: columns"
+              (click)="tableCache.selection.toggle(row)"></mat-row>
+          </table>
+        </div>
+      </ms-list-data-container>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Interest</th>
-        <td mat-cell *matCellDef="let interest">{{ interest.name }}</td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumns"
-        (click)="interestCacheService.selection.toggle(row)"></tr>
-
-    </table>
-
-    <table class="footer mat-elevation-z1">
-      <tr>
-        <td><ms-selection-count-display [selectionCount]="interestCacheService.selectionCount"></ms-selection-count-display></td>
-        <td><mat-paginator #paginator [pageSize]="interestCacheService.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator></td>
-      </tr>
-    </table>
-  </div>
-</div>
+    </mat-tab>
+  </mat-tab-group>
+</ms-tabbed-container>

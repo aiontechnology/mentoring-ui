@@ -28,7 +28,7 @@ export function standAloneDialogManagerEditProviders<COMPONENT_TYPE>(
   return [
     {
       provide: name,
-      useFactory: (dialog: MatDialog, afterCloseFunction: (s: string) => (a: any) => void) =>
+      useFactory: (dialog: MatDialog, afterCloseFunction: ClosedResultType) =>
         DialogManager<COMPONENT_TYPE>.builder(dialog, componentType)
           .withAfterCloseFunction(afterCloseFunction)
           .build(),

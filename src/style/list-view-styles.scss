@@ -1,0 +1,53 @@
+/*!
+ * Copyright 2022 Aion Technology LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import 'src/style/_variables';
+
+.list-data-container {
+  width: 100%;
+  background-color: transparent !important;
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 10px;
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  margin-top: 24px;
+  position: relative;
+
+  th {
+    color: white;
+    background-color: $primary;
+  }
+
+  th.mat-header-cell:first-of-type {
+    padding-left: 24px;
+    border-top-left-radius: 10px;
+  }
+
+  th.mat-header-cell:last-of-type {
+    padding-right: 24px;
+    border-top-right-radius: 10px;
+  }
+
+  mat-checkbox {
+    background-color: white;
+  }
+
+  tr:last-child td {
+    border-bottom: 0;
+  }
+}

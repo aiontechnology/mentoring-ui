@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,9 +38,9 @@ export abstract class AbstractTableCache<T> extends SelectionManager<T> implemen
     private label: string,
   ) {
     super();
-    this.pageSize = 10;
     this.currentPage = 0;
   }
+
 
   /**
    * Get the value of the data source filter.
@@ -53,7 +53,8 @@ export abstract class AbstractTableCache<T> extends SelectionManager<T> implemen
    * Set the paginator for the current DataSource
    */
   set paginator(paginator: MatPaginator) {
-    this.tableDataSource.paginator = paginator;
+    this.tableDataSource.paginator = paginator
+    this.pageSize = paginator.pageSize
     this.tableDataSource.paginator.page.subscribe((pageEvent: PageEvent) => {
       this.currentPage = pageEvent.pageIndex;
       this.pageSize = pageEvent.pageSize;

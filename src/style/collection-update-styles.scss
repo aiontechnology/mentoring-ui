@@ -1,0 +1,133 @@
+/*!
+ * Copyright 2023 Aion Technology LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import 'src/style/_variables';
+
+.filter-group-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group-content {
+  display: flex;
+
+  .spacer {
+    width: 20px;
+  }
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  .title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+    margin: 5px 0;
+  }
+
+  .mat-form-field {
+    width: 100%;
+  }
+
+  mat-label, input, mat-select {
+    font-family: 'Roboto', sans-serif;
+    font-size: 24px;
+  }
+
+  .mat-icon {
+    vertical-align: middle;
+  }
+}
+
+.droplist-group {
+  display: flex;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 10px;
+
+  .droplist-container {
+    width: 100%;
+    display: inline-block;
+    vertical-align: top;
+
+    .droplist-column {
+      height: 270px;
+      background: white;
+      //border-radius: 10px;
+      border: #979797 1px solid;
+      overflow: auto;
+      display: block;
+
+      .droplist-box {
+        padding: 13px 15px;
+        border-bottom: solid 1px #ccc;
+        color: rgba(0, 0, 0, 0.87);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        box-sizing: border-box;
+        cursor: move;
+        background: white;
+
+        span.tag {
+          font-family: 'Roboto', sans-serif;
+          font-weight: 400;
+          font-size: 14px;
+          color: white;
+          background-color: #3BAFBF;
+          padding: 8px;
+          border-radius: 10px;
+        }
+      }
+    }
+  }
+
+  .droplist-container:first-child {
+    margin-right: 20px;
+  }
+
+  button.transfer {
+    width: 100%;
+    margin-top: 15px;
+    padding: 20px 0;
+    border-radius: 20px;
+    color: white;
+    background-color: #3BAFBF;
+  }
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.droplist-column.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

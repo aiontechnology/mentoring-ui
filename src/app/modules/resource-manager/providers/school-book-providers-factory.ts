@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-import {InjectionToken} from '@angular/core';
-import {Command} from '../../../implementation/command/command';
-import {DialogManager} from '../../../implementation/command/dialog-manager';
-import {DataSource} from '../../../implementation/data/data-source';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {Book} from '../../../models/book/book';
-import {TableCache} from '../../../implementation/table-cache/table-cache';
-import {updateDialogManagerProviders} from '../../../providers/dialog/update-dialog-manager-providers';
-import {SCHOOL_BOOK_DATA_SOURCE} from '../../../providers/global/global-school-book-providers-factory';
-import {BookDialogComponent} from '../components/book-dialog/book-dialog.component';
-import {SchoolBookDialogComponent} from '../components/school-book-dialog/school-book-dialog.component';
+import {InjectionToken} from '@angular/core'
+import {DialogManager} from '../../../implementation/command/dialog-manager'
+import {DataSource} from '../../../implementation/data/data-source'
+import {UriSupplier} from '../../../implementation/data/uri-supplier'
+import {TableCache} from '../../../implementation/table-cache/table-cache'
+import {Book} from '../../../models/book/book'
+import {updateDialogManagerProviders} from '../../../providers/dialog/update-dialog-manager-providers'
+import {SCHOOL_BOOK_DATA_SOURCE} from '../../../providers/global/global-school-book-providers-factory'
+import {BookDialogComponent} from '../components/book-dialog/book-dialog.component'
+import {SchoolBookDialogComponent} from '../components/school-book-dialog/school-book-dialog.component'
 
-export const SCHOOL_BOOK_TABLE_CACHE = new InjectionToken<UriSupplier>('school-book-table-cache');
-export const SCHOOL_BOOK_LIST_MENU = new InjectionToken<Command[]>('school-book-list-menu')
+export const SCHOOL_BOOK_TABLE_CACHE = new InjectionToken<UriSupplier>('school-book-table-cache')
 export const BOOK_UPDATE_DIALOG_MANAGER = new InjectionToken<DialogManager<BookDialogComponent>>('book-update-dialog-manager')
 
 export function schoolBookProvidersFactory() {

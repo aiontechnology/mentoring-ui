@@ -1,11 +1,11 @@
-/**
- * Copyright 2020 - 2021 Aion Technology LLC
+/*
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,17 +15,16 @@
  */
 
 import 'zone.js/plugins/zone-error';
-import { EnvironmentOptions } from './environment-options';
+import {EnvironmentOptions} from './environment-options';
 
 const windowEnv = window as EnvironmentOptions;
 
 export const environment = {
   production: windowEnv?.env?.production,
+  region: windowEnv?.env?.region,
   apiUri: windowEnv?.env?.apiUri,
   lpgUri: windowEnv?.env?.lpgUri,
   baseUri: windowEnv?.env?.baseUri,
-  tokenRedirect: windowEnv?.env?.tokenRedirect,
-  logoutRedirect: windowEnv?.env?.logoutRedirect,
-  cognitoBaseUrl: windowEnv?.env?.cognitoBaseUrl,
+  cognitoPoolId: windowEnv?.env?.cognitoPoolId,
   cognitoClientId: windowEnv?.env?.cognitoClientId
 };

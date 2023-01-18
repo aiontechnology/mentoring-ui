@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
+import {UserLoginService} from '../../../../implementation/security/user-login.service';
 import {MenuStateService} from '../../../../implementation/services/menu-state.service';
-import {UserSessionService} from '../../../../implementation/services/user-session.service';
 import {BOOK_GROUP, GAME_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP} from '../../resource-manager.module';
 
-export const setState = (index: number, menuState: MenuStateService, userSession: UserSessionService): void => {
+export const setState = (index: number, menuState: MenuStateService, userLoginService: UserLoginService): void => {
   menuState.makeAllInvisible();
-  if (userSession.isProgAdmin) {
+  if (userLoginService.isProgramAdmin) {
     switch (index) {
       case 0:
         menuState.makeGroupVisible(SCHOOL_BOOK_GROUP)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {emailAddressValidator} from '../../../../../implementation/form-validation/email-address-validator';
-import {phoneValidator} from '../../../../../implementation/form-validation/phone-validator';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
+import {emailAddressValidator} from '../../../../../implementation/forms/email-address-validator';
+import {phoneValidator} from '../../../../../implementation/forms/phone-validator';
+import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {Personnel} from '../../../../../models/personnel/personnel';
 import {School} from '../../../../../models/school/school';
 import {PERSONNEL_DATA_SOURCE, PERSONNEL_URI_SUPPLIER} from '../../../../../providers/global/global-personnel-providers-factory';
