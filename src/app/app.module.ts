@@ -61,6 +61,7 @@ import {globalSchoolSessionProvidersFactory} from './providers/global/global-sch
 import {globalSnackbarProviders} from './providers/global/global-snackbar-providers';
 import {globalStudentProvidersFactory} from './providers/global/global-student-providers-factory';
 import {globalTeacherProvidersFactory} from './providers/global/global-teacher-providers-factory';
+import { SessionContainerComponent } from './components/user-session/session-container/session-container.component';
 
 @NgModule({
   declarations: [
@@ -80,6 +81,7 @@ import {globalTeacherProvidersFactory} from './providers/global/global-teacher-p
     NoopComponent,
     QuotesComponent,
     SchoolSelectorComponent,
+    SessionContainerComponent,
   ],
   imports: [
     AppRoutingModule,

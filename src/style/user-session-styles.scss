@@ -14,8 +14,36 @@
  * limitations under the License.
  */
 
+@import 'src/style/_variables';
+
 .row-container {
-  .submit {
-    margin: 0;
+  mat-checkbox {
+    text-align: right;
   }
+
+  a {
+    text-decoration: none;
+    color: #007FFF;
+  }
+
+  .submit {
+    height: 70px;
+    color: white;
+    background-color: #FFBD59;
+    border-width: 0;
+    border-radius: 16px;
+    margin: 30px 0;
+  }
+}
+
+.input-field {
+  input {
+    color: #979797;
+  }
+}
+
+.error {
+  color: $warn;
+  text-align: center;
+  margin-top: 20px;
 }

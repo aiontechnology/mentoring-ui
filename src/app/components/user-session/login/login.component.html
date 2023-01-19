@@ -14,39 +14,34 @@
   ~ limitations under the License.
   -->
 
-<img class="background" src="assets/man-boy-background.png"/>
-<div class="container">
-  <img src="assets/ms-white.png">
-  <div class="login-dialog">
-    <div class="mat-display-4">Sign in with your email and password</div>
-    <form class="form-signin" method="POST">
-      <div class="row-container">
-        <mat-form-field appearance="outline" class="input-field">
-          <mat-label>Email</mat-label>
-          <input matInput required type="email" maxlength="100" [(ngModel)]="email"
-                 [ngModelOptions]="{standalone: true}">
-        </mat-form-field>
-      </div>
-      <div class="row-container">
-        <mat-form-field appearance="outline" class="input-field">
-          <mat-label>Password</mat-label>
-          <input matInput required type="password" maxlength="25" [(ngModel)]="password"
-                 [ngModelOptions]="{standalone: true}">
-        </mat-form-field>
-      </div>
-      <div class="row-container options">
-        <a [routerLink]="['/reset-password']" class="mat-body-1">Forgot Password?</a>
-        <div></div>
-<!--        <mat-checkbox [ngModel]="remember" [ngModelOptions]="{standalone: true}">Remember me</mat-checkbox>-->
-      </div>
-      <div *ngIf="errorMessage != null" class="row-container">
-        <span class="error mat-body-2">{{errorMessage}}</span>
-      </div>
-      <div class="row-container">
-        <button class="submit mat-body-1" (click)="onLogin()" type="submit">
-          Log In
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
+<ms-session-container title="Sign in with your email and password" width="650px" height="373px">
+  <form class="form-signin" method="POST">
+    <div class="row-container">
+      <mat-form-field appearance="outline" class="input-field">
+        <mat-label>Email</mat-label>
+        <input matInput required type="email" maxlength="100" [(ngModel)]="email"
+               [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+    </div>
+    <div class="row-container">
+      <mat-form-field appearance="outline" class="input-field">
+        <mat-label>Password</mat-label>
+        <input matInput required type="password" maxlength="25" [(ngModel)]="password"
+               [ngModelOptions]="{standalone: true}">
+      </mat-form-field>
+    </div>
+    <div class="row-container options">
+      <a [routerLink]="['/reset-password']" class="mat-body-1">Forgot Password?</a>
+      <div></div>
+      <!--        <mat-checkbox [ngModel]="remember" [ngModelOptions]="{standalone: true}">Remember me</mat-checkbox>-->
+    </div>
+    <div *ngIf="errorMessage != null" class="row-container">
+      <span class="error mat-body-2">{{errorMessage}}</span>
+    </div>
+    <div class="row-container">
+      <button class="submit mat-body-1" (click)="onLogin()" type="submit">
+        Log In
+      </button>
+    </div>
+  </form>
+</ms-session-container>

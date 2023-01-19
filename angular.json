@@ -35,7 +35,8 @@
               "src/style/tab-styles.scss",
               "src/style/collection-update-styles.scss",
               "src/style/snackbar-styles.scss",
-              "src/style/login-styles.scss"
+              "src/style/login-styles.scss",
+              "src/style/user-session-styles.scss"
             ],
             "scripts": [],
             "vendorChunk": true,

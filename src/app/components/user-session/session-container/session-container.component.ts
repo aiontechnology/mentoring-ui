@@ -1,4 +1,4 @@
-/*!
+/*
  * Copyright 2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-.row-container {
-  .submit {
-    margin: 0;
-  }
+import {Component, Input} from '@angular/core';
+
+@Component({
+  selector: 'ms-session-container',
+  templateUrl: './session-container.component.html',
+  styleUrls: ['./session-container.component.scss']
+})
+export class SessionContainerComponent {
+  @Input() title: string
+  @Input() width: string
+  @Input() height: string
 }
