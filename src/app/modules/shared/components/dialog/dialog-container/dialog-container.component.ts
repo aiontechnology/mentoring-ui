@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,4 +27,14 @@ export class DialogContainerComponent {
   @Input() component: DialogActions
   @Input() isValid: boolean
   @Input() hasRequiredFields: boolean = true
+
+  get actionLabel(): string {
+    if (this.panelTitle.startsWith('Add'))
+      return 'Add'
+    if (this.panelTitle.startsWith('Edit'))
+      return 'Update'
+    if (this.panelTitle.startsWith('Invite'))
+      return 'Invite'
+    return 'Submit'
+  }
 }

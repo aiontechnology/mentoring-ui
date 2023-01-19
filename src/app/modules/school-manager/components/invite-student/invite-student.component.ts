@@ -32,7 +32,7 @@ export class InviteStudentComponent extends DialogComponent<Invitation, InviteSt
 
   constructor(
     // for super
-    @Inject(MAT_DIALOG_DATA) data: any,
+    @Inject(MAT_DIALOG_DATA) public data: { model: Invitation, panelTitle: string },
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<InviteStudentComponent>,
     @Inject(INVITATION_DATA_SOURCE) private invitationDataSource: DataSource<Invitation>,

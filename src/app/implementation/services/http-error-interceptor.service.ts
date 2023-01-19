@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router'
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {Router} from '@angular/router'
+import {Observable, throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 /**
  * Handles error responses from server.
@@ -46,6 +46,8 @@ export class HttpErrorInterceptorService {
           switch (error.status) {
             case 401:
               this.router.navigate(['/login']);
+              break;
+            case 404:
               break;
             default:
               errorMsg = `Error: ${error.status} - ${error.message}`;

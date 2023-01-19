@@ -1,0 +1,51 @@
+/*!
+ * Copyright 2023 Aion Technology LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.page-container {
+  background: url("../../../../../assets/flower-background.png") fixed;
+
+  div {
+    position: relative;
+
+    img {
+      position: absolute;
+      top: 23px;
+      left: 30px;
+    }
+  }
+
+  .notification-container {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-weight: 400;
+    padding: 150px 0 75px;
+
+    mat-card {
+      background-color: rgb(251, 251, 251, 0);
+      border: 0;
+      margin: 100px auto;
+      padding: 0;
+
+      mat-card-content {
+        font: 600 34px 'Montserrat', sans-serif;
+        text-align: center;
+        background-color: #FBFBFB;
+        padding: 50px 50px 0 50px;
+        border-radius: 10px;
+        height: 100%;
+      }
+    }
+  }
+}

@@ -15,24 +15,23 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {equalsById} from '../../implementation/functions/comparison';
-import {UserLoginService} from '../../implementation/security/user-login.service';
-import {MultiItemCache} from '../../implementation/state-management/multi-item-cache';
-import {SingleItemCache} from '../../implementation/state-management/single-item-cache';
-import {School} from '../../models/school/school';
-import {SCHOOL_COLLECTION_CACHE, SCHOOL_INSTANCE_CACHE} from '../../providers/global/global-school-providers-factory';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
+import {UserLoginService} from '../../../../implementation/security/user-login.service';
+import {MenuStateService} from '../../../../implementation/services/menu-state.service';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {School} from '../../../../models/school/school';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 
 @Component({
-  selector: 'ms-school-selector',
-  templateUrl: './school-selector.component.html',
-  styleUrls: ['./school-selector.component.scss']
+  selector: 'ms-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss']
 })
-export class SchoolSelectorComponent {
-  compareSchools = equalsById
-
+export class HeaderComponent {
   constructor(
     public userLoginService: UserLoginService,
+    public menuState: MenuStateService,
+    public navService: NavigationService,
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
-    @Inject(SCHOOL_COLLECTION_CACHE) public schoolCollectionCache: MultiItemCache<School>,
   ) {}
 }
