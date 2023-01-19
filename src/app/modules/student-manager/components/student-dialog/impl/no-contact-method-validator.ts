@@ -18,7 +18,7 @@ import {FormGroup, ValidatorFn} from '@angular/forms';
 
 export function noContactMethodValidator(): ValidatorFn {
   return (contact: FormGroup): { [key: string]: any } | null => {
-    const errorMsg = 'You must provide at least one contact method.';
+    const errorMsg = 'At least one contact method required.';
 
     const phone = contact.get('phone');
     const email = contact.get('email');

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import {School} from 'src/app/models/school/school';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {states as globalStates} from '../../../../implementation/constants/states';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
+import {phoneValidator} from '../../../../implementation/forms/phone-validator';
 import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {
@@ -56,12 +56,12 @@ export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogC
   }
 
   protected postDialogClose(school: School) {
-    this.schoolInstanceCache.item = school;
+    this.schoolInstanceCache.item = school
     this.schoolCollectionCache.load()
   }
 
   protected toModel(formValue: any): School {
-    const school: School = new School(formValue);
+    const school: School = new School(formValue)
     if (this.isUpdate) {
       school.links = formValue.school.links
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,28 +48,31 @@ const routes: Routes = [
 export const STUDENT_GROUP = 'student'
 
 @NgModule({
-  declarations: [
-    MentorDialogComponent,
-    ScrollToDirective,
-    StudentContactsComponent,
-    StudentDetailContainerComponent,
-    StudentDetailComponent,
-    StudentListComponent,
-    StudentLpgComponent,
-    StudentManagerComponent,
-    StudentTeacherInputComponent,
-    TeacherDialogComponent,
-    TeacherGradeFilterPipe,
-    StudentDialogComponent,
-  ],
-  imports: [
-    RouterModule.forChild(routes),
-    SharedModule.forRoot(),
-  ],
-  providers: [
-    ...studentProvidersFactory(),
-    LpgRepositoryService,
-  ]
+    declarations: [
+        MentorDialogComponent,
+        ScrollToDirective,
+        StudentContactsComponent,
+        StudentDetailContainerComponent,
+        StudentDetailComponent,
+        StudentListComponent,
+        StudentLpgComponent,
+        StudentManagerComponent,
+        StudentTeacherInputComponent,
+        TeacherDialogComponent,
+        TeacherGradeFilterPipe,
+        StudentDialogComponent,
+    ],
+    imports: [
+        RouterModule.forChild(routes),
+        SharedModule.forRoot(),
+    ],
+    exports: [
+        ScrollToDirective
+    ],
+    providers: [
+        ...studentProvidersFactory(),
+        LpgRepositoryService,
+    ]
 })
 export class StudentManagerModule {
 }

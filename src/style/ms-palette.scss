@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-$ms-palette: (
-  50: #489db4,
-  100: #489db4,
-  500: #489db4,
-  700: #489db4,
+$ms-palette-main: (
+  50: #71B8C9,
+  100: #71B8C9,
+  500: #4988A0,
+  700: #4988A0,
   contrast: (
     contrast: (
       50: white,
@@ -28,3 +28,18 @@ $ms-palette: (
     )
   )
 );
+
+$ms-palette-warn: (
+  50: #FE0303,
+  100: #FE0303,
+  500: #FE0303,
+  700: #FE0303,
+  contrast: (
+    contrast: (
+      50: white,
+      100: white,
+      500: white,
+      700: white
+    )
+  )
+)

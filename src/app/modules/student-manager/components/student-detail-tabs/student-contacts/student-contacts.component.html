@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022 Aion Technology LLC
+  ~ Copyright 2022-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,82 +14,113 @@
   ~ limitations under the License.
   -->
 
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Contacts</mat-card-title>
-    <div class="notification mat-h5" *ngIf="isHistoric">
-      Historic Data (Read Only)
-    </div>
-  </mat-card-header>
-  <mat-card-content class="mat-elevation-z8">
-    <div class="contacts">
-      <ng-container *ngFor="let parent of parents; let i = index">
-        <div class="parent">
-          <h1>Parent / Guardian {{ i + 1 }}</h1>
-          <table>
-            <tr>
-              <td>First name</td>
-              <td>{{ parent?.firstName }}</td>
-            </tr>
-            <tr>
-              <td>Last name</td>
-              <td>{{ parent?.lastName }}</td>
-            </tr>
-            <tr>
-              <td>Phone number</td>
-              <td>{{ parent?.phone ? parent.phone : '' }}</td>
-            </tr>
-            <tr>
-              <td>Email address</td>
-              <td>{{ parent?.email ? parent.email : '' }}</td>
-            </tr>
-            <tr>
-              <td>Preferred contact method</td>
-              <td>{{ (parent?.preferredContactMethod ? parent.preferredContactMethod : '') | lowercase }}</td>
-            </tr>
-            <tr>
-              <td>Comments</td>
-              <td>{{ parent?.comment ? parent.comment : '' }}</td>
-            </tr>
-          </table>
-        </div>
-      </ng-container>
-      <div *ngIf="emergencyContact" class="emergency-contact">
-        <h1>Emergency Contact</h1>
-        <table>
-          <tr>
-            <td>First name</td>
-            <td>{{ emergencyContact?.firstName }}</td>
-          </tr>
-          <tr>
-            <td>Last name</td>
-            <td>{{ emergencyContact?.lastName }}</td>
-          </tr>
-          <tr>
-            <td>Relation</td>
-            <td>{{ emergencyContact?.label | lowercase }}</td>
-          </tr>
-          <tr>
-            <td>Phone number</td>
-            <td>{{ emergencyContact?.phone ? emergencyContact.phone : '' }}</td>
-          </tr>
-          <tr>
-            <td>Email address</td>
-            <td>{{ emergencyContact?.email ? emergencyContact.email : '' }}</td>
-          </tr>
-          <tr>
-            <td>Preferred contact method</td>
-            <td>{{ (emergencyContact?.preferredContactMethod ? emergencyContact.preferredContactMethod : '') | lowercase }}</td>
-          </tr>
-          <tr>
-            <td>Comments</td>
-            <td>{{ emergencyContact?.comment ? emergencyContact.comment : '' }}</td>
-          </tr>
-        </table>
-      </div>
-    </div>
-    <div class="no-contacts" *ngIf="!contacts?.length">
-      <h1>No contacts provided</h1>
-    </div>
-  </mat-card-content>
-</mat-card>
+<mat-expansion-panel *ngIf="contacts[0]" hideToggle="true" (click)="toggleParent1()">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <mat-icon>{{isParent1Open ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}}</mat-icon>
+      <p class="mat-display-3">Parent/Guardian 1</p>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <table>
+    <tbody>
+    <tr>
+      <td>First Name:</td>
+      <td>{{ contacts[0]?.firstName }}</td>
+    </tr>
+    <tr>
+      <td>Last Name:</td>
+      <td>{{ contacts[0]?.lastName }}</td>
+    </tr>
+    <tr>
+      <td>Phone:</td>
+      <td>{{ contacts[0]?.phone }}</td>
+    </tr>
+    <tr>
+      <td>Email:</td>
+      <td>{{ contacts[0]?.email }}</td>
+    </tr>
+    <tr>
+      <td>Preferred Contact Method:</td>
+      <td>{{ contacts[0]?.formattedPreferredContactMethod }}</td>
+    </tr>
+    <tr>
+      <td>Comments:</td>
+      <td>{{ contacts[0]?.comment }}</td>
+    </tr>
+    </tbody>
+  </table>
+</mat-expansion-panel>
+
+<mat-expansion-panel *ngIf="contacts[1]" hideToggle="true" (click)="toggleParent1()">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <mat-icon>{{isParent1Open ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}}</mat-icon>
+      <p class="mat-display-3">Parent/Guardian 2</p>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <table>
+    <tbody>
+    <tr>
+      <td>First Name:</td>
+      <td>{{ contacts[1]?.firstName }}</td>
+    </tr>
+    <tr>
+      <td>Last Name:</td>
+      <td>{{ contacts[1]?.lastName }}</td>
+    </tr>
+    <tr>
+      <td>Phone:</td>
+      <td>{{ contacts[1]?.phone }}</td>
+    </tr>
+    <tr>
+      <td>Email:</td>
+      <td>{{ contacts[1]?.email }}</td>
+    </tr>
+    <tr>
+      <td>Preferred contact method:</td>
+      <td>{{ contacts[1]?.formattedPreferredContactMethod }}</td>
+    </tr>
+    <tr>
+      <td>Comments:</td>
+      <td>{{ contacts[1]?.comment }}</td>
+    </tr>
+    </tbody>
+  </table>
+</mat-expansion-panel>
+
+<mat-expansion-panel *ngIf="emergencyContact" hideToggle="true" (click)="toggleParent1()">
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <mat-icon>{{isEmergencyContactOpen ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}}</mat-icon>
+      <p class="mat-display-3">Emergency Contact</p>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <table>
+    <tbody>
+    <tr>
+      <td>First Name:</td>
+      <td>{{ emergencyContact?.firstName }}</td>
+    </tr>
+    <tr>
+      <td>Last Name:</td>
+      <td>{{ emergencyContact?.lastName }}</td>
+    </tr>
+    <tr>
+      <td>Phone:</td>
+      <td>{{ emergencyContact?.phone }}</td>
+    </tr>
+    <tr>
+      <td>Email:</td>
+      <td>{{ emergencyContact?.email }}</td>
+    </tr>
+    <tr>
+      <td>Preferred contact method:</td>
+      <td>{{ emergencyContact?.formattedPreferredContactMethod }}</td>
+    </tr>
+    <tr>
+      <td>Comments:</td>
+      <td>{{ emergencyContact?.comment }}</td>
+    </tr>
+    </tbody>
+  </table>
+</mat-expansion-panel>

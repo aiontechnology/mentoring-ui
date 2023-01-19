@@ -1,11 +1,11 @@
-/**
- * Copyright 2021 Aion Technology LLC
+/*!
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,48 +14,80 @@
  * limitations under the License.
  */
 
-div.bg {
-
-  display: flex;
-
-  height: 100%;
+.container {
   width: 100%;
-
-  background-image: url('../../../assets/home-background.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-
+  position: relative;
+  font-family: 'Montserrat', sans-serif;
 }
 
-div.bg-filter {
-  display: flex;
-  align-items: center;
+.home-img {
   width: 100%;
-  background-color: rgba(250, 250, 250, 0.8);
+  display: block;
 }
 
-div.home-text-box {
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  width: 500px;
-  height: 500px;
-  border-radius: 10px;
-  margin: auto;
-
-  background-color: rgba(250, 250, 250, 0.8);
-  backdrop-filter: blur(12px);
-
-}
-
-p {
+.hero-text {
+  margin: 29px;
+  width: 70%;
+  position: absolute;
+  color: white;
+  font-size: 77px;
+  font-weight: 600;
+  letter-spacing: -1.87px;
   text-align: center;
-  margin: 0 75px;
+  line-height: 100px;
+  text-shadow: 0px 6px 16px rgba(0, 0, 0, .5);
 }
 
-p.header {
-  margin-bottom: 75px;
+.arc-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  margin-top: -130px;
+}
+
+.arc-container {
+  position: relative;
+  width: 100%;
+  justify-content: center;
+}
+
+.arc-container a {
+  position: absolute;
+  top: -60px;
+  width: 100%;
+  display: flex;
+}
+
+.arc-container a:link {
+  text-decoration: none;
+}
+
+.contact-message {
+  position: absolute;
+  top: 80px;
+  width: 100%;
+  text-align: center;
+  opacity: 1;
+  color: white;
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: 0.23px;
+}
+
+.button {
+  color: white;
+  width: 269px;
+  height: 70px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 26px;
+  font-weight: 500;
+  font-style: normal;
+  letter-spacing: -0.63px;
+  text-align: center;
+  border-radius: 20px;
+  opacity: 1;
+  background-color: #FFBD59;
+  z-index: 1;
+  margin-left: auto;
+  margin-right: auto;
 }

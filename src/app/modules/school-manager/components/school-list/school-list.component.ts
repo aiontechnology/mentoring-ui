@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,17 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../implementation/component/list-component';
-import {School} from '../../../../models/school/school';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {School} from '../../../../models/school/school';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
-import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {
   ADD_SCHOOL_MENU_TITLE,
   ADD_SCHOOL_PANEL_TITLE,
@@ -63,14 +62,12 @@ export class SchoolListComponent extends ListComponent<School> implements OnInit
     @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
     // other
     @Inject(SCHOOL_LIST_EDIT_DIALOG_MANAGER) private schoolEditDialogManager: DialogManager<SchoolDialogComponent>,
-    @Inject(SCHOOL_LIST_DELETE_DIALOG_MANAGER) private schoolDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
+    @Inject(SCHOOL_LIST_DELETE_DIALOG_MANAGER) private schoolDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
   ) {
     super(menuState, navService, tableCache, schoolInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
-
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
@@ -88,11 +85,11 @@ export class SchoolListComponent extends ListComponent<School> implements OnInit
         .withSnackbarMessage(EDIT_SCHOOL_SNACKBAR_MESSAGE)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1),
-      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolDeleteDialogManager)
+      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR_SCHOOL,
           pluralName: PLURAL_SCHOOL,
-          countSupplier: () => this.tableCache.selectionCount
+          nameSupplier: () => this.tableCache.selection.selected.map(selection => selection.name)
         }))
         .withSnackbarMessage(REMOVE_SCHOOL_SNACKBAR_MESSAGE)
         .build()

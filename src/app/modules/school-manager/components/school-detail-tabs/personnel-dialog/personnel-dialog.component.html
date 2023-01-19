@@ -14,15 +14,13 @@
   ~ limitations under the License.
   -->
 
-<h2 mat-dialog-title>{{data.panelTitle}}</h2>
-<mat-dialog-content>
+<ms-dialog-container class="personnel-dialog" [panelTitle]="data.panelTitle" [component]="this"
+                     isValid="modelFormGroup.isValid">
   <form [formGroup]="modelFormGroup">
     <input type="hidden" formControlName="personnel">
 
-    <p class="legend mat-small">* Denotes a required field</p>
-
-    <div class="dialog-container">
-      <mat-form-field>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
         <mat-label>Job Title</mat-label>
         <mat-select formControlName="type" required>
           <mat-option *ngFor="let title of titles" [value]="title.value">
@@ -35,9 +33,10 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput placeholder="First Name" formControlName="firstName" required />
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" required/>
         <mat-error *ngIf="modelFormGroup.hasError('required', 'firstName')">
           You must enter a first name
         </mat-error>
@@ -45,8 +44,10 @@
           A first name can be a maximum of 50 characters in length
         </mat-error>
       </mat-form-field>
-      <mat-form-field>
-        <input matInput placeholder="Last Name" formControlName="lastName" required />
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" required/>
         <mat-error *ngIf="modelFormGroup.hasError('required', 'lastName')">
           You must enter a last name
         </mat-error>
@@ -56,18 +57,20 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput msPhoneFormat placeholder="Phone Number" formControlName="cellPhone" />
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <input matInput msPhoneFormat formControlName="cellPhone"/>
         <mat-error *ngIf="modelFormGroup.hasError('phoneNumberFormat', 'cellPhone')">
           Invalid phone number format
         </mat-error>
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput placeholder="Email Address" formControlName="email" />
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Email Address</mat-label>
+        <input matInput formControlName="email"/>
         <mat-error *ngIf="modelFormGroup.hasError('email', 'email')">
           Invalid email address format
         </mat-error>
@@ -76,14 +79,5 @@
         </mat-error>
       </mat-form-field>
     </div>
-
   </form>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button color="primary" (click)="save()" [disabled]="!modelFormGroup.valid">
-    <mat-icon>save</mat-icon> Save
-  </button>
-  <button mat-button color="primary" (click)="dismiss()">
-    <mat-icon>cancel</mat-icon> Cancel
-  </button>
-</mat-dialog-actions>
+</ms-dialog-container>

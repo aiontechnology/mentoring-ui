@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@ export const REMOVE_BOOK_MENU_TITLE = 'Remove Book(s)'
 export const ADD_BOOK_PANEL_TITLE = 'Add New Book'
 export const EDIT_BOOK_PANEL_TITLE = 'Edit Book'
 
-export const ADD_BOOK_SNACKBAR_MESSAGE = 'Book Added'
-export const EDIT_BOOK_SNACKBAR_MESSAGE = 'Book Updated'
-export const REMOVE_BOOK_SNACKBAR_MESSAGE = 'Book(s) Removed'
+export const ADD_BOOK_SNACKBAR_MESSAGE = 'Book Successfully Added \u2713'
+export const EDIT_BOOK_SNACKBAR_MESSAGE = 'Book Successfully Updated \u2713'
+export const REMOVE_BOOK_SNACKBAR_MESSAGE = 'Book(s) Successfully Removed \u2713'
 
 export const SINGULAR_BOOK = 'book'
 export const PLURAL_BOOK = 'books'
@@ -37,17 +37,17 @@ export const REMOVE_GAME_MENU_TITLE = 'Remove Game(s)'
 export const ADD_GAME_PANEL_TITLE = 'Add New Game'
 export const EDIT_GAME_PANEL_TITLE = 'Edit Game'
 
-export const ADD_GAME_SNACKBAR_MESSAGE = 'Game Added'
-export const EDIT_GAME_SNACKBAR_MESSAGE = 'Game Updated'
-export const REMOVE_GAME_SNACKBAR_MESSAGE = 'Game(s) Removed'
+export const ADD_GAME_SNACKBAR_MESSAGE = 'Game Successfully Added \u2713'
+export const EDIT_GAME_SNACKBAR_MESSAGE = 'Game Successfully Updated \u2713'
+export const REMOVE_GAME_SNACKBAR_MESSAGE = 'Game(s) Successfully Removed \u2713'
 
 export const SINGULAR_GAME = 'game'
 export const PLURAL_GAME = 'games'
 
 /* School Books */
 export const UPDATE_BOOK_MENU_TITLE = 'Update Books'
-export const UPDATE_BOOK_SNACKBAR_MESSAGE = 'Books Updated'
+export const UPDATE_BOOK_SNACKBAR_MESSAGE = 'Books Successfully Updated \u2713'
 
 /* School Games */
 export const UPDATE_GAME_MENU_TITLE = 'Update Games'
-export const UPDATE_GAME_SNACKBAR_MESSAGE = 'Games Updated'
+export const UPDATE_GAME_SNACKBAR_MESSAGE = 'Games Successfully Updated \u2713'

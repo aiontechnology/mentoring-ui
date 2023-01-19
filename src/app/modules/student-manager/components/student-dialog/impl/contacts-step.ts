@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {emailAddressValidator} from '../../../../../implementation/form-validation/email-address-validator';
-import {phoneValidator} from '../../../../../implementation/form-validation/phone-validator';
+import {emailAddressValidator} from '../../../../../implementation/forms/email-address-validator';
+import {phoneValidator} from '../../../../../implementation/forms/phone-validator';
 import {Student} from '../../../../../models/student/student';
 import {FormGroupHolder} from './form-group-holder';
 import {noContactMethodValidator} from './no-contact-method-validator';

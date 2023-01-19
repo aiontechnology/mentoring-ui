@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,19 @@ import {StudentRegistration} from '../../models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../../models/workflow/student-registration-lookup';
 import {StudentRegistrationLookupRepository} from '../school-manager/repositories/student-registration-lookup-repository';
 import {StudentRegistrationRepository} from '../school-manager/repositories/student-registration-repository';
-import {ConfimationDialogComponent} from './components/confimation-dialog/confimation-dialog.component';
+import {BackArrowComponent} from './components/back-arrow/back-arrow.component';
+import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
+import {DialogContainerComponent} from './components/dialog/dialog-container/dialog-container.component';
+import {FileTabComponent} from './components/file-tab/file-tab.component';
+import {GradeLevelComponent} from './components/grade-level/grade-level.component';
+import {ListDataContainerComponent} from './components/list-data-container/list-data-container.component';
+import {ListFooterComponent} from './components/list-footer/list-footer.component';
+import {ListViewHeaderComponent} from './components/list-view-header/list-view-header.component';
+import {MenuComponent} from './components/menu/menu.component';
+import {SearchComponent} from './components/seach/search.component';
 import {SelectionCountDisplayComponent} from './components/selection-count-display/selection-count-display.component';
+import {SpinnerComponent} from './components/spinner/spinner.component';
+import {TabbedContainerComponent} from './components/tabbed-container/tabbed-container.component';
 import {OnlyNumberDirective} from './directives/only-number.directive';
 import {PhoneFormatDirective} from './directives/phone-format.directive';
 import {MetaDataService} from './services/meta-data/meta-data.service';
@@ -41,8 +52,19 @@ export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('regist
 @NgModule({
   declarations: [
     // Components
-    ConfimationDialogComponent,
+    BackArrowComponent,
+    ConfirmationDialogComponent,
+    DialogContainerComponent,
+    FileTabComponent,
+    GradeLevelComponent,
+    ListDataContainerComponent,
+    ListFooterComponent,
+    ListViewHeaderComponent,
+    MenuComponent,
+    SearchComponent,
     SelectionCountDisplayComponent,
+    SpinnerComponent,
+    TabbedContainerComponent,
 
     // Directives
     OnlyNumberDirective,
@@ -50,8 +72,18 @@ export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('regist
   ],
   exports: [
     // Components
-    ConfimationDialogComponent,
+    BackArrowComponent,
+    ConfirmationDialogComponent,
+    FileTabComponent,
+    GradeLevelComponent,
+    ListDataContainerComponent,
+    ListFooterComponent,
+    ListViewHeaderComponent,
+    MenuComponent,
+    SearchComponent,
     SelectionCountDisplayComponent,
+    SpinnerComponent,
+    TabbedContainerComponent,
 
     // Directives
     OnlyNumberDirective,
@@ -63,6 +95,7 @@ export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('regist
     LayoutModule,
     MaterialModule,
     ReactiveFormsModule,
+    DialogContainerComponent,
   ],
   imports: [
     CommonModule,

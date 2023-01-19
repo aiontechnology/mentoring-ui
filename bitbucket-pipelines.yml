@@ -40,10 +40,12 @@ pipelines:
             - aws ecr get-login-password | docker login --username AWS --password-stdin 661143960593.dkr.ecr.us-west-2.amazonaws.com
             - docker build -t ui:$TAG .
             - docker tag ui:$TAG $IMAGE:latest
+            - docker tag ui:$TAG $IMAGE:test
             - docker tag ui:$TAG $IMAGE:$TAG
             - docker push $IMAGE:latest
+            - docker push $IMAGE:test
             - docker push $IMAGE:$TAG
-    develop:
+    '{develop,version-2}':
       - step:
           name: Package Test Environment Image
           deployment: Test

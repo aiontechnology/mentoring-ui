@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import {SingleItemCache} from '../../implementation/state-management/single-item
 import {SingleItemCacheUpdater} from '../../implementation/state-management/single-item-cache-updater';
 import {TableCache} from '../../implementation/table-cache/table-cache';
 import {ClosedResultType} from '../../implementation/types/dialog-types';
-import {ConfimationDialogComponent} from '../../modules/shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../modules/shared/components/confirmation-dialog/confirmation-dialog.component';
 import {detailAfterClosedDeleteProviders} from './detail/detail-after-closed-delete-providers';
 import {detailAfterClosedEditProviders} from './detail/detail-after-closed-edit-providers';
 import {detailDialogManagerDeleteProviders} from './detail/detail-dialog-manager-delete-providers';
@@ -30,7 +30,7 @@ import {detailDialogManagerEditProviders} from './detail/detail-dialog-manager-e
 export function detailDialogManagerProviders<MODEL_TYPE, COMPONENT_TYPE, SERVICE_TYPE extends TableCache<MODEL_TYPE>>(
   prefix: string,
   editName: InjectionToken<DialogManager<COMPONENT_TYPE>>,
-  deleteName: InjectionToken<DialogManager<ConfimationDialogComponent>>,
+  deleteName: InjectionToken<DialogManager<ConfirmationDialogComponent>>,
   componentType: ComponentType<COMPONENT_TYPE>,
   serviceToken: InjectionToken<SERVICE_TYPE>,
   routeAfterDelete: string[],

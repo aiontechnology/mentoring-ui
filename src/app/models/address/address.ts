@@ -32,4 +32,14 @@ export class Address {
     this.zip = convertEmptyStringToNull(json?.zip)
   }
 
+  formatCityStateZip(): string {
+    let value = this.city
+    if (this.city && this.state) {
+      value += ', '
+    }
+    value += this.state
+    value += ` ${this.zip}`
+    return value
+  }
+
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { UserSessionService } from './user-session.service';
+import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {UserLoginService} from '../security/user-login.service';
 
 /**
  * Appends access token to header in outgoing requests.
@@ -25,11 +25,13 @@ import { UserSessionService } from './user-session.service';
 @Injectable()
 export class TokenInterceptorService implements HttpInterceptor {
 
-  constructor(private userSession: UserSessionService) { }
+  constructor(
+    private userLoginService: UserLoginService
+  ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    const accessToken = this.userSession.accessToken;
+    const accessToken = this.userLoginService.accessTokenJwt;
 
     const authReq = req.clone({
       setHeaders: {

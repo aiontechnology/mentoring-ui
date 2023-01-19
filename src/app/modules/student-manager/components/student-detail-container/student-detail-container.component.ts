@@ -16,10 +16,14 @@
 
 import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {SchoolSession} from '../../../../models/school/schoolsession';
 import {MenuStateService} from '../../../../implementation/services/menu-state.service';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {School} from '../../../../models/school/school';
+import {SchoolSession} from '../../../../models/school/schoolsession';
+import {Student} from '../../../../models/student/student';
+import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
 import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global/global-school-session-providers-factory';
+import {STUDENT_INSTANCE_CACHE} from '../../../../providers/global/global-student-providers-factory';
 
 @Component({
   selector: 'ms-student-detail-container',
@@ -31,7 +35,9 @@ export class StudentDetailContainerComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private menuState: MenuStateService,
+    @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
+    @Inject(STUDENT_INSTANCE_CACHE) public studentInstanceCache: SingleItemCache<Student>,
   ) { }
 
   ngOnInit(): void {

@@ -14,107 +14,110 @@
   ~ limitations under the License.
   -->
 
-<div class="spinner-container" *ngIf="tableCache.isLoading$ | async">
-  <mat-progress-spinner color="primary" mode="indeterminate" [diameter]="100" [strokeWidth]="10"></mat-progress-spinner>
-</div>
+<ms-tabbed-container tabLabel="MENTOR MANAGER">
 
-<div class="bg">
-  <div class="list-container mat-elevation-z2">
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Mentors</span>
+      </ng-template>
 
-    <div class="header">
-      <mat-form-field>
-        <input matInput [(ngModel)]="tableCache.filterBinding" (keyup)="tableCache.applyFilter($event.target.value)"
-               placeholder="Filter"/>
-        <button mat-button *ngIf="tableCache.filter" matSuffix mat-icon-button (click)="tableCache.clearFilter()">
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
+      <ms-list-data-container [tableCache]="tableCache">
+        <table class="list-data-container" mat-table [dataSource]="tableCache.tableDataSource" matSort>
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox
+                (change)="$event ? tableCache.masterToggle() : null"
+                [checked]="tableCache.selection.hasValue() && tableCache.isAllSelected()"
+                [indeterminate]="tableCache.selection.hasValue() && !tableCache.isAllSelected()">
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="$event ? tableCache.selection.toggle(row) : null"
+                [checked]="tableCache.selection.isSelected(row)">
+              </mat-checkbox>
+            </td>
+          </ng-container>
 
-    <div>
-      <table mat-table [dataSource]="tableCache.tableDataSource" matSort>
-        <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox
-              (change)="$event ? tableCache.masterToggle() : null"
-              [checked]="tableCache.selection.hasValue() && tableCache.isAllSelected()"
-              [indeterminate]="tableCache.selection.hasValue() && !tableCache.isAllSelected()"
-            >
-            </mat-checkbox>
-          </th>
-          <td mat-cell *matCellDef="let row">
-            <mat-checkbox
-              (click)="$event.stopPropagation()"
-              (change)="$event ? tableCache.selection.toggle(row) : null"
-              [checked]="tableCache.selection.isSelected(row)"
-            >
-            </mat-checkbox>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="firstName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <p class="mat-body-2">First Name</p>
+            </th>
+            <td mat-cell *matCellDef="let mentor">
+              <p class="mat-body-1">
+                <a
+                  (click)="routeWithBackButton(['/mentormanager/schools', schoolInstanceCache.item.id, 'mentors', mentor.id])">
+                  {{ mentor.firstName }}
+                </a>
+              </p>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="firstName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
-          <td mat-cell *matCellDef="let mentor">
-            <a (click)="routeWithBackButton(['/mentormanager/schools', schoolInstanceCache.item.id, 'mentors', mentor.id])">
-              {{ mentor.firstName }}
-            </a></td>
-        </ng-container>
+          <ng-container matColumnDef="lastName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <p class="mat-body-2">Last Name</p>
+            </th>
+            <td mat-cell *matCellDef="let mentor">
+              <p class="mat-body-1">{{ mentor.lastName }}</p>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="lastName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
-          <td mat-cell *matCellDef="let mentor">{{ mentor.lastName }}</td>
-        </ng-container>
+          <ng-container matColumnDef="availability">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <p class="mat-body-2">Availability</p>
+            </th>
+            <td mat-cell *matCellDef="let mentor">
+              <p class="mat-body-1">{{ mentor.availability }}</p>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="availability">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Availability</th>
-          <td mat-cell *matCellDef="let mentor">
-            {{ mentor.availability }}
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="cellPhone">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <p class="mat-body-2">Phone</p>
+            </th>
+            <td mat-cell *matCellDef="let mentor">
+              <p class="mat-body-1">{{ mentor.cellPhone }}</p>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="cellPhone">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Phone</th>
-          <td mat-cell *matCellDef="let mentor">{{ mentor.cellPhone }}</td>
-        </ng-container>
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <p class="mat-body-2">Email</p>
+            </th>
+            <td mat-cell *matCellDef="let mentor">
+              <p class="mat-body-1">{{ mentor.email }}</p>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-          <td mat-cell *matCellDef="let mentor">{{ mentor.email }}</td>
-        </ng-container>
+          <ng-container matColumnDef="mediaReleaseSigned">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <p class="mat-body-2">Media Release</p>
+            </th>
+            <td mat-cell *matCellDef="let mentor">
+              <p class="mat-body-1">
+                <mat-icon *ngIf="mentor.mediaReleaseSigned">done</mat-icon>
+              </p>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="mediaReleaseSigned">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Media Release</th>
-          <td mat-cell *matCellDef="let mentor">
-            <mat-icon *ngIf="mentor.mediaReleaseSigned">done</mat-icon>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="backgroundCheckCompleted">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+              <p class="mat-body-2">Background Check</p>
+            </th>
+            <td mat-cell *matCellDef="let mentor">
+              <p class="mat-body-1">
+                <mat-icon *ngIf="mentor.backgroundCheckCompleted">done</mat-icon>
+              </p>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="backgroundCheckCompleted">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Background Check</th>
-          <td mat-cell *matCellDef="let mentor">
-            <mat-icon *ngIf="mentor.backgroundCheckCompleted">done</mat-icon>
-          </td>
-        </ng-container>
+          <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: columns" (click)="tableCache.selection.toggle(row)"></tr>
+        </table>
+      </ms-list-data-container>
 
-        <tr mat-header-row *matHeaderRowDef="columns; sticky: true"></tr>
-        <tr
-          mat-row
-          *matRowDef="let row; columns: columns"
-          (click)="tableCache.selection.toggle(row)"
-        ></tr>
-      </table>
-
-      <table class="footer mat-elevation-z1">
-        <tr>
-          <td>
-            <ms-selection-count-display [selectionCount]="tableCache.selectionCount"></ms-selection-count-display>
-          </td>
-          <td>
-            <mat-paginator #paginator [pageSize]="tableCache.pageSize" [pageSizeOptions]="[10, 20, 50]"></mat-paginator>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-  </div>
-</div>
+    </mat-tab>
+  </mat-tab-group>
+</ms-tabbed-container>

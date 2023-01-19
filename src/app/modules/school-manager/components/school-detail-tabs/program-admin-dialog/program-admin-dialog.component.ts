@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {DialogComponent} from '../../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
-import {emailAddressValidator} from '../../../../../implementation/form-validation/email-address-validator';
-import {phoneValidator} from '../../../../../implementation/form-validation/phone-validator';
+import {emailAddressValidator} from '../../../../../implementation/forms/email-address-validator';
+import {phoneValidator} from '../../../../../implementation/forms/phone-validator';
 import {ProgramAdmin} from '../../../../../models/program-admin/program-admin';
 import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../../../providers/global/global-program-admin-providers-factory';
 

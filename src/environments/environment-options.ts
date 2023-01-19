@@ -1,11 +1,11 @@
-/**
- * Copyright 2021 Aion Technology LLC
+/*
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,13 +16,12 @@
 
 export interface EnvironmentOptions {
   env?: {
-    production: string;
-    apiUri: string;
-    lpgUri: string;
-    baseUri: string;
-    tokenRedirect: string;
-    logoutRedirect: string;
-    cognitoBaseUrl: string;
-    cognitoClientId: string;
+    production: string
+    region: string
+    apiUri: string
+    lpgUri: string
+    baseUri: string
+    cognitoPoolId: string
+    cognitoClientId: string
   };
 }

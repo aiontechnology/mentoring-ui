@@ -16,9 +16,9 @@
 
 import {Component, Inject} from '@angular/core';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
-import {STUDENT_INSTANCE_CACHE} from '../../../../../providers/global/global-student-providers-factory';
 import {Contact} from '../../../../../models/contact/contact';
 import {Student} from '../../../../../models/student/student';
+import {STUDENT_INSTANCE_CACHE} from '../../../../../providers/global/global-student-providers-factory';
 
 @Component({
   selector: 'ms-student-contacts',
@@ -27,6 +27,9 @@ import {Student} from '../../../../../models/student/student';
 })
 export class StudentContactsComponent {
   isHistoric = false
+  isParent1Open: boolean = false
+  isParent2Open: boolean = false
+  isEmergencyContactOpen: boolean = false
 
   constructor(@Inject(STUDENT_INSTANCE_CACHE) public studentCache: SingleItemCache<Student>) { }
 
@@ -42,4 +45,15 @@ export class StudentContactsComponent {
     return this.contacts.find(contact => contact.isEmergencyContact)
   }
 
+  toggleParent1() {
+    this.isParent1Open = !this.isParent1Open
+  }
+
+  toggleParent2() {
+    this.isParent2Open = !this.isParent2Open
+  }
+
+  toggleEmergencyContact() {
+    this.isEmergencyContactOpen = !this.isEmergencyContactOpen
+  }
 }

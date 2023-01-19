@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2021-2022 Aion Technology LLC
+  ~ Copyright 2021-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,37 +14,76 @@
   ~ limitations under the License.
   -->
 
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>Game Details</mat-card-title>
-  </mat-card-header>
-  <mat-card-content class="mat-elevation-z8">
-    <h1>{{ gameInstanceCache.item?.name }}</h1>
-    <table>
-      <tr>
-        <td>Description</td>
-        <td>{{ gameInstanceCache.item?.description }}</td>
-      </tr>
-      <tr>
-        <td>Grade Level</td>
-        <td>{{ gradeRangeDisplay }}</td>
-      </tr>
-      <tr>
-        <td>Activity Focuses</td>
-        <td>{{ gameInstanceCache.item?.activityFocuses.join(', ') }}</td>
-      </tr>
-      <tr>
-        <td>Leadership Success Skills</td>
-        <td>{{ gameInstanceCache.item?.leadershipSkills.join(', ') }}</td>
-      </tr>
-      <tr>
-        <td>Leadership Traits</td>
-        <td>{{ gameInstanceCache.item?.leadershipTraits.join(', ') }}</td>
-      </tr>
-      <tr>
-        <td>Location</td>
-        <td>{{ gameInstanceCache.item?.displayLocation }}</td>
-      </tr>
-    </table>
-  </mat-card-content>
-</mat-card>
+<ms-tabbed-container tabLabel="RESOURCE MANAGER">
+  <mat-tab-group class="wrapper" animationDuration="0ms" dynamicHeight>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <span class="tab-label">Game Details</span>
+      </ng-template>
+      <ms-menu></ms-menu>
+      <table class="detail-view-container">
+        <thead class="mat-body-2">
+        <tr>
+          <td colspan="2">
+            {{ gameInstanceCache.item?.name }}
+          </td>
+        </tr>
+        </thead>
+        <tbody class="mat-body-1">
+        <tr>
+          <td>Grade Range:</td>
+          <td>
+            <p>
+              <ms-grade-level gradeLevel="{{gameInstanceCache.item?.grade1}}"></ms-grade-level>
+              &nbsp;&nbsp;-&nbsp;&nbsp;
+              <ms-grade-level gradeLevel="{{gameInstanceCache.item?.grade2}}"></ms-grade-level>
+            </p>
+          </td>
+        </tr>
+        <tr>
+          <td>Description:</td>
+          <td>
+            <p>{{ gameInstanceCache.item?.description }}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>Activity Focuses:</td>
+          <td>
+            <mat-chip-list>
+              <mat-chip class="chip" *ngFor="let activityFocus of gameInstanceCache.item?.activityFocuses">
+                {{activityFocus}}
+              </mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
+        <tr>
+          <td>Leadership Success Skills:</td>
+          <td>
+            <mat-chip-list>
+              <mat-chip class="chip" *ngFor="let leadershipSkill of gameInstanceCache.item?.leadershipSkills">
+                {{leadershipSkill}}
+              </mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
+        <tr>
+          <td>Leadership Traits:</td>
+          <td>
+            <mat-chip-list>
+              <mat-chip class="chip" *ngFor="let leadershipTrait of gameInstanceCache.item?.leadershipTraits">
+                {{leadershipTrait}}
+              </mat-chip>
+            </mat-chip-list>
+          </td>
+        </tr>
+        <tr>
+          <td>Location:</td>
+          <td>
+            <p>{{ gameInstanceCache.item?.displayLocation }}</p>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-tab>
+  </mat-tab-group>
+</ms-tabbed-container>

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
@@ -37,12 +36,6 @@ export abstract class ListComponent<T> extends MenuRegisteringComponent {
   protected set sort(sort: MatSort) {
     if (sort) {
       this.tableCache.sort = sort
-    }
-  }
-
-  protected set paginator(paginator: MatPaginator) {
-    if (paginator) {
-      this.tableCache.paginator = paginator
     }
   }
 

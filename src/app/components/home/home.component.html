@@ -14,18 +14,14 @@
   ~ limitations under the License.
   -->
 
-<div class="bg">
-  <div class="bg-filter">
-    <div class="home-text-box mat-elevation-z2">
-      <p class="mat-h1 header">Welcome, {{ userSession.givenName }}!</p>
-      <div class="footer">
-        <p class="mat-h1">If you need assistance or have any questions,
-          please contact:</p>
-        <br/>
-        <p class="mat-h4"><a href="mailto:kathryn.anderson@hisheartfoundation.org">Kathryn Anderson</a></p>
-        <div>
-        </div>
-      </div>
-    </div>
+<div class="container">
+  <p class="hero-text">YOU ARE CHANGING<br/>YOUNG LIVES FOREVER</p>
+  <img class="home-img" src="../../../assets/home-background.png" alt="">
+  <div class="arc-container">
+    <p class="contact-message">If you need any assistance or have<br/>any questions, please contact Kathryn Anderson</p>
+    <a href="mailto:kathryn.anderson@hisheartfoundation.org">
+      <button mat-flat-button color="primary" class="button login-button">Contact</button>
+    </a>
+    <img class="arc-img" src="../../../assets/blue-arc-home.png">
   </div>
 </div>

@@ -18,17 +18,17 @@ import {ComponentType} from '@angular/cdk/portal';
 import {InjectionToken} from '@angular/core';
 import {DialogManager} from '../../implementation/command/dialog-manager';
 import {ClosedResultType} from '../../implementation/types/dialog-types';
-import {standAloneAfterClosedEditProviders} from './stand-alone/stand-alone-after-closed-edit-providers';
+import {standAloneAfterClosedSnackbarProviders} from './stand-alone/stand-alone-after-closed-snackbar-providers';
 import {standAloneDialogManagerEditProviders} from './stand-alone/stand-alone-dialog-manager-edit-providers';
 
-const STAND_ALONE_AFTER_CLOSED_EDIT = new InjectionToken<ClosedResultType>('stand-alone-after-closed-edit');
+const STAND_ALONE_AFTER_CLOSED_SNACKBAR = new InjectionToken<ClosedResultType>('stand-alone-after-closed-snackbar');
 
 export function standAloneDialogManagerProviders<COMPONENT_TYPE>(
   name: InjectionToken<DialogManager<COMPONENT_TYPE>>,
   componentType: ComponentType<COMPONENT_TYPE>,
 ): any[] {
   return [
-    ...standAloneAfterClosedEditProviders(STAND_ALONE_AFTER_CLOSED_EDIT),
-    ...standAloneDialogManagerEditProviders<COMPONENT_TYPE>(name, STAND_ALONE_AFTER_CLOSED_EDIT, componentType),
+    ...standAloneAfterClosedSnackbarProviders(STAND_ALONE_AFTER_CLOSED_SNACKBAR),
+    ...standAloneDialogManagerEditProviders<COMPONENT_TYPE>(name, STAND_ALONE_AFTER_CLOSED_SNACKBAR, componentType),
   ]
 }

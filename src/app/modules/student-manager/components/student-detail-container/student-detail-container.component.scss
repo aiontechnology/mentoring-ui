@@ -13,3 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+@import 'src/style/_variables';
+
+.student-name {
+  border-left: 4px solid $accent;
+  padding-left: 6px;
+  margin-bottom: 24px;
+}
+
+.notification {
+  position: absolute;
+  top: -40px;
+  right: 750px;
+  color: $gray-color
+}

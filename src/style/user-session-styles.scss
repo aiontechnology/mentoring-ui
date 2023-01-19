@@ -1,0 +1,49 @@
+/*!
+ * Copyright 2023 Aion Technology LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import 'src/style/_variables';
+
+.row-container {
+  mat-checkbox {
+    text-align: right;
+  }
+
+  a {
+    text-decoration: none;
+    color: #007FFF;
+  }
+
+  .submit {
+    height: 70px;
+    color: white;
+    background-color: #FFBD59;
+    border-width: 0;
+    border-radius: 16px;
+    margin: 30px 0;
+  }
+}
+
+.input-field {
+  input {
+    color: #979797;
+  }
+}
+
+.error {
+  color: $warn;
+  text-align: center;
+  margin-top: 20px;
+}

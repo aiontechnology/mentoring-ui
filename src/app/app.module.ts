@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,36 +15,41 @@
  */
 
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {ErrorHandler, InjectionToken, NgModule} from '@angular/core';
+import {ErrorHandler, NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {MatSnackBar} from '@angular/material/snack-bar';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ActivatedRoute, ActivatedRouteSnapshot, RouterModule, RouterOutlet, Routes} from '@angular/router';
-import {environment} from 'src/environments/environment';
+import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {BackArrowComponent} from './components/back-arrow/back-arrow.component';
-import {HandleLogoutComponent} from './components/handle-logout/handle-logout.component';
+import {DecoratedComponent} from './components/decorated/decorated.component';
+import {FooterComponent} from './components/footer/footer.component';
+import {HeaderComponent} from './components/header/header.component';
 import {HomeComponent} from './components/home/home.component';
 import {LandingPageComponent} from './components/landing-page/landing-page.component';
 import {NoopComponent} from './components/noop/noop.component';
-import {ReceiveTokenComponent} from './components/receive-token/receive-token.component';
+import {QuotesComponent} from './components/quotes/quotes.component';
 import {SchoolSelectorComponent} from './components/school-selector/school-selector.component';
-import {SidenavComponent} from './components/sidenav/sidenav.component';
-import {ToolbarComponent} from './components/toolbar/toolbar.component';
-import {SnackbarManager} from './implementation/managers/snackbar-manager';
+import {ChangePasswordComponent} from './components/user-session/change-password/change-password.component';
+import {ForgotPasswordStep1Component} from './components/user-session/forgot-password-step1/forgot-password-step1.component';
+import {ForgotPasswordStep2Component} from './components/user-session/forgot-password-step2/forgot-password-step2.component';
+import {LoginComponent} from './components/user-session/login/login.component';
+import {LogoutNotificationComponent} from './components/user-session/logout-notification/logout-notification.component';
+import {LogoutComponent} from './components/user-session/logout/logout.component';
 import {GlobalErrorHandler} from './implementation/errors/global-error-handler';
+import {IsAuthenticatedGuard} from './implementation/route/is-authenticated-guard.service';
+import {IsProgramAdminGuard} from './implementation/route/is-program-admin-guard.service';
+import {isSystemAdminGuard} from './implementation/route/is-system-admin-guard.service';
 import {NavigationService} from './implementation/route/navigation.service';
-import {CanActivateApp} from './implementation/services/can-activate-app';
-import {CanActivateSysAdmin} from './implementation/services/can-activate-sys-admin';
+import {CognitoService} from './implementation/security/cognito.service';
+import {UserLoginService} from './implementation/security/user-login.service';
 import {HttpErrorInterceptorService} from './implementation/services/http-error-interceptor.service';
 import {MenuStateService} from './implementation/services/menu-state.service';
 import {TokenInterceptorService} from './implementation/services/token-interceptor.service';
-import {UserSessionService} from './implementation/services/user-session.service';
 import {MaterialModule} from './implementation/shared/material.module';
 import {SchoolLocalStorageLoader} from './implementation/state-management/school-local-storage-loader';
 import {globalBookProvidersFactory} from './providers/global/global-book-providers-factory';
 import {globalGameProvidersFactory} from './providers/global/global-game-providers-factory';
+import {globalInterestProvidersFactory} from './providers/global/global-interest-providers-factory';
 import {globalInvitationProvidersFactory} from './providers/global/global-invitation-providers-factory';
 import {globalMentorProvidersFactory} from './providers/global/global-mentor-providers-factory';
 import {globalPersonnelProvidersFactory} from './providers/global/global-personnel-providers-factory';
@@ -56,101 +61,45 @@ import {globalSchoolSessionProvidersFactory} from './providers/global/global-sch
 import {globalSnackbarProviders} from './providers/global/global-snackbar-providers';
 import {globalStudentProvidersFactory} from './providers/global/global-student-providers-factory';
 import {globalTeacherProvidersFactory} from './providers/global/global-teacher-providers-factory';
-
-const LOGIN_PROVIDER = new InjectionToken('loginRedirectResolver');
-const LOGOUT_PROVIDER = new InjectionToken('logoutRedirectResolver');
-
-const oauthScopes = 'openid profile';
-const loginUrl = `https://${environment.cognitoBaseUrl}/login?client_id=${environment.cognitoClientId}&response_type=token&scope=${oauthScopes}&redirect_uri=${environment.tokenRedirect}`;
-const logoutUrl = `https://${environment.cognitoBaseUrl}/logout?client_id=${environment.cognitoClientId}&logout_uri=${environment.logoutRedirect}`;
-
-const routes: Routes = [
-  {
-    path: '', component: AppComponent, children: [
-      {
-        path: '', component: SidenavComponent, children: [
-          {path: '', component: LandingPageComponent},
-          {path: 'logout', component: NoopComponent, canActivate: [LOGOUT_PROVIDER, CanActivateApp]},
-          {path: 'home', component: HomeComponent, canActivate: [CanActivateApp]},
-          {path: 'handleLogout', component: HandleLogoutComponent, canActivate: [CanActivateApp]},
-          {
-            path: 'adminmanager',
-            loadChildren: () => import('./modules/admin-manager/admin-manager.module').then(m => m.AdminManagerModule),
-            canActivate: [CanActivateSysAdmin]
-          },
-          {
-            path: 'resourcemanager',
-            loadChildren: () => import('./modules/resource-manager/resource-manager.module').then(m => m.ResourceManagerModule),
-            canActivate: [CanActivateApp]
-          },
-          {
-            path: 'schoolsmanager',
-            loadChildren: () => import('./modules/school-manager/school-manager.module').then(m => m.SchoolManagerModule),
-            canActivate: [CanActivateApp]
-          },
-          {
-            path: 'studentmanager',
-            loadChildren: () => import('./modules/student-manager/student-manager.module').then(m => m.StudentManagerModule),
-            canActivate: [CanActivateApp]
-          },
-          {
-            path: 'mentormanager',
-            loadChildren: () => import('./modules/mentor-manager/mentor-manager.module').then(m => m.MentorManagerModule),
-            canActivate: [CanActivateApp]
-          },
-          {
-            path: 'workflowmanager',
-            loadChildren: () => import('./modules/workflow-manager/workflow-manager.module').then(m => m.WorkflowManagerModule)
-          },
-          {path: 'receiveToken', component: ReceiveTokenComponent},
-          {path: 'login', component: NoopComponent, canActivate: [LOGIN_PROVIDER]},
-          {path: '**', redirectTo: ''}
-        ]
-      }
-    ]
-  }
-];
+import { SessionContainerComponent } from './components/user-session/session-container/session-container.component';
 
 @NgModule({
   declarations: [
     // components
     AppComponent,
-    BackArrowComponent,
-    HandleLogoutComponent,
+    ChangePasswordComponent,
+    DecoratedComponent,
+    FooterComponent,
+    ForgotPasswordStep1Component,
+    ForgotPasswordStep2Component,
+    HeaderComponent,
     HomeComponent,
     LandingPageComponent,
+    LoginComponent,
+    LogoutComponent,
+    LogoutNotificationComponent,
     NoopComponent,
-    ReceiveTokenComponent,
+    QuotesComponent,
     SchoolSelectorComponent,
-    SidenavComponent,
-    ToolbarComponent,
+    SessionContainerComponent,
   ],
   imports: [
+    AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     HttpClientModule,
     MaterialModule,
-    RouterModule.forRoot(routes),
-    RouterOutlet,
   ],
   providers: [
+    IsAuthenticatedGuard,
+    IsProgramAdminGuard,
+    isSystemAdminGuard,
+    CognitoService,
     MenuStateService,
     NavigationService,
     SchoolLocalStorageLoader,
-    UserSessionService,
-    {
-      provide: LOGIN_PROVIDER,
-      useValue: (route: ActivatedRouteSnapshot) => {window.open(loginUrl, '_self')}
-    },
-    {
-      provide: LOGOUT_PROVIDER,
-      useValue: (route: ActivatedRoute) => {window.open(logoutUrl, '_self')}
-    },
-    {
-      provide: 'TOKEN_REDIRECT',
-      useValue: environment.tokenRedirect
-    },
+    UserLoginService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptorService,
@@ -165,19 +114,20 @@ const routes: Routes = [
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
     },
+    ...globalBookProvidersFactory(),
+    ...globalGameProvidersFactory(),
+    ...globalInterestProvidersFactory(),
+    ...globalInvitationProvidersFactory(),
+    ...globalMentorProvidersFactory(),
     ...globalSchoolProvidersFactory(),
     ...globalPersonnelProvidersFactory(),
     ...globalProgramAdminProvidersFactory(),
-    ...globalTeacherProvidersFactory(),
-    ...globalMentorProvidersFactory(),
-    ...globalStudentProvidersFactory(),
-    ...globalBookProvidersFactory(),
-    ...globalGameProvidersFactory(),
     ...globalSchoolBookProvidersFactory(),
     ...globalSchoolGameProvidersFactory(),
     ...globalSchoolSessionProvidersFactory(),
-    ...globalInvitationProvidersFactory(),
     ...globalSnackbarProviders(),
+    ...globalStudentProvidersFactory(),
+    ...globalTeacherProvidersFactory(),
   ],
   bootstrap: [AppComponent]
 })

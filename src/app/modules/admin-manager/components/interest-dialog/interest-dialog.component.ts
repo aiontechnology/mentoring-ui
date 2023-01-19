@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,88 +14,69 @@
  * limitations under the License.
  */
 
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { AbstractControl, UntypedFormGroup, UntypedFormBuilder, ValidatorFn, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { MetaDataService } from 'src/app/modules/shared/services/meta-data/meta-data.service';
-import { InterestOutbound } from 'src/app/models/meta-data/interests/interest-outbound';
-import { InterestInbound } from '../../models/interest/interest-inbound';
-import { Subscription } from 'rxjs';
+import {Component, Inject, OnInit} from '@angular/core';
+import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {DialogComponent} from '../../../../implementation/component/dialog-component';
+import {DataSource} from '../../../../implementation/data/data-source';
+import {Interest} from '../../../../models/interest';
+import {INTEREST_DATA_SOURCE} from '../../../../providers/global/global-interest-providers-factory';
 
 @Component({
   selector: 'ms-interest-dialog',
   templateUrl: './interest-dialog.component.html',
   styleUrls: ['./interest-dialog.component.scss']
 })
-export class InterestDialogComponent implements OnInit, OnDestroy {
-  private isUpdate: boolean;
-  private updateValue: string; // 'CREATE_ME' for new interest, and 'old_value' for edited interest.
+export class InterestDialogComponent extends DialogComponent<Interest, InterestDialogComponent> implements OnInit {
+  private interests: string[]
 
-  dialogTitle: string;
-  model: UntypedFormGroup;
-
-  interestSubscription$: Subscription;
-  interests: string[];
-
-  constructor(private dialogRef: MatDialogRef<InterestDialogComponent>,
-              private metaDataService: MetaDataService,
-              private formBuilder: UntypedFormBuilder,
-              @Inject(MAT_DIALOG_DATA) private data: any) {
-
-    const updateInterest = data?.model ? data.model.name : '';
-    this.updateValue = updateInterest ? updateInterest : 'CREATE_ME';
-
-    this.isUpdate = this.determineUpdate(data);
-
-    this.dialogTitle = this.isUpdate ? 'Edit Interest' : 'Add New Interest';
-    this.createModel(formBuilder, updateInterest);
+  constructor(
+    // for super
+    @Inject(MAT_DIALOG_DATA) public data: { model: Interest, panelTitle: string },
+    formBuilder: FormBuilder,
+    dialogRef: MatDialogRef<InterestDialogComponent>,
+    @Inject(INTEREST_DATA_SOURCE) interestDataSource: DataSource<Interest>,
+  ) {
+    super(data?.model, formBuilder, dialogRef, interestDataSource)
+    interestDataSource.allValues()
+      .then(interests => this.interests = interests.map(i => i.name))
   }
 
   ngOnInit(): void {
-    this.interestSubscription$ = this.metaDataService.interests.subscribe(data => {
-      this.interests = data;
-    });
-  }
-
-  ngOnDestroy(): void {
-    this.interestSubscription$.unsubscribe();
-  }
-
-  createModel(formBuilder: UntypedFormBuilder, interest: string): void {
-    this.model = formBuilder.group({
-      name: [interest, [this.duplicateInterestValidator(), Validators.required]]
-    });
+    this.init()
   }
 
   duplicateInterestValidator(): ValidatorFn {
     const errorMsg = 'This interest already exists'
     return (control: AbstractControl): { [key: string]: any } | null => {
       if (this.interests?.includes(control.value) && this.interests !== undefined) {
-        return { duplicateInterest: { msg: errorMsg } };
+        return {duplicateInterest: {msg: errorMsg}};
       }
       return null;
     };
+    return null;
   }
 
-  save(): void {
-    const newInterest = this.model.value.name;
-    const value: InterestOutbound = {
-      [newInterest]: this.updateValue
-    };
-    const ret = this.metaDataService.updateInterests(value);
-
-    ret.then(() => {
-      const n: InterestInbound = { name: newInterest };
-      this.dialogRef.close(n);
-    });
+  protected override toModel(formValue: any): Interest {
+    const interest: Interest = new Interest(formValue)
+    if (this.isUpdate) {
+      interest.links = formValue.interest.links
+    }
+    return interest;
   }
 
-  dismiss(): void {
-    this.dialogRef.close(null);
+  protected override doCreateFormGroup(formBuilder: FormBuilder, interest: Interest): FormGroup {
+    return formBuilder.group({
+      interest,
+      name: ['', [this.duplicateInterestValidator(), Validators.required]]
+    })
   }
 
-  private determineUpdate(formData: any): boolean {
-    return formData?.model != null;
+  protected override doUpdateFormGroup(formGroup: FormGroup, interest: Interest): void {
+    formGroup.setValue({
+      interest,
+      name: interest?.name
+    })
   }
 
 }

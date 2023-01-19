@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,14 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, ReplaySubject, Subject} from 'rxjs';
+import {Observable, Subject} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {environment} from 'src/environments/environment';
-import {InterestOutbound} from '../../../../models/meta-data/interests/interest-outbound';
 
 @Injectable()
 export class MetaDataService {
 
   private acctivityFocusesUri = environment.apiUri + '/api/v1/activityfocuses';
-  private interestsUri = environment.apiUri + '/api/v1/interests';
   private leadershipTraitsUri = environment.apiUri + '/api/v1/leadership_traits';
   private leadershipSkillsUri = environment.apiUri + '/api/v1/leadership_skills';
   private phonogramUri = environment.apiUri + '/api/v1/phonograms';
@@ -39,7 +37,6 @@ export class MetaDataService {
     this._phonograms = new Subject<string[]>();
     this._behaviors = new Subject<string[]>();
     this._tags = new Subject<string[]>();
-    this._interests = new ReplaySubject<string[]>(1);
   }
 
   private _activityFocuses: Subject<string[]>;
@@ -76,12 +73,6 @@ export class MetaDataService {
 
   get tags(): Observable<string[]> {
     return this._tags;
-  }
-
-  private _interests: ReplaySubject<string[]>;
-
-  get interests(): Observable<string[]> {
-    return this._interests;
   }
 
   loadActivityFocuses(): void {
@@ -139,32 +130,6 @@ export class MetaDataService {
         const tags = data?.content ?? [];
         this._tags.next(tags);
       });
-  }
-
-  loadInterests(): Promise<string[]> {
-    return this.http.get<any>(this.interestsUri)
-      .pipe(
-        map(data => {
-          const interests = data?.content ?? [];
-          this._interests.next(interests);
-          return interests;
-        }))
-      .toPromise();
-  }
-
-  updateInterests(newInterest: InterestOutbound): Promise<string[]> {
-    return new Promise((resolver) => {
-      this.http.put<any>(this.interestsUri, newInterest)
-        .subscribe(
-          data => {
-            const interests = data?.content ?? [];
-            this._interests.next(interests);
-            resolver(interests);
-          },
-          error => {
-            console.error('Error', error);
-          });
-    });
   }
 
 }

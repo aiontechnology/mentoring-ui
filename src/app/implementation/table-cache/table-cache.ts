@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ export class TableCache<T> extends AbstractRemovableTableCache<T> {
   constructor(
     label: string,
     private dataSource: DataSource<T>,
+    private comparator?: (item1: T, item2: T) => number
   ) {
     super(label);
   }
@@ -33,7 +34,9 @@ export class TableCache<T> extends AbstractRemovableTableCache<T> {
     return this.dataSource.allValues()
       .then(values => {
         this.isLoading$.next(false)
-        this.tableDataSource.data = values
+        this.tableDataSource.data = this.comparator
+          ? values.sort(this.comparator)
+          : values
         return values
       });
   }

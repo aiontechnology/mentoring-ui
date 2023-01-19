@@ -42,7 +42,7 @@ import {personnelProvidersFactory} from './providers/personnel-providers-factory
 import {programAdminProvidersFactory} from './providers/program-admin-providers-factory';
 import {schoolBookProvidersFactory} from './providers/school-book-providers-factory';
 import {schoolGameProvidersFactory} from './providers/school-game-providers-factory';
-import {schoolProvidersFactory} from './providers/school-providers-factory';
+import {SCHOOL_SESSION_ADD_DIALOG_MANAGER, schoolProvidersFactory} from './providers/school-providers-factory';
 import {teacherProvidersFactory} from './providers/teacher-providers-factory';
 import {SchoolManagerComponent} from './school-manager.component';
 
@@ -104,6 +104,7 @@ export const INVITATION_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<I
     ...schoolGameProvidersFactory(),
     ...schoolProvidersFactory(),
     ...teacherProvidersFactory(),
+    ...standAloneDialogManagerProviders<SchoolSessionDialogComponent>(SCHOOL_SESSION_ADD_DIALOG_MANAGER, SchoolSessionDialogComponent),
     ...standAloneDialogManagerProviders<InviteStudentComponent>(INVITATION_EDIT_DIALOG_MANAGER, InviteStudentComponent),
   ]
 })

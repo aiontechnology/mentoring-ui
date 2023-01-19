@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,7 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {Book} from './models/book/book';
-import {Game} from './models/game/game';
-import {Mentor} from './models/mentor/mentor';
-import {Personnel} from './models/personnel/personnel';
-import {ProgramAdmin} from './models/program-admin/program-admin';
-import {School} from './models/school/school';
-import {Teacher} from './models/teacher/teacher';
-import {UserSessionService} from './implementation/services/user-session.service';
+import {UserLoginService} from './implementation/security/user-login.service';
 import {MultiItemCache} from './implementation/state-management/multi-item-cache';
 import {MultiItemCacheSchoolChangeLoader} from './implementation/state-management/multi-item-cache-school-change-loader';
 import {SchoolChangeDataSourceResetter} from './implementation/state-management/school-change-data-source-resetter';
@@ -30,6 +23,13 @@ import {SchoolChangeUriSupplierHandler} from './implementation/state-management/
 import {SchoolLocalStorageLoader} from './implementation/state-management/school-local-storage-loader';
 import {SchoolSessionsSchoolChangeHandler} from './implementation/state-management/school-sessions-school-change-handler';
 import {SingleItemCache} from './implementation/state-management/single-item-cache';
+import {Book} from './models/book/book';
+import {Game} from './models/game/game';
+import {Mentor} from './models/mentor/mentor';
+import {Personnel} from './models/personnel/personnel';
+import {ProgramAdmin} from './models/program-admin/program-admin';
+import {School} from './models/school/school';
+import {Teacher} from './models/teacher/teacher';
 import {INVITATION_URI_SUPPLIER_UPDATER} from './providers/global/global-invitation-providers-factory';
 import {MENTOR_COLLECTION_CACHE_LOADER, MENTOR_SCHOOL_CHANGE_RESETTER} from './providers/global/global-mentor-providers-factory';
 import {PERSONNEL_SCHOOL_CHANGE_RESETTER} from './providers/global/global-personnel-providers-factory';
@@ -49,24 +49,19 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'mentorsuccess-ui';
 
   constructor(
-    private userSession: UserSessionService,
+    private userLoginService: UserLoginService,
     private schoolLocalStorageLoader: SchoolLocalStorageLoader,
-
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_COLLECTION_CACHE) public schoolCollectionCache: MultiItemCache<School>,
-
     @Inject(SCHOOL_SESSION_COLLECTION_CACHE_LOADER) private schoolSessionCollectionCacheLoader: SchoolSessionsSchoolChangeHandler,
-
     @Inject(MENTOR_SCHOOL_CHANGE_RESETTER) private mentorSchoolChangeResetter: SchoolChangeDataSourceResetter<Mentor>,
     @Inject(PERSONNEL_SCHOOL_CHANGE_RESETTER) private personnelSchoolChangeResetter: SchoolChangeDataSourceResetter<Personnel>,
     @Inject(PROGRAM_ADMIN_SCHOOL_CHANGE_RESETTER) private programAdminSchoolChangeResetter: SchoolChangeDataSourceResetter<ProgramAdmin>,
     @Inject(SCHOOL_BOOK_SCHOOL_CHANGE_RESETTER) private schoolBookAdminSchoolChangeResetter: SchoolChangeDataSourceResetter<Book>,
     @Inject(SCHOOL_GAME_SCHOOL_CHANGE_RESETTER) private schoolGameAdminSchoolChangeResetter: SchoolChangeDataSourceResetter<Game>,
     @Inject(TEACHER_SCHOOL_CHANGE_RESETTER) private teacherAdminSchoolChangeResetter: SchoolChangeDataSourceResetter<Teacher>,
-
     @Inject(MENTOR_COLLECTION_CACHE_LOADER) private mentorCollectionCacheLoader: MultiItemCacheSchoolChangeLoader<Mentor>,
     @Inject(TEACHER_COLLECTION_CACHE_LOADER) private teacherCollectionCacheLoader: MultiItemCacheSchoolChangeLoader<Teacher>,
-
     @Inject(INVITATION_URI_SUPPLIER_UPDATER) private invitationUriSupplierUpdater: SchoolChangeUriSupplierHandler,
   ) {}
 
@@ -84,11 +79,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mentorCollectionCacheLoader.start()
     this.teacherCollectionCacheLoader.start()
 
-    this.invitationUriSupplierUpdater.start()
+    // this.invitationUriSupplierUpdater.start()
   }
 
   ngOnDestroy(): void {
-    this.invitationUriSupplierUpdater.stop()
+    // this.invitationUriSupplierUpdater.stop()
 
     this.teacherCollectionCacheLoader.stop()
     this.mentorCollectionCacheLoader.stop()
@@ -104,7 +99,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   private async loadSchools(): Promise<void> {
-    if (this.userSession.isLoggedIn() && this.userSession.isSysAdmin) {
+    if (this.userLoginService.isAuthenticated && this.userLoginService.isSystemAdmin) {
       await this.schoolCollectionCache.load()
     }
   }

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020-2022 Aion Technology LLC
+  ~ Copyright 2020-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,54 +14,56 @@
   ~ limitations under the License.
   -->
 
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>{{ studentInstanceCache.item?.firstName + ' ' + studentInstanceCache.item?.lastName }}</mat-card-title>
-    <div class="notification mat-h5" *ngIf="!schoolSessionInstanceCache.item.isCurrent">
-      Historic Data (Read Only)
-    </div>
-  </mat-card-header>
-  <mat-card-content class="mat-elevation-z8">
-    <div class="student-details">
-      <h1>Details</h1>
-      <table>
-        <tr>
-          <td>Student ID</td>
-          <td>{{ studentInstanceCache.item?.studentId }}</td>
-        </tr>
-        <tr>
-          <td>Grade</td>
-          <td>{{ studentInstanceCache.item?.grade }}</td>
-        </tr>
-        <tr>
-          <td>Interests</td>
-          <td>{{ studentInstanceCache.item?.interests.join(', ') }}</td>
-        </tr>
-        <tr>
-          <td>Media release signed</td>
-          <td>{{ studentInstanceCache.item?.mediaReleaseSigned ? 'yes' : 'no' }}</td>
-        </tr>
-        <tr>
-          <td>Start date</td>
-          <td>{{ studentInstanceCache.item?.startDate | date: 'MMMM, yyyy' : 'utc' }}</td>
-        </tr>
-        <tr>
-          <td>Preferred time</td>
-          <td>{{ studentInstanceCache.item?.preferredTime }}</td>
-        </tr>
-        <tr>
-          <td>Actual time</td>
-          <td>{{ studentInstanceCache.item?.actualTime }}</td>
-        </tr>
-        <tr>
-          <td>Mentor</td>
-          <td>{{ studentInstanceCache.item?.mentor?.mentor?.firstName }} {{ studentInstanceCache.item?.mentor?.mentor?.lastName }}</td>
-        </tr>
-        <tr>
-          <td>Location</td>
-          <td>{{ studentInstanceCache.item?.displayLocation }}</td>
-        </tr>
-      </table>
-    </div>
-  </mat-card-content>
-</mat-card>
+<table class="detail-view-container">
+  <thead class="mat-body-2">
+  <tr>
+    <td colspan="2">
+      Student Details
+    </td>
+  </tr>
+  </thead>
+  <tbody class="mat-body-1">
+  <tr>
+    <td>Student ID:</td>
+    <td>{{ studentInstanceCache.item?.studentId }}</td>
+  </tr>
+  <tr>
+    <td>Grade:</td>
+    <td>
+      <ms-grade-level gradeLevel="{{ studentInstanceCache.item?.grade }}"></ms-grade-level>
+    </td>
+  </tr>
+  <tr>
+    <td>Interests:</td>
+    <td>
+      <mat-chip-list>
+        <mat-chip class="chip" *ngFor="let interest of studentInstanceCache.item?.interests">{{interest}}</mat-chip>
+      </mat-chip-list>
+    </td>
+  </tr>
+  <tr>
+    <td>Media Release Signed:</td>
+    <td>{{ studentInstanceCache.item?.mediaReleaseSigned ? 'Yes' : 'No' }}</td>
+  </tr>
+  <tr>
+    <td>Start Date:</td>
+    <td>{{ studentInstanceCache.item?.startDate | date: 'MMMM, yyyy' : 'utc' }}</td>
+  </tr>
+  <tr>
+    <td>Preferred Time:</td>
+    <td>{{ studentInstanceCache.item?.preferredTime }}</td>
+  </tr>
+  <tr>
+    <td>Actual Time:</td>
+    <td>{{ studentInstanceCache.item?.actualTime }}</td>
+  </tr>
+  <tr>
+    <td>Mentor:</td>
+    <td>{{ studentInstanceCache.item?.mentor?.mentor?.firstName }} {{ studentInstanceCache.item?.mentor?.mentor?.lastName }}</td>
+  </tr>
+  <tr>
+    <td>Location:</td>
+    <td>{{ studentInstanceCache.item?.displayLocation }}</td>
+  </tr>
+  </tbody>
+</table>

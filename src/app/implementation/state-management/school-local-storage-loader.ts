@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,23 @@
  */
 
 import {Inject, Injectable} from '@angular/core';
-import {SCHOOL_INSTANCE_CACHE} from '../../providers/global/global-school-providers-factory';
 import {School} from '../../models/school/school';
-import {UserSessionService} from '../services/user-session.service';
+import {SCHOOL_INSTANCE_CACHE} from '../../providers/global/global-school-providers-factory';
+import {UserLoginService} from '../security/user-login.service';
 import {SingleItemCache} from './single-item-cache';
 
 @Injectable()
 export class SchoolLocalStorageLoader {
   constructor(
-    @Inject(SCHOOL_INSTANCE_CACHE )private schoolInstanceCache: SingleItemCache<School>
+    @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>
   ) {
     if (this.schoolInstanceCache.isEmpty) {
-      const schoolJson: string = localStorage.getItem('SchoolInstanceCache')
+      const schoolJson: string = localStorage.getItem(UserLoginService.SCHOOL_KEY)
       const school: School = new School(JSON.parse(schoolJson))
-      if(school?.id) {
+      if (school?.id) {
         this.schoolInstanceCache.item = school
       } else {
-        localStorage.removeItem(UserSessionService.SCHOOL_KEY)
+        localStorage.removeItem(UserLoginService.SCHOOL_KEY)
       }
     }
   }

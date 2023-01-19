@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,8 @@
 
 import {InjectionToken, NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {CanActivateProgAdmin} from 'src/app/implementation/services/can-activate-prog-admin';
-import {CanActivateSysAdmin} from 'src/app/implementation/services/can-activate-sys-admin';
 import {Command} from '../../implementation/command/command';
 import {SCHOOL_ID} from '../../implementation/route/route-constants';
-import {TableCache} from '../../implementation/table-cache/table-cache';
-import {globalMentorProvidersFactory} from '../../providers/global/global-mentor-providers-factory';
-import {globalSchoolProvidersFactory} from '../../providers/global/global-school-providers-factory';
-import {School} from '../../models/school/school';
 import {SharedModule} from '../shared/shared.module';
 import {MentorDetailComponent} from './components/mentor-detail/mentor-detail.component';
 import {MentorDialogComponent} from './components/mentor-dialog/mentor-dialog.component';

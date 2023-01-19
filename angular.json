@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "mentorsuccess-ui": {
@@ -29,7 +29,14 @@
             "styles": [
               "src/style/styles.scss",
               "src/style/theme.scss",
-              "src/style/_variables.scss"
+              "src/style/list-view-styles.scss",
+              "src/style/detail-view-styles.scss",
+              "src/style/dialog-view-styles.scss",
+              "src/style/tab-styles.scss",
+              "src/style/collection-update-styles.scss",
+              "src/style/snackbar-styles.scss",
+              "src/style/login-styles.scss",
+              "src/style/user-session-styles.scss"
             ],
             "scripts": [],
             "vendorChunk": true,
@@ -37,7 +44,14 @@
             "buildOptimizer": false,
             "sourceMap": true,
             "optimization": false,
-            "namedChunks": true
+            "namedChunks": true,
+            "allowedCommonJsDependencies": [
+              "@aws-crypto/sha256-js",
+              "buffer",
+              "isomorphic-unfetch",
+              "js-cookie",
+              "aws-sdk/global"
+            ]
           },
           "configurations": {
             "prod": {
@@ -94,8 +108,7 @@
             ],
             "styles": [
               "src/style/styles.scss",
-              "src/style/theme.scss",
-              "src/style/_variables.scss"
+              "src/style/theme.scss"
             ],
             "scripts": []
           }
@@ -114,5 +127,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": false
   }
 }

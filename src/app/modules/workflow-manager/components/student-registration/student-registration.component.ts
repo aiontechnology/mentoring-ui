@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {grades} from '../../../../implementation/constants/grades';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
+import {emailAddressValidator} from '../../../../implementation/forms/email-address-validator';
 import {valueOrNull} from '../../../../implementation/functions/value-or-null';
+import {Grade} from '../../../../implementation/types/grade';
 import {Teacher} from '../../../../models/teacher/teacher';
 import {StudentRegistration} from '../../../../models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../../../../models/workflow/student-registration-lookup';
-import {Grade} from '../../../../implementation/types/grade';
 import {LinkService} from '../../../shared/services/link-service/link.service';
 import {REGISTRATION_DATA_SOURCE, REGISTRATION_LOOKUP_DATA_SOURCE, REGISTRATION_URI_SUPPLIER} from '../../../shared/shared.module';
 

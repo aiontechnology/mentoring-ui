@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2021-2022 Aion Technology LLC
+  ~ Copyright 2021-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,20 +14,25 @@
   ~ limitations under the License.
   -->
 
-<h2 mat-dialog-title>Update Books</h2>
-<mat-dialog-content>
+<ms-dialog-container panelTitle="Update Book List" [component]="this" [isValid]="true" [hasRequiredFields]="false">
   <div class="filter-group-wrapper">
-    <h3 class="mat-h3">Resource filters</h3>
     <div class="filter-group-content">
       <div class="filter-group">
-        <mat-form-field>
-          <input matInput #filterAll (keyup)="books.applyTitleFilter($event.target.value)" placeholder="Global titles"/>
+        <div class="title mat-title">Global Books</div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>
+            <mat-icon>search</mat-icon>
+            Global Books
+          </mat-label>
+          <input matInput #filterAll (keyup)="books.applyTitleFilter($event.target.value)"/>
           <button mat-button *ngIf="filterAll.value" matSuffix mat-icon-button (click)="books.clearInput(filterAll)">
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
-        <mat-form-field>
-          <mat-label>Global tags</mat-label>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Global Tags</mat-label>
           <mat-select (selectionChange)="books.applyTagFilter($event.value)">
             <mat-option>- None -</mat-option>
             <mat-option *ngFor="let tag of (tags$ | async)" [value]="tag">
@@ -38,14 +43,22 @@
       </div>
       <div class="spacer"></div>
       <div class="filter-group">
-        <mat-form-field>
-          <input matInput #filterLocal (keyup)="localBooks.applyTitleFilter($event.target.value)" placeholder="Local titles"/>
-          <button mat-button *ngIf="filterLocal.value" matSuffix mat-icon-button (click)="localBooks.clearInput(filterLocal)">
+        <div class="title mat-title">Local Books</div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>
+            <mat-icon>search</mat-icon>
+            Local Books
+          </mat-label>
+          <input matInput #filterLocal (keyup)="localBooks.applyTitleFilter($event.target.value)"/>
+          <button mat-button *ngIf="filterLocal.value" matSuffix mat-icon-button
+                  (click)="localBooks.clearInput(filterLocal)">
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
-        <mat-form-field>
-          <mat-label>Local tags</mat-label>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Local Tags</mat-label>
           <mat-select (selectionChange)="localBooks.applyTagFilter($event.value)">
             <mat-option>- None -</mat-option>
             <mat-option *ngFor="let tag of (tags$ | async)" [value]="tag">
@@ -57,50 +70,49 @@
     </div>
   </div>
 
-  <p class="mat-small">To add: Click and drag titles from global resources to local resources.</p>
+  <p class="mat-body-1">To add: Click and drag titles from global resources to local resources.</p>
 
   <div class="droplist-group" cdkDropListGroup>
 
     <div class="droplist-container">
-      <h3 class="mat-h3">Global books</h3>
       <div
         class="droplist-column"
         cdkDropList
         cdkDropListSortingDisabled
         [cdkDropListData]="books.filteredData"
         (cdkDropListDropped)="drop($event)">
-        <div class="droplist-box mat-body" *ngFor="let book of books.filteredData" cdkDrag>{{ book.title }}<span class="tag" *ngIf="book.tag">{{ book.tag }}</span></div>
+        <div class="droplist-box mat-body" *ngFor="let book of books.filteredData" cdkDrag>
+          {{ book.displayName }}
+          <span class="tag" *ngIf="book.tag">{{ book.tag }}</span>
+        </div>
       </div>
-      <button class="transfer" mat-raised-button (click)="moveGlobalToLocal()">
-        Add to school
-        <mat-icon>arrow_forward</mat-icon>
+      <button class="transfer" (click)="moveGlobalToLocal()">
+        <span class="mat-display-1">
+          Add to School
+          <mat-icon>arrow_forward</mat-icon>
+        </span>
       </button>
     </div>
 
     <div class="droplist-container">
-      <h3 class="mat-h3">School books</h3>
       <div
         class="droplist-column"
         cdkDropList
         cdkDropListSortingDisabled
         [cdkDropListData]="localBooks.filteredData"
         (cdkDropListDropped)="drop($event)">
-        <div class="droplist-box mat-body" *ngFor="let book of localBooks.filteredData" cdkDrag>{{ book.title }}<span class="tag" *ngIf="book.tag">{{ book.tag }}</span></div>
+        <div class="droplist-box mat-body" *ngFor="let book of localBooks.filteredData" cdkDrag>
+          {{ book.displayName }}
+          <span class="tag" *ngIf="book.tag">{{ book.tag }}</span>
+        </div>
       </div>
-      <button class="transfer" mat-raised-button (click)="moveLocalToGlobal()">
-        <mat-icon>arrow_back</mat-icon>
-        Remove from school
+      <button class="transfer" (click)="moveLocalToGlobal()">
+        <span class="mat-display-1">
+          <mat-icon>arrow_back</mat-icon>
+          Remove from School
+        </span>
       </button>
     </div>
 
   </div>
-
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button color="primary" (click)="save()">
-    <mat-icon>save</mat-icon> Save
-  </button>
-  <button mat-button color="primary" (click)="dismiss()">
-    <mat-icon>cancel</mat-icon> Cancel
-  </button>
-</mat-dialog-actions>
+</ms-dialog-container>

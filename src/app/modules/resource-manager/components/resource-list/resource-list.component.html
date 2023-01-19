@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020-2022 Aion Technology LLC
+  ~ Copyright 2020-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,17 +14,33 @@
   ~ limitations under the License.
   -->
 
-<mat-tab-group class="wrapper" [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
-  <mat-tab *ngIf="userSession.isProgAdmin" label="School Books">
+<ms-tabbed-container tabLabel="RESOURCE MANAGER">
+
+<mat-tab-group class="wrapper" animationDuration="0ms" [(selectedIndex)]="tabIndex" (selectedIndexChange)="onTabChange($event)">
+  <mat-tab *ngIf="userLoginService.isProgramAdmin">
+    <ng-template mat-tab-label>
+      <span class="tab-label">School Books</span>
+    </ng-template>
     <ms-school-book-list class="tab-content"></ms-school-book-list>
   </mat-tab>
-  <mat-tab *ngIf="userSession.isProgAdmin" label="School Games">
+  <mat-tab *ngIf="userLoginService.isProgramAdmin">
+    <ng-template mat-tab-label>
+      <span class="tab-label">School Games</span>
+    </ng-template>
     <ms-school-game-list class="tab-content"></ms-school-game-list>
   </mat-tab>
-  <mat-tab label="Global Books">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <span class="tab-label">Global Books</span>
+    </ng-template>
     <ms-book-list class="tab-content"></ms-book-list>
   </mat-tab>
-  <mat-tab label="Global Games">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <span class="tab-label">Global Games</span>
+    </ng-template>
     <ms-game-list class="tab-content"></ms-game-list>
   </mat-tab>
 </mat-tab-group>
+
+</ms-tabbed-container>

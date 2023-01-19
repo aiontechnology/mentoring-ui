@@ -15,17 +15,16 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {DialogManager} from '../../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../../implementation/component/list-component';
-import {Book} from '../../../../../models/book/book';
-import {School} from '../../../../../models/school/school';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
+import {Book} from '../../../../../models/book/book';
+import {School} from '../../../../../models/school/school';
 import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
 import {UPDATE_BOOK_MENU_TITLE, UPDATE_BOOK_SNACKBAR_MESSAGE} from '../../../other/school-constants';
 import {BOOK_UPDATE_DIALOG_MANAGER, SCHOOL_BOOK_TABLE_CACHE} from '../../../providers/school-book-providers-factory';
@@ -53,8 +52,6 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
-
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [

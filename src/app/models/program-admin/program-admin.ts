@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,5 +33,9 @@ export class ProgramAdmin {
     this.email = convertEmptyStringToNull(json?.email)
     this.cellPhone = convertEmptyStringToNull(json?.cellPhone)
     this.links = json?.links
+  }
+
+  get fullName() {
+    return `${this.firstName} ${this.lastName}`
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,14 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 import {resourceLocations} from 'src/app/implementation/constants/locations';
 import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
-import {Book} from 'src/app/models/book/book';
 import {Grade} from 'src/app/implementation/types/grade';
+import {Book} from 'src/app/models/book/book';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
+import {Interest} from '../../../../models/interest';
 import {BOOK_DATA_SOURCE} from '../../../../providers/global/global-book-providers-factory';
+import {INTEREST_DATA_SOURCE} from '../../../../providers/global/global-interest-providers-factory';
 
 @Component({
   selector: 'ms-book-dialog',
@@ -35,7 +37,7 @@ import {BOOK_DATA_SOURCE} from '../../../../providers/global/global-book-provide
 export class BookDialogComponent extends DialogComponent<Book, BookDialogComponent> implements OnInit {
   grades: Grade[] = resourceGrades;
   locations: { [key: string]: string } = resourceLocations;
-  interestList$: Observable<string[]>;
+  interestList$: Promise<Interest[]>;
   leadershipTraitList$: Observable<string[]>;
   leadershipSkillList$: Observable<string[]>;
   phonogramList$: Observable<string[]>;
@@ -49,6 +51,7 @@ export class BookDialogComponent extends DialogComponent<Book, BookDialogCompone
     dialogRef: MatDialogRef<BookDialogComponent>,
     @Inject(BOOK_DATA_SOURCE) bookDataSource: DataSource<Book>,
     // other
+    @Inject(INTEREST_DATA_SOURCE) private interestDataSource: DataSource<Interest>,
     private metaDataService: MetaDataService,
   ) {
     super(data?.model, formBuilder, dialogRef, bookDataSource)
@@ -57,8 +60,7 @@ export class BookDialogComponent extends DialogComponent<Book, BookDialogCompone
   ngOnInit(): void {
     this.init()
 
-    this.metaDataService.loadInterests();
-    this.interestList$ = this.metaDataService.interests;
+    this.interestList$ = this.interestDataSource.allValues()
 
     this.metaDataService.loadLeadershipTraits();
     this.leadershipTraitList$ = this.metaDataService.leadershipTraits;

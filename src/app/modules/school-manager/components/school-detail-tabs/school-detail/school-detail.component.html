@@ -14,55 +14,40 @@
   ~ limitations under the License.
   -->
 
-<mat-card>
-  <ms-school-session-display></ms-school-session-display>
-  <mat-card-content class="mat-elevation-z8">
-    <div class="address">
-      <h1>Address</h1>
-      <table>
-        <tr>
-          <td>Street 1</td>
-          <td>{{ schoolInstanceCache.item?.address?.street1 }}</td>
-        </tr>
-        <tr>
-          <td>Street 2</td>
-          <td>{{ schoolInstanceCache.item?.address?.street2 }}</td>
-        </tr>
-        <tr>
-          <td>City</td>
-          <td>{{ schoolInstanceCache.item?.address?.city }}</td>
-        </tr>
-        <tr>
-          <td>State</td>
-          <td>{{ schoolInstanceCache.item?.address?.state }}</td>
-        </tr>
-        <tr>
-          <td>Zip</td>
-          <td>{{ schoolInstanceCache.item?.address?.zip }}</td>
-        </tr>
-      </table>
-    </div>
-    <div class="phone">
-      <h1>Phone</h1>
-      <table>
-        <tr>
-          <td>Phone number</td>
-          <td>{{ schoolInstanceCache.item?.phone }}</td>
-        </tr>
-      </table>
-    </div>
-    <div class="other">
-      <h1>Other</h1>
-      <table>
-        <tr>
-          <td>School district</td>
-          <td>{{ schoolInstanceCache.item?.district }}</td>
-        </tr>
-        <tr>
-          <td>Private school?</td>
-          <td>{{ schoolInstanceCache.item?.isPrivate ? "yes" : "no" }}</td>
-        </tr>
-      </table>
-    </div>
-  </mat-card-content>
-</mat-card>
+<table class="detail-view-container">
+  <thead class="mat-body-2">
+  <tr>
+    <td colspan="2">
+      {{ schoolInstanceCache.item?.name }} - Session: {{schoolInstanceCache.item?.currentSession?.label}}
+    </td>
+  </tr>
+  </thead>
+  <tbody class="mat-body-1">
+  <tr>
+    <td>Address:</td>
+    <td>
+      <p>{{ schoolInstanceCache.item?.address?.street1 }}</p>
+      <p>{{ schoolInstanceCache.item?.address?.street2 }}</p>
+      <p>{{ schoolInstanceCache.item?.address?.formatCityStateZip() }}</p>
+    </td>
+  </tr>
+  <tr>
+    <td>Phone:</td>
+    <td>
+      <p>{{ schoolInstanceCache.item?.phone }}</p>
+    </td>
+  </tr>
+  <tr>
+    <td>School District:</td>
+    <td>
+      <p>{{ schoolInstanceCache.item?.district }}</p>
+    </td>
+  </tr>
+  <tr>
+    <td>Private/Public:</td>
+    <td>
+      <p>{{ schoolInstanceCache.item?.isPrivate ? "Private" : "Public" }}</p>
+    </td>
+  </tr>
+  </tbody>
+</table>

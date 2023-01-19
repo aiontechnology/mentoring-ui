@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,7 @@ import {SharedModule} from 'src/app/modules/shared/shared.module';
 import {AdminManagerComponent} from './admin-manager.component';
 import {InterestDialogComponent} from './components/interest-dialog/interest-dialog.component';
 import {InterestListComponent} from './components/interest-list/interest-list.component';
-import {interestListProviders} from './providers/interest-list-menus';
-import {InterestCacheService} from './services/interests/interest-cache.service';
+import {interestProvidersFactory} from './providers/interest-providers-factory';
 
 const routes: Routes = [
   {
@@ -30,6 +29,9 @@ const routes: Routes = [
     ]
   }
 ];
+
+// Groups
+export const INTERESTS_GROUP = 'interest'
 
 /**
  * This module manages the system administrator's abilities.
@@ -45,8 +47,7 @@ const routes: Routes = [
     SharedModule.forRoot(),
   ],
   providers: [
-    InterestCacheService,
-    ...interestListProviders,
+    ...interestProvidersFactory(),
   ]
 })
 export class AdminManagerModule {}

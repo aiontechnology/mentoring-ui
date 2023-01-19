@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,8 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
-import {Book} from 'src/app/models/book/book';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
+import {Book} from 'src/app/models/book/book';
 import {DialogManager} from '../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
 import {DetailComponent} from '../../../../implementation/component/detail-component';
@@ -27,7 +27,7 @@ import {BOOK_ID} from '../../../../implementation/route/route-constants';
 import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
 import {SingleItemCacheUpdater} from '../../../../implementation/state-management/single-item-cache-updater';
 import {BOOK_INSTANCE_CACHE, BOOK_INSTANCE_CACHE_UPDATER} from '../../../../providers/global/global-book-providers-factory';
-import {ConfimationDialogComponent} from '../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {
   EDIT_BOOK_MENU_TITLE,
   EDIT_BOOK_PANEL_TITLE,
@@ -54,7 +54,7 @@ export class BookDetailComponent extends DetailComponent implements OnInit, OnDe
     navService: NavigationService,
     // other
     @Inject(BOOK_DETAIL_EDIT_DIALOG_MANAGER) private bookEditDialogManager: DialogManager<BookDialogComponent>,
-    @Inject(BOOK_DETAIL_DELETE_DIALOG_MANAGER) private bookDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
+    @Inject(BOOK_DETAIL_DELETE_DIALOG_MANAGER) private bookDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     @Inject(BOOK_INSTANCE_CACHE) public bookInstanceCache: SingleItemCache<Book>,
     @Inject(BOOK_INSTANCE_CACHE_UPDATER) private bookInstanceCacheUpdater: SingleItemCacheUpdater<Book>,
   ) {
@@ -75,13 +75,13 @@ export class BookDetailComponent extends DetailComponent implements OnInit, OnDe
           panelTitle: EDIT_BOOK_PANEL_TITLE
         }))
         .build(),
-      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_BOOK_MENU_TITLE, BOOK_GROUP, this.bookDeleteDialogManager)
+      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_BOOK_MENU_TITLE, BOOK_GROUP, this.bookDeleteDialogManager)
         .withSnackbarMessage(REMOVE_BOOK_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.bookInstanceCache.item,
           singularName: SINGULAR_BOOK,
           pluralName: PLURAL_BOOK,
-          countSupplier: () => 1,
+          nameSupplier: () => [this.bookInstanceCache.item.title],
         }))
         .build()
     ]

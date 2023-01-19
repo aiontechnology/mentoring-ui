@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,10 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {personLocations} from 'src/app/implementation/constants/locations';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
-import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {emailAddressValidator} from '../../../../implementation/form-validation/email-address-validator';
-import {phoneValidator} from '../../../../implementation/form-validation/phone-validator';
+import {emailAddressValidator} from '../../../../implementation/forms/email-address-validator';
+import {phoneValidator} from '../../../../implementation/forms/phone-validator';
 import {Mentor} from '../../../../models/mentor/mentor';
-import {School} from '../../../../models/school/school';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_URI_SUPPLIER} from '../../../../providers/global/global-mentor-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
+import {MENTOR_DATA_SOURCE} from '../../../../providers/global/global-mentor-providers-factory';
 
 @Component({
   selector: 'ms-mentor-dialog',
@@ -44,10 +40,6 @@ export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogC
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<MentorDialogComponent>,
     @Inject(MENTOR_DATA_SOURCE) mentorDataSource: DataSource<Mentor>,
-    // other
-    @Inject(MENTOR_INSTANCE_CACHE) private mentorCache: SingleItemCache<Mentor>,
-    @Inject(MENTOR_URI_SUPPLIER) private mentorUriSupplier: UriSupplier,
-    @Inject(SCHOOL_INSTANCE_CACHE) private schoolCache: SingleItemCache<School>,
   ) {
     super(data?.model, formBuilder, dialogRef, mentorDataSource)
   }
@@ -62,14 +54,14 @@ export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogC
   }
 
   protected toModel(formValue: any): Mentor {
-    const mentor: Mentor = new Mentor(formValue);
+    const mentor: Mentor = new Mentor(formValue)
     if (this.isUpdate) {
       mentor.links = formValue.mentor.links
     }
     return mentor;
   }
 
-  protected doCreateFormGroup(formBuilder: FormBuilder, mentor: Mentor): FormGroup {
+  protected override doCreateFormGroup(formBuilder: FormBuilder, mentor: Mentor): FormGroup {
     return formBuilder.group({
       mentor,
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
@@ -83,7 +75,7 @@ export class MentorDialogComponent extends DialogComponent<Mentor, MentorDialogC
     });
   }
 
-  protected doUpdateFormGroup(formGroup: FormGroup, mentor: Mentor): void {
+  protected override doUpdateFormGroup(formGroup: FormGroup, mentor: Mentor): void {
     formGroup.setValue({
       mentor,
       firstName: mentor?.firstName,

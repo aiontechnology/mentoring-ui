@@ -1,0 +1,67 @@
+/*!
+ * Copyright 2023 Aion Technology LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+snack-bar-container.normal-snackbar, snack-bar-container.logout-snackbar {
+  border-radius: 20px;
+
+  .mat-simple-snack-bar-content {
+    font-family: 'Montserrat', sans-serif;
+    font-width: 500;
+    font-size: 24px;
+    letter-spacing: 0.16px;
+    text-align: center;
+    width: 100%;
+  }
+
+  .mat-simple-snack-bar-content {
+    display: inline-block;
+    line-height: normal;
+    vertical-align: middle;
+  }
+
+  > simple-snack-bar {
+    display: flex;
+    align-items: center;
+  }
+}
+
+snack-bar-container.normal-snackbar {
+  width: 650px;
+  height: 89px;
+  margin-top: 250px !important;
+  background-color: #979797;
+  color: white;
+
+  *:not(span) {
+    height: 100%;
+  }
+}
+
+snack-bar-container.logout-snackbar {
+  width: 650px;
+  height: 373px;
+  margin-top: 300px !important;
+  background-color: white;
+  color: black;
+
+  > div {
+    height: 100%;
+
+    > div {
+      height: 100%;
+    }
+  }
+}

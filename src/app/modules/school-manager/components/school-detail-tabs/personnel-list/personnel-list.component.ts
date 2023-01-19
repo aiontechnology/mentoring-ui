@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,17 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 import {DialogManager} from '../../../../../implementation/command/dialog-manager';
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
 import {ListComponent} from '../../../../../implementation/component/list-component';
-import {Personnel} from '../../../../../models/personnel/personnel';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
 import {TableCache} from '../../../../../implementation/table-cache/table-cache';
+import {Personnel} from '../../../../../models/personnel/personnel';
 import {PERSONNEL_INSTANCE_CACHE} from '../../../../../providers/global/global-personnel-providers-factory';
-import {ConfimationDialogComponent} from '../../../../shared/components/confimation-dialog/confimation-dialog.component';
+import {ConfirmationDialogComponent} from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {
   ADD_PERSONNEL_MENU_TITLE,
   ADD_PERSONNEL_PANEL_TITLE,
@@ -53,7 +52,7 @@ import {PersonnelDialogComponent} from '../personnel-dialog/personnel-dialog.com
   styleUrls: ['./personnel-list.component.scss']
 })
 export class PersonnelListComponent extends ListComponent<Personnel> implements OnInit, OnDestroy {
-  columns = ['select', 'type', 'firstName', 'lastName', 'email', 'cellPhone']
+  columns = ['select', 'type', 'lastName', 'firstName', 'email', 'cellPhone']
 
   constructor(
     // for super
@@ -63,14 +62,12 @@ export class PersonnelListComponent extends ListComponent<Personnel> implements 
     @Inject(PERSONNEL_INSTANCE_CACHE) personnelInstanceCache: SingleItemCache<Personnel>,
     // other
     @Inject(PERSONNEL_EDIT_DIALOG_MANAGER) private personnelEditDialogManager: DialogManager<PersonnelDialogComponent>,
-    @Inject(PERSONNEL_DELETE_DIALOG_MANAGER) private personnelDeleteDialogManager: DialogManager<ConfimationDialogComponent>,
+    @Inject(PERSONNEL_DELETE_DIALOG_MANAGER) private personnelDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
   ) {
     super(menuState, navService, tableCache, personnelInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
-
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) { super.paginator = paginator }
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
@@ -88,11 +85,11 @@ export class PersonnelListComponent extends ListComponent<Personnel> implements 
         .withSnackbarMessage(EDIT_PERSONNEL_SNACKBAR_MESSAGE)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1),
-      MenuDialogCommand<ConfimationDialogComponent>.builder(REMOVE_PERSONNEL_MENU_TITLE, PERSONNEL_GROUP, this.personnelDeleteDialogManager)
+      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_PERSONNEL_MENU_TITLE, PERSONNEL_GROUP, this.personnelDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR_PERSONNEL,
           pluralName: PLURAL_PERSONNEL,
-          countSupplier: () => this.tableCache.selectionCount
+          nameSupplier: () => this.tableCache.selection.selected.map(selection => selection.fullName),
         }))
         .withSnackbarMessage(REMOVE_PERSONNEL_SNACKBAR_MESSAGE)
         .build()

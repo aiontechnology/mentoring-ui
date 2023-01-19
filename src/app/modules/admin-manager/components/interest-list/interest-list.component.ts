@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,53 +15,82 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatPaginator} from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {CommandArray} from '../../../../implementation/types/types';
-import {ADMIN_LIST_MENU} from '../../providers/interest-list-menus';
-import {InterestCacheService} from '../../services/interests/interest-cache.service';
+import {DialogManager} from '../../../../implementation/command/dialog-manager';
+import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
+import {ListComponent} from '../../../../implementation/component/list-component';
+import {NavigationService} from '../../../../implementation/route/navigation.service';
+import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
+import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {Interest} from '../../../../models/interest';
+import {INTEREST_INSTANCE_CACHE} from '../../../../providers/global/global-interest-providers-factory';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {INTERESTS_GROUP} from '../../admin-manager.module';
+import {
+  ADD_INTEREST_MENU_TITLE,
+  ADD_INTEREST_PANEL_TITLE,
+  ADD_INTEREST_SNACKBAR_MESSAGE,
+  EDIT_INTEREST_MENU_TITLE,
+  EDIT_INTEREST_PANEL_TITLE,
+  EDIT_INTEREST_SNACKBAR_MESSAGE
+} from '../../other/admin-constants';
+import {
+  INTEREST_LIST_DELETE_DIALOG_MANAGER,
+  INTEREST_LIST_EDIT_DIALOG_MANAGER,
+  INTEREST_TABLE_CACHE
+} from '../../providers/interest-providers-factory';
+import {InterestDialogComponent} from '../interest-dialog/interest-dialog.component';
 
 @Component({
   selector: 'ms-interest-list',
   templateUrl: './interest-list.component.html',
   styleUrls: ['./interest-list.component.scss']
 })
-export class InterestListComponent implements OnInit, OnDestroy {
-
-  displayedColumns: string[];
+export class InterestListComponent extends ListComponent<Interest> implements OnInit, OnDestroy {
+  columns = ['select', 'name']
 
   constructor(
-    public interestCacheService: InterestCacheService,
-    private menuState: MenuStateService,
-    @Inject(ADMIN_LIST_MENU) private menuCommands: CommandArray,
-  ) {}
-
-  @ViewChild(MatSort) set sort(sort: MatSort) {
-    if (sort !== undefined) {
-      this.interestCacheService.sort = sort;
-    }
+    // for super
+    menuState: MenuStateService,
+    navService: NavigationService,
+    @Inject(INTEREST_TABLE_CACHE) tableCache: TableCache<Interest>,
+    @Inject(INTEREST_INSTANCE_CACHE) interestInstanceCache: SingleItemCache<Interest>,
+    // other
+    @Inject(INTEREST_LIST_EDIT_DIALOG_MANAGER) private interestEditDialogManager: DialogManager<InterestDialogComponent>,
+    @Inject(INTEREST_LIST_DELETE_DIALOG_MANAGER) private interestDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
+  ) {
+    super(menuState, navService, tableCache, interestInstanceCache)
   }
 
-  @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
-    if (paginator !== undefined) {
-      this.interestCacheService.paginator = paginator;
-    }
+  @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort}
+
+  protected override get menus(): MenuDialogCommand<any>[] {
+    return [
+      MenuDialogCommand<InterestDialogComponent>.builder(ADD_INTEREST_MENU_TITLE, INTERESTS_GROUP, this.interestEditDialogManager)
+        .withDataSupplier(() => ({
+          panelTitle: ADD_INTEREST_PANEL_TITLE
+        }))
+        .withSnackbarMessage(ADD_INTEREST_SNACKBAR_MESSAGE)
+        .build(),
+      MenuDialogCommand<InterestDialogComponent>.builder(EDIT_INTEREST_MENU_TITLE, INTERESTS_GROUP, this.interestEditDialogManager)
+        .withDataSupplier(() => ({
+          model: this.tableCache.getFirstSelection(),
+          panelTitle: EDIT_INTEREST_PANEL_TITLE
+        }))
+        .withSnackbarMessage(EDIT_INTEREST_SNACKBAR_MESSAGE)
+        .build()
+        .enableIf(() => this.tableCache.selection.selected.length === 1),
+    ]
   }
 
   ngOnInit(): void {
-    this.displayedColumns = ['select', 'name'];
-
-    this.interestCacheService.loadInterests();
-    this.interestCacheService.clearSelection();
-
     this.menuState.reset()
-    this.menuCommands.forEach(command => {
-      this.menuState.add(command.factory(false))
-    })
+    this.init()
   }
 
   ngOnDestroy(): void {
-    this.menuState.reset();
+    this.destroy()
   }
+
 }

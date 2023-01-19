@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020-2022 Aion Technology LLC
+  ~ Copyright 2020-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,16 +14,15 @@
   ~ limitations under the License.
   -->
 
-<h2 mat-dialog-title>{{data.panelTitle}}</h2>
-<mat-dialog-content>
+<ms-dialog-container class="book-dialog" [panelTitle]="data.panelTitle" [component]="this"
+                     [isValid]="modelFormGroup.valid">
   <form [formGroup]="modelFormGroup">
     <input type="hidden" formControlName="book"/>
 
-    <p class="legend mat-small">* Denotes a required field</p>
-
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput placeholder="Title" formControlName="title" required/>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" required/>
         <mat-error *ngIf="modelFormGroup.hasError('required', 'title')">
           You must enter a title
         </mat-error>
@@ -33,18 +32,20 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput placeholder="Description" formControlName="description"/>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input matInput formControlName="description"/>
         <mat-error *ngIf="modelFormGroup.hasError('maxlength', 'description')">
           A description can be a maximum of 255 characters in length
         </mat-error>
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
-        <input matInput placeholder="Author" formControlName="author" required/>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Author</mat-label>
+        <input matInput formControlName="author" required/>
         <mat-error *ngIf="modelFormGroup.hasError('required', 'author')">
           You must enter an author
         </mat-error>
@@ -54,9 +55,9 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
-        <mat-label>Reading level</mat-label>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Reading Level</mat-label>
         <mat-select formControlName="gradeLevel" required>
           <mat-option *ngFor="let grade of grades" [value]="grade.value">
             {{ grade.valueView }}
@@ -68,17 +69,17 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
         <mat-label>Interests</mat-label>
         <mat-select formControlName="interests" multiple>
-          <mat-option *ngFor="let interest of (interestList$ | async)" [value]="interest">{{interest}}</mat-option>
+          <mat-option *ngFor="let interest of (interestList$ | async)" [value]="interest.name">{{interest.name}}</mat-option>
         </mat-select>
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
         <mat-label>Leadership Traits</mat-label>
         <mat-select formControlName="leadershipTraits" multiple>
           <mat-option *ngFor="let leadershipTrait of (leadershipTraitList$ | async)"
@@ -87,8 +88,8 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
         <mat-label>Leadership Success Skills</mat-label>
         <mat-select formControlName="leadershipSkills" multiple>
           <mat-option *ngFor="let leadershipSkill of (leadershipSkillList$ | async)"
@@ -97,8 +98,8 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
         <mat-label>Phonograms</mat-label>
         <mat-select formControlName="phonograms" multiple>
           <mat-option *ngFor="let phonogram of (phonogramList$ | async)" [value]="phonogram">{{phonogram}}</mat-option>
@@ -106,8 +107,8 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
         <mat-label>Behaviors</mat-label>
         <mat-select formControlName="behaviors" multiple>
           <mat-option *ngFor="let behavior of (behaviorList$ | async)" [value]="behavior">{{behavior}}</mat-option>
@@ -115,8 +116,8 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
-      <mat-form-field>
+    <div class="row-container">
+      <mat-form-field appearance="outline">
         <mat-label>Tag</mat-label>
         <mat-select formControlName="tag">
           <mat-option *ngFor="let tag of (tagsList$ | async)" [value]="tag">{{tag}}</mat-option>
@@ -124,7 +125,7 @@
       </mat-form-field>
     </div>
 
-    <div class="dialog-container">
+    <div class="row-container">
       <mat-radio-group formControlName="location">
         <mat-radio-button *ngFor="let location of (locations | keyvalue: unsorted)" [value]="location.key">
           {{location.value}}
@@ -132,14 +133,4 @@
       </mat-radio-group>
     </div>
   </form>
-</mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-button color="primary" (click)="save()" [disabled]="!modelFormGroup.valid">
-    <mat-icon>save</mat-icon>
-    Save
-  </button>
-  <button mat-button color="primary" (click)="dismiss()">
-    <mat-icon>cancel</mat-icon>
-    Cancel
-  </button>
-</mat-dialog-actions>
+</ms-dialog-container>

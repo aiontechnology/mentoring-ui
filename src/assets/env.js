@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,11 @@
 (function(window) {
     window["env"] = window["env"] || {};
 
-    window["env"]["production"] = false;
-    window["env"]["apiUri"] = "http://localhost:8080";
-    window["env"]["lpgUri"] = "http://localhost:8090";
-    window["env"]["baseUri"] = "http://localhost:4200";
-    window["env"]["tokenRedirect"] = "http://localhost:4200/receiveToken";
-    window["env"]["logoutRedirect"] = "http://localhost:4200/handleLogout";
-    window["env"]["cognitoBaseUrl"] = "mentorsuccess-localhost.auth.us-west-2.amazoncognito.com";
-    window["env"]["cognitoClientId"] = "2j1eb0o8qfsbrpaqsftd879c79";
-})(this);
+    window["env"]["production"] = false
+    window["env"]["region"] = "us-west-2"
+    window["env"]["apiUri"] = "http://localhost:8080"
+    window["env"]["lpgUri"] = "http://localhost:8090"
+    window["env"]["baseUri"] = "http://localhost:4200"
+    window["env"]["cognitoPoolId"] = "us-west-2_EBQBuK2yn"
+    window["env"]["cognitoClientId"] = "50q37ipum07ltgh8grqkl29i2n"
+})(this)
