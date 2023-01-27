@@ -18,9 +18,10 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CognitoCallback} from '../../../implementation/security/cognito.service';
 import {LoggedInCallback, UserLoginService} from '../../../implementation/security/user-login.service';
+import {MultiItemCache} from '../../../implementation/state-management/multi-item-cache';
 import {SingleItemCacheUpdater} from '../../../implementation/state-management/single-item-cache-updater';
 import {School} from '../../../models/school/school';
-import {SCHOOL_INSTANCE_CACHE_UPDATER} from '../../../providers/global/global-school-providers-factory';
+import {SCHOOL_COLLECTION_CACHE, SCHOOL_INSTANCE_CACHE_UPDATER} from '../../../providers/global/global-school-providers-factory';
 
 @Component({
   selector: 'ms-login',
@@ -37,6 +38,7 @@ export class LoginComponent implements LoggedInCallback, CognitoCallback, OnInit
     private router: Router,
     private userLoginService: UserLoginService,
     @Inject(SCHOOL_INSTANCE_CACHE_UPDATER) private schoolInstanceCacheUpdater: SingleItemCacheUpdater<School>,
+    @Inject(SCHOOL_COLLECTION_CACHE) private schoolCollectionCache: MultiItemCache<School>,
   ) {}
 
   ngOnInit(): void {
@@ -70,6 +72,8 @@ export class LoginComponent implements LoggedInCallback, CognitoCallback, OnInit
       if(this.userLoginService.schoolUUID) {
         this.schoolInstanceCacheUpdater.fromId(this.userLoginService.schoolUUID)
           .then(school => console.log('Set school', school))
+      } else {
+        this.schoolCollectionCache.load()
       }
       this.router.navigate(['/home'])
     }
