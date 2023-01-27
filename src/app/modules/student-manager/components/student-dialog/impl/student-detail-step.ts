@@ -101,7 +101,7 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
       grade: student?.grade?.toString(),
       preBehavioralAssessment: student?.preBehavioralAssessment,
       postBehavioralAssessment: student?.postBehavioralAssessment,
-      mediaReleaseSigned: student?.mediaReleaseSigned,
+      mediaReleaseSigned: student?.mediaReleaseSigned || false,
       month: getMonth(student?.startDate),
       year: getYear(student?.startDate),
       preferredTime: student?.preferredTime,
@@ -111,7 +111,7 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
       leadershipSkills: student?.leadershipSkills,
       leadershipTraits: student?.leadershipTraits,
       behaviors: student?.behaviors,
-      location: student?.location?.toString(),
+      location: student?.location?.toString() || 'OFFLINE',
       links: student.links
     })
   }
