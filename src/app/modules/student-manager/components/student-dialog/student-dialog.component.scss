@@ -63,3 +63,9 @@ h3 {
     letter-spacing: -0.28px;
   }
 }
+
+.row-container {
+  mat-checkbox.checkbox-left {
+    text-align: left;
+  }
+}
