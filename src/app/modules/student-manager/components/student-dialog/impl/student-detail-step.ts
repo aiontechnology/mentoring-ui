@@ -30,6 +30,7 @@ import {FormGroupHolder} from './form-group-holder';
 export class StudentDetailStep extends FormGroupHolder<Student> {
   compareMentors = equalsBySelfLink
 
+  activityFocuses: string[]
   behaviors: string[]
   interests: string[]
   leadershipSkills: string[]
@@ -48,6 +49,8 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
     interestDataSource.allValues()
       .then(iterests => this.interests = iterests.map(i => i.name))
 
+    metaDataService.loadActivityFocuses()
+      .then(activityFocuses => this.activityFocuses = activityFocuses)
     metaDataService.loadBehaviors()
       .then(behaviors => this.behaviors = behaviors)
     metaDataService.loadLeadershipSkills()
@@ -84,6 +87,7 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
       preferredTime: ['', Validators.maxLength(30)],
       actualTime: ['', Validators.maxLength(30)],
       mentor: null,
+      activityFocuses: [],
       interests: [],
       leadershipSkills: [],
       leadershipTraits: [],
@@ -109,6 +113,7 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
       preferredTime: student?.preferredTime,
       actualTime: student?.actualTime,
       mentor: student?.mentor?.mentor,
+      activityFocuses: student?.activityFocuses,
       interests: student?.interests,
       leadershipSkills: student?.leadershipSkills,
       leadershipTraits: student?.leadershipTraits,

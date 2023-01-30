@@ -42,6 +42,14 @@
     </td>
   </tr>
   <tr>
+    <td>Activity Focuses:</td>
+    <td>
+      <mat-chip-list>
+        <mat-chip class="chip" *ngFor="let activityFocus of studentInstanceCache.item?.activityFocuses">{{activityFocus}}</mat-chip>
+      </mat-chip-list>
+    </td>
+  </tr>
+  <tr>
     <td>Media Release Signed:</td>
     <td>{{ studentInstanceCache.item?.mediaReleaseSigned ? 'Yes' : 'No' }}</td>
   </tr>

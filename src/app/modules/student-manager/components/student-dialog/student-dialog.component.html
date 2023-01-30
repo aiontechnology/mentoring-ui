@@ -123,6 +123,18 @@
           </mat-form-field>
         </div>
 
+        <!-- Activity Focuses -->
+        <div class="row-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Activity Focuses</mat-label>
+            <mat-select formControlName="activityFocuses" multiple>
+              <mat-option *ngFor="let activityFocus of studentDetailsStep.activityFocuses" [value]="activityFocus">
+                {{ activityFocus }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
         <!-- Preferred Meeting Time -->
         <div class="row-container">
           <mat-form-field appearance="outline">

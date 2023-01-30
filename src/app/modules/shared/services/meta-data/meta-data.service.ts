@@ -75,12 +75,15 @@ export class MetaDataService {
     return this._tags;
   }
 
-  loadActivityFocuses(): void {
-    this.http.get<any>(this.acctivityFocusesUri)
-      .subscribe(data => {
-        const activityFocuses = data?.content ?? [];
-        this._activityFocuses.next(activityFocuses);
-      });
+  loadActivityFocuses(): Promise<string[]> {
+    return this.http.get<any>(this.acctivityFocusesUri)
+      .pipe(
+        map(data => {
+        const activityFocuses = data?.content ?? []
+        this._activityFocuses.next(activityFocuses)
+        return activityFocuses
+      }))
+      .toPromise()
   }
 
   loadLeadershipTraits(): Promise<string[]> {
