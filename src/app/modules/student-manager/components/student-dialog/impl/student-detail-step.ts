@@ -30,6 +30,7 @@ import {FormGroupHolder} from './form-group-holder';
 export class StudentDetailStep extends FormGroupHolder<Student> {
   compareMentors = equalsBySelfLink
 
+  activityFocuses: string[]
   behaviors: string[]
   interests: string[]
   leadershipSkills: string[]
@@ -48,6 +49,8 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
     interestDataSource.allValues()
       .then(iterests => this.interests = iterests.map(i => i.name))
 
+    metaDataService.loadActivityFocuses()
+      .then(activityFocuses => this.activityFocuses = activityFocuses)
     metaDataService.loadBehaviors()
       .then(behaviors => this.behaviors = behaviors)
     metaDataService.loadLeadershipSkills()
@@ -77,12 +80,14 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
       grade: ['', Validators.required],
       preBehavioralAssessment: ['', [Validators.min(0), Validators.max(45)]],
       postBehavioralAssessment: ['', [Validators.min(0), Validators.max(45)]],
+      registrationSigned: false,
       mediaReleaseSigned: false,
       month: [''],
       year: ['', Validators.min(1900)],
       preferredTime: ['', Validators.maxLength(30)],
       actualTime: ['', Validators.maxLength(30)],
       mentor: null,
+      activityFocuses: [],
       interests: [],
       leadershipSkills: [],
       leadershipTraits: [],
@@ -101,17 +106,19 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
       grade: student?.grade?.toString(),
       preBehavioralAssessment: student?.preBehavioralAssessment,
       postBehavioralAssessment: student?.postBehavioralAssessment,
-      mediaReleaseSigned: student?.mediaReleaseSigned,
+      registrationSigned: student?.registrationSigned || false,
+      mediaReleaseSigned: student?.mediaReleaseSigned || false,
       month: getMonth(student?.startDate),
       year: getYear(student?.startDate),
       preferredTime: student?.preferredTime,
       actualTime: student?.actualTime,
       mentor: student?.mentor?.mentor,
+      activityFocuses: student?.activityFocuses,
       interests: student?.interests,
       leadershipSkills: student?.leadershipSkills,
       leadershipTraits: student?.leadershipTraits,
       behaviors: student?.behaviors,
-      location: student?.location?.toString(),
+      location: student?.location?.toString() || 'OFFLINE',
       links: student.links
     })
   }

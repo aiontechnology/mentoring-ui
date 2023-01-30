@@ -62,4 +62,14 @@ h3 {
     background-color: #3BAFBF;
     letter-spacing: -0.28px;
   }
+
+  button.action-done:disabled {
+    background-color: rgb(84, 195, 193, .35);
+  }
+}
+
+.row-container {
+  mat-checkbox.checkbox-left {
+    text-align: left;
+  }
 }

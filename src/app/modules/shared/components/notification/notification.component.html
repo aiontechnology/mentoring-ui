@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022-2023 Aion Technology LLC
+  ~ Copyright 2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,8 +14,17 @@
   ~ limitations under the License.
   -->
 
-<ms-notification width="918px" height="325px">
-  <div>Registration for {{name | async}} is complete.</div>
-  <div>Thank you for your time!</div>
-  <div><img src="assets/big-check.svg"/></div>
-</ms-notification>
+<div class="page-container">
+  <div>
+    <img src="../../../../../assets/ms-logo-white.png"/>
+  </div>
+  <div class="notification-container">
+    <mat-card style="width:{{width}}; height:{{height}};">
+      <mat-card-content>
+        <ng-content></ng-content>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<ms-footer></ms-footer>
+

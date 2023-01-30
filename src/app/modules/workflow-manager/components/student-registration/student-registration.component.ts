@@ -23,9 +23,11 @@ import {UriSupplier} from '../../../../implementation/data/uri-supplier';
 import {emailAddressValidator} from '../../../../implementation/forms/email-address-validator';
 import {valueOrNull} from '../../../../implementation/functions/value-or-null';
 import {Grade} from '../../../../implementation/types/grade';
+import {ProgramAdmin} from '../../../../models/program-admin/program-admin';
 import {Teacher} from '../../../../models/teacher/teacher';
 import {StudentRegistration} from '../../../../models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../../../../models/workflow/student-registration-lookup';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../../../providers/global/global-program-admin-providers-factory';
 import {LinkService} from '../../../shared/services/link-service/link.service';
 import {REGISTRATION_DATA_SOURCE, REGISTRATION_LOOKUP_DATA_SOURCE, REGISTRATION_URI_SUPPLIER} from '../../../shared/shared.module';
 
@@ -37,37 +39,39 @@ import {REGISTRATION_DATA_SOURCE, REGISTRATION_LOOKUP_DATA_SOURCE, REGISTRATION_
 })
 export class StudentRegistrationComponent implements OnInit {
 
-  model: FormGroup;
-  registration: StudentRegistrationLookup;
+  model: FormGroup
+  registration: StudentRegistrationLookup
 
   constructor(
     @Inject(REGISTRATION_LOOKUP_DATA_SOURCE) private registrationLookupDataSource: DataSource<StudentRegistrationLookup>,
     @Inject(REGISTRATION_DATA_SOURCE) private registrationDataSource: DataSource<StudentRegistration>,
     @Inject(REGISTRATION_URI_SUPPLIER) private registrationUriSuppler: UriSupplier,
+    @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
+    @Inject(PROGRAM_ADMIN_URI_SUPPLIER) private programAdminUriSupplier: UriSupplier,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
   ) {}
 
   get today(): string {
-    return new Date().toDateString();
+    return new Date().toDateString()
   }
 
   /**
    * Get the array of grades that are used to populate the grade dropdown list.
    */
   get grades(): Grade[] {
-    return grades;
+    return grades
   }
 
   get teachers(): Teacher[] {
-    const grade = Number(this.model.get('grade')?.value);
+    const grade = Number(this.model.get('grade')?.value)
     if (!grade) {
-      return [];
+      return []
     } else {
       const teachers: Teacher[] = this.registration.teachers
-        .filter(t => (t.grade1 === grade || t.grade2 === grade));
-      return teachers;
+        .filter(t => (t.grade1 === grade || t.grade2 === grade))
+      return teachers
     }
   }
 
@@ -98,15 +102,15 @@ export class StudentRegistrationComponent implements OnInit {
       valueOrNull(this.model, 'parentSignature'),
       this.registration.links,
     );
-    const that = this;
-    console.log('That', that);
+    const that = this
+    console.log('That', that)
     this.registrationDataSource.update(studentRegistration)
       .then(() => {
-        this.router.navigate(['./thanks'], {
+        this.router.navigate(['/workflowmanager/thankYou'], {
           relativeTo: that.route,
           queryParams: {name: this.model.get('studentFirstName').value}
         })
-          .then(() => console.log('Navigated to thank you page'));
+          .then(() => console.log('Navigated to thank you page'))
       });
   }
 
@@ -114,12 +118,25 @@ export class StudentRegistrationComponent implements OnInit {
     this.model = this.createModel(this.formBuilder);
     this.route.paramMap
       .subscribe(params => {
-        const registrationId = params.get('registrationId');
-        this.registrationUriSuppler.withSubstitution('schoolId', params.get('schoolId'));
+        const registrationId = params.get('registrationId')
+        this.registrationUriSuppler.withSubstitution('schoolId', params.get('schoolId'))
         this.registrationLookupDataSource.oneValue(registrationId)
           .then(registration => {
             this.registration = registration;
             this.updateModel(registration);
+          })
+          .catch(error => {
+            this.programAdminUriSupplier.withSubstitution('schoolId', params.get('schoolId'))
+            this.programAdminDataSource.allValues()
+              .then(programAdmins => {
+                const programAdmin = programAdmins?.[0]
+                this.router.navigate(['/workflowmanager/registrationInvalid'], {
+                  queryParams: {paName: programAdmin.fullName, paEmail: programAdmin.email}
+                })
+              })
+              .catch(error => {
+                this.router.navigate(['/workflowmanager/registrationInvalid'])
+              })
           });
       })
   }
@@ -133,7 +150,7 @@ export class StudentRegistrationComponent implements OnInit {
       parent1EmailAddress: registration.parent1EmailAddress || '',
       parent1PreferredContactMethod: registration.parent1EmailAddress ? 'EMAIL' : ''
     });
-    this.model.setValue(model);
+    this.model.setValue(model)
   }
 
   private createModel(formBuilder: FormBuilder) {
@@ -166,5 +183,5 @@ const contactValidator: ValidatorFn = (control: AbstractControl): ValidationErro
   const parent1PhoneNumber = control.get('parent1PhoneNumber')?.value;
   return !parent1EmailAddress && !parent1PhoneNumber
     ? {contactInvalid: true}
-    : null;
-};
+    : null
+}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,22 +15,20 @@
  */
 
 import {NgModule} from '@angular/core';
-import {SharedModule} from '../shared/shared.module';
+import {RouterModule, Routes} from '@angular/router';
 import {RegistrationInvalid} from './components/registration-invalid/registration-invalid.component';
 import {StudentRegistrationThanksComponent} from './components/student-registration-thanks/student-registration-thanks.component';
 import {StudentRegistrationComponent} from './components/student-registration/student-registration.component';
-import {WorkflowRoutingModule} from './workflow-routing.module';
+
+const routes: Routes = [
+  {path: 'schools/:schoolId/registrations/:registrationId', component: StudentRegistrationComponent},
+  {path: 'thankYou', component: StudentRegistrationThanksComponent},
+  {path: 'registrationInvalid', component: RegistrationInvalid},
+];
 
 @NgModule({
-  declarations: [
-    RegistrationInvalid,
-    StudentRegistrationComponent,
-    StudentRegistrationThanksComponent,
-  ],
-  imports: [
-    WorkflowRoutingModule,
-    SharedModule.forRoot()
-  ],
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class WorkflowManagerModule {
+export class WorkflowRoutingModule {
 }

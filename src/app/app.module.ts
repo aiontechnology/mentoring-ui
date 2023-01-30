@@ -21,20 +21,17 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {DecoratedComponent} from './components/decorated/decorated.component';
-import {FooterComponent} from './components/footer/footer.component';
-import {HeaderComponent} from './components/header/header.component';
 import {HomeComponent} from './components/home/home.component';
 import {LandingPageComponent} from './components/landing-page/landing-page.component';
 import {NoopComponent} from './components/noop/noop.component';
 import {QuotesComponent} from './components/quotes/quotes.component';
-import {SchoolSelectorComponent} from './components/school-selector/school-selector.component';
 import {ChangePasswordComponent} from './components/user-session/change-password/change-password.component';
 import {ForgotPasswordStep1Component} from './components/user-session/forgot-password-step1/forgot-password-step1.component';
 import {ForgotPasswordStep2Component} from './components/user-session/forgot-password-step2/forgot-password-step2.component';
 import {LoginComponent} from './components/user-session/login/login.component';
 import {LogoutNotificationComponent} from './components/user-session/logout-notification/logout-notification.component';
 import {LogoutComponent} from './components/user-session/logout/logout.component';
+import {SessionContainerComponent} from './components/user-session/session-container/session-container.component';
 import {GlobalErrorHandler} from './implementation/errors/global-error-handler';
 import {IsAuthenticatedGuard} from './implementation/route/is-authenticated-guard.service';
 import {IsProgramAdminGuard} from './implementation/route/is-program-admin-guard.service';
@@ -61,18 +58,14 @@ import {globalSchoolSessionProvidersFactory} from './providers/global/global-sch
 import {globalSnackbarProviders} from './providers/global/global-snackbar-providers';
 import {globalStudentProvidersFactory} from './providers/global/global-student-providers-factory';
 import {globalTeacherProvidersFactory} from './providers/global/global-teacher-providers-factory';
-import { SessionContainerComponent } from './components/user-session/session-container/session-container.component';
 
 @NgModule({
   declarations: [
     // components
     AppComponent,
     ChangePasswordComponent,
-    DecoratedComponent,
-    FooterComponent,
     ForgotPasswordStep1Component,
     ForgotPasswordStep2Component,
-    HeaderComponent,
     HomeComponent,
     LandingPageComponent,
     LoginComponent,
@@ -80,7 +73,6 @@ import { SessionContainerComponent } from './components/user-session/session-con
     LogoutNotificationComponent,
     NoopComponent,
     QuotesComponent,
-    SchoolSelectorComponent,
     SessionContainerComponent,
   ],
   imports: [

@@ -102,8 +102,12 @@
 
         <!-- Media Release -->
         <div class="row-container">
-          <mat-checkbox formControlName="mediaReleaseSigned" labelPosition="before">
+          <mat-checkbox class="checkbox-left" formControlName="mediaReleaseSigned" labelPosition="before">
             <span class="mat-body-1">Media release signed?</span>
+          </mat-checkbox>
+
+          <mat-checkbox class="checkbox-right" formControlName="registrationSigned" labelPosition="before">
+            <span class="mat-body-1">Registration signed?</span>
           </mat-checkbox>
         </div>
 
@@ -114,6 +118,18 @@
             <mat-select formControlName="interests" multiple>
               <mat-option *ngFor="let interest of studentDetailsStep.interests" [value]="interest">
                 {{ interest }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Activity Focuses -->
+        <div class="row-container">
+          <mat-form-field appearance="outline">
+            <mat-label>Activity Focuses</mat-label>
+            <mat-select formControlName="activityFocuses" multiple>
+              <mat-option *ngFor="let activityFocus of studentDetailsStep.activityFocuses" [value]="activityFocus">
+                {{ activityFocus }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -501,7 +517,7 @@
     <mat-icon>arrow_forward_ios</mat-icon>
   </button>
   <button class="mat-display-1 action-done" *ngIf="stepper.selectedIndex === 2" (click)="save()" color="primary"
-          mat-button>
+          mat-button [disabled]="!allModelsAreValid()">
     Done
   </button>
 </mat-dialog-actions>

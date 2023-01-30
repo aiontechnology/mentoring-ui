@@ -1,5 +1,5 @@
 /*!
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 .controls > button {
   background-color: rgb(84, 195, 193);
-  bottom: 30px;
+  bottom: 50px;
   border-radius: 10px;
   color: white;
   font-family: Roboto;
@@ -28,7 +28,7 @@
   font-size: 26px;
   height: 70px;
   position: absolute;
-  right: 30px;
+  right: 50px;
   text-decoration: none;
   width: 269px;
 }
@@ -124,24 +124,12 @@ mat-form-field {
 
 .required-warning {
   color: #FE0303;
-  padding-top: 34px;
+  padding: 34px 0;
 }
 
 .row {
   display: flex;
   margin-top: 20px;
-}
-
-.row > div:not(:last-child) {
-  margin-right: 20px;
-}
-
-.row2 > div {
-  flex: 0 0 46%;
-}
-
-.row3 > div {
-  flex: 0 0 30%
 }
 
 .row-radio {

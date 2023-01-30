@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022 Aion Technology LLC
+  ~ Copyright 2022-2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -29,6 +29,6 @@
 <mat-dialog-actions class="action-container">
   <button class="save-button" mat-button color="primary" (click)="component.save()" [disabled]="!isValid">
     <mat-icon>add</mat-icon>
-    <span class="mat-body-2">{{panelTitle.startsWith('Add') ? 'Add' : 'Update'}}</span>
+    <span class="mat-body-2">{{actionLabel}}</span>
   </button>
 </mat-dialog-actions>

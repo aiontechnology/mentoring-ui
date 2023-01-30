@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022-2023 Aion Technology LLC
+  ~ Copyright 2023 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,8 +14,10 @@
   ~ limitations under the License.
   -->
 
-<ms-notification width="918px" height="325px">
-  <div>Registration for {{name | async}} is complete.</div>
-  <div>Thank you for your time!</div>
-  <div><img src="assets/big-check.svg"/></div>
+<ms-notification width="918px" height="225px">
+  <div class="warn">Sorry. This link is invalid.</div>
+  <div>
+    <span>Please contact your school's administrator</span>
+    <span *ngIf="programAdminName !== null">:<br/>{{programAdminName}}<br/><a href="mailto:{{programAdminEmail}}">{{programAdminEmail}}</a></span>
+  </div>
 </ms-notification>

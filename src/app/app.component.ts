@@ -79,11 +79,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mentorCollectionCacheLoader.start()
     this.teacherCollectionCacheLoader.start()
 
-    // this.invitationUriSupplierUpdater.start()
+    this.invitationUriSupplierUpdater.start()
   }
 
   ngOnDestroy(): void {
-    // this.invitationUriSupplierUpdater.stop()
+    this.invitationUriSupplierUpdater.stop()
 
     this.teacherCollectionCacheLoader.stop()
     this.mentorCollectionCacheLoader.stop()

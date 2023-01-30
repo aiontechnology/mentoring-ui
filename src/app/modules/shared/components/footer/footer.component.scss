@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@import 'src/style/_variables';
+@import '../../../../../style/variables';
 
 .footer {
   position: relative;
@@ -50,7 +50,7 @@
 
   img {
     position: absolute;
-    top: 50px;
+    top: 20px;
     right: 50px;
   }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {UriSupplier} from '../data/uri-supplier';
 import {School} from '../../models/school/school';
+import {UriSupplier} from '../data/uri-supplier';
 import {SubscriptionManager} from '../reactive/subscription-manager';
 import {SCHOOL_ID} from '../route/route-constants';
 import {SingleItemCache} from './single-item-cache';
@@ -38,6 +38,8 @@ export class SchoolChangeUriSupplierHandler extends SubscriptionManager {
 
   private onSchoolChange = (school: School): void => {
     this.uriSupplier.reset()
-    this.uriSupplier.withSubstitution(SCHOOL_ID, school.id)
+    if(school) {
+      this.uriSupplier.withSubstitution(SCHOOL_ID, school?.id)
+    }
   }
 }

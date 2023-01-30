@@ -156,7 +156,7 @@ export class UserLoginService {
         }
       })
     } else {
-      console.error('UserLoginService: Can\'t retrieve the current user')
+      console.log('UserLoginService: Can\'t retrieve the current user')
       callback.isLoggedIn('Can\'t retrieve the current user', false)
     }
   }

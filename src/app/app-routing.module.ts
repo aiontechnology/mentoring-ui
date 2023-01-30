@@ -16,7 +16,6 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DecoratedComponent} from './components/decorated/decorated.component';
 import {HomeComponent} from './components/home/home.component';
 import {LandingPageComponent} from './components/landing-page/landing-page.component';
 import {ChangePasswordComponent} from './components/user-session/change-password/change-password.component';
@@ -26,6 +25,7 @@ import {LoginComponent} from './components/user-session/login/login.component';
 import {LogoutComponent} from './components/user-session/logout/logout.component';
 import {IsAuthenticatedGuard} from './implementation/route/is-authenticated-guard.service';
 import {isSystemAdminGuard} from './implementation/route/is-system-admin-guard.service';
+import {DecoratedComponent} from './modules/shared/components/decorated/decorated.component';
 
 const routes: Routes = [
   {
@@ -57,11 +57,6 @@ const routes: Routes = [
         loadChildren: () => import('./modules/mentor-manager/mentor-manager.module').then(m => m.MentorManagerModule),
         canActivate: [IsAuthenticatedGuard]
       },
-      {
-        path: 'workflowmanager',
-        loadChildren: () => import('./modules/workflow-manager/workflow-manager.module').then(m => m.WorkflowManagerModule),
-        canActivate: [IsAuthenticatedGuard]
-      },
     ]
   },
   {path: 'login', component: LoginComponent},
@@ -69,6 +64,10 @@ const routes: Routes = [
   {path: 'change-password', component: ChangePasswordComponent},
   {path: 'reset-password', component: ForgotPasswordStep1Component},
   {path: 'reset-password/:email', component: ForgotPasswordStep2Component},
+  {
+    path: 'workflowmanager',
+    loadChildren: () => import('./modules/workflow-manager/workflow-manager.module').then(m => m.WorkflowManagerModule)
+  },
   {path: '**', redirectTo: ''}
 ]
 

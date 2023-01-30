@@ -28,9 +28,11 @@ export abstract class Student {
   actualTime: string
   startDate: string
   location: string
+  registrationSigned: boolean
   mediaReleaseSigned: boolean
   preBehavioralAssessment: number
   postBehavioralAssessment: number
+  activityFocuses: string[]
   behaviors: string[]
   interests: string[]
   leadershipSkills: string[]
@@ -55,9 +57,11 @@ export abstract class Student {
     this.actualTime = convertEmptyStringToNull(json?.actualTime)
     this.startDate = convertEmptyStringToNull(json?.startDate)
     this.location = convertEmptyStringToNull(json?.location)
+    this.registrationSigned = json?.registrationSigned
     this.mediaReleaseSigned = json?.mediaReleaseSigned
     this.preBehavioralAssessment = json?.preBehavioralAssessment
     this.postBehavioralAssessment = json?.postBehavioralAssessment
+    this.activityFocuses = json?.activityFocuses || []
     this.behaviors = json?.behaviors || []
     this.interests = json?.interests || []
     this.leadershipSkills = json?.leadershipSkills || []
