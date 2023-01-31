@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,14 @@ export abstract class Repository<T> implements DataManager<T> {
             return values.map(this.toModel)
           })
         ))
+
+  delete = (uri: string): Promise<void> =>
+    firstValueFrom(
+      this.http.delete(uri)
+        .pipe(
+          map(a => null)
+        )
+    )
 
   oneValue = (id: string): Promise<T> =>
     firstValueFrom(
