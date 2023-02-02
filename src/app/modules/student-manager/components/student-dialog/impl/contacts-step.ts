@@ -112,7 +112,7 @@ export class ContactsStep extends FormGroupHolder<Student> {
       email: [null, [emailAddressValidator(), Validators.maxLength(50)]],
       preferredContactMethod: null,
       isEmergencyContact,
-      comment: ['']
+      comment: ['', [Validators.maxLength(255)]]
     }, {
       validators: noContactMethodValidator()
     })
