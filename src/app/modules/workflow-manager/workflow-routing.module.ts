@@ -17,11 +17,13 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {RegistrationInvalid} from './components/registration-invalid/registration-invalid.component';
+import {StudentRegistrationCancelledComponent} from './components/student-registration-cancelled/student-registration-cancelled.component';
 import {StudentRegistrationThanksComponent} from './components/student-registration-thanks/student-registration-thanks.component';
 import {StudentRegistrationComponent} from './components/student-registration/student-registration.component';
 
 const routes: Routes = [
   {path: 'schools/:schoolId/registrations/:registrationId', component: StudentRegistrationComponent},
+  {path: 'schools/:schoolId/registrations/:registrationId/cancel', component: StudentRegistrationCancelledComponent},
   {path: 'thankYou', component: StudentRegistrationThanksComponent},
   {path: 'registrationInvalid', component: RegistrationInvalid},
 ];
