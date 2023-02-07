@@ -1,5 +1,5 @@
 /*!
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-.contact-preference {
-  padding-bottom: 10px;
-}
+@import 'src/style/_variables';
 
 .controls > button {
   background-color: rgb(84, 195, 193);
@@ -51,6 +49,7 @@
 }
 
 .form-content {
+  position: relative;
   background-color: #FBFBFB;
   padding: 50px 50px 0 50px;
   border-bottom-left-radius: 10px;
@@ -99,14 +98,6 @@ mat-form-field {
   padding-right: 5px;
 }
 
-.mat-sidenav {
-  display: none;
-}
-
-.mat-toolbar {
-  display: none;
-}
-
 .page-container {
   background: url("../../../../../assets/cloud-tileable.png") repeat;
 }
@@ -128,4 +119,42 @@ mat-form-field {
 .row-radio {
   line-height: 1.125;
   padding-bottom: 1.35em;
+}
+
+.student-name {
+  position: absolute;
+  font: 32px Roboto;
+  border-left: 4px solid $accent;
+  padding-left: 6px;
+  top: 70px;
+  left: 100px;
+}
+
+.left {
+  float: left;
+  width: 50%;
+  margin-right: 20px;
+}
+
+.right {
+  margin-left: 20px;
+}
+
+.action-container {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    margin: 20px 0;
+  }
+
+  button.action-done {
+    color: white;
+    background-color: #3BAFBF;
+    letter-spacing: -0.28px;
+  }
+
+  button.action-done:disabled {
+    background-color: rgb(84, 195, 193, .35);
+  }
 }

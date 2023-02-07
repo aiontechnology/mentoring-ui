@@ -14,45 +14,49 @@
  * limitations under the License.
  */
 
-import {LayoutModule} from '@angular/cdk/layout';
-import {CommonModule} from '@angular/common';
-import {InjectionToken, ModuleWithProviders, NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {RouterModule} from '@angular/router';
-import {MaterialModule} from 'src/app/implementation/shared/material.module';
-import {environment} from '../../../environments/environment';
-import {DataSource} from '../../implementation/data/data-source';
-import {Repository} from '../../implementation/data/repository';
-import {UriSupplier} from '../../implementation/data/uri-supplier';
-import {StudentRegistration} from '../../models/workflow/student-registration';
-import {StudentRegistrationLookup} from '../../models/workflow/student-registration-lookup';
-import {StudentRegistrationLookupRepository} from '../school-manager/repositories/student-registration-lookup-repository';
-import {StudentRegistrationRepository} from '../school-manager/repositories/student-registration-repository';
-import {BackArrowComponent} from './components/back-arrow/back-arrow.component';
-import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
-import {DecoratedComponent} from './components/decorated/decorated.component';
-import {DialogContainerComponent} from './components/dialog/dialog-container/dialog-container.component';
-import {FileTabComponent} from './components/file-tab/file-tab.component';
-import {FooterComponent} from './components/footer/footer.component';
-import {GradeLevelComponent} from './components/grade-level/grade-level.component';
-import {HeaderComponent} from './components/header/header.component';
-import {ListDataContainerComponent} from './components/list-data-container/list-data-container.component';
-import {ListFooterComponent} from './components/list-footer/list-footer.component';
-import {ListViewHeaderComponent} from './components/list-view-header/list-view-header.component';
-import {MenuComponent} from './components/menu/menu.component';
-import {NotificationComponent} from './components/notification/notification.component';
-import {SchoolSelectorComponent} from './components/school-selector/school-selector.component';
-import {SearchComponent} from './components/seach/search.component';
-import {SelectionCountDisplayComponent} from './components/selection-count-display/selection-count-display.component';
-import {SpinnerComponent} from './components/spinner/spinner.component';
-import {TabbedContainerComponent} from './components/tabbed-container/tabbed-container.component';
-import {OnlyNumberDirective} from './directives/only-number.directive';
-import {PhoneFormatDirective} from './directives/phone-format.directive';
-import {MetaDataService} from './services/meta-data/meta-data.service';
+import {LayoutModule} from '@angular/cdk/layout'
+import {CommonModule} from '@angular/common'
+import {InjectionToken, ModuleWithProviders, NgModule} from '@angular/core'
+import {FormsModule, ReactiveFormsModule} from '@angular/forms'
+import {RouterModule} from '@angular/router'
+import {MaterialModule} from 'src/app/implementation/shared/material.module'
+import {environment} from '../../../environments/environment'
+import {DataSource} from '../../implementation/data/data-source'
+import {Repository} from '../../implementation/data/repository'
+import {UriSupplier} from '../../implementation/data/uri-supplier'
+import {StudentInformationLookup} from '../../models/workflow/student-information-lookup'
+import {StudentRegistration} from '../../models/workflow/student-registration'
+import {StudentRegistrationLookup} from '../../models/workflow/student-registration-lookup'
+import {StudentInformationLookupRepository} from '../school-manager/repositories/student-information-lookup-repository'
+import {StudentRegistrationLookupRepository} from '../school-manager/repositories/student-registration-lookup-repository'
+import {StudentRegistrationRepository} from '../school-manager/repositories/student-registration-repository'
+import {BackArrowComponent} from './components/back-arrow/back-arrow.component'
+import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component'
+import {DecoratedComponent} from './components/decorated/decorated.component'
+import {DialogContainerComponent} from './components/dialog/dialog-container/dialog-container.component'
+import {FileTabComponent} from './components/file-tab/file-tab.component'
+import {FooterComponent} from './components/footer/footer.component'
+import {GradeLevelComponent} from './components/grade-level/grade-level.component'
+import {HeaderComponent} from './components/header/header.component'
+import {ListDataContainerComponent} from './components/list-data-container/list-data-container.component'
+import {ListFooterComponent} from './components/list-footer/list-footer.component'
+import {ListViewHeaderComponent} from './components/list-view-header/list-view-header.component'
+import {MenuComponent} from './components/menu/menu.component'
+import {NotificationComponent} from './components/notification/notification.component'
+import {SchoolSelectorComponent} from './components/school-selector/school-selector.component'
+import {SearchComponent} from './components/seach/search.component'
+import {SelectionCountDisplayComponent} from './components/selection-count-display/selection-count-display.component'
+import {SpinnerComponent} from './components/spinner/spinner.component'
+import {TabbedContainerComponent} from './components/tabbed-container/tabbed-container.component'
+import {OnlyNumberDirective} from './directives/only-number.directive'
+import {PhoneFormatDirective} from './directives/phone-format.directive'
+import {MetaDataService} from './services/meta-data/meta-data.service'
 
-export const REGISTRATION_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistrationLookup>>('registration-lookup-data-source');
-export const REGISTRATION_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistration>>('registration-data-source');
-export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('registration-uri-supplier');
+export const REGISTRATION_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistrationLookup>>('registration-lookup-data-source')
+export const REGISTRATION_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistration>>('registration-data-source')
+export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('registration-uri-supplier')
+export const STUDENT_INFO_URI_SUPPLIER = new InjectionToken<UriSupplier>('student-info-uri-supplier')
+export const STUDENT_INFO_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentInformationLookup>>('student-info-lookup-data-source')
 
 @NgModule({
   declarations: [
@@ -140,6 +144,16 @@ export class SharedModule {
           provide: REGISTRATION_DATA_SOURCE,
           useFactory: (repository: Repository<StudentRegistration>) => new DataSource<StudentRegistration>(repository),
           deps: [StudentRegistrationRepository]
+        },
+        {
+          provide: STUDENT_INFO_URI_SUPPLIER,
+          useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/students/{studentId}/registrations`)
+        },
+        StudentInformationLookupRepository,
+        {
+          provide: STUDENT_INFO_LOOKUP_DATA_SOURCE,
+          useFactory: (repository: Repository<StudentInformationLookup>) => new DataSource<StudentInformationLookup>(repository),
+          deps: [StudentInformationLookupRepository]
         },
 
         // Services

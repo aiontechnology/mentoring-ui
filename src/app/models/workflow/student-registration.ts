@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,27 +15,28 @@
  */
 
 export class StudentRegistration {
-  constructor(public studentFirstName: string,
-              public studentLastName: string,
-              public grade: number,
-              public parent1FirstName: string,
-              public parent1LastName: string,
-              public parent1PhoneNumber: string,
-              public parent1EmailAddress: string,
-              public parent1PreferredContactMethod: string,
-              public parent2FirstName: string,
-              public parent2LastName: string,
-              public parent2PhoneNumber: string,
-              public parent2EmailAddress: string,
-              public parent2PreferredContactMethod: string,
-              public teacher: string,
-              public preferredSession: string,
-              public emergencyContactFirstName: string,
-              public emergencyContactLastName: string,
-              public emergencyContactPhone: string,
-              public parentSignature: string,
-              public links: { self: [{ href: string; }] }) {
-  }
+  constructor(
+    public studentFirstName: string,
+    public studentLastName: string,
+    public grade: number,
+    public parent1FirstName: string,
+    public parent1LastName: string,
+    public parent1PhoneNumber: string,
+    public parent1EmailAddress: string,
+    public parent1PreferredContactMethod: string,
+    public parent2FirstName: string,
+    public parent2LastName: string,
+    public parent2PhoneNumber: string,
+    public parent2EmailAddress: string,
+    public parent2PreferredContactMethod: string,
+    public teacher: string,
+    public preferredSession: string,
+    public emergencyContactFirstName: string,
+    public emergencyContactLastName: string,
+    public emergencyContactPhone: string,
+    public parentSignature: string,
+    public links: { self: [{ href: string; }] }
+  ) {}
 
   static of(value: any): StudentRegistration {
     return new StudentRegistration(
