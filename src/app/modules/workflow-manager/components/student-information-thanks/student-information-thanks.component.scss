@@ -1,4 +1,4 @@
-/*
+/*!
  * Copyright 2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-export class StudentInformationLookup {
-  constructor(
-    public studentName: string,
-    public links: any,
-  ) {}
-
-  static of(value: any): StudentInformationLookup {
-    return new StudentInformationLookup(
-      value?.studentName,
-      value?.links,
-    )
-  }
+img {
+  padding-top: 50px;
 }

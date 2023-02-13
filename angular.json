@@ -37,7 +37,8 @@
               "src/style/snackbar-styles.scss",
               "src/style/login-styles.scss",
               "src/style/user-session-styles.scss",
-              "src/style/stepper-styles.scss"
+              "src/style/stepper-styles.scss",
+              "src/style/grid-styles.scss"
             ],
             "scripts": [],
             "vendorChunk": true,

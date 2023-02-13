@@ -76,7 +76,7 @@
 
 .hhf-logo {
   position: absolute;
-  top:75px;
+  top: 75px;
   right: 75px;
 }
 
@@ -140,6 +140,12 @@ mat-form-field {
   margin-left: 20px;
 }
 
+p {
+  font: 400 24px Roboto, "Helvetica Neue", sans-serif;
+  letter-spacing: 0.16px;
+  padding: 30px 0 50px 0;
+}
+
 .action-container {
   display: flex;
   justify-content: flex-end;
@@ -158,3 +164,76 @@ mat-form-field {
     background-color: rgb(84, 195, 193, .35);
   }
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 5fr repeat(5, 1fr);
+  gap: 0 0;
+  font: 18px Roboto, "Helvetica Neue", sans-serif;
+
+  .grid-title {
+    place-self: auto stretch;
+    font-weight: 700;
+    color: white;
+    border-top: #979797 solid 1px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #4988A0;
+    width: 1fr;
+  }
+
+  .grid-title:nth-child(1) {
+    border-left: #979797 solid 1px;
+    border-top: #979797 solid 1px;
+    border-top-left-radius: 20px;
+    padding-left: 50px;
+  }
+
+  .grid-title:nth-child(6) {
+    border-right: #979797 solid 1px;
+    border-top-right-radius: 20px;
+    padding-right: 50px;
+  }
+
+  .grid-item {
+    place-self: auto stretch;
+    font-weight: 500;
+    border-bottom: #979797 solid 1px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .grid-item:nth-child(1) {
+    border-left: #979797 solid 1px;
+    padding-left: 50px;
+  }
+
+  .grid-item:nth-of-type(5) {
+    border-right: #979797 solid 1px;
+  }
+
+  .grid-footer {
+    height: 50px;
+    background-color: #4988A0;
+    border-bottom: #979797 solid 1px;
+    width: 100%;
+  }
+
+  .grid-footer:nth-last-child(6) {
+    border-left: #979797 solid 1px;
+    border-bottom: #979797 solid 1px;
+    border-bottom-left-radius: 20px;
+
+  }
+
+  .grid-footer:nth-last-child(1) {
+    border-right: #979797 solid 1px;
+    border-bottom: #979797 solid 1px;
+    border-bottom-right-radius: 20px;
+  }
+
+  .radio-group {
+    display: contents;
+  }
+}
+

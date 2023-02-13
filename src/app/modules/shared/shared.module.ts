@@ -24,9 +24,11 @@ import {environment} from '../../../environments/environment'
 import {DataSource} from '../../implementation/data/data-source'
 import {Repository} from '../../implementation/data/repository'
 import {UriSupplier} from '../../implementation/data/uri-supplier'
+import {StudentInformation} from '../../models/workflow/student-information';
 import {StudentInformationLookup} from '../../models/workflow/student-information-lookup'
 import {StudentRegistration} from '../../models/workflow/student-registration'
 import {StudentRegistrationLookup} from '../../models/workflow/student-registration-lookup'
+import {StudentInfoRepository} from '../school-manager/repositories/student-info-repository';
 import {StudentInformationLookupRepository} from '../school-manager/repositories/student-information-lookup-repository'
 import {StudentRegistrationLookupRepository} from '../school-manager/repositories/student-registration-lookup-repository'
 import {StudentRegistrationRepository} from '../school-manager/repositories/student-registration-repository'
@@ -57,6 +59,7 @@ export const REGISTRATION_DATA_SOURCE = new InjectionToken<DataSource<StudentReg
 export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('registration-uri-supplier')
 export const STUDENT_INFO_URI_SUPPLIER = new InjectionToken<UriSupplier>('student-info-uri-supplier')
 export const STUDENT_INFO_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentInformationLookup>>('student-info-lookup-data-source')
+export const STUDENT_INFO_DATA_SOURCE = new InjectionToken<DataSource<StudentInformation>>('student-info-data-source')
 
 @NgModule({
   declarations: [
@@ -154,6 +157,12 @@ export class SharedModule {
           provide: STUDENT_INFO_LOOKUP_DATA_SOURCE,
           useFactory: (repository: Repository<StudentInformationLookup>) => new DataSource<StudentInformationLookup>(repository),
           deps: [StudentInformationLookupRepository]
+        },
+        StudentInfoRepository,
+        {
+          provide: STUDENT_INFO_DATA_SOURCE,
+          useFactory: (repository: Repository<StudentInformation>) => new DataSource<StudentInformation>(repository),
+          deps: [StudentInfoRepository]
         },
 
         // Services

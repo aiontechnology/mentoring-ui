@@ -76,7 +76,7 @@ export class StudentRegistrationComponent implements OnInit {
   }
 
   selfLinkFunction(): (object: any) => string {
-    return LinkService.selfLink;
+    return LinkService.selfLink
   }
 
   submitForm(): void {
@@ -101,12 +101,11 @@ export class StudentRegistrationComponent implements OnInit {
       valueOrNull(this.model, 'emergencyContactPhone'),
       valueOrNull(this.model, 'parentSignature'),
       this.registration.links,
-    );
+    )
     const that = this
-    console.log('That', that)
     this.registrationDataSource.update(studentRegistration)
       .then(() => {
-        this.router.navigate(['/workflowmanager/thankYou'], {
+        this.router.navigate(['/workflowmanager/studentThankYou'], {
           relativeTo: that.route,
           queryParams: {name: this.model.get('studentFirstName').value}
         })

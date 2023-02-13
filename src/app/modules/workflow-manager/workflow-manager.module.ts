@@ -17,6 +17,7 @@
 import {NgModule} from '@angular/core';
 import {SharedModule} from '../shared/shared.module';
 import {RegistrationInvalid} from './components/registration-invalid/registration-invalid.component';
+import {StudentInformationThanksComponent} from './components/student-information-thanks/student-information-thanks.component';
 import {StudentInformationComponent} from './components/student-information/student-information.component';
 import {StudentRegistrationCancelledComponent} from './components/student-registration-cancelled/student-registration-cancelled.component';
 import {StudentRegistrationThanksComponent} from './components/student-registration-thanks/student-registration-thanks.component';
@@ -27,6 +28,7 @@ import {WorkflowRoutingModule} from './workflow-routing.module';
   declarations: [
     RegistrationInvalid,
     StudentInformationComponent,
+    StudentInformationThanksComponent,
     StudentRegistrationCancelledComponent,
     StudentRegistrationComponent,
     StudentRegistrationThanksComponent,

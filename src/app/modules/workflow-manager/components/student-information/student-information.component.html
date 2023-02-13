@@ -24,7 +24,7 @@
       <mat-card-content class="form-content">
         <div class="student-name">{{(studentInfo | async)?.studentName | uppercase}}</div>
         <mat-horizontal-stepper #stepper>
-          <mat-step [stepControl]="infoFormGroup" errorMessage="Invalid" label="Student Info" >
+          <mat-step [stepControl]="infoFormGroup" errorMessage="Invalid" label="Student Info">
             <div class="required-warning">* Denotes a required field</div>
             <form [formGroup]="infoFormGroup">
               <div class="float-container">
@@ -70,7 +70,7 @@
                   <div class="row-container">
                     <mat-form-field appearance="outline">
                       <mat-label>Comments</mat-label>
-                      <textarea rows="11" formControlName="teacherComments" matInput></textarea>
+                      <textarea rows="11" formControlName="teacherComment" matInput></textarea>
                       <mat-error *ngIf="infoFormGroup.hasError('maxlength', 'teacherComments')">
                         A comment can be a maximum of 500 characters in length
                       </mat-error>
@@ -82,7 +82,37 @@
           </mat-step>
 
           <mat-step [stepControl]="assessmentFormGroup" errorMessage="Invalid" label="Behavioral Assessment">
-
+            <p>
+              Please provide information on the student listed below. This information will be used to evaluate progress
+              socially and academically in school while participating in the MentorSuccess™ program. Thank you for
+              your feedback.
+            </p>
+            <form [formGroup]="assessmentFormGroup">
+              <div class="grid-container">
+                <div class="grid-title">Title</div>
+                <div class="grid-title">Never</div>
+                <div class="grid-title">Rarely</div>
+                <div class="grid-title">Sometimes</div>
+                <div class="grid-title">Frequently</div>
+                <div class="grid-title">Always</div>
+                <span class="radio-group" *ngFor="let question of questions; let i = index">
+                  <mat-radio-group class="radio-group" formControlName="{{'question'+ (i+1)}}">
+                  <div class="grid-item">{{i + 1}}. {{question}}</div>
+                    <mat-radio-button class="grid-item"value="1" [checked]="assessmentFormGroup.get('question' + (i+1)).value == 1"></mat-radio-button>
+                    <mat-radio-button class="grid-item"value="2" [checked]="assessmentFormGroup.get('question' + (i+1)).value == 2"></mat-radio-button>
+                    <mat-radio-button class="grid-item"value="3" [checked]="assessmentFormGroup.get('question' + (i+1)).value == 3"></mat-radio-button>
+                    <mat-radio-button class="grid-item"value="4" [checked]="assessmentFormGroup.get('question' + (i+1)).value == 4"></mat-radio-button>
+                    <mat-radio-button class="grid-item"value="5" [checked]="assessmentFormGroup.get('question' + (i+1)).value == 5"></mat-radio-button>
+                  </mat-radio-group>
+                </span>
+                <div class="grid-footer"></div>
+                <div class="grid-footer"></div>
+                <div class="grid-footer"></div>
+                <div class="grid-footer"></div>
+                <div class="grid-footer"></div>
+                <div class="grid-footer"></div>
+              </div>
+            </form>
           </mat-step>
         </mat-horizontal-stepper>
         <mat-dialog-actions class="action-container">
@@ -96,7 +126,7 @@
             Next
             <mat-icon>arrow_forward_ios</mat-icon>
           </button>
-          <button class="mat-display-1 action-done" *ngIf="stepper.selectedIndex === 1" (click)="save()" color="primary"
+          <button class="mat-display-1 action-done" *ngIf="stepper.selectedIndex === 1" (click)="submitForm()" color="primary"
                   mat-button [disabled]="!infoFormGroup.valid || !assessmentFormGroup.valid">
             Done
           </button>
