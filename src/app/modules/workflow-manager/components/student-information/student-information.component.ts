@@ -19,8 +19,10 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {ProgramAdmin} from '../../../../models/program-admin/program-admin';
 import {StudentInformation} from '../../../../models/workflow/student-information';
 import {StudentInformationLookup} from '../../../../models/workflow/student-information-lookup';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../../../providers/global/global-program-admin-providers-factory';
 import {MetaDataService} from '../../../shared/services/meta-data/meta-data.service';
 import {STUDENT_INFO_DATA_SOURCE, STUDENT_INFO_LOOKUP_DATA_SOURCE, STUDENT_INFO_URI_SUPPLIER} from '../../../shared/shared.module';
 
@@ -33,7 +35,7 @@ export class StudentInformationComponent implements OnInit {
 
   infoFormGroup: FormGroup
   assessmentFormGroup: FormGroup
-  studentInfo: Promise<StudentInformationLookup>
+  studentInfo: StudentInformationLookup
   behaviors: string[]
   leadershipSkills: string[]
   leadershipTraits: string[]
@@ -81,6 +83,8 @@ export class StudentInformationComponent implements OnInit {
     @Inject(STUDENT_INFO_URI_SUPPLIER) private studentInfoUriSupplier: UriSupplier,
     @Inject(STUDENT_INFO_LOOKUP_DATA_SOURCE) private studentInfoLookupDataSource: DataSource<StudentInformationLookup>,
     @Inject(STUDENT_INFO_DATA_SOURCE) private studentInfoDataSource: DataSource<StudentInformation>,
+    @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
+    @Inject(PROGRAM_ADMIN_URI_SUPPLIER) private programAdminUriSupplier: UriSupplier,
     metaDataService: MetaDataService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
@@ -100,7 +104,23 @@ export class StudentInformationComponent implements OnInit {
       const registrationId = params.get('registrationId')
       this.studentInfoUriSupplier.withSubstitution('schoolId', schoolId)
       this.studentInfoUriSupplier.withSubstitution('studentId', studentId)
-      this.studentInfo = this.studentInfoLookupDataSource.oneValue(registrationId)
+      this.studentInfoLookupDataSource.oneValue(registrationId)
+        .then(studentInfo => {
+          this.studentInfo = studentInfo
+        })
+        .catch(() => {
+          this.programAdminUriSupplier.withSubstitution('schoolId', schoolId)
+          this.programAdminDataSource.allValues()
+            .then(programAdmins => {
+              const programAdmin = programAdmins?.[0]
+              this.router.navigate(['/workflowmanager/invalidLink'], {
+                queryParams: {paName: programAdmin.fullName, paEmail: programAdmin.email}
+              })
+            })
+            .catch(error => {
+              this.router.navigate(['/workflowmanager/invalidLink'])
+            })
+        })
     })
   }
 
@@ -148,18 +168,16 @@ export class StudentInformationComponent implements OnInit {
     )
 
     const that = this
-    this.studentInfo.then(info => {
-      studentInformation['links'] = info["links"]
-      console.log('===>', info)
-      console.log('===> ', studentInformation)
-      this.studentInfoDataSource.update(studentInformation)
-        .then(() => {
-          this.router.navigate(['/workflowmanager/teacherThankYou'], {
-            relativeTo: that.route,
-            queryParams: {name: info.studentName}
-          })
+    studentInformation['links'] = this.studentInfo['links']
+    console.log('===>', this.studentInfo)
+    console.log('===> ', studentInformation)
+    this.studentInfoDataSource.update(studentInformation)
+      .then(() => {
+        this.router.navigate(['/workflowmanager/teacherThankYou'], {
+          relativeTo: that.route,
+          queryParams: {name: this.studentInfo.studentName}
         })
-    })
+      })
   }
 
   private createInfoModel(formBuilder: FormBuilder): FormGroup {

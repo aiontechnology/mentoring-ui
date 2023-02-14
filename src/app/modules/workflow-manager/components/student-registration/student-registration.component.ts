@@ -124,19 +124,19 @@ export class StudentRegistrationComponent implements OnInit {
             this.registration = registration;
             this.updateModel(registration);
           })
-          .catch(error => {
+          .catch(() => {
             this.programAdminUriSupplier.withSubstitution('schoolId', params.get('schoolId'))
             this.programAdminDataSource.allValues()
               .then(programAdmins => {
                 const programAdmin = programAdmins?.[0]
-                this.router.navigate(['/workflowmanager/registrationInvalid'], {
+                this.router.navigate(['/workflowmanager/invalidLink'], {
                   queryParams: {paName: programAdmin.fullName, paEmail: programAdmin.email}
                 })
               })
               .catch(error => {
-                this.router.navigate(['/workflowmanager/registrationInvalid'])
+                this.router.navigate(['/workflowmanager/invalidLink'])
               })
-          });
+          })
       })
   }
 

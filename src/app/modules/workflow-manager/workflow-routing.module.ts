@@ -16,7 +16,7 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {RegistrationInvalid} from './components/registration-invalid/registration-invalid.component';
+import {InvalidLink} from './components/registration-invalid/invalid-link.component';
 import {StudentInformationThanksComponent} from './components/student-information-thanks/student-information-thanks.component';
 import {StudentInformationComponent} from './components/student-information/student-information.component';
 import {StudentRegistrationCancelledComponent} from './components/student-registration-cancelled/student-registration-cancelled.component';
@@ -27,7 +27,7 @@ const routes: Routes = [
   {path: 'schools/:schoolId/registrations/:registrationId', component: StudentRegistrationComponent},
   {path: 'schools/:schoolId/registrations/:registrationId/cancel', component: StudentRegistrationCancelledComponent},
   {path: 'schools/:schoolId/students/:studentId/information/:registrationId', component: StudentInformationComponent},
-  {path: 'registrationInvalid', component: RegistrationInvalid},
+  {path: 'invalidLink', component: InvalidLink},
   {path: 'studentThankYou', component: StudentRegistrationThanksComponent},
   {path: 'teacherThankYou', component: StudentInformationThanksComponent}
 ];

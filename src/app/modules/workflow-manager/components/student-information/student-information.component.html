@@ -22,7 +22,7 @@
     <mat-card class="form-card">
       <mat-card-title class="form-title">STUDENT INFO</mat-card-title>
       <mat-card-content class="form-content">
-        <div class="student-name">{{(studentInfo | async)?.studentName | uppercase}}</div>
+        <div class="student-name">{{studentInfo?.studentName | uppercase}}</div>
         <mat-horizontal-stepper #stepper>
           <mat-step [stepControl]="infoFormGroup" errorMessage="Invalid" label="Student Info">
             <div class="required-warning">* Denotes a required field</div>

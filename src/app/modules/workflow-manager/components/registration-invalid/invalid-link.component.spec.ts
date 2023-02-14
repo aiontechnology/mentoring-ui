@@ -16,19 +16,19 @@
 
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {RegistrationInvalid} from './registration-invalid.component';
+import {InvalidLink} from './registration-invalid.component';
 
 describe('RegistrationNotFoundComponent', () => {
-  let component: RegistrationInvalid;
-  let fixture: ComponentFixture<RegistrationInvalid>;
+  let component: InvalidLink;
+  let fixture: ComponentFixture<InvalidLink>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RegistrationInvalid ]
+      declarations: [ InvalidLink ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RegistrationInvalid);
+    fixture = TestBed.createComponent(InvalidLink);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

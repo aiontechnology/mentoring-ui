@@ -18,11 +18,11 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 
 @Component({
-  selector: 'ms-registration-invalid',
-  templateUrl: './registration-invalid.component.html',
-  styleUrls: ['./registration-invalid.component.scss']
+  selector: 'ms-invalid-link',
+  templateUrl: './invalid-link.component.html',
+  styleUrls: ['./invalid-link.component.scss']
 })
-export class RegistrationInvalid implements OnInit {
+export class InvalidLink implements OnInit {
   programAdminName: string
   programAdminEmail: string
 
