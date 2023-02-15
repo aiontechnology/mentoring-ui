@@ -16,22 +16,10 @@
 
 import {LayoutModule} from '@angular/cdk/layout'
 import {CommonModule} from '@angular/common'
-import {InjectionToken, ModuleWithProviders, NgModule} from '@angular/core'
+import {ModuleWithProviders, NgModule} from '@angular/core'
 import {FormsModule, ReactiveFormsModule} from '@angular/forms'
 import {RouterModule} from '@angular/router'
 import {MaterialModule} from 'src/app/implementation/shared/material.module'
-import {environment} from '../../../environments/environment'
-import {DataSource} from '../../implementation/data/data-source'
-import {Repository} from '../../implementation/data/repository'
-import {UriSupplier} from '../../implementation/data/uri-supplier'
-import {StudentInformation} from '../../models/workflow/student-information';
-import {StudentInformationLookup} from '../../models/workflow/student-information-lookup'
-import {StudentRegistration} from '../../models/workflow/student-registration'
-import {StudentRegistrationLookup} from '../../models/workflow/student-registration-lookup'
-import {StudentInfoRepository} from '../school-manager/repositories/student-info-repository';
-import {StudentInformationLookupRepository} from '../school-manager/repositories/student-information-lookup-repository'
-import {StudentRegistrationLookupRepository} from '../school-manager/repositories/student-registration-lookup-repository'
-import {StudentRegistrationRepository} from '../school-manager/repositories/student-registration-repository'
 import {BackArrowComponent} from './components/back-arrow/back-arrow.component'
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component'
 import {DecoratedComponent} from './components/decorated/decorated.component'
@@ -52,14 +40,8 @@ import {SpinnerComponent} from './components/spinner/spinner.component'
 import {TabbedContainerComponent} from './components/tabbed-container/tabbed-container.component'
 import {OnlyNumberDirective} from './directives/only-number.directive'
 import {PhoneFormatDirective} from './directives/phone-format.directive'
+import {workflowProvidersFactory} from './providers/workflow-providers-factory';
 import {MetaDataService} from './services/meta-data/meta-data.service'
-
-export const REGISTRATION_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistrationLookup>>('registration-lookup-data-source')
-export const REGISTRATION_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistration>>('registration-data-source')
-export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('registration-uri-supplier')
-export const STUDENT_INFO_URI_SUPPLIER = new InjectionToken<UriSupplier>('student-info-uri-supplier')
-export const STUDENT_INFO_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentInformationLookup>>('student-info-lookup-data-source')
-export const STUDENT_INFO_DATA_SOURCE = new InjectionToken<DataSource<StudentInformation>>('student-info-data-source')
 
 @NgModule({
   declarations: [
@@ -131,41 +113,7 @@ export class SharedModule {
     return {
       ngModule: SharedModule,
       providers: [
-        /* Registration resources */
-        {
-          provide: REGISTRATION_URI_SUPPLIER,
-          useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/registrations`)
-        },
-        StudentRegistrationLookupRepository,
-        {
-          provide: REGISTRATION_LOOKUP_DATA_SOURCE,
-          useFactory: (repository: Repository<StudentRegistrationLookup>) => new DataSource<StudentRegistrationLookup>(repository),
-          deps: [StudentRegistrationLookupRepository]
-        },
-        StudentRegistrationRepository,
-        {
-          provide: REGISTRATION_DATA_SOURCE,
-          useFactory: (repository: Repository<StudentRegistration>) => new DataSource<StudentRegistration>(repository),
-          deps: [StudentRegistrationRepository]
-        },
-        {
-          provide: STUDENT_INFO_URI_SUPPLIER,
-          useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/students/{studentId}/registrations`)
-        },
-        StudentInformationLookupRepository,
-        {
-          provide: STUDENT_INFO_LOOKUP_DATA_SOURCE,
-          useFactory: (repository: Repository<StudentInformationLookup>) => new DataSource<StudentInformationLookup>(repository),
-          deps: [StudentInformationLookupRepository]
-        },
-        StudentInfoRepository,
-        {
-          provide: STUDENT_INFO_DATA_SOURCE,
-          useFactory: (repository: Repository<StudentInformation>) => new DataSource<StudentInformation>(repository),
-          deps: [StudentInfoRepository]
-        },
-
-        // Services
+        ...workflowProvidersFactory(),
         MetaDataService
       ]
     };

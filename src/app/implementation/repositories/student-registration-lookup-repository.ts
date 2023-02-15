@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-import {Repository} from '../../../implementation/data/repository';
-import {REGISTRATION_URI_SUPPLIER} from '../../shared/shared.module';
-import {StudentRegistration} from '../../../models/workflow/student-registration';
-import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
+import {Inject, Injectable} from '@angular/core';
+import {StudentRegistrationLookup} from '../../models/workflow/student-registration-lookup';
+import {REGISTRATION_URI_SUPPLIER} from '../../modules/shared/providers/workflow-providers-factory';
+import {Repository} from '../data/repository';
+import {UriSupplier} from '../data/uri-supplier';
 
 @Injectable()
-export class StudentRegistrationRepository extends Repository<StudentRegistration> {
+export class StudentRegistrationLookupRepository extends Repository<StudentRegistrationLookup> {
 
   constructor(http: HttpClient,
               @Inject(REGISTRATION_URI_SUPPLIER) uriSupplier: UriSupplier) {
     super(http, uriSupplier);
   }
 
-  protected override toModel = (value: any): StudentRegistration => {
-    return value ? StudentRegistration.of(value) : null;
+  protected override toModel = (value: any): StudentRegistrationLookup => {
+    return value ? StudentRegistrationLookup.of(value) : null;
   }
 
 }

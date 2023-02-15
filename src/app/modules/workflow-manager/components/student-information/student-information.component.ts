@@ -23,8 +23,12 @@ import {ProgramAdmin} from '../../../../models/program-admin/program-admin';
 import {StudentInformation} from '../../../../models/workflow/student-information';
 import {StudentInformationLookup} from '../../../../models/workflow/student-information-lookup';
 import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../../../providers/global/global-program-admin-providers-factory';
+import {
+  STUDENT_INFO_DATA_SOURCE,
+  STUDENT_INFO_LOOKUP_DATA_SOURCE,
+  STUDENT_INFO_URI_SUPPLIER
+} from '../../../shared/providers/workflow-providers-factory';
 import {MetaDataService} from '../../../shared/services/meta-data/meta-data.service';
-import {STUDENT_INFO_DATA_SOURCE, STUDENT_INFO_LOOKUP_DATA_SOURCE, STUDENT_INFO_URI_SUPPLIER} from '../../../shared/shared.module';
 
 @Component({
   selector: 'ms-student-information',

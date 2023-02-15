@@ -28,8 +28,12 @@ import {Teacher} from '../../../../models/teacher/teacher';
 import {StudentRegistration} from '../../../../models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../../../../models/workflow/student-registration-lookup';
 import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../../../providers/global/global-program-admin-providers-factory';
+import {
+  REGISTRATION_DATA_SOURCE,
+  REGISTRATION_LOOKUP_DATA_SOURCE,
+  REGISTRATION_URI_SUPPLIER
+} from '../../../shared/providers/workflow-providers-factory';
 import {LinkService} from '../../../shared/services/link-service/link.service';
-import {REGISTRATION_DATA_SOURCE, REGISTRATION_LOOKUP_DATA_SOURCE, REGISTRATION_URI_SUPPLIER} from '../../../shared/shared.module';
 
 @Component({
   selector: 'ms-student-registration',

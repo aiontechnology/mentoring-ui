@@ -18,6 +18,7 @@
 export const ADD_STUDENT_MENU_TITLE = 'Add Student'
 export const EDIT_STUDENT_MENU_TITLE = 'Edit Student'
 export const REMOVE_STUDENT_MENU_TITLE = 'Remove Student(s)'
+export const REQUEST_TEACHER_INPUT = 'Request Teacher Input'
 
 export const ADD_STUDENT_PANEL_TITLE = 'Add New Student'
 export const EDIT_STUDENT_PANEL_TITLE = 'Edit Student'
@@ -25,6 +26,7 @@ export const EDIT_STUDENT_PANEL_TITLE = 'Edit Student'
 export const ADD_STUDENT_SNACKBAR_MESSAGE = 'Student Successfully Added \u2713'
 export const EDIT_STUDENT_SNACKBAR_MESSAGE = 'Student Successfully Updated \u2713'
 export const REMOVE_STUDENT_SNACKBAR_MESSAGE = 'Student(s) Successfully Removed \u2713'
+export const REQUEST_TEACHER_INPUT_SNACKBAR_MESSAGE = 'Teacher Information Request Sent \u2713'
 
 export const SINGULAR_STUDENT = 'student'
 export const PLURAL_STUDENT = 'students'

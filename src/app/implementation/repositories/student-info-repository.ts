@@ -16,10 +16,11 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
-import {Repository} from '../../../implementation/data/repository';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {StudentInformation} from '../../../models/workflow/student-information';
-import {STUDENT_INFO_URI_SUPPLIER} from '../../shared/shared.module';
+import {BaseUri} from '../../models/workflow/base-uri';
+import {StudentInformation} from '../../models/workflow/student-information';
+import {STUDENT_INFO_URI_SUPPLIER} from '../../modules/shared/providers/workflow-providers-factory';
+import {Repository} from '../data/repository';
+import {UriSupplier} from '../data/uri-supplier';
 
 @Injectable()
 export class StudentInfoRepository extends Repository<StudentInformation> {
@@ -28,11 +29,26 @@ export class StudentInfoRepository extends Repository<StudentInformation> {
     http: HttpClient,
     @Inject(STUDENT_INFO_URI_SUPPLIER) uriSupplier: UriSupplier
   ) {
-    super(http, uriSupplier);
+    super(http, uriSupplier)
   }
 
   protected override toModel = (value: any): StudentInformation => {
-    return value ? StudentInformation.of(value) : null;
+    return value ? StudentInformation.of(value) : null
+  }
+
+}
+
+@Injectable()
+export class StudentInfoRepository2 extends Repository<BaseUri> {
+  constructor(
+    http: HttpClient,
+    @Inject(STUDENT_INFO_URI_SUPPLIER) uriSupplier: UriSupplier
+  ) {
+    super(http, uriSupplier);
+  }
+
+  protected toModel = (value: any): BaseUri => {
+    return value ? BaseUri.of(value) : null
   }
 
 }
