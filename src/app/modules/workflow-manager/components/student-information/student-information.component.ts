@@ -81,7 +81,7 @@ export class StudentInformationComponent implements OnInit {
     'Equates setbacks and failures as temporary, not permanent',
   ]
 
-  private debug: boolean = true;
+  private debug: boolean = false;
 
   constructor(
     @Inject(STUDENT_INFO_URI_SUPPLIER) private studentInfoUriSupplier: UriSupplier,
