@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -33,7 +34,10 @@ import {MetaDataService} from '../../../shared/services/meta-data/meta-data.serv
 @Component({
   selector: 'ms-student-information',
   templateUrl: './student-information.component.html',
-  styleUrls: ['./student-information.component.scss']
+  styleUrls: ['./student-information.component.scss'],
+  providers: [
+    {provide: STEPPER_GLOBAL_OPTIONS, useValue: {showError: true}}
+  ]
 })
 export class StudentInformationComponent implements OnInit {
 
@@ -184,11 +188,53 @@ export class StudentInformationComponent implements OnInit {
       })
   }
 
+  private leadershipSkillsCache: string[]
+  leadershipSkillsChanged() {
+    if(this.infoFormGroup.get('leadershipSkills').value.length <= 3) {
+      this.leadershipSkillsCache = this.infoFormGroup.get('leadershipSkills').value
+    } else {
+      this.infoFormGroup.get('leadershipSkills').setValue(this.leadershipSkillsCache)
+    }
+    if(this.infoFormGroup.get('leadershipSkills').value.length < 3) {
+      this.infoFormGroup.get('leadershipSkills').setErrors({
+        wrongCount: 'Please Select 3 Leadership Skills'
+      })
+    }
+  }
+
+  private leadershipTraitsCache: string[]
+  leadershipTraitsChanged() {
+    if(this.infoFormGroup.get('leadershipTraits').value.length <= 2) {
+      this.leadershipTraitsCache = this.infoFormGroup.get('leadershipTraits').value
+    } else {
+      this.infoFormGroup.get('leadershipTraits').setValue(this.leadershipTraitsCache)
+    }
+    if(this.infoFormGroup.get('leadershipTraits').value.length < 2) {
+      this.infoFormGroup.get('leadershipTraits').setErrors({
+        wrongCount: 'Please Select 2 Leadership Traits'
+      })
+    }
+  }
+
+  private behaviorCache: string[]
+  behaviorChanged() {
+    if(this.infoFormGroup.get('behaviors').value.length <= 1) {
+      this.behaviorCache = this.infoFormGroup.get('behaviors').value
+    } else {
+      this.infoFormGroup.get('behaviors').setValue(this.behaviorCache)
+    }
+    if(this.infoFormGroup.get('behaviors').value.length < 1) {
+      this.infoFormGroup.get('behaviors').setErrors({
+        wrongCount: 'Please Select 1 Behavior'
+      })
+    }
+  }
+
   private createInfoModel(formBuilder: FormBuilder): FormGroup {
     return formBuilder.group({
-      behaviors: [],
-      leadershipSkills: [],
-      leadershipTraits: [],
+      behaviors: [[], [Validators.required]],
+      leadershipSkills: [[], [Validators.required]],
+      leadershipTraits: [[], [Validators.required]],
       teacherComment: ['', Validators.maxLength(500)],
     })
   }
