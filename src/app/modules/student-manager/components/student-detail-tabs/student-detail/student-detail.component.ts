@@ -110,18 +110,24 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
         .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
       new MenuExecutableCommand(REQUEST_TEACHER_INPUT, STUDENT_GROUP, false,
         () => {
-          this.studentInfoUriSupplier.withSubstitution('schoolId', this.schoolInstanceCache.item.id)
-          this.studentInfoUriSupplier.withSubstitution('studentId', this.studentInstanceCache.item.id)
-          this.studentInfoDataSource.add(BaseUri.workflow())
-          this.studentInstanceCache.item.teacherInfoWorkflowAllowed = false;
           const snackbarManager = new SnackbarManager(this.snackbar)
-          snackbarManager.open(REQUEST_TEACHER_INPUT_SNACKBAR_MESSAGE)
+          if (this.studentInstanceCache?.item?.teacher?.teacher.email !== null &&
+            this.studentInstanceCache?.item?.teacher?.teacher.email.trim() !== '') {
+            this.studentInfoUriSupplier.withSubstitution('schoolId', this.schoolInstanceCache.item.id)
+            this.studentInfoUriSupplier.withSubstitution('studentId', this.studentInstanceCache.item.id)
+            this.studentInfoDataSource.add(BaseUri.workflow())
+            this.studentInstanceCache.item.teacherInfoWorkflowAllowed = false;
+            snackbarManager.open(REQUEST_TEACHER_INPUT_SNACKBAR_MESSAGE)
+          } else {
+            if(this.studentInstanceCache?.item?.teacher === null) {
+              snackbarManager.open("ERROR: No teacher set for student \u274C")
+            } else {
+              snackbarManager.open("ERROR: Teacher has no email address \u274C")
+            }
+          }
         })
         .enableIf(() => {
-          return this.studentInstanceCache.item.teacherInfoWorkflowAllowed &&
-            this.studentInstanceCache?.item?.teacher?.teacher.email !== undefined &&
-            this.studentInstanceCache?.item?.teacher?.teacher.email !== null &&
-            this.studentInstanceCache?.item?.teacher?.teacher.email !== ''
+          return this.studentInstanceCache.item.teacherInfoWorkflowAllowed
         })
     ]
   }
