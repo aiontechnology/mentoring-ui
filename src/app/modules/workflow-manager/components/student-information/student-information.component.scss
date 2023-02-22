@@ -1,0 +1,242 @@
+/*!
+ * Copyright 2023 Aion Technology LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import 'src/style/_variables';
+
+.controls > button {
+  background-color: rgb(84, 195, 193);
+  bottom: 50px;
+  border-radius: 10px;
+  color: white;
+  font-family: Roboto;
+  font-weight: 500;
+  font-size: 26px;
+  height: 70px;
+  position: absolute;
+  right: 50px;
+  text-decoration: none;
+  width: 269px;
+}
+
+.controls > button:disabled {
+  background-color: rgb(84, 195, 193, .35);
+}
+
+.form {
+  font-family: Roboto;
+  font-weight: 400;
+  padding: 150px 0 75px 0;
+}
+
+.form-card {
+  background-color: rgb(251, 251, 251, 0);
+  border: 0;
+  margin: 0px 50px 0px 50px;
+  padding: 0;
+}
+
+.form-content {
+  position: relative;
+  background-color: #FBFBFB;
+  padding: 50px 50px 0 50px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.form-footer {
+  padding: 0 0 100px 0;
+}
+
+.form-title {
+  background-color: #4988A0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: white;
+  font-family: Montserrat;
+  font-size: 34px;
+  font-weight: 700;
+  letter-spacing: .23px;
+  margin: 0 !important;
+  padding: 25px 0 25px 0;
+  text-align: center;
+}
+
+.hhf-logo {
+  position: absolute;
+  top: 75px;
+  right: 75px;
+}
+
+label {
+  display: block;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.ms-logo {
+  position: absolute;
+  top: 23px;
+  left: 30px;
+}
+
+.mat-radio-button {
+  padding-right: 5px;
+}
+
+.page-container {
+  background: url("../../../../../assets/cloud-tileable.png") repeat;
+}
+
+.page-header {
+  position: relative;
+}
+
+.required-warning {
+  color: #FE0303;
+  padding: 34px 0;
+}
+
+.row {
+  display: flex;
+  margin-top: 20px;
+}
+
+.row-radio {
+  line-height: 1.125;
+  padding-bottom: 1.35em;
+}
+
+.student-name {
+  position: absolute;
+  font: 32px Roboto;
+  border-left: 4px solid $accent;
+  padding-left: 6px;
+  top: 70px;
+  left: 100px;
+}
+
+.left {
+  float: left;
+  width: 50%;
+  margin-right: 20px;
+}
+
+.right {
+  margin-left: 20px;
+}
+
+p {
+  font: 400 24px Roboto, "Helvetica Neue", sans-serif;
+  letter-spacing: 0.16px;
+  padding: 30px 0 50px 0;
+}
+
+.action-container {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    margin: 20px 0;
+  }
+
+  button.action-done {
+    color: white;
+    background-color: #3BAFBF;
+    letter-spacing: -0.28px;
+  }
+
+  button.action-done:disabled {
+    background-color: rgb(84, 195, 193, .35);
+  }
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 5fr repeat(5, 1fr);
+  gap: 0 0;
+  font: 18px Roboto, "Helvetica Neue", sans-serif;
+
+  .grid-title {
+    place-self: auto stretch;
+    font-weight: 700;
+    color: white;
+    border-top: #979797 solid 1px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    background-color: #4988A0;
+    width: 1fr;
+  }
+
+  .grid-title:nth-child(1) {
+    border-left: #979797 solid 1px;
+    border-top: #979797 solid 1px;
+    border-top-left-radius: 20px;
+    padding-left: 50px;
+  }
+
+  .grid-title:nth-child(6) {
+    border-right: #979797 solid 1px;
+    border-top-right-radius: 20px;
+    padding-right: 50px;
+  }
+
+  .grid-item {
+    place-self: auto stretch;
+    font-weight: 500;
+    border-bottom: #979797 solid 1px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+  .grid-item:nth-child(1) {
+    border-left: #979797 solid 1px;
+    padding-left: 50px;
+  }
+
+  .grid-item:nth-of-type(5) {
+    border-right: #979797 solid 1px;
+  }
+
+  .grid-footer {
+    height: 50px;
+    background-color: #4988A0;
+    border-bottom: #979797 solid 1px;
+    width: 100%;
+  }
+
+  .grid-footer:nth-last-child(6) {
+    border-left: #979797 solid 1px;
+    border-bottom: #979797 solid 1px;
+    border-bottom-left-radius: 20px;
+
+  }
+
+  .grid-footer:nth-last-child(1) {
+    border-right: #979797 solid 1px;
+    border-bottom: #979797 solid 1px;
+    border-bottom-right-radius: 20px;
+  }
+
+  .radio-group {
+    display: contents;
+  }
+}
+
+.citation {
+  margin: 25px 100px;
+}

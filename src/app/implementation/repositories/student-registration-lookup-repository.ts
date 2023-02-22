@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {REGISTRATION_URI_SUPPLIER} from '../../shared/shared.module';
-import {StudentRegistrationLookup} from '../../../models/workflow/student-registration-lookup';
-import {Repository} from '../../../implementation/data/repository';
+import {Inject, Injectable} from '@angular/core';
+import {StudentRegistrationLookup} from '../../models/workflow/student-registration-lookup';
+import {REGISTRATION_URI_SUPPLIER} from '../../modules/shared/providers/workflow-providers-factory';
+import {Repository} from '../data/repository';
+import {UriSupplier} from '../data/uri-supplier';
 
 @Injectable()
 export class StudentRegistrationLookupRepository extends Repository<StudentRegistrationLookup> {

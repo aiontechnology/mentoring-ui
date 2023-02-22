@@ -446,27 +446,27 @@
       <form [formGroup]="studentDetailsStep.formGroup">
 
         <!-- Behavioral assessment -->
-        <div class="row-container row-label">Behavioral Assessment (1-45)</div>
+        <div class="row-container row-label">Behavioral Assessment (1-175)</div>
         <div class="row-container">
           <mat-form-field appearance="outline">
             <mat-label>Before</mat-label>
-            <input formControlName="preBehavioralAssessment" matInput max="45" min="0" type="number">
+            <input formControlName="preBehavioralAssessment" matInput max="175" min="0" type="number">
             <mat-error *ngIf="studentDetailsStep.formGroup.hasError('min', 'preBehavioralAssessment')">
               Value must be greater than zero
             </mat-error>
             <mat-error *ngIf="studentDetailsStep.formGroup.hasError('max', 'preBehavioralAssessment')">
-              Value must be less than 45
+              Value must be 175 or less
             </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>After</mat-label>
-            <input formControlName="postBehavioralAssessment" matInput max="45" min="0" type="number">
+            <input formControlName="postBehavioralAssessment" matInput max="175" min="0" type="number">
             <mat-error *ngIf="studentDetailsStep.formGroup.hasError('min', 'postBehavioralAssessment')">
               Value must be greater than zero
             </mat-error>
             <mat-error *ngIf="studentDetailsStep.formGroup.hasError('max', 'postBehavioralAssessment')">
-              Value must be less than 45
+              Value must be 175 of less
             </mat-error>
           </mat-form-field>
         </div>

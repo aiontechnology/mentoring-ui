@@ -1,5 +1,5 @@
-/*
- * Copyright 2022-2023 Aion Technology LLC
+/*!
+ * Copyright 2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-import {EnableableCommand} from './enableable-command';
-
-export abstract class MenuCommand extends EnableableCommand {
-  protected constructor(
-    public title: string,
-    public group: string,
-    public isAdminOnly: boolean,
-  ) {
-    super()
+.grid-container {
+  span.mat-radio-label-content {
+    padding-left: 0 !important;
   }
 }

@@ -28,8 +28,12 @@ import {Teacher} from '../../../../models/teacher/teacher';
 import {StudentRegistration} from '../../../../models/workflow/student-registration';
 import {StudentRegistrationLookup} from '../../../../models/workflow/student-registration-lookup';
 import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../../../providers/global/global-program-admin-providers-factory';
+import {
+  REGISTRATION_DATA_SOURCE,
+  REGISTRATION_LOOKUP_DATA_SOURCE,
+  REGISTRATION_URI_SUPPLIER
+} from '../../../shared/providers/workflow-providers-factory';
 import {LinkService} from '../../../shared/services/link-service/link.service';
-import {REGISTRATION_DATA_SOURCE, REGISTRATION_LOOKUP_DATA_SOURCE, REGISTRATION_URI_SUPPLIER} from '../../../shared/shared.module';
 
 @Component({
   selector: 'ms-student-registration',
@@ -76,7 +80,7 @@ export class StudentRegistrationComponent implements OnInit {
   }
 
   selfLinkFunction(): (object: any) => string {
-    return LinkService.selfLink;
+    return LinkService.selfLink
   }
 
   submitForm(): void {
@@ -101,12 +105,11 @@ export class StudentRegistrationComponent implements OnInit {
       valueOrNull(this.model, 'emergencyContactPhone'),
       valueOrNull(this.model, 'parentSignature'),
       this.registration.links,
-    );
+    )
     const that = this
-    console.log('That', that)
     this.registrationDataSource.update(studentRegistration)
       .then(() => {
-        this.router.navigate(['/workflowmanager/thankYou'], {
+        this.router.navigate(['/workflowmanager/studentThankYou'], {
           relativeTo: that.route,
           queryParams: {name: this.model.get('studentFirstName').value}
         })
@@ -125,19 +128,19 @@ export class StudentRegistrationComponent implements OnInit {
             this.registration = registration;
             this.updateModel(registration);
           })
-          .catch(error => {
+          .catch(() => {
             this.programAdminUriSupplier.withSubstitution('schoolId', params.get('schoolId'))
             this.programAdminDataSource.allValues()
               .then(programAdmins => {
                 const programAdmin = programAdmins?.[0]
-                this.router.navigate(['/workflowmanager/registrationInvalid'], {
+                this.router.navigate(['/workflowmanager/invalidLink'], {
                   queryParams: {paName: programAdmin.fullName, paEmail: programAdmin.email}
                 })
               })
               .catch(error => {
-                this.router.navigate(['/workflowmanager/registrationInvalid'])
+                this.router.navigate(['/workflowmanager/invalidLink'])
               })
-          });
+          })
       })
   }
 

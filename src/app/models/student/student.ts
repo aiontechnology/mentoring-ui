@@ -32,6 +32,7 @@ export abstract class Student {
   mediaReleaseSigned: boolean
   preBehavioralAssessment: number
   postBehavioralAssessment: number
+  teacherInfoWorkflowAllowed: boolean
   activityFocuses: string[]
   behaviors: string[]
   interests: string[]
@@ -61,6 +62,7 @@ export abstract class Student {
     this.mediaReleaseSigned = json?.mediaReleaseSigned
     this.preBehavioralAssessment = json?.preBehavioralAssessment
     this.postBehavioralAssessment = json?.postBehavioralAssessment
+    this.teacherInfoWorkflowAllowed = json?.teacherInfoWorkflowAllowed
     this.activityFocuses = json?.activityFocuses || []
     this.behaviors = json?.behaviors || []
     this.interests = json?.interests || []

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-import {EnableableCommand} from './enableable-command';
+import {MenuCommand} from './menu-command';
 
-export abstract class MenuCommand extends EnableableCommand {
-  protected constructor(
-    public title: string,
-    public group: string,
-    public isAdminOnly: boolean,
+export class MenuExecutableCommand extends MenuCommand {
+  constructor(
+    title: string,
+    group: string,
+    isAdminOnly: boolean,
+    private command: () => void,
   ) {
-    super()
+    super(title, group, isAdminOnly)
+  }
+
+  protected doExecute(): void {
+    this.command()
   }
 }

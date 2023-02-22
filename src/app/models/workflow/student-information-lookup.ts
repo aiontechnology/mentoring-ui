@@ -14,28 +14,16 @@
  * limitations under the License.
  */
 
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
-
-@Component({
-  selector: 'ms-registration-invalid',
-  templateUrl: './registration-invalid.component.html',
-  styleUrls: ['./registration-invalid.component.scss']
-})
-export class RegistrationInvalid implements OnInit {
-  programAdminName: string
-  programAdminEmail: string
-
+export class StudentInformationLookup {
   constructor(
-    private route: ActivatedRoute
+    public studentName: string,
+    public links: any,
   ) {}
 
-  ngOnInit(): void {
-    this.route.queryParamMap.subscribe(params => {
-      this.programAdminName = params.get('paName')
-      this.programAdminEmail = params.get('paEmail')
-    })
+  static of(value: any): StudentInformationLookup {
+    return new StudentInformationLookup(
+      value?.studentName,
+      value?.links,
+    )
   }
-
-
 }

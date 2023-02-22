@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,20 @@
  * limitations under the License.
  */
 
-import {EnableableCommand} from './enableable-command';
+import {environment} from '../../../environments/environment';
 
-export abstract class MenuCommand extends EnableableCommand {
-  protected constructor(
-    public title: string,
-    public group: string,
-    public isAdminOnly: boolean,
-  ) {
-    super()
+export class BaseUri {
+  constructor(
+    public uri: string,
+  ) {}
+
+  static of(value: any): BaseUri {
+    return new BaseUri(
+      value?.baseUri,
+    )
+  }
+
+  static workflow(): BaseUri {
+    return this.of({baseUri: environment.baseUri + '/workflowmanager'})
   }
 }

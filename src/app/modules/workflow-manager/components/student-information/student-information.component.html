@@ -1,0 +1,160 @@
+<!--
+  ~ Copyright 2023 Aion Technology LLC
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<div class="page-container">
+  <div class="page-header">
+    <img class="ms-logo" src="../../../../../assets/ms-logo-white.png"/>
+  </div>
+  <div class="form student-info-dialog">
+    <mat-card class="form-card">
+      <mat-card-title class="form-title">STUDENT INFO</mat-card-title>
+      <mat-card-content class="form-content">
+        <div class="student-name">{{studentInfo?.studentName | uppercase}}</div>
+        <mat-horizontal-stepper #stepper>
+          <mat-step [stepControl]="infoFormGroup" errorMessage="Incomplete" label="Student Info">
+            <div class="required-warning">* Denotes a required field</div>
+            <form [formGroup]="infoFormGroup">
+              <div class="float-container">
+                <div class="left">
+                  <!-- Leadership Skills -->
+                  <div class="row-container">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Leadership Success Skills (Select 3)</mat-label>
+                      <mat-select formControlName="leadershipSkills" (selectionChange)="leadershipSkillsChanged()" multiple required>
+                        <mat-option *ngFor="let leadershipSkill of leadershipSkills" [value]="leadershipSkill">
+                          {{ leadershipSkill }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="infoFormGroup.hasError('required', 'leadershipSkills')">
+                        Please Select 3 Leadership Skills
+                      </mat-error>
+                      <mat-error *ngIf="infoFormGroup.hasError('wrongCount', 'leadershipSkills')">
+                        Please Select 3 Leadership Skills
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Leadership Traits -->
+                  <div class="row-container">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Leadership Traits (Select 2)</mat-label>
+                      <mat-select formControlName="leadershipTraits" (selectionChange)="leadershipTraitsChanged()" multiple required>
+                        <mat-option *ngFor="let leadershipTrait of leadershipTraits" [value]="leadershipTrait">
+                          {{ leadershipTrait }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="infoFormGroup.hasError('required', 'leadershipTraits')">
+                        Please Select 2 Leadership Traits
+                      </mat-error>
+                      <mat-error *ngIf="infoFormGroup.hasError('wrongCount', 'leadershipTraits')">
+                        Please Select 2 Leadership Traits
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Behaviors -->
+                  <div class="row-container">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Behaviors (Select 1)</mat-label>
+                      <mat-select formControlName="behaviors" (selectionChange)="behaviorChanged()" multiple required>
+                        <mat-option *ngFor="let behavior of behaviors" [value]="behavior">
+                          {{ behavior }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="infoFormGroup.hasError('required', 'behaviors')">
+                        Please Select 1 Behavior
+                      </mat-error>
+                      <mat-error *ngIf="infoFormGroup.hasError('wrongCount', 'behaviors')">
+                        Please Select 1 Behavior
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="right">
+                  <div class="row-container">
+                    <mat-form-field appearance="outline">
+                      <mat-label>Comments</mat-label>
+                      <textarea rows="11" formControlName="teacherComment" matInput></textarea>
+                      <mat-error *ngIf="infoFormGroup.hasError('maxlength', 'teacherComments')">
+                        A comment can be a maximum of 500 characters in length
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </mat-step>
+
+          <mat-step [stepControl]="assessmentFormGroup" errorMessage="Incomplete" label="Behavioral Assessment">
+            <p>
+              Please provide information on the student listed below. This information will be used to evaluate progress
+              socially and academically in school while participating in the MentorSuccess™ program. Thank you for
+              your feedback.
+            </p>
+            <form [formGroup]="assessmentFormGroup">
+              <div class="grid-container">
+                <div class="grid-title">Title</div>
+                <div class="grid-title">Never</div>
+                <div class="grid-title">Rarely</div>
+                <div class="grid-title">Sometimes</div>
+                <div class="grid-title">Frequently</div>
+                <div class="grid-title">Always</div>
+                <span class="radio-group" *ngFor="let question of questions; let i = index">
+                  <mat-radio-group class="radio-group" formControlName="{{'question'+ (i+1)}}">
+                  <div class="grid-item">{{i + 1}}. {{question}}</div>
+                    <mat-radio-button class="grid-item"value="1" [checked]="assessmentFormGroup.get('question' + (i+1)).value == 1"></mat-radio-button>
+                    <mat-radio-button class="grid-item"value="2" [checked]="assessmentFormGroup.get('question' + (i+1)).value == 2"></mat-radio-button>
+                    <mat-radio-button class="grid-item"value="3" [checked]="assessmentFormGroup.get('question' + (i+1)).value == 3"></mat-radio-button>
+                    <mat-radio-button class="grid-item"value="4" [checked]="assessmentFormGroup.get('question' + (i+1)).value == 4"></mat-radio-button>
+                    <mat-radio-button class="grid-item"value="5" [checked]="assessmentFormGroup.get('question' + (i+1)).value == 5"></mat-radio-button>
+                  </mat-radio-group>
+                </span>
+                <div class="grid-footer"></div>
+                <div class="grid-footer"></div>
+                <div class="grid-footer"></div>
+                <div class="grid-footer"></div>
+                <div class="grid-footer"></div>
+                <div class="grid-footer"></div>
+              </div>
+              <div class="citation">
+                Excerpted from Thrivers: The Surprising Reasons Why Some Kids Struggle and Others Shine © 2021 by
+                Michele Borba, published by G. P. Putnam’s Sons, an imprint of Penguin Random House LLC.
+              </div>
+            </form>
+          </mat-step>
+        </mat-horizontal-stepper>
+        <mat-dialog-actions class="action-container">
+          <button class="mat-display-1" *ngIf="stepper.selectedIndex !== 0" (click)="stepper.previous()" color="primary"
+                  mat-button>
+            <mat-icon>arrow_back_ios</mat-icon>
+            Back
+          </button>
+          <button class="mat-display-1" *ngIf="stepper.selectedIndex !== 1" (click)="stepper.next()" color="primary"
+                  mat-button>
+            Next
+            <mat-icon>arrow_forward_ios</mat-icon>
+          </button>
+          <button class="mat-display-1 action-done" *ngIf="stepper.selectedIndex === 1" (click)="submitForm()" color="primary"
+                  mat-button [disabled]="!infoFormGroup.valid || !assessmentFormGroup.valid">
+            Done
+          </button>
+        </mat-dialog-actions>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  <ms-footer></ms-footer>
+</div>

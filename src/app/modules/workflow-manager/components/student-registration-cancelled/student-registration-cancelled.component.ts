@@ -18,10 +18,10 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {DataSource} from '../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../implementation/data/uri-supplier';
+import {StudentRegistrationRepository} from '../../../../implementation/repositories/student-registration-repository';
 import {ProgramAdmin} from '../../../../models/program-admin/program-admin';
 import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../../../providers/global/global-program-admin-providers-factory';
-import {StudentRegistrationRepository} from '../../../school-manager/repositories/student-registration-repository';
-import {REGISTRATION_URI_SUPPLIER} from '../../../shared/shared.module';
+import {REGISTRATION_URI_SUPPLIER} from '../../../shared/providers/workflow-providers-factory';
 
 @Component({
   selector: 'ms-student-registration-cancelled',

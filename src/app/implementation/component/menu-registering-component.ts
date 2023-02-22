@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {MenuDialogCommand} from '../command/menu-dialog-command';
+import {MenuCommand} from '../command/menu-command';
 import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
 import {BackButtonSupportingComponent} from './back-button-supporting-component';
@@ -27,7 +27,7 @@ export abstract class MenuRegisteringComponent extends BackButtonSupportingCompo
     super(navService)
   }
 
-  protected get menus(): MenuDialogCommand<any>[] {
+  protected get menus(): MenuCommand[] {
     return []
   }
 

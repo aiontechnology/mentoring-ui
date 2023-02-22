@@ -16,19 +16,19 @@
 
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {RegistrationInvalid} from './registration-invalid.component';
+import {StudentInformationThanksComponent} from './student-information-thanks.component';
 
-describe('RegistrationNotFoundComponent', () => {
-  let component: RegistrationInvalid;
-  let fixture: ComponentFixture<RegistrationInvalid>;
+describe('StudentInformationThanksComponent', () => {
+  let component: StudentInformationThanksComponent;
+  let fixture: ComponentFixture<StudentInformationThanksComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RegistrationInvalid ]
+      declarations: [ StudentInformationThanksComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RegistrationInvalid);
+    fixture = TestBed.createComponent(StudentInformationThanksComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -16,7 +16,9 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {RegistrationInvalid} from './components/registration-invalid/registration-invalid.component';
+import {InvalidLink} from './components/registration-invalid/invalid-link.component';
+import {StudentInformationThanksComponent} from './components/student-information-thanks/student-information-thanks.component';
+import {StudentInformationComponent} from './components/student-information/student-information.component';
 import {StudentRegistrationCancelledComponent} from './components/student-registration-cancelled/student-registration-cancelled.component';
 import {StudentRegistrationThanksComponent} from './components/student-registration-thanks/student-registration-thanks.component';
 import {StudentRegistrationComponent} from './components/student-registration/student-registration.component';
@@ -24,8 +26,10 @@ import {StudentRegistrationComponent} from './components/student-registration/st
 const routes: Routes = [
   {path: 'schools/:schoolId/registrations/:registrationId', component: StudentRegistrationComponent},
   {path: 'schools/:schoolId/registrations/:registrationId/cancel', component: StudentRegistrationCancelledComponent},
-  {path: 'thankYou', component: StudentRegistrationThanksComponent},
-  {path: 'registrationInvalid', component: RegistrationInvalid},
+  {path: 'schools/:schoolId/students/:studentId/information/:registrationId', component: StudentInformationComponent},
+  {path: 'invalidLink', component: InvalidLink},
+  {path: 'studentThankYou', component: StudentRegistrationThanksComponent},
+  {path: 'teacherThankYou', component: StudentInformationThanksComponent}
 ];
 
 @NgModule({

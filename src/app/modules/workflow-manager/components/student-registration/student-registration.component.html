@@ -99,7 +99,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Cell Phone</mat-label>
-              <input matInput formControlName="parent1PhoneNumber"/>
+              <input matInput msPhoneFormat formControlName="parent1PhoneNumber"/>
               <mat-error *ngIf="model.hasError('contactInvalid')">
                 Please enter a phone number or email address
               </mat-error>
@@ -146,7 +146,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Cell Phone</mat-label>
-              <input matInput formControlName="parent2PhoneNumber"/>
+              <input matInput msPhoneFormat formControlName="parent2PhoneNumber"/>
             </mat-form-field>
           </div>
 
@@ -180,12 +180,12 @@
 
           <div class="row-container">
             <mat-form-field appearance="outline">
-              <mat-label>Emergency Contact Name</mat-label>
+              <mat-label>Emergency Contact (First Name)</mat-label>
               <input matInput formControlName="emergencyContactFirstName"/>
             </mat-form-field>
 
             <mat-form-field appearance="outline">
-              <mat-label>Emergency Contact Name</mat-label>
+              <mat-label>Emergency Contact (Last Name)</mat-label>
               <input matInput formControlName="emergencyContactLastName"/>
             </mat-form-field>
           </div>
@@ -193,7 +193,7 @@
           <div class="row-container">
             <mat-form-field appearance="outline">
               <mat-label>Cell Phone</mat-label>
-              <input matInput formControlName="emergencyContactPhone"/>
+              <input matInput msPhoneFormat formControlName="emergencyContactPhone"/>
             </mat-form-field>
           </div>
 
@@ -233,7 +233,5 @@
       </mat-card-content>
     </mat-card>
   </div>
-  <div class="page-footer">
-    <img class="hhf-logo" src="../../../../../assets/hhf-logo-white.png"/>
-  </div>
+  <ms-footer></ms-footer>
 </div>
