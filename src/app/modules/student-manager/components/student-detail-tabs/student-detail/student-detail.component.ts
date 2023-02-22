@@ -22,11 +22,9 @@ import {MenuStateService} from 'src/app/implementation/services/menu-state.servi
 import {DialogManager} from '../../../../../implementation/command/dialog-manager';
 import {MenuCommand} from '../../../../../implementation/command/menu-command';
 import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
-import {MenuExecutableCommand} from '../../../../../implementation/command/menu-executable-command';
 import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
 import {DataSource} from '../../../../../implementation/data/data-source';
 import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
-import {SnackbarManager} from '../../../../../implementation/managers/snackbar-manager';
 import {NavigationService} from '../../../../../implementation/route/navigation.service';
 import {RouteElementWatcher} from '../../../../../implementation/route/route-element-watcher.service';
 import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
@@ -51,8 +49,6 @@ import {
   PLURAL_STUDENT,
   REMOVE_STUDENT_MENU_TITLE,
   REMOVE_STUDENT_SNACKBAR_MESSAGE,
-  REQUEST_TEACHER_INPUT,
-  REQUEST_TEACHER_INPUT_SNACKBAR_MESSAGE,
   SINGULAR_STUDENT
 } from '../../../other/student-constants';
 import {STUDENT_DETAIL_DELETE_DIALOG_MANAGER, STUDENT_DETAIL_EDIT_DIALOG_MANAGER} from '../../../providers/student-providers-factory';
@@ -108,6 +104,7 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
         }))
         .build()
         .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
+      /*
       new MenuExecutableCommand(REQUEST_TEACHER_INPUT, STUDENT_GROUP, false,
         () => {
           const snackbarManager = new SnackbarManager(this.snackbar)
@@ -129,6 +126,7 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
         .enableIf(() => {
           return this.studentInstanceCache.item.teacherInfoWorkflowAllowed
         })
+       */
     ]
   }
 
