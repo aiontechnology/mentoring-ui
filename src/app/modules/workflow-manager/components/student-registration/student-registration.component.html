@@ -51,7 +51,7 @@
 
             <mat-form-field appearance="outline">
               <mat-label>Grade</mat-label>
-              <mat-select formControlName="grade" required>
+              <mat-select formControlName="grade" (selectionChange)="resetTeacher($event)" required>
                 <mat-option *ngFor="let grade of grades" [value]="grade.value">
                   {{grade.valueView}}
                 </mat-option>
@@ -166,6 +166,8 @@
               <mat-label *ngIf="model.get('grade').value">Teacher</mat-label>
               <mat-label *ngIf="!model.get('grade').value">Teacher (please select grade first)</mat-label>
               <mat-select formControlName="teacher">
+                <mat-option *ngIf="teachers.length > 0" [value]="">
+                </mat-option>
                 <mat-option *ngFor="let teacher of teachers" [value]="selfLinkFunction()(teacher)">
                   {{ teacher.firstName + ' ' + teacher.lastName }}
                 </mat-option>
