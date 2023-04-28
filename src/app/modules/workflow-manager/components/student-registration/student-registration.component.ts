@@ -144,6 +144,12 @@ export class StudentRegistrationComponent implements OnInit {
       })
   }
 
+  resetTeacher(event: any) {
+    this.model.patchValue({
+      teacher: null
+    })
+  }
+
   private updateModel(registration: StudentRegistrationLookup) {
     const model = Object.assign({}, this.model.value, {
       studentFirstName: registration.studentFirstName || '',
