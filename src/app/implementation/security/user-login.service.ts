@@ -48,13 +48,13 @@ export class UserLoginService {
   }
 
   get accessTokenJwt() {
-    return this.accessToken.getJwtToken()
+    return this.accessToken?.getJwtToken()
   }
 
   private get accessToken() {
     let token = null
-    this.cognitoService.getCurrentUser().getSession((error, session) => {
-      token = session.getAccessToken()
+    this.cognitoService.getCurrentUser()?.getSession((error, session) => {
+      token = session?.getAccessToken()
     })
     return token
   }
