@@ -1,0 +1,22 @@
+name: mentorsuccess-ui
+id: 'ari:cloud:compass:791acea2-71ce-4f0a-a604-d8eec9f1541d:component/ba332265-3f57-40d7-9444-bd8d39d0d410/ae6cda18-7b43-47e9-a557-bc8a4ab22b4a'
+description: User interface for the MentorSuccess application
+configVersion: 1
+typeId: APPLICATION
+ownerId: 'ari:cloud:teams::team/87b27333-73f3-46ed-bfa4-58cbf20dcd8f'
+fields:
+  tier: 4
+links:
+  - name: Bitbucket Repository
+    type: REPOSITORY
+    url: 'https://bitbucket.org/hisheartfoundation/mentorsuccess-ui'
+  - name: Jira Project
+    type: PROJECT
+    url: 'https://aiontechnology.atlassian.net/browse/MS'
+  - name: Confluence Documentation
+    type: DOCUMENT
+    url: 'https://aiontechnology.atlassian.net/wiki/spaces/MS/overview'
+relationships: {}
+labels:
+  - 'language:typescript'
+customFields: null
