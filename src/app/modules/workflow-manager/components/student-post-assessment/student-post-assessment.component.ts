@@ -18,36 +18,33 @@ import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
+import {DataSource} from '@implementation/data/data-source';
+import {UriSupplier} from '@implementation/data/uri-supplier';
+import {ProgramAdmin} from '@models/program-admin/program-admin';
+import {PostAssessmentWorkflow} from '@models/workflow/post-assessment-workflow';
 import {StudentAssessment} from '@models/workflow/student-assessment';
-import {DataSource} from '../../../../implementation/data/data-source';
-import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {ProgramAdmin} from '../../../../models/program-admin/program-admin';
-import {StudentInformation} from '../../../../models/workflow/student-information';
-import {StudentInformationLookup} from '../../../../models/workflow/student-information-lookup';
-import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../../../providers/global/global-program-admin-providers-factory';
 import {
-  STUDENT_INFO_DATA_SOURCE,
-  STUDENT_INFO_LOOKUP_DATA_SOURCE,
-  STUDENT_INFO_URI_SUPPLIER
-} from '../../../shared/providers/workflow-providers-factory';
-import {MetaDataService} from '../../../shared/services/meta-data/meta-data.service';
+  POST_ASSESSMENT_WORKFLOW_LOOKUP_DATASOURCE,
+  POST_ASSESSMENT_WORKFLOW_LOOKUP_URI_SUPPLIER,
+  STUDENT_ASSESSMENT_DATA_SOURCE,
+  STUDENT_ASSESSMENT_URI_SUPPLIER
+} from '@modules-shared/providers/workflow-providers-factory';
+import {MetaDataService} from '@modules-shared/services/meta-data/meta-data.service';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '@providers/global/global-program-admin-providers-factory';
 
 @Component({
-  selector: 'ms-student-information',
-  templateUrl: './student-information.component.html',
-  styleUrls: ['./student-information.component.scss'],
+  selector: 'ms-student-post-assessment',
+  templateUrl: './student-post-assessment.component.html',
+  styleUrls: ['./student-post-assessment.component.scss'],
   providers: [
     {provide: STEPPER_GLOBAL_OPTIONS, useValue: {showError: true}}
   ]
 })
-export class StudentInformationComponent implements OnInit {
+export class StudentPostAssessmentComponent implements OnInit {
 
-  infoFormGroup: FormGroup
   assessmentFormGroup: FormGroup
-  studentInfo: StudentInformationLookup
-  behaviors: string[]
-  leadershipSkills: string[]
-  leadershipTraits: string[]
+  workflow: PostAssessmentWorkflow
+  studentName: string
   questions: string[] = [
     'Can easily and accurately describe her special strengths and positive qualities',
     'Is proud and confident in her abilities; enjoys being herself',
@@ -89,33 +86,35 @@ export class StudentInformationComponent implements OnInit {
   private debug: boolean = false;
 
   constructor(
-    @Inject(STUDENT_INFO_URI_SUPPLIER) private studentInfoUriSupplier: UriSupplier,
-    @Inject(STUDENT_INFO_LOOKUP_DATA_SOURCE) private studentInfoLookupDataSource: DataSource<StudentInformationLookup>,
-    @Inject(STUDENT_INFO_DATA_SOURCE) private studentInfoDataSource: DataSource<StudentInformation>,
+    @Inject(POST_ASSESSMENT_WORKFLOW_LOOKUP_DATASOURCE) private postAssessmentWorkflowLookupDatasource,
+    @Inject(POST_ASSESSMENT_WORKFLOW_LOOKUP_URI_SUPPLIER) private postAssessmentWorkflowLookupUriSupplier,
+    @Inject(STUDENT_ASSESSMENT_DATA_SOURCE) private studentAssessmentDataSource: DataSource<StudentAssessment>,
+    @Inject(STUDENT_ASSESSMENT_URI_SUPPLIER) private studentAssessmentUriSupplier: UriSupplier,
     @Inject(PROGRAM_ADMIN_DATA_SOURCE) private programAdminDataSource: DataSource<ProgramAdmin>,
     @Inject(PROGRAM_ADMIN_URI_SUPPLIER) private programAdminUriSupplier: UriSupplier,
     metaDataService: MetaDataService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-  ) {
-    metaDataService.loadBehaviors().then(behaviors => this.behaviors = behaviors)
-    metaDataService.loadLeadershipSkills().then(leadershipSkills => this.leadershipSkills = leadershipSkills)
-    metaDataService.loadLeadershipTraits().then(leadershipTraits => this.leadershipTraits = leadershipTraits)
-  }
+  ) {}
 
   ngOnInit(): void {
-    this.infoFormGroup = this.createInfoModel(this.formBuilder)
     this.assessmentFormGroup = this.createAssessmentModel(this.formBuilder)
+    this.route.queryParamMap.subscribe(params => {
+      this.studentName = params.get('student')
+    })
     this.route.paramMap.subscribe(params => {
       const schoolId = params.get('schoolId')
       const studentId = params.get('studentId')
-      const registrationId = params.get('registrationId')
-      this.studentInfoUriSupplier.withSubstitution('schoolId', schoolId)
-      this.studentInfoUriSupplier.withSubstitution('studentId', studentId)
-      this.studentInfoLookupDataSource.oneValue(registrationId)
-        .then(studentInfo => {
-          this.studentInfo = studentInfo
+      const assessmentId = params.get('assessmentId')
+      this.postAssessmentWorkflowLookupUriSupplier.withSubstitution('schoolId', schoolId)
+      this.studentAssessmentUriSupplier.withSubstitution('schoolId', schoolId)
+      this.postAssessmentWorkflowLookupUriSupplier.withSubstitution('studentId', studentId)
+      this.studentAssessmentUriSupplier.withSubstitution('studentId', studentId)
+      this.studentAssessmentUriSupplier.withSubstitution('assessmentId', assessmentId)
+      this.postAssessmentWorkflowLookupDatasource.oneValue(assessmentId)
+        .then(workflow => {
+          this.workflow = workflow
         })
         .catch(() => {
           this.programAdminUriSupplier.withSubstitution('schoolId', schoolId)
@@ -134,12 +133,7 @@ export class StudentInformationComponent implements OnInit {
   }
 
   submitForm(): void {
-    const studentInformation = new StudentInformation(
-      this.infoFormGroup.get('leadershipSkills')?.value || [],
-      this.infoFormGroup.get('leadershipTraits')?.value || [],
-      this.infoFormGroup.get('behaviors')?.value || [],
-      this.infoFormGroup.get('teacherComment')?.value,
-      new StudentAssessment(
+    const studentAssessment = new StudentAssessment(
         this.assessmentFormGroup.get('question1')?.value,
         this.assessmentFormGroup.get('question2')?.value,
         this.assessmentFormGroup.get('question3')?.value,
@@ -175,71 +169,17 @@ export class StudentInformationComponent implements OnInit {
         this.assessmentFormGroup.get('question33')?.value,
         this.assessmentFormGroup.get('question34')?.value,
         this.assessmentFormGroup.get('question35')?.value,
-      )
     )
 
+    console.log("==> Submitting assessment")
     const that = this
-    studentInformation['links'] = this.studentInfo['links']
-    console.log('===>', this.studentInfo)
-    console.log('===> ', studentInformation)
-    this.studentInfoDataSource.update(studentInformation)
+    this.studentAssessmentDataSource.add(studentAssessment)
       .then(() => {
         this.router.navigate(['/workflowmanager/teacherThankYou'], {
           relativeTo: that.route,
-          queryParams: {name: this.studentInfo.studentName}
+          queryParams: {name: this.workflow.studentName}
         })
       })
-  }
-
-  private leadershipSkillsCache: string[]
-  leadershipSkillsChanged() {
-    if(this.infoFormGroup.get('leadershipSkills').value.length <= 3) {
-      this.leadershipSkillsCache = this.infoFormGroup.get('leadershipSkills').value
-    } else {
-      this.infoFormGroup.get('leadershipSkills').setValue(this.leadershipSkillsCache)
-    }
-    if(this.infoFormGroup.get('leadershipSkills').value.length < 3) {
-      this.infoFormGroup.get('leadershipSkills').setErrors({
-        wrongCount: 'Please Select 3 Leadership Skills'
-      })
-    }
-  }
-
-  private leadershipTraitsCache: string[]
-  leadershipTraitsChanged() {
-    if(this.infoFormGroup.get('leadershipTraits').value.length <= 2) {
-      this.leadershipTraitsCache = this.infoFormGroup.get('leadershipTraits').value
-    } else {
-      this.infoFormGroup.get('leadershipTraits').setValue(this.leadershipTraitsCache)
-    }
-    if(this.infoFormGroup.get('leadershipTraits').value.length < 2) {
-      this.infoFormGroup.get('leadershipTraits').setErrors({
-        wrongCount: 'Please Select 2 Leadership Traits'
-      })
-    }
-  }
-
-  private behaviorCache: string[]
-  behaviorChanged() {
-    if(this.infoFormGroup.get('behaviors').value.length <= 1) {
-      this.behaviorCache = this.infoFormGroup.get('behaviors').value
-    } else {
-      this.infoFormGroup.get('behaviors').setValue(this.behaviorCache)
-    }
-    if(this.infoFormGroup.get('behaviors').value.length < 1) {
-      this.infoFormGroup.get('behaviors').setErrors({
-        wrongCount: 'Please Select 1 Behavior'
-      })
-    }
-  }
-
-  private createInfoModel(formBuilder: FormBuilder): FormGroup {
-    return formBuilder.group({
-      behaviors: [[], [Validators.required]],
-      leadershipSkills: [[], [Validators.required]],
-      leadershipTraits: [[], [Validators.required]],
-      teacherComment: ['', Validators.maxLength(500)],
-    })
   }
 
   private createAssessmentModel(formBuilder: FormBuilder): FormGroup {

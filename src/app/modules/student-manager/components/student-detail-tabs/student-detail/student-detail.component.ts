@@ -17,31 +17,25 @@
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Subscription} from 'rxjs';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../../implementation/command/dialog-manager';
-import {MenuCommand} from '../../../../../implementation/command/menu-command';
-import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
-import {SchoolWatchingDetailComponent} from '../../../../../implementation/component/school-watching-detail-component';
-import {DataSource} from '../../../../../implementation/data/data-source';
-import {UriSupplier} from '../../../../../implementation/data/uri-supplier';
-import {NavigationService} from '../../../../../implementation/route/navigation.service';
-import {RouteElementWatcher} from '../../../../../implementation/route/route-element-watcher.service';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
-import {School} from '../../../../../models/school/school';
-import {SchoolSession} from '../../../../../models/school/schoolsession';
-import {StudentInbound} from '../../../../../models/student-inbound/student-inbound';
-import {Student} from '../../../../../models/student/student';
-import {BaseUri} from '../../../../../models/workflow/base-uri';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
-import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../../providers/global/global-school-session-providers-factory';
-import {
-  STUDENT_DATA_SOURCE,
-  STUDENT_INSTANCE_CACHE,
-  STUDENT_ROUTE_WATCHER
-} from '../../../../../providers/global/global-student-providers-factory';
-import {ConfirmationDialogComponent} from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {STUDENT_INFO2_DATA_SOURCE, STUDENT_INFO_URI_SUPPLIER} from '../../../../shared/providers/workflow-providers-factory';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuCommand} from '@implementation/command/menu-command';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {MenuExecutableCommand} from '@implementation/command/menu-executable-command';
+import {SchoolWatchingDetailComponent} from '@implementation/component/school-watching-detail-component';
+import {DataSource} from '@implementation/data/data-source';
+import {UriSupplier} from '@implementation/data/uri-supplier';
+import {SnackbarManager} from '@implementation/managers/snackbar-manager';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {RouteElementWatcher} from '@implementation/route/route-element-watcher.service';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {School} from '@models/school/school';
+import {SchoolSession} from '@models/school/schoolsession';
+import {StudentInbound} from '@models/student-inbound/student-inbound';
+import {Student} from '@models/student/student';
+import {BaseUri} from '@models/workflow/base-uri';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {STUDENT_INFO2_DATA_SOURCE, STUDENT_INFO_URI_SUPPLIER} from '@modules-shared/providers/workflow-providers-factory';
+import {StudentDialogComponent} from '@modules-student-manager/components/student-dialog/student-dialog.component';
 import {
   EDIT_STUDENT_MENU_TITLE,
   EDIT_STUDENT_PANEL_TITLE,
@@ -49,11 +43,20 @@ import {
   PLURAL_STUDENT,
   REMOVE_STUDENT_MENU_TITLE,
   REMOVE_STUDENT_SNACKBAR_MESSAGE,
+  REQUEST_TEACHER_INPUT,
+  REQUEST_TEACHER_INPUT_SNACKBAR_MESSAGE,
   SINGULAR_STUDENT
-} from '../../../other/student-constants';
-import {STUDENT_DETAIL_DELETE_DIALOG_MANAGER, STUDENT_DETAIL_EDIT_DIALOG_MANAGER} from '../../../providers/student-providers-factory';
-import {STUDENT_GROUP} from '../../../student-manager.module';
-import {StudentDialogComponent} from '../../student-dialog/student-dialog.component';
+} from '@modules-student-manager/other/student-constants';
+import {
+  STUDENT_DETAIL_DELETE_DIALOG_MANAGER,
+  STUDENT_DETAIL_EDIT_DIALOG_MANAGER
+} from '@modules-student-manager/providers/student-providers-factory';
+import {STUDENT_GROUP} from '@modules-student-manager/student-manager.module';
+import {SCHOOL_INSTANCE_CACHE} from '@providers/global/global-school-providers-factory';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '@providers/global/global-school-session-providers-factory';
+import {STUDENT_DATA_SOURCE, STUDENT_INSTANCE_CACHE, STUDENT_ROUTE_WATCHER} from '@providers/global/global-student-providers-factory';
+import {Subscription} from 'rxjs';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 
 @Component({
   selector: 'ms-student-detail',
@@ -104,7 +107,6 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
         }))
         .build()
         .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
-      /*
       new MenuExecutableCommand(REQUEST_TEACHER_INPUT, STUDENT_GROUP, false,
         () => {
           const snackbarManager = new SnackbarManager(this.snackbar)
@@ -116,17 +118,16 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
             this.studentInstanceCache.item.teacherInfoWorkflowAllowed = false;
             snackbarManager.open(REQUEST_TEACHER_INPUT_SNACKBAR_MESSAGE)
           } else {
-            if(this.studentInstanceCache?.item?.teacher === null) {
-              snackbarManager.open("ERROR: No teacher set for student \u274C")
+            if (this.studentInstanceCache?.item?.teacher === null) {
+              snackbarManager.open('ERROR: No teacher set for student \u274C')
             } else {
-              snackbarManager.open("ERROR: Teacher has no email address \u274C")
+              snackbarManager.open('ERROR: Teacher has no email address \u274C')
             }
           }
         })
         .enableIf(() => {
           return this.studentInstanceCache.item.teacherInfoWorkflowAllowed
         })
-       */
     ]
   }
 

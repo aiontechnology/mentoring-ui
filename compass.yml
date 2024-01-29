@@ -16,7 +16,9 @@ links:
   - name: Confluence Documentation
     type: DOCUMENT
     url: 'https://aiontechnology.atlassian.net/wiki/spaces/MS/overview'
-relationships: {}
+relationships:
+  DEPENDS_ON:
+    - 'ari:cloud:compass:791acea2-71ce-4f0a-a604-d8eec9f1541d:component/ba332265-3f57-40d7-9444-bd8d39d0d410/2db8e16d-607a-47d5-b305-6d3d34776972'
 labels:
   - 'language:typescript'
 customFields: null

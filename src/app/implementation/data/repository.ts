@@ -15,12 +15,15 @@
  */
 
 import {HttpClient} from '@angular/common/http';
+import {DataManager} from '@implementation/data/data-manager';
+import {UriSupplier} from '@implementation/data/uri-supplier';
+import {LinkService} from '@modules-shared/services/link-service/link.service';
 import {firstValueFrom, forkJoin} from 'rxjs';
 import {map} from 'rxjs/operators';
-import {LinkService} from '../../modules/shared/services/link-service/link.service';
-import {DataManager} from './data-manager';
-import {UriSupplier} from './uri-supplier';
 
+/**
+ * Abstract class that provides support for classes that communicate with REST services.
+ */
 export abstract class Repository<T> implements DataManager<T> {
   protected abstract toModel: (value: any) => T;
 

@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-import {environment} from '@environments/environment';
-
-export class BaseUri {
+export class PostAssessmentWorkflow {
   constructor(
-    public uri: string,
+    public studentName: string,
+    public links: any,
   ) {}
 
-  static of(value: any): BaseUri {
-    return new BaseUri(
-      value?.baseUri,
+  static of(value: any): PostAssessmentWorkflow {
+    return new PostAssessmentWorkflow(
+      value?.studentName,
+      value?.links,
     )
-  }
-
-  static workflow(): BaseUri {
-    return this.of({baseUri: environment.baseUri + '/workflowmanager'})
   }
 }

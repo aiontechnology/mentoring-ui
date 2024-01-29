@@ -2,6 +2,17 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "@components/*": ["src/app/components/*"],
+      "@environments/*": ["src/environments/*"],
+      "@implementation/*": ["src/app/implementation/*"],
+      "@models/*": ["src/app/models/*"],
+      "@modules-school-manager/*": ["src/app/modules/school-manager/*"],
+      "@modules-shared/*": ["src/app/modules/shared/*"],
+      "@modules-student-manager/*": ["src/app/modules/student-manager/*"],
+      "@modules-workflow-manager/*": ["src/app/modules/workflow-manager/*"],
+      "@providers/*": ["src/app/providers/*"],
+    },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -14,7 +25,7 @@
     "typeRoots": [
       "node_modules/@types"
     ],
-    "lib": [
+     "lib": [
       "es2018",
       "dom"
     ],

@@ -18,37 +18,21 @@ import {HttpClient} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
 import {Repository} from '@implementation/data/repository';
 import {UriSupplier} from '@implementation/data/uri-supplier';
-import {BaseUri} from '@models/workflow/base-uri';
-import {StudentInformation} from '@models/workflow/student-information';
-import {STUDENT_INFO_URI_SUPPLIER} from '@modules-shared/providers/workflow-providers-factory';
+import {StudentAssessment} from '@models/workflow/student-assessment';
+import {STUDENT_ASSESSMENT_URI_SUPPLIER} from '@modules-shared/providers/workflow-providers-factory';
 
 @Injectable()
-export class StudentInfoRepository extends Repository<StudentInformation> {
+export class StudentAssessmentRepository extends Repository<StudentAssessment> {
 
   constructor(
     http: HttpClient,
-    @Inject(STUDENT_INFO_URI_SUPPLIER) uriSupplier: UriSupplier
+    @Inject(STUDENT_ASSESSMENT_URI_SUPPLIER) uriSupplier: UriSupplier
   ) {
     super(http, uriSupplier)
   }
 
-  protected override toModel = (value: any): StudentInformation => {
-    return value ? StudentInformation.of(value) : null
-  }
-
-}
-
-@Injectable()
-export class StudentInfoRepository2 extends Repository<BaseUri> {
-  constructor(
-    http: HttpClient,
-    @Inject(STUDENT_INFO_URI_SUPPLIER) uriSupplier: UriSupplier
-  ) {
-    super(http, uriSupplier);
-  }
-
-  protected toModel = (value: any): BaseUri => {
-    return value ? BaseUri.of(value) : null
+  protected override toModel = (value: any): StudentAssessment => {
+    return value ? StudentAssessment.of(value) : null
   }
 
 }

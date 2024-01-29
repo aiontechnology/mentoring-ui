@@ -15,6 +15,9 @@
  */
 
 import {NgModule} from '@angular/core';
+import {
+  StudentPostAssessmentComponent
+} from '@modules-workflow-manager/components/student-post-assessment/student-post-assessment.component';
 import {SharedModule} from '../shared/shared.module';
 import {InvalidLink} from './components/registration-invalid/invalid-link.component';
 import {StudentInformationThanksComponent} from './components/student-information-thanks/student-information-thanks.component';
@@ -29,6 +32,7 @@ import {WorkflowRoutingModule} from './workflow-routing.module';
     InvalidLink,
     StudentInformationComponent,
     StudentInformationThanksComponent,
+    StudentPostAssessmentComponent,
     StudentRegistrationCancelledComponent,
     StudentRegistrationComponent,
     StudentRegistrationThanksComponent,

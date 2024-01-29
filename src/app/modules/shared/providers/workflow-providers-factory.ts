@@ -15,27 +15,37 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {environment} from '../../../../environments/environment';
-import {DataSource} from '../../../implementation/data/data-source';
-import {Repository} from '../../../implementation/data/repository';
-import {UriSupplier} from '../../../implementation/data/uri-supplier';
-import {StudentInfoRepository, StudentInfoRepository2} from '../../../implementation/repositories/student-info-repository';
-import {StudentInformationLookupRepository} from '../../../implementation/repositories/student-information-lookup-repository';
-import {StudentRegistrationLookupRepository} from '../../../implementation/repositories/student-registration-lookup-repository';
-import {StudentRegistrationRepository} from '../../../implementation/repositories/student-registration-repository';
-import {BaseUri} from '../../../models/workflow/base-uri';
-import {StudentInformation} from '../../../models/workflow/student-information';
-import {StudentInformationLookup} from '../../../models/workflow/student-information-lookup';
-import {StudentRegistration} from '../../../models/workflow/student-registration';
-import {StudentRegistrationLookup} from '../../../models/workflow/student-registration-lookup';
+import {environment} from '@environments/environment';
+import {DataSource} from '@implementation/data/data-source';
+import {Repository} from '@implementation/data/repository';
+import {UriSupplier} from '@implementation/data/uri-supplier';
+import {PostAssessmentWorkflowRepository} from '@implementation/repositories/post-assessment-workflow-repository';
+import {StudentAssessmentRepository} from '@implementation/repositories/student-assessment-repository';
+import {StudentInfoRepository, StudentInfoRepository2} from '@implementation/repositories/student-info-repository';
+import {StudentInformationLookupRepository} from '@implementation/repositories/student-information-lookup-repository';
+import {StudentRegistrationLookupRepository} from '@implementation/repositories/student-registration-lookup-repository';
+import {StudentRegistrationRepository} from '@implementation/repositories/student-registration-repository';
+import {BaseUri} from '@models/workflow/base-uri';
+import {PostAssessmentWorkflow} from '@models/workflow/post-assessment-workflow';
+import {StudentAssessment} from '@models/workflow/student-assessment';
+import {StudentInformation} from '@models/workflow/student-information';
+import {StudentInformationLookup} from '@models/workflow/student-information-lookup';
+import {StudentRegistration} from '@models/workflow/student-registration';
+import {StudentRegistrationLookup} from '@models/workflow/student-registration-lookup';
 
 export const REGISTRATION_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistrationLookup>>('registration-lookup-data-source')
 export const REGISTRATION_DATA_SOURCE = new InjectionToken<DataSource<StudentRegistration>>('registration-data-source')
 export const REGISTRATION_URI_SUPPLIER = new InjectionToken<UriSupplier>('registration-uri-supplier')
+export const STUDENT_ASSESSMENT_URI_SUPPLIER = new InjectionToken<UriSupplier>('student-assessment-uri-supplier')
+export const STUDENT_ASSESSMENT_DATA_SOURCE = new InjectionToken<DataSource<StudentAssessment>>('student-assessment-data-source')
 export const STUDENT_INFO_URI_SUPPLIER = new InjectionToken<UriSupplier>('student-info-uri-supplier')
 export const STUDENT_INFO_LOOKUP_DATA_SOURCE = new InjectionToken<DataSource<StudentInformationLookup>>('student-info-lookup-data-source')
 export const STUDENT_INFO_DATA_SOURCE = new InjectionToken<DataSource<StudentInformation>>('student-info-data-source')
 export const STUDENT_INFO2_DATA_SOURCE = new InjectionToken<DataSource<BaseUri>>('student-info2-data-source')
+export const POST_ASSESSMENT_WORKFLOW_LOOKUP_URI_SUPPLIER =
+  new InjectionToken<UriSupplier>('post-assessment-workflow-uri-supplier')
+export const POST_ASSESSMENT_WORKFLOW_LOOKUP_DATASOURCE =
+  new InjectionToken<DataSource<PostAssessmentWorkflow>>('post-assessment-workflow-data-source')
 
 export function workflowProvidersFactory() {
   return [
@@ -56,6 +66,29 @@ export function workflowProvidersFactory() {
       useFactory: (repository: Repository<StudentRegistration>) => new DataSource<StudentRegistration>(repository),
       deps: [StudentRegistrationRepository]
     },
+
+    /* Student Post Assessment */
+    {
+      provide: POST_ASSESSMENT_WORKFLOW_LOOKUP_URI_SUPPLIER,
+      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/students/{studentId}/workflow/assessments`)
+    },
+    PostAssessmentWorkflowRepository,
+    {
+      provide: POST_ASSESSMENT_WORKFLOW_LOOKUP_DATASOURCE,
+      useFactory: (repository: Repository<PostAssessmentWorkflow>) => new DataSource<PostAssessmentWorkflow>(repository),
+      deps: [PostAssessmentWorkflowRepository]
+    },
+    {
+      provide: STUDENT_ASSESSMENT_URI_SUPPLIER,
+      useFactory: () => new UriSupplier(`${environment.apiUri}/api/v1/schools/{schoolId}/students/{studentId}/assessments/{assessmentId}`)
+    },
+    StudentAssessmentRepository,
+    {
+      provide: STUDENT_ASSESSMENT_DATA_SOURCE,
+      useFactory: (repository: Repository<StudentAssessment>) => new DataSource<StudentAssessment>(repository),
+      deps: [StudentAssessmentRepository]
+    },
+
 
     /* Student Information */
     {

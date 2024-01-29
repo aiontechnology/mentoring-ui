@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import {Inject, Injectable} from '@angular/core';
-import {INVITATION_URI_SUPPLIER} from '../../providers/global/global-invitation-providers-factory';
-import {Repository} from '../data/repository';
 import {HttpClient} from '@angular/common/http';
-import {UriSupplier} from '../data/uri-supplier';
-import {Invitation} from '../../models/workflow/invitation';
+import {Inject, Injectable} from '@angular/core';
+import {Repository} from '@implementation/data/repository';
+import {UriSupplier} from '@implementation/data/uri-supplier';
+import {Invitation} from '@models/workflow/invitation';
+import {INVITATION_URI_SUPPLIER} from '@providers/global/global-invitation-providers-factory';
 
 @Injectable()
 export class InvitationRepository extends Repository<Invitation> {

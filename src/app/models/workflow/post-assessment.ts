@@ -16,18 +16,19 @@
 
 import {environment} from '@environments/environment';
 
-export class BaseUri {
+export class PostAssessment {
+
   constructor(
-    public uri: string,
+    public postAssessmentUri: string,
+    public links: any,
   ) {}
 
-  static of(value: any): BaseUri {
-    return new BaseUri(
-      value?.baseUri,
+  static of(value: any): PostAssessment {
+    const postAssessmentUri = environment.baseUri + '/workflowmanager'
+    return new PostAssessment(
+      postAssessmentUri,
+      value?.links
     )
   }
 
-  static workflow(): BaseUri {
-    return this.of({baseUri: environment.baseUri + '/workflowmanager'})
-  }
 }

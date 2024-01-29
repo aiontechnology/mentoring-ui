@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import {SCHOOL_ID} from '../../implementation/route/route-constants';
 import {standAloneDialogManagerProviders} from '../../providers/dialog/stand-alone-dialog-manager-providers';
 import {SharedModule} from '../shared/shared.module';
 import {InviteStudentComponent} from './components/invite-student/invite-student.component';
+import {RequestPostAssessmentComponent} from './components/request-post-assessment/request-post-assessment.component';
 import {SchoolDetailContainerComponent} from './components/school-detail-container/school-detail-container.component';
 import {PersonnelDialogComponent} from './components/school-detail-tabs/personnel-dialog/personnel-dialog.component';
 import {PersonnelListComponent} from './components/school-detail-tabs/personnel-list/personnel-list.component';
@@ -70,7 +71,8 @@ export const SCHOOL_GROUP = 'school'
 export const TEACHER_GROUP = 'teacher'
 
 // Tokens
-export const INVITATION_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<InviteStudentComponent>>('invitation-edit-dialog-manager');
+export const INVITATION_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<InviteStudentComponent>>('invitation-edit-dialog-manager')
+export const POST_ASSESSMENT_DIALOG_MANAGER = new InjectionToken<DialogManager<RequestPostAssessmentComponent>>('post-assessment-dialog-manager')
 
 @NgModule({
   declarations: [
@@ -92,6 +94,7 @@ export const INVITATION_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<I
     TeacherListComponent,
     PersonnelDialogComponent,
     ProgramAdminDetailComponent,
+    RequestPostAssessmentComponent,
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -106,6 +109,7 @@ export const INVITATION_EDIT_DIALOG_MANAGER = new InjectionToken<DialogManager<I
     ...teacherProvidersFactory(),
     ...standAloneDialogManagerProviders<SchoolSessionDialogComponent>(SCHOOL_SESSION_ADD_DIALOG_MANAGER, SchoolSessionDialogComponent),
     ...standAloneDialogManagerProviders<InviteStudentComponent>(INVITATION_EDIT_DIALOG_MANAGER, InviteStudentComponent),
+    ...standAloneDialogManagerProviders<RequestPostAssessmentComponent>(POST_ASSESSMENT_DIALOG_MANAGER, RequestPostAssessmentComponent),
   ]
 })
 export class SchoolManagerModule {

@@ -16,6 +16,9 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+import {
+  StudentPostAssessmentComponent
+} from '@modules-workflow-manager/components/student-post-assessment/student-post-assessment.component';
 import {InvalidLink} from './components/registration-invalid/invalid-link.component';
 import {StudentInformationThanksComponent} from './components/student-information-thanks/student-information-thanks.component';
 import {StudentInformationComponent} from './components/student-information/student-information.component';
@@ -27,6 +30,7 @@ const routes: Routes = [
   {path: 'schools/:schoolId/registrations/:registrationId', component: StudentRegistrationComponent},
   {path: 'schools/:schoolId/registrations/:registrationId/cancel', component: StudentRegistrationCancelledComponent},
   {path: 'schools/:schoolId/students/:studentId/information/:registrationId', component: StudentInformationComponent},
+  {path: 'schools/:schoolId/students/:studentId/assessment/:assessmentId', component: StudentPostAssessmentComponent},
   {path: 'invalidLink', component: InvalidLink},
   {path: 'studentThankYou', component: StudentRegistrationThanksComponent},
   {path: 'teacherThankYou', component: StudentInformationThanksComponent}
