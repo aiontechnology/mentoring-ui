@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,14 +72,16 @@ export class GameListComponent extends ListComponent<Game> implements OnInit, On
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<GameDialogComponent>.builder(ADD_GAME_MENU_TITLE, GAME_GROUP, this.gameEditDialogManager)
+      MenuDialogCommand
+        .builder(ADD_GAME_MENU_TITLE, GAME_GROUP, this.gameEditDialogManager)
         .withDataSupplier(() => ({
           panelTitle: ADD_GAME_PANEL_TITLE
         }))
         .withSnackbarMessage(ADD_GAME_SNACKBAR_MESSAGE)
         .withAdminOnly(true)
         .build(),
-      MenuDialogCommand<GameDialogComponent>.builder(EDIT_GAME_MENU_TITLE, GAME_GROUP, this.gameEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_GAME_MENU_TITLE, GAME_GROUP, this.gameEditDialogManager)
         .withDataSupplier(() => ({
           model: this.tableCache.getFirstSelection(),
           panelTitle: EDIT_GAME_PANEL_TITLE
@@ -88,7 +90,8 @@ export class GameListComponent extends ListComponent<Game> implements OnInit, On
         .withAdminOnly(true)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_GAME_MENU_TITLE, GAME_GROUP, this.gameDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_GAME_MENU_TITLE, GAME_GROUP, this.gameDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR_GAME,
           pluralName: PLURAL_GAME,

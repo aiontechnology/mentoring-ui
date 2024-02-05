@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {MatSnackBar, MatSnackBarRef, MatSnackBarVerticalPosition, SimpleSnackBar} from '@angular/material/snack-bar';
+import {MatLegacySnackBar as MatSnackBar, MatLegacySnackBarRef as MatSnackBarRef, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition, LegacySimpleSnackBar as SimpleSnackBar} from '@angular/material/legacy-snack-bar';
 
 export class SnackbarManager {
   constructor(private snackBar: MatSnackBar,

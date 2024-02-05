@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,13 +71,15 @@ export class SchoolListComponent extends ListComponent<School> implements OnInit
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<SchoolDialogComponent>.builder(ADD_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolEditDialogManager)
+      MenuDialogCommand
+        .builder(ADD_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolEditDialogManager)
         .withDataSupplier(() => ({
           panelTitle: ADD_SCHOOL_PANEL_TITLE
         }))
         .withSnackbarMessage(ADD_SCHOOL_SNACKBAR_MESSAGE)
         .build(),
-      MenuDialogCommand<SchoolDialogComponent>.builder(EDIT_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolEditDialogManager)
         .withDataSupplier(() => ({
           model: this.tableCache.getFirstSelection(),
           panelTitle: EDIT_SCHOOL_PANEL_TITLE
@@ -85,7 +87,8 @@ export class SchoolListComponent extends ListComponent<School> implements OnInit
         .withSnackbarMessage(EDIT_SCHOOL_SNACKBAR_MESSAGE)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_SCHOOL_MENU_TITLE, SCHOOL_GROUP, this.schoolDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR_SCHOOL,
           pluralName: PLURAL_SCHOOL,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,14 +68,16 @@ export class BookDetailComponent extends DetailComponent implements OnInit, OnDe
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<BookDialogComponent>.builder(EDIT_BOOK_MENU_TITLE, BOOK_GROUP, this.bookEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_BOOK_MENU_TITLE, BOOK_GROUP, this.bookEditDialogManager)
         .withSnackbarMessage(EDIT_BOOK_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.bookInstanceCache.item,
           panelTitle: EDIT_BOOK_PANEL_TITLE
         }))
         .build(),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_BOOK_MENU_TITLE, BOOK_GROUP, this.bookDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_BOOK_MENU_TITLE, BOOK_GROUP, this.bookDeleteDialogManager)
         .withSnackbarMessage(REMOVE_BOOK_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.bookInstanceCache.item,

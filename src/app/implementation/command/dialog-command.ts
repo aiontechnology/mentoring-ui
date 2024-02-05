@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {ObjectSupplier} from '../types/types';
 import {Command} from './command';
 import {DialogManager} from './dialog-manager';

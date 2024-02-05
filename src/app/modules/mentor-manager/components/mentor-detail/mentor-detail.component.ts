@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,14 +77,16 @@ export class MentorDetailComponent extends SchoolWatchingDetailComponent impleme
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<MentorDialogComponent>.builder(EDIT_MENU_TITLE, MENTOR_GROUP, this.mentorEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_MENU_TITLE, MENTOR_GROUP, this.mentorEditDialogManager)
         .withSnackbarMessage(EDIT_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.mentorInstanceCache.item,
           panelTitle: EDIT_PANEL_TITLE
         }))
         .build(),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_MENU_TITLE, MENTOR_GROUP, this.mentorDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_MENU_TITLE, MENTOR_GROUP, this.mentorDeleteDialogManager)
         .withSnackbarMessage(REMOVE_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.mentorInstanceCache.item,

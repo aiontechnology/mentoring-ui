@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,13 +74,15 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
 
   protected override get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<MentorDialogComponent>.builder(ADD_MENU_TITLE, MENTOR_GROUP, this.mentorEditDialogManager)
+      MenuDialogCommand
+        .builder(ADD_MENU_TITLE, MENTOR_GROUP, this.mentorEditDialogManager)
         .withDataSupplier(() => ({
           panelTitle: ADD_PANEL_TITLE
         }))
         .withSnackbarMessage(ADD_SNACKBAR_MESSAGE)
         .build(),
-      MenuDialogCommand<MentorDialogComponent>.builder(EDIT_MENU_TITLE, MENTOR_GROUP, this.mentorEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_MENU_TITLE, MENTOR_GROUP, this.mentorEditDialogManager)
         .withDataSupplier(() => ({
           model: this.tableCache.getFirstSelection(),
           panelTitle: EDIT_PANEL_TITLE
@@ -88,7 +90,8 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
         .withSnackbarMessage(EDIT_SNACKBAR_MESSAGE)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_MENU_TITLE, MENTOR_GROUP, this.mentorDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_MENU_TITLE, MENTOR_GROUP, this.mentorDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR,
           pluralName: PLURAL,

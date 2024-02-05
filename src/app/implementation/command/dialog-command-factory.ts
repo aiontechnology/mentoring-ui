@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ export type DialogCommandFactory<MODEL_TYPE, COMPONENT_TYPE> =
 export function createDialogCommandFactory<MODEL_TYPE, COMPONENT_TYPE>(dialogManager: DialogManager<COMPONENT_TYPE>):
   DialogCommandFactory<MODEL_TYPE, COMPONENT_TYPE> {
   return (config: DialogManagerConfiguration<MODEL_TYPE>) =>
-    DialogCommand<COMPONENT_TYPE>
+    DialogCommand
       .builder(dialogManager)
       .withDataSupplier(config.dataSupplier)
       .withSnackbarMessage(config.snackbarMessage)

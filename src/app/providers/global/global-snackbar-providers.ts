@@ -15,7 +15,7 @@
  */
 
 import {InjectionToken} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {SnackbarManager} from '../../implementation/managers/snackbar-manager';
 
 export const SNACKBAR_MANAGER = new InjectionToken<SnackbarManager>('snackbar-manager');

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {DialogManager} from '@implementation/command/dialog-manager';
 import {MenuCommand} from '@implementation/command/menu-command';
@@ -89,7 +89,8 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
 
   protected get menus(): MenuCommand[] {
     return [
-      MenuDialogCommand<StudentDialogComponent>.builder(EDIT_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentEditDialogManager)
         .withSnackbarMessage(EDIT_STUDENT_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.studentInstanceCache.item,
@@ -97,7 +98,8 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
         }))
         .build()
         .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentDeleteDialogManager)
         .withSnackbarMessage(REMOVE_STUDENT_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.studentInstanceCache.item,

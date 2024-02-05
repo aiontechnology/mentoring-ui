@@ -16,7 +16,7 @@
 
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {Observable} from 'rxjs';
 import {Book} from 'src/app/models/book/book';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';

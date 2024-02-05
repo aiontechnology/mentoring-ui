@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,14 +72,16 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<BookDialogComponent>.builder(ADD_BOOK_MENU_TITLE, BOOK_GROUP, this.bookEditDialogManager)
+      MenuDialogCommand
+        .builder(ADD_BOOK_MENU_TITLE, BOOK_GROUP, this.bookEditDialogManager)
         .withDataSupplier(() => ({
           panelTitle: ADD_BOOK_PANEL_TITLE
         }))
         .withSnackbarMessage(ADD_BOOK_SNACKBAR_MESSAGE)
         .withAdminOnly(true)
         .build(),
-      MenuDialogCommand<BookDialogComponent>.builder(EDIT_BOOK_MENU_TITLE, BOOK_GROUP, this.bookEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_BOOK_MENU_TITLE, BOOK_GROUP, this.bookEditDialogManager)
         .withDataSupplier(() => ({
           model: this.tableCache.getFirstSelection(),
           panelTitle: EDIT_BOOK_PANEL_TITLE
@@ -88,7 +90,8 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
         .withAdminOnly(true)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_BOOK_MENU_TITLE, BOOK_GROUP, this.bookDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_BOOK_MENU_TITLE, BOOK_GROUP, this.bookDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR_BOOK,
           pluralName: PLURAL_BOOK,

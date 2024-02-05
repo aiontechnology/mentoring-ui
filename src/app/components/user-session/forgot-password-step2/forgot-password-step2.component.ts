@@ -15,7 +15,7 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {MatSnackBar, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
+import {MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition} from '@angular/material/legacy-snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {CognitoCallback} from '../../../implementation/security/cognito.service';
 import {UserLoginService} from '../../../implementation/security/user-login.service';

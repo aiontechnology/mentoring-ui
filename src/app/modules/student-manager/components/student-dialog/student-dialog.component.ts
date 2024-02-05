@@ -17,7 +17,7 @@
 import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {DialogCommand} from '../../../../implementation/command/dialog-command';
 import {DialogCommandFactory, DialogManagerConfiguration} from '../../../../implementation/command/dialog-command-factory';
 import {DataSource} from '../../../../implementation/data/data-source';

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,13 +67,15 @@ export class InterestListComponent extends ListComponent<Interest> implements On
 
   protected override get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<InterestDialogComponent>.builder(ADD_INTEREST_MENU_TITLE, INTERESTS_GROUP, this.interestEditDialogManager)
+      MenuDialogCommand
+        .builder(ADD_INTEREST_MENU_TITLE, INTERESTS_GROUP, this.interestEditDialogManager)
         .withDataSupplier(() => ({
           panelTitle: ADD_INTEREST_PANEL_TITLE
         }))
         .withSnackbarMessage(ADD_INTEREST_SNACKBAR_MESSAGE)
         .build(),
-      MenuDialogCommand<InterestDialogComponent>.builder(EDIT_INTEREST_MENU_TITLE, INTERESTS_GROUP, this.interestEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_INTEREST_MENU_TITLE, INTERESTS_GROUP, this.interestEditDialogManager)
         .withDataSupplier(() => ({
           model: this.tableCache.getFirstSelection(),
           panelTitle: EDIT_INTEREST_PANEL_TITLE
