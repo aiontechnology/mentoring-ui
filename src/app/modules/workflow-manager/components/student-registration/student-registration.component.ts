@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -177,7 +177,7 @@ export class StudentRegistrationComponent implements OnInit {
       parent2PhoneNumber: [''],
       parent2EmailAddress: ['', [emailAddressValidator(), Validators.maxLength(50)]],
       parent2PreferredContactMethod: [''],
-      teacher: [''],
+      teacher: ['', Validators.required],
       preferredSession: [''],
       emergencyContactFirstName: [''],
       emergencyContactLastName: [''],
