@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,14 +72,16 @@ export class GameDetailComponent extends DetailComponent implements OnInit, OnDe
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<GameDialogComponent>.builder(EDIT_GAME_MENU_TITLE, GAME_GROUP, this.gameEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_GAME_MENU_TITLE, GAME_GROUP, this.gameEditDialogManager)
         .withSnackbarMessage(EDIT_GAME_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.gameInstanceCache.item,
           panelTitle: EDIT_GAME_PANEL_TITLE
         }))
         .build(),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_GAME_MENU_TITLE, GAME_GROUP, this.gameDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_GAME_MENU_TITLE, GAME_GROUP, this.gameDeleteDialogManager)
         .withSnackbarMessage(REMOVE_GAME_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.gameInstanceCache.item,

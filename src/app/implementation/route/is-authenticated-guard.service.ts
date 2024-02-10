@@ -15,7 +15,7 @@
  */
 
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import {Observable} from 'rxjs';
 import {UserLoginService} from '../security/user-login.service';
 
@@ -23,7 +23,7 @@ import {UserLoginService} from '../security/user-login.service';
  * Controls access to components outside the landing page.
  */
 @Injectable()
-export class IsAuthenticatedGuard implements CanActivate {
+export class IsAuthenticatedGuard  {
 
   constructor(
     private userLoginService: UserLoginService,

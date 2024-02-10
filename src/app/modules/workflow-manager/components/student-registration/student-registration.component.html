@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022-2023 Aion Technology LLC
+  ~ Copyright 2022-2024 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -165,13 +165,16 @@
             <mat-form-field appearance="outline">
               <mat-label *ngIf="model.get('grade').value">Teacher</mat-label>
               <mat-label *ngIf="!model.get('grade').value">Teacher (please select grade first)</mat-label>
-              <mat-select formControlName="teacher">
+              <mat-select formControlName="teacher" required>
                 <mat-option *ngIf="teachers.length > 0" [value]="">
                 </mat-option>
                 <mat-option *ngFor="let teacher of teachers" [value]="selfLinkFunction()(teacher)">
                   {{ teacher.firstName + ' ' + teacher.lastName }}
                 </mat-option>
               </mat-select>
+              <mat-error *ngIf="model.hasError('required', 'teacher')">
+                You must select a teacher
+              </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="outline">

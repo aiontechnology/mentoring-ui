@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,14 +74,16 @@ export class ProgramAdminDetailComponent extends SchoolWatchingDetailComponent i
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<ProgramAdminDialogComponent>.builder(ADD_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminEditDialogManager)
+      MenuDialogCommand
+        .builder(ADD_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminEditDialogManager)
         .withSnackbarMessage(ADD_PROGRAM_ADMIN_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           panelTitle: ADD_PROGRAM_ADMIN_PANEL_TITLE
         }))
         .build()
         .enableIf(() => this.programAdminInstanceCache.item === undefined),
-      MenuDialogCommand<ProgramAdminDialogComponent>.builder(EDIT_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminEditDialogManager)
         .withSnackbarMessage(EDIT_PROGRAM_ADMIN_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.programAdminInstanceCache.item,
@@ -89,7 +91,8 @@ export class ProgramAdminDetailComponent extends SchoolWatchingDetailComponent i
         }))
         .build()
         .enableIf(() => this.programAdminInstanceCache.item !== undefined),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminDeleteDialogManager)
         .withSnackbarMessage(REMOVE_PROGRAM_ADMIN_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.programAdminInstanceCache.item,

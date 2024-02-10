@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,13 +71,15 @@ export class TeacherListComponent extends ListComponent<Teacher> implements OnIn
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<TeacherDialogComponent>.builder(ADD_TEACHER_MENU_TITLE, TEACHER_GROUP, this.teacherEditDialogManager)
+      MenuDialogCommand
+        .builder(ADD_TEACHER_MENU_TITLE, TEACHER_GROUP, this.teacherEditDialogManager)
         .withDataSupplier(() => ({
           panelTitle: ADD_TEACHER_PANEL_TITLE
         }))
         .withSnackbarMessage(ADD_TEACHER_SNACKBAR_MESSAGE)
         .build(),
-      MenuDialogCommand<TeacherDialogComponent>.builder(EDIT_TEACHER_MENU_TITLE, TEACHER_GROUP, this.teacherEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_TEACHER_MENU_TITLE, TEACHER_GROUP, this.teacherEditDialogManager)
         .withDataSupplier(() => ({
           model: this.tableCache.getFirstSelection(),
           panelTitle: EDIT_TEACHER_PANEL_TITLE
@@ -85,7 +87,8 @@ export class TeacherListComponent extends ListComponent<Teacher> implements OnIn
         .withSnackbarMessage(EDIT_TEACHER_SNACKBAR_MESSAGE)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_TEACHER_MENU_TITLE, TEACHER_GROUP, this.teacherDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_TEACHER_MENU_TITLE, TEACHER_GROUP, this.teacherDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR_TEACHER,
           pluralName: PLURAL_TEACHER,

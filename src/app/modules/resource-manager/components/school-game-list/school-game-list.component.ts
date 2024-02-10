@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-
 import {ListComponent} from '../../../../implementation/component/list-component';
 import {NavigationService} from '../../../../implementation/route/navigation.service';
 import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {Book} from '../../../../models/book/book';
 import {Game} from '../../../../models/game/game';
 import {UPDATE_GAME_MENU_TITLE, UPDATE_GAME_SNACKBAR_MESSAGE} from '../../other/resource-constants';
 import {GAME_UPDATE_DIALOG_MANAGER, SCHOOL_GAME_TABLE_CACHE} from '../../providers/school-game-providers-factory';
@@ -52,7 +51,8 @@ export class SchoolGameListComponent extends ListComponent<Game> implements OnIn
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<Book>.builder(UPDATE_GAME_MENU_TITLE, SCHOOL_GAME_GROUP, this.gameUpdateDialogManager)
+      MenuDialogCommand
+        .builder(UPDATE_GAME_MENU_TITLE, SCHOOL_GAME_GROUP, this.gameUpdateDialogManager)
         .withSnackbarMessage(UPDATE_GAME_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           localItems: () => this.tableCache.tableDataSource.data

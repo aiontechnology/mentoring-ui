@@ -21,16 +21,19 @@ export const REMOVE_SCHOOL_MENU_TITLE = 'Remove School(s)'
 
 export const ADD_SCHOOL_SESSION_TITLE = 'Add New Session'
 export const INVITE_STUDENT_MENU_TITLE = 'Invite New Student'
+export const REQUEST_POST_ASSESSMENT_MENU_TITLE = 'Request Post Assessments'
 
 export const ADD_SCHOOL_PANEL_TITLE = 'Add New School'
 export const EDIT_SCHOOL_PANEL_TITLE = 'Edit School'
 export const INVITE_STUDENT_PANEL_TITLE = 'Invite New Student'
+export const POST_ASSESSMENT_PANEL_TITLE = 'Request Post Assessments'
 
 export const ADD_SCHOOL_SNACKBAR_MESSAGE = 'School Successfully Added \u2713'
 export const EDIT_SCHOOL_SNACKBAR_MESSAGE = 'School Successfully Updated \u2713'
 export const REMOVE_SCHOOL_SNACKBAR_MESSAGE = 'School(s) Successfully Removed \u2713'
 export const ADD_SCHOOL_SESSION_SNACKBAR_MESSAGE = 'Session Successfully Added \u2713'
 export const INVITE_STUDENT_SNACKBAR_MESSAGE = 'Student Successfully Invited \u2713'
+export const POST_ASSESSMENT_SNACKBAR_MESSAGE = 'Post Assessments Successfully Requested \u2713'
 
 export const SINGULAR_SCHOOL = 'school'
 export const PLURAL_SCHOOL = 'schools'

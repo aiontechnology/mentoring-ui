@@ -35,6 +35,8 @@ export class DialogContainerComponent {
       return 'Update'
     if (this.panelTitle.startsWith('Invite'))
       return 'Invite'
+    if (this.panelTitle.startsWith('Request'))
+      return 'Request'
     return 'Submit'
   }
 }

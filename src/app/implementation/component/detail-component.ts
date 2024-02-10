@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 import {ActivatedRoute, ParamMap} from '@angular/router';
+import {URI} from '@implementation/data/uri-supplier';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
 import {Observable} from 'rxjs';
-import {URI} from '../data/uri-supplier';
-import {NavigationService} from '../route/navigation.service';
-import {MenuStateService} from '../services/menu-state.service';
 import {MenuRegisteringComponent} from './menu-registering-component';
 
 export abstract class DetailComponent extends MenuRegisteringComponent {

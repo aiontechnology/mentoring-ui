@@ -2,6 +2,35 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
+    "paths": {
+      "@components/*": [
+        "src/app/components/*"
+      ],
+      "@environments/*": [
+        "src/environments/*"
+      ],
+      "@implementation/*": [
+        "src/app/implementation/*"
+      ],
+      "@models/*": [
+        "src/app/models/*"
+      ],
+      "@modules-school-manager/*": [
+        "src/app/modules/school-manager/*"
+      ],
+      "@modules-shared/*": [
+        "src/app/modules/shared/*"
+      ],
+      "@modules-student-manager/*": [
+        "src/app/modules/student-manager/*"
+      ],
+      "@modules-workflow-manager/*": [
+        "src/app/modules/workflow-manager/*"
+      ],
+      "@providers/*": [
+        "src/app/providers/*"
+      ]
+    },
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
@@ -10,7 +39,7 @@
     "module": "es2020",
     "moduleResolution": "node",
     "importHelpers": true,
-    "target": "es2020",
+    "target": "ES2022",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -18,7 +47,8 @@
       "es2018",
       "dom"
     ],
-    "strict": false
+    "strict": false,
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

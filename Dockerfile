@@ -1,5 +1,5 @@
 #
-# Copyright 2020-2022 Aion Technology LLC
+# Copyright 2020-2024 Aion Technology LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
 # limitations under the License.
 
 # stage 1
-FROM node:16.17.1-alpine3.15 as build-stage
+FROM node:iron-alpine3.18 as build-stage
 
 WORKDIR /app
 COPY package.json .
 RUN npm install
 COPY . .
-RUN npm install -g @angular/cli@14.1.3
+RUN npm install -g @angular/cli@17.1.1
 RUN npm run build
 
 # stage 2

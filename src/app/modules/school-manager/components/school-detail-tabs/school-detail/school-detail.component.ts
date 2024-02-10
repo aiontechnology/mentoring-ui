@@ -16,23 +16,22 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
-import {DetailComponent} from '../../../../../implementation/component/detail-component';
-import {Cache} from '../../../../../implementation/data/cache';
-import {NavigationService} from '../../../../../implementation/route/navigation.service';
-import {MultiItemCache} from '../../../../../implementation/state-management/multi-item-cache';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
-import {School} from '../../../../../models/school/school';
-import {SchoolSession} from '../../../../../models/school/schoolsession';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {DetailComponent} from '@implementation/component/detail-component';
+import {Cache} from '@implementation/data/cache';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {MultiItemCache} from '@implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {School} from '@models/school/school';
+import {SchoolSession} from '@models/school/schoolsession';
+import {InviteStudentComponent} from '@modules-school-manager/components/invite-student/invite-student.component';
+import {RequestPostAssessmentComponent} from '@modules-school-manager/components/request-post-assessment/request-post-assessment.component';
+import {SchoolDialogComponent} from '@modules-school-manager/components/school-dialog/school-dialog.component';
 import {
-  SCHOOL_SESSION_CACHE,
-  SCHOOL_SESSION_COLLECTION_CACHE,
-  SCHOOL_SESSION_INSTANCE_CACHE
-} from '../../../../../providers/global/global-school-session-providers-factory';
-import {ConfirmationDialogComponent} from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+  SchoolSessionDialogComponent
+} from '@modules-school-manager/components/school-session/school-session-dialog/school-session-dialog.component';
 import {
   ADD_SCHOOL_SESSION_SNACKBAR_MESSAGE,
   ADD_SCHOOL_SESSION_TITLE,
@@ -43,19 +42,26 @@ import {
   INVITE_STUDENT_PANEL_TITLE,
   INVITE_STUDENT_SNACKBAR_MESSAGE,
   PLURAL_SCHOOL,
+  POST_ASSESSMENT_PANEL_TITLE,
+  POST_ASSESSMENT_SNACKBAR_MESSAGE,
   REMOVE_SCHOOL_MENU_TITLE,
   REMOVE_SCHOOL_SNACKBAR_MESSAGE,
+  REQUEST_POST_ASSESSMENT_MENU_TITLE,
   SINGULAR_SCHOOL
-} from '../../../other/school-constants';
+} from '@modules-school-manager/other/school-constants';
 import {
   SCHOOL_DETAIL_DELETE_DIALOG_MANAGER,
   SCHOOL_DETAIL_EDIT_DIALOG_MANAGER,
   SCHOOL_SESSION_ADD_DIALOG_MANAGER
-} from '../../../providers/school-providers-factory';
-import {INVITATION_EDIT_DIALOG_MANAGER, SCHOOL_GROUP} from '../../../school-manager.module';
-import {InviteStudentComponent} from '../../invite-student/invite-student.component';
-import {SchoolDialogComponent} from '../../school-dialog/school-dialog.component';
-import {SchoolSessionDialogComponent} from '../../school-session/school-session-dialog/school-session-dialog.component';
+} from '@modules-school-manager/providers/school-providers-factory';
+import {INVITATION_EDIT_DIALOG_MANAGER, POST_ASSESSMENT_DIALOG_MANAGER, SCHOOL_GROUP} from '@modules-school-manager/school-manager.module';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {SCHOOL_INSTANCE_CACHE} from '@providers/global/global-school-providers-factory';
+import {
+  SCHOOL_SESSION_CACHE,
+  SCHOOL_SESSION_COLLECTION_CACHE,
+  SCHOOL_SESSION_INSTANCE_CACHE
+} from '@providers/global/global-school-session-providers-factory';
 
 @Component({
   selector: 'ms-school-detail',
@@ -73,6 +79,7 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
     @Inject(SCHOOL_DETAIL_DELETE_DIALOG_MANAGER) private schoolDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     @Inject(SCHOOL_SESSION_ADD_DIALOG_MANAGER) private schoolSessionAddDialogManager: DialogManager<SchoolSessionDialogComponent>,
     @Inject(INVITATION_EDIT_DIALOG_MANAGER) private invitationEditDialogManager: DialogManager<InviteStudentComponent>,
+    @Inject(POST_ASSESSMENT_DIALOG_MANAGER) private  postAssessmentDialogManager: DialogManager<RequestPostAssessmentComponent>,
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     @Inject(SCHOOL_SESSION_CACHE) private schoolSessionCache: Cache<SchoolSession>,
@@ -121,6 +128,12 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
         .withSnackbarMessage(INVITE_STUDENT_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           panelTitle: INVITE_STUDENT_PANEL_TITLE
+        }))
+        .build(),
+      MenuDialogCommand.builder(REQUEST_POST_ASSESSMENT_MENU_TITLE, SCHOOL_GROUP, this.postAssessmentDialogManager)
+        .withSnackbarMessage(POST_ASSESSMENT_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          panelTitle: POST_ASSESSMENT_PANEL_TITLE
         }))
         .build()
     ]

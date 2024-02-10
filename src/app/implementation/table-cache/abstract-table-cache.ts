@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import {MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
 import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
+import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
 import {Resettable} from '../state-management/resettable';
 import {SelectionManager} from './selection-manager';
 

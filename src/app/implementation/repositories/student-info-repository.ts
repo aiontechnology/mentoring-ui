@@ -16,11 +16,11 @@
 
 import {HttpClient} from '@angular/common/http';
 import {Inject, Injectable} from '@angular/core';
-import {BaseUri} from '../../models/workflow/base-uri';
-import {StudentInformation} from '../../models/workflow/student-information';
-import {STUDENT_INFO_URI_SUPPLIER} from '../../modules/shared/providers/workflow-providers-factory';
-import {Repository} from '../data/repository';
-import {UriSupplier} from '../data/uri-supplier';
+import {Repository} from '@implementation/data/repository';
+import {UriSupplier} from '@implementation/data/uri-supplier';
+import {BaseUri} from '@models/workflow/base-uri';
+import {StudentInformation} from '@models/workflow/student-information';
+import {STUDENT_INFO_URI_SUPPLIER} from '@modules-shared/providers/workflow-providers-factory';
 
 @Injectable()
 export class StudentInfoRepository extends Repository<StudentInformation> {

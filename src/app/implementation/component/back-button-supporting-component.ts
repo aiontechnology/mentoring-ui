@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-import {NavigationService} from '../route/navigation.service';
+import {NavigationService} from '@implementation/route/navigation.service';
 
 export abstract class BackButtonSupportingComponent {
   protected constructor(
     private navService: NavigationService,
   ) {}
+
+  routeWithBackButton(path: string[]) {
+    this.handleBackButton(this.navService)
+    this.navService.routeTo(path)
+  }
 
   protected init() {
     // Do nothing
@@ -27,11 +32,6 @@ export abstract class BackButtonSupportingComponent {
 
   protected destroy() {
     // Do nothing
-  }
-
-  routeWithBackButton(path: string[]) {
-    this.handleBackButton(this.navService)
-    this.navService.routeTo(path)
   }
 
   protected doHandleBackButton(navService: NavigationService): void {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,8 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<Book>.builder(UPDATE_BOOK_MENU_TITLE, SCHOOL_BOOK_GROUP, this.bookUpdateDialogManager)
+      MenuDialogCommand
+        .builder(UPDATE_BOOK_MENU_TITLE, SCHOOL_BOOK_GROUP, this.bookUpdateDialogManager)
         .withSnackbarMessage(UPDATE_BOOK_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           localItems: () => this.tableCache.tableDataSource.data

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,8 @@ export class SchoolGameListComponent extends ListComponent<Game> implements OnIn
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<Game>.builder(UPDATE_GAME_MENU_TITLE, SCHOOL_GAME_GROUP, this.gameUpdateDialogManager)
+      MenuDialogCommand
+        .builder(UPDATE_GAME_MENU_TITLE, SCHOOL_GAME_GROUP, this.gameUpdateDialogManager)
         .withSnackbarMessage(UPDATE_GAME_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           localItems: () => this.tableCache.tableDataSource.data

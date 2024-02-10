@@ -15,7 +15,7 @@
  */
 
 import {Component} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
 import {map} from 'rxjs/operators';
 import {UserLoginService} from '../../implementation/security/user-login.service';

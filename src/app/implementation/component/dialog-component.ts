@@ -15,7 +15,7 @@
  */
 
 import {FormBuilder, FormGroup} from '@angular/forms';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {DataSource} from '../data/data-source';
 import {DialogActions} from './dialog-actions';
 

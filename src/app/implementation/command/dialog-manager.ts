@@ -15,7 +15,7 @@
  */
 
 import {ComponentType} from '@angular/cdk/portal';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog, MatLegacyDialogConfig as MatDialogConfig} from '@angular/material/legacy-dialog';
 import {ClosedResultType} from '../types/dialog-types';
 
 export class DialogManager<T> {

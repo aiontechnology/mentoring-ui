@@ -16,16 +16,16 @@
 
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {HomeComponent} from './components/home/home.component';
-import {LandingPageComponent} from './components/landing-page/landing-page.component';
-import {ChangePasswordComponent} from './components/user-session/change-password/change-password.component';
-import {ForgotPasswordStep1Component} from './components/user-session/forgot-password-step1/forgot-password-step1.component';
-import {ForgotPasswordStep2Component} from './components/user-session/forgot-password-step2/forgot-password-step2.component';
-import {LoginComponent} from './components/user-session/login/login.component';
-import {LogoutComponent} from './components/user-session/logout/logout.component';
-import {IsAuthenticatedGuard} from './implementation/route/is-authenticated-guard.service';
-import {isSystemAdminGuard} from './implementation/route/is-system-admin-guard.service';
-import {DecoratedComponent} from './modules/shared/components/decorated/decorated.component';
+import {HomeComponent} from '@components/home/home.component';
+import {LandingPageComponent} from '@components/landing-page/landing-page.component';
+import {ChangePasswordComponent} from '@components/user-session/change-password/change-password.component';
+import {ForgotPasswordStep1Component} from '@components/user-session/forgot-password-step1/forgot-password-step1.component';
+import {ForgotPasswordStep2Component} from '@components/user-session/forgot-password-step2/forgot-password-step2.component';
+import {LoginComponent} from '@components/user-session/login/login.component';
+import {LogoutComponent} from '@components/user-session/logout/logout.component';
+import {IsAuthenticatedGuard} from '@implementation/route/is-authenticated-guard.service';
+import {isSystemAdminGuard} from '@implementation/route/is-system-admin-guard.service';
+import {DecoratedComponent} from '@modules-shared/components/decorated/decorated.component';
 
 const routes: Routes = [
   {
@@ -66,7 +66,8 @@ const routes: Routes = [
   {path: 'reset-password/:email', component: ForgotPasswordStep2Component},
   {
     path: 'workflowmanager',
-    loadChildren: () => import('./modules/workflow-manager/workflow-manager.module').then(m => m.WorkflowManagerModule)
+    loadChildren: () => import('./modules/workflow-manager/workflow-manager.module')
+      .then(m => m.WorkflowManagerModule)
   },
   {path: '**', redirectTo: ''}
 ]

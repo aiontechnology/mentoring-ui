@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2023 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import {MatDialogRef} from '@angular/material/dialog';
-import {ObjectSupplier} from '../types/types';
+import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {ObjectSupplier} from '@implementation/types/types';
 import {DialogManager} from './dialog-manager';
 import {MenuCommand} from './menu-command';
 
 export class MenuDialogCommand<T> extends MenuCommand {
-  static DialogMenuCommandBuilder = class<T> {
+  static MenuDialogCommandBuilder = class<T> {
     private isAdminOnly: boolean = false
     private dataSupplier: ObjectSupplier
     private snackbarMessage: string
@@ -73,7 +73,7 @@ export class MenuDialogCommand<T> extends MenuCommand {
     group: string,
     dialogManager: DialogManager<T>,
   ) {
-    return new this.DialogMenuCommandBuilder(title, group, dialogManager)
+    return new this.MenuDialogCommandBuilder(title, group, dialogManager)
   }
 
   protected override doExecute(): MatDialogRef<any> {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,14 +86,16 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<StudentDialogComponent>.builder(ADD_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentEditDialogManager)
+      MenuDialogCommand
+        .builder(ADD_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentEditDialogManager)
         .withDataSupplier(() => ({
           panelTitle: ADD_STUDENT_PANEL_TITLE
         }))
         .withSnackbarMessage(ADD_STUDENT_SNACKBAR_MESSAGE)
         .build()
         .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
-      MenuDialogCommand<StudentDialogComponent>.builder(EDIT_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentEditDialogManager)
         .withDataSupplier(() => ({
           model: this.tableCache.getFirstSelection(),
           panelTitle: EDIT_STUDENT_PANEL_TITLE
@@ -102,7 +104,8 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1)
         .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_STUDENT_MENU_TITLE, STUDENT_GROUP, this.studentDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR_STUDENT,
           pluralName: PLURAL_STUDENT,

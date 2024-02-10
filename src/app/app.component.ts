@@ -15,6 +15,7 @@
  */
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {POST_ASSESSMENT_URI_SUPPLIER_UPDATER} from '@providers/global/global-assessment-providers-factory';
 import {UserLoginService} from './implementation/security/user-login.service';
 import {MultiItemCache} from './implementation/state-management/multi-item-cache';
 import {MultiItemCacheSchoolChangeLoader} from './implementation/state-management/multi-item-cache-school-change-loader';
@@ -63,6 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
     @Inject(MENTOR_COLLECTION_CACHE_LOADER) private mentorCollectionCacheLoader: MultiItemCacheSchoolChangeLoader<Mentor>,
     @Inject(TEACHER_COLLECTION_CACHE_LOADER) private teacherCollectionCacheLoader: MultiItemCacheSchoolChangeLoader<Teacher>,
     @Inject(INVITATION_URI_SUPPLIER_UPDATER) private invitationUriSupplierUpdater: SchoolChangeUriSupplierHandler,
+    @Inject(POST_ASSESSMENT_URI_SUPPLIER_UPDATER) private postAssessmentUriSupplierUpdater: SchoolChangeUriSupplierHandler,
   ) {}
 
   ngOnInit(): void {
@@ -80,9 +82,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.teacherCollectionCacheLoader.start()
 
     this.invitationUriSupplierUpdater.start()
+    this.postAssessmentUriSupplierUpdater.start()
   }
 
   ngOnDestroy(): void {
+    this.postAssessmentUriSupplierUpdater.stop()
     this.invitationUriSupplierUpdater.stop()
 
     this.teacherCollectionCacheLoader.stop()

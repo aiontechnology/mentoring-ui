@@ -15,7 +15,7 @@
  */
 
 import {Component, Inject} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import {MatLegacyDialog as MatDialog} from '@angular/material/legacy-dialog';
 import {Cache} from '../../../../../implementation/data/cache';
 import {School} from '../../../../../models/school/school';
 import {SchoolSession} from '../../../../../models/school/schoolsession';

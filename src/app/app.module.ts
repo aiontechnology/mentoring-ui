@@ -19,6 +19,7 @@ import {ErrorHandler, NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {globalAssessmentProvidersFactory} from '@providers/global/global-assessment-providers-factory';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HomeComponent} from './components/home/home.component';
@@ -106,6 +107,7 @@ import {globalTeacherProvidersFactory} from './providers/global/global-teacher-p
       provide: ErrorHandler,
       useClass: GlobalErrorHandler
     },
+    ...globalAssessmentProvidersFactory(),
     ...globalBookProvidersFactory(),
     ...globalGameProvidersFactory(),
     ...globalInterestProvidersFactory(),

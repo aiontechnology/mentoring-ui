@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
 import {EnableableCommand} from './enableable-command';
 
 describe('EnableableCommand', () => {

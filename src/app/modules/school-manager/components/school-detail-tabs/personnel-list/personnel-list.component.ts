@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,13 +71,15 @@ export class PersonnelListComponent extends ListComponent<Personnel> implements 
 
   protected get menus(): MenuDialogCommand<any>[] {
     return [
-      MenuDialogCommand<PersonnelDialogComponent>.builder(ADD_PERSONNEL_MENU_TITLE, PERSONNEL_GROUP, this.personnelEditDialogManager)
+      MenuDialogCommand
+        .builder(ADD_PERSONNEL_MENU_TITLE, PERSONNEL_GROUP, this.personnelEditDialogManager)
         .withDataSupplier(() => ({
           panelTitle: ADD_PERSONNEL_PANEL_TITLE
         }))
         .withSnackbarMessage(ADD_PERSONNEL_SNACKBAR_MESSAGE)
         .build(),
-      MenuDialogCommand<PersonnelDialogComponent>.builder(EDIT_PERSONNEL_MENU_TITLE, PERSONNEL_GROUP, this.personnelEditDialogManager)
+      MenuDialogCommand
+        .builder(EDIT_PERSONNEL_MENU_TITLE, PERSONNEL_GROUP, this.personnelEditDialogManager)
         .withDataSupplier(() => ({
           model: this.tableCache.getFirstSelection(),
           panelTitle: EDIT_PERSONNEL_PANEL_TITLE
@@ -85,7 +87,8 @@ export class PersonnelListComponent extends ListComponent<Personnel> implements 
         .withSnackbarMessage(EDIT_PERSONNEL_SNACKBAR_MESSAGE)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length === 1),
-      MenuDialogCommand<ConfirmationDialogComponent>.builder(REMOVE_PERSONNEL_MENU_TITLE, PERSONNEL_GROUP, this.personnelDeleteDialogManager)
+      MenuDialogCommand
+        .builder(REMOVE_PERSONNEL_MENU_TITLE, PERSONNEL_GROUP, this.personnelDeleteDialogManager)
         .withDataSupplier(() => ({
           singularName: SINGULAR_PERSONNEL,
           pluralName: PLURAL_PERSONNEL,
