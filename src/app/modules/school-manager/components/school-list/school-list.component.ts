@@ -16,16 +16,14 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
-import {ListComponent} from '../../../../implementation/component/list-component';
-import {NavigationService} from '../../../../implementation/route/navigation.service';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {School} from '../../../../models/school/school';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {ListComponent} from '@implementation/component/list-component';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {TableCache} from '@implementation/table-cache/table-cache';
+import {School} from '@models/school/school';
+import {SchoolDialogComponent} from '@modules-school-manager/components/school-dialog/school-dialog.component';
 import {
   ADD_SCHOOL_MENU_TITLE,
   ADD_SCHOOL_PANEL_TITLE,
@@ -37,14 +35,16 @@ import {
   REMOVE_SCHOOL_MENU_TITLE,
   REMOVE_SCHOOL_SNACKBAR_MESSAGE,
   SINGULAR_SCHOOL
-} from '../../other/school-constants';
+} from '@modules-school-manager/other/school-constants';
 import {
   SCHOOL_LIST_DELETE_DIALOG_MANAGER,
   SCHOOL_LIST_EDIT_DIALOG_MANAGER,
   SCHOOL_TABLE_CACHE
-} from '../../providers/school-providers-factory';
-import {SCHOOL_GROUP} from '../../school-manager.module';
-import {SchoolDialogComponent} from '../school-dialog/school-dialog.component';
+} from '@modules-school-manager/providers/school-providers-factory';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {SCHOOL_GROUP} from '@modules-shared/other/shared-constants';
+import {SCHOOL_INSTANCE_CACHE} from '@providers/global/global-school-providers-factory';
+import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 
 @Component({
   selector: 'ms-school-list',

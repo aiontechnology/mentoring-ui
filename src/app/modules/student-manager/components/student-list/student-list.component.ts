@@ -16,27 +16,30 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {grades} from 'src/app/implementation/constants/grades';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {SchoolSession} from 'src/app/models/school/schoolsession';
-import {DialogManager} from '../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
-import {ListComponent} from '../../../../implementation/component/list-component';
-import {equalsById} from '../../../../implementation/functions/comparison';
-import {NavigationService} from '../../../../implementation/route/navigation.service';
-import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {Contact} from '../../../../models/contact/contact';
-import {School} from '../../../../models/school/school';
-import {Student} from '../../../../models/student/student';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {ListComponent} from '@implementation/component/list-component';
+import {grades} from '@implementation/constants/grades';
+import {equalsById} from '@implementation/functions/comparison';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {MultiItemCache} from '@implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {TableCache} from '@implementation/table-cache/table-cache';
+import {Contact} from '@models/contact/contact';
+import {School} from '@models/school/school';
+import {SchoolSession} from '@models/school/schoolsession';
+import {Student} from '@models/student/student';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {InviteStudentComponent} from '@modules-shared/components/invite-student/invite-student.component';
 import {
-  SCHOOL_SESSION_COLLECTION_CACHE,
-  SCHOOL_SESSION_INSTANCE_CACHE
-} from '../../../../providers/global/global-school-session-providers-factory';
-import {STUDENT_INSTANCE_CACHE} from '../../../../providers/global/global-student-providers-factory';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+  INVITE_STUDENT_MENU_TITLE,
+  INVITE_STUDENT_PANEL_TITLE,
+  INVITE_STUDENT_SNACKBAR_MESSAGE,
+  SCHOOL_GROUP
+} from '@modules-shared/other/shared-constants';
+import {INVITATION_EDIT_DIALOG_MANAGER} from '@modules-shared/shared.module';
+import {StudentDialogComponent} from '@modules-student-manager/components/student-dialog/student-dialog.component';
 import {
   ADD_STUDENT_MENU_TITLE,
   ADD_STUDENT_PANEL_TITLE,
@@ -48,14 +51,16 @@ import {
   REMOVE_STUDENT_MENU_TITLE,
   REMOVE_STUDENT_SNACKBAR_MESSAGE,
   SINGULAR_STUDENT
-} from '../../other/student-constants';
+} from '@modules-student-manager/other/student-constants';
 import {
   STUDENT_LIST_DELETE_DIALOG_MANAGER,
   STUDENT_LIST_EDIT_DIALOG_MANAGER,
   STUDENT_TABLE_CACHE
-} from '../../providers/student-providers-factory';
-import {STUDENT_GROUP} from '../../student-manager.module';
-import {StudentDialogComponent} from '../student-dialog/student-dialog.component';
+} from '@modules-student-manager/providers/student-providers-factory';
+import {STUDENT_GROUP} from '@modules-student-manager/student-manager.module';
+import {SCHOOL_INSTANCE_CACHE} from '@providers/global/global-school-providers-factory';
+import {SCHOOL_SESSION_COLLECTION_CACHE, SCHOOL_SESSION_INSTANCE_CACHE} from '@providers/global/global-school-session-providers-factory';
+import {STUDENT_INSTANCE_CACHE} from '@providers/global/global-student-providers-factory';
 
 @Component({
   selector: 'ms-student-list',
@@ -78,6 +83,7 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
     @Inject(STUDENT_LIST_DELETE_DIALOG_MANAGER) private studentDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     @Inject(SCHOOL_SESSION_COLLECTION_CACHE) public schoolSessionCollectionCache: MultiItemCache<SchoolSession>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
+    @Inject(INVITATION_EDIT_DIALOG_MANAGER) private invitationEditDialogManager: DialogManager<InviteStudentComponent>,
   ) {
     super(menuState, navService, tableCache, studentInstanceCache)
   }
@@ -114,7 +120,13 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
         .withSnackbarMessage(REMOVE_STUDENT_SNACKBAR_MESSAGE)
         .build()
         .enableIf(() => this.tableCache.selection.selected.length > 0)
-        .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent)
+        .enableIf(() => this.schoolSessionInstanceCache.item?.isCurrent),
+      MenuDialogCommand.builder(INVITE_STUDENT_MENU_TITLE, SCHOOL_GROUP, this.invitationEditDialogManager)
+        .withSnackbarMessage(INVITE_STUDENT_SNACKBAR_MESSAGE)
+        .withDataSupplier(() => ({
+          panelTitle: INVITE_STUDENT_PANEL_TITLE
+        }))
+        .build(),
     ]
   }
 
@@ -126,9 +138,6 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
   ngOnDestroy(): void {
     this.destroy()
   }
-
-  protected doHandleBackButton = (navService: NavigationService) =>
-    navService.push({routeSpec: ['/studentmanager/schools', this.schoolInstanceCache.item.id], fragment: undefined})
 
   displayContact(contact: Contact): string {
     const name = contact.firstName + ' ' + contact.lastName;
@@ -142,4 +151,7 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
   studentGrade(student: Student): string {
     return grades[student.grade].valueView;
   }
+
+  protected doHandleBackButton = (navService: NavigationService) =>
+    navService.push({routeSpec: ['/studentmanager/schools', this.schoolInstanceCache.item.id], fragment: undefined})
 }

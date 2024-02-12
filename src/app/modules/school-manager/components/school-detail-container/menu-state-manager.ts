@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-import {UserLoginService} from '../../../../implementation/security/user-login.service';
-import {MenuStateService} from '../../../../implementation/services/menu-state.service';
-import {
-  PERSONNEL_GROUP,
-  PROGRAM_ADMIN_GROUP,
-  SCHOOL_BOOK_GROUP,
-  SCHOOL_GAME_GROUP,
-  SCHOOL_GROUP,
-  TEACHER_GROUP
-} from '../../school-manager.module';
+import {UserLoginService} from '@implementation/security/user-login.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {SCHOOL_GROUP} from '@modules-shared/other/shared-constants';
+import {PERSONNEL_GROUP, PROGRAM_ADMIN_GROUP, SCHOOL_BOOK_GROUP, SCHOOL_GAME_GROUP, TEACHER_GROUP} from '../../school-manager.module';
 
 export const setState = (index: number, menuState: MenuStateService, userLoginService: UserLoginService): void => {
   menuState.makeAllInvisible();

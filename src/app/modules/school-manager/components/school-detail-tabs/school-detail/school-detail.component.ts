@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import {MultiItemCache} from '@implementation/state-management/multi-item-cache'
 import {SingleItemCache} from '@implementation/state-management/single-item-cache';
 import {School} from '@models/school/school';
 import {SchoolSession} from '@models/school/schoolsession';
-import {InviteStudentComponent} from '@modules-school-manager/components/invite-student/invite-student.component';
 import {RequestPostAssessmentComponent} from '@modules-school-manager/components/request-post-assessment/request-post-assessment.component';
 import {SchoolDialogComponent} from '@modules-school-manager/components/school-dialog/school-dialog.component';
 import {
@@ -38,9 +37,6 @@ import {
   EDIT_SCHOOL_MENU_TITLE,
   EDIT_SCHOOL_PANEL_TITLE,
   EDIT_SCHOOL_SNACKBAR_MESSAGE,
-  INVITE_STUDENT_MENU_TITLE,
-  INVITE_STUDENT_PANEL_TITLE,
-  INVITE_STUDENT_SNACKBAR_MESSAGE,
   PLURAL_SCHOOL,
   POST_ASSESSMENT_PANEL_TITLE,
   POST_ASSESSMENT_SNACKBAR_MESSAGE,
@@ -54,8 +50,16 @@ import {
   SCHOOL_DETAIL_EDIT_DIALOG_MANAGER,
   SCHOOL_SESSION_ADD_DIALOG_MANAGER
 } from '@modules-school-manager/providers/school-providers-factory';
-import {INVITATION_EDIT_DIALOG_MANAGER, POST_ASSESSMENT_DIALOG_MANAGER, SCHOOL_GROUP} from '@modules-school-manager/school-manager.module';
+import {POST_ASSESSMENT_DIALOG_MANAGER} from '@modules-school-manager/school-manager.module';
 import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {InviteStudentComponent} from '@modules-shared/components/invite-student/invite-student.component';
+import {
+  INVITE_STUDENT_MENU_TITLE,
+  INVITE_STUDENT_PANEL_TITLE,
+  INVITE_STUDENT_SNACKBAR_MESSAGE,
+  SCHOOL_GROUP
+} from '@modules-shared/other/shared-constants';
+import {INVITATION_EDIT_DIALOG_MANAGER,} from '@modules-shared/shared.module';
 import {SCHOOL_INSTANCE_CACHE} from '@providers/global/global-school-providers-factory';
 import {
   SCHOOL_SESSION_CACHE,
@@ -79,7 +83,7 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
     @Inject(SCHOOL_DETAIL_DELETE_DIALOG_MANAGER) private schoolDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     @Inject(SCHOOL_SESSION_ADD_DIALOG_MANAGER) private schoolSessionAddDialogManager: DialogManager<SchoolSessionDialogComponent>,
     @Inject(INVITATION_EDIT_DIALOG_MANAGER) private invitationEditDialogManager: DialogManager<InviteStudentComponent>,
-    @Inject(POST_ASSESSMENT_DIALOG_MANAGER) private  postAssessmentDialogManager: DialogManager<RequestPostAssessmentComponent>,
+    @Inject(POST_ASSESSMENT_DIALOG_MANAGER) private postAssessmentDialogManager: DialogManager<RequestPostAssessmentComponent>,
     @Inject(SCHOOL_INSTANCE_CACHE) public schoolInstanceCache: SingleItemCache<School>,
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     @Inject(SCHOOL_SESSION_CACHE) private schoolSessionCache: Cache<SchoolSession>,

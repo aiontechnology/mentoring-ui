@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
-import {DialogComponent} from '../../../../implementation/component/dialog-component';
-import {DataSource} from '../../../../implementation/data/data-source';
-import {emailAddressValidator} from '../../../../implementation/forms/email-address-validator';
-import {Invitation} from '../../../../models/workflow/invitation';
-import {INVITATION_DATA_SOURCE} from '../../../../providers/global/global-invitation-providers-factory';
+import {DialogComponent} from '@implementation/component/dialog-component';
+import {DataSource} from '@implementation/data/data-source';
+import {emailAddressValidator} from '@implementation/forms/email-address-validator';
+import {Invitation} from '@models/workflow/invitation';
+import {INVITATION_DATA_SOURCE} from '@providers/global/global-invitation-providers-factory';
 
 @Component({
   selector: 'ms-invite-student',
