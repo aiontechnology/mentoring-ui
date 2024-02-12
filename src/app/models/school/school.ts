@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ export class School {
   phone: string
   district: string
   isPrivate: boolean
+  emailTag: string
   currentSession: SchoolSession
   links: {
     self: [
@@ -41,6 +42,7 @@ export class School {
     this.phone = convertEmptyStringToNull(json?.phone)
     this.district = convertEmptyStringToNull(json?.district)
     this.isPrivate = json?.isPrivate
+    this.emailTag = json?.emailTag
     this.currentSession = new SchoolSession(json?.currentSession)
     this.links = json?.links
   }

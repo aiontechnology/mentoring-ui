@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,18 +17,14 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
+import {DialogComponent} from '@implementation/component/dialog-component';
+import {states as globalStates} from '@implementation/constants/states';
+import {DataSource} from '@implementation/data/data-source';
+import {phoneValidator} from '@implementation/forms/phone-validator';
+import {MultiItemCache} from '@implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {SCHOOL_COLLECTION_CACHE, SCHOOL_DATA_SOURCE, SCHOOL_INSTANCE_CACHE} from '@providers/global/global-school-providers-factory';
 import {School} from 'src/app/models/school/school';
-import {DialogComponent} from '../../../../implementation/component/dialog-component';
-import {states as globalStates} from '../../../../implementation/constants/states';
-import {DataSource} from '../../../../implementation/data/data-source';
-import {phoneValidator} from '../../../../implementation/forms/phone-validator';
-import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {
-  SCHOOL_COLLECTION_CACHE,
-  SCHOOL_DATA_SOURCE,
-  SCHOOL_INSTANCE_CACHE
-} from '../../../../providers/global/global-school-providers-factory';
 
 @Component({
   selector: 'ms-new-school-dialog',
@@ -81,7 +77,8 @@ export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogC
       }),
       phone: [null, phoneValidator()],
       district: [null, Validators.maxLength(50)],
-      isPrivate: false
+      isPrivate: false,
+      emailTag: [null, Validators.maxLength(10)],
     })
     if (!this.isUpdate) {
       const control = new FormControl('', [Validators.required, Validators.maxLength(30)])
@@ -103,7 +100,8 @@ export class SchoolDialogComponent extends DialogComponent<School, SchoolDialogC
       },
       phone: school?.phone,
       district: school?.district,
-      isPrivate: school?.isPrivate
+      isPrivate: school?.isPrivate,
+      emailTag: school?.emailTag,
     })
   }
 }
