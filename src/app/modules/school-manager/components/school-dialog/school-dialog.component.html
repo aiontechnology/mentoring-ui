@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020-2022 Aion Technology LLC
+  ~ Copyright 2020-2024 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -109,6 +109,16 @@
         <input matInput formControlName="district"/>
         <mat-error *ngIf="modelFormGroup.hasError('maxlength', 'district')">
           A district can be a maximum of 50 characters in length
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row-container">
+      <mat-form-field appearance="outline">
+        <mat-label>Email Tag</mat-label>
+        <input matInput formControlName="emailTag"/>
+        <mat-error *ngIf="modelFormGroup.hasError('maxlength', 'emailTag')">
+          An email tag can be a maximum of 10 characters in length
         </mat-error>
       </mat-form-field>
     </div>
