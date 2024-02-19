@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Grade } from '../types/grade';
+import {Grade} from '@implementation/types/grade';
 
 export const grades: Grade[] = [
   { value: '0', valueView: 'Kindergarten'},
@@ -23,12 +23,5 @@ export const grades: Grade[] = [
   { value: '3', valueView: 'Third' },
   { value: '4', valueView: 'Fourth' },
   { value: '5', valueView: 'Fifth' },
-  { value: '6', valueView: 'Sixth' },
-  { value: '7', valueView: 'Seventh' },
-  { value: '8', valueView: 'Eighth' },
-  { value: '9', valueView: 'Nineth' },
-  { value: '10', valueView: 'Tenth' },
-  { value: '11', valueView: 'Eleventh' },
-  { value: '12', valueView: 'Twelveth' },
 ];
 
