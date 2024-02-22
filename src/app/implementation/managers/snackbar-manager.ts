@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {MatLegacySnackBar as MatSnackBar, MatLegacySnackBarRef as MatSnackBarRef, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition, LegacySimpleSnackBar as SimpleSnackBar} from '@angular/material/legacy-snack-bar';
+import {MatSnackBar, MatSnackBarRef, MatSnackBarVerticalPosition, SimpleSnackBar} from '@angular/material/snack-bar';
 
 export class SnackbarManager {
   constructor(private snackBar: MatSnackBar,

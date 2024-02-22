@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Aion Technology LLC
+ * Copyright 2023-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,10 @@
  */
 
 import {Component, OnInit} from '@angular/core';
-import {MatLegacySnackBar as MatSnackBar, MatLegacySnackBarVerticalPosition as MatSnackBarVerticalPosition} from '@angular/material/legacy-snack-bar';
+import {MatSnackBar, MatSnackBarVerticalPosition} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
-import {CognitoCallback} from '../../../implementation/security/cognito.service';
-import {UserLoginService} from '../../../implementation/security/user-login.service';
+import {CognitoCallback} from '@implementation/security/cognito.service';
+import {UserLoginService} from '@implementation/security/user-login.service';
 
 @Component({
   selector: 'ms-forgot-password-step2',

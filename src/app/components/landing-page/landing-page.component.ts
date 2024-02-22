@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 
 import {Component} from '@angular/core';
-import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {ActivatedRoute, Router} from '@angular/router';
+import {LogoutNotificationComponent} from '@components/user-session/logout-notification/logout-notification.component';
+import {UserLoginService} from '@implementation/security/user-login.service';
 import {map} from 'rxjs/operators';
-import {UserLoginService} from '../../implementation/security/user-login.service';
-import {LogoutNotificationComponent} from '../user-session/logout-notification/logout-notification.component';
 
 @Component({
   selector: 'ms-landing-page',

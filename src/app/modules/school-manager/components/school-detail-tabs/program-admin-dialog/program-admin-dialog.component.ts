@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
-import {DialogComponent} from '../../../../../implementation/component/dialog-component';
-import {DataSource} from '../../../../../implementation/data/data-source';
-import {emailAddressValidator} from '../../../../../implementation/forms/email-address-validator';
-import {phoneValidator} from '../../../../../implementation/forms/phone-validator';
-import {ProgramAdmin} from '../../../../../models/program-admin/program-admin';
-import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../../../providers/global/global-program-admin-providers-factory';
+import {DialogComponent} from '@implementation/component/dialog-component';
+import {DataSource} from '@implementation/data/data-source';
+import {emailAddressValidator} from '@implementation/forms/email-address-validator';
+import {phoneValidator} from '@implementation/forms/phone-validator';
+import {ProgramAdmin} from '@models/program-admin/program-admin';
+import {PROGRAM_ADMIN_DATA_SOURCE} from '@providers/global/global-program-admin-providers-factory';
 
 @Component({
   selector: 'ms-program-admin-detail-dialog',
@@ -32,7 +32,7 @@ import {PROGRAM_ADMIN_DATA_SOURCE} from '../../../../../providers/global/global-
 export class ProgramAdminDialogComponent extends DialogComponent<ProgramAdmin, ProgramAdminDialogComponent> implements OnInit {
   constructor(
     // For super
-    @Inject(MAT_DIALOG_DATA) public data: { model: ProgramAdmin, panelTitle: string },
+    @Inject(MAT_DIALOG_DATA) public data: { model: ProgramAdmin, panelTitle: string, isEdit: boolean },
     formBuilder: FormBuilder,
     dialogRef: MatDialogRef<ProgramAdminDialogComponent>,
     @Inject(PROGRAM_ADMIN_DATA_SOURCE) programAdminDataSource: DataSource<ProgramAdmin>,
@@ -58,7 +58,7 @@ export class ProgramAdminDialogComponent extends DialogComponent<ProgramAdmin, P
       firstName: ['', [Validators.required, Validators.maxLength(50)]],
       lastName: ['', [Validators.required, Validators.maxLength(50)]],
       cellPhone: [null, phoneValidator()],
-      email: [null, [Validators.required, emailAddressValidator(), Validators.maxLength(50)]]
+      email: [{value: null, disabled: this.data.isEdit}, [Validators.required, emailAddressValidator(), Validators.maxLength(50)]]
     })
   }
 

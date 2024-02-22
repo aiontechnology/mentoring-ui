@@ -78,7 +78,8 @@ export class ProgramAdminDetailComponent extends SchoolWatchingDetailComponent i
         .builder(ADD_PROGRAM_ADMIN_MENU_TITLE, PROGRAM_ADMIN_GROUP, this.programAdminEditDialogManager)
         .withSnackbarMessage(ADD_PROGRAM_ADMIN_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
-          panelTitle: ADD_PROGRAM_ADMIN_PANEL_TITLE
+          panelTitle: ADD_PROGRAM_ADMIN_PANEL_TITLE,
+          isEdit: false
         }))
         .build()
         .enableIf(() => this.programAdminInstanceCache.item === undefined),
@@ -87,7 +88,8 @@ export class ProgramAdminDetailComponent extends SchoolWatchingDetailComponent i
         .withSnackbarMessage(EDIT_PROGRAM_ADMIN_SNACKBAR_MESSAGE)
         .withDataSupplier(() => ({
           model: this.programAdminInstanceCache.item,
-          panelTitle: EDIT_PROGRAM_ADMIN_PANEL_TITLE
+          panelTitle: EDIT_PROGRAM_ADMIN_PANEL_TITLE,
+          isEdit: true
         }))
         .build()
         .enableIf(() => this.programAdminInstanceCache.item !== undefined),
