@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpRequest} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {MatLegacySnackBar as MatSnackBar} from '@angular/material/legacy-snack-bar';
+import {MatSnackBar} from '@angular/material/snack-bar';
 import {Router} from '@angular/router'
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -37,7 +37,7 @@ export class HttpErrorInterceptorService {
       catchError((error: HttpErrorResponse) => {
 
         let errorMsg: string;
-        const serverMsg = error?.error?.error?.name;
+        const serverMsg = error?.error?.message;
 
         if (serverMsg) {
           errorMsg = serverMsg;
@@ -68,9 +68,10 @@ export class HttpErrorInterceptorService {
 
   private displayError(e: string): void {
     this.snackBar.open(e, '', {
-      duration: 5000,
+      duration: 7500,
       horizontalPosition: 'center',
-      verticalPosition: 'top'
+      panelClass: 'error-snackbar',
+      verticalPosition: 'bottom'
     });
   }
 

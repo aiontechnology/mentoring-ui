@@ -1,5 +1,5 @@
 /*!
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,21 @@ $ms-palette-main: (
   )
 );
 
+$ms-palette-accent: (
+  50: #F86A12,
+  100: #F86A12,
+  500: #F86A12,
+  700: #F86A12,
+  contrast: (
+    contrast: (
+      50: white,
+      100: white,
+      500: white,
+      700: white
+    )
+  )
+);
+
 $ms-palette-warn: (
   50: #FE0303,
   100: #FE0303,
@@ -42,4 +57,4 @@ $ms-palette-warn: (
       700: white
     )
   )
-)
+);

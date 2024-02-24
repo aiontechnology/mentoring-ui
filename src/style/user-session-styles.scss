@@ -1,5 +1,5 @@
 /*!
- * Copyright 2023 Aion Technology LLC
+ * Copyright 2023-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@import 'src/style/_variables';
+@import 'colors';
 
 .row-container {
   mat-checkbox {
@@ -38,7 +38,7 @@
 
 .input-field {
   input {
-    color: #979797;
+    color: $gray;
   }
 }
 

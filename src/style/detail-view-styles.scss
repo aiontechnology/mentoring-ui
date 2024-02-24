@@ -1,5 +1,5 @@
 /*!
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-@import 'src/style/_variables';
+@import 'colors';
+@import 'borders';
 
 table.detail-view-container {
   width: 100%;
@@ -71,7 +72,7 @@ table.detail-view-container {
 
   .chip {
     color: white;
-    background-color: $orange;
+    background-color: $accent;
     font-size: 14px;
     font-weight: 500;
     letter-spacing: -.21;

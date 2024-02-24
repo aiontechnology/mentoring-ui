@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Aion Technology LLC
+ * Copyright 2023-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ export class NewPasswordUser {
 })
 export class ChangePasswordComponent implements LoggedInCallback, CognitoCallback, OnInit {
   registrationUser: NewPasswordUser = new NewPasswordUser()
+  errorMessage: string
 
   constructor(
     private userRegistrationService: UserRegistrationService,
@@ -48,9 +49,9 @@ export class ChangePasswordComponent implements LoggedInCallback, CognitoCallbac
     this.userRegistrationService.newPassword(this.registrationUser, this)
   }
 
-  cognitoCallback(message: string, result: any): void {
-    if (message != null) {
-      console.error('Error changing password', message)
+  cognitoCallback(exception: any, result: any): void {
+    if (exception != null) {
+      this.errorMessage = exception.message
     } else {
       this.router.navigate(['/home'])
     }

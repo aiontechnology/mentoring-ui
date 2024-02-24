@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2023 Aion Technology LLC
+  ~ Copyright 2023-2024 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<ms-session-container title="Sign in with your email and password" width="650px" height="373px">
+<ms-session-container title="Sign in with your email and password" width="650px" height="425px">
   <form class="form-signin" method="POST">
     <div class="row-container">
       <mat-form-field appearance="outline" class="input-field">
@@ -30,18 +30,16 @@
                [ngModelOptions]="{standalone: true}">
       </mat-form-field>
     </div>
-    <div class="row-container options">
+    <div class="row-container">
       <a [routerLink]="['/reset-password']" class="mat-body-1">Forgot Password?</a>
-      <div></div>
-      <!--        <mat-checkbox [ngModel]="remember" [ngModelOptions]="{standalone: true}">Remember me</mat-checkbox>-->
-    </div>
-    <div *ngIf="errorMessage != null" class="row-container">
-      <span class="error mat-body-2">{{errorMessage}}</span>
     </div>
     <div class="row-container">
       <button class="submit mat-body-1" (click)="onLogin()" type="submit">
         Log In
       </button>
+    </div>
+    <div *ngIf="errorMessage != null" class="row-container">
+      <span class="error mat-body-2">{{ errorMessage }}</span>
     </div>
   </form>
 </ms-session-container>

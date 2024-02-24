@@ -1,5 +1,5 @@
 /*!
- * Copyright 2023 Aion Technology LLC
+ * Copyright 2023-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-@import 'src/style/_variables';
+@import 'src/style/borders';
+@import 'src/style/colors';
+@import 'src/style/typography';
 
 .controls > button {
   background-color: rgb(84, 195, 193);
   bottom: 50px;
   border-radius: 10px;
   color: white;
-  font-family: Roboto;
+  font-family: $alternate-font-family;
   font-weight: 500;
   font-size: 26px;
   height: 70px;
@@ -107,7 +109,7 @@ mat-form-field {
 }
 
 .required-warning {
-  color: #FE0303;
+  color: $warn;
   padding: 34px 0;
 }
 
@@ -156,7 +158,7 @@ p {
 
   button.action-done {
     color: white;
-    background-color: #3BAFBF;
+    background-color: $aqua;
     letter-spacing: -0.28px;
   }
 
@@ -175,7 +177,7 @@ p {
     place-self: auto stretch;
     font-weight: 700;
     color: white;
-    border-top: #979797 solid 1px;
+    border-top: $gray solid 1px;
     padding-top: 15px;
     padding-bottom: 15px;
     background-color: #4988A0;
@@ -183,14 +185,14 @@ p {
   }
 
   .grid-title:nth-child(1) {
-    border-left: #979797 solid 1px;
-    border-top: #979797 solid 1px;
+    border-left: $gray solid 1px;
+    border-top: $gray solid 1px;
     border-top-left-radius: 20px;
     padding-left: 50px;
   }
 
   .grid-title:nth-child(6) {
-    border-right: #979797 solid 1px;
+    border-right: $gray solid 1px;
     border-top-right-radius: 20px;
     padding-right: 50px;
   }
@@ -198,37 +200,37 @@ p {
   .grid-item {
     place-self: auto stretch;
     font-weight: 500;
-    border-bottom: #979797 solid 1px;
+    border-bottom: $gray solid 1px;
     padding-top: 15px;
     padding-bottom: 15px;
   }
 
   .grid-item:nth-child(1) {
-    border-left: #979797 solid 1px;
+    border-left: $gray solid 1px;
     padding-left: 50px;
   }
 
   .grid-item:nth-of-type(5) {
-    border-right: #979797 solid 1px;
+    border-right: $gray solid 1px;
   }
 
   .grid-footer {
     height: 50px;
     background-color: #4988A0;
-    border-bottom: #979797 solid 1px;
+    border-bottom: $gray solid 1px;
     width: 100%;
   }
 
   .grid-footer:nth-last-child(6) {
-    border-left: #979797 solid 1px;
-    border-bottom: #979797 solid 1px;
+    border-left: $gray solid 1px;
+    border-bottom: $gray solid 1px;
     border-bottom-left-radius: 20px;
 
   }
 
   .grid-footer:nth-last-child(1) {
-    border-right: #979797 solid 1px;
-    border-bottom: #979797 solid 1px;
+    border-right: $gray solid 1px;
+    border-bottom: $gray solid 1px;
     border-bottom-right-radius: 20px;
   }
 

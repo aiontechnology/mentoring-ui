@@ -1,5 +1,5 @@
 /*!
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,31 +14,22 @@
  * limitations under the License.
  */
 
-@import 'src/style/_colors';
-@import 'src/style/_borders';
+@use '@angular/material' as mat;
 
-.title-container {
-  display: flex;
-  justify-content: space-between;
+@import 'palette';
 
-  button {
-    margin-top: -25px;
-    font-size: 18px;
-  }
-}
+$app-primary: mat.define-palette($ms-palette-main);
+$app-accent: mat.define-palette($ms-palette-accent);
+$app-warn: mat.define-palette($ms-palette-warn);
 
-.legend {
-  margin-bottom: 20px;
-  color: $warn;
-}
+$primary: mat.get-color-from-palette($app-primary);
+$accent: mat.get-color-from-palette($app-accent);
+$warn: mat.get-color-from-palette($app-warn);
 
-.action-container {
-  display: flex;
-  justify-content: flex-end;
+$gray: gray;
+$aqua: #3BAFBF;
 
-  button.action-done {
-    color: white;
-    background-color: $accent;
-    letter-spacing: -0.28px;
-  }
+@mixin color($background-color, $font-color) {
+  background-color: $background-color;
+  color: $font-color;
 }

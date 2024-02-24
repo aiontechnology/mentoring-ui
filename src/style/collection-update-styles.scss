@@ -1,5 +1,5 @@
 /*!
- * Copyright 2023 Aion Technology LLC
+ * Copyright 2023-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-@import 'src/style/_variables';
+@import 'borders';
+@import 'colors';
+@import 'typography';
 
 .filter-group-wrapper {
   display: flex;
@@ -35,7 +37,7 @@
   flex-grow: 1;
 
   .title {
-    font-family: 'Roboto', sans-serif;
+    font-family: $alternate-font-family;
     font-weight: 500;
     margin: 5px 0;
   }
@@ -45,7 +47,7 @@
   }
 
   mat-label, input, mat-select {
-    font-family: 'Roboto', sans-serif;
+    font-family: $alternate-font-family;
     font-size: 24px;
   }
 
@@ -69,7 +71,7 @@
       height: 270px;
       background: white;
       //border-radius: 10px;
-      border: #979797 1px solid;
+      border: $border-color 1px solid;
       overflow: auto;
       display: block;
 
@@ -86,11 +88,11 @@
         background: white;
 
         span.tag {
-          font-family: 'Roboto', sans-serif;
+          font-family: $alternate-font-family;
           font-weight: 400;
           font-size: 14px;
           color: white;
-          background-color: #3BAFBF;
+          background-color: $aqua;
           padding: 8px;
           border-radius: 10px;
         }
@@ -108,7 +110,7 @@
     padding: 20px 0;
     border-radius: 20px;
     color: white;
-    background-color: #3BAFBF;
+    background-color: $aqua;
   }
 }
 

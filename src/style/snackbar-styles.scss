@@ -1,5 +1,5 @@
 /*!
- * Copyright 2023 Aion Technology LLC
+ * Copyright 2023-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,54 +14,47 @@
  * limitations under the License.
  */
 
-snack-bar-container.normal-snackbar, snack-bar-container.logout-snackbar {
-  border-radius: 20px;
+@import 'colors';
+@import 'borders';
+@import 'typography';
 
-  .mat-simple-snack-bar-content {
-    font-family: 'Montserrat', sans-serif;
-    font-width: 500;
-    font-size: 24px;
+@mixin snackbar-surface() {
+  .mdc-snackbar__surface {
+    align-items: center;
+    box-shadow: none;
+    display: flex;
     letter-spacing: 0.16px;
-    text-align: center;
-    width: 100%;
-  }
-
-  .mat-simple-snack-bar-content {
-    display: inline-block;
-    line-height: normal;
     vertical-align: middle;
   }
-
-  > simple-snack-bar {
-    display: flex;
-    align-items: center;
-  }
 }
 
-snack-bar-container.normal-snackbar {
-  width: 650px;
-  height: 89px;
-  margin-top: 250px !important;
-  background-color: #979797;
-  color: white;
+mat-snack-bar-container {
+  @include font($font-size: 24px);
 
-  *:not(span) {
-    height: 100%;
+  &.normal-snackbar {
+    @include snackbar-surface;
+    @include color($border-color, white);
+    border-radius: $border-radius;
+    height: 89px;
+    margin-top: 250px !important;
+    width: 650px;
   }
-}
 
-snack-bar-container.logout-snackbar {
-  width: 650px;
-  height: 373px;
-  margin-top: 300px !important;
-  background-color: white;
-  color: black;
+  &.logout-snackbar {
+    @include snackbar-surface;
+    @include color(white, black);
+    border-radius: $border-radius;
+    height: 373px;
+    margin-top: 300px !important;
+    width: 650px;
+  }
 
-  > div {
-    height: 100%;
-
-    > div {
-      height: 100%;
-    }
+  &.error-snackbar {
+    @include snackbar-surface;
+    @include color($warn, white);
+    border-radius: 0;
+    margin: 0;
+    position: fixed;
+    width: 100%;
   }
 }

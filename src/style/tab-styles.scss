@@ -1,5 +1,5 @@
 /*!
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-@import 'src/style/_variables';
+@import 'colors';
 
 // The tab body clips overflow by default. In order to position elements into the header from the body, we need to turn
 // that off.
@@ -29,10 +29,10 @@
   font-style: normal;
   letter-spacing: 0.12px;
   line-height: 67px;
-  color: $orange;
+  color: $accent;
   margin-bottom: 10px;
 }
 
 .mat-tab-group.mat-primary .mat-ink-bar {
-  background-color: $orange;
+  background-color: $accent;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,8 @@ import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDial
 import {Observable} from 'rxjs';
 import {resourceLocations} from 'src/app/implementation/constants/locations';
 import {resourceGrades} from 'src/app/implementation/constants/resourceGrades';
-import {Game} from 'src/app/models/game/game';
 import {Grade} from 'src/app/implementation/types/grade';
+import {Game} from 'src/app/models/game/game';
 import {MetaDataService} from 'src/app/modules/shared/services/meta-data/meta-data.service';
 import {DialogComponent} from '../../../../implementation/component/dialog-component';
 import {DataSource} from '../../../../implementation/data/data-source';
@@ -52,12 +52,12 @@ export class GameDialogComponent extends DialogComponent<Game, GameDialogCompone
   }
 
   gradeRangeValidator = (control: AbstractControl): { [key: string]: boolean } => {
-    const grade1 = control.get('grade1');
-    const grade2 = control.get('grade2');
+    const grade1: number = +control.get('grade1').value;
+    const grade2: number = +control.get('grade2').value;
     if (!grade1 || !grade2) {
       return null;
     }
-    return (grade1.value > grade2.value) ? {invalidRange: true} : null;
+    return (grade1 > grade2) ? {invalidRange: true} : null;
   }
 
   ngOnInit(): void {

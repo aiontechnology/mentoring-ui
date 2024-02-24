@@ -1,5 +1,5 @@
 /*!
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,11 @@
  * limitations under the License.
  */
 
-@use '@angular/material' as mat;
+@import 'colors';
 
-@import './ms-palette.scss';
+@mixin standard-boarder($color: $gray, $width: 1px, $style: solid) {
+  border: $width $style $color;
+}
 
-$app-primary: mat.define-palette($ms-palette-main);
-$app-accent: mat.define-palette($ms-palette-main);
-$app-warn: mat.define-palette($ms-palette-warn);
-
-$primary: mat.get-color-from-palette($app-primary);
-$accent: mat.get-color-from-palette($app-accent, 100);
-$warn: mat.get-color-from-palette($app-warn);
-
-$border-color: #979797;
-$gray-color: #7D7D7D;
-$panel-background-color: #FBFBFB;
-$panel-font-color: #414141;
-$orange: #F86A12;
+$border-color: $gray;
+$border-radius: 20px;
