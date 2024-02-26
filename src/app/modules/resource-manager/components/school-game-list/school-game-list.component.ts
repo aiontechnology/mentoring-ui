@@ -16,17 +16,18 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
-import {ListComponent} from '../../../../implementation/component/list-component';
-import {NavigationService} from '../../../../implementation/route/navigation.service';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {Game} from '../../../../models/game/game';
-import {UPDATE_GAME_MENU_TITLE, UPDATE_GAME_SNACKBAR_MESSAGE} from '../../other/resource-constants';
-import {GAME_UPDATE_DIALOG_MANAGER, SCHOOL_GAME_TABLE_CACHE} from '../../providers/school-game-providers-factory';
-import {SCHOOL_GAME_GROUP} from '../../resource-manager.module';
-import {SchoolGameDialogComponent} from '../school-game-dialog/school-game-dialog.component';
+import {ActivatedRoute} from '@angular/router';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {ListComponent} from '@implementation/component/list-component';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {TableCache} from '@implementation/table-cache/table-cache';
+import {Game} from '@models/game/game';
+import {SchoolGameDialogComponent} from '@modules-resource-manager/components/school-game-dialog/school-game-dialog.component';
+import {UPDATE_GAME_MENU_TITLE, UPDATE_GAME_SNACKBAR_MESSAGE} from '@modules-resource-manager/other/resource-constants';
+import {GAME_UPDATE_DIALOG_MANAGER, SCHOOL_GAME_TABLE_CACHE} from '@modules-resource-manager/providers/school-game-providers-factory';
+import {SCHOOL_GAME_GROUP} from '@modules-resource-manager/resource-manager.module';
 
 @Component({
   selector: 'ms-school-game-list',
@@ -40,11 +41,12 @@ export class SchoolGameListComponent extends ListComponent<Game> implements OnIn
     // for super
     menuState: MenuStateService,
     navService: NavigationService,
+    route: ActivatedRoute,
     @Inject(SCHOOL_GAME_TABLE_CACHE) tableCache: TableCache<Game>,
     //other
     @Inject(GAME_UPDATE_DIALOG_MANAGER) private gameUpdateDialogManager: DialogManager<SchoolGameDialogComponent>,
   ) {
-    super(menuState, navService, tableCache)
+    super(menuState, navService, route, tableCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -70,5 +72,5 @@ export class SchoolGameListComponent extends ListComponent<Game> implements OnIn
   }
 
   protected doHandleBackButton = (navService: NavigationService) =>
-    navService.push({routeSpec: ['/resourcemanager'], fragment: 'schoolgame'})
+    navService.push({routeSpec: ['/resourcemanager'], fragment: 'schoolgame', filter: this.tableCache.filterBinding})
 }

@@ -16,27 +16,23 @@
 
 import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {SchoolWatchingDetailComponent} from '@implementation/component/school-watching-detail-component';
+import {DataSource} from '@implementation/data/data-source';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {RouteElementWatcher} from '@implementation/route/route-element-watcher.service';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {Mentor} from '@models/mentor/mentor';
+import {School} from '@models/school/school';
+import {SchoolSession} from '@models/school/schoolsession';
+import {MENTOR_GROUP} from '@modules-mentor-manager/mentor-manager.module';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {MENTOR_DATA_SOURCE, MENTOR_INSTANCE_CACHE, MENTOR_ROUTE_WATCHER} from '@providers/global/global-mentor-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '@providers/global/global-school-providers-factory';
+import {SCHOOL_SESSION_INSTANCE_CACHE} from '@providers/global/global-school-session-providers-factory';
 import {Subscription} from 'rxjs';
 import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
-import {SchoolWatchingDetailComponent} from '../../../../implementation/component/school-watching-detail-component';
-import {DataSource} from '../../../../implementation/data/data-source';
-import {NavigationService} from '../../../../implementation/route/navigation.service';
-import {RouteElementWatcher} from '../../../../implementation/route/route-element-watcher.service';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {Mentor} from '../../../../models/mentor/mentor';
-import {School} from '../../../../models/school/school';
-import {SchoolSession} from '../../../../models/school/schoolsession';
-import {
-  MENTOR_DATA_SOURCE,
-  MENTOR_INSTANCE_CACHE,
-  MENTOR_ROUTE_WATCHER
-} from '../../../../providers/global/global-mentor-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
-import {SCHOOL_SESSION_INSTANCE_CACHE} from '../../../../providers/global/global-school-session-providers-factory';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {MENTOR_GROUP} from '../../mentor-manager.module';
 import {
   EDIT_MENU_TITLE,
   EDIT_PANEL_TITLE,
@@ -111,7 +107,7 @@ export class MentorDetailComponent extends SchoolWatchingDetailComponent impleme
   }
 
   protected doHandleBackButton = (navService: NavigationService): void =>
-    navService.push({routeSpec: ['/mentormanager', 'schools', this.schoolInstanceCache.item.id], fragment: undefined})
+    navService.push({routeSpec: ['/mentormanager', 'schools', this.schoolInstanceCache.item.id], fragment: undefined, filter: null})
 
   protected onSchoolChange(school: School) {
     this.router.navigate(['mentormanager', 'schools', school.id])

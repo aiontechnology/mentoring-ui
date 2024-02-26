@@ -16,16 +16,16 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
-import {ListComponent} from '../../../../../implementation/component/list-component';
-import {NavigationService} from '../../../../../implementation/route/navigation.service';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
-import {TableCache} from '../../../../../implementation/table-cache/table-cache';
-import {Personnel} from '../../../../../models/personnel/personnel';
-import {PERSONNEL_INSTANCE_CACHE} from '../../../../../providers/global/global-personnel-providers-factory';
-import {ConfirmationDialogComponent} from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ActivatedRoute} from '@angular/router';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {ListComponent} from '@implementation/component/list-component';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {TableCache} from '@implementation/table-cache/table-cache';
+import {Personnel} from '@models/personnel/personnel';
+import {PersonnelDialogComponent} from '@modules-school-manager/components/school-detail-tabs/personnel-dialog/personnel-dialog.component';
 import {
   ADD_PERSONNEL_MENU_TITLE,
   ADD_PERSONNEL_PANEL_TITLE,
@@ -37,14 +37,15 @@ import {
   REMOVE_PERSONNEL_MENU_TITLE,
   REMOVE_PERSONNEL_SNACKBAR_MESSAGE,
   SINGULAR_PERSONNEL
-} from '../../../other/school-constants';
+} from '@modules-school-manager/other/school-constants';
 import {
   PERSONNEL_DELETE_DIALOG_MANAGER,
   PERSONNEL_EDIT_DIALOG_MANAGER,
   PERSONNEL_TABLE_CACHE
-} from '../../../providers/personnel-providers-factory';
-import {PERSONNEL_GROUP} from '../../../school-manager.module';
-import {PersonnelDialogComponent} from '../personnel-dialog/personnel-dialog.component';
+} from '@modules-school-manager/providers/personnel-providers-factory';
+import {PERSONNEL_GROUP} from '@modules-school-manager/school-manager.module';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {PERSONNEL_INSTANCE_CACHE} from '@providers/global/global-personnel-providers-factory';
 
 @Component({
   selector: 'ms-personnel-list',
@@ -58,13 +59,14 @@ export class PersonnelListComponent extends ListComponent<Personnel> implements 
     // for super
     menuState: MenuStateService,
     navService: NavigationService,
+    route: ActivatedRoute,
     @Inject(PERSONNEL_TABLE_CACHE) tableCache: TableCache<Personnel>,
     @Inject(PERSONNEL_INSTANCE_CACHE) personnelInstanceCache: SingleItemCache<Personnel>,
     // other
     @Inject(PERSONNEL_EDIT_DIALOG_MANAGER) private personnelEditDialogManager: DialogManager<PersonnelDialogComponent>,
     @Inject(PERSONNEL_DELETE_DIALOG_MANAGER) private personnelDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
   ) {
-    super(menuState, navService, tableCache, personnelInstanceCache)
+    super(menuState, navService, route, tableCache, personnelInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }

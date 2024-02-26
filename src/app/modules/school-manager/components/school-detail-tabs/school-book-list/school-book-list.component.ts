@@ -16,20 +16,23 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
-import {ListComponent} from '../../../../../implementation/component/list-component';
-import {NavigationService} from '../../../../../implementation/route/navigation.service';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
-import {TableCache} from '../../../../../implementation/table-cache/table-cache';
-import {Book} from '../../../../../models/book/book';
-import {School} from '../../../../../models/school/school';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../../providers/global/global-school-providers-factory';
-import {UPDATE_BOOK_MENU_TITLE, UPDATE_BOOK_SNACKBAR_MESSAGE} from '../../../other/school-constants';
-import {BOOK_UPDATE_DIALOG_MANAGER, SCHOOL_BOOK_TABLE_CACHE} from '../../../providers/school-book-providers-factory';
-import {SCHOOL_BOOK_GROUP} from '../../../school-manager.module';
-import {SchoolBookDialogComponent} from '../school-book-dialog/school-book-dialog.component';
+import {ActivatedRoute} from '@angular/router';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {ListComponent} from '@implementation/component/list-component';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {TableCache} from '@implementation/table-cache/table-cache';
+import {Book} from '@models/book/book';
+import {School} from '@models/school/school';
+import {
+  SchoolBookDialogComponent
+} from '@modules-school-manager/components/school-detail-tabs/school-book-dialog/school-book-dialog.component';
+import {UPDATE_BOOK_MENU_TITLE, UPDATE_BOOK_SNACKBAR_MESSAGE} from '@modules-school-manager/other/school-constants';
+import {BOOK_UPDATE_DIALOG_MANAGER, SCHOOL_BOOK_TABLE_CACHE} from '@modules-school-manager/providers/school-book-providers-factory';
+import {SCHOOL_BOOK_GROUP} from '@modules-school-manager/school-manager.module';
+import {SCHOOL_INSTANCE_CACHE} from '@providers/global/global-school-providers-factory';
 
 @Component({
   selector: 'ms-school-book-list',
@@ -43,12 +46,13 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
     // for super
     menuState: MenuStateService,
     navService: NavigationService,
+    route: ActivatedRoute,
     @Inject(SCHOOL_BOOK_TABLE_CACHE) tableCache: TableCache<Book>,
     //other
     @Inject(SCHOOL_INSTANCE_CACHE) private schoolInstanceCache: SingleItemCache<School>,
     @Inject(BOOK_UPDATE_DIALOG_MANAGER) private bookUpdateDialogManager: DialogManager<SchoolBookDialogComponent>,
   ) {
-    super(menuState, navService, tableCache)
+    super(menuState, navService, route, tableCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -74,7 +78,11 @@ export class SchoolBookListComponent extends ListComponent<Book> implements OnIn
   }
 
   protected doHandleBackButton = (navService: NavigationService) =>
-    navService.push({routeSpec: ['/schoolsmanager/schools', this.schoolInstanceCache.item.id], fragment: 'book'})
+    navService.push({
+      routeSpec: ['/schoolsmanager/schools', this.schoolInstanceCache.item.id],
+      fragment: 'book',
+      filter: this.tableCache.filterBinding
+    })
 
   protected override loadTableCache = async (): Promise<void> => {
     // do nothing

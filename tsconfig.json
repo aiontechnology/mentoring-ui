@@ -7,6 +7,8 @@
       "@environments/*": ["src/environments/*"],
       "@implementation/*": ["src/app/implementation/*"],
       "@models/*": ["src/app/models/*"],
+      "@modules-admin-manager/*": ["src/app/modules/admin-manager/*"],
+      "@modules-mentor-manager/*": ["src/app/modules/mentor-manager/*"],
       "@modules-resource-manager/*": ["src/app/modules/resource-manager/*"],
       "@modules-school-manager/*": ["src/app/modules/school-manager/*"],
       "@modules-shared/*": ["src/app/modules/shared/*"],

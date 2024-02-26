@@ -27,6 +27,7 @@ import {UriSupplier} from '@implementation/data/uri-supplier';
 import {SnackbarManager} from '@implementation/managers/snackbar-manager';
 import {NavigationService} from '@implementation/route/navigation.service';
 import {RouteElementWatcher} from '@implementation/route/route-element-watcher.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
 import {SingleItemCache} from '@implementation/state-management/single-item-cache';
 import {School} from '@models/school/school';
 import {SchoolSession} from '@models/school/schoolsession';
@@ -56,7 +57,6 @@ import {SCHOOL_INSTANCE_CACHE} from '@providers/global/global-school-providers-f
 import {SCHOOL_SESSION_INSTANCE_CACHE} from '@providers/global/global-school-session-providers-factory';
 import {STUDENT_DATA_SOURCE, STUDENT_INSTANCE_CACHE, STUDENT_ROUTE_WATCHER} from '@providers/global/global-student-providers-factory';
 import {Subscription} from 'rxjs';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
 
 @Component({
   selector: 'ms-student-detail',
@@ -145,7 +145,7 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
   }
 
   protected doHandleBackButton = (navService: NavigationService): void =>
-    navService.push({routeSpec: ['/studentmanager', 'schools', this.schoolInstanceCache.item.id], fragment: undefined})
+    navService.push({routeSpec: ['/studentmanager', 'schools', this.schoolInstanceCache.item.id], fragment: undefined, filter: null})
 
   protected onSchoolChange(school: School) {
     this.router.navigate(['studentmanager', 'schools', school.id])

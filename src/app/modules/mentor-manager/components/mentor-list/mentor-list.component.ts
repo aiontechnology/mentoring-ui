@@ -16,19 +16,18 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
-import {ListComponent} from '../../../../implementation/component/list-component';
-import {NavigationService} from '../../../../implementation/route/navigation.service';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {Mentor} from '../../../../models/mentor/mentor';
-import {School} from '../../../../models/school/school';
-import {MENTOR_INSTANCE_CACHE} from '../../../../providers/global/global-mentor-providers-factory';
-import {SCHOOL_INSTANCE_CACHE} from '../../../../providers/global/global-school-providers-factory';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {MENTOR_GROUP} from '../../mentor-manager.module';
+import {ActivatedRoute} from '@angular/router';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {ListComponent} from '@implementation/component/list-component';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {TableCache} from '@implementation/table-cache/table-cache';
+import {Mentor} from '@models/mentor/mentor';
+import {School} from '@models/school/school';
+import {MentorDialogComponent} from '@modules-mentor-manager/components/mentor-dialog/mentor-dialog.component';
+import {MENTOR_GROUP} from '@modules-mentor-manager/mentor-manager.module';
 import {
   ADD_MENU_TITLE,
   ADD_PANEL_TITLE,
@@ -40,13 +39,15 @@ import {
   REMOVE_MENU_TITLE,
   REMOVE_SNACKBAR_MESSAGE,
   SINGULAR
-} from '../../other/mentor-constants';
+} from '@modules-mentor-manager/other/mentor-constants';
 import {
   MENTOR_LIST_DELETE_DIALOG_MANAGER,
   MENTOR_LIST_EDIT_DIALOG_MANAGER,
   MENTOR_TABLE_CACHE
-} from '../../providers/mentor-providers-factory';
-import {MentorDialogComponent} from '../mentor-dialog/mentor-dialog.component';
+} from '@modules-mentor-manager/providers/mentor-providers-factory';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {MENTOR_INSTANCE_CACHE} from '@providers/global/global-mentor-providers-factory';
+import {SCHOOL_INSTANCE_CACHE} from '@providers/global/global-school-providers-factory';
 
 @Component({
   selector: 'ms-mentor-list',
@@ -60,6 +61,7 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
     // for super
     menuState: MenuStateService,
     navService: NavigationService,
+    route: ActivatedRoute,
     @Inject(MENTOR_TABLE_CACHE) tableCache: TableCache<Mentor>,
     @Inject(MENTOR_INSTANCE_CACHE) mentorInstanceCache: SingleItemCache<Mentor>,
     // other
@@ -67,7 +69,7 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
     @Inject(MENTOR_LIST_EDIT_DIALOG_MANAGER) private mentorEditDialogManager: DialogManager<MentorDialogComponent>,
     @Inject(MENTOR_LIST_DELETE_DIALOG_MANAGER) private mentorDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
   ) {
-    super(menuState, navService, tableCache, mentorInstanceCache)
+    super(menuState, navService, route, tableCache, mentorInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -113,5 +115,9 @@ export class MentorListComponent extends ListComponent<Mentor> implements OnInit
   }
 
   protected doHandleBackButton = (navService: NavigationService) =>
-    navService.push({routeSpec: ['/mentormanager/schools', this.schoolInstanceCache.item.id], fragment: undefined})
+    navService.push({
+      routeSpec: ['/mentormanager/schools', this.schoolInstanceCache.item.id],
+      fragment: undefined,
+      filter: this.tableCache.filterBinding
+    })
 }

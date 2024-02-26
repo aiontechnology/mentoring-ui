@@ -16,6 +16,7 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute} from '@angular/router';
 import {DialogManager} from '@implementation/command/dialog-manager';
 import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
 import {ListComponent} from '@implementation/component/list-component';
@@ -75,6 +76,7 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
     // for super
     menuState: MenuStateService,
     navService: NavigationService,
+    route: ActivatedRoute,
     @Inject(STUDENT_TABLE_CACHE) tableCache: TableCache<Student>,
     @Inject(STUDENT_INSTANCE_CACHE) studentInstanceCache: SingleItemCache<Student>,
     // other
@@ -85,7 +87,7 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
     @Inject(SCHOOL_SESSION_INSTANCE_CACHE) public schoolSessionInstanceCache: SingleItemCache<SchoolSession>,
     @Inject(INVITATION_EDIT_DIALOG_MANAGER) private invitationEditDialogManager: DialogManager<InviteStudentComponent>,
   ) {
-    super(menuState, navService, tableCache, studentInstanceCache)
+    super(menuState, navService, route, tableCache, studentInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -153,5 +155,5 @@ export class StudentListComponent extends ListComponent<Student> implements OnIn
   }
 
   protected doHandleBackButton = (navService: NavigationService) =>
-    navService.push({routeSpec: ['/studentmanager/schools', this.schoolInstanceCache.item.id], fragment: undefined})
+    navService.push({routeSpec: ['/studentmanager/schools', this.schoolInstanceCache.item.id], fragment: undefined, filter: this.tableCache.filterBinding})
 }

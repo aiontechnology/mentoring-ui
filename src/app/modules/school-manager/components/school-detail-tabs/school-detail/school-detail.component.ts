@@ -152,6 +152,6 @@ export class SchoolDetailComponent extends DetailComponent implements OnInit, On
   }
 
   protected doHandleBackButton = (navService: NavigationService): void =>
-    navService.push({routeSpec: ['/schoolsmanager'], fragment: undefined})
+    navService.push({routeSpec: ['/schoolsmanager'], fragment: undefined, filter: null})
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 import {Component, Input} from '@angular/core';
-import {UserLoginService} from '../../../../implementation/security/user-login.service';
-import {MenuStateService} from '../../../../implementation/services/menu-state.service';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
+import {UserLoginService} from '@implementation/security/user-login.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {TableCache} from '@implementation/table-cache/table-cache';
 
 @Component({
   selector: 'ms-list-view-header',
