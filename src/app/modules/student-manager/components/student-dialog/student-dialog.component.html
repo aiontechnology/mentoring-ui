@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020-2023 Aion Technology LLC
+  ~ Copyright 2020-2024 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -136,15 +136,16 @@
         </div>
 
         <!-- Preferred Meeting Time -->
-        <div class="row-container">
-          <mat-form-field appearance="outline">
-            <mat-label>Preferred meeting time</mat-label>
-            <input formControlName="preferredTime" matInput/>
-            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'preferredTime')">
-              Preferred time can be a maximum of 30 characters in length
-            </mat-error>
-          </mat-form-field>
-        </div>
+<!-- MS-886 Removed from UI only. API Still supports this-->
+<!--        <div class="row-container">-->
+<!--          <mat-form-field appearance="outline">-->
+<!--            <mat-label>Preferred meeting time</mat-label>-->
+<!--            <input formControlName="preferredTime" matInput/>-->
+<!--            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'preferredTime')">-->
+<!--              Preferred time can be a maximum of 30 characters in length-->
+<!--            </mat-error>-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
 
         <!-- Actual Meeting Time -->
         <div class="row-container">

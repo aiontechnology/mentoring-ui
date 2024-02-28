@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020-2023 Aion Technology LLC
+  ~ Copyright 2020-2024 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -61,10 +61,11 @@
     <td>Start Date:</td>
     <td>{{ studentInstanceCache.item?.startDate | date: 'MMMM, yyyy' : 'utc' }}</td>
   </tr>
-  <tr>
-    <td>Preferred Time:</td>
-    <td>{{ studentInstanceCache.item?.preferredTime }}</td>
-  </tr>
+<!-- MS-886 Removed from UI only. API Still supports this-->
+<!--  <tr>-->
+<!--    <td>Preferred Time:</td>-->
+<!--    <td>{{ studentInstanceCache.item?.preferredTime }}</td>-->
+<!--  </tr>-->
   <tr>
     <td>Actual Time:</td>
     <td>{{ studentInstanceCache.item?.actualTime }}</td>
