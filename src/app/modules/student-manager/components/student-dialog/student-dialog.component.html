@@ -57,13 +57,14 @@
 
         <!-- Student ID and Grade -->
         <div class="row-container">
-          <mat-form-field appearance="outline">
-            <mat-label>Student ID</mat-label>
-            <input formControlName="studentId" matInput/>
-            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'studentId')">
-              The student ID can be a maximum of 20 characters in length
-            </mat-error>
-          </mat-form-field>
+<!-- MS-884 Removed from UI only. API Still supports this -->
+<!--          <mat-form-field appearance="outline">-->
+<!--            <mat-label>Student ID</mat-label>-->
+<!--            <input formControlName="studentId" matInput/>-->
+<!--            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'studentId')">-->
+<!--              The student ID can be a maximum of 20 characters in length-->
+<!--            </mat-error>-->
+<!--          </mat-form-field>-->
 
           <mat-form-field appearance="outline">
             <mat-label>Grade</mat-label>

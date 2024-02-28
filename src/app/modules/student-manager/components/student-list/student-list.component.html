@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020-2022 Aion Technology LLC
+  ~ Copyright 2020-2024 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -75,14 +75,15 @@
             </td>
           </ng-container>
 
-          <ng-container matColumnDef="studentId">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              <p class="mat-body-2">ID</p>
-            </th>
-            <td mat-cell *matCellDef="let student">
-              <p class="mat-body-1">{{ student.studentId }}</p>
-            </td>
-          </ng-container>
+<!-- MS-884 Removed from UI only. API Still supports this -->
+<!--          <ng-container matColumnDef="studentId">-->
+<!--            <th mat-header-cell *matHeaderCellDef mat-sort-header>-->
+<!--              <p class="mat-body-2">ID</p>-->
+<!--            </th>-->
+<!--            <td mat-cell *matCellDef="let student">-->
+<!--              <p class="mat-body-1">{{ student.studentId }}</p>-->
+<!--            </td>-->
+<!--          </ng-container>-->
 
           <ng-container matColumnDef="grade">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>

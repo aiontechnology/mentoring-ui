@@ -69,7 +69,7 @@ import {STUDENT_INSTANCE_CACHE} from '@providers/global/global-student-providers
   styleUrls: ['./student-list.component.scss'],
 })
 export class StudentListComponent extends ListComponent<Student> implements OnInit, OnDestroy {
-  columns = ['select', 'firstName', 'lastName', 'studentId', 'grade', 'teacher', 'actualTime', 'contacts']
+  columns = ['select', 'firstName', 'lastName' /*,'studentId'*/, 'grade', 'teacher', 'actualTime', 'contacts']
   compareSessions = equalsById
 
   constructor(

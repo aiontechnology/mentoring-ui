@@ -128,7 +128,7 @@ export class StudentDetailComponent extends SchoolWatchingDetailComponent implem
           }
         })
         .enableIf(() => {
-          return this.studentInstanceCache.item.teacherInfoWorkflowAllowed
+          return this.studentInstanceCache.item?.teacherInfoWorkflowAllowed
         })
     ]
   }
