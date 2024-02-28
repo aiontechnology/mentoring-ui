@@ -17,23 +17,24 @@
 import {Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {grades} from '../../../../implementation/constants/grades';
-import {DataSource} from '../../../../implementation/data/data-source';
-import {UriSupplier} from '../../../../implementation/data/uri-supplier';
-import {emailAddressValidator} from '../../../../implementation/forms/email-address-validator';
-import {valueOrNull} from '../../../../implementation/functions/value-or-null';
-import {Grade} from '../../../../implementation/types/grade';
-import {ProgramAdmin} from '../../../../models/program-admin/program-admin';
-import {Teacher} from '../../../../models/teacher/teacher';
-import {StudentRegistration} from '../../../../models/workflow/student-registration';
-import {StudentRegistrationLookup} from '../../../../models/workflow/student-registration-lookup';
-import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '../../../../providers/global/global-program-admin-providers-factory';
+import {grades} from '@implementation/constants/grades';
+import {DataSource} from '@implementation/data/data-source';
+import {UriSupplier} from '@implementation/data/uri-supplier';
+import {emailAddressValidator} from '@implementation/forms/email-address-validator';
+import {phoneValidator} from '@implementation/forms/phone-validator';
+import {valueOrNull} from '@implementation/functions/value-or-null';
+import {Grade} from '@implementation/types/grade';
+import {ProgramAdmin} from '@models/program-admin/program-admin';
+import {Teacher} from '@models/teacher/teacher';
+import {StudentRegistration} from '@models/workflow/student-registration';
+import {StudentRegistrationLookup} from '@models/workflow/student-registration-lookup';
 import {
   REGISTRATION_DATA_SOURCE,
   REGISTRATION_LOOKUP_DATA_SOURCE,
   REGISTRATION_URI_SUPPLIER
-} from '../../../shared/providers/workflow-providers-factory';
-import {LinkService} from '../../../shared/services/link-service/link.service';
+} from '@modules-shared/providers/workflow-providers-factory';
+import {LinkService} from '@modules-shared/services/link-service/link.service';
+import {PROGRAM_ADMIN_DATA_SOURCE, PROGRAM_ADMIN_URI_SUPPLIER} from '@providers/global/global-program-admin-providers-factory';
 
 @Component({
   selector: 'ms-student-registration',
@@ -169,12 +170,12 @@ export class StudentRegistrationComponent implements OnInit {
       grade: ['', Validators.required],
       parent1FirstName: ['', [Validators.required, Validators.maxLength(50)]],
       parent1LastName: ['', [Validators.required, Validators.maxLength(50)]],
-      parent1PhoneNumber: [''],
+      parent1PhoneNumber: ['', [Validators.required, phoneValidator()]],
       parent1EmailAddress: ['', [emailAddressValidator(), Validators.maxLength(50)]],
       parent1PreferredContactMethod: ['', [Validators.required]],
       parent2FirstName: ['', [Validators.maxLength(50)]],
       parent2LastName: ['', [Validators.maxLength(50)]],
-      parent2PhoneNumber: [''],
+      parent2PhoneNumber: ['', [phoneValidator()]],
       parent2EmailAddress: ['', [emailAddressValidator(), Validators.maxLength(50)]],
       parent2PreferredContactMethod: [''],
       teacher: ['', Validators.required],
