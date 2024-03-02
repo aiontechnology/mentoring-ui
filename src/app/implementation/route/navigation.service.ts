@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Aion Technology LLC
+ * Copyright 2021-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 
 type RouteSpec = string[]
-export type FullSpec = { routeSpec: RouteSpec, fragment: string }
+export type FullSpec = { routeSpec: RouteSpec, fragment: string, filter: string }
 
 @Injectable()
 export class NavigationService {

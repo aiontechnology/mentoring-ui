@@ -16,16 +16,16 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../../implementation/command/menu-dialog-command';
-import {ListComponent} from '../../../../../implementation/component/list-component';
-import {NavigationService} from '../../../../../implementation/route/navigation.service';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
-import {TableCache} from '../../../../../implementation/table-cache/table-cache';
-import {Teacher} from '../../../../../models/teacher/teacher';
-import {TEACHER_INSTANCE_CACHE} from '../../../../../providers/global/global-teacher-providers-factory';
-import {ConfirmationDialogComponent} from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ActivatedRoute} from '@angular/router';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {ListComponent} from '@implementation/component/list-component';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {TableCache} from '@implementation/table-cache/table-cache';
+import {Teacher} from '@models/teacher/teacher';
+import {TeacherDialogComponent} from '@modules-school-manager/components/school-detail-tabs/teacher-dialog/teacher-dialog.component';
 import {
   ADD_TEACHER_MENU_TITLE,
   ADD_TEACHER_PANEL_TITLE,
@@ -37,14 +37,15 @@ import {
   REMOVE_TEACHER_MENU_TITLE,
   REMOVE_TEACHER_SNACKBAR_MESSAGE,
   SINGULAR_TEACHER
-} from '../../../other/school-constants';
+} from '@modules-school-manager/other/school-constants';
 import {
   TEACHER_DELETE_DIALOG_MANAGER,
   TEACHER_EDIT_DIALOG_MANAGER,
   TEACHER_TABLE_CACHE
-} from '../../../providers/teacher-providers-factory';
-import {TEACHER_GROUP} from '../../../school-manager.module';
-import {TeacherDialogComponent} from '../teacher-dialog/teacher-dialog.component';
+} from '@modules-school-manager/providers/teacher-providers-factory';
+import {TEACHER_GROUP} from '@modules-school-manager/school-manager.module';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {TEACHER_INSTANCE_CACHE} from '@providers/global/global-teacher-providers-factory';
 
 @Component({
   selector: 'ms-teacher-list',
@@ -58,13 +59,14 @@ export class TeacherListComponent extends ListComponent<Teacher> implements OnIn
     // for super
     menuState: MenuStateService,
     navService: NavigationService,
+    route: ActivatedRoute,
     @Inject(TEACHER_TABLE_CACHE) tableCache: TableCache<Teacher>,
     @Inject(TEACHER_INSTANCE_CACHE) teacherInstanceCache: SingleItemCache<Teacher>,
     // other
     @Inject(TEACHER_EDIT_DIALOG_MANAGER) private teacherEditDialogManager: DialogManager<TeacherDialogComponent>,
     @Inject(TEACHER_DELETE_DIALOG_MANAGER) private teacherDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
   ) {
-    super(menuState, navService, tableCache, teacherInstanceCache)
+    super(menuState, navService, route, tableCache, teacherInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }

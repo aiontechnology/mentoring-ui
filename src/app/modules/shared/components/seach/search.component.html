@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2022 Aion Technology LLC
+  ~ Copyright 2022-2024 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,10 +17,10 @@
 <mat-form-field class="search" appearance="outline">
   <input matInput
          [(ngModel)]="tableCache.filterBinding"
-         (keyup)="tableCache.applyFilter($event.target.value)"/>
+         (keyup)="bindSearchValue($event.target.value)"/>
   <mat-icon matPrefix>search</mat-icon>
   <button mat-button *ngIf="tableCache.filter" matSuffix mat-icon-button
-          (click)="tableCache.clearFilter()">
+          (click)="clearSearchValue()">
     <mat-icon>close</mat-icon>
   </button>
 </mat-form-field>

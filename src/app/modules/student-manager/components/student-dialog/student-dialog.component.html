@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2020-2023 Aion Technology LLC
+  ~ Copyright 2020-2024 Aion Technology LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -57,13 +57,14 @@
 
         <!-- Student ID and Grade -->
         <div class="row-container">
-          <mat-form-field appearance="outline">
-            <mat-label>Student ID</mat-label>
-            <input formControlName="studentId" matInput/>
-            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'studentId')">
-              The student ID can be a maximum of 20 characters in length
-            </mat-error>
-          </mat-form-field>
+<!-- MS-884 Removed from UI only. API Still supports this -->
+<!--          <mat-form-field appearance="outline">-->
+<!--            <mat-label>Student ID</mat-label>-->
+<!--            <input formControlName="studentId" matInput/>-->
+<!--            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'studentId')">-->
+<!--              The student ID can be a maximum of 20 characters in length-->
+<!--            </mat-error>-->
+<!--          </mat-form-field>-->
 
           <mat-form-field appearance="outline">
             <mat-label>Grade</mat-label>
@@ -136,20 +137,21 @@
         </div>
 
         <!-- Preferred Meeting Time -->
-        <div class="row-container">
-          <mat-form-field appearance="outline">
-            <mat-label>Preferred meeting time</mat-label>
-            <input formControlName="preferredTime" matInput/>
-            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'preferredTime')">
-              Preferred time can be a maximum of 30 characters in length
-            </mat-error>
-          </mat-form-field>
-        </div>
+<!-- MS-886 Removed from UI only. API Still supports this-->
+<!--        <div class="row-container">-->
+<!--          <mat-form-field appearance="outline">-->
+<!--            <mat-label>Preferred meeting time</mat-label>-->
+<!--            <input formControlName="preferredTime" matInput/>-->
+<!--            <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'preferredTime')">-->
+<!--              Preferred time can be a maximum of 30 characters in length-->
+<!--            </mat-error>-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
 
         <!-- Actual Meeting Time -->
         <div class="row-container">
           <mat-form-field appearance="outline">
-            <mat-label>Actual meeting time</mat-label>
+            <mat-label>Meeting Time</mat-label>
             <input formControlName="actualTime" matInput/>
             <mat-error class="mat-body-1" *ngIf="studentDetailsStep.formGroup.hasError('maxlength', 'actualTime')">
               Actual meeting time can be a maximum of 30 characters in length

@@ -16,17 +16,18 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
-import {ListComponent} from '../../../../implementation/component/list-component';
-import {NavigationService} from '../../../../implementation/route/navigation.service';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {Interest} from '../../../../models/interest';
-import {INTEREST_INSTANCE_CACHE} from '../../../../providers/global/global-interest-providers-factory';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {INTERESTS_GROUP} from '../../admin-manager.module';
+import {ActivatedRoute} from '@angular/router';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {ListComponent} from '@implementation/component/list-component';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {TableCache} from '@implementation/table-cache/table-cache';
+import {Interest} from '@models/interest';
+import {INTERESTS_GROUP} from '@modules-admin-manager/admin-manager.module';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {INTEREST_INSTANCE_CACHE} from '@providers/global/global-interest-providers-factory';
 import {
   ADD_INTEREST_MENU_TITLE,
   ADD_INTEREST_PANEL_TITLE,
@@ -54,13 +55,14 @@ export class InterestListComponent extends ListComponent<Interest> implements On
     // for super
     menuState: MenuStateService,
     navService: NavigationService,
+    route: ActivatedRoute,
     @Inject(INTEREST_TABLE_CACHE) tableCache: TableCache<Interest>,
     @Inject(INTEREST_INSTANCE_CACHE) interestInstanceCache: SingleItemCache<Interest>,
     // other
     @Inject(INTEREST_LIST_EDIT_DIALOG_MANAGER) private interestEditDialogManager: DialogManager<InterestDialogComponent>,
     @Inject(INTEREST_LIST_DELETE_DIALOG_MANAGER) private interestDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
   ) {
-    super(menuState, navService, tableCache, interestInstanceCache)
+    super(menuState, navService, route, tableCache, interestInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort}

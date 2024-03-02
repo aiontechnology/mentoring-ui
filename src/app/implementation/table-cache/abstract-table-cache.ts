@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import {MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent} from '@angular/material/legacy-paginator';
-import {MatSort} from '@angular/material/sort';
+import {LegacyPageEvent as PageEvent, MatLegacyPaginator as MatPaginator} from '@angular/material/legacy-paginator';
 import {MatLegacyTableDataSource as MatTableDataSource} from '@angular/material/legacy-table';
-import {Resettable} from '../state-management/resettable';
+import {MatSort} from '@angular/material/sort';
+import {Resettable} from '@implementation/state-management/resettable';
 import {SelectionManager} from './selection-manager';
 
 export abstract class AbstractTableCache<T> extends SelectionManager<T> implements Resettable {
@@ -92,8 +92,8 @@ export abstract class AbstractTableCache<T> extends SelectionManager<T> implemen
    * @param filterValue The value to use as a filter
    */
   applyFilter(filterValue: string): void {
-    filterValue = filterValue.trim();
-    filterValue = filterValue.toLowerCase();
+    filterValue = filterValue?.trim();
+    filterValue = filterValue?.toLowerCase();
     this.tableDataSource.filter = filterValue;
     this.clearSelection();
   }

@@ -16,6 +16,7 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute} from '@angular/router';
 import {DialogManager} from '@implementation/command/dialog-manager';
 import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
 import {ListComponent} from '@implementation/component/list-component';
@@ -58,13 +59,14 @@ export class SchoolListComponent extends ListComponent<School> implements OnInit
     // for super
     menuState: MenuStateService,
     navService: NavigationService,
+    route: ActivatedRoute,
     @Inject(SCHOOL_TABLE_CACHE) tableCache: TableCache<School>,
     @Inject(SCHOOL_INSTANCE_CACHE) schoolInstanceCache: SingleItemCache<School>,
     // other
     @Inject(SCHOOL_LIST_EDIT_DIALOG_MANAGER) private schoolEditDialogManager: DialogManager<SchoolDialogComponent>,
     @Inject(SCHOOL_LIST_DELETE_DIALOG_MANAGER) private schoolDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
   ) {
-    super(menuState, navService, tableCache, schoolInstanceCache)
+    super(menuState, navService, route, tableCache, schoolInstanceCache)
   }
 
   @ViewChild(MatSort) set sort(sort: MatSort) { super.sort = sort }
@@ -110,5 +112,5 @@ export class SchoolListComponent extends ListComponent<School> implements OnInit
   }
 
   protected doHandleBackButton = (navService: NavigationService) =>
-    navService.push({routeSpec: ['/schoolsmanager'], fragment: undefined})
+    navService.push({routeSpec: ['/schoolsmanager'], fragment: undefined, filter: this.tableCache.filterBinding})
 }

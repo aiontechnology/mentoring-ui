@@ -16,17 +16,17 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {DialogManager} from '../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
-import {ListComponent} from '../../../../implementation/component/list-component';
-import {NavigationService} from '../../../../implementation/route/navigation.service';
-import {UserLoginService} from '../../../../implementation/security/user-login.service';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {Book} from '../../../../models/book/book';
-import {BOOK_INSTANCE_CACHE} from '../../../../providers/global/global-book-providers-factory';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ActivatedRoute} from '@angular/router';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {ListComponent} from '@implementation/component/list-component';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {UserLoginService} from '@implementation/security/user-login.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {TableCache} from '@implementation/table-cache/table-cache';
+import {Book} from '@models/book/book';
+import {BookDialogComponent} from '@modules-resource-manager/components/book-dialog/book-dialog.component';
 import {
   ADD_BOOK_MENU_TITLE,
   ADD_BOOK_PANEL_TITLE,
@@ -38,10 +38,11 @@ import {
   REMOVE_BOOK_MENU_TITLE,
   REMOVE_BOOK_SNACKBAR_MESSAGE,
   SINGULAR_BOOK
-} from '../../other/resource-constants';
+} from '@modules-resource-manager/other/resource-constants';
+import {BOOK_GROUP} from '@modules-resource-manager/resource-manager.module';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {BOOK_INSTANCE_CACHE} from '@providers/global/global-book-providers-factory';
 import {BOOK_LIST_DELETE_DIALOG_MANAGER, BOOK_LIST_EDIT_DIALOG_MANAGER, BOOK_TABLE_CACHE} from '../../providers/book-providers-factory';
-import {BOOK_GROUP} from '../../resource-manager.module';
-import {BookDialogComponent} from '../book-dialog/book-dialog.component';
 
 @Component({
   selector: 'ms-book-list',
@@ -55,6 +56,7 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
     // for super
     menuState: MenuStateService,
     navService: NavigationService,
+    route: ActivatedRoute,
     @Inject(BOOK_TABLE_CACHE) tableCache: TableCache<Book>,
     @Inject(BOOK_INSTANCE_CACHE) bookInstanceCache: SingleItemCache<Book>,
     // other
@@ -62,7 +64,7 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
     @Inject(BOOK_LIST_DELETE_DIALOG_MANAGER) private bookDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     public userLoginService: UserLoginService,
   ) {
-    super(menuState, navService, tableCache, bookInstanceCache)
+    super(menuState, navService, route, tableCache, bookInstanceCache)
     if (userLoginService.isSystemAdmin) {
       this.columns = ['select'].concat(this.columns)
     }
@@ -113,5 +115,5 @@ export class BookListComponent extends ListComponent<Book> implements OnInit, On
   }
 
   protected doHandleBackButton = (navService: NavigationService) =>
-    navService.push({routeSpec: ['/resourcemanager'], fragment: 'book'})
+    navService.push({routeSpec: ['/resourcemanager'], fragment: 'book', filter: this.tableCache.filterBinding})
 }

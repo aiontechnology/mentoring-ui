@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 
 import {MatSort} from '@angular/material/sort';
+import {ActivatedRoute} from '@angular/router';
 import {NavigationService} from '../route/navigation.service';
 import {MenuStateService} from '../services/menu-state.service';
 import {SingleItemCache} from '../state-management/single-item-cache';
@@ -27,6 +28,7 @@ export abstract class ListComponent<T> extends MenuRegisteringComponent {
     menuState: MenuStateService,
     navService: NavigationService,
     // other
+    private route: ActivatedRoute,
     public tableCache: TableCache<T>,
     private instanceCache?: SingleItemCache<T>,
   ) {
@@ -46,6 +48,7 @@ export abstract class ListComponent<T> extends MenuRegisteringComponent {
         if (this.instanceCache && !this.instanceCache.isEmpty) {
           this.tableCache.jumpToItem(this.instanceCache.item)
         }
+        this.setFilter()
       })
   }
 
@@ -53,5 +56,13 @@ export abstract class ListComponent<T> extends MenuRegisteringComponent {
     this.tableCache.reset()
     await this.tableCache.loadData()
     this.tableCache.clearSelection()
+  }
+
+  private setFilter(): void {
+    this.route.queryParamMap.subscribe(params => {
+      const filter = params.get('filter');
+      this.tableCache.applyFilter(filter)
+      this.tableCache.filterBinding = filter
+    })
   }
 }

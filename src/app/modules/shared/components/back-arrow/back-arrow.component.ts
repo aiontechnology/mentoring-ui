@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-import {NavigationService} from '../../../../implementation/route/navigation.service';
+import {FullSpec, NavigationService} from '@implementation/route/navigation.service';
 
 @Component({
   selector: 'ms-back-arrow',
@@ -36,7 +36,20 @@ export class BackArrowComponent {
   returnToPreviousRoute = (): void => {
     const previousRoute = this.navService.pop()
     if (previousRoute) {
-      this.router.navigate(previousRoute.routeSpec, {fragment: previousRoute.fragment})
+      this.router.navigate(previousRoute.routeSpec, this.createNavParam(previousRoute))
+    }
+  }
+
+  private createNavParam(previousRoute: FullSpec) {
+    if (previousRoute.filter) {
+      return {
+        queryParams: {filter: previousRoute.filter},
+        fragment: previousRoute.fragment
+      }
+    } else {
+      return {
+        fragment: previousRoute.fragment
+      }
     }
   }
 }

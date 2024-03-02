@@ -16,17 +16,17 @@
 
 import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
-import {MenuStateService} from 'src/app/implementation/services/menu-state.service';
-import {Game} from 'src/app/models/game/game';
-import {DialogManager} from '../../../../implementation/command/dialog-manager';
-import {MenuDialogCommand} from '../../../../implementation/command/menu-dialog-command';
-import {ListComponent} from '../../../../implementation/component/list-component';
-import {NavigationService} from '../../../../implementation/route/navigation.service';
-import {UserLoginService} from '../../../../implementation/security/user-login.service';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {TableCache} from '../../../../implementation/table-cache/table-cache';
-import {GAME_INSTANCE_CACHE} from '../../../../providers/global/global-game-providers-factory';
-import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {ActivatedRoute} from '@angular/router';
+import {DialogManager} from '@implementation/command/dialog-manager';
+import {MenuDialogCommand} from '@implementation/command/menu-dialog-command';
+import {ListComponent} from '@implementation/component/list-component';
+import {NavigationService} from '@implementation/route/navigation.service';
+import {UserLoginService} from '@implementation/security/user-login.service';
+import {MenuStateService} from '@implementation/services/menu-state.service';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {TableCache} from '@implementation/table-cache/table-cache';
+import {Game} from '@models/game/game';
+import {GameDialogComponent} from '@modules-resource-manager/components/game-dialog/game-dialog.component';
 import {
   ADD_GAME_MENU_TITLE,
   ADD_GAME_PANEL_TITLE,
@@ -38,10 +38,15 @@ import {
   REMOVE_GAME_MENU_TITLE,
   REMOVE_GAME_SNACKBAR_MESSAGE,
   SINGULAR_GAME
-} from '../../other/resource-constants';
-import {GAME_LIST_DELETE_DIALOG_MANAGER, GAME_LIST_EDIT_DIALOG_MANAGER, GAME_TABLE_CACHE} from '../../providers/game-providers-factory';
-import {GAME_GROUP} from '../../resource-manager.module';
-import {GameDialogComponent} from '../game-dialog/game-dialog.component';
+} from '@modules-resource-manager/other/resource-constants';
+import {
+  GAME_LIST_DELETE_DIALOG_MANAGER,
+  GAME_LIST_EDIT_DIALOG_MANAGER,
+  GAME_TABLE_CACHE
+} from '@modules-resource-manager/providers/game-providers-factory';
+import {GAME_GROUP} from '@modules-resource-manager/resource-manager.module';
+import {ConfirmationDialogComponent} from '@modules-shared/components/confirmation-dialog/confirmation-dialog.component';
+import {GAME_INSTANCE_CACHE} from '@providers/global/global-game-providers-factory';
 
 @Component({
   selector: 'ms-game-list',
@@ -55,6 +60,7 @@ export class GameListComponent extends ListComponent<Game> implements OnInit, On
     // for super
     menuState: MenuStateService,
     navService: NavigationService,
+    route: ActivatedRoute,
     @Inject(GAME_TABLE_CACHE) tableCache: TableCache<Game>,
     @Inject(GAME_INSTANCE_CACHE) gameInstanceCache: SingleItemCache<Game>,
     // other
@@ -62,7 +68,7 @@ export class GameListComponent extends ListComponent<Game> implements OnInit, On
     @Inject(GAME_LIST_DELETE_DIALOG_MANAGER) private gameDeleteDialogManager: DialogManager<ConfirmationDialogComponent>,
     public userLoginService: UserLoginService,
   ) {
-    super(menuState, navService, tableCache, gameInstanceCache)
+    super(menuState, navService, route, tableCache, gameInstanceCache)
     if (userLoginService.isSystemAdmin) {
       this.columns = ['select'].concat(this.columns)
     }
@@ -113,5 +119,5 @@ export class GameListComponent extends ListComponent<Game> implements OnInit, On
   }
 
   protected doHandleBackButton = (navService: NavigationService) =>
-    navService.push({routeSpec: ['/resourcemanager'], fragment: 'game'})
+    navService.push({routeSpec: ['/resourcemanager'], fragment: 'game', filter: this.tableCache.filterBinding})
 }
