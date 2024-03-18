@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2023 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +18,28 @@ import {STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import {Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder} from '@angular/forms';
 import {MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef} from '@angular/material/legacy-dialog';
-import {DialogCommand} from '../../../../implementation/command/dialog-command';
-import {DialogCommandFactory, DialogManagerConfiguration} from '../../../../implementation/command/dialog-command-factory';
-import {DataSource} from '../../../../implementation/data/data-source';
-import {MultiItemCache} from '../../../../implementation/state-management/multi-item-cache';
-import {SingleItemCache} from '../../../../implementation/state-management/single-item-cache';
-import {Interest} from '../../../../models/interest';
-import {Mentor} from '../../../../models/mentor/mentor';
-import {StudentOutbound} from '../../../../models/student-outbound/student-outbound';
-import {Student} from '../../../../models/student/student';
-import {Teacher} from '../../../../models/teacher/teacher';
-import {INTEREST_DATA_SOURCE} from '../../../../providers/global/global-interest-providers-factory';
-import {MENTOR_COLLECTION_CACHE, MENTOR_INSTANCE_CACHE} from '../../../../providers/global/global-mentor-providers-factory';
-import {STUDENT_DATA_SOURCE} from '../../../../providers/global/global-student-providers-factory';
-import {TEACHER_COLLECTION_CACHE, TEACHER_INSTANCE_CACHE} from '../../../../providers/global/global-teacher-providers-factory';
-import {MetaDataService} from '../../../shared/services/meta-data/meta-data.service';
-import {STUDENT_ADD_MENTOR, STUDENT_ADD_TEACHER} from '../../providers/student-providers-factory';
-import {MentorDialogComponent} from '../mentor-dialog/mentor-dialog.component';
-import {TeacherDialogComponent} from '../teacher-dialog/teacher-dialog.component';
-import {ContactsStep} from './impl/contacts-step';
-import {StudentDetailStep} from './impl/student-detail-step';
-import {TeacherInputStep} from './impl/teacher-input-step';
+import {environment} from '@environments/environment';
+import {DialogCommand} from '@implementation/command/dialog-command';
+import {DialogCommandFactory, DialogManagerConfiguration} from '@implementation/command/dialog-command-factory';
+import {DataSource} from '@implementation/data/data-source';
+import {MultiItemCache} from '@implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {Interest} from '@models/interest';
+import {Mentor} from '@models/mentor/mentor';
+import {StudentOutbound} from '@models/student-outbound/student-outbound';
+import {Student} from '@models/student/student';
+import {Teacher} from '@models/teacher/teacher';
+import {MetaDataService} from '@modules-shared/services/meta-data/meta-data.service';
+import {MentorDialogComponent} from '@modules-student-manager/components/mentor-dialog/mentor-dialog.component';
+import {ContactsStep} from '@modules-student-manager/components/student-dialog/impl/contacts-step';
+import {StudentDetailStep} from '@modules-student-manager/components/student-dialog/impl/student-detail-step';
+import {TeacherInputStep} from '@modules-student-manager/components/student-dialog/impl/teacher-input-step';
+import {TeacherDialogComponent} from '@modules-student-manager/components/teacher-dialog/teacher-dialog.component';
+import {STUDENT_ADD_MENTOR, STUDENT_ADD_TEACHER} from '@modules-student-manager/providers/student-providers-factory';
+import {INTEREST_DATA_SOURCE} from '@providers/global/global-interest-providers-factory';
+import {MENTOR_COLLECTION_CACHE, MENTOR_INSTANCE_CACHE} from '@providers/global/global-mentor-providers-factory';
+import {STUDENT_DATA_SOURCE} from '@providers/global/global-student-providers-factory';
+import {TEACHER_COLLECTION_CACHE, TEACHER_INSTANCE_CACHE} from '@providers/global/global-teacher-providers-factory';
 
 @Component({
   selector: 'ms-student-dialog',
@@ -125,8 +126,8 @@ export class StudentDialogComponent implements OnInit {
       this.studentDetailsStep.value,
       this.teacherInputStep.value,
       this.contactsStep.value,
+      { baseUri: environment.baseUri + '/workflowmanager' }
     )
-    const student: Student = new StudentOutbound(joinedValues)
-    return student;
+    return new StudentOutbound(joinedValues)
   }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,8 @@ export abstract class Repository<T> implements DataManager<T> {
       .pipe(
         map(this.toModel)
       ))
+
+  post = (value: T): Promise<T> => this.add(value)
 
   allValues = (): Promise<T[]> =>
     firstValueFrom(

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,9 @@
  * limitations under the License.
  */
 
-import {MenuCommand} from '../command/menu-command';
+import {MenuCommand} from '@implementation/command/menu-command';
 
 export type BooleanSupplier = () => boolean
-
-export const TRUTHY_SUPPLIER: BooleanSupplier = () => true
-export const FALSY_SUPPLIER: BooleanSupplier = () => false
-
 export type ObjectSupplier = () => object
 
 export type AnyConsumer = (a: any) => void
