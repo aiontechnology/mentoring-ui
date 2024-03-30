@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,12 @@
  */
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {equalsBySelfLink} from '../../../../../implementation/functions/comparison';
-import {Student} from '../../../../../models/student/student';
-import {Teacher} from '../../../../../models/teacher/teacher';
-import {MultiItemCache} from '../../../../../implementation/state-management/multi-item-cache';
-import {SingleItemCache} from '../../../../../implementation/state-management/single-item-cache';
-import {LinkService} from '../../../../shared/services/link-service/link.service';
+import {equalsBySelfLink} from '@implementation/functions/comparison';
+import {MultiItemCache} from '@implementation/state-management/multi-item-cache';
+import {SingleItemCache} from '@implementation/state-management/single-item-cache';
+import {Student} from '@models/student/student';
+import {Teacher} from '@models/teacher/teacher';
+import {LinkService} from '@modules-shared/services/link-service/link.service';
 import {FormGroupHolder} from './form-group-holder';
 
 export class TeacherInputStep extends FormGroupHolder<Student> {
@@ -35,6 +35,11 @@ export class TeacherInputStep extends FormGroupHolder<Student> {
     private teacherCollectionCache: MultiItemCache<Teacher>,
   ) {
     super(student, formBuilder)
+  }
+
+  init(): TeacherInputStep {
+    super.doInit()
+    return this;
   }
 
   override get value(): any {

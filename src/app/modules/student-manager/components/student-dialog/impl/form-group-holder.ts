@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,8 @@ export abstract class FormGroupHolder<T> {
     return this.formGroup.value
   }
 
-  init() {
+  protected doInit(): void {
     this.generate(this.item)
-    return this;
   }
 
   protected abstract generateFormGroup(item: T): FormGroup

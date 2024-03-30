@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Aion Technology LLC
+ * Copyright 2020-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Student} from '../student/student';
+import {Student} from '@models/student/student';
 
 interface StudentTeacherOutbound {
   uri: string
@@ -29,11 +29,13 @@ export class StudentOutbound extends Student {
 
   teacher: StudentTeacherOutbound
   mentor: StudentMentorOutbound
+  baseUri: string
 
   constructor(json?: any) {
     super(json)
     this.teacher = json?.teacher
     this.mentor = json?.mentor
+    this.baseUri = json?.baseUri
   }
 
 }

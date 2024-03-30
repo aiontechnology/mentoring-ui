@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Aion Technology LLC
+ * Copyright 2022-2024 Aion Technology LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,16 @@
  */
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {grades} from '../../../../../implementation/constants/grades';
-import {personLocations} from '../../../../../implementation/constants/locations';
-import {DataSource} from '../../../../../implementation/data/data-source';
-import {equalsBySelfLink} from '../../../../../implementation/functions/comparison';
-import {getMonth, getYear, months} from '../../../../../implementation/shared/date.utils';
-import {Grade} from '../../../../../implementation/types/grade';
-import {Interest} from '../../../../../models/interest';
-import {Mentor} from '../../../../../models/mentor/mentor';
-import {Student} from '../../../../../models/student/student';
-import {MetaDataService} from '../../../../shared/services/meta-data/meta-data.service';
+import {grades} from '@implementation/constants/grades';
+import {personLocations} from '@implementation/constants/locations';
+import {DataSource} from '@implementation/data/data-source';
+import {equalsBySelfLink} from '@implementation/functions/comparison';
+import {getMonth, getYear, months} from '@implementation/shared/date.utils';
+import {Grade} from '@implementation/types/grade';
+import {Interest} from '@models/interest';
+import {Mentor} from '@models/mentor/mentor';
+import {Student} from '@models/student/student';
+import {MetaDataService} from '@modules-shared/services/meta-data/meta-data.service';
 import {FormGroupHolder} from './form-group-holder';
 
 export class StudentDetailStep extends FormGroupHolder<Student> {
@@ -57,6 +57,11 @@ export class StudentDetailStep extends FormGroupHolder<Student> {
       .then(leadershipSkills => this.leadershipSkills = leadershipSkills)
     metaDataService.loadLeadershipTraits()
       .then(leadershipTraits => this.leadershipTraits = leadershipTraits)
+  }
+
+  init(): StudentDetailStep {
+    super.doInit()
+    return this;
   }
 
   override get value(): any {
