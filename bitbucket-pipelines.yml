@@ -83,7 +83,7 @@ pipelines:
             - docker push $IMAGE:latest
             - docker push $IMAGE:prod
             - docker push $IMAGE:$TAG
-definitions:
-  services:
-    docker:
-      memory: 4096
+#definitions:
+#  services:
+#    docker:
+#      memory: 4096
