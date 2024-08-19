@@ -18,7 +18,7 @@ FROM node:iron-alpine3.18 as build-stage
 
 WORKDIR /app
 COPY package.json .
-RUN npm install
+RUN node --max-old-space-size=7168 `which npm` install
 COPY . .
 RUN npm install -g @angular/cli@17.1.1
 RUN npm run build
