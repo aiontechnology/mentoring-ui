@@ -22,6 +22,6 @@
     window["env"]["apiUri"] = "http://localhost:8080"
     window["env"]["lpgUri"] = "http://localhost:8090"
     window["env"]["baseUri"] = "http://localhost:4200"
-    window["env"]["cognitoPoolId"] = "us-west-2_EBQBuK2yn"
-    window["env"]["cognitoClientId"] = "50q37ipum07ltgh8grqkl29i2n"
+    window["env"]["cognitoPoolId"] = "us-west-2_PN5WtXF09"
+    window["env"]["cognitoClientId"] = "3ms5vc2qq7u7am9132r89e1hq9"
 })(this)

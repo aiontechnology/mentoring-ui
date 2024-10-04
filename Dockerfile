@@ -14,7 +14,7 @@
 # limitations under the License.
 
 # stage 1
-FROM node:iron-alpine3.18 as build-stage
+FROM node:iron-alpine3.20 as build-stage
 
 WORKDIR /app
 COPY package.json .
