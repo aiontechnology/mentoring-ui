@@ -1,0 +1,56 @@
+# Copyright 2024-2025 Aion Technology LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: Build Only
+
+# Feature branch
+on:
+  push:
+    branches:
+      - '**'
+      - '!develop'
+      - '!master'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ vars.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Login to ECR
+        run: |
+          aws ecr get-login-password | docker login --username AWS --password-stdin ${{ vars.ECR_KEY }}
+
+      - name: Calculate Docker Tag
+        run: |
+          echo "DOCKER_TAG=${{ github.ref_name }}-build.${{ github.run_number }}" >> "$GITHUB_ENV"
+
+      - name: Build Docker Container
+        run: |
+          docker build -t ui:${{ env.DOCKER_TAG }} .
+          docker tag ui:${{ env.DOCKER_TAG }} ${{ vars.ECR_KEY}}:latest
+          docker tag ui:${{ env.DOCKER_TAG }} ${{ vars.ECR_KEY}}:test
+          docker tag ui:${{ env.DOCKER_TAG }} ${{ vars.ECR_KEY}}:prod
+          docker tag ui:${{ env.DOCKER_TAG }} ${{ vars.ECR_KEY}}:${{ env.DOCKER_TAG }}
