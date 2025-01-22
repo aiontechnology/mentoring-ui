@@ -1,4 +1,4 @@
-# Copyright 2024 Aion Technology LLC
+# Copyright 2024-2025 Aion Technology LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,15 +14,16 @@
 
 name: Build and Deploy to ECR
 
+# Feature branch
 on:
   push:
     branches:
-      - '**'
-      - '!master'
+      - 'master'
 
 jobs:
   build-and-deploy:
 
+    environment: production
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -49,13 +50,11 @@ jobs:
         run: |
           docker build -t ui:${{ env.DOCKER_TAG }} .
           docker tag ui:${{ env.DOCKER_TAG }} ${{ vars.ECR_KEY}}:latest
-          docker tag ui:${{ env.DOCKER_TAG }} ${{ vars.ECR_KEY}}:test
           docker tag ui:${{ env.DOCKER_TAG }} ${{ vars.ECR_KEY}}:prod
           docker tag ui:${{ env.DOCKER_TAG }} ${{ vars.ECR_KEY}}:${{ env.DOCKER_TAG }}
 
       - name: Push Container to ECR
         run: |
           docker push ${{ vars.ECR_KEY }}:latest
-          docker push ${{ vars.ECR_KEY }}:test
           docker push ${{ vars.ECR_KEY }}:prod
           docker push ${{ vars.ECR_KEY }}:${{ env.DOCKER_TAG }}
